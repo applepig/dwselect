@@ -1,0 +1,12 @@
+{
+    "version": "1.0",
+    "debugger": {
+        "enabled": true,
+        "sourceMaps": true,
+        "breakOnExceptions": false
+    },
+    "inspector": {
+        "enabled": true,
+        "showSourceMaps": true
+    }
+}

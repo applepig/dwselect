@@ -1,0 +1,17 @@
+{
+    "debug.allowBreakpointsEverywhere": true,
+    "debug.console.fontSize": 14,
+    "debug.console.lineHeight": 20,
+    "debug.inlineValues": "auto",
+    "debug.showBreakpointsInOverviewRuler": true,
+    "debug.showInlineBreakpointCandidates": true,
+    "debug.toolBarLocation": "docked",
+    "debug.toolBarVisibleWhenRunning": "always",
+    "files.associations": {
+        "*.vue": "vue"
+    },
+    "emmet.includeLanguages": {
+        "vue-html": "html",
+        "vue": "html"
+    }
+}

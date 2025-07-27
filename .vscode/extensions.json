@@ -1,0 +1,10 @@
+{
+    "recommendations": [
+        "ms-vscode.vscode-js-debug",
+        "ms-vscode.vscode-js-debug-companion",
+        "ms-vscode.vscode-json",
+        "bradlc.vscode-tailwindcss",
+        "octref.vetur",
+        "vue.volar"
+    ]
+}

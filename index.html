@@ -1,0 +1,470 @@
+<html>
+
+<head>
+	<title>DW嚴選推坑專區</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@600&display=swap" rel="stylesheet">
+
+	<base target="_blank">
+	<script src="https://cdn.jsdelivr.net/npm/vue@2.7.14"></script>
+	<script src="https://cdn.jsdelivr.net/npm/public-google-sheets-parser@latest"></script>
+
+	<!-- Google Tag Manager -->
+	<script>(function (w, d, s, l, i) {
+			w[l] = w[l] || []; w[l].push({
+				'gtm.start':
+					new Date().getTime(), event: 'gtm.js'
+			}); var f = d.getElementsByTagName(s)[0],
+				j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
+					'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);
+		})(window, document, 'script', 'dataLayer', 'GTM-KTZKC8CH');</script>
+	<!-- End Google Tag Manager -->
+</head>
+
+<body>
+	<div class="vue">
+		<header>
+			<h1>DW嚴選</h1>
+			<div class="search">
+				<input type="search" placeholder="在找什麼嗎？™" v-model="search" list="hashtags_opts">
+				<datalist id="hashtags_opts">
+					<option v-for="t in hashtags" :value="t"></option>
+				</datalist>
+			</div>
+		</header>
+		<main>
+			<div class="items">
+				<template v-for="item in filter_items">
+					<a class="item" :href="item.link_url" @click.stop.prevent="selected = item">
+						<img :src="item.img_url" loading="lazy">
+						<div class="label">
+							<h4 class="title">{{ item.name }}</h4>
+							<p class="price" v-if="isNaN(item.price)">{{ item.price }}</p>
+							<p class="price" v-else>約 ${{ item.price }}</p>
+						</div>
+					</a>
+				</template>
+			</div>
+			<div class="item info" v-if="items.length">
+				<p v-if="filter_items.length == 0">找不到結果</p>
+
+				<p v-if="filter_items.length != items.length">
+					<a href="#" @click.stop.prevent="search = ''">顯示所有結果</a>
+					或
+					到<a :href="fb_thread_url">推坑串</a>許願吧？
+				</p>
+				<p v-else>
+					在找別的嗎？
+					到<a :href="fb_thread_url">推坑串</a>許願吧？
+				</p>
+			</div>
+		</main>
+		<div class="mask" @click="selected = {}"></div>
+		<aside>
+			<template v-if="selected.name">
+				<button class="close" @click="selected = {}">╳</button>
+
+				<a :href="selected.link_url">
+					<img :src="selected.img_url">
+				</a>
+				<h4>{{ selected.name }}</h4>
+				<p>
+				<div class="price" v-if="isNaN(selected.price)">{{ selected.price }}</div>
+				<div class="price" v-else-if="selected.price">約 ${{ selected.price }}</div>
+				<a :href="selected.link_url">購買連結</a>
+				</p>
+				<p v-if="selected.desc" v-html="selected.desc"></p>
+				<p v-if="selected.reference">
+					<a :href="selected.reference">參考資料</a>
+				</p>
+				<ul>
+					<li v-for="t in selected.tags" class="tag">
+						<a :href="t" @click.stop.prevent="search = t">{{ t }}</a>
+					</li>
+				</ul>
+			</template>
+		</aside>
+	</div>
+</body>
+<style>
+	:root {
+		--black: #333;
+		--white: #fff;
+		--accent: #f80;
+		--accent-light: #fb8;
+	}
+
+	* {
+		box-sizing: border-box;
+		transition: 0.2s all ease;
+		text-decoration: none;
+		line-height: 24px;
+		font-size: 16px;
+		font-family: 'Noto Sans TC', sans-serif;
+	}
+
+	body {
+		margin: 0;
+		padding: 0;
+		border: 0;
+		background: var(--black);
+		color: var(--white);
+		overflow-x: hidden;
+	}
+
+	button {
+		border: 1px solid var(--accent);
+		color: var(--accent);
+		background: var(--white);
+		border-radius: 4px;
+		padding: 3px 10px;
+	}
+
+	a,
+	a:visited {
+		color: var(--accent);
+	}
+
+	a:hover,
+	a:focus,
+	a:active {
+		color: var(--accent-light);
+	}
+
+	header {
+		position: sticky;
+		top: 0;
+		width: 100%;
+		background: #ff8000;
+		padding: 0 20px;
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		z-index: 10;
+	}
+
+	header h1 {
+		display: none;
+		margin: 0;
+		font-size: 22px;
+		margin: 10px 0;
+		flex: 1;
+	}
+
+	header .search {
+		margin: 10px 0 10px auto;
+		flex: 0;
+	}
+
+	header input {
+		width: 200px;
+		max-width: 100%;
+	}
+
+	@media (min-width: 360px) {
+		header h1 {
+			display: block;
+		}
+	}
+
+	.items {
+		display: grid;
+		grid-template-columns: repeat(1, 1fr);
+	}
+
+	@media (min-width: 600px) {
+		.items {
+			grid-template-columns: repeat(2, 1fr)
+		}
+	}
+
+	@media (min-width: 900px) {
+		.items {
+			grid-template-columns: repeat(3, 1fr)
+		}
+	}
+
+	@media (min-width: 1200px) {
+		.items {
+			grid-template-columns: repeat(4, 1fr)
+		}
+	}
+
+	@media (min-width: 1500px) {
+		.items {
+			grid-template-columns: repeat(5, 1fr)
+		}
+	}
+
+	@media (min-width: 1800px) {
+		.items {
+			grid-template-columns: repeat(6, 1fr)
+		}
+	}
+
+	@media (min-width: 2100px) {
+		.items {
+			grid-template-columns: repeat(7, 1fr)
+		}
+	}
+
+	@media (min-width: 2400px) {
+		.items {
+			grid-template-columns: repeat(8, 1fr)
+		}
+	}
+
+	@media (min-width: 2700px) {
+		.items {
+			grid-template-columns: repeat(9, 1fr)
+		}
+	}
+
+	@media (min-width: 3000px) {
+		.items {
+			grid-template-columns: repeat(10, 1fr)
+		}
+	}
+
+	@media (min-width: 3300px) {
+		.items {
+			grid-template-columns: repeat(11, 1fr)
+		}
+	}
+
+	@media (min-width: 3600px) {
+		.items {
+			grid-template-columns: repeat(12, 1fr)
+		}
+	}
+
+	@media (min-width: 3900px) {
+		.items {
+			grid-template-columns: repeat(13, 1fr)
+		}
+	}
+
+	@media (min-width: 4200px) {
+		.items {
+			grid-template-columns: repeat(14, 1fr)
+		}
+	}
+
+	@media (min-width: 4500px) {
+		.items {
+			grid-template-columns: repeat(15, 1fr)
+		}
+	}
+
+	@media (min-width: 4800px) {
+		.items {
+			grid-template-columns: repeat(16, 1fr)
+		}
+	}
+
+	.item {
+		aspect-ratio: 1 / 1;
+		position: relative;
+		display: flex;
+		flex-flow: column;
+		justify-content: flex-end;
+	}
+
+	.item.info {
+		width: 100%;
+		height: 25vh;
+		align-items: center;
+		justify-content: center;
+		min-height: 150px;
+		max-height: 300px;
+	}
+
+	.item.info p,
+	.item.info a {
+		font-size: 22px;
+		line-height: 30px;
+		margin: 6px 0;
+	}
+
+	.item img {
+		position: absolute;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		z-index: -1;
+	}
+
+	.item .label {
+		display: flex;
+		align-items: flex-end;
+		gap: 5px;
+		background: rgba(0, 0, 0, 0.6);
+	}
+
+	.item:nth-child(2n) .label {
+		background: rgba(0, 0, 0, 0.4);
+	}
+
+	.item .title,
+	.item .price {
+		display: block;
+		padding: 4px;
+		margin: 0;
+		color: white;
+	}
+
+	.item .title {
+		flex: 1;
+	}
+
+	.mask {
+		position: fixed;
+		top: 0;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		opacity: 0;
+		display: none;
+		background: rgba(0, 0, 0, 0.5);
+	}
+
+	aside {
+		display: flex;
+		flex-flow: column;
+		position: fixed;
+		z-index: 20;
+		top: 0;
+		bottom: 0;
+		left: 100%;
+		width: 100vw;
+		max-width: 480px;
+		padding: 20px;
+		background: var(--white);
+		color: var(--black);
+		overflow-y: auto;
+		transition-delay: 0.1s;
+	}
+
+	aside .close {
+		align-self: flex-end;
+	}
+
+	aside img {
+		max-width: 100%;
+		margin: 12px 0;
+	}
+
+	aside h4,
+	aside p {
+		margin: 0 0 12px 0;
+	}
+
+	aside ul,
+	aside li {
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	aside .tag {
+		display: inline-block;
+		padding: 0 8px;
+		border: 1px solid var(--black);
+		border-radius: 3px;
+		margin: 0 4px 4px 0;
+	}
+
+	.aside_active {
+		overflow: hidden;
+	}
+
+	.aside_active .mask {
+		display: block;
+		opacity: 1;
+	}
+
+	.aside_active aside {
+		transform: translateX(-100%);
+	}
+</style>
+<script>
+	var vm = new Vue({
+		el: ".vue",
+		data: {
+			items: [],
+			selected: {},
+			search: location.hash ? decodeURI(location.hash.replace('#', '')) : '',
+			fb_thread_url: "https://www.facebook.com/applepig/posts/pfbid0j5U2aw7URVNhwLNuWjGgrZvtUQvNmik36uwRc8T1qcvR6GunRKf4V7jVjnsjxn4Zl",
+		},
+		created() {
+			this.getItems();
+		},
+		watch: {
+			selected(v) {
+				if (v?.name) {
+					document.body.classList.add("aside_active");
+				} else {
+					document.body.classList.remove("aside_active");
+				}
+			},
+			search(v) {
+				history.replaceState({ search: v }, "", v ? "#" + v : "");
+				this.selected = {};
+			},
+		},
+		computed: {
+			hashtags() {
+				var ret = {};
+				this.items.forEach(item => {
+					item.tags.forEach(tag => {
+						ret[tag] = ret?.[tag] + 1 || 1
+					})
+				});
+
+				return (Object.keys(ret)).sort((a, b) => ret[b] - ret[a]);
+			},
+			filter_items() {
+				if (!this.search) {
+					return this.items
+				} else if (/^#/.test(this.search)) {
+					return this.items.filter(item => item.tags.includes(this.search));
+				} else {
+					return this.items.filter(item => (item.name + item.desc).toLowerCase().includes(this.search.toLowerCase()));
+				}
+			},
+		},
+		methods: {
+			getItems() {
+				var parser = new PublicGoogleSheetsParser();
+				var id = '1CANuynOyJpG04AdX0s4dhAbZmilr6vG4IwQQOXejYJ4';
+
+				parser.parse(id).then(items => {
+					var ret = items.map(item => {
+						item.tags = item?.tags?.split(" ") || [];
+						if (/pchome\.com\.tw/.test(item.link_url)) item.tags.push("PCHome");
+						if (/momo\.com\.tw/.test(item.link_url)) item.tags.push("momo");
+						if (/amazon\.com/.test(item.link_url)) item.tags.push("美亞");
+						if (/amazon\.co\.jp/.test(item.link_url)) item.tags.push("日亞");
+						item.tags = item.tags.map(t => "#" + t);
+
+						item.desc = item.desc.replace(/\n/ig, '<br>');
+
+						return item
+					}).filter(item => item.name);
+					//					for (var i=0; i<ret.length; i++) {
+					//						var j = Math.floor(Math.random() * (i+1));
+					//						[ret[i], ret[j]] = [ret[j], ret[i]];
+					//					}
+
+					this.items = ret;
+				})
+			},
+		}
+	})
+</script>
+
+</html>
