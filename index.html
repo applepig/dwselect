@@ -5,10 +5,11 @@
 	<title>DW嚴選推坑專區</title>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+	<meta name="color-scheme" content="light dark">
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;600&display=swap" rel="stylesheet">
-	<base target="_blank">
+	<base target="_blank" rel="noopener noreferrer">
 	<!-- Google Tag Manager -->
 	<script>(function (w, d, s, l, i) {
 			w[l] = w[l] || []; w[l].push({
@@ -26,7 +27,7 @@
 		<header>
 			<h1>DW嚴選</h1>
 			<div class="search">
-				<input type="search" placeholder="在找什麼嗎？™" list="popular-tags">
+				<input type="search" placeholder="在找什麼嗎？™" list="popular-tags" aria-label="搜尋標籤或關鍵字">
 				<datalist id="popular-tags"></datalist>
 				<div class="suggestions"></div>
 			</div>
@@ -65,6 +66,10 @@
 			--card-bg: #333;
 			--border-color: #555;
 		}
+	}
+
+	html {
+		scrollbar-gutter: stable;
 	}
 
 	* {
@@ -127,6 +132,7 @@
 			border: 1px solid var(--border-color);
 			background-color: var(--bg-color);
 			color: var(--text-color);
+			accent-color: var(--accent-color);
 		}
 	}
 
@@ -275,6 +281,7 @@
 			font-size: 24px;
 			font-weight: 600;
 			margin: 16px 0 8px 0;
+			text-wrap: balance;
 		}
 
 		.price {
@@ -497,10 +504,17 @@
 			if (this.rawData.tags) {
 				this._tags = this.rawData.tags.split(' ').filter(t => t.trim());
 			}
-			if (/pchome\.com\.tw/.test(this.rawData.link_url)) this._tags.push("PCHome");
-			if (/momo\.com\.tw/.test(this.rawData.link_url)) this._tags.push("momo");
-			if (/amazon\.com/.test(this.rawData.link_url)) this._tags.push("美亞");
-			if (/amazon\.co\.jp/.test(this.rawData.link_url)) this._tags.push("日亞");
+
+			try {
+				const hostname = new URL(this.rawData.link_url).hostname;
+				if (hostname.includes('pchome.com.tw')) this._tags.push("PCHome");
+				if (hostname.includes('momo.com.tw')) this._tags.push("momo");
+				if (hostname.includes('amazon.com')) this._tags.push("美亞");
+				if (hostname.includes('amazon.co.jp')) this._tags.push("日亞");
+			} catch (error) {
+				console.warn('Invalid URL:', this.rawData.link_url);
+			}
+
 			this._processedTags = this._tags.map(tag => `#${tag}`);
 		}
 
@@ -584,6 +598,12 @@
 					this.elements.search_input.value = e.target.textContent;
 					this.elements.search_input.dispatchEvent(new Event('input', { bubbles: true }));
 				}
+			});
+
+			// 監聽瀏覽器返回/前進按鈕
+			window.addEventListener('popstate', () => {
+				this.handleInitialSearch();
+				this.app.filterAndDisplayItems();
 			});
 		}
 
@@ -726,7 +746,7 @@
 			const descriptionHTML = item.desc ? `<p class="description">${item.desc}</p>` : '';
 
 			return `
-				<button class="close close-dialog">╳</button>
+				<button class="close close-dialog" aria-label="關閉">╳</button>
 				<img src="${item.img_url}" alt="${item.name}" style="aspect-ratio: 1 / 1; width: 100%; object-fit: cover; border-radius: 8px;">
 				<h4>${item.name}</h4>
 				${priceHTML}
@@ -794,13 +814,10 @@
 
 					// Apply scroll lock styles
 					document.body.classList.add('dialog-open');
-					const scrollbarWidth = this.getScrollbarWidth();
-					document.body.style.paddingRight = `${scrollbarWidth}px`;
 					document.body.style.top = `-${this.scrollPosition}px`;
 				} else {
 					// Remove scroll lock styles
 					document.body.classList.remove('dialog-open');
-					document.body.style.paddingRight = '';
 					document.body.style.top = '';
 
 					// Restore scroll position
@@ -816,14 +833,26 @@
 		}
 
 		async loadData() {
+			const controller = new AbortController();
+			const timeoutId = setTimeout(() => controller.abort(), 10000); // 10秒超時
+
 			try {
-				const response = await fetch(this.google_tsv_url);
+				const response = await fetch(this.google_tsv_url, {
+					signal: controller.signal
+				});
+				clearTimeout(timeoutId);
+
 				if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
 				const tsvText = await response.text();
 				this.parseTSV(tsvText);
 			}
 			catch (error) {
-				console.error('Failed to load or parse sheet data:', error);
+				clearTimeout(timeoutId);
+				if (error.name === 'AbortError') {
+					console.error('Request was aborted due to timeout');
+				} else {
+					console.error('Failed to load or parse sheet data:', error);
+				}
 			}
 		}
 
@@ -911,18 +940,6 @@
 					element.classList.add('hidden');
 				}
 			});
-		}
-
-		getScrollbarWidth() {
-			const outer = document.createElement('div');
-			outer.style.visibility = 'hidden';
-			outer.style.overflow = 'scroll';
-			document.body.appendChild(outer);
-			const inner = document.createElement('div');
-			outer.appendChild(inner);
-			const scrollbarWidth = outer.offsetWidth - inner.offsetWidth;
-			outer.parentNode.removeChild(outer);
-			return scrollbarWidth;
 		}
 	}
 
