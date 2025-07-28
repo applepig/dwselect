@@ -39,9 +39,9 @@
 				</p>
 			</div>
 		</main>
-		<article popover id="item-popover">
-			<!-- Popover content will be dynamically generated here -->
-		</article>
+		<dialog id="item-dialog">
+			<!-- Dialog content will be dynamically generated here -->
+		</dialog>
 		<div id="loader" class="loader"></div>
 	</div>
 </body>
@@ -238,7 +238,7 @@
 		}
 	}
 
-	#item-popover {
+	#item-dialog {
 		max-width: 480px;
 		width: 90%;
 		border: 1px solid var(--border-color);
@@ -247,6 +247,11 @@
 		background: var(--bg-color);
 		color: var(--text-color);
 		box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+		margin: 0;
+		position: fixed;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
 
 		&::backdrop {
 			background: rgba(0, 0, 0, 0.5);
@@ -262,6 +267,8 @@
 			font-size: 24px;
 			cursor: pointer;
 			color: var(--text-color);
+			user-select: none;
+			text-shadow: 0 0 1px var(--bg-color);
 		}
 
 		h4 {
@@ -384,16 +391,19 @@
 		display: flex;
 	}
 
-	body.popover-open {
+	body.dialog-open {
 		overflow: hidden;
+		position: fixed;
+		width: 100%;
+		height: 100%;
 	}
 
-	body.popover-open>#app {
+	body.dialog-open>#app {
 		pointer-events: none;
 		user-select: none;
 	}
 
-	body.popover-open #item-popover {
+	body.dialog-open #item-dialog {
 		pointer-events: auto;
 	}
 
@@ -401,15 +411,20 @@
 		display: block;
 	}
 
-	/* Popover Slide-in Animation */
-	#item-popover {
-		transform: translateX(-100%);
+	/* Dialog Animation */
+	#item-dialog {
 		opacity: 0;
+		transform: translate(-50%, -50%) scale(0.9);
+		transition: opacity 0.3s ease, transform 0.3s ease;
+		position: fixed;
+		top: 50%;
+		left: 50%;
+		margin: 0;
 	}
 
-	#item-popover.is-open {
-		transform: translateX(0%);
+	#item-dialog[data-open="true"] {
 		opacity: 1;
+		transform: translate(-50%, -50%) scale(1);
 	}
 
 	/* Hidden class for items */
@@ -624,18 +639,17 @@
 		}
 	}
 
-	class PopoverController {
+	class DialogController {
 		constructor(app) {
 			this.app = app;
 			this.elements = {
-				popover: document.getElementById('item-popover'),
+				dialog: document.getElementById('item-dialog'),
 				items_container: document.querySelector('.items'),
 			};
 		}
 
 		init() {
 			this.setupEventListeners();
-			this.elements.popover.classList.remove('is-open'); // Set initial closed state
 		}
 
 		setupEventListeners() {
@@ -651,12 +665,8 @@
 				}
 			});
 
-			this.elements.popover.addEventListener('toggle', () => {
-				this.app.state.isPopoverOpen = this.elements.popover.matches(':popover-open');
-			});
-
-			this.elements.popover.addEventListener('click', (e) => {
-				if (e.target.classList.contains('close-popover')) {
+			this.elements.dialog.addEventListener('click', (e) => {
+				if (e.target.classList.contains('close-dialog')) {
 					this.hide();
 				}
 				if (e.target.classList.contains('tag-clickable')) {
@@ -667,31 +677,46 @@
 					this.hide();
 				}
 			});
+
+			// Handle backdrop click to close dialog
+			this.elements.dialog.addEventListener('click', (e) => {
+				if (e.target === this.elements.dialog) {
+					this.hide();
+				}
+			});
+
+			// Handle escape key
+			document.addEventListener('keydown', (e) => {
+				if (e.key === 'Escape' && this.elements.dialog.open) {
+					this.hide();
+				}
+			});
 		}
 
 		show(item) {
-			this.elements.popover.innerHTML = this.generateContent(item);
-			this.elements.popover.classList.remove('is-open'); // Start in closed state
-			try {
-				this.elements.popover.showPopover();
-				// Use requestAnimationFrame to ensure popover is shown before animating
-				requestAnimationFrame(() => {
-					requestAnimationFrame(() => {
-						this.elements.popover.classList.add('is-open'); // Trigger slide-in animation
-					});
-				});
-			}
-			catch (error) {
-				console.error('Error showing popover:', error);
-			}
+			this.elements.dialog.innerHTML = this.generateContent(item);
+
+			// Set state first to handle scroll position
+			this.app.state.isDialogOpen = true;
+
+			// Show dialog and trigger animation
+			this.elements.dialog.showModal();
+
+			// Trigger animation on next frame
+			requestAnimationFrame(() => {
+				this.elements.dialog.setAttribute('data-open', 'true');
+			});
 		}
 
 		hide() {
-			this.elements.popover.classList.remove('is-open'); // Trigger slide-out animation
-			// Wait for animation to complete before hiding
+			// Remove animation state
+			this.elements.dialog.removeAttribute('data-open');
+
+			// Wait for animation to complete before closing
 			setTimeout(() => {
-				this.elements.popover.hidePopover();
-			}, 300); // Match the transition duration
+				this.elements.dialog.close();
+				this.app.state.isDialogOpen = false;
+			}, 300);
 		}
 
 		generateContent(item) {
@@ -701,7 +726,7 @@
 			const descriptionHTML = item.desc ? `<p class="description">${item.desc}</p>` : '';
 
 			return `
-				<button class="close close-popover">╳</button>
+				<button class="close close-dialog">╳</button>
 				<img src="${item.img_url}" alt="${item.name}" style="aspect-ratio: 1 / 1; width: 100%; object-fit: cover; border-radius: 8px;">
 				<h4>${item.name}</h4>
 				${priceHTML}
@@ -728,13 +753,13 @@
 
 			this.stateController = new StateController({
 				isLoading: false,
-				isPopoverOpen: false,
+				isDialogOpen: false,
 				isSuggestionOpen: false,
 			});
 			this.state = this.stateController.state;
 
 			this.searchController = new SearchController(this);
-			this.popoverController = new PopoverController(this);
+			this.dialogController = new DialogController(this);
 
 			this.categoryElements = new Map(); // Map<string, HTMLElement> to store category title DOM elements
 			this.categoryItemMap = new Map(); // Map<string, Set<Item>> to map category names to a set of Item instances in that category
@@ -747,7 +772,7 @@
 			this.state.isLoading = true;
 
 			this.searchController.init();
-			this.popoverController.init();
+			this.dialogController.init();
 
 			await this.loadData();
 			this.populateTagDatalist();
@@ -762,10 +787,27 @@
 				document.body.classList.toggle('is-loading', value);
 			});
 
-			this.stateController.watch('isPopoverOpen', (value) => {
-				document.body.classList.toggle('popover-open', value);
-				const scrollbarWidth = value ? this.getScrollbarWidth() : 0;
-				document.body.style.paddingRight = `${scrollbarWidth}px`;
+			this.stateController.watch('isDialogOpen', (value) => {
+				if (value) {
+					// Store current scroll position before any changes
+					this.scrollPosition = window.pageYOffset;
+
+					// Apply scroll lock styles
+					document.body.classList.add('dialog-open');
+					const scrollbarWidth = this.getScrollbarWidth();
+					document.body.style.paddingRight = `${scrollbarWidth}px`;
+					document.body.style.top = `-${this.scrollPosition}px`;
+				} else {
+					// Remove scroll lock styles
+					document.body.classList.remove('dialog-open');
+					document.body.style.paddingRight = '';
+					document.body.style.top = '';
+
+					// Restore scroll position
+					if (this.scrollPosition !== undefined) {
+						window.scrollTo(0, this.scrollPosition);
+					}
+				}
 			});
 
 			this.stateController.watch('isSuggestionOpen', (value) => {

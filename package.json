@@ -7,5 +7,6 @@
     "dev": "python3 -m http.server 3000",
     "deploy": "scp index.html root@applepig.idv.tw:/var/www/html/dwselect/"
   },
-  "dependencies": {}
+  "dependencies": {},
+  "spreadsheet_url": "https://docs.google.com/spreadsheets/d/1CANuynOyJpG04AdX0s4dhAbZmilr6vG4IwQQOXejYJ4/edit?gid=0#gid=0"
 }
