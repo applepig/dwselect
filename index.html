@@ -443,11 +443,92 @@
 		}
 	}
 
+	class SearchController {
+		constructor(app) {
+			this.app = app;
+			this.search_term = '';
+			this.elements = {
+				search_input: document.querySelector('input[type="search"]'),
+				suggestions_container: document.querySelector('.suggestions'),
+				popular_tags_datalist: document.getElementById('popular-tags'),
+			};
+		}
+
+		init() {
+			this.setupEventListeners();
+			this.handleInitialSearch();
+		}
+
+		setupEventListeners() {
+			this.elements.search_input.addEventListener('input', (e) => {
+				this.search_term = e.target.value;
+				this.updateURL();
+				this.app.renderItems();
+				this.updateSuggestions();
+			});
+
+			this.elements.suggestions_container.addEventListener('click', (e) => {
+				if (e.target.tagName === 'A') {
+					e.preventDefault();
+					this.elements.search_input.value = e.target.textContent;
+					this.elements.search_input.dispatchEvent(new Event('input', { bubbles: true }));
+				}
+			});
+		}
+
+		updateURL() {
+			const urlParams = new URLSearchParams(location.search);
+			if (this.search_term) {
+				urlParams.set('search', this.search_term);
+			} else {
+				urlParams.delete('search');
+			}
+			const newSearch = urlParams.toString();
+			const url = newSearch ? `${location.pathname}?${newSearch}` : location.pathname;
+			history.replaceState(null, '', url);
+		}
+
+		updateSuggestions() {
+			this.elements.suggestions_container.innerHTML = '';
+			if (this.search_term.startsWith('#')) {
+				const matching_tags = [...this.app.tags].filter(tag => tag.toLowerCase().includes(this.search_term.toLowerCase()));
+				if (matching_tags.length > 0) {
+					const fragment = document.createDocumentFragment();
+					matching_tags.slice(0, 10).forEach(tag => {
+						const suggestion_element = document.createElement('a');
+						suggestion_element.href = '#';
+						suggestion_element.textContent = tag;
+						fragment.appendChild(suggestion_element);
+					});
+					this.elements.suggestions_container.appendChild(fragment);
+					this.elements.suggestions_container.style.display = 'block';
+				} else {
+					this.elements.suggestions_container.style.display = 'none';
+				}
+			} else {
+				this.elements.suggestions_container.style.display = 'none';
+			}
+		}
+
+		handleInitialSearch() {
+			const urlParams = new URLSearchParams(window.location.search);
+			const searchTerm = urlParams.get('search');
+			if (searchTerm) {
+				const decodedTerm = decodeURIComponent(searchTerm);
+				this.elements.search_input.value = decodedTerm;
+				this.search_term = decodedTerm;
+			}
+		}
+
+		getSearchTerm() {
+			return this.search_term;
+		}
+	}
+
 	class App {
 		constructor() {
 			this.items = [];
 			this.tags = new Set();
-			this.search_term = '';
 			this.fb_thread_url = "https://www.facebook.com/applepig/posts/pfbid0j5U2aw7URVNhwLNuWjGgrZvtUQvNmik36uwRc8T1qcvR6GunRKf4V7jVjnsjxn4Zl";
 			this.google_sheet_id = "1CANuynOyJpG04AdX0s4dhAbZmilr6vG4IwQQOXejYJ4";
 			this.google_tsv_url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQF7sPFKfnvvL0rXrZIA2CT0v563K_A-jJC3Bv3IvSTV0xroYyFBNUzW3svXh3oER0CrCeVvIhySZt7/pub?output=tsv";
@@ -456,24 +537,22 @@
 			this.elements = {
 				app: document.getElementById('app'),
 				items_container: document.querySelector('.items'),
-				search_input: document.querySelector('input[type="search"]'),
-				suggestions_container: document.querySelector('.suggestions'),
 				popover: document.getElementById('item-popover'),
 				loader: document.getElementById('loader'),
-				popular_tags_datalist: document.getElementById('popular-tags'),
 			};
 
+			this.searchController = new SearchController(this);
 			this.init();
 		}
 
 		async init() {
 			this.showLoader();
+			this.searchController.init();
 			await this.loadData();
 			this.populateTagDatalist();
 			this.renderItems();
 			this.hideLoader();
 			this.setupEventListeners();
-			this.handleInitialSearch();
 		}
 
 		showLoader() {
@@ -494,7 +573,6 @@
 				this.parseTSV(tsvText);
 			} catch (error) {
 				console.error('Failed to load or parse sheet data:', error);
-				// Optionally, display an error message to the user
 			}
 		}
 
@@ -511,10 +589,9 @@
 						rawItem[header[j]] = data[j].trim();
 					}
 
-					if (rawItem.name) { // Ensure item is valid
+					if (rawItem.name) {
 						const item = new Item(rawItem);
 						items.push(item);
-						// Add display tags to global tags set
 						item.displayTags.forEach(tag => this.tags.add(tag));
 					}
 				}
@@ -536,7 +613,7 @@
 				option.value = tag;
 				fragment.appendChild(option);
 			});
-			this.elements.popular_tags_datalist.appendChild(fragment);
+			this.searchController.elements.popular_tags_datalist.appendChild(fragment);
 		}
 
 		renderItems() {
@@ -576,46 +653,18 @@
 		}
 
 		filter_items() {
-			if (!this.search_term) {
+			const searchTerm = this.searchController.getSearchTerm();
+			if (!searchTerm) {
 				return this.items;
 			} else {
-				return this.items.filter(item => item.matchesSearch(this.search_term));
+				return this.items.filter(item => item.matchesSearch(searchTerm));
 			}
 		}
 
 		setupEventListeners() {
-			this.elements.search_input.addEventListener('input', (e) => {
-				this.search_term = e.target.value;
-				// Use replaceState to avoid polluting history
-				// Use search= prefix to avoid conflict with tag # symbols
-				const urlParams = new URLSearchParams(location.search);
-				if (this.search_term) {
-					urlParams.set('search', this.search_term);
-				} else {
-					urlParams.delete('search');
-				}
-				const newSearch = urlParams.toString();
-				const url = newSearch ? `${location.pathname}?${newSearch}` : location.pathname;
-				history.replaceState(null, '', url);
-				this.renderItems();
-				this.updateSuggestions();
-			});
-
-			this.elements.suggestions_container.addEventListener('click', (e) => {
-				if (e.target.tagName === 'A') {
-					e.preventDefault();
-					this.elements.search_input.value = e.target.textContent;
-					// Manually trigger the input event to ensure filtering and rendering happens
-					this.elements.search_input.dispatchEvent(new Event('input', { bubbles: true }));
-				}
-			});
-
-			// Handle popover logic
 			this.elements.items_container.addEventListener('click', (e) => {
 				const itemElement = e.target.closest('.item');
-				// Ensure it's not the info placeholder
 				if (itemElement && !itemElement.classList.contains('info')) {
-					// Check if popover is open - if so, this might be a backdrop click
 					if (this.isPopoverOpen) {
 						e.preventDefault();
 						e.stopPropagation();
@@ -631,67 +680,35 @@
 				}
 			});
 
-			// Update popover state on toggle and handle backdrop interactions
 			this.elements.popover.addEventListener('toggle', () => {
 				this.isPopoverOpen = this.elements.popover.matches(':popover-open');
 				this.toggleBackdropInteraction();
 			});
 
-			// Handle backdrop clicks properly
 			document.addEventListener('click', (e) => {
-				// If popover is open and click is outside popover content
 				if (this.isPopoverOpen && !this.elements.popover.contains(e.target)) {
-					// Check if the click target is an item that would trigger a new popover
 					const clickedItem = e.target.closest('.item');
 					if (clickedItem && !clickedItem.classList.contains('info')) {
-						// Prevent the item click from opening a new popover
 						e.preventDefault();
 						e.stopPropagation();
-						// The browser will still close the current popover due to light dismiss
 					}
 				}
 			});
 
-			// Handle popover tag clicks
 			this.elements.popover.addEventListener('click', (e) => {
 				if (e.target.classList.contains('tag-clickable')) {
 					e.preventDefault();
 					e.stopPropagation();
 					const tag = e.target.textContent;
-					this.elements.search_input.value = tag;
-					this.elements.search_input.dispatchEvent(new Event('input', { bubbles: true }));
+					this.searchController.elements.search_input.value = tag;
+					this.searchController.elements.search_input.dispatchEvent(new Event('input', { bubbles: true }));
 					this.elements.popover.hidePopover();
 				}
 			});
 		}
 
-		updateSuggestions() {
-			this.elements.suggestions_container.innerHTML = '';
-			if (this.search_term.startsWith('#')) {
-				const matching_tags = [...this.tags].filter(tag => tag.toLowerCase().includes(this.search_term.toLowerCase()));
-				if (matching_tags.length > 0) {
-					const fragment = document.createDocumentFragment();
-					// Limit suggestions to first 10
-					matching_tags.slice(0, 10).forEach(tag => {
-						const suggestion_element = document.createElement('a');
-						suggestion_element.href = '#';
-						suggestion_element.textContent = tag;
-						fragment.appendChild(suggestion_element);
-					});
-					this.elements.suggestions_container.appendChild(fragment);
-					this.elements.suggestions_container.style.display = 'block';
-				} else {
-					this.elements.suggestions_container.style.display = 'none';
-				}
-			} else {
-				// Hide suggestions when not in tag-search mode
-				this.elements.suggestions_container.style.display = 'none';
-			}
-		}
-
 		showPopover(item) {
 			this.elements.popover.innerHTML = this.generatePopoverContent(item);
-			// Use setTimeout to ensure DOM is ready
 			setTimeout(() => {
 				try {
 					this.elements.popover.showPopover();
@@ -723,19 +740,13 @@
 
 		toggleBackdropInteraction() {
 			if (this.isPopoverOpen) {
-				// Disable scrolling and interactions on backdrop elements
 				this.elements.app.style.pointerEvents = 'none';
 				this.elements.app.style.userSelect = 'none';
-
-				// Calculate scrollbar width to prevent layout shift
 				const scrollbarWidth = this.getScrollbarWidth();
 				document.body.style.overflow = 'hidden';
 				document.body.style.paddingRight = `${scrollbarWidth}px`;
-
-				// Re-enable popover interactions
 				this.elements.popover.style.pointerEvents = 'auto';
 			} else {
-				// Re-enable all interactions
 				this.elements.app.style.pointerEvents = 'auto';
 				this.elements.app.style.userSelect = 'auto';
 				document.body.style.overflow = 'auto';
@@ -744,34 +755,15 @@
 		}
 
 		getScrollbarWidth() {
-			// Create a temporary div to measure scrollbar width
 			const outer = document.createElement('div');
 			outer.style.visibility = 'hidden';
 			outer.style.overflow = 'scroll';
 			document.body.appendChild(outer);
-
 			const inner = document.createElement('div');
 			outer.appendChild(inner);
-
 			const scrollbarWidth = outer.offsetWidth - inner.offsetWidth;
-
-			// Clean up
 			outer.parentNode.removeChild(outer);
-
 			return scrollbarWidth;
-		}
-
-		handleInitialSearch() {
-			// Check if there's a search term in the URL search params
-			const urlParams = new URLSearchParams(window.location.search);
-			const searchTerm = urlParams.get('search');
-			if (searchTerm) {
-				const decodedTerm = decodeURIComponent(searchTerm);
-				this.elements.search_input.value = decodedTerm;
-				this.search_term = decodedTerm;
-				this.renderItems();
-				this.updateSuggestions();
-			}
 		}
 	}
 
