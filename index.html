@@ -15,7 +15,7 @@
 				'gtm.start':
 					new Date().getTime(), event: 'gtm.js'
 			}); var f = d.getElementsByTagName(s)[0],
-				j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
+				j = document.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
 					'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);
 		})(window, document, 'script', 'dataLayer', 'GTM-KTZKC8CH');</script>
 	<!-- End Google Tag Manager -->
@@ -238,7 +238,6 @@
 		}
 	}
 
-	/* Popover Styles */
 	#item-popover {
 		max-width: 480px;
 		width: 90%;
@@ -350,7 +349,6 @@
 		}
 	}
 
-	/* Loader Styles */
 	.loader {
 		position: fixed;
 		top: 0;
@@ -359,19 +357,19 @@
 		bottom: 0;
 		background: var(--bg-color);
 		z-index: 999;
-		display: flex;
+		display: none; /* Hidden by default */
 		align-items: center;
 		justify-content: center;
+	}
 
-		&::after {
-			content: '';
-			width: 50px;
-			height: 50px;
-			border: 5px solid var(--border-color);
-			border-top-color: var(--accent-color);
-			border-radius: 50%;
-			animation: spin 1s linear infinite;
-		}
+	.loader::after {
+		content: '';
+		width: 50px;
+		height: 50px;
+		border: 5px solid var(--border-color);
+		border-top-color: var(--accent-color);
+		border-radius: 50%;
+		animation: spin 1s linear infinite;
 	}
 
 	@keyframes spin {
@@ -379,67 +377,146 @@
 			transform: rotate(360deg);
 		}
 	}
+
+	/* State-based Classes */
+	body.is-loading .loader {
+		display: flex;
+	}
+
+	body.popover-open {
+		overflow: hidden;
+	}
+
+	body.popover-open>#app {
+		pointer-events: none;
+		user-select: none;
+	}
+
+	body.popover-open #item-popover {
+		pointer-events: auto;
+	}
+
+	.suggestions.is-open {
+		display: block;
+	}
+
+	/* Popover Slide-in Animation */
+	#item-popover {
+		transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+		transform: translateX(0%);
+		opacity: 1;
+	}
+
+	#item-popover.is-closed {
+		transform: translateX(-100%);
+		opacity: 0;
+	}
+
+	/* Hidden class for items */
+	.hidden {
+		display: none !important;
+	}
 </style>
 <script type="module">
+	class StateController {
+		constructor(initialState) {
+			this.watchers = {};
+			
+			const handler = {
+				set: (target, property, value) => {
+					const oldValue = target[property];
+					target[property] = value;
+					if (oldValue !== value) { // Only notify if value actually changed
+						this.notify(property, value);
+					}
+					return true;
+				}
+			};
+			
+			this.state = new Proxy(initialState, handler);
+		}
+
+		watch(property, callback) {
+			if (!this.watchers[property]) {
+				this.watchers[property] = [];
+			}
+			this.watchers[property].push(callback);
+		}
+
+		notify(property, value) {
+			if (this.watchers[property]) {
+				this.watchers[property].forEach(callback => callback(value));
+			}
+		}
+	}
+
 	class Item {
 		constructor(rawData) {
 			this.rawData = rawData;
 			this._tags = [];
 			this._processedTags = [];
+			this.domElement = null; // Will store the actual DOM element
 			this.processData();
 		}
 
 		processData() {
-			// Process tags from raw data
 			if (this.rawData.tags) {
 				this._tags = this.rawData.tags.split(' ').filter(t => t.trim());
 			}
-
-			// Add auto-detected tags based on URL
 			if (/pchome\.com\.tw/.test(this.rawData.link_url)) this._tags.push("PCHome");
 			if (/momo\.com\.tw/.test(this.rawData.link_url)) this._tags.push("momo");
 			if (/amazon\.com/.test(this.rawData.link_url)) this._tags.push("美亞");
 			if (/amazon\.co\.jp/.test(this.rawData.link_url)) this._tags.push("日亞");
-
-			// Create processed tags for display
 			this._processedTags = this._tags.map(tag => `#${tag}`);
 		}
 
-		// Getters
 		get name() { return this.rawData.name; }
 		get price() { return this.rawData.price; }
-		get desc() {
-			return this.rawData.desc ? this.rawData.desc.replace(/\n/ig, '<br>') : '';
-		}
+		get desc() { return this.rawData.desc ? this.rawData.desc.replace(/\n/ig, '<br>') : ''; }
 		get link_url() { return this.rawData.link_url; }
 		get img_url() { return this.rawData.img_url; }
 		get category() { return this.rawData.category || '未分類'; }
 		get reference() { return this.rawData.reference; }
-
-		// Tag getters
-		get tags() { return this._tags; } // Raw tags without #
-		get displayTags() { return this._processedTags; } // Tags with # for display
-		get searchTags() { return this._processedTags; } // Tags with # for search
-
-		// Methods
-		hasTag(tag) {
-			const searchTag = tag.startsWith('#') ? tag : `#${tag}`;
-			return this._processedTags.includes(searchTag);
-		}
+		get tags() { return this._tags; }
+		get displayTags() { return this._processedTags; }
 
 		matchesSearch(searchTerm) {
 			if (!searchTerm) return true;
-
 			const lowerSearch = searchTerm.toLowerCase();
-
-			// Tag search
 			if (searchTerm.startsWith('#')) {
-				return this.hasTag(searchTerm);
+				return this._processedTags.includes(searchTerm);
 			}
-
-			// Text search
 			return (this.name?.toLowerCase().includes(lowerSearch)) ||
 				(this.desc?.toLowerCase().includes(lowerSearch));
+		}
+
+		createDomElement() {
+			const itemElement = document.createElement('a');
+			itemElement.className = 'item';
+			itemElement.href = this.link_url;
+			itemElement.dataset.itemId = this.name;
+
+			itemElement.innerHTML = `
+				<img src="${this.img_url}" loading="lazy" alt="${this.name}">
+				<div class="label">
+					<h4 class="title">${this.name}</h4>
+					<p class="price">${this.price}</p>
+				</div>
+			`;
+			this.domElement = itemElement;
+			return itemElement;
+		}
+
+		show() {
+			if (this.domElement) {
+				this.domElement.classList.remove('hidden');
+			}
+		}
+
+		hide() {
+			if (this.domElement) {
+				this.domElement.classList.add('hidden');
+			}
 		}
 	}
 
@@ -463,7 +540,7 @@
 			this.elements.search_input.addEventListener('input', (e) => {
 				this.search_term = e.target.value;
 				this.updateURL();
-				this.app.renderItems();
+				this.app.filterAndDisplayItems(); // Call new method
 				this.updateSuggestions();
 			});
 
@@ -480,7 +557,8 @@
 			const urlParams = new URLSearchParams(location.search);
 			if (this.search_term) {
 				urlParams.set('search', this.search_term);
-			} else {
+			}
+			else {
 				urlParams.delete('search');
 			}
 			const newSearch = urlParams.toString();
@@ -501,12 +579,14 @@
 						fragment.appendChild(suggestion_element);
 					});
 					this.elements.suggestions_container.appendChild(fragment);
-					this.elements.suggestions_container.style.display = 'block';
-				} else {
-					this.elements.suggestions_container.style.display = 'none';
+					this.app.state.isSuggestionOpen = true;
 				}
-			} else {
-				this.elements.suggestions_container.style.display = 'none';
+				else {
+					this.app.state.isSuggestionOpen = false;
+				}
+			}
+			else {
+				this.app.state.isSuggestionOpen = false;
 			}
 		}
 
@@ -525,53 +605,154 @@
 		}
 	}
 
+	class PopoverController {
+		constructor(app) {
+			this.app = app;
+			this.elements = {
+				popover: document.getElementById('item-popover'),
+				items_container: document.querySelector('.items'),
+			};
+		}
+
+		init() {
+			this.setupEventListeners();
+			this.elements.popover.classList.add('is-closed'); // Set initial closed state
+		}
+
+		setupEventListeners() {
+			this.elements.items_container.addEventListener('click', (e) => {
+				const itemElement = e.target.closest('.item:not(.info)');
+				if (itemElement) {
+					e.preventDefault();
+					const itemName = itemElement.dataset.itemId;
+					const item = this.app.items.find(i => i.name === itemName);
+					if (item) {
+						this.show(item);
+					}
+				}
+			});
+
+			this.elements.popover.addEventListener('toggle', () => {
+				this.app.state.isPopoverOpen = this.elements.popover.matches(':popover-open');
+			});
+
+			this.elements.popover.addEventListener('click', (e) => {
+				if (e.target.classList.contains('close-popover')) {
+					this.hide();
+				}
+				if (e.target.classList.contains('tag-clickable')) {
+					e.preventDefault();
+					const tag = e.target.textContent;
+					this.app.searchController.elements.search_input.value = tag;
+					this.app.searchController.elements.search_input.dispatchEvent(new Event('input', { bubbles: true }));
+					this.hide();
+				}
+			});
+		}
+
+		show(item) {
+			this.elements.popover.innerHTML = this.generateContent(item);
+			this.elements.popover.classList.remove('is-closed'); // Remove class to trigger slide-in
+			try {
+				this.elements.popover.showPopover();
+			}
+			catch (error) {
+				console.error('Error showing popover:', error);
+			}
+		}
+
+		hide() {
+			this.elements.popover.classList.add('is-closed'); // Add class to trigger slide-out
+			this.elements.popover.hidePopover();
+		}
+
+		generateContent(item) {
+			const tagsHTML = item.displayTags.map(tag => `<span class="tag-clickable">${tag}</span>`).join('');
+			const priceHTML = item.price ? `<p class="price">${item.price}</p>` : '';
+			const referenceHTML = item.reference ? `<a href="${item.reference}" class="button btn-outline">參考資料</a>` : '';
+			const descriptionHTML = item.desc ? `<p class="description">${item.desc}</p>` : '';
+
+			return `
+				<button class="close close-popover">╳</button>
+				<img src="${item.img_url}" alt="${item.name}" style="aspect-ratio: 1 / 1; width: 100%; object-fit: cover; border-radius: 8px;">
+				<h4>${item.name}</h4>
+				${priceHTML}
+				${descriptionHTML}
+				<div class="tags">${tagsHTML}</div>
+				<div class="actions">
+					<a href="${item.link_url}" class="button cta">購買連結</a>
+					${referenceHTML}
+				</div>
+			`;
+		}
+	}
+
 	class App {
 		constructor() {
 			this.items = [];
 			this.tags = new Set();
-			this.fb_thread_url = "https://www.facebook.com/applepig/posts/pfbid0j5U2aw7URVNhwLNuWjGgrZvtUQvNmik36uwRc8T1qcvR6GunRKf4V7jVjnsjxn4Zl";
-			this.google_sheet_id = "1CANuynOyJpG04AdX0s4dhAbZmilr6vG4IwQQOXejYJ4";
 			this.google_tsv_url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQF7sPFKfnvvL0rXrZIA2CT0v563K_A-jJC3Bv3IvSTV0xroYyFBNUzW3svXh3oER0CrCeVvIhySZt7/pub?output=tsv";
-			this.isPopoverOpen = false;
-
+			
 			this.elements = {
-				app: document.getElementById('app'),
 				items_container: document.querySelector('.items'),
-				popover: document.getElementById('item-popover'),
-				loader: document.getElementById('loader'),
+				suggestions_container: document.querySelector('.suggestions'),
 			};
 
+			this.stateController = new StateController({
+				isLoading: false,
+				isPopoverOpen: false,
+				isSuggestionOpen: false,
+			});
+			this.state = this.stateController.state;
+
 			this.searchController = new SearchController(this);
+			this.popoverController = new PopoverController(this);
+			
+			this.categoryElements = new Map(); // Map<string, HTMLElement> to store category title DOM elements
+			this.categoryItemMap = new Map(); // Map<string, Set<Item>> to map category names to a set of Item instances in that category
+
 			this.init();
 		}
 
 		async init() {
-			this.showLoader();
+			this.setupStateWatchers();
+			this.state.isLoading = true;
+			
 			this.searchController.init();
+			this.popoverController.init();
+			
 			await this.loadData();
 			this.populateTagDatalist();
-			this.renderItems();
-			this.hideLoader();
-			this.setupEventListeners();
+			this.renderAllItemsInitially(); // New method for initial render
+			this.filterAndDisplayItems(); // Apply initial filter
+			
+			this.state.isLoading = false;
 		}
 
-		showLoader() {
-			this.elements.loader.style.display = 'flex';
-		}
+		setupStateWatchers() {
+			this.stateController.watch('isLoading', (value) => {
+				document.body.classList.toggle('is-loading', value);
+			});
 
-		hideLoader() {
-			this.elements.loader.style.display = 'none';
+			this.stateController.watch('isPopoverOpen', (value) => {
+				document.body.classList.toggle('popover-open', value);
+				const scrollbarWidth = value ? this.getScrollbarWidth() : 0;
+				document.body.style.paddingRight = `${scrollbarWidth}px`;
+			});
+
+			this.stateController.watch('isSuggestionOpen', (value) => {
+				this.elements.suggestions_container.classList.toggle('is-open', value);
+			});
 		}
 
 		async loadData() {
 			try {
 				const response = await fetch(this.google_tsv_url);
-				if (!response.ok) {
-					throw new Error(`HTTP error! status: ${response.status}`);
-				}
+				if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
 				const tsvText = await response.text();
 				this.parseTSV(tsvText);
-			} catch (error) {
+			}
+			catch (error) {
 				console.error('Failed to load or parse sheet data:', error);
 			}
 		}
@@ -580,7 +761,6 @@
 			const lines = text.split('\n');
 			const header = lines[0].split('\t').map(h => h.trim());
 			const items = [];
-
 			for (let i = 1; i < lines.length; i++) {
 				const data = lines[i].split('\t');
 				if (data.length === header.length) {
@@ -588,7 +768,6 @@
 					for (let j = 0; j < header.length; j++) {
 						rawItem[header[j]] = data[j].trim();
 					}
-
 					if (rawItem.name) {
 						const item = new Item(rawItem);
 						items.push(item);
@@ -605,9 +784,7 @@
 				acc[tag] = (acc[tag] || 0) + 1;
 				return acc;
 			}, {});
-
 			const sorted_tags = Object.keys(tag_counts).sort((a, b) => tag_counts[b] - tag_counts[a]);
-
 			sorted_tags.slice(0, 15).forEach(tag => {
 				const option = document.createElement('option');
 				option.value = tag;
@@ -616,142 +793,60 @@
 			this.searchController.elements.popular_tags_datalist.appendChild(fragment);
 		}
 
-		renderItems() {
-			const itemsToRender = this.filter_items();
+		renderAllItemsInitially() {
+			this.elements.items_container.innerHTML = ''; // Clear existing items
+			this.categoryElements.clear();
+			this.categoryItemMap.clear();
 
-			if (itemsToRender.length === 0) {
-				this.elements.items_container.innerHTML = '<p class="info">找不到結果</p>';
-				return;
-			}
-
-			const grouped_items = itemsToRender.reduce((acc, item) => {
+			const grouped_items = this.items.reduce((acc, item) => {
 				const category = item.category || '未分類';
-				if (!acc[category]) {
-					acc[category] = [];
-				}
+				if (!acc[category]) acc[category] = [];
 				acc[category].push(item);
 				return acc;
 			}, {});
 
-			let html = '';
+			const fragment = document.createDocumentFragment();
 			for (const category in grouped_items) {
-				html += `<h2 class="category-title">${category}</h2>`;
-				
+				const category_header = document.createElement('h2');
+				category_header.className = 'category-title';
+				category_header.textContent = category;
+				fragment.appendChild(category_header);
+				this.categoryElements.set(category, category_header);
+				this.categoryItemMap.set(category, new Set());
+
 				grouped_items[category].forEach(item => {
-					html += `
-						<a class="item" href="${item.link_url}" data-item-id="${item.name}">
-							<img src="${item.img_url}" loading="lazy" alt="${item.name}">
-							<div class="label">
-								<h4 class="title">${item.name}</h4>
-								<p class="price">${item.price}</p>
-							</div>
-						</a>
-					`;
+					const itemDom = item.createDomElement(); // Item now creates its own DOM element
+					fragment.appendChild(itemDom);
+					this.categoryItemMap.get(category).add(item);
 				});
 			}
-			this.elements.items_container.innerHTML = html;
+			this.elements.items_container.appendChild(fragment);
 		}
 
-		filter_items() {
+		filterAndDisplayItems() {
 			const searchTerm = this.searchController.getSearchTerm();
-			if (!searchTerm) {
-				return this.items;
-			} else {
-				return this.items.filter(item => item.matchesSearch(searchTerm));
-			}
-		}
+			const visibleItemCounts = new Map();
 
-		setupEventListeners() {
-			this.elements.items_container.addEventListener('click', (e) => {
-				const itemElement = e.target.closest('.item');
-				if (itemElement && !itemElement.classList.contains('info')) {
-					if (this.isPopoverOpen) {
-						e.preventDefault();
-						e.stopPropagation();
-						return;
-					}
-
-					e.preventDefault();
-					const itemName = itemElement.dataset.itemId;
-					const item = this.items.find(i => i.name === itemName);
-					if (item) {
-						this.showPopover(item);
-					}
+			this.items.forEach(item => {
+				if (item.matchesSearch(searchTerm)) {
+					item.show();
+					const category = item.category || '未分類';
+					visibleItemCounts.set(category, (visibleItemCounts.get(category) || 0) + 1);
+				}
+				else {
+					item.hide();
 				}
 			});
 
-			this.elements.popover.addEventListener('toggle', () => {
-				this.isPopoverOpen = this.elements.popover.matches(':popover-open');
-				this.toggleBackdropInteraction();
-			});
-
-			document.addEventListener('click', (e) => {
-				if (this.isPopoverOpen && !this.elements.popover.contains(e.target)) {
-					const clickedItem = e.target.closest('.item');
-					if (clickedItem && !clickedItem.classList.contains('info')) {
-						e.preventDefault();
-						e.stopPropagation();
-					}
+			// Update category title visibility
+			this.categoryElements.forEach((element, category) => {
+				if (visibleItemCounts.get(category) > 0) {
+					element.classList.remove('hidden');
+				}
+				else {
+					element.classList.add('hidden');
 				}
 			});
-
-			this.elements.popover.addEventListener('click', (e) => {
-				if (e.target.classList.contains('tag-clickable')) {
-					e.preventDefault();
-					e.stopPropagation();
-					const tag = e.target.textContent;
-					this.searchController.elements.search_input.value = tag;
-					this.searchController.elements.search_input.dispatchEvent(new Event('input', { bubbles: true }));
-					this.elements.popover.hidePopover();
-				}
-			});
-		}
-
-		showPopover(item) {
-			this.elements.popover.innerHTML = this.generatePopoverContent(item);
-			setTimeout(() => {
-				try {
-					this.elements.popover.showPopover();
-				} catch (error) {
-					console.error('Error showing popover:', error);
-				}
-			}, 0);
-		}
-
-		generatePopoverContent(item) {
-			const tagsHTML = item.displayTags.map(tag => `<span class="tag-clickable">${tag}</span>`).join('');
-			const priceHTML = item.price ? `<p class="price">${item.price}</p>` : '';
-			const referenceHTML = item.reference ? `<a href="${item.reference}" class="button btn-outline">參考資料</a>` : '';
-			const descriptionHTML = item.desc ? `<p class="description">${item.desc}</p>` : '';
-
-			return `
-            <button onclick="this.closest('#item-popover').hidePopover()" class="close">╳</button>
-            <img src="${item.img_url}" alt="${item.name}" style="aspect-ratio: 1 / 1; width: 100%; object-fit: cover; border-radius: 8px;">
-            <h4>${item.name}</h4>
-            ${priceHTML}
-            ${descriptionHTML}
-            <div class="tags">${tagsHTML}</div>
-            <div class="actions">
-                <a href="${item.link_url}" class="button cta">購買連結</a>
-                ${referenceHTML}
-            </div>
-        `;
-		}
-
-		toggleBackdropInteraction() {
-			if (this.isPopoverOpen) {
-				this.elements.app.style.pointerEvents = 'none';
-				this.elements.app.style.userSelect = 'none';
-				const scrollbarWidth = this.getScrollbarWidth();
-				document.body.style.overflow = 'hidden';
-				document.body.style.paddingRight = `${scrollbarWidth}px`;
-				this.elements.popover.style.pointerEvents = 'auto';
-			} else {
-				this.elements.app.style.pointerEvents = 'auto';
-				this.elements.app.style.userSelect = 'auto';
-				document.body.style.overflow = 'auto';
-				document.body.style.paddingRight = '0px';
-			}
 		}
 
 		getScrollbarWidth() {
