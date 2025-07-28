@@ -4,9 +4,8 @@
   "description": "DW's Selections",
   "main": "index.html",
   "scripts": {
-    "start": "python3 -m http.server 3000",
     "dev": "python3 -m http.server 3000",
-    "debug": "python3 -m http.server 3000"
+    "deploy": "scp index.html root@applepig.idv.tw:/var/www/html/dwselect/"
   },
   "dependencies": {}
 }

@@ -357,7 +357,8 @@
 		bottom: 0;
 		background: var(--bg-color);
 		z-index: 999;
-		display: none; /* Hidden by default */
+		display: none;
+		/* Hidden by default */
 		align-items: center;
 		justify-content: center;
 	}
@@ -402,14 +403,13 @@
 
 	/* Popover Slide-in Animation */
 	#item-popover {
-		transition: transform 0.3s ease-out, opacity 0.3s ease-out;
-		transform: translateX(0%);
-		opacity: 1;
-	}
-
-	#item-popover.is-closed {
 		transform: translateX(-100%);
 		opacity: 0;
+	}
+
+	#item-popover.is-open {
+		transform: translateX(0%);
+		opacity: 1;
 	}
 
 	/* Hidden class for items */
@@ -421,7 +421,7 @@
 	class StateController {
 		constructor(initialState) {
 			this.watchers = {};
-			
+
 			const handler = {
 				set: (target, property, value) => {
 					const oldValue = target[property];
@@ -432,7 +432,7 @@
 					return true;
 				}
 			};
-			
+
 			this.state = new Proxy(initialState, handler);
 		}
 
@@ -451,6 +451,25 @@
 	}
 
 	class Item {
+		/**
+		 * Parses a single TSV line into a raw data object.
+		 * @param {string} line - The TSV line string.
+		 * @param {string[]} header - The array of header names.
+		 * @returns {object|null} The parsed raw data object, or null if parsing fails.
+		 */
+		static fromTSVLine(line, header) {
+			const data = line.split('	');
+			if (data.length !== header.length) {
+				console.warn('TSV line data length does not match header length:', line);
+				return null;
+			}
+			const rawItem = {};
+			for (let j = 0; j < header.length; j++) {
+				rawItem[header[j]] = data[j].trim();
+			}
+			return rawItem;
+		}
+
 		constructor(rawData) {
 			this.rawData = rawData;
 			this._tags = [];
@@ -616,7 +635,7 @@
 
 		init() {
 			this.setupEventListeners();
-			this.elements.popover.classList.add('is-closed'); // Set initial closed state
+			this.elements.popover.classList.remove('is-open'); // Set initial closed state
 		}
 
 		setupEventListeners() {
@@ -652,9 +671,15 @@
 
 		show(item) {
 			this.elements.popover.innerHTML = this.generateContent(item);
-			this.elements.popover.classList.remove('is-closed'); // Remove class to trigger slide-in
+			this.elements.popover.classList.remove('is-open'); // Start in closed state
 			try {
 				this.elements.popover.showPopover();
+				// Use requestAnimationFrame to ensure popover is shown before animating
+				requestAnimationFrame(() => {
+					requestAnimationFrame(() => {
+						this.elements.popover.classList.add('is-open'); // Trigger slide-in animation
+					});
+				});
 			}
 			catch (error) {
 				console.error('Error showing popover:', error);
@@ -662,8 +687,11 @@
 		}
 
 		hide() {
-			this.elements.popover.classList.add('is-closed'); // Add class to trigger slide-out
-			this.elements.popover.hidePopover();
+			this.elements.popover.classList.remove('is-open'); // Trigger slide-out animation
+			// Wait for animation to complete before hiding
+			setTimeout(() => {
+				this.elements.popover.hidePopover();
+			}, 300); // Match the transition duration
 		}
 
 		generateContent(item) {
@@ -692,7 +720,7 @@
 			this.items = [];
 			this.tags = new Set();
 			this.google_tsv_url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQF7sPFKfnvvL0rXrZIA2CT0v563K_A-jJC3Bv3IvSTV0xroYyFBNUzW3svXh3oER0CrCeVvIhySZt7/pub?output=tsv";
-			
+
 			this.elements = {
 				items_container: document.querySelector('.items'),
 				suggestions_container: document.querySelector('.suggestions'),
@@ -707,7 +735,7 @@
 
 			this.searchController = new SearchController(this);
 			this.popoverController = new PopoverController(this);
-			
+
 			this.categoryElements = new Map(); // Map<string, HTMLElement> to store category title DOM elements
 			this.categoryItemMap = new Map(); // Map<string, Set<Item>> to map category names to a set of Item instances in that category
 
@@ -717,15 +745,15 @@
 		async init() {
 			this.setupStateWatchers();
 			this.state.isLoading = true;
-			
+
 			this.searchController.init();
 			this.popoverController.init();
-			
+
 			await this.loadData();
 			this.populateTagDatalist();
 			this.renderAllItemsInitially(); // New method for initial render
 			this.filterAndDisplayItems(); // Apply initial filter
-			
+
 			this.state.isLoading = false;
 		}
 
@@ -762,17 +790,11 @@
 			const header = lines[0].split('\t').map(h => h.trim());
 			const items = [];
 			for (let i = 1; i < lines.length; i++) {
-				const data = lines[i].split('\t');
-				if (data.length === header.length) {
-					const rawItem = {};
-					for (let j = 0; j < header.length; j++) {
-						rawItem[header[j]] = data[j].trim();
-					}
-					if (rawItem.name) {
-						const item = new Item(rawItem);
-						items.push(item);
-						item.displayTags.forEach(tag => this.tags.add(tag));
-					}
+				const rawItem = Item.fromTSVLine(lines[i], header);
+				if (rawItem && rawItem.name) {
+					const item = new Item(rawItem);
+					items.push(item);
+					item.displayTags.forEach(tag => this.tags.add(tag));
 				}
 			}
 			this.items = items;
