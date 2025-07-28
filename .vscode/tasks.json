@@ -4,9 +4,11 @@
         {
             "label": "Start Development Server",
             "type": "shell",
-            "command": "npm",
+            "command": "python3",
             "args": [
-                "start"
+                "-m",
+                "http.server",
+                "3000"
             ],
             "group": {
                 "kind": "build",
@@ -31,7 +33,7 @@
                 },
                 "background": {
                     "activeOnStart": true,
-                    "beginsPattern": ".",
+                    "beginsPattern": "Serving HTTP",
                     "endsPattern": "."
                 }
             }

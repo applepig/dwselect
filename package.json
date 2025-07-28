@@ -4,11 +4,9 @@
   "description": "DW's Selections",
   "main": "index.html",
   "scripts": {
-    "start": "serve . -p 3000",
-    "dev": "serve . -p 3000",
-    "debug": "serve . -p 3000 --debug"
+    "start": "python3 -m http.server 3000",
+    "dev": "python3 -m http.server 3000",
+    "debug": "python3 -m http.server 3000"
   },
-  "dependencies": {
-    "serve": "^14.2.0"
-  }
+  "dependencies": {}
 }

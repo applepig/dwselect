@@ -17,7 +17,8 @@
                 "webpack:///./~/*": "${webRoot}/node_modules/*",
                 "webpack:////*": "/*",
                 "webpack:///./*": "${webRoot}/*"
-            }
+            },
+            "preLaunchTask": "Start Development Server"
         },
         {
             "name": "Attach to Chrome",
@@ -33,7 +34,8 @@
             "request": "launch",
             "url": "http://localhost:3000",
             "webRoot": "${workspaceFolder}",
-            "sourceMaps": true
+            "sourceMaps": true,
+            "preLaunchTask": "Start Development Server"
         },
         {
             "name": "Debug with Node.js",
