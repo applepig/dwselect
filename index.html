@@ -480,7 +480,7 @@
 		 * @returns {object|null} The parsed raw data object, or null if parsing fails.
 		 */
 		static fromTSVLine(line, header) {
-			const data = line.split('	');
+			const data = line.split("\t");
 			if (data.length !== header.length) {
 				console.warn('TSV line data length does not match header length:', line);
 				return null;
