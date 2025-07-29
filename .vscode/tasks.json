@@ -4,11 +4,10 @@
         {
             "label": "Start Development Server",
             "type": "shell",
-            "command": "python3",
+            "command": "npm",
             "args": [
-                "-m",
-                "http.server",
-                "3000"
+                "run",
+                "dev"
             ],
             "group": {
                 "kind": "build",

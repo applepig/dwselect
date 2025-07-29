@@ -531,11 +531,19 @@
 		matchesSearch(searchTerm) {
 			if (!searchTerm) return true;
 			const lowerSearch = searchTerm.toLowerCase();
+
+			// Handle tag-specific search (allows partial matches like #PCH for #PCHome)
 			if (searchTerm.startsWith('#')) {
-				return this._processedTags.includes(searchTerm);
+				return this.displayTags.some(tag => tag.toLowerCase().includes(lowerSearch));
 			}
-			return (this.name?.toLowerCase().includes(lowerSearch)) ||
-				(this.desc?.toLowerCase().includes(lowerSearch));
+
+			// Freetext search across name, desc, link_url, and raw tags
+			return (
+				this.name?.toLowerCase().includes(lowerSearch) ||
+				this.desc?.toLowerCase().includes(lowerSearch) ||
+				this.link_url?.toLowerCase().includes(lowerSearch) ||
+				this.tags.some(tag => tag.toLowerCase().includes(lowerSearch))
+			);
 		}
 
 		createDomElement() {

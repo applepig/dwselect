@@ -1,11 +1,11 @@
 {
   "name": "dwselect",
   "version": "1.0.0",
-  "description": "DW's Selections",
-  "main": "index.html",
+  "description": "DW's Selections - Zero Build Zero Dependency",
+  "main": "src/index.html",
   "scripts": {
     "dev": "python3 -m http.server 3000",
-    "deploy": "scp index.html root@applepig.idv.tw:/var/www/html/dwselect/"
+    "deploy": "scp src/index.html root@applepig.idv.tw:/var/www/html/dwselect/"
   },
   "dependencies": {},
   "spreadsheet_url": "https://docs.google.com/spreadsheets/d/1CANuynOyJpG04AdX0s4dhAbZmilr6vG4IwQQOXejYJ4/edit?gid=0#gid=0"
