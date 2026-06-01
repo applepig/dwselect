@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>DW嚴選推坑專區</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="color-scheme" content="light dark">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;600&display=swap" rel="stylesheet">
+    <base target="_blank" rel="noopener noreferrer">
+    <!-- Google Tag Manager -->
+    <script>(function (w, d, s, l, i) {
+            w[l] = w[l] || []; w[l].push({
+                'gtm.start':
+                    new Date().getTime(), event: 'gtm.js'
+            }); var f = d.getElementsByTagName(s)[0],
+                j = document.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
+                    'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);
+        })(window, document, 'script', 'dataLayer', 'GTM-KTZKC8CH');</script>
+    <!-- End Google Tag Manager -->
+</head>
+
+<body>
+    <div id="app">
+        <header>
+            <h1>DW嚴選</h1>
+            <div class="search">
+                <input type="search" placeholder="在找什麼嗎？™" list="popular-tags" aria-label="搜尋標籤或關鍵字">
+                <datalist id="popular-tags"></datalist>
+                <div class="suggestions"></div>
+            </div>
+        </header>
+        <main>
+            <div class="items"></div>
+            <div class="item info">
+                <p class="placeholder">在找別的嗎？到<a
+                        href="https://www.facebook.com/applepig/posts/pfbid0j5U2aw7URVNhwLNuWjGgrZvtUQvNmik36uwRc8T1qcvR6GunRKf4V7jVjnsjxn4Zl">推坑串</a>許願吧？
+                </p>
+            </div>
+        </main>
+        <dialog id="item-dialog">
+            <!-- Dialog content will be dynamically generated here -->
+        </dialog>
+        <div id="loader" class="loader"></div>
+    </div>
+</body>
+<style>
+    :root {
+        /* Light Theme (Default) */
+        --bg-color: #ffffff;
+        --text-color: #333333;
+        --accent-color: #f80;
+        --accent-light: #fb8;
+        --card-bg: #f9f9f9;
+        --border-color: #ddd;
+    }
+
+    @media (prefers-color-scheme: dark) {
+        :root {
+            --bg-color: #212121;
+            --text-color: #ffffff;
+            --accent-color: #fb8;
+            --accent-light: #f80;
+            --card-bg: #333;
+            --border-color: #555;
+        }
+    }
+
+    html {
+        scrollbar-gutter: stable;
+    }
+
+    * {
+        box-sizing: border-box;
+        transition: 0.2s all ease;
+        line-height: 1.5;
+        font-size: 16px;
+        font-family: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    }
+
+    a {
+        color: var(--accent-color);
+        text-decoration: none;
+
+        &:hover,
+        &:focus,
+        &:active {
+            text-decoration: underline;
+        }
+    }
+
+    body {
+        margin: 0;
+        padding: 0;
+        border: 0;
+        background: var(--bg-color);
+        color: var(--text-color);
+        overflow-x: hidden;
+        transition: none;
+    }
+
+    header {
+        position: sticky;
+        top: 0;
+        width: 100%;
+        background: var(--accent-color);
+        padding: 10px 20px;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        z-index: 10;
+        gap: 20px;
+
+        h1 {
+            margin: 0;
+            font-size: 22px;
+            color: var(--bg-color);
+        }
+
+        .search {
+            position: relative;
+            margin-left: auto;
+        }
+
+        input {
+            width: 220px;
+            max-width: 100%;
+            padding: 8px 12px;
+            border-radius: 20px;
+            border: 1px solid var(--border-color);
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            accent-color: var(--accent-color);
+        }
+    }
+
+    .suggestions {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: var(--card-bg);
+        border: 1px solid var(--border-color);
+        border-top: none;
+        border-radius: 0 0 8px 8px;
+        z-index: 11;
+        display: none;
+        /* Initially hidden */
+
+        a {
+            display: block;
+            padding: 8px 12px;
+            color: var(--text-color);
+            text-decoration: none;
+
+            &:hover {
+                background-color: var(--accent-light);
+                color: var(--bg-color);
+            }
+        }
+    }
+
+    .items {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 20px;
+        padding: 20px;
+    }
+
+    .category-title {
+        grid-column: 1 / -1;
+        margin: 20px 0 0 0;
+        padding-bottom: 10px;
+        border-bottom: 1px solid var(--border-color);
+        color: var(--text-color);
+        font-size: 24px;
+    }
+
+    .item {
+        aspect-ratio: 1 / 1;
+        position: relative;
+        display: flex;
+        flex-flow: column;
+        justify-content: flex-end;
+        border-radius: 8px;
+        overflow: hidden;
+        cursor: pointer;
+        color: white;
+
+        &:hover .label {
+            background: rgba(0, 0, 0, 0.8);
+        }
+
+        &.info {
+            align-items: center;
+            justify-content: center;
+            min-height: 150px;
+            color: var(--text-color);
+            aspect-ratio: unset;
+
+            p {
+                font-size: 22px;
+                line-height: 30px;
+                margin: 6px 0;
+                color: var(--text-color);
+            }
+
+            a {
+                font-size: 22px;
+                line-height: 30px;
+                margin: 6px 0;
+                color: var(--accent-color);
+            }
+        }
+
+        img {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
+        }
+
+        .label {
+            display: flex;
+            align-items: flex-end;
+            gap: 5px;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.6);
+        }
+
+        .title,
+        .price {
+            display: block;
+            margin: 0;
+            color: white;
+        }
+
+        .title {
+            flex: 1;
+            font-weight: 600;
+        }
+    }
+
+    #item-dialog {
+        max-width: 480px;
+        width: 90%;
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        padding: 20px;
+        background: var(--bg-color);
+        color: var(--text-color);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        margin: 0;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+
+        &::backdrop {
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+        }
+
+        .close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: transparent;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--text-color);
+            user-select: none;
+            text-shadow: 0 0 1px var(--bg-color);
+        }
+
+        h4 {
+            font-size: 24px;
+            font-weight: 600;
+            margin: 16px 0 8px 0;
+            text-wrap: balance;
+        }
+
+        .price {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--accent-color);
+            margin: 0 0 16px 0;
+        }
+
+        .description {
+            margin-bottom: 16px;
+        }
+
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 16px;
+
+            span {
+                background-color: var(--accent-light);
+                color: var(--bg-color);
+                padding: 4px 10px;
+                border-radius: 15px;
+                font-size: 14px;
+            }
+
+            .tag-clickable {
+                cursor: pointer;
+                transition: all 0.2s ease;
+
+                &:hover {
+                    background-color: var(--accent-color);
+                    transform: scale(1.05);
+                }
+            }
+        }
+
+        .actions {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .cta {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            text-align: center;
+            background-color: var(--accent-color);
+            color: var(--bg-color);
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+
+            &:hover {
+                filter: brightness(1.1);
+            }
+        }
+
+        .btn-outline {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            text-align: center;
+            border: 1px solid var(--accent-color);
+            color: var(--accent-color);
+            background-color: transparent;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            box-sizing: border-box;
+
+            &:hover {
+                background-color: var(--accent-light);
+                color: var(--bg-color);
+            }
+        }
+    }
+
+    .loader {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: var(--bg-color);
+        z-index: 999;
+        display: none;
+        /* Hidden by default */
+        align-items: center;
+        justify-content: center;
+    }
+
+    .loader::after {
+        content: '';
+        width: 50px;
+        height: 50px;
+        border: 5px solid var(--border-color);
+        border-top-color: var(--accent-color);
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
+    /* State-based Classes */
+    body.is-loading .loader {
+        display: flex;
+    }
+
+    body.dialog-open {
+        overflow: hidden;
+        position: fixed;
+        width: 100%;
+        height: 100%;
+    }
+
+    body.dialog-open>#app {
+        pointer-events: none;
+        user-select: none;
+    }
+
+    body.dialog-open #item-dialog {
+        pointer-events: auto;
+    }
+
+    .suggestions.is-open {
+        display: block;
+    }
+
+    /* Dialog Animation */
+    #item-dialog {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.9);
+        transition: opacity 0.3s ease, transform 0.3s ease;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        margin: 0;
+    }
+
+    #item-dialog[data-open="true"] {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+    }
+
+    /* Hidden class for items */
+    .hidden {
+        display: none !important;
+    }
+</style>
+<script type="module">
+    class StateController {
+        constructor(initialState) {
+            this.watchers = {};
+
+            const handler = {
+                set: (target, property, value) => {
+                    const oldValue = target[property];
+                    target[property] = value;
+                    if (oldValue !== value) { // Only notify if value actually changed
+                        this.notify(property, value);
+                    }
+                    return true;
+                }
+            };
+
+            this.state = new Proxy(initialState, handler);
+        }
+
+        watch(property, callback) {
+            if (!this.watchers[property]) {
+                this.watchers[property] = [];
+            }
+            this.watchers[property].push(callback);
+        }
+
+        notify(property, value) {
+            if (this.watchers[property]) {
+                this.watchers[property].forEach(callback => callback(value));
+            }
+        }
+    }
+
+    class Item {
+        /**
+         * Parses a single TSV line into a raw data object.
+         * @param {string} line - The TSV line string.
+         * @param {string[]} header - The array of header names.
+         * @returns {object|null} The parsed raw data object, or null if parsing fails.
+         */
+        static fromTSVLine(line, header) {
+            const data = line.split("\t");
+            if (data.length !== header.length) {
+                console.warn('TSV line data length does not match header length:', line);
+                return null;
+            }
+            const rawItem = {};
+            for (let j = 0; j < header.length; j++) {
+                rawItem[header[j]] = data[j].trim();
+            }
+            return rawItem;
+        }
+
+        constructor(rawData) {
+            this.rawData = rawData;
+            this._tags = [];
+            this._processedTags = [];
+            this.domElement = null; // Will store the actual DOM element
+            this.processData();
+        }
+
+        processData() {
+            if (this.rawData.tags) {
+                this._tags = this.rawData.tags.split(' ').filter(t => t.trim());
+            }
+
+            try {
+                const hostname = new URL(this.rawData.link_url).hostname;
+                if (hostname.includes('pchome.com.tw')) this._tags.push("PCHome");
+                if (hostname.includes('momo.com.tw')) this._tags.push("momo");
+                if (hostname.includes('amazon.com')) this._tags.push("美亞");
+                if (hostname.includes('amazon.co.jp')) this._tags.push("日亞");
+            } catch (error) {
+                console.warn('Invalid URL:', this.rawData.link_url);
+            }
+
+            this._processedTags = this._tags.map(tag => `#${tag}`);
+        }
+
+        get name() { return this.rawData.name; }
+        get price() { return this.rawData.price; }
+        get desc() { return this.rawData.desc ? this.rawData.desc.replace(/\n/ig, '<br>') : ''; }
+        get link_url() { return this.rawData.link_url; }
+        get img_url() { return this.rawData.img_url; }
+        get category() { return this.rawData.category || '未分類'; }
+        get reference() { return this.rawData.reference; }
+        get tags() { return this._tags; }
+        get displayTags() { return this._processedTags; }
+
+        matchesSearch(searchTerm) {
+            if (!searchTerm) return true;
+            const lowerSearch = searchTerm.toLowerCase();
+
+            // Handle tag-specific search (allows partial matches like #PCH for #PCHome)
+            if (searchTerm.startsWith('#')) {
+                return this.displayTags.some(tag => tag.toLowerCase().includes(lowerSearch));
+            }
+
+            // Freetext search across name, desc, link_url, and raw tags
+            return (
+                this.name?.toLowerCase().includes(lowerSearch) ||
+                this.desc?.toLowerCase().includes(lowerSearch) ||
+                this.link_url?.toLowerCase().includes(lowerSearch) ||
+                this.tags.some(tag => tag.toLowerCase().includes(lowerSearch))
+            );
+        }
+
+        createDomElement() {
+            const itemElement = document.createElement('a');
+            itemElement.className = 'item';
+            itemElement.href = this.link_url;
+            itemElement.dataset.itemId = this.name;
+
+            itemElement.innerHTML = `
+				<img src="${this.img_url}" loading="lazy" alt="${this.name}">
+				<div class="label">
+					<h4 class="title">${this.name}</h4>
+					<p class="price">${this.price}</p>
+				</div>
+			`;
+            this.domElement = itemElement;
+            return itemElement;
+        }
+
+        show() {
+            if (this.domElement) {
+                this.domElement.classList.remove('hidden');
+            }
+        }
+
+        hide() {
+            if (this.domElement) {
+                this.domElement.classList.add('hidden');
+            }
+        }
+    }
+
+    class SearchController {
+        constructor(app) {
+            this.app = app;
+            this.search_term = '';
+            this.elements = {
+                search_input: document.querySelector('input[type="search"]'),
+                suggestions_container: document.querySelector('.suggestions'),
+                popular_tags_datalist: document.getElementById('popular-tags'),
+            };
+        }
+
+        init() {
+            this.setupEventListeners();
+            this.handleInitialSearch();
+        }
+
+        setupEventListeners() {
+            this.elements.search_input.addEventListener('input', (e) => {
+                this.search_term = e.target.value;
+                this.updateURL();
+                this.app.filterAndDisplayItems(); // Call new method
+                this.updateSuggestions();
+            });
+
+            this.elements.suggestions_container.addEventListener('click', (e) => {
+                if (e.target.tagName === 'A') {
+                    e.preventDefault();
+                    this.elements.search_input.value = e.target.textContent;
+                    this.elements.search_input.dispatchEvent(new Event('input', { bubbles: true }));
+                }
+            });
+
+            // 監聽瀏覽器返回/前進按鈕
+            window.addEventListener('popstate', () => {
+                this.handleInitialSearch();
+                this.app.filterAndDisplayItems();
+            });
+        }
+
+        updateURL() {
+            const urlParams = new URLSearchParams(location.search);
+            if (this.search_term) {
+                urlParams.set('search', this.search_term);
+            }
+            else {
+                urlParams.delete('search');
+            }
+            const newSearch = urlParams.toString();
+            const url = newSearch ? `${location.pathname}?${newSearch}` : location.pathname;
+            history.replaceState(null, '', url);
+        }
+
+        updateSuggestions() {
+            this.elements.suggestions_container.innerHTML = '';
+            if (this.search_term.startsWith('#')) {
+                const matching_tags = [...this.app.tags].filter(tag => tag.toLowerCase().includes(this.search_term.toLowerCase()));
+                if (matching_tags.length > 0) {
+                    const fragment = document.createDocumentFragment();
+                    matching_tags.slice(0, 10).forEach(tag => {
+                        const suggestion_element = document.createElement('a');
+                        suggestion_element.href = '#';
+                        suggestion_element.textContent = tag;
+                        fragment.appendChild(suggestion_element);
+                    });
+                    this.elements.suggestions_container.appendChild(fragment);
+                    this.app.state.isSuggestionOpen = true;
+                }
+                else {
+                    this.app.state.isSuggestionOpen = false;
+                }
+            }
+            else {
+                this.app.state.isSuggestionOpen = false;
+            }
+        }
+
+        handleInitialSearch() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const searchTerm = urlParams.get('search');
+            if (searchTerm) {
+                const decodedTerm = decodeURIComponent(searchTerm);
+                this.elements.search_input.value = decodedTerm;
+                this.search_term = decodedTerm;
+            }
+        }
+
+        getSearchTerm() {
+            return this.search_term;
+        }
+    }
+
+    class DialogController {
+        constructor(app) {
+            this.app = app;
+            this.elements = {
+                dialog: document.getElementById('item-dialog'),
+                items_container: document.querySelector('.items'),
+            };
+        }
+
+        init() {
+            this.setupEventListeners();
+        }
+
+        setupEventListeners() {
+            this.elements.items_container.addEventListener('click', (e) => {
+                const itemElement = e.target.closest('.item:not(.info)');
+                if (itemElement) {
+                    e.preventDefault();
+                    const itemName = itemElement.dataset.itemId;
+                    const item = this.app.items.find(i => i.name === itemName);
+                    if (item) {
+                        this.show(item);
+                    }
+                }
+            });
+
+            this.elements.dialog.addEventListener('click', (e) => {
+                if (e.target.classList.contains('close-dialog')) {
+                    this.hide();
+                }
+                if (e.target.classList.contains('tag-clickable')) {
+                    e.preventDefault();
+                    const tag = e.target.textContent;
+                    this.app.searchController.elements.search_input.value = tag;
+                    this.app.searchController.elements.search_input.dispatchEvent(new Event('input', { bubbles: true }));
+                    this.hide();
+                }
+            });
+
+            // Handle backdrop click to close dialog
+            this.elements.dialog.addEventListener('click', (e) => {
+                if (e.target === this.elements.dialog) {
+                    this.hide();
+                }
+            });
+
+            // Handle escape key
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && this.elements.dialog.open) {
+                    this.hide();
+                }
+            });
+        }
+
+        show(item) {
+            this.elements.dialog.innerHTML = this.generateContent(item);
+
+            // Set state first to handle scroll position
+            this.app.state.isDialogOpen = true;
+
+            // Show dialog and trigger animation
+            this.elements.dialog.showModal();
+
+            // Trigger animation on next frame
+            requestAnimationFrame(() => {
+                this.elements.dialog.setAttribute('data-open', 'true');
+            });
+        }
+
+        hide() {
+            // Remove animation state
+            this.elements.dialog.removeAttribute('data-open');
+
+            // Wait for animation to complete before closing
+            setTimeout(() => {
+                this.elements.dialog.close();
+                this.app.state.isDialogOpen = false;
+            }, 300);
+        }
+
+        generateContent(item) {
+            const tagsHTML = item.displayTags.map(tag => `<span class="tag-clickable">${tag}</span>`).join('');
+            const priceHTML = item.price ? `<p class="price">${item.price}</p>` : '';
+            const referenceHTML = item.reference ? `<a href="${item.reference}" class="button btn-outline">參考資料</a>` : '';
+            const descriptionHTML = item.desc ? `<p class="description">${item.desc}</p>` : '';
+
+            return `
+				<button class="close close-dialog" aria-label="關閉">╳</button>
+				<img src="${item.img_url}" alt="${item.name}" style="aspect-ratio: 1 / 1; width: 100%; object-fit: cover; border-radius: 8px;">
+				<h4>${item.name}</h4>
+				${priceHTML}
+				${descriptionHTML}
+				<div class="tags">${tagsHTML}</div>
+				<div class="actions">
+					<a href="${item.link_url}" class="button cta">購買連結</a>
+					${referenceHTML}
+				</div>
+			`;
+        }
+    }
+
+    class App {
+        constructor() {
+            this.items = [];
+            this.tags = new Set();
+            this.google_tsv_url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQF7sPFKfnvvL0rXrZIA2CT0v563K_A-jJC3Bv3IvSTV0xroYyFBNUzW3svXh3oER0CrCeVvIhySZt7/pub?output=tsv";
+
+            this.elements = {
+                items_container: document.querySelector('.items'),
+                suggestions_container: document.querySelector('.suggestions'),
+            };
+
+            this.stateController = new StateController({
+                isLoading: false,
+                isDialogOpen: false,
+                isSuggestionOpen: false,
+            });
+            this.state = this.stateController.state;
+
+            this.searchController = new SearchController(this);
+            this.dialogController = new DialogController(this);
+
+            this.categoryElements = new Map(); // Map<string, HTMLElement> to store category title DOM elements
+            this.categoryItemMap = new Map(); // Map<string, Set<Item>> to map category names to a set of Item instances in that category
+
+            this.init();
+        }
+
+        async init() {
+            this.setupStateWatchers();
+            this.state.isLoading = true;
+
+            this.searchController.init();
+            this.dialogController.init();
+
+            await this.loadData();
+            this.populateTagDatalist();
+            this.renderAllItemsInitially(); // New method for initial render
+            this.filterAndDisplayItems(); // Apply initial filter
+
+            this.state.isLoading = false;
+        }
+
+        setupStateWatchers() {
+            this.stateController.watch('isLoading', (value) => {
+                document.body.classList.toggle('is-loading', value);
+            });
+
+            this.stateController.watch('isDialogOpen', (value) => {
+                if (value) {
+                    // Store current scroll position before any changes
+                    this.scrollPosition = window.pageYOffset;
+
+                    // Apply scroll lock styles
+                    document.body.classList.add('dialog-open');
+                    document.body.style.top = `-${this.scrollPosition}px`;
+                } else {
+                    // Remove scroll lock styles
+                    document.body.classList.remove('dialog-open');
+                    document.body.style.top = '';
+
+                    // Restore scroll position
+                    if (this.scrollPosition !== undefined) {
+                        window.scrollTo(0, this.scrollPosition);
+                    }
+                }
+            });
+
+            this.stateController.watch('isSuggestionOpen', (value) => {
+                this.elements.suggestions_container.classList.toggle('is-open', value);
+            });
+        }
+
+        async loadData() {
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 10000); // 10秒超時
+
+            try {
+                const response = await fetch(this.google_tsv_url, {
+                    signal: controller.signal
+                });
+                clearTimeout(timeoutId);
+
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                const tsvText = await response.text();
+                this.parseTSV(tsvText);
+            }
+            catch (error) {
+                clearTimeout(timeoutId);
+                if (error.name === 'AbortError') {
+                    console.error('Request was aborted due to timeout');
+                } else {
+                    console.error('Failed to load or parse sheet data:', error);
+                }
+            }
+        }
+
+        parseTSV(text) {
+            const lines = text.split('\n');
+            const header = lines[0].split('\t').map(h => h.trim());
+            const items = [];
+            for (let i = 1; i < lines.length; i++) {
+                const rawItem = Item.fromTSVLine(lines[i], header);
+                if (rawItem && rawItem.name) {
+                    const item = new Item(rawItem);
+                    items.push(item);
+                    item.displayTags.forEach(tag => this.tags.add(tag));
+                }
+            }
+            this.items = items;
+        }
+
+        populateTagDatalist() {
+            const fragment = document.createDocumentFragment();
+            const tag_counts = this.items.flatMap(item => item.displayTags).reduce((acc, tag) => {
+                acc[tag] = (acc[tag] || 0) + 1;
+                return acc;
+            }, {});
+            const sorted_tags = Object.keys(tag_counts).sort((a, b) => tag_counts[b] - tag_counts[a]);
+            sorted_tags.slice(0, 15).forEach(tag => {
+                const option = document.createElement('option');
+                option.value = tag;
+                fragment.appendChild(option);
+            });
+            this.searchController.elements.popular_tags_datalist.appendChild(fragment);
+        }
+
+        renderAllItemsInitially() {
+            this.elements.items_container.innerHTML = ''; // Clear existing items
+            this.categoryElements.clear();
+            this.categoryItemMap.clear();
+
+            const grouped_items = this.items.reduce((acc, item) => {
+                const category = item.category || '未分類';
+                if (!acc[category]) acc[category] = [];
+                acc[category].push(item);
+                return acc;
+            }, {});
+
+            const fragment = document.createDocumentFragment();
+            for (const category in grouped_items) {
+                const category_header = document.createElement('h2');
+                category_header.className = 'category-title';
+                category_header.textContent = category;
+                fragment.appendChild(category_header);
+                this.categoryElements.set(category, category_header);
+                this.categoryItemMap.set(category, new Set());
+
+                grouped_items[category].forEach(item => {
+                    const itemDom = item.createDomElement(); // Item now creates its own DOM element
+                    fragment.appendChild(itemDom);
+                    this.categoryItemMap.get(category).add(item);
+                });
+            }
+            this.elements.items_container.appendChild(fragment);
+        }
+
+        filterAndDisplayItems() {
+            const searchTerm = this.searchController.getSearchTerm();
+            const visibleItemCounts = new Map();
+
+            this.items.forEach(item => {
+                if (item.matchesSearch(searchTerm)) {
+                    item.show();
+                    const category = item.category || '未分類';
+                    visibleItemCounts.set(category, (visibleItemCounts.get(category) || 0) + 1);
+                }
+                else {
+                    item.hide();
+                }
+            });
+
+            // Update category title visibility
+            this.categoryElements.forEach((element, category) => {
+                if (visibleItemCounts.get(category) > 0) {
+                    element.classList.remove('hidden');
+                }
+                else {
+                    element.classList.add('hidden');
+                }
+            });
+        }
+    }
+
+    new App();
+</script>
+
+</html>
