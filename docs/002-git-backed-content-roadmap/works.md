@@ -166,3 +166,11 @@ Broker / action 應禁止：
 - 首頁：更新 `app/pages/index.vue`，透過 Nuxt Content `queryCollection('products')` 查詢 `status = "published"` 商品，套用 helper 後渲染 category sections 與最小商品卡片，包含圖片、名稱、價格與購買連結。
 - 驗證：`pnpm test tests/published-products.test.ts` 通過，1 個 test file、3 個 tests；`pnpm test` 通過，4 個 test files、20 個 tests；`pnpm generate` 通過並產生 `.output/public`。
 - 決策：本 milestone 不新增 draft / unpublished / archived content 檔，避免測試 fixture 進入 generate content source；狀態過濾以 pure helper 測試覆蓋，實際首頁 query 也保留 `status = "published"` 條件。
+
+### Milestone 4 開發日誌
+
+- Red：新增 `tests/runtime-google-sheet.test.ts`，驗證 runtime 掃描會忽略 `legacy/`、`docs/`、migration script 與 `tests/`，但會抓出 `app/` 與 `.output/public` 中的 `docs.google.com/spreadsheets`、`pub?output=tsv`、`output=tsv` 指標；第一次執行 `pnpm test tests/runtime-google-sheet.test.ts` 因 `scripts/assert-runtime-google-sheet-clean` 尚不存在失敗，符合預期。
+- Green：新增 `scripts/assert-runtime-google-sheet-clean.ts`，提供測試與 CI 共用的 runtime 掃描，掃描 `app/`、`content.config.ts`、`nuxt.config.ts` 與存在時的 `.output/public`，並排除 legacy migration / docs 參考來源；新增 `.github/workflows/static-generate.yml`，在 PR 與 main push 安裝 dependencies、執行 `pnpm test`、`pnpm generate`、runtime Sheet 掃描，並 upload `.output/public` artifact。
+- Refactor：更新 `README.md`，移除 Vue/Vite template 文案，補上 local development、migration、static generate 與 runtime Sheet 掃描指令；掃描器避免同一檔案對 `pub?output=tsv` 與 `output=tsv` 重複回報。
+- 驗證：`pnpm test tests/runtime-google-sheet.test.ts` 通過，1 個 test file、3 個 tests；`pnpm test` 通過，5 個 test files、23 個 tests；`pnpm generate` 通過並產生 `.output/public`；`node scripts/assert-runtime-google-sheet-clean.ts` 通過，確認公開 runtime 與 build output 不含 Google Sheets TSV 指標。
+- 決策：Google Sheets 字串允許保留在 `legacy/`、`docs/`、`scripts/migrate-google-sheet-products.ts` 與測試中，因為它們是 migration input / 參考與驗收工具，不是公開站 runtime；Sprint 1 只新增 artifact workflow，不設定 production deploy、Pages 或 domain。

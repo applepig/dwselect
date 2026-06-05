@@ -24,12 +24,12 @@
 - [x] 專案改為 Nuxt SSG app，並可用 `pnpm generate` 產生靜態輸出。
 - [x] 商品資料存在 `content/products/*.json`，每個商品一檔，且 Nuxt Content schema 會驗證必要欄位、狀態 enum、HTTP(S) URL 欄位與 timestamp 欄位格式。
 - [x] 前台商品查詢只回傳 `status = "published"` 的商品；`draft`、`unpublished`、`archived` 不會出現在公開首頁。
-- [ ] Google Sheets TSV 只作為 migration input；公開站 client bundle 不再包含 Google Sheets TSV URL，也不會在 runtime fetch Google Sheets。
+- [x] Google Sheets TSV 只作為 migration input；公開站 client bundle 不再包含 Google Sheets TSV URL，也不會在 runtime fetch Google Sheets。
 - [x] Migration script 能把 legacy TSV 欄位轉成新 product JSON schema，包含 `name`、`price_text`、`description`、`purchase_url`、`image_url`、`category`、`tags`、`reference_url`，並支援固定 cutover date 讓 rerun 產生穩定檔名與 `id`。
 - [x] Migration script 會保留 legacy 行為：空白分類轉為 `未分類`，`tags` 從空白分隔字串轉為 array，並依 `purchase_url` host 加入 `PCHome`、`momo`、`美亞`、`日亞` 這類平台 tags。
 - [x] Migration script 會跳過沒有 `name` 的 row，並對欄位數不符、URL 無效、非 HTTP(S) URL 或檔名 collision 產生可讀錯誤或 warning。
 - [x] Home page 至少顯示已上架商品卡片，依 category 分組，卡片包含圖片、名稱、價格與購買連結。
-- [ ] GitHub Actions 會安裝 dependencies、執行測試、執行 Nuxt static generate，並保留 `.output/public` static artifact。
+- [x] GitHub Actions 會安裝 dependencies、執行測試、執行 Nuxt static generate，並保留 `.output/public` static artifact。
 
 ## 相關檔案
 
@@ -195,6 +195,6 @@ Sprint 1 只驗證 timestamp 欄位格式，不建立完整狀態 transition inv
 > 預期結果：GitHub Actions 可在 PR / main workflow 跑測試與 static generate，公開站 runtime 不再包含 Google Sheets TSV URL。
 > 驗證方式：`pnpm test`、`pnpm generate`、GitHub Actions workflow、搜尋 build output 不含 Google Sheets TSV URL
 
-- [ ] 撰寫/更新測試（Red）：新增檢查或 CI step，確認公開 runtime code 不包含 legacy Google Sheets TSV URL。
-- [ ] 實作最小功能（Green）：新增 `.github/workflows/static-generate.yml`，執行 install、test、generate，保存 `.output/public` static artifact。
-- [ ] Refactor 並確認測試維持通過：更新 README 的 local development / migration / generate 指令。
+- [x] 撰寫/更新測試（Red）：新增檢查或 CI step，確認公開 runtime code 不包含 legacy Google Sheets TSV URL。
+- [x] 實作最小功能（Green）：新增 `.github/workflows/static-generate.yml`，執行 install、test、generate，保存 `.output/public` static artifact。
+- [x] Refactor 並確認測試維持通過：更新 README 的 local development / migration / generate 指令。
