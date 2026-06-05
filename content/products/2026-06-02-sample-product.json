@@ -1,0 +1,19 @@
+{
+  "id": "2026-06-02-sample-product",
+  "status": "published",
+  "name": "範例商品",
+  "price_text": "NT$ 1,990",
+  "description": "Milestone 2 schema 驗證用範例商品。",
+  "purchase_url": "https://example.com/product",
+  "image_url": "https://example.com/product.jpg",
+  "category": "未分類",
+  "tags": [
+    "sample"
+  ],
+  "reference_url": null,
+  "created_at": "2026-06-02T00:00:00+08:00",
+  "updated_at": "2026-06-02T00:00:00+08:00",
+  "published_at": "2026-06-02T00:00:00+08:00",
+  "unpublished_at": null,
+  "archived_at": null
+}

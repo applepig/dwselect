@@ -150,3 +150,11 @@ Broker / action 應禁止：
 - Refactor：將既有 styles 搬到 `app/assets/styles/`，移除 Vue/Vite placeholder runtime path（`src/main.js`、`src/router/*`、`src/views/*`、placeholder store/composable、`vite.config.js` 等），避免公開站繼續依賴 Vite-only entry。
 - 驗證：`pnpm test` 通過，1 個 test file、2 個 tests；`pnpm generate` 通過並產生 `.output/public`。過程中處理 Nuxt Content 需要 `better-sqlite3`、pnpm build script 需 rebuild native binding，以及 prerender 需 `vue` direct dependency 的問題。
 - 決策：Milestone 1 只建立 products collection skeleton 與 query helper shape，不建立完整 product schema、不新增 migration script、不實作 published-only 首頁與 GitHub Actions。
+
+### Milestone 2 開發日誌
+
+- Red：新增 `tests/product-schema.test.ts` 與 `tests/migrate-google-sheet-products.test.ts`，覆蓋 status enum、HTTP(S) URL validation、timestamp format、固定 cutover date、空白 category、tags 轉換、平台 tags、缺 name、欄位數不符、URL error 與 slug collision；第一次執行 `pnpm test tests/product-schema.test.ts tests/migrate-google-sheet-products.test.ts` 因 `app/utils/product-schema` 與 `scripts/migrate-google-sheet-products` 尚不存在失敗，符合預期。
+- Green：建立 `app/utils/product-schema.ts`，由 `content.config.ts` 套用 Nuxt Content schema validation；新增 `scripts/migrate-google-sheet-products.ts`，支援 TSV mapping、固定 `--date YYYY-MM-DD`、穩定 id / filename、HTTP(S) URL 驗證、空白分類預設 `未分類`、空白分隔 tags、PCHome / momo / 美亞 / 日亞平台 tags、缺 name / 欄位數不符 / URL error / slug collision summary；新增 `content/products/2026-06-02-sample-product.json` 作 schema fixture。
+- Refactor：整理 `formatMigrationSummary()`，讓 skipped rows、warnings、errors 與 slug collisions 分段輸出；修正 script 使用 Node v24 可直接啟動的 `.ts` import 與 CLI usage 文案，避免新增 `tsx` dependency。
+- 驗證：`pnpm test tests/product-schema.test.ts tests/migrate-google-sheet-products.test.ts` 通過，2 個 test files、15 個 tests。完整 `pnpm test` 與 `pnpm generate` 於本 milestone 收尾驗證執行。
+- 決策：Milestone 2 僅建立資料 schema、migration 與 sample fixture，不實作 Milestone 3 首頁商品列表、不新增 Milestone 4 GitHub Actions。

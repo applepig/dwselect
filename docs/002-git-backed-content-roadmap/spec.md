@@ -22,12 +22,12 @@
 ### 驗收條件
 
 - [x] 專案改為 Nuxt SSG app，並可用 `pnpm generate` 產生靜態輸出。
-- [ ] 商品資料存在 `content/products/*.json`，每個商品一檔，且 Nuxt Content schema 會驗證必要欄位、狀態 enum、HTTP(S) URL 欄位與 timestamp 欄位格式。
+- [x] 商品資料存在 `content/products/*.json`，每個商品一檔，且 Nuxt Content schema 會驗證必要欄位、狀態 enum、HTTP(S) URL 欄位與 timestamp 欄位格式。
 - [ ] 前台商品查詢只回傳 `status = "published"` 的商品；`draft`、`unpublished`、`archived` 不會出現在公開首頁。
 - [ ] Google Sheets TSV 只作為 migration input；公開站 client bundle 不再包含 Google Sheets TSV URL，也不會在 runtime fetch Google Sheets。
-- [ ] Migration script 能把 legacy TSV 欄位轉成新 product JSON schema，包含 `name`、`price_text`、`description`、`purchase_url`、`image_url`、`category`、`tags`、`reference_url`，並支援固定 cutover date 讓 rerun 產生穩定檔名與 `id`。
-- [ ] Migration script 會保留 legacy 行為：空白分類轉為 `未分類`，`tags` 從空白分隔字串轉為 array，並依 `purchase_url` host 加入 `PCHome`、`momo`、`美亞`、`日亞` 這類平台 tags。
-- [ ] Migration script 會跳過沒有 `name` 的 row，並對欄位數不符、URL 無效、非 HTTP(S) URL 或檔名 collision 產生可讀錯誤或 warning。
+- [x] Migration script 能把 legacy TSV 欄位轉成新 product JSON schema，包含 `name`、`price_text`、`description`、`purchase_url`、`image_url`、`category`、`tags`、`reference_url`，並支援固定 cutover date 讓 rerun 產生穩定檔名與 `id`。
+- [x] Migration script 會保留 legacy 行為：空白分類轉為 `未分類`，`tags` 從空白分隔字串轉為 array，並依 `purchase_url` host 加入 `PCHome`、`momo`、`美亞`、`日亞` 這類平台 tags。
+- [x] Migration script 會跳過沒有 `name` 的 row，並對欄位數不符、URL 無效、非 HTTP(S) URL 或檔名 collision 產生可讀錯誤或 warning。
 - [ ] Home page 至少顯示已上架商品卡片，依 category 分組，卡片包含圖片、名稱、價格與購買連結。
 - [ ] GitHub Actions 會安裝 dependencies、執行測試、執行 Nuxt static generate，並保留 `.output/public` static artifact。
 
@@ -177,9 +177,9 @@ Sprint 1 只驗證 timestamp 欄位格式，不建立完整狀態 transition inv
 > 預期結果：`content/products/*.json` 有正式 schema，migration script 可從 legacy TSV 產生符合 schema 的 JSON。
 > 驗證方式：`pnpm test tests/product-schema.test.ts tests/migrate-google-sheet-products.test.ts`
 
-- [ ] 撰寫/更新測試（Red）：覆蓋 status enum、HTTP(S) URL validation、固定 cutover date、空白 category、tags 轉換、平台 tags、缺 name、欄位數不符與 slug collision。
-- [ ] 實作最小功能（Green）：建立 product collection schema、migration parser、slug/id 產生規則與 sample fixture。
-- [ ] Refactor 並確認測試維持通過：整理 migration summary output，讓 skipped / errored rows 可讀。
+- [x] 撰寫/更新測試（Red）：覆蓋 status enum、HTTP(S) URL validation、固定 cutover date、空白 category、tags 轉換、平台 tags、缺 name、欄位數不符與 slug collision。
+- [x] 實作最小功能（Green）：建立 product collection schema、migration parser、slug/id 產生規則與 sample fixture。
+- [x] Refactor 並確認測試維持通過：整理 migration summary output，讓 skipped / errored rows 可讀。
 
 ### Milestone 3：Published-only 首頁商品列表
 
