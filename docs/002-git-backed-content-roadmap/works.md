@@ -143,6 +143,15 @@ Broker / action 應禁止：
 - URL validation 補強為只允許 HTTP(S) URL；`javascript:`、`data:` 與相對路徑都不允許。
 - Branch / PR 命名策略暫不定案，等進入 inside workflow 或 remote draft workflow spec 時再討論。
 
+## 2026-06-06
+
+### Dev server LAN access hotfix
+
+- **症狀**：`pnpm dev` 啟動後只聽 `localhost:3000`，無法從 `toybox.local` 或區網 IP 連入測試。
+- **根因**：`package.json` 的 dev script 使用 `nuxt dev`，Nuxt dev server 預設只綁定 localhost。後續實測發現 `toybox.local` 也可能透過 Avahi/mDNS 解析到 IPv6，因此只綁 `0.0.0.0` 仍不足。
+- **修復**：新增 `tests/dev-server-script.test.ts` 鎖定 dev script 必須包含 dual-stack host `--host ::`，並將 `pnpm dev` 改為 `nuxt dev --host ::`。
+- **驗證**：`pnpm test tests/dev-server-script.test.ts` 通過；`pnpm test` 全套 6 個 test files、24 tests 通過；重啟 dev server 後 `ss` 顯示 `*:3000`，`10.0.4.105:3000`、IPv6 LAN address 與 `toybox.local:3000` 均回 `200 OK`。
+
 ### Milestone 1 開發日誌
 
 - Red：新增 `tests/nuxt-smoke.test.ts`，描述 Nuxt Content + static generate baseline 與 `getPublishedProductsQuery()` helper skeleton；執行 `pnpm install && pnpm test` 後，Vitest 可啟動但因 `../nuxt.config` 尚不存在失敗，符合預期。
