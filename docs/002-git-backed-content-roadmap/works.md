@@ -158,3 +158,11 @@ Broker / action 應禁止：
 - Refactor：整理 `formatMigrationSummary()`，讓 skipped rows、warnings、errors 與 slug collisions 分段輸出；修正 script 使用 Node v24 可直接啟動的 `.ts` import 與 CLI usage 文案，避免新增 `tsx` dependency。
 - 驗證：`pnpm test tests/product-schema.test.ts tests/migrate-google-sheet-products.test.ts` 通過，2 個 test files、15 個 tests。完整 `pnpm test` 與 `pnpm generate` 於本 milestone 收尾驗證執行。
 - 決策：Milestone 2 僅建立資料 schema、migration 與 sample fixture，不實作 Milestone 3 首頁商品列表、不新增 Milestone 4 GitHub Actions。
+
+### Milestone 3 開發日誌
+
+- Red：新增 `tests/published-products.test.ts`，以 in-test fixture 覆蓋 `published`、`draft`、`unpublished`、`archived` 狀態，並驗證 category grouping 與最小 UI card mapping 不暴露 legacy TSV 欄位名；第一次執行 `pnpm test tests/published-products.test.ts` 因 `app/utils/published-products` 尚不存在失敗，符合預期。
+- Green：新增 `app/utils/published-products.ts`，提供 `getPublishedProducts()` 與 `getGroupedPublishedProducts()` pure helper，只輸出已上架商品，依 `category ASC`、`published_at DESC`、`name ASC` 排序，並把 product JSON 欄位映射成首頁 card 所需的 `image`、`name`、`price`、`purchase_link`。
+- 首頁：更新 `app/pages/index.vue`，透過 Nuxt Content `queryCollection('products')` 查詢 `status = "published"` 商品，套用 helper 後渲染 category sections 與最小商品卡片，包含圖片、名稱、價格與購買連結。
+- 驗證：`pnpm test tests/published-products.test.ts` 通過，1 個 test file、3 個 tests；`pnpm test` 通過，4 個 test files、20 個 tests；`pnpm generate` 通過並產生 `.output/public`。
+- 決策：本 milestone 不新增 draft / unpublished / archived content 檔，避免測試 fixture 進入 generate content source；狀態過濾以 pure helper 測試覆蓋，實際首頁 query 也保留 `status = "published"` 條件。

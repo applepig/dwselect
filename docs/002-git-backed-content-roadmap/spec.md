@@ -23,12 +23,12 @@
 
 - [x] 專案改為 Nuxt SSG app，並可用 `pnpm generate` 產生靜態輸出。
 - [x] 商品資料存在 `content/products/*.json`，每個商品一檔，且 Nuxt Content schema 會驗證必要欄位、狀態 enum、HTTP(S) URL 欄位與 timestamp 欄位格式。
-- [ ] 前台商品查詢只回傳 `status = "published"` 的商品；`draft`、`unpublished`、`archived` 不會出現在公開首頁。
+- [x] 前台商品查詢只回傳 `status = "published"` 的商品；`draft`、`unpublished`、`archived` 不會出現在公開首頁。
 - [ ] Google Sheets TSV 只作為 migration input；公開站 client bundle 不再包含 Google Sheets TSV URL，也不會在 runtime fetch Google Sheets。
 - [x] Migration script 能把 legacy TSV 欄位轉成新 product JSON schema，包含 `name`、`price_text`、`description`、`purchase_url`、`image_url`、`category`、`tags`、`reference_url`，並支援固定 cutover date 讓 rerun 產生穩定檔名與 `id`。
 - [x] Migration script 會保留 legacy 行為：空白分類轉為 `未分類`，`tags` 從空白分隔字串轉為 array，並依 `purchase_url` host 加入 `PCHome`、`momo`、`美亞`、`日亞` 這類平台 tags。
 - [x] Migration script 會跳過沒有 `name` 的 row，並對欄位數不符、URL 無效、非 HTTP(S) URL 或檔名 collision 產生可讀錯誤或 warning。
-- [ ] Home page 至少顯示已上架商品卡片，依 category 分組，卡片包含圖片、名稱、價格與購買連結。
+- [x] Home page 至少顯示已上架商品卡片，依 category 分組，卡片包含圖片、名稱、價格與購買連結。
 - [ ] GitHub Actions 會安裝 dependencies、執行測試、執行 Nuxt static generate，並保留 `.output/public` static artifact。
 
 ## 相關檔案
@@ -186,9 +186,9 @@ Sprint 1 只驗證 timestamp 欄位格式，不建立完整狀態 transition inv
 > 預期結果：首頁從 Nuxt Content 讀取商品，只顯示 `published`，依 category 分組並渲染最小商品卡片。
 > 驗證方式：`pnpm test tests/published-products.test.ts`、`pnpm generate`
 
-- [ ] 撰寫/更新測試（Red）：建立 fixture products，驗證 `draft`、`unpublished`、`archived` 不會出現在 published query。
-- [ ] 實作最小功能（Green）：首頁查詢 published products，渲染 category sections、image、name、price、purchase link。
-- [ ] Refactor 並確認測試維持通過：抽出最小 data mapping，避免 UI 直接依賴 legacy TSV 欄位名。
+- [x] 撰寫/更新測試（Red）：建立 fixture products，驗證 `draft`、`unpublished`、`archived` 不會出現在 published query。
+- [x] 實作最小功能（Green）：首頁查詢 published products，渲染 category sections、image、name、price、purchase link。
+- [x] Refactor 並確認測試維持通過：抽出最小 data mapping，避免 UI 直接依賴 legacy TSV 欄位名。
 
 ### Milestone 4：GitHub Actions static rebuild 與 runtime Sheet 移除驗收
 
