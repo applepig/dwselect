@@ -60,3 +60,9 @@ pnpm build:search-index
 
 - 真實圖片仍使用 legacy source URL，可能存在 hotlink、過期、403 或尺寸不一致；本 sprint 只驗證 UI/generate 不崩潰，不處理圖片本地化。
 - `pnpm generate` 仍顯示既有 sourcemap / Rollup comment warnings，但不影響本次驗收通過。
+
+### xreview 修正：嚴格 TSV 欄數
+
+- xreview finding：`scripts/migrate-google-sheet-products.ts` 的 `getNormalizedColumns()` 會在 row 少一欄且最後 header 是 `reference` 時自動補空字串；若缺的是中間 tab（例如缺 `price`），可能讓 URL 欄位左移，產生 schema 通過但欄位錯位的商品 JSON。
+- 使用者決策：TSV 後續不再使用，採最小嚴格欄數修正；不再支援省略最後 `reference` 欄。
+- 修正摘要：移除欄位補齊容錯，row 欄數不等於 header 欄數時一律 warning + skip；測試改寫省略尾端 `reference` 應 skip，並新增缺中間 `price` 欄造成 URL 左移的 regression。

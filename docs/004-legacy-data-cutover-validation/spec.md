@@ -84,7 +84,7 @@ Product JSON 範例：
 - Case 2：Slug collision。處理方式：沿用 migration script numeric suffix，例如 `2026-06-02-ikea`、`2026-06-02-ikea-2`，並以測試或 migration summary 覆蓋。
 - Case 3：商品圖片 URL 失效、hotlink 擋圖或尺寸不一致。處理方式：本 sprint 不下載圖片；驗收只要求頁面 layout 不重疊、不崩潰，圖片品質問題列入後續圖片本地化或資料修正。
 - Case 4：Legacy row 有 `brand` 或 `price_value` 但新 schema 不保留。處理方式：本 sprint 明確忽略；若 inside editing 或 price monitoring 需要，另開 schema evolution。
-- Case 5：Legacy TSV 最後一欄 `reference` 可能是 trailing empty column。處理方式：script 支援省略最後空欄；不保留 TSV snapshot，避免 trailing empty columns 造成 snapshot 噪音。
+- Case 5：Legacy TSV 欄數不符合 header。處理方式：script 採嚴格欄數驗證，row 欄數不等於 header 欄數時 warning + skip；不支援省略最後 `reference` 空欄，避免中間欄位缺 tab 時產生 schema 通過但欄位錯位的商品 JSON。
 - Case 6：公開 runtime 重新包含 Google Sheets TSV URL。處理方式：`assert-runtime-google-sheet-clean` 必須在 generate 後通過；`legacy/` 與 `docs/` 內保留 reference 仍允許。
 
 ## ADR（Architecture Decision Record）

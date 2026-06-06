@@ -75,7 +75,7 @@ describe('migrate Google Sheet products', () => {
     expect(result.summary.created_count).toBe(1)
   })
 
-  it('should treat an omitted final reference column as an empty reference value', () => {
+  it('should warn and skip rows when the final reference column is omitted', () => {
     const tsv = [
       legacy_header,
       '商品名稱	品牌	推薦文字	分類	好物  3C	1990	NT$ 1,990	https://24h.pchome.com.tw/prod/ABC	https://example.com/image.jpg',
@@ -83,10 +83,27 @@ describe('migrate Google Sheet products', () => {
 
     const result = migrateGoogleSheetProducts(tsv, { date: '2026-06-02' })
 
-    expect(result.products).toHaveLength(1)
-    expect(result.products[0]?.content.reference_url).toBeNull()
-    expect(result.summary.warnings).toEqual([])
-    expect(result.summary.skipped_count).toBe(0)
+    expect(result.products).toEqual([])
+    expect(result.summary.warnings).toEqual([
+      { row_number: 2, reason: 'column count mismatch: expected 10, got 9' },
+    ])
+    expect(result.summary.skipped_count).toBe(1)
+  })
+
+  it('should warn and skip legacy rows with a missing middle column before URLs shift left', () => {
+    const tsv = [
+      legacy_header,
+      '商品名稱	品牌	推薦文字	分類	好物  3C	1990	https://24h.pchome.com.tw/prod/ABC	https://example.com/image.jpg	https://example.com/ref',
+    ].join('\n')
+
+    const result = migrateGoogleSheetProducts(tsv, { date: '2026-06-02' })
+
+    expect(result.products).toEqual([])
+    expect(result.summary.created_count).toBe(0)
+    expect(result.summary.warnings).toEqual([
+      { row_number: 2, reason: 'column count mismatch: expected 10, got 9' },
+    ])
+    expect(result.summary.skipped_count).toBe(1)
   })
 
   it('should add platform tags without duplicates from purchase URL host', () => {
