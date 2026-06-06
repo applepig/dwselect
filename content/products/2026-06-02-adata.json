@@ -1,0 +1,21 @@
+{
+  "id": "2026-06-02-adata",
+  "status": "published",
+  "name": "ADATA 行動電源",
+  "price_text": "500",
+  "description": "體積相當小，而且還很便宜",
+  "purchase_url": "https://24h.pchome.com.tw/prod/DYAO44-A900HC1WQ",
+  "image_url": "https://cs-a.ecimg.tw/items/DYAO44A900HC1WQ/yt000001_1711341252.jpg",
+  "category": "3C",
+  "tags": [
+    "行動電源",
+    "3C",
+    "PCHome"
+  ],
+  "reference_url": null,
+  "created_at": "2026-06-02T00:00:00+08:00",
+  "updated_at": "2026-06-02T00:00:00+08:00",
+  "published_at": "2026-06-02T00:00:00+08:00",
+  "unpublished_at": null,
+  "archived_at": null
+}

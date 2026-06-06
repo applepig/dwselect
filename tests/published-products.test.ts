@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest'
+import { readFileSync, readdirSync } from 'node:fs'
 
 import {
   getCatalogProductId,
@@ -8,6 +9,8 @@ import {
   getPublishedProducts,
 } from '../app/utils/published-products'
 import type { Product } from '../app/utils/product-schema'
+
+const products_dir_url = new URL('../content/products/', import.meta.url)
 
 const base_product = {
   price_text: 'NT$ 1,990',
@@ -29,6 +32,13 @@ function makeProduct(product: Partial<Product> & Pick<Product, 'id' | 'status' |
     ...base_product,
     ...product,
   }
+}
+
+function readContentProducts(): Product[] {
+  return readdirSync(products_dir_url)
+    .filter((file_name) => file_name.endsWith('.json'))
+    .toSorted((left_file_name, right_file_name) => left_file_name.localeCompare(right_file_name))
+    .map((file_name) => JSON.parse(readFileSync(new URL(file_name, products_dir_url), 'utf8')) as Product)
 }
 
 describe('published products mapping', () => {
@@ -322,5 +332,30 @@ describe('catalog view state', () => {
         price: 'NT$ 123,456,789 起',
       }),
     ])
+  })
+})
+
+describe('published product cutover content', () => {
+  it('should expose 66 real published products without the sample product', () => {
+    const catalog_view = getCatalogView(readContentProducts())
+
+    expect(catalog_view.counts).toEqual({ published: 66, filtered: 66 })
+    expect(catalog_view.products.map((product) => product.id)).not.toContain('2026-06-02-sample-product')
+    expect(catalog_view.products).toContainEqual(expect.objectContaining({
+      id: '2026-06-02-sharp-65-xled',
+      name: 'Sharp 65吋 XLED',
+      category: '影音',
+      tags: ['電視', '影音', 'PCHome'],
+    }))
+  })
+
+  it('should search real product names, categories and tags from the cutover content', () => {
+    const products = readContentProducts()
+
+    expect(getCatalogView(products, { query: 'Sharp 65吋 XLED' }).products).toContainEqual(expect.objectContaining({
+      id: '2026-06-02-sharp-65-xled',
+    }))
+    expect(getCatalogView(products, { query: '影音' }).products.length).toBeGreaterThan(0)
+    expect(getCatalogView(products, { query: 'PCHome' }).products.length).toBeGreaterThan(0)
   })
 })

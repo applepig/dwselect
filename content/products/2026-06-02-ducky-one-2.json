@@ -1,0 +1,21 @@
+{
+  "id": "2026-06-02-ducky-one-2",
+  "status": "published",
+  "name": "Ducky One 2",
+  "price_text": "2300",
+  "description": "我覺得Ducky One 2可以買，但是3不行，所以趁他們還有生產的時候多庫存個兩把",
+  "purchase_url": "https://24h.pchome.com.tw/prod/DCAHVA-A900GAGDQ",
+  "image_url": "https://cs-a.ecimg.tw/items/DCAHVAA900GAGDQ/yt000001_1701253293.jpg",
+  "category": "電腦",
+  "tags": [
+    "電腦",
+    "鍵盤",
+    "PCHome"
+  ],
+  "reference_url": null,
+  "created_at": "2026-06-02T00:00:00+08:00",
+  "updated_at": "2026-06-02T00:00:00+08:00",
+  "published_at": "2026-06-02T00:00:00+08:00",
+  "unpublished_at": null,
+  "archived_at": null
+}

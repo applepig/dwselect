@@ -3,8 +3,45 @@ import { describe, expect, it } from 'vitest'
 import { migrateGoogleSheetProducts, formatMigrationSummary } from '../scripts/migrate-google-sheet-products'
 
 const header = 'name\tprice\tdesc\tlink_url\timg_url\ttags\tcategory\treference'
+const legacy_header = 'name\tbrand\tdesc\tcategory\ttags\tprice_value\tprice\tlink_url\timg_url\treference'
 
 describe('migrate Google Sheet products', () => {
+  it('should migrate an inline cutover fixture without skipped rows and expose slug collisions', () => {
+    const tsv = [
+      legacy_header,
+      'IKEA\t品牌 A\t第一筆描述\t居家\t收納 生活\t100\tNT$ 100\thttps://www.ikea.com.tw/product/a\thttps://example.com/ikea-a.jpg\thttps://example.com/ref-a',
+      'IKEA\t品牌 B\t第二筆描述\t居家\t收納\t200\tNT$ 200\thttps://www.ikea.com.tw/product/b\thttps://example.com/ikea-b.jpg\t',
+      'Panasonic\t品牌 C\t第三筆描述\t家電\t電器\t300\tNT$ 300\thttps://example.com/panasonic\thttps://example.com/panasonic.jpg\t',
+    ].join('\n')
+
+    const result = migrateGoogleSheetProducts(tsv, { date: '2026-06-02' })
+
+    expect(result.products).toHaveLength(3)
+    expect(result.summary.created_count).toBe(3)
+    expect(result.summary.skipped_count).toBe(0)
+    expect(result.summary.skipped).toEqual([])
+    expect(result.summary.warnings).toEqual([])
+    expect(result.summary.errors).toEqual([])
+    expect(result.summary.collisions).toEqual([
+      { row_number: 3, original_id: '2026-06-02-ikea', resolved_id: '2026-06-02-ikea-2' },
+    ])
+  })
+
+  it('should use the product id as the output filename stem for inline cutover fixtures', () => {
+    const tsv = [
+      legacy_header,
+      'IKEA\t品牌 A\t第一筆描述\t居家\t收納 生活\t100\tNT$ 100\thttps://www.ikea.com.tw/product/a\thttps://example.com/ikea-a.jpg\thttps://example.com/ref-a',
+      'IKEA\t品牌 B\t第二筆描述\t居家\t收納\t200\tNT$ 200\thttps://www.ikea.com.tw/product/b\thttps://example.com/ikea-b.jpg\t',
+    ].join('\n')
+
+    const result = migrateGoogleSheetProducts(tsv, { date: '2026-06-02' })
+
+    expect(result.products).toHaveLength(2)
+    for (const product of result.products) {
+      expect(product.file_name).toBe(`${product.content.id}.json`)
+    }
+  })
+
   it('should convert legacy TSV rows to stable product JSON with a fixed cutover date', () => {
     const tsv = [
       header,
@@ -36,6 +73,20 @@ describe('migrate Google Sheet products', () => {
       },
     ])
     expect(result.summary.created_count).toBe(1)
+  })
+
+  it('should treat an omitted final reference column as an empty reference value', () => {
+    const tsv = [
+      legacy_header,
+      '商品名稱	品牌	推薦文字	分類	好物  3C	1990	NT$ 1,990	https://24h.pchome.com.tw/prod/ABC	https://example.com/image.jpg',
+    ].join('\n')
+
+    const result = migrateGoogleSheetProducts(tsv, { date: '2026-06-02' })
+
+    expect(result.products).toHaveLength(1)
+    expect(result.products[0]?.content.reference_url).toBeNull()
+    expect(result.summary.warnings).toEqual([])
+    expect(result.summary.skipped_count).toBe(0)
   })
 
   it('should add platform tags without duplicates from purchase URL host', () => {

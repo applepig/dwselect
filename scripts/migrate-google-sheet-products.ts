@@ -79,12 +79,13 @@ export function migrateGoogleSheetProducts(tsv_text: string, options: MigrationO
 
   for (let i = 1; i < lines.length; i += 1) {
     const row_number = i + 1
-    const columns = lines[i]?.split('\t') ?? []
+    const raw_columns = lines[i]?.split('\t') ?? []
+    const columns = getNormalizedColumns(headers, raw_columns)
 
-    if (columns.length !== headers.length) {
+    if (!columns) {
       summary.warnings.push({
         row_number,
-        reason: `column count mismatch: expected ${headers.length}, got ${columns.length}`,
+        reason: `column count mismatch: expected ${headers.length}, got ${raw_columns.length}`,
       })
       summary.skipped_count += 1
       continue
@@ -205,6 +206,19 @@ function getRow(headers: string[], columns: string[]) {
 
     return row
   }, {}) as Record<(typeof REQUIRED_HEADERS)[number], string>
+}
+
+function getNormalizedColumns(headers: string[], columns: string[]) {
+  if (columns.length === headers.length) {
+    return columns
+  }
+
+  const last_header = headers[headers.length - 1]
+  if (columns.length === headers.length - 1 && last_header === 'reference') {
+    return [...columns, '']
+  }
+
+  return null
 }
 
 function getUrlError(purchase_url: string, image_url: string, reference_url: string | null) {

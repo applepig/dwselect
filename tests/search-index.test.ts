@@ -1,4 +1,5 @@
 import MiniSearch from 'minisearch'
+import { readFileSync, readdirSync } from 'node:fs'
 import { mkdir, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
@@ -32,6 +33,8 @@ const base_product: Product = {
   unpublished_at: null,
   archived_at: null,
 }
+const products_dir_url = new URL('../content/products/', import.meta.url)
+const search_index_url = new URL('../public/search-index.json', import.meta.url)
 
 const temp_paths: string[] = []
 
@@ -40,6 +43,17 @@ afterEach(async () => {
 
   await Promise.all(temp_paths.splice(0).map((path) => rm(path, { recursive: true, force: true })))
 })
+
+function readContentProducts(): Product[] {
+  return readdirSync(products_dir_url)
+    .filter((file_name) => file_name.endsWith('.json'))
+    .toSorted((left_file_name, right_file_name) => left_file_name.localeCompare(right_file_name))
+    .map((file_name) => JSON.parse(readFileSync(new URL(file_name, products_dir_url), 'utf8')) as Product)
+}
+
+function readStaticSearchIndexPayload() {
+  return JSON.parse(readFileSync(search_index_url, 'utf8')) as ReturnType<typeof buildSearchIndexPayload>
+}
 
 describe('search index', () => {
   it('should map published products to search documents', () => {
@@ -190,5 +204,32 @@ describe('search index', () => {
     expect(querySearchIndex(mini_search, '機械鍵盤')).toEqual([
       expect.objectContaining({ id: '2026-06-02-sample-product' }),
     ])
+  })
+
+  it('should keep the generated static search index document count aligned with cutover content', () => {
+    const published_count = readContentProducts().filter((product) => product.status === 'published').length
+    const payload = readStaticSearchIndexPayload()
+
+    expect(published_count).toBe(66)
+    expect(payload.documents).toHaveLength(published_count)
+    expect(payload.index.documentCount).toBe(published_count)
+    expect(payload.documents.map((document) => document.id)).not.toContain('2026-06-02-sample-product')
+    expect(payload.documents).toContainEqual(expect.objectContaining({
+      id: '2026-06-02-sharp-65-xled',
+      name: 'Sharp 65吋 XLED',
+      category: '影音',
+    }))
+  })
+
+  it('should query real product names, categories and tags from the generated static search index', () => {
+    const mini_search = loadSearchIndex(readStaticSearchIndexPayload())
+
+    expect(querySearchIndex(mini_search, 'Sharp 65吋 XLED')).toContainEqual(expect.objectContaining({
+      id: '2026-06-02-sharp-65-xled',
+      label: 'Sharp 65吋 XLED',
+      category: '影音',
+    }))
+    expect(querySearchIndex(mini_search, '影音').length).toBeGreaterThan(0)
+    expect(querySearchIndex(mini_search, 'PCHome').length).toBeGreaterThan(0)
   })
 })

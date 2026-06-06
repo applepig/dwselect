@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { readFileSync } from 'node:fs'
+import { readFileSync, readdirSync } from 'node:fs'
 
 import nuxt_config from '../nuxt.config'
 import package_json from '../package.json'
@@ -86,5 +86,23 @@ describe('Nuxt SSG baseline', () => {
     expect(readme_source).toContain('pnpm build:search-index')
     expect(readme_source).toContain('public/search-index.json')
     expect(readme_source).toContain('pnpm generate')
+  })
+
+  it('should expose real cutover catalog artifacts and remove the sample product', () => {
+    const product_file_names = readdirSync(new URL('../content/products/', import.meta.url))
+      .filter((file_name) => file_name.endsWith('.json'))
+    const product_sources = product_file_names.map((file_name) => readFileSync(
+      new URL(`../content/products/${file_name}`, import.meta.url),
+      'utf8',
+    ))
+    const search_index_source = readFileSync(new URL('../public/search-index.json', import.meta.url), 'utf8')
+
+    expect(product_file_names).toHaveLength(66)
+    expect(product_file_names).not.toContain('2026-06-02-sample-product.json')
+    expect(product_sources.join('\n')).toContain('Sharp 65吋 XLED')
+    expect(product_sources.join('\n')).toContain('"category": "影音"')
+    expect(search_index_source).toContain('2026-06-02-sharp-65-xled')
+    expect(search_index_source).toContain('Sharp 65吋 XLED')
+    expect(search_index_source).not.toContain('2026-06-02-sample-product')
   })
 })
