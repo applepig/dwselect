@@ -1,6 +1,12 @@
 import { describe, expect, it } from 'vitest'
 
-import { getGroupedPublishedProducts, getPublishedProducts } from '../app/utils/published-products'
+import {
+  getCatalogProductId,
+  getCatalogSearchProducts,
+  getCatalogView,
+  getGroupedPublishedProducts,
+  getPublishedProducts,
+} from '../app/utils/published-products'
 import type { Product } from '../app/utils/product-schema'
 
 const base_product = {
@@ -59,10 +65,13 @@ describe('published products mapping', () => {
       {
         id: 'published-product',
         category: '鍵盤',
+        description: '推薦文',
         image: 'https://example.com/image.jpg',
         name: '已上架商品',
         price: 'NT$ 2,490',
+        published_at: '2026-06-02T00:00:00+08:00',
         purchase_link: 'https://example.com/buy',
+        tags: ['tag-a'],
       },
     ])
     expect(published_products[0]).not.toHaveProperty('price_text')
@@ -118,6 +127,200 @@ describe('published products mapping', () => {
           expect.objectContaining({ id: 'keyboard-old' }),
         ],
       },
+    ])
+  })
+
+  it('should normalize Nuxt Content runtime ids to canonical product ids', () => {
+    const product = makeProduct({
+      id: 'products/products/2026-06-02-sample-product.json',
+      status: 'published',
+      name: '範例商品',
+    })
+
+    expect(getCatalogProductId(product)).toBe('2026-06-02-sample-product')
+    expect(getPublishedProducts([product])).toEqual([
+      expect.objectContaining({ id: '2026-06-02-sample-product' }),
+    ])
+  })
+})
+
+describe('catalog view state', () => {
+  it('should expose published-only cards, category counts and sort options for UI consumption', () => {
+    const products = [
+      makeProduct({ id: 'keyboard', status: 'published', name: '機械鍵盤', category: '鍵盤', tags: ['typing'] }),
+      makeProduct({ id: 'mouse', status: 'published', name: '無線滑鼠', category: '滑鼠', tags: ['wireless'] }),
+      makeProduct({ id: 'draft-keyboard', status: 'draft', name: '草稿鍵盤', category: '鍵盤', tags: ['draft'] }),
+    ]
+
+    const catalog_view = getCatalogView(products)
+
+    expect(catalog_view.counts).toEqual({ published: 2, filtered: 2 })
+    expect(catalog_view.products.map((product) => product.id)).toEqual(['mouse', 'keyboard'])
+    expect(catalog_view.sections).toEqual([
+      {
+        category: '滑鼠',
+        products: [expect.objectContaining({ id: 'mouse' })],
+      },
+      {
+        category: '鍵盤',
+        products: [expect.objectContaining({ id: 'keyboard' })],
+      },
+    ])
+    expect(catalog_view.category_options).toEqual([
+      { label: '全部', value: '全部', count: 2, active: true },
+      { label: '滑鼠', value: '滑鼠', count: 1, active: false },
+      { label: '鍵盤', value: '鍵盤', count: 1, active: false },
+    ])
+    expect(catalog_view.sort_options).toEqual([
+      { label: '預設排序', value: 'default', active: true },
+      { label: '最新上架', value: 'latest', active: false },
+      { label: '名稱排序', value: 'name', active: false },
+    ])
+    expect(catalog_view.empty_reason).toBeNull()
+  })
+
+  it('should filter by category without counting non-published products', () => {
+    const products = [
+      makeProduct({ id: 'keyboard', status: 'published', name: '機械鍵盤', category: '鍵盤' }),
+      makeProduct({ id: 'mouse', status: 'published', name: '無線滑鼠', category: '滑鼠' }),
+      makeProduct({ id: 'draft-mouse', status: 'draft', name: '草稿滑鼠', category: '滑鼠' }),
+    ]
+
+    const catalog_view = getCatalogView(products, { category: '滑鼠' })
+
+    expect(catalog_view.products.map((product) => product.id)).toEqual(['mouse'])
+    expect(catalog_view.sections).toEqual([
+      {
+        category: '滑鼠',
+        products: [expect.objectContaining({ id: 'mouse' })],
+      },
+    ])
+    expect(catalog_view.category_options.find((option) => option.value === '滑鼠')).toEqual({
+      label: '滑鼠',
+      value: '滑鼠',
+      count: 1,
+      active: true,
+    })
+  })
+
+  it('should support catalog sort values with stable ordering', () => {
+    const products = [
+      makeProduct({
+        id: 'keyboard-old',
+        status: 'published',
+        name: 'B 鍵盤',
+        category: '鍵盤',
+        published_at: '2026-06-01T00:00:00+08:00',
+      }),
+      makeProduct({
+        id: 'mouse-new',
+        status: 'published',
+        name: 'C 滑鼠',
+        category: '滑鼠',
+        published_at: '2026-06-04T00:00:00+08:00',
+      }),
+      makeProduct({
+        id: 'keyboard-new',
+        status: 'published',
+        name: 'A 鍵盤',
+        category: '鍵盤',
+        published_at: '2026-06-03T00:00:00+08:00',
+      }),
+    ]
+
+    expect(getCatalogView(products, { sort: 'default' }).products.map((product) => product.id)).toEqual([
+      'mouse-new',
+      'keyboard-new',
+      'keyboard-old',
+    ])
+    expect(getCatalogView(products, { sort: 'latest' }).products.map((product) => product.id)).toEqual([
+      'mouse-new',
+      'keyboard-new',
+      'keyboard-old',
+    ])
+    expect(getCatalogView(products, { sort: 'name' }).products.map((product) => product.id)).toEqual([
+      'keyboard-new',
+      'keyboard-old',
+      'mouse-new',
+    ])
+    expect(getCatalogView(products, { sort: 'category' }).products.map((product) => product.id)).toEqual([
+      'mouse-new',
+      'keyboard-new',
+      'keyboard-old',
+    ])
+  })
+
+  it('should keep catalog products from the complete search result set after the autocomplete limit', () => {
+    const products = Array.from({ length: 13 }, (_, index) => makeProduct({
+      id: `product-${index + 1}`,
+      status: 'published',
+      name: `共同關鍵字商品 ${index + 1}`,
+      category: index === 12 ? '第十三分類' : '前段分類',
+      published_at: `2026-06-${String(index + 1).padStart(2, '0')}T00:00:00+08:00`,
+    }))
+    const complete_search_results = products.map((product) => ({ id: product.id }))
+
+    const search_products = getCatalogSearchProducts(products, complete_search_results, '共同關鍵字')
+    const catalog_view = getCatalogView(search_products, { category: '第十三分類' })
+
+    expect(search_products).toHaveLength(13)
+    expect(catalog_view.products.map((product) => product.id)).toEqual(['product-13'])
+  })
+
+  it('should treat empty query as no query and keep the current category and sort state', () => {
+    const products = [
+      makeProduct({ id: 'keyboard', status: 'published', name: '機械鍵盤', category: '鍵盤' }),
+      makeProduct({ id: 'mouse', status: 'published', name: '無線滑鼠', category: '滑鼠' }),
+    ]
+
+    const catalog_view = getCatalogView(products, { query: '   ', category: '鍵盤', sort: 'name' })
+
+    expect(catalog_view.query).toBe('')
+    expect(catalog_view.category).toBe('鍵盤')
+    expect(catalog_view.sort).toBe('name')
+    expect(catalog_view.products.map((product) => product.id)).toEqual(['keyboard'])
+    expect(catalog_view.empty_reason).toBeNull()
+  })
+
+  it('should return an empty-result reason when filters match no published product', () => {
+    const products = [
+      makeProduct({ id: 'keyboard', status: 'published', name: '機械鍵盤', description: '打字用', category: '鍵盤' }),
+      makeProduct({ id: 'draft-monitor', status: 'draft', name: '4K 螢幕', description: '影像用', category: '螢幕' }),
+    ]
+
+    const catalog_view = getCatalogView(products, { query: '螢幕' })
+
+    expect(catalog_view.products).toEqual([])
+    expect(catalog_view.sections).toEqual([])
+    expect(catalog_view.counts).toEqual({ published: 1, filtered: 0 })
+    expect(catalog_view.empty_reason).toBe('no-results')
+  })
+
+  it('should map long text fields without truncating source values in catalog cards', () => {
+    const long_name = '非常長的商品名稱'.repeat(12)
+    const long_description = '這是一段很長的推薦描述，測試 catalog helper 不應替 UI 任意截斷。'.repeat(8)
+    const long_tag = 'ergonomic-keyboard-long-tag-name'.repeat(4)
+    const products = [
+      makeProduct({
+        id: 'long-text-product',
+        status: 'published',
+        name: long_name,
+        description: long_description,
+        tags: [long_tag],
+        price_text: 'NT$ 123,456,789 起',
+      }),
+    ]
+
+    const catalog_view = getCatalogView(products, { query: long_tag })
+
+    expect(catalog_view.products).toEqual([
+      expect.objectContaining({
+        id: 'long-text-product',
+        name: long_name,
+        description: long_description,
+        tags: [long_tag],
+        price: 'NT$ 123,456,789 起',
+      }),
     ])
   })
 })

@@ -1,0 +1,139 @@
+{
+  "version": 1,
+  "generated_at": "2026-06-05T18:04:21.261Z",
+  "documents": [
+    {
+      "id": "2026-06-02-sample-product",
+      "name": "範例商品",
+      "category": "未分類",
+      "price_text": "NT$ 1,990",
+      "image_url": "https://placehold.co/1200x800/e5ded1/12304d.png?text=DW+Select"
+    }
+  ],
+  "index": {
+    "documentCount": 1,
+    "nextId": 1,
+    "documentIds": {
+      "0": "2026-06-02-sample-product"
+    },
+    "fieldIds": {
+      "name": 0,
+      "description": 1,
+      "category": 2,
+      "tags": 3
+    },
+    "fieldLength": {
+      "0": [
+        2,
+        7,
+        2,
+        1
+      ]
+    },
+    "averageFieldLength": [
+      2,
+      7,
+      2,
+      1
+    ],
+    "storedFields": {
+      "0": {
+        "id": "2026-06-02-sample-product",
+        "name": "範例商品",
+        "category": "未分類",
+        "price_text": "NT$ 1,990",
+        "image_url": "https://placehold.co/1200x800/e5ded1/12304d.png?text=DW+Select"
+      }
+    },
+    "dirtCount": 0,
+    "index": [
+      [
+        "sample",
+        {
+          "3": {
+            "0": 1
+          }
+        }
+      ],
+      [
+        "schema",
+        {
+          "1": {
+            "0": 1
+          }
+        }
+      ],
+      [
+        "分類",
+        {
+          "2": {
+            "0": 1
+          }
+        }
+      ],
+      [
+        "未",
+        {
+          "2": {
+            "0": 1
+          }
+        }
+      ],
+      [
+        "用",
+        {
+          "1": {
+            "0": 1
+          }
+        }
+      ],
+      [
+        "驗證",
+        {
+          "1": {
+            "0": 1
+          }
+        }
+      ],
+      [
+        "2",
+        {
+          "1": {
+            "0": 1
+          }
+        }
+      ],
+      [
+        "milestone",
+        {
+          "1": {
+            "0": 1
+          }
+        }
+      ],
+      [
+        "商品",
+        {
+          "0": {
+            "0": 1
+          },
+          "1": {
+            "0": 1
+          }
+        }
+      ],
+      [
+        "範例",
+        {
+          "0": {
+            "0": 1
+          },
+          "1": {
+            "0": 1
+          }
+        }
+      ]
+    ],
+    "serializationVersion": 2
+  }
+}

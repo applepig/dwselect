@@ -5,14 +5,17 @@
   "type": "module",
   "scripts": {
     "dev": "nuxt dev --host ::",
-    "build": "nuxt build",
+    "build": "pnpm build:search-index && nuxt build",
+    "build:search-index": "node scripts/build-search-index.ts",
     "test": "vitest run",
-    "generate": "nuxt generate",
+    "generate": "pnpm build:search-index && nuxt generate",
     "preview": "nuxt preview"
   },
   "dependencies": {
     "@nuxt/content": "^3.7.1",
+    "@nuxt/ui": "^4.8.2",
     "better-sqlite3": "^12.5.0",
+    "minisearch": "^7.2.0",
     "nuxt": "^4.2.2",
     "vue": "^3.5.24"
   },

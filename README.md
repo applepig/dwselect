@@ -22,6 +22,14 @@ pnpm dev
 pnpm test
 ```
 
+產生 public search index：
+
+```bash
+pnpm build:search-index
+```
+
+搜尋 index 會輸出到 `public/search-index.json`。`pnpm generate` 會先執行這個步驟，確保靜態輸出使用最新 Git-backed content。
+
 ## Migration
 
 Google Sheets TSV 只作為 legacy migration input 或參考來源，不應在公開站 client/runtime fetch。需要把 TSV 匯入 Git-backed product JSON 時，使用 migration script 並傳入固定 cutover date，讓 rerun 產生穩定檔名與 `id`：

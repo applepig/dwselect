@@ -5,7 +5,7 @@
   "price_text": "NT$ 1,990",
   "description": "Milestone 2 schema 驗證用範例商品。",
   "purchase_url": "https://example.com/product",
-  "image_url": "https://example.com/product.jpg",
+  "image_url": "https://placehold.co/1200x800/e5ded1/12304d.png?text=DW+Select",
   "category": "未分類",
   "tags": [
     "sample"
