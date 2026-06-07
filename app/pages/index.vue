@@ -62,7 +62,7 @@
           >
             <button
               v-for="option in catalog_view.category_options"
-              :key="option.value"
+              :key="`category-option-${option.value}`"
               type="button"
               class="category-tab"
               :aria-pressed="option.active"
@@ -118,7 +118,7 @@
       >
         <section
           v-for="group in catalog_view.sections"
-          :key="group.category"
+          :key="`product-section-${group.category}`"
           class="product-section"
         >
           <h2 class="section-heading">
@@ -128,10 +128,12 @@
           <ul class="product-grid">
             <li
               v-for="product in group.products"
-              :key="product.id"
+              :key="`product-card-${product.id}`"
               class="product-card"
+              :data-product-id="product.id"
             >
               <img
+                :key="`product-image-${product.id}-${product.image}`"
                 :src="product.image"
                 :alt="product.name"
                 class="product-image"

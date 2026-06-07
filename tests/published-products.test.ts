@@ -189,6 +189,20 @@ describe('catalog view state', () => {
     expect(catalog_view.empty_reason).toBeNull()
   })
 
+  it('should use runtime-independent ordering for CJK categories during hydration', () => {
+    const products = [
+      makeProduct({ id: 'food', status: 'published', name: '食材商品', category: '食材' }),
+      makeProduct({ id: 'kitchen', status: 'published', name: '廚房商品', category: '廚房' }),
+      makeProduct({ id: 'home', status: 'published', name: '居家商品', category: '居家' }),
+    ]
+
+    const catalog_view = getCatalogView(products)
+
+    expect(catalog_view.category_options.map((option) => option.value)).toEqual(['全部', '居家', '廚房', '食材'])
+    expect(catalog_view.sections.map((section) => section.category)).toEqual(['居家', '廚房', '食材'])
+    expect(catalog_view.products.map((product) => product.id)).toEqual(['home', 'kitchen', 'food'])
+  })
+
   it('should filter by category without counting non-published products', () => {
     const products = [
       makeProduct({ id: 'keyboard', status: 'published', name: '機械鍵盤', category: '鍵盤' }),

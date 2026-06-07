@@ -125,7 +125,7 @@ export function getCatalogView(products: Product[], state: CatalogState = {}): C
 }
 
 function compareProducts(left_product: Product, right_product: Product) {
-  const category_order = left_product.category.localeCompare(right_product.category)
+  const category_order = compareText(left_product.category, right_product.category)
 
   if (category_order !== 0) {
     return category_order
@@ -137,7 +137,7 @@ function compareProducts(left_product: Product, right_product: Product) {
     return published_at_order
   }
 
-  return left_product.name.localeCompare(right_product.name)
+  return compareText(left_product.name, right_product.name)
 }
 
 function compareProductsByLatest(left_product: Product, right_product: Product) {
@@ -147,17 +147,34 @@ function compareProductsByLatest(left_product: Product, right_product: Product) 
     return published_at_order
   }
 
-  return left_product.name.localeCompare(right_product.name)
+  return compareText(left_product.name, right_product.name)
 }
 
 function compareProductsByName(left_product: Product, right_product: Product) {
-  const name_order = left_product.name.localeCompare(right_product.name)
+  const name_order = compareText(left_product.name, right_product.name)
 
   if (name_order !== 0) {
     return name_order
   }
 
   return compareProducts(left_product, right_product)
+}
+
+function compareText(left_value: string, right_value: string) {
+  const left_chars = Array.from(left_value.normalize('NFKC'))
+  const right_chars = Array.from(right_value.normalize('NFKC'))
+  const length = Math.min(left_chars.length, right_chars.length)
+
+  for (let i = 0; i < length; i += 1) {
+    const left_code_point = left_chars[i]?.codePointAt(0) ?? 0
+    const right_code_point = right_chars[i]?.codePointAt(0) ?? 0
+
+    if (left_code_point !== right_code_point) {
+      return left_code_point - right_code_point
+    }
+  }
+
+  return left_chars.length - right_chars.length
 }
 
 function compareNullableTimestampDesc(left_value: string | null, right_value: string | null) {
