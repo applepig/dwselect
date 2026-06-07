@@ -1,466 +1,532 @@
 {
   "version": 1,
-  "generated_at": "2026-06-07T09:40:37.866Z",
+  "generated_at": "2026-06-07T15:24:46.808Z",
   "documents": [
     {
       "id": "2026-06-02-adata-行動電源",
       "name": "ADATA 行動電源",
-      "category": "3C",
+      "category_label": "3C",
+      "channel_label": "PChome",
       "price_text": "500",
       "image_url": "https://cs-a.ecimg.tw/items/DYAO44A900HC1WQ/yt000001_1711341252.jpg"
     },
     {
       "id": "2026-06-02-aeron-chair",
       "name": "Aeron Chair",
-      "category": "電腦",
+      "category_label": "電腦",
+      "channel_label": "其他通路",
       "price_text": "28000~32000",
       "image_url": "https://cdn-next.cybassets.com/media/W1siZiIsIjEyMjkwL2F0dGFjaGVkX3Bob3Rvcy8xNzYyMjQ1MTkzXzEwMDFf5L-d5Zu657at5L-u6YGL6LK76Kqq5piOQTQtMV92Mi5qcGcuanBlZyJdXQ.jpeg?sha=9b24df7f10db7f74"
     },
     {
       "id": "2026-06-02-aibo-qi行動電源",
       "name": "aibo Qi行動電源",
-      "category": "3C",
+      "category_label": "3C",
+      "channel_label": "PChome",
       "price_text": "899",
       "image_url": "https://img.pchome.com.tw/cs/items/DYAOE1A900HDHBH/000001_1723775526.jpg"
     },
     {
       "id": "2026-06-02-altwork-station",
       "name": "Altwork Station",
-      "category": "電腦",
+      "category_label": "電腦",
+      "channel_label": "其他通路",
       "price_text": "8000鎂",
       "image_url": "https://assets.newatlas.com/dims4/default/a0ace13/2147483647/strip/true/crop/1063x1080+0+0/resize/1063x1080!/quality/90/?url=http%3A%2F%2Fnewatlas-brightspot.s3.amazonaws.com%2Farchive%2Faltwork-station-2.jpg"
     },
     {
       "id": "2026-06-02-aplus-ups",
       "name": "APlus UPS",
-      "category": "電腦",
+      "category_label": "電腦",
+      "channel_label": "PChome",
       "price_text": "1450",
       "image_url": "https://img.pchome.com.tw/cs/items/DCAR15A900AU2RL/000001_1598318654.jpg"
     },
     {
       "id": "2026-06-02-apple-tv-4k",
       "name": "Apple TV 4K",
-      "category": "影音",
+      "category_label": "影音",
+      "channel_label": "PChome",
       "price_text": "4490",
       "image_url": "https://img.pchome.com.tw/cs/items/DYAJFN1900H1P8W/000001_1734071736.jpg"
     },
     {
       "id": "2026-06-02-arnest-永切れ王",
       "name": "Arnest 永切れ王",
-      "category": "廚房",
+      "category_label": "廚房",
+      "channel_label": "Amazon JP",
       "price_text": "￥3800",
       "image_url": "https://m.media-amazon.com/images/I/61fci0cf+zL._AC_SL1500_.jpg"
     },
     {
       "id": "2026-06-02-avier行動電源",
       "name": "Avier行動電源",
-      "category": "3C",
+      "category_label": "3C",
+      "channel_label": "PChome",
       "price_text": "479",
       "image_url": "https://img.pchome.com.tw/cs/items/DYAO44A900GLJQ6/000001_1701165477.jpg"
     },
     {
       "id": "2026-06-02-b18",
       "name": "B18",
-      "category": "電腦",
+      "category_label": "電腦",
+      "channel_label": "其他通路",
       "price_text": "あるよー",
       "image_url": "https://scontent.ftpe8-4.fna.fbcdn.net/v/t39.30808-6/308492852_593092195937302_5331278784983725989_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=cw2LJYXN_8cQ7kNvgE6_sJ1&_nc_zt=23&_nc_ht=scontent.ftpe8-4.fna&_nc_gid=AiNbn07n_lOMyek5dW-Y2UT&oh=00_AYA0w2K741c1J98h05oOvOTs1gu4-ho3Qa6fculv6tRTqQ&oe=67637CD4"
     },
     {
       "id": "2026-06-02-belkin-三孔type-c充電器",
       "name": "Belkin 三孔Type C充電器",
-      "category": "3C",
+      "category_label": "3C",
+      "channel_label": "其他通路",
       "price_text": "790",
       "image_url": "https://img.pchome.com.tw/cs/items/DCAD6E1900H8FBD/000001_1716168950.jpg"
     },
     {
       "id": "2026-06-02-benq-e43-735",
       "name": "BenQ E43-735",
-      "category": "影音",
+      "category_label": "影音",
+      "channel_label": "PChome",
       "price_text": "10999",
       "image_url": "https://img.pchome.com.tw/cs/items/DPAD0O1900GHE37/000001_1733195326.jpg"
     },
     {
       "id": "2026-06-02-benq-e55-735",
       "name": "BenQ E55-735",
-      "category": "影音",
+      "category_label": "影音",
+      "channel_label": "PChome",
       "price_text": "13999",
       "image_url": "https://img.pchome.com.tw/cs/items/DPAD0O1900GHE46/000001_1733903546.jpg"
     },
     {
       "id": "2026-06-02-benq-rd280u",
       "name": "BenQ RD280U",
-      "category": "電腦",
+      "category_label": "電腦",
+      "channel_label": "PChome",
       "price_text": "16888",
       "image_url": "https://cs-a.ecimg.tw/items/DSABSOA900HJAH0/yt000001_1719283603.jpg"
     },
     {
       "id": "2026-06-02-blueair-3250空氣清淨機",
       "name": "Blueair 3250空氣清淨機",
-      "category": "居家",
+      "category_label": "居家",
+      "channel_label": "PChome",
       "price_text": "一台4400",
       "image_url": "https://img.pchome.com.tw/cs/items/DMAUE4A900HS6J6/i010011_1725438230.jpg"
     },
     {
       "id": "2026-06-02-bose-qc45",
       "name": "Bose QC45",
-      "category": "3C",
+      "category_label": "3C",
+      "channel_label": "PChome",
       "price_text": "8000",
       "image_url": "https://img.pchome.com.tw/cs/items/DGCT18A900GN5LD/000001_1702626142.jpg"
     },
     {
       "id": "2026-06-02-brita",
       "name": "Brita",
-      "category": "廚房",
+      "category_label": "廚房",
+      "channel_label": "PChome",
       "price_text": "2200",
       "image_url": "https://img.pchome.com.tw/cs/items/DEAY3AA900GLY25/000001_1703232993.jpg"
     },
     {
       "id": "2026-06-02-ducky-one-2",
       "name": "Ducky One 2",
-      "category": "電腦",
+      "category_label": "電腦",
+      "channel_label": "PChome",
       "price_text": "2300",
       "image_url": "https://cs-a.ecimg.tw/items/DCAHVAA900GAGDQ/yt000001_1701253293.jpg"
     },
     {
       "id": "2026-06-02-elac-connex-dcb41",
       "name": "ELAC ConneX DCB41",
-      "category": "影音",
+      "category_label": "影音",
+      "channel_label": "PChome",
       "price_text": "大概16000",
       "image_url": "https://img.pchome.com.tw/cs/items/DMAAH8A900HVR8U/000001_1727248100.jpg"
     },
     {
       "id": "2026-06-02-electrolux吸塵器",
       "name": "Electrolux吸塵器",
-      "category": "居家",
+      "category_label": "居家",
+      "channel_label": "Costco",
       "price_text": "11999",
       "image_url": "https://www.costco.com.tw/mediapermalink/20231225-20240104_12"
     },
     {
       "id": "2026-06-02-fibbr光纖hdmi線",
       "name": "FIBBR光纖HDMI線",
-      "category": "影音",
+      "category_label": "影音",
+      "channel_label": "Amazon US",
       "price_text": "20~30鎂",
       "image_url": "https://m.media-amazon.com/images/I/61buqTkTaSL._SL1500_.jpg"
     },
     {
       "id": "2026-06-02-fisher-paykel-抽屜式洗碗機",
       "name": "Fisher&Paykel 抽屜式洗碗機",
-      "category": "廚房",
+      "category_label": "廚房",
+      "channel_label": "PChome",
       "price_text": "45000",
       "image_url": "https://img.pchome.com.tw/cs/items/DMBR24A900GK0BS/000001_1703010353.jpg"
     },
     {
       "id": "2026-06-02-hitachi-rd-14fr",
       "name": "Hitachi RD-14FR",
-      "category": "居家",
+      "category_label": "居家",
+      "channel_label": "PChome",
       "price_text": "5999",
       "image_url": "https://img.pchome.com.tw/cs/items/DMBQ01A900GSFE3/000001_1700533478.jpg"
     },
     {
       "id": "2026-06-02-homepod-大",
       "name": "Homepod（大）",
-      "category": "影音",
+      "category_label": "影音",
+      "channel_label": "PChome",
       "price_text": "22000",
       "image_url": "https://img.pchome.com.tw/cs/items/DYAJKI1900GB142/000001_1683606077.jpg"
     },
     {
       "id": "2026-06-02-ikea充電線",
       "name": "IKEA充電線",
-      "category": "3C",
+      "category_label": "3C",
+      "channel_label": "其他通路",
       "price_text": "199",
       "image_url": "https://www.ikea.com.tw/dairyfarm/tw/images/456/1045699_PE842703_S4.webp"
     },
     {
       "id": "2026-06-02-ikea充電電池",
       "name": "IKEA充電電池",
-      "category": "3C",
+      "category_label": "3C",
+      "channel_label": "其他通路",
       "price_text": "249~349",
       "image_url": "https://www.ikea.com.tw/dairyfarm/tw/images/685/0968547_PE810493_S4.webp"
     },
     {
       "id": "2026-06-02-iris吸頂燈-並",
       "name": "Iris吸頂燈（並）",
-      "category": "居家",
+      "category_label": "居家",
+      "channel_label": "Costco",
       "price_text": "2699",
       "image_url": "https://www.costco.com.tw/medias/sys_master/images/he6/h87/100246339026974.webp"
     },
     {
       "id": "2026-06-02-iris高階吸頂燈",
       "name": "Iris高階吸頂燈",
-      "category": "居家",
+      "category_label": "居家",
+      "channel_label": "Amazon JP",
       "price_text": "￥20000",
       "image_url": "https://m.media-amazon.com/images/I/61VmU90A9-L._AC_SL1000_.jpg"
     },
     {
       "id": "2026-06-02-j5create豆腐頭",
       "name": "j5create豆腐頭",
-      "category": "3C",
+      "category_label": "3C",
+      "channel_label": "PChome",
       "price_text": "199",
       "image_url": "https://img.pchome.com.tw/cs/items/DCAX3NA900AD07K/000001_1680747068.jpg"
     },
     {
       "id": "2026-06-02-kioxia-1tb隨身碟",
       "name": "Kioxia 1TB隨身碟",
-      "category": "電腦",
+      "category_label": "電腦",
+      "channel_label": "PChome",
       "price_text": "2490",
       "image_url": "https://img.pchome.com.tw/cs/items/DRAA5DA900FDQCR/000001_1660124876.jpg"
     },
     {
       "id": "2026-06-02-kohler-familycare浴櫃",
       "name": "Kohler FamilyCare浴櫃",
-      "category": "居家",
+      "category_label": "居家",
+      "channel_label": "其他通路",
       "price_text": "20000",
       "image_url": "https://cdn11.bigcommerce.com/s-71ht0mylo2/images/stencil/1280x1280/products/288/841/a__99517.1698132192.jpg?c=1"
     },
     {
       "id": "2026-06-02-kohler暖風機",
       "name": "Kohler暖風機",
-      "category": "居家",
+      "category_label": "居家",
+      "channel_label": "其他通路",
       "price_text": "10900",
       "image_url": "https://cdn11.bigcommerce.com/s-71ht0mylo2/images/stencil/1280x1280/products/731/2456/10623367_O__33401.1691461503.jpg?c=1"
     },
     {
       "id": "2026-06-02-kolin-電暖器",
       "name": "Kolin 電暖器",
-      "category": "居家",
+      "category_label": "居家",
+      "channel_label": "PChome",
       "price_text": "1180",
       "image_url": "https://img.pchome.com.tw/cs/items/DMAZ0FA900H16LY/000001_1703236548.jpg"
     },
     {
       "id": "2026-06-02-lg-c4-65吋-oled",
       "name": "LG C4 65吋 OLED",
-      "category": "影音",
+      "category_label": "影音",
+      "channel_label": "其他通路",
       "price_text": "低於60000",
       "image_url": "https://www.lg.com/content/dam/channel/wcms/tw/images/oled-tv-smart-screen/oled65c4pta_att_eatt_tw_c/OLED65C4PTA_ATT_EATT_TW_C-450x450-new.jpg"
     },
     {
       "id": "2026-06-02-lion-nanox洗衣精",
       "name": "Lion Nanox洗衣精",
-      "category": "居家",
+      "category_label": "居家",
+      "channel_label": "PChome",
       "price_text": "1099",
       "image_url": "https://img.pchome.com.tw/cs/items/DAAK2J1900H333K/000001_1733713845.jpg"
     },
     {
       "id": "2026-06-02-lixil免治馬桶座",
       "name": "Lixil免治馬桶座",
-      "category": "居家",
+      "category_label": "居家",
+      "channel_label": "Amazon JP",
       "price_text": "￥42000",
       "image_url": "https://m.media-amazon.com/images/I/5114LY5TExL._AC_SL1172_.jpg"
     },
     {
       "id": "2026-06-02-mitsubishi-冷凍櫃",
       "name": "Mitsubishi 冷凍櫃",
-      "category": "廚房",
+      "category_label": "廚房",
+      "channel_label": "PChome",
       "price_text": "12000",
       "image_url": "https://cs-a.ecimg.tw/items/DPAC3KA900B2TTL/000001_1676515813.jpg"
     },
     {
       "id": "2026-06-02-msi桌上型",
       "name": "MSI桌上型",
-      "category": "電腦",
+      "category_label": "電腦",
+      "channel_label": "PChome",
       "price_text": "29990",
       "image_url": "https://img.pchome.com.tw/cs/items/DSAANL1900I1LVY/000001_1732513100.jpg"
     },
     {
       "id": "2026-06-02-panasonic-nn-bs607",
       "name": "Panasonic NN-BS607",
-      "category": "廚房",
+      "category_label": "廚房",
+      "channel_label": "PChome",
       "price_text": "12900",
       "image_url": "https://img.pchome.com.tw/cs/items/DMBJ02A900HB5FS/000001_1710409790.jpg"
     },
     {
       "id": "2026-06-02-panasonic-np-th4",
       "name": "Panasonic NP-TH4",
-      "category": "廚房",
+      "category_label": "廚房",
+      "channel_label": "PChome",
       "price_text": "21000",
       "image_url": "https://img.pchome.com.tw/cs/items/DMBR1PA900GT5EO/000001_1699497746.jpg"
     },
     {
       "id": "2026-06-02-panasonic-sr-kt069",
       "name": "Panasonic SR-KT069",
-      "category": "廚房",
+      "category_label": "廚房",
+      "channel_label": "PChome",
       "price_text": "5000",
       "image_url": "https://img.pchome.com.tw/cs/items/DMBI0HA900AOX6V/000001_1687162992.jpg"
     },
     {
       "id": "2026-06-02-panasonic-v150mdh",
       "name": "Panasonic V150MDH",
-      "category": "居家",
+      "category_label": "居家",
+      "channel_label": "PChome",
       "price_text": "41000",
       "image_url": "https://img.pchome.com.tw/cs/items/DPAI1HA900FQ5GC/000001_1702519023.jpg"
     },
     {
       "id": "2026-06-02-panasonic-冷凍櫃",
       "name": "Panasonic 冷凍櫃",
-      "category": "廚房",
+      "category_label": "廚房",
+      "channel_label": "PChome",
       "price_text": "19000",
       "image_url": "https://img.pchome.com.tw/cs/items/DPAC1TA900ALMUG/000001_1619054781.jpg"
     },
     {
       "id": "2026-06-02-panasonic-日規冰箱",
       "name": "Panasonic 日規冰箱",
-      "category": "廚房",
+      "category_label": "廚房",
+      "channel_label": "PChome",
       "price_text": "67000",
       "image_url": "https://img.pchome.com.tw/cs/items/DPAC74A900BNXAJ/000001_1628842716.jpg"
     },
     {
       "id": "2026-06-02-philips-40b1u5600",
       "name": "Philips 40B1U5600",
-      "category": "電腦",
+      "category_label": "電腦",
+      "channel_label": "PChome",
       "price_text": "15000",
       "image_url": "https://img.pchome.com.tw/cs/items/DSABQKA900HLMQG/000001_1730023435.jpg"
     },
     {
       "id": "2026-06-02-roomba-j7",
       "name": "Roomba j7+",
-      "category": "居家",
+      "category_label": "居家",
+      "channel_label": "PChome",
       "price_text": "26000",
       "image_url": "https://cs-a.ecimg.tw/items/DMBL0JA900DZHJ9/yt000001_1701345400.jpg"
     },
     {
       "id": "2026-06-02-samsung-m7-32吋",
       "name": "Samsung M7 32吋",
-      "category": "電腦",
+      "category_label": "電腦",
+      "channel_label": "PChome",
       "price_text": "9900",
       "image_url": "https://img.pchome.com.tw/cs/items/DSABONA900E71LK/000001_1701314910.jpg"
     },
     {
       "id": "2026-06-02-sennheiser-ambeo-max",
       "name": "Sennheiser Ambeo Max",
-      "category": "影音",
+      "category_label": "影音",
+      "channel_label": "PChome",
       "price_text": "84900",
       "image_url": "https://img.pchome.com.tw/cs/items/DMAAEEA900GPR35/i010004_1696574787.jpg"
     },
     {
       "id": "2026-06-02-sharp-65吋-xled",
       "name": "Sharp 65吋 XLED",
-      "category": "影音",
+      "category_label": "影音",
+      "channel_label": "PChome",
       "price_text": "43000",
       "image_url": "https://img.pchome.com.tw/cs/items/DPADN9A900HQHS6/000001_1724033495.jpg"
     },
     {
       "id": "2026-06-02-sharp-xp10t",
       "name": "Sharp XP10T",
-      "category": "廚房",
+      "category_label": "廚房",
+      "channel_label": "PChome",
       "price_text": "29900",
       "image_url": "https://img.pchome.com.tw/cs/items/DMBJ03A900FTXFP/000001_1670575743.jpg"
     },
     {
       "id": "2026-06-02-synology-ds723",
       "name": "Synology DS723+",
-      "category": "電腦",
+      "category_label": "電腦",
+      "channel_label": "PChome",
       "price_text": "15000",
       "image_url": "https://img.pchome.com.tw/cs/items/DRAG08A900FWNSJ/000001_1681108395.jpg"
     },
     {
       "id": "2026-06-02-toshiba-yd5000",
       "name": "Toshiba YD5000",
-      "category": "廚房",
+      "category_label": "廚房",
+      "channel_label": "Amazon JP",
       "price_text": "￥100000",
       "image_url": "https://m.media-amazon.com/images/I/815FU9IOtcL._AC_SL1500_.jpg"
     },
     {
       "id": "2026-06-02-toshiba高階吸頂燈",
       "name": "Toshiba高階吸頂燈",
-      "category": "居家",
+      "category_label": "居家",
+      "channel_label": "Amazon JP",
       "price_text": "￥30000",
       "image_url": "https://m.media-amazon.com/images/I/51l80QQ5itL._AC_SL1500_.jpg"
     },
     {
       "id": "2026-06-02-toto恆溫水龍頭",
       "name": "TOTO恆溫水龍頭",
-      "category": "居家",
+      "category_label": "居家",
+      "channel_label": "Amazon JP",
       "price_text": "￥18000",
       "image_url": "https://m.media-amazon.com/images/I/51xa1Xtqc3L._AC_SL1100_.jpg"
     },
     {
       "id": "2026-06-02-trusco-物流箱",
       "name": "Trusco 物流箱",
-      "category": "居家",
+      "category_label": "居家",
+      "channel_label": "Amazon JP",
       "price_text": "￥1790",
       "image_url": "https://m.media-amazon.com/images/I/51lnbg1qqCL._AC_.jpg"
     },
     {
       "id": "2026-06-02-unifi-express",
       "name": "Unifi Express",
-      "category": "電腦",
+      "category_label": "電腦",
+      "channel_label": "其他通路",
       "price_text": "5799",
       "image_url": "https://images.svc.ui.com/?u=https%3A%2F%2Fcdn.ecomm.ui.com%2Fproducts%2F4ed25b4c-db92-4b98-bbf3-b0989f007c0e%2F8ff040a0-4b16-4c98-a96c-b643cfafbc73.png&q=75&w=1920"
     },
     {
       "id": "2026-06-02-zyxel-xgs1250-12",
       "name": "Zyxel XGS1250-12",
-      "category": "電腦",
+      "category_label": "電腦",
+      "channel_label": "PChome",
       "price_text": "9000",
       "image_url": "https://img.pchome.com.tw/cs/items/DRAF0IA900B7QHW/000001_1658917277.jpg"
     },
     {
       "id": "2026-06-02-三菱重工冷氣",
       "name": "三菱重工冷氣",
-      "category": "居家",
+      "category_label": "居家",
+      "channel_label": "PChome",
       "price_text": "比較貴一點",
       "image_url": "https://img.pchome.com.tw/cs/items/DPAF4HA900FMJD3/000001_1700034325.jpg"
     },
     {
       "id": "2026-06-02-大橋牌越光米",
       "name": "大橋牌越光米",
-      "category": "食材",
+      "category_label": "食材",
+      "channel_label": "PChome",
       "price_text": "125/kg",
       "image_url": "https://cs-a.ecimg.tw/items/DBBY0MA900GMBY7/000001_1693383527.jpg"
     },
     {
       "id": "2026-06-02-威寶40l烤箱",
       "name": "威寶40L烤箱",
-      "category": "廚房",
+      "category_label": "廚房",
+      "channel_label": "momo",
       "price_text": "9000",
       "image_url": "https://i1.momoshop.com.tw/1692546180/goodsimg/0011/521/511/11521511_R.webp"
     },
     {
       "id": "2026-06-02-富里牛奶皇后",
       "name": "富里牛奶皇后",
-      "category": "食材",
+      "category_label": "食材",
+      "channel_label": "PChome",
       "price_text": "200/kg",
       "image_url": "https://img.pchome.com.tw/cs/items/DBBY0JA900F81AW/000001_1656130303.jpg"
     },
     {
       "id": "2026-06-02-山田製油-胡麻辣油",
       "name": "山田製油 胡麻辣油",
-      "category": "食材",
+      "category_label": "食材",
+      "channel_label": "其他通路",
       "price_text": "￥972",
       "image_url": "https://shoplineimg.com/5d08366e3f64c1000128316b/63bf65758cd22b3421747f3e/2000x.webp?source_format=jpg"
     },
     {
       "id": "2026-06-02-日本米入門篇",
       "name": "日本米入門篇",
-      "category": "食材",
+      "category_label": "食材",
+      "channel_label": "其他通路",
       "price_text": "150/kg",
       "image_url": "https://scontent.ftpe8-2.fna.fbcdn.net/v/t39.30808-6/285454481_10225222919953314_2760340429445359591_n.jpg"
     },
     {
       "id": "2026-06-02-旭ポンズ",
       "name": "旭ポンズ",
-      "category": "食材",
+      "category_label": "食材",
+      "channel_label": "其他通路",
       "price_text": "￥840",
       "image_url": "https://item-shopping.c.yimg.jp/i/n/sake-nishida_asp-1005_1"
     },
     {
       "id": "2026-06-02-花王-attack-zero",
       "name": "花王 Attack Zero",
-      "category": "居家",
+      "category_label": "居家",
+      "channel_label": "Costco",
       "price_text": "579",
       "image_url": "https://www.costco.com.tw/medias/sys_master/images/h16/h10/275511669325854.webp"
     },
     {
       "id": "2026-06-02-象印nw-jw10",
       "name": "象印NW-JW10",
-      "category": "廚房",
+      "category_label": "廚房",
+      "channel_label": "Amazon JP",
       "price_text": "￥45000",
       "image_url": "https://m.media-amazon.com/images/I/61dGv0BJc2L._AC_SL1000_.jpg"
     },
     {
       "id": "2026-06-02-電池充電器",
       "name": "電池充電器",
-      "category": "3C",
+      "category_label": "3C",
+      "channel_label": "PChome",
       "price_text": "249",
       "image_url": "https://img.pchome.com.tw/cs/items/DCABC4A900BOW1X/000001_1629649165.jpg"
     }
@@ -538,404 +604,538 @@
     },
     "fieldIds": {
       "name": 0,
-      "description": 1,
-      "category": 2,
-      "tags": 3
+      "summary": 1,
+      "description": 2,
+      "category_label": 3,
+      "channel_label": 4,
+      "tags": 5
     },
     "fieldLength": {
       "0": [
         3,
         6,
+        6,
+        1,
         1,
         4
       ],
       "1": [
         2,
         27,
+        27,
         1,
+        2,
         2
       ],
       "2": [
         4,
         13,
+        13,
+        1,
         1,
         5
       ],
       "3": [
         2,
         24,
+        24,
         1,
+        2,
         2
       ],
       "4": [
         2,
         20,
+        20,
+        1,
         1,
         3
       ],
       "5": [
         3,
         33,
+        33,
+        1,
         1,
         4
       ],
       "6": [
         4,
         14,
+        14,
         1,
+        2,
         2
       ],
       "7": [
         3,
         8,
+        8,
+        1,
         1,
         4
       ],
       "8": [
         1,
         16,
+        16,
         1,
+        2,
         2
       ],
       "9": [
         6,
         23,
+        23,
         1,
+        2,
         4
       ],
       "10": [
         3,
         11,
+        11,
+        1,
         1,
         3
       ],
       "11": [
         3,
         10,
+        10,
+        1,
         1,
         3
       ],
       "12": [
         2,
         27,
+        27,
+        1,
         1,
         4
       ],
       "13": [
         5,
         15,
+        15,
+        1,
         1,
         5
       ],
       "14": [
         2,
         12,
+        12,
+        1,
         1,
         3
       ],
       "15": [
         1,
         13,
+        13,
+        1,
         1,
         3
       ],
       "16": [
         3,
         21,
+        21,
+        1,
         1,
         3
       ],
       "17": [
         3,
         12,
+        12,
+        1,
         1,
         3
       ],
       "18": [
         2,
         29,
+        29,
+        1,
         1,
         2
       ],
       "19": [
         4,
         27,
+        27,
         1,
+        2,
         5
       ],
       "20": [
         5,
         23,
+        23,
+        1,
         1,
         6
       ],
       "21": [
         3,
         13,
+        13,
+        1,
         1,
         2
       ],
       "22": [
         2,
         19,
+        19,
+        1,
         1,
         3
       ],
       "23": [
         3,
         12,
+        12,
         1,
+        2,
         2
       ],
       "24": [
         3,
         10,
+        10,
         1,
+        2,
         2
       ],
       "25": [
         5,
         23,
+        23,
+        1,
         1,
         4
       ],
       "26": [
         5,
         21,
+        21,
         1,
+        2,
         6
       ],
       "27": [
         3,
         9,
+        9,
+        1,
         1,
         3
       ],
       "28": [
         4,
         16,
+        16,
+        1,
         1,
         4
       ],
       "29": [
         4,
         48,
+        48,
         1,
+        2,
         2
       ],
       "30": [
         4,
         25,
+        25,
         1,
+        2,
         2
       ],
       "31": [
         4,
         23,
+        23,
+        1,
         1,
         5
       ],
       "32": [
         5,
         18,
+        18,
         1,
+        2,
         3
       ],
       "33": [
         4,
         24,
+        24,
+        1,
         1,
         4
       ],
       "34": [
         5,
         14,
+        14,
         1,
+        2,
         2
       ],
       "35": [
         2,
         22,
+        22,
+        1,
         1,
         4
       ],
       "36": [
         3,
         7,
+        7,
+        1,
         1,
         4
       ],
       "37": [
         3,
         10,
+        10,
+        1,
         1,
         4
       ],
       "38": [
         3,
         10,
+        10,
+        1,
         1,
         4
       ],
       "39": [
         3,
         6,
+        6,
+        1,
         1,
         4
       ],
       "40": [
         2,
         17,
+        17,
+        1,
         1,
         4
       ],
       "41": [
         2,
         15,
+        15,
+        1,
         1,
         4
       ],
       "42": [
         4,
         18,
+        18,
+        1,
         1,
         4
       ],
       "43": [
         2,
         18,
+        18,
+        1,
         1,
         4
       ],
       "44": [
         2,
         18,
+        18,
+        1,
         1,
         5
       ],
       "45": [
         4,
         19,
+        19,
+        1,
         1,
         3
       ],
       "46": [
         3,
         21,
+        21,
+        1,
         1,
         3
       ],
       "47": [
         4,
         12,
+        12,
+        1,
         1,
         3
       ],
       "48": [
         2,
         27,
+        27,
+        1,
         1,
         4
       ],
       "49": [
         2,
         21,
+        21,
+        1,
         1,
         4
       ],
       "50": [
         2,
         23,
+        23,
         1,
+        2,
         1
       ],
       "51": [
         5,
         18,
+        18,
         1,
+        2,
         6
       ],
       "52": [
         3,
         37,
+        37,
         1,
+        2,
         5
       ],
       "53": [
         3,
         12,
+        12,
         1,
+        2,
         4
       ],
       "54": [
         2,
         14,
+        14,
         1,
+        2,
         3
       ],
       "55": [
         3,
         27,
+        27,
+        1,
         1,
         3
       ],
       "56": [
         3,
         19,
+        19,
+        1,
         1,
         4
       ],
       "57": [
         5,
         21,
+        21,
+        1,
         1,
         3
       ],
       "58": [
         4,
         13,
+        13,
+        1,
         1,
         3
       ],
       "59": [
         3,
         11,
+        11,
+        1,
         1,
         3
       ],
       "60": [
         4,
         27,
+        27,
         1,
+        2,
         2
       ],
       "61": [
         4,
         8,
+        8,
         1,
+        2,
         2
       ],
       "62": [
         3,
         32,
+        32,
         1,
+        2,
         2
       ],
       "63": [
         3,
         7,
+        7,
+        1,
         1,
         3
       ],
       "64": [
         4,
         19,
+        19,
         1,
+        2,
         3
       ],
       "65": [
         2,
         18,
+        18,
+        1,
         1,
         3
       ]
@@ -943,469 +1143,537 @@
     "averageFieldLength": [
       3.1969696969696964,
       18.272727272727273,
+      18.272727272727273,
       1,
+      1.3333333333333333,
       3.3939393939393945
     ],
     "storedFields": {
       "0": {
         "id": "2026-06-02-adata-行動電源",
         "name": "ADATA 行動電源",
-        "category": "3C",
+        "category_label": "3C",
+        "channel_label": "PChome",
         "price_text": "500",
         "image_url": "https://cs-a.ecimg.tw/items/DYAO44A900HC1WQ/yt000001_1711341252.jpg"
       },
       "1": {
         "id": "2026-06-02-aeron-chair",
         "name": "Aeron Chair",
-        "category": "電腦",
+        "category_label": "電腦",
+        "channel_label": "其他通路",
         "price_text": "28000~32000",
         "image_url": "https://cdn-next.cybassets.com/media/W1siZiIsIjEyMjkwL2F0dGFjaGVkX3Bob3Rvcy8xNzYyMjQ1MTkzXzEwMDFf5L-d5Zu657at5L-u6YGL6LK76Kqq5piOQTQtMV92Mi5qcGcuanBlZyJdXQ.jpeg?sha=9b24df7f10db7f74"
       },
       "2": {
         "id": "2026-06-02-aibo-qi行動電源",
         "name": "aibo Qi行動電源",
-        "category": "3C",
+        "category_label": "3C",
+        "channel_label": "PChome",
         "price_text": "899",
         "image_url": "https://img.pchome.com.tw/cs/items/DYAOE1A900HDHBH/000001_1723775526.jpg"
       },
       "3": {
         "id": "2026-06-02-altwork-station",
         "name": "Altwork Station",
-        "category": "電腦",
+        "category_label": "電腦",
+        "channel_label": "其他通路",
         "price_text": "8000鎂",
         "image_url": "https://assets.newatlas.com/dims4/default/a0ace13/2147483647/strip/true/crop/1063x1080+0+0/resize/1063x1080!/quality/90/?url=http%3A%2F%2Fnewatlas-brightspot.s3.amazonaws.com%2Farchive%2Faltwork-station-2.jpg"
       },
       "4": {
         "id": "2026-06-02-aplus-ups",
         "name": "APlus UPS",
-        "category": "電腦",
+        "category_label": "電腦",
+        "channel_label": "PChome",
         "price_text": "1450",
         "image_url": "https://img.pchome.com.tw/cs/items/DCAR15A900AU2RL/000001_1598318654.jpg"
       },
       "5": {
         "id": "2026-06-02-apple-tv-4k",
         "name": "Apple TV 4K",
-        "category": "影音",
+        "category_label": "影音",
+        "channel_label": "PChome",
         "price_text": "4490",
         "image_url": "https://img.pchome.com.tw/cs/items/DYAJFN1900H1P8W/000001_1734071736.jpg"
       },
       "6": {
         "id": "2026-06-02-arnest-永切れ王",
         "name": "Arnest 永切れ王",
-        "category": "廚房",
+        "category_label": "廚房",
+        "channel_label": "Amazon JP",
         "price_text": "￥3800",
         "image_url": "https://m.media-amazon.com/images/I/61fci0cf+zL._AC_SL1500_.jpg"
       },
       "7": {
         "id": "2026-06-02-avier行動電源",
         "name": "Avier行動電源",
-        "category": "3C",
+        "category_label": "3C",
+        "channel_label": "PChome",
         "price_text": "479",
         "image_url": "https://img.pchome.com.tw/cs/items/DYAO44A900GLJQ6/000001_1701165477.jpg"
       },
       "8": {
         "id": "2026-06-02-b18",
         "name": "B18",
-        "category": "電腦",
+        "category_label": "電腦",
+        "channel_label": "其他通路",
         "price_text": "あるよー",
         "image_url": "https://scontent.ftpe8-4.fna.fbcdn.net/v/t39.30808-6/308492852_593092195937302_5331278784983725989_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=cw2LJYXN_8cQ7kNvgE6_sJ1&_nc_zt=23&_nc_ht=scontent.ftpe8-4.fna&_nc_gid=AiNbn07n_lOMyek5dW-Y2UT&oh=00_AYA0w2K741c1J98h05oOvOTs1gu4-ho3Qa6fculv6tRTqQ&oe=67637CD4"
       },
       "9": {
         "id": "2026-06-02-belkin-三孔type-c充電器",
         "name": "Belkin 三孔Type C充電器",
-        "category": "3C",
+        "category_label": "3C",
+        "channel_label": "其他通路",
         "price_text": "790",
         "image_url": "https://img.pchome.com.tw/cs/items/DCAD6E1900H8FBD/000001_1716168950.jpg"
       },
       "10": {
         "id": "2026-06-02-benq-e43-735",
         "name": "BenQ E43-735",
-        "category": "影音",
+        "category_label": "影音",
+        "channel_label": "PChome",
         "price_text": "10999",
         "image_url": "https://img.pchome.com.tw/cs/items/DPAD0O1900GHE37/000001_1733195326.jpg"
       },
       "11": {
         "id": "2026-06-02-benq-e55-735",
         "name": "BenQ E55-735",
-        "category": "影音",
+        "category_label": "影音",
+        "channel_label": "PChome",
         "price_text": "13999",
         "image_url": "https://img.pchome.com.tw/cs/items/DPAD0O1900GHE46/000001_1733903546.jpg"
       },
       "12": {
         "id": "2026-06-02-benq-rd280u",
         "name": "BenQ RD280U",
-        "category": "電腦",
+        "category_label": "電腦",
+        "channel_label": "PChome",
         "price_text": "16888",
         "image_url": "https://cs-a.ecimg.tw/items/DSABSOA900HJAH0/yt000001_1719283603.jpg"
       },
       "13": {
         "id": "2026-06-02-blueair-3250空氣清淨機",
         "name": "Blueair 3250空氣清淨機",
-        "category": "居家",
+        "category_label": "居家",
+        "channel_label": "PChome",
         "price_text": "一台4400",
         "image_url": "https://img.pchome.com.tw/cs/items/DMAUE4A900HS6J6/i010011_1725438230.jpg"
       },
       "14": {
         "id": "2026-06-02-bose-qc45",
         "name": "Bose QC45",
-        "category": "3C",
+        "category_label": "3C",
+        "channel_label": "PChome",
         "price_text": "8000",
         "image_url": "https://img.pchome.com.tw/cs/items/DGCT18A900GN5LD/000001_1702626142.jpg"
       },
       "15": {
         "id": "2026-06-02-brita",
         "name": "Brita",
-        "category": "廚房",
+        "category_label": "廚房",
+        "channel_label": "PChome",
         "price_text": "2200",
         "image_url": "https://img.pchome.com.tw/cs/items/DEAY3AA900GLY25/000001_1703232993.jpg"
       },
       "16": {
         "id": "2026-06-02-ducky-one-2",
         "name": "Ducky One 2",
-        "category": "電腦",
+        "category_label": "電腦",
+        "channel_label": "PChome",
         "price_text": "2300",
         "image_url": "https://cs-a.ecimg.tw/items/DCAHVAA900GAGDQ/yt000001_1701253293.jpg"
       },
       "17": {
         "id": "2026-06-02-elac-connex-dcb41",
         "name": "ELAC ConneX DCB41",
-        "category": "影音",
+        "category_label": "影音",
+        "channel_label": "PChome",
         "price_text": "大概16000",
         "image_url": "https://img.pchome.com.tw/cs/items/DMAAH8A900HVR8U/000001_1727248100.jpg"
       },
       "18": {
         "id": "2026-06-02-electrolux吸塵器",
         "name": "Electrolux吸塵器",
-        "category": "居家",
+        "category_label": "居家",
+        "channel_label": "Costco",
         "price_text": "11999",
         "image_url": "https://www.costco.com.tw/mediapermalink/20231225-20240104_12"
       },
       "19": {
         "id": "2026-06-02-fibbr光纖hdmi線",
         "name": "FIBBR光纖HDMI線",
-        "category": "影音",
+        "category_label": "影音",
+        "channel_label": "Amazon US",
         "price_text": "20~30鎂",
         "image_url": "https://m.media-amazon.com/images/I/61buqTkTaSL._SL1500_.jpg"
       },
       "20": {
         "id": "2026-06-02-fisher-paykel-抽屜式洗碗機",
         "name": "Fisher&Paykel 抽屜式洗碗機",
-        "category": "廚房",
+        "category_label": "廚房",
+        "channel_label": "PChome",
         "price_text": "45000",
         "image_url": "https://img.pchome.com.tw/cs/items/DMBR24A900GK0BS/000001_1703010353.jpg"
       },
       "21": {
         "id": "2026-06-02-hitachi-rd-14fr",
         "name": "Hitachi RD-14FR",
-        "category": "居家",
+        "category_label": "居家",
+        "channel_label": "PChome",
         "price_text": "5999",
         "image_url": "https://img.pchome.com.tw/cs/items/DMBQ01A900GSFE3/000001_1700533478.jpg"
       },
       "22": {
         "id": "2026-06-02-homepod-大",
         "name": "Homepod（大）",
-        "category": "影音",
+        "category_label": "影音",
+        "channel_label": "PChome",
         "price_text": "22000",
         "image_url": "https://img.pchome.com.tw/cs/items/DYAJKI1900GB142/000001_1683606077.jpg"
       },
       "23": {
         "id": "2026-06-02-ikea充電線",
         "name": "IKEA充電線",
-        "category": "3C",
+        "category_label": "3C",
+        "channel_label": "其他通路",
         "price_text": "199",
         "image_url": "https://www.ikea.com.tw/dairyfarm/tw/images/456/1045699_PE842703_S4.webp"
       },
       "24": {
         "id": "2026-06-02-ikea充電電池",
         "name": "IKEA充電電池",
-        "category": "3C",
+        "category_label": "3C",
+        "channel_label": "其他通路",
         "price_text": "249~349",
         "image_url": "https://www.ikea.com.tw/dairyfarm/tw/images/685/0968547_PE810493_S4.webp"
       },
       "25": {
         "id": "2026-06-02-iris吸頂燈-並",
         "name": "Iris吸頂燈（並）",
-        "category": "居家",
+        "category_label": "居家",
+        "channel_label": "Costco",
         "price_text": "2699",
         "image_url": "https://www.costco.com.tw/medias/sys_master/images/he6/h87/100246339026974.webp"
       },
       "26": {
         "id": "2026-06-02-iris高階吸頂燈",
         "name": "Iris高階吸頂燈",
-        "category": "居家",
+        "category_label": "居家",
+        "channel_label": "Amazon JP",
         "price_text": "￥20000",
         "image_url": "https://m.media-amazon.com/images/I/61VmU90A9-L._AC_SL1000_.jpg"
       },
       "27": {
         "id": "2026-06-02-j5create豆腐頭",
         "name": "j5create豆腐頭",
-        "category": "3C",
+        "category_label": "3C",
+        "channel_label": "PChome",
         "price_text": "199",
         "image_url": "https://img.pchome.com.tw/cs/items/DCAX3NA900AD07K/000001_1680747068.jpg"
       },
       "28": {
         "id": "2026-06-02-kioxia-1tb隨身碟",
         "name": "Kioxia 1TB隨身碟",
-        "category": "電腦",
+        "category_label": "電腦",
+        "channel_label": "PChome",
         "price_text": "2490",
         "image_url": "https://img.pchome.com.tw/cs/items/DRAA5DA900FDQCR/000001_1660124876.jpg"
       },
       "29": {
         "id": "2026-06-02-kohler-familycare浴櫃",
         "name": "Kohler FamilyCare浴櫃",
-        "category": "居家",
+        "category_label": "居家",
+        "channel_label": "其他通路",
         "price_text": "20000",
         "image_url": "https://cdn11.bigcommerce.com/s-71ht0mylo2/images/stencil/1280x1280/products/288/841/a__99517.1698132192.jpg?c=1"
       },
       "30": {
         "id": "2026-06-02-kohler暖風機",
         "name": "Kohler暖風機",
-        "category": "居家",
+        "category_label": "居家",
+        "channel_label": "其他通路",
         "price_text": "10900",
         "image_url": "https://cdn11.bigcommerce.com/s-71ht0mylo2/images/stencil/1280x1280/products/731/2456/10623367_O__33401.1691461503.jpg?c=1"
       },
       "31": {
         "id": "2026-06-02-kolin-電暖器",
         "name": "Kolin 電暖器",
-        "category": "居家",
+        "category_label": "居家",
+        "channel_label": "PChome",
         "price_text": "1180",
         "image_url": "https://img.pchome.com.tw/cs/items/DMAZ0FA900H16LY/000001_1703236548.jpg"
       },
       "32": {
         "id": "2026-06-02-lg-c4-65吋-oled",
         "name": "LG C4 65吋 OLED",
-        "category": "影音",
+        "category_label": "影音",
+        "channel_label": "其他通路",
         "price_text": "低於60000",
         "image_url": "https://www.lg.com/content/dam/channel/wcms/tw/images/oled-tv-smart-screen/oled65c4pta_att_eatt_tw_c/OLED65C4PTA_ATT_EATT_TW_C-450x450-new.jpg"
       },
       "33": {
         "id": "2026-06-02-lion-nanox洗衣精",
         "name": "Lion Nanox洗衣精",
-        "category": "居家",
+        "category_label": "居家",
+        "channel_label": "PChome",
         "price_text": "1099",
         "image_url": "https://img.pchome.com.tw/cs/items/DAAK2J1900H333K/000001_1733713845.jpg"
       },
       "34": {
         "id": "2026-06-02-lixil免治馬桶座",
         "name": "Lixil免治馬桶座",
-        "category": "居家",
+        "category_label": "居家",
+        "channel_label": "Amazon JP",
         "price_text": "￥42000",
         "image_url": "https://m.media-amazon.com/images/I/5114LY5TExL._AC_SL1172_.jpg"
       },
       "35": {
         "id": "2026-06-02-mitsubishi-冷凍櫃",
         "name": "Mitsubishi 冷凍櫃",
-        "category": "廚房",
+        "category_label": "廚房",
+        "channel_label": "PChome",
         "price_text": "12000",
         "image_url": "https://cs-a.ecimg.tw/items/DPAC3KA900B2TTL/000001_1676515813.jpg"
       },
       "36": {
         "id": "2026-06-02-msi桌上型",
         "name": "MSI桌上型",
-        "category": "電腦",
+        "category_label": "電腦",
+        "channel_label": "PChome",
         "price_text": "29990",
         "image_url": "https://img.pchome.com.tw/cs/items/DSAANL1900I1LVY/000001_1732513100.jpg"
       },
       "37": {
         "id": "2026-06-02-panasonic-nn-bs607",
         "name": "Panasonic NN-BS607",
-        "category": "廚房",
+        "category_label": "廚房",
+        "channel_label": "PChome",
         "price_text": "12900",
         "image_url": "https://img.pchome.com.tw/cs/items/DMBJ02A900HB5FS/000001_1710409790.jpg"
       },
       "38": {
         "id": "2026-06-02-panasonic-np-th4",
         "name": "Panasonic NP-TH4",
-        "category": "廚房",
+        "category_label": "廚房",
+        "channel_label": "PChome",
         "price_text": "21000",
         "image_url": "https://img.pchome.com.tw/cs/items/DMBR1PA900GT5EO/000001_1699497746.jpg"
       },
       "39": {
         "id": "2026-06-02-panasonic-sr-kt069",
         "name": "Panasonic SR-KT069",
-        "category": "廚房",
+        "category_label": "廚房",
+        "channel_label": "PChome",
         "price_text": "5000",
         "image_url": "https://img.pchome.com.tw/cs/items/DMBI0HA900AOX6V/000001_1687162992.jpg"
       },
       "40": {
         "id": "2026-06-02-panasonic-v150mdh",
         "name": "Panasonic V150MDH",
-        "category": "居家",
+        "category_label": "居家",
+        "channel_label": "PChome",
         "price_text": "41000",
         "image_url": "https://img.pchome.com.tw/cs/items/DPAI1HA900FQ5GC/000001_1702519023.jpg"
       },
       "41": {
         "id": "2026-06-02-panasonic-冷凍櫃",
         "name": "Panasonic 冷凍櫃",
-        "category": "廚房",
+        "category_label": "廚房",
+        "channel_label": "PChome",
         "price_text": "19000",
         "image_url": "https://img.pchome.com.tw/cs/items/DPAC1TA900ALMUG/000001_1619054781.jpg"
       },
       "42": {
         "id": "2026-06-02-panasonic-日規冰箱",
         "name": "Panasonic 日規冰箱",
-        "category": "廚房",
+        "category_label": "廚房",
+        "channel_label": "PChome",
         "price_text": "67000",
         "image_url": "https://img.pchome.com.tw/cs/items/DPAC74A900BNXAJ/000001_1628842716.jpg"
       },
       "43": {
         "id": "2026-06-02-philips-40b1u5600",
         "name": "Philips 40B1U5600",
-        "category": "電腦",
+        "category_label": "電腦",
+        "channel_label": "PChome",
         "price_text": "15000",
         "image_url": "https://img.pchome.com.tw/cs/items/DSABQKA900HLMQG/000001_1730023435.jpg"
       },
       "44": {
         "id": "2026-06-02-roomba-j7",
         "name": "Roomba j7+",
-        "category": "居家",
+        "category_label": "居家",
+        "channel_label": "PChome",
         "price_text": "26000",
         "image_url": "https://cs-a.ecimg.tw/items/DMBL0JA900DZHJ9/yt000001_1701345400.jpg"
       },
       "45": {
         "id": "2026-06-02-samsung-m7-32吋",
         "name": "Samsung M7 32吋",
-        "category": "電腦",
+        "category_label": "電腦",
+        "channel_label": "PChome",
         "price_text": "9900",
         "image_url": "https://img.pchome.com.tw/cs/items/DSABONA900E71LK/000001_1701314910.jpg"
       },
       "46": {
         "id": "2026-06-02-sennheiser-ambeo-max",
         "name": "Sennheiser Ambeo Max",
-        "category": "影音",
+        "category_label": "影音",
+        "channel_label": "PChome",
         "price_text": "84900",
         "image_url": "https://img.pchome.com.tw/cs/items/DMAAEEA900GPR35/i010004_1696574787.jpg"
       },
       "47": {
         "id": "2026-06-02-sharp-65吋-xled",
         "name": "Sharp 65吋 XLED",
-        "category": "影音",
+        "category_label": "影音",
+        "channel_label": "PChome",
         "price_text": "43000",
         "image_url": "https://img.pchome.com.tw/cs/items/DPADN9A900HQHS6/000001_1724033495.jpg"
       },
       "48": {
         "id": "2026-06-02-sharp-xp10t",
         "name": "Sharp XP10T",
-        "category": "廚房",
+        "category_label": "廚房",
+        "channel_label": "PChome",
         "price_text": "29900",
         "image_url": "https://img.pchome.com.tw/cs/items/DMBJ03A900FTXFP/000001_1670575743.jpg"
       },
       "49": {
         "id": "2026-06-02-synology-ds723",
         "name": "Synology DS723+",
-        "category": "電腦",
+        "category_label": "電腦",
+        "channel_label": "PChome",
         "price_text": "15000",
         "image_url": "https://img.pchome.com.tw/cs/items/DRAG08A900FWNSJ/000001_1681108395.jpg"
       },
       "50": {
         "id": "2026-06-02-toshiba-yd5000",
         "name": "Toshiba YD5000",
-        "category": "廚房",
+        "category_label": "廚房",
+        "channel_label": "Amazon JP",
         "price_text": "￥100000",
         "image_url": "https://m.media-amazon.com/images/I/815FU9IOtcL._AC_SL1500_.jpg"
       },
       "51": {
         "id": "2026-06-02-toshiba高階吸頂燈",
         "name": "Toshiba高階吸頂燈",
-        "category": "居家",
+        "category_label": "居家",
+        "channel_label": "Amazon JP",
         "price_text": "￥30000",
         "image_url": "https://m.media-amazon.com/images/I/51l80QQ5itL._AC_SL1500_.jpg"
       },
       "52": {
         "id": "2026-06-02-toto恆溫水龍頭",
         "name": "TOTO恆溫水龍頭",
-        "category": "居家",
+        "category_label": "居家",
+        "channel_label": "Amazon JP",
         "price_text": "￥18000",
         "image_url": "https://m.media-amazon.com/images/I/51xa1Xtqc3L._AC_SL1100_.jpg"
       },
       "53": {
         "id": "2026-06-02-trusco-物流箱",
         "name": "Trusco 物流箱",
-        "category": "居家",
+        "category_label": "居家",
+        "channel_label": "Amazon JP",
         "price_text": "￥1790",
         "image_url": "https://m.media-amazon.com/images/I/51lnbg1qqCL._AC_.jpg"
       },
       "54": {
         "id": "2026-06-02-unifi-express",
         "name": "Unifi Express",
-        "category": "電腦",
+        "category_label": "電腦",
+        "channel_label": "其他通路",
         "price_text": "5799",
         "image_url": "https://images.svc.ui.com/?u=https%3A%2F%2Fcdn.ecomm.ui.com%2Fproducts%2F4ed25b4c-db92-4b98-bbf3-b0989f007c0e%2F8ff040a0-4b16-4c98-a96c-b643cfafbc73.png&q=75&w=1920"
       },
       "55": {
         "id": "2026-06-02-zyxel-xgs1250-12",
         "name": "Zyxel XGS1250-12",
-        "category": "電腦",
+        "category_label": "電腦",
+        "channel_label": "PChome",
         "price_text": "9000",
         "image_url": "https://img.pchome.com.tw/cs/items/DRAF0IA900B7QHW/000001_1658917277.jpg"
       },
       "56": {
         "id": "2026-06-02-三菱重工冷氣",
         "name": "三菱重工冷氣",
-        "category": "居家",
+        "category_label": "居家",
+        "channel_label": "PChome",
         "price_text": "比較貴一點",
         "image_url": "https://img.pchome.com.tw/cs/items/DPAF4HA900FMJD3/000001_1700034325.jpg"
       },
       "57": {
         "id": "2026-06-02-大橋牌越光米",
         "name": "大橋牌越光米",
-        "category": "食材",
+        "category_label": "食材",
+        "channel_label": "PChome",
         "price_text": "125/kg",
         "image_url": "https://cs-a.ecimg.tw/items/DBBY0MA900GMBY7/000001_1693383527.jpg"
       },
       "58": {
         "id": "2026-06-02-威寶40l烤箱",
         "name": "威寶40L烤箱",
-        "category": "廚房",
+        "category_label": "廚房",
+        "channel_label": "momo",
         "price_text": "9000",
         "image_url": "https://i1.momoshop.com.tw/1692546180/goodsimg/0011/521/511/11521511_R.webp"
       },
       "59": {
         "id": "2026-06-02-富里牛奶皇后",
         "name": "富里牛奶皇后",
-        "category": "食材",
+        "category_label": "食材",
+        "channel_label": "PChome",
         "price_text": "200/kg",
         "image_url": "https://img.pchome.com.tw/cs/items/DBBY0JA900F81AW/000001_1656130303.jpg"
       },
       "60": {
         "id": "2026-06-02-山田製油-胡麻辣油",
         "name": "山田製油 胡麻辣油",
-        "category": "食材",
+        "category_label": "食材",
+        "channel_label": "其他通路",
         "price_text": "￥972",
         "image_url": "https://shoplineimg.com/5d08366e3f64c1000128316b/63bf65758cd22b3421747f3e/2000x.webp?source_format=jpg"
       },
       "61": {
         "id": "2026-06-02-日本米入門篇",
         "name": "日本米入門篇",
-        "category": "食材",
+        "category_label": "食材",
+        "channel_label": "其他通路",
         "price_text": "150/kg",
         "image_url": "https://scontent.ftpe8-2.fna.fbcdn.net/v/t39.30808-6/285454481_10225222919953314_2760340429445359591_n.jpg"
       },
       "62": {
         "id": "2026-06-02-旭ポンズ",
         "name": "旭ポンズ",
-        "category": "食材",
+        "category_label": "食材",
+        "channel_label": "其他通路",
         "price_text": "￥840",
         "image_url": "https://item-shopping.c.yimg.jp/i/n/sake-nishida_asp-1005_1"
       },
       "63": {
         "id": "2026-06-02-花王-attack-zero",
         "name": "花王 Attack Zero",
-        "category": "居家",
+        "category_label": "居家",
+        "channel_label": "Costco",
         "price_text": "579",
         "image_url": "https://www.costco.com.tw/medias/sys_master/images/h16/h10/275511669325854.webp"
       },
       "64": {
         "id": "2026-06-02-象印nw-jw10",
         "name": "象印NW-JW10",
-        "category": "廚房",
+        "category_label": "廚房",
+        "channel_label": "Amazon JP",
         "price_text": "￥45000",
         "image_url": "https://m.media-amazon.com/images/I/61dGv0BJc2L._AC_SL1000_.jpg"
       },
       "65": {
         "id": "2026-06-02-電池充電器",
         "name": "電池充電器",
-        "category": "3C",
+        "category_label": "3C",
+        "channel_label": "PChome",
         "price_text": "249",
         "image_url": "https://img.pchome.com.tw/cs/items/DCABC4A900BOW1X/000001_1629649165.jpg"
       }
@@ -1417,6 +1685,9 @@
         {
           "1": {
             "65": 1
+          },
+          "2": {
+            "65": 1
           }
         }
       ],
@@ -1424,6 +1695,9 @@
         "插",
         {
           "1": {
+            "65": 1
+          },
+          "2": {
             "65": 1
           }
         }
@@ -1433,6 +1707,9 @@
         {
           "1": {
             "55": 1
+          },
+          "2": {
+            "55": 1
           }
         }
       ],
@@ -1440,6 +1717,9 @@
         "反而",
         {
           "1": {
+            "65": 1
+          },
+          "2": {
             "65": 1
           }
         }
@@ -1449,6 +1729,9 @@
         {
           "1": {
             "65": 1
+          },
+          "2": {
+            "65": 1
           }
         }
       ],
@@ -1456,6 +1739,9 @@
         "炭釜",
         {
           "1": {
+            "64": 1
+          },
+          "2": {
             "64": 1
           }
         }
@@ -1465,6 +1751,9 @@
         {
           "1": {
             "64": 1
+          },
+          "2": {
+            "64": 1
           }
         }
       ],
@@ -1472,6 +1761,9 @@
         "本體",
         {
           "1": {
+            "18": 1
+          },
+          "2": {
             "18": 1
           }
         }
@@ -1481,6 +1773,9 @@
         {
           "1": {
             "65": 1
+          },
+          "2": {
+            "65": 1
           }
         }
       ],
@@ -1488,6 +1783,9 @@
         "輸",
         {
           "1": {
+            "64": 1
+          },
+          "2": {
             "64": 1
           }
         }
@@ -1497,6 +1795,9 @@
         {
           "1": {
             "64": 1
+          },
+          "2": {
+            "64": 1
           }
         }
       ],
@@ -1504,6 +1805,9 @@
         "煮",
         {
           "1": {
+            "64": 1
+          },
+          "2": {
             "64": 1
           }
         }
@@ -1513,6 +1817,9 @@
         {
           "1": {
             "64": 1
+          },
+          "2": {
+            "64": 1
           }
         }
       ],
@@ -1520,6 +1827,9 @@
         "少",
         {
           "1": {
+            "64": 1
+          },
+          "2": {
             "64": 1
           }
         }
@@ -1529,6 +1839,9 @@
         {
           "1": {
             "64": 1
+          },
+          "2": {
+            "64": 1
           }
         }
       ],
@@ -1536,6 +1849,9 @@
         "清洗",
         {
           "1": {
+            "64": 1
+          },
+          "2": {
             "64": 1
           }
         }
@@ -1546,7 +1862,7 @@
           "0": {
             "13": 1
           },
-          "3": {
+          "5": {
             "13": 1
           }
         }
@@ -1572,6 +1888,9 @@
         {
           "1": {
             "63": 1
+          },
+          "2": {
+            "63": 1
           }
         }
       ],
@@ -1579,6 +1898,9 @@
         "噴",
         {
           "1": {
+            "63": 1
+          },
+          "2": {
             "63": 1
           }
         }
@@ -1590,6 +1912,9 @@
             "63": 1
           },
           "1": {
+            "63": 1
+          },
+          "2": {
             "63": 1
           }
         }
@@ -1615,6 +1940,9 @@
         {
           "1": {
             "62": 1
+          },
+          "2": {
+            "62": 1
           }
         }
       ],
@@ -1622,6 +1950,9 @@
         "東京",
         {
           "1": {
+            "62": 1
+          },
+          "2": {
             "62": 1
           }
         }
@@ -1632,6 +1963,10 @@
           "1": {
             "8": 1,
             "53": 1
+          },
+          "2": {
+            "8": 1,
+            "53": 1
           }
         }
       ],
@@ -1639,6 +1974,9 @@
         "附近",
         {
           "1": {
+            "62": 1
+          },
+          "2": {
             "62": 1
           }
         }
@@ -1648,6 +1986,9 @@
         {
           "1": {
             "62": 1
+          },
+          "2": {
+            "62": 1
           }
         }
       ],
@@ -1655,6 +1996,9 @@
         "橘",
         {
           "1": {
+            "62": 1
+          },
+          "2": {
             "62": 1
           }
         }
@@ -1664,6 +2008,9 @@
         {
           "1": {
             "33": 1
+          },
+          "2": {
+            "33": 1
           }
         }
       ],
@@ -1671,6 +2018,9 @@
         "成城",
         {
           "1": {
+            "62": 1
+          },
+          "2": {
             "62": 1
           }
         }
@@ -1680,6 +2030,9 @@
         {
           "1": {
             "62": 1
+          },
+          "2": {
+            "62": 1
           }
         }
       ],
@@ -1687,6 +2040,9 @@
         "試",
         {
           "1": {
+            "62": 1
+          },
+          "2": {
             "62": 1
           }
         }
@@ -1696,6 +2052,9 @@
         {
           "1": {
             "14": 1
+          },
+          "2": {
+            "14": 1
           }
         }
       ],
@@ -1703,6 +2062,9 @@
         "被",
         {
           "1": {
+            "62": 1
+          },
+          "2": {
             "62": 1
           }
         }
@@ -1712,6 +2074,9 @@
         {
           "1": {
             "62": 1
+          },
+          "2": {
+            "62": 1
           }
         }
       ],
@@ -1719,6 +2084,9 @@
         "黑",
         {
           "1": {
+            "62": 1
+          },
+          "2": {
             "62": 1
           }
         }
@@ -1752,6 +2120,9 @@
         {
           "1": {
             "62": 1
+          },
+          "2": {
+            "62": 1
           }
         }
       ],
@@ -1760,6 +2131,9 @@
         {
           "1": {
             "61": 1
+          },
+          "2": {
+            "61": 1
           }
         }
       ],
@@ -1767,6 +2141,9 @@
         "主動",
         {
           "1": {
+            "17": 1
+          },
+          "2": {
             "17": 1
           }
         }
@@ -1784,6 +2161,9 @@
         {
           "1": {
             "60": 1
+          },
+          "2": {
+            "60": 1
           }
         }
       ],
@@ -1791,6 +2171,9 @@
         "第一",
         {
           "1": {
+            "60": 1
+          },
+          "2": {
             "60": 1
           }
         }
@@ -1800,6 +2183,9 @@
         {
           "1": {
             "60": 1
+          },
+          "2": {
+            "60": 1
           }
         }
       ],
@@ -1807,6 +2193,10 @@
         "超市",
         {
           "1": {
+            "60": 1,
+            "62": 1
+          },
+          "2": {
             "60": 1,
             "62": 1
           }
@@ -1820,6 +2210,12 @@
             "56": 1,
             "60": 1,
             "63": 1
+          },
+          "2": {
+            "6": 1,
+            "56": 1,
+            "60": 1,
+            "63": 1
           }
         }
       ],
@@ -1827,6 +2223,10 @@
         "公司",
         {
           "1": {
+            "60": 1,
+            "62": 1
+          },
+          "2": {
             "60": 1,
             "62": 1
           }
@@ -1838,6 +2238,10 @@
           "1": {
             "60": 1,
             "62": 1
+          },
+          "2": {
+            "60": 1,
+            "62": 1
           }
         }
       ],
@@ -1845,6 +2249,9 @@
         "回",
         {
           "1": {
+            "60": 1
+          },
+          "2": {
             "60": 1
           }
         }
@@ -1854,6 +2261,9 @@
         {
           "1": {
             "53": 1
+          },
+          "2": {
+            "53": 1
           }
         }
       ],
@@ -1861,6 +2271,9 @@
         "香油",
         {
           "1": {
+            "60": 1
+          },
+          "2": {
             "60": 1
           }
         }
@@ -1870,6 +2283,9 @@
         {
           "1": {
             "60": 1
+          },
+          "2": {
+            "60": 1
           }
         }
       ],
@@ -1877,6 +2293,9 @@
         "而是",
         {
           "1": {
+            "60": 1
+          },
+          "2": {
             "60": 1
           }
         }
@@ -1894,6 +2313,17 @@
             "31": 1,
             "50": 1,
             "52": 1
+          },
+          "2": {
+            "0": 1,
+            "4": 1,
+            "11": 1,
+            "19": 1,
+            "25": 1,
+            "30": 1,
+            "31": 1,
+            "50": 1,
+            "52": 1
           }
         }
       ],
@@ -1901,6 +2331,9 @@
         "辣",
         {
           "1": {
+            "60": 1
+          },
+          "2": {
             "60": 1
           }
         }
@@ -1913,6 +2346,9 @@
           },
           "1": {
             "60": 1
+          },
+          "2": {
+            "60": 1
           }
         }
       ],
@@ -1920,6 +2356,9 @@
         "雖然",
         {
           "1": {
+            "60": 1
+          },
+          "2": {
             "60": 1
           }
         }
@@ -1953,6 +2392,9 @@
         {
           "1": {
             "59": 1
+          },
+          "2": {
+            "59": 1
           }
         }
       ],
@@ -1960,6 +2402,9 @@
         "吃",
         {
           "1": {
+            "59": 1
+          },
+          "2": {
             "59": 1
           }
         }
@@ -1972,6 +2417,9 @@
           },
           "1": {
             "59": 1
+          },
+          "2": {
+            "59": 1
           }
         }
       ],
@@ -1982,6 +2430,9 @@
             "59": 1
           },
           "1": {
+            "59": 1
+          },
+          "2": {
             "59": 1
           }
         }
@@ -1999,6 +2450,9 @@
         {
           "1": {
             "58": 1
+          },
+          "2": {
+            "58": 1
           }
         }
       ],
@@ -2006,6 +2460,9 @@
         "親",
         {
           "1": {
+            "58": 1
+          },
+          "2": {
             "58": 1
           }
         }
@@ -2015,6 +2472,9 @@
         {
           "1": {
             "58": 1
+          },
+          "2": {
+            "58": 1
           }
         }
       ],
@@ -2022,6 +2482,9 @@
         "烤麵包",
         {
           "1": {
+            "58": 1
+          },
+          "2": {
             "58": 1
           }
         }
@@ -2033,6 +2496,10 @@
             "58": 1
           },
           "1": {
+            "37": 1,
+            "58": 1
+          },
+          "2": {
             "37": 1,
             "58": 1
           }
@@ -2057,14 +2524,14 @@
       [
         "食材",
         {
-          "2": {
+          "3": {
             "57": 1,
             "59": 1,
             "60": 1,
             "61": 1,
             "62": 1
           },
-          "3": {
+          "5": {
             "57": 1,
             "59": 1,
             "60": 1,
@@ -2078,6 +2545,9 @@
         {
           "1": {
             "57": 1
+          },
+          "2": {
+            "57": 1
           }
         }
       ],
@@ -2085,6 +2555,9 @@
         "潮",
         {
           "1": {
+            "57": 1
+          },
+          "2": {
             "57": 1
           }
         }
@@ -2094,6 +2567,9 @@
         {
           "1": {
             "57": 1
+          },
+          "2": {
+            "57": 1
           }
         }
       ],
@@ -2101,6 +2577,9 @@
         "8",
         {
           "1": {
+            "57": 1
+          },
+          "2": {
             "57": 1
           }
         }
@@ -2110,6 +2589,9 @@
         {
           "1": {
             "57": 1
+          },
+          "2": {
+            "57": 1
           }
         }
       ],
@@ -2117,6 +2599,9 @@
         "每個人",
         {
           "1": {
+            "3": 1
+          },
+          "2": {
             "3": 1
           }
         }
@@ -2133,7 +2618,12 @@
             "59": 1,
             "61": 1
           },
-          "3": {
+          "2": {
+            "57": 1,
+            "59": 1,
+            "61": 1
+          },
+          "5": {
             "57": 1,
             "59": 1,
             "61": 1
@@ -2153,6 +2643,9 @@
         {
           "1": {
             "56": 1
+          },
+          "2": {
+            "56": 1
           }
         }
       ],
@@ -2160,6 +2653,9 @@
         "優先",
         {
           "1": {
+            "20": 1
+          },
+          "2": {
             "20": 1
           }
         }
@@ -2169,6 +2665,9 @@
         {
           "1": {
             "56": 1
+          },
+          "2": {
+            "56": 1
           }
         }
       ],
@@ -2177,6 +2676,9 @@
         {
           "1": {
             "56": 1
+          },
+          "2": {
+            "56": 1
           }
         }
       ],
@@ -2184,6 +2686,9 @@
         "稱讚",
         {
           "1": {
+            "56": 1
+          },
+          "2": {
             "56": 1
           }
         }
@@ -2200,6 +2705,9 @@
         "冷凍庫",
         {
           "1": {
+            "35": 1
+          },
+          "2": {
             "35": 1
           }
         }
@@ -2221,6 +2729,9 @@
           },
           "1": {
             "56": 1
+          },
+          "2": {
+            "56": 1
           }
         }
       ],
@@ -2228,6 +2739,10 @@
         "路線",
         {
           "1": {
+            "55": 1,
+            "58": 1
+          },
+          "2": {
             "55": 1,
             "58": 1
           }
@@ -2238,13 +2753,16 @@
         {
           "1": {
             "55": 1
+          },
+          "2": {
+            "55": 1
           }
         }
       ],
       [
         "網路",
         {
-          "3": {
+          "5": {
             "20": 1,
             "37": 1,
             "38": 1,
@@ -2263,6 +2781,9 @@
         {
           "1": {
             "55": 1
+          },
+          "2": {
+            "55": 1
           }
         }
       ],
@@ -2270,6 +2791,9 @@
         "八",
         {
           "1": {
+            "55": 1
+          },
+          "2": {
             "55": 1
           }
         }
@@ -2279,6 +2803,9 @@
         {
           "1": {
             "55": 1
+          },
+          "2": {
+            "55": 1
           }
         }
       ],
@@ -2286,6 +2813,9 @@
         "桶",
         {
           "1": {
+            "54": 1
+          },
+          "2": {
             "54": 1
           }
         }
@@ -2296,6 +2826,10 @@
           "1": {
             "54": 1,
             "55": 1
+          },
+          "2": {
+            "54": 1,
+            "55": 1
           }
         }
       ],
@@ -2303,6 +2837,9 @@
         "全面",
         {
           "1": {
+            "33": 1
+          },
+          "2": {
             "33": 1
           }
         }
@@ -2312,13 +2849,16 @@
         {
           "1": {
             "54": 1
+          },
+          "2": {
+            "54": 1
           }
         }
       ],
       [
         "收納",
         {
-          "3": {
+          "5": {
             "53": 1
           }
         }
@@ -2327,6 +2867,10 @@
         "資料",
         {
           "1": {
+            "53": 1,
+            "61": 1
+          },
+          "2": {
             "53": 1,
             "61": 1
           }
@@ -2338,6 +2882,10 @@
           "1": {
             "53": 1,
             "61": 1
+          },
+          "2": {
+            "53": 1,
+            "61": 1
           }
         }
       ],
@@ -2345,6 +2893,9 @@
         "下面",
         {
           "1": {
+            "53": 1
+          },
+          "2": {
             "53": 1
           }
         }
@@ -2354,6 +2905,9 @@
         {
           "1": {
             "1": 1
+          },
+          "2": {
+            "1": 1
           }
         }
       ],
@@ -2362,6 +2916,9 @@
         {
           "1": {
             "53": 1
+          },
+          "2": {
+            "53": 1
           }
         }
       ],
@@ -2369,6 +2926,9 @@
         "搬",
         {
           "1": {
+            "53": 1
+          },
+          "2": {
             "53": 1
           }
         }
@@ -2394,6 +2954,9 @@
         {
           "1": {
             "52": 1
+          },
+          "2": {
+            "52": 1
           }
         }
       ],
@@ -2401,6 +2964,9 @@
         "杜絕",
         {
           "1": {
+            "52": 1
+          },
+          "2": {
             "52": 1
           }
         }
@@ -2410,6 +2976,9 @@
         {
           "1": {
             "52": 1
+          },
+          "2": {
+            "52": 1
           }
         }
       ],
@@ -2417,6 +2986,9 @@
         "龍頭",
         {
           "1": {
+            "52": 1
+          },
+          "2": {
             "52": 1
           }
         }
@@ -2426,6 +2998,9 @@
         {
           "1": {
             "52": 1
+          },
+          "2": {
+            "52": 1
           }
         }
       ],
@@ -2433,6 +3008,9 @@
         "溫度",
         {
           "1": {
+            "52": 1
+          },
+          "2": {
             "52": 1
           }
         }
@@ -2442,6 +3020,9 @@
         {
           "1": {
             "52": 1
+          },
+          "2": {
+            "52": 1
           }
         }
       ],
@@ -2449,6 +3030,9 @@
         "得到",
         {
           "1": {
+            "52": 1
+          },
+          "2": {
             "52": 1
           }
         }
@@ -2458,6 +3042,9 @@
         {
           "1": {
             "52": 1
+          },
+          "2": {
+            "52": 1
           }
         }
       ],
@@ -2466,6 +3053,29 @@
         {
           "1": {
             "52": 1
+          },
+          "2": {
+            "52": 1
+          }
+        }
+      ],
+      [
+        "通路",
+        {
+          "4": {
+            "1": 1,
+            "3": 1,
+            "8": 1,
+            "9": 1,
+            "23": 1,
+            "24": 1,
+            "29": 1,
+            "30": 1,
+            "32": 1,
+            "54": 1,
+            "60": 1,
+            "61": 1,
+            "62": 1
           }
         }
       ],
@@ -2473,6 +3083,9 @@
         "熱",
         {
           "1": {
+            "52": 1
+          },
+          "2": {
             "52": 1
           }
         }
@@ -2482,6 +3095,9 @@
         {
           "1": {
             "52": 1
+          },
+          "2": {
+            "52": 1
           }
         }
       ],
@@ -2489,6 +3105,9 @@
         "夠",
         {
           "1": {
+            "52": 1
+          },
+          "2": {
             "52": 1
           }
         }
@@ -2502,7 +3121,10 @@
           "1": {
             "52": 1
           },
-          "3": {
+          "2": {
+            "52": 1
+          },
+          "5": {
             "52": 1
           }
         }
@@ -2512,6 +3134,9 @@
         {
           "1": {
             "51": 1
+          },
+          "2": {
+            "51": 1
           }
         }
       ],
@@ -2519,6 +3144,9 @@
         "羅浮宮",
         {
           "1": {
+            "51": 1
+          },
+          "2": {
             "51": 1
           }
         }
@@ -2528,6 +3156,9 @@
         {
           "1": {
             "51": 1
+          },
+          "2": {
+            "51": 1
           }
         }
       ],
@@ -2535,6 +3166,9 @@
         "以下",
         {
           "1": {
+            "15": 1
+          },
+          "2": {
             "15": 1
           }
         }
@@ -2544,6 +3178,9 @@
         {
           "1": {
             "51": 1
+          },
+          "2": {
+            "51": 1
           }
         }
       ],
@@ -2551,6 +3188,9 @@
         "演",
         {
           "1": {
+            "51": 1
+          },
+          "2": {
             "51": 1
           }
         }
@@ -2560,6 +3200,9 @@
         {
           "1": {
             "50": 1
+          },
+          "2": {
+            "50": 1
           }
         }
       ],
@@ -2567,6 +3210,9 @@
         "次",
         {
           "1": {
+            "50": 1
+          },
+          "2": {
             "50": 1
           }
         }
@@ -2584,6 +3230,9 @@
         {
           "1": {
             "49": 1
+          },
+          "2": {
+            "49": 1
           }
         }
       ],
@@ -2591,6 +3240,9 @@
         "需要",
         {
           "1": {
+            "35": 1
+          },
+          "2": {
             "35": 1
           }
         }
@@ -2600,6 +3252,9 @@
         {
           "1": {
             "49": 1
+          },
+          "2": {
+            "49": 1
           }
         }
       ],
@@ -2607,6 +3262,9 @@
         "裝上",
         {
           "1": {
+            "52": 1
+          },
+          "2": {
             "52": 1
           }
         }
@@ -2617,6 +3275,10 @@
           "1": {
             "49": 1,
             "54": 1
+          },
+          "2": {
+            "49": 1,
+            "54": 1
           }
         }
       ],
@@ -2624,6 +3286,9 @@
         "即使",
         {
           "1": {
+            "49": 1
+          },
+          "2": {
             "49": 1
           }
         }
@@ -2633,6 +3298,9 @@
         {
           "1": {
             "49": 1
+          },
+          "2": {
+            "49": 1
           }
         }
       ],
@@ -2640,6 +3308,9 @@
         "單價",
         {
           "1": {
+            "15": 1
+          },
+          "2": {
             "15": 1
           }
         }
@@ -2649,6 +3320,9 @@
         {
           "1": {
             "49": 1
+          },
+          "2": {
+            "49": 1
           }
         }
       ],
@@ -2657,6 +3331,9 @@
         {
           "1": {
             "48": 1
+          },
+          "2": {
+            "48": 1
           }
         }
       ],
@@ -2664,6 +3341,10 @@
         "拿來",
         {
           "1": {
+            "17": 1,
+            "22": 1
+          },
+          "2": {
             "17": 1,
             "22": 1
           }
@@ -2675,6 +3356,10 @@
           "1": {
             "48": 1,
             "56": 1
+          },
+          "2": {
+            "48": 1,
+            "56": 1
           }
         }
       ],
@@ -2682,6 +3367,9 @@
         "無",
         {
           "1": {
+            "48": 1
+          },
+          "2": {
             "48": 1
           }
         }
@@ -2692,7 +3380,10 @@
           "1": {
             "30": 1
           },
-          "3": {
+          "2": {
+            "30": 1
+          },
+          "5": {
             "2": 1
           }
         }
@@ -2702,6 +3393,9 @@
         {
           "1": {
             "48": 1
+          },
+          "2": {
+            "48": 1
           }
         }
       ],
@@ -2710,6 +3404,9 @@
         {
           "1": {
             "48": 1
+          },
+          "2": {
+            "48": 1
           }
         }
       ],
@@ -2717,6 +3414,9 @@
         "微妙",
         {
           "1": {
+            "7": 1
+          },
+          "2": {
             "7": 1
           }
         }
@@ -2727,6 +3427,10 @@
           "1": {
             "48": 1,
             "57": 1
+          },
+          "2": {
+            "48": 1,
+            "57": 1
           }
         }
       ],
@@ -2734,6 +3438,9 @@
         "長輩",
         {
           "1": {
+            "48": 1
+          },
+          "2": {
             "48": 1
           }
         }
@@ -2754,6 +3461,9 @@
           },
           "1": {
             "48": 1
+          },
+          "2": {
+            "48": 1
           }
         }
       ],
@@ -2765,6 +3475,9 @@
           },
           "1": {
             "47": 1
+          },
+          "2": {
+            "47": 1
           }
         }
       ],
@@ -2772,6 +3485,9 @@
         "選擇",
         {
           "1": {
+            "47": 1
+          },
+          "2": {
             "47": 1
           }
         }
@@ -2781,6 +3497,9 @@
         {
           "1": {
             "5": 1
+          },
+          "2": {
+            "5": 1
           }
         }
       ],
@@ -2788,6 +3507,9 @@
         "帶",
         {
           "1": {
+            "46": 1
+          },
+          "2": {
             "46": 1
           }
         }
@@ -2797,6 +3519,9 @@
         {
           "1": {
             "46": 1
+          },
+          "2": {
+            "46": 1
           }
         }
       ],
@@ -2804,6 +3529,9 @@
         "可惜",
         {
           "1": {
+            "51": 1
+          },
+          "2": {
             "51": 1
           }
         }
@@ -2813,6 +3541,9 @@
         {
           "1": {
             "49": 1
+          },
+          "2": {
+            "49": 1
           }
         }
       ],
@@ -2820,6 +3551,9 @@
         "可愛",
         {
           "1": {
+            "46": 1
+          },
+          "2": {
             "46": 1
           }
         }
@@ -2851,6 +3585,31 @@
             "52": 1,
             "55": 1,
             "65": 1
+          },
+          "2": {
+            "9": 1,
+            "10": 1,
+            "12": 1,
+            "13": 1,
+            "15": 1,
+            "16": 1,
+            "19": 1,
+            "20": 1,
+            "22": 1,
+            "25": 1,
+            "26": 1,
+            "28": 1,
+            "29": 1,
+            "30": 1,
+            "35": 1,
+            "38": 1,
+            "43": 1,
+            "45": 1,
+            "46": 1,
+            "48": 1,
+            "52": 1,
+            "55": 1,
+            "65": 1
           }
         }
       ],
@@ -2858,6 +3617,9 @@
         "音樂",
         {
           "1": {
+            "46": 1
+          },
+          "2": {
             "46": 1
           }
         }
@@ -2867,6 +3629,9 @@
         {
           "1": {
             "46": 1
+          },
+          "2": {
+            "46": 1
           }
         }
       ],
@@ -2874,6 +3639,9 @@
         "片",
         {
           "1": {
+            "46": 1
+          },
+          "2": {
             "46": 1
           }
         }
@@ -2883,6 +3651,9 @@
         {
           "1": {
             "45": 1
+          },
+          "2": {
+            "45": 1
           }
         }
       ],
@@ -2890,6 +3661,9 @@
         "接",
         {
           "1": {
+            "45": 1
+          },
+          "2": {
             "45": 1
           }
         }
@@ -2899,13 +3673,16 @@
         {
           "1": {
             "49": 1
+          },
+          "2": {
+            "49": 1
           }
         }
       ],
       [
         "人",
         {
-          "3": {
+          "5": {
             "44": 1
           }
         }
@@ -2915,13 +3692,16 @@
         {
           "1": {
             "32": 1
+          },
+          "2": {
+            "32": 1
           }
         }
       ],
       [
         "掃地",
         {
-          "3": {
+          "5": {
             "44": 1
           }
         }
@@ -2930,6 +3710,9 @@
         "從此",
         {
           "1": {
+            "62": 1
+          },
+          "2": {
             "62": 1
           }
         }
@@ -2940,30 +3723,10 @@
           "1": {
             "44": 1,
             "53": 1
-          }
-        }
-      ],
-      [
-        "jw10",
-        {
-          "0": {
-            "64": 1
-          }
-        }
-      ],
-      [
-        "j7",
-        {
-          "0": {
-            "44": 1
-          }
-        }
-      ],
-      [
-        "j5create",
-        {
-          "0": {
-            "27": 1
+          },
+          "2": {
+            "44": 1,
+            "53": 1
           }
         }
       ],
@@ -2971,6 +3734,9 @@
         "raid",
         {
           "1": {
+            "49": 1
+          },
+          "2": {
             "49": 1
           }
         }
@@ -2982,6 +3748,9 @@
             "44": 1
           },
           "1": {
+            "44": 1
+          },
+          "2": {
             "44": 1
           }
         }
@@ -3009,6 +3778,11 @@
             "43": 1,
             "48": 1,
             "59": 1
+          },
+          "2": {
+            "43": 1,
+            "48": 1,
+            "59": 1
           }
         }
       ],
@@ -3016,6 +3790,10 @@
         "直接",
         {
           "1": {
+            "43": 1,
+            "50": 1
+          },
+          "2": {
             "43": 1,
             "50": 1
           }
@@ -3027,6 +3805,10 @@
           "1": {
             "37": 1,
             "48": 1
+          },
+          "2": {
+            "37": 1,
+            "48": 1
           }
         }
       ],
@@ -3034,6 +3816,9 @@
         "94ppi",
         {
           "1": {
+            "43": 1
+          },
+          "2": {
             "43": 1
           }
         }
@@ -3043,6 +3828,9 @@
         {
           "1": {
             "18": 1
+          },
+          "2": {
+            "18": 1
           }
         }
       ],
@@ -3051,6 +3839,9 @@
         {
           "1": {
             "43": 1
+          },
+          "2": {
+            "43": 1
           }
         }
       ],
@@ -3058,6 +3849,9 @@
         "於是",
         {
           "1": {
+            "43": 1
+          },
+          "2": {
             "43": 1
           }
         }
@@ -3068,6 +3862,10 @@
           "1": {
             "63": 1,
             "65": 1
+          },
+          "2": {
+            "63": 1,
+            "65": 1
           }
         }
       ],
@@ -3075,6 +3873,9 @@
         "好幫手",
         {
           "1": {
+            "53": 1
+          },
+          "2": {
             "53": 1
           }
         }
@@ -3084,6 +3885,9 @@
         {
           "1": {
             "42": 1
+          },
+          "2": {
+            "42": 1
           }
         }
       ],
@@ -3091,6 +3895,9 @@
         "好看",
         {
           "1": {
+            "30": 1
+          },
+          "2": {
             "30": 1
           }
         }
@@ -3101,6 +3908,10 @@
           "1": {
             "42": 1,
             "62": 1
+          },
+          "2": {
+            "42": 1,
+            "62": 1
           }
         }
       ],
@@ -3108,6 +3919,9 @@
         "六",
         {
           "1": {
+            "42": 1
+          },
+          "2": {
             "42": 1
           }
         }
@@ -3117,6 +3931,9 @@
         {
           "1": {
             "41": 1
+          },
+          "2": {
+            "41": 1
           }
         }
       ],
@@ -3125,6 +3942,9 @@
         {
           "1": {
             "3": 1
+          },
+          "2": {
+            "3": 1
           }
         }
       ],
@@ -3132,6 +3952,10 @@
         "差不多",
         {
           "1": {
+            "41": 1,
+            "44": 1
+          },
+          "2": {
             "41": 1,
             "44": 1
           }
@@ -3146,6 +3970,10 @@
           "1": {
             "41": 1,
             "42": 1
+          },
+          "2": {
+            "41": 1,
+            "42": 1
           }
         }
       ],
@@ -3153,6 +3981,9 @@
         "普通",
         {
           "1": {
+            "41": 1
+          },
+          "2": {
             "41": 1
           }
         }
@@ -3163,6 +3994,10 @@
           "1": {
             "40": 1,
             "44": 1
+          },
+          "2": {
+            "40": 1,
+            "44": 1
           }
         }
       ],
@@ -3170,6 +4005,9 @@
         "中間",
         {
           "1": {
+            "29": 1
+          },
+          "2": {
             "29": 1
           }
         }
@@ -3179,6 +4017,9 @@
         {
           "1": {
             "40": 1
+          },
+          "2": {
+            "40": 1
           }
         }
       ],
@@ -3186,6 +4027,9 @@
         "加寬",
         {
           "1": {
+            "43": 1
+          },
+          "2": {
             "43": 1
           }
         }
@@ -3195,6 +4039,9 @@
         {
           "1": {
             "40": 1
+          },
+          "2": {
+            "40": 1
           }
         }
       ],
@@ -3202,6 +4049,9 @@
         "自動",
         {
           "1": {
+            "40": 1
+          },
+          "2": {
             "40": 1
           }
         }
@@ -3212,6 +4062,10 @@
           "1": {
             "1": 1,
             "48": 1
+          },
+          "2": {
+            "1": 1,
+            "48": 1
           }
         }
       ],
@@ -3219,6 +4073,9 @@
         "總之",
         {
           "1": {
+            "40": 1
+          },
+          "2": {
             "40": 1
           }
         }
@@ -3237,6 +4094,10 @@
           "1": {
             "39": 1,
             "46": 1
+          },
+          "2": {
+            "39": 1,
+            "46": 1
           }
         }
       ],
@@ -3244,6 +4105,9 @@
         "份",
         {
           "1": {
+            "39": 1
+          },
+          "2": {
             "39": 1
           }
         }
@@ -3253,6 +4117,9 @@
         {
           "1": {
             "39": 1
+          },
+          "2": {
+            "39": 1
           }
         }
       ],
@@ -3260,6 +4127,9 @@
         "四號",
         {
           "1": {
+            "24": 1
+          },
+          "2": {
             "24": 1
           }
         }
@@ -3269,6 +4139,9 @@
         {
           "1": {
             "55": 1
+          },
+          "2": {
+            "55": 1
           }
         }
       ],
@@ -3276,6 +4149,9 @@
         "switch",
         {
           "1": {
+            "55": 1
+          },
+          "2": {
             "55": 1
           }
         }
@@ -3297,6 +4173,9 @@
           },
           "1": {
             "47": 1
+          },
+          "2": {
+            "47": 1
           }
         }
       ],
@@ -3306,7 +4185,10 @@
           "1": {
             "46": 1
           },
-          "3": {
+          "2": {
+            "46": 1
+          },
+          "5": {
             "46": 1
           }
         }
@@ -3349,6 +4231,10 @@
           "1": {
             "38": 1,
             "58": 1
+          },
+          "2": {
+            "38": 1,
+            "58": 1
           }
         }
       ],
@@ -3357,6 +4243,9 @@
         {
           "1": {
             "37": 1
+          },
+          "2": {
+            "37": 1
           }
         }
       ],
@@ -3364,6 +4253,9 @@
         "別",
         {
           "1": {
+            "37": 1
+          },
+          "2": {
             "37": 1
           }
         }
@@ -3400,6 +4292,9 @@
           },
           "1": {
             "33": 1
+          },
+          "2": {
+            "33": 1
           }
         }
       ],
@@ -3408,13 +4303,16 @@
         {
           "1": {
             "38": 1
+          },
+          "2": {
+            "38": 1
           }
         }
       ],
       [
         "桌",
         {
-          "3": {
+          "5": {
             "36": 1
           }
         }
@@ -3432,13 +4330,19 @@
         {
           "1": {
             "36": 1
+          },
+          "2": {
+            "36": 1
           }
         }
       ],
       [
         "momo",
         {
-          "3": {
+          "4": {
+            "58": 1
+          },
+          "5": {
             "58": 1
           }
         }
@@ -3447,6 +4351,9 @@
         "multigig",
         {
           "1": {
+            "55": 1
+          },
+          "2": {
             "55": 1
           }
         }
@@ -3463,6 +4370,9 @@
         "mac",
         {
           "1": {
+            "45": 1
+          },
+          "2": {
             "45": 1
           }
         }
@@ -3496,6 +4406,9 @@
         {
           "1": {
             "4": 1
+          },
+          "2": {
+            "4": 1
           }
         }
       ],
@@ -3506,7 +4419,11 @@
             "35": 1,
             "37": 1
           },
-          "3": {
+          "2": {
+            "35": 1,
+            "37": 1
+          },
+          "5": {
             "35": 1,
             "48": 1
           }
@@ -3517,6 +4434,9 @@
         {
           "1": {
             "35": 1
+          },
+          "2": {
+            "35": 1
           }
         }
       ],
@@ -3524,6 +4444,9 @@
         "低於",
         {
           "1": {
+            "11": 1
+          },
+          "2": {
             "11": 1
           }
         }
@@ -3533,6 +4456,9 @@
         {
           "1": {
             "35": 1
+          },
+          "2": {
+            "35": 1
           }
         }
       ],
@@ -3540,6 +4466,9 @@
         "擴充",
         {
           "1": {
+            "35": 1
+          },
+          "2": {
             "35": 1
           }
         }
@@ -3549,6 +4478,9 @@
         {
           "1": {
             "26": 1
+          },
+          "2": {
+            "26": 1
           }
         }
       ],
@@ -3556,6 +4488,9 @@
         "稍微",
         {
           "1": {
+            "35": 1
+          },
+          "2": {
             "35": 1
           }
         }
@@ -3565,6 +4500,9 @@
         {
           "1": {
             "34": 1
+          },
+          "2": {
+            "34": 1
           }
         }
       ],
@@ -3573,6 +4511,9 @@
         {
           "1": {
             "62": 1
+          },
+          "2": {
+            "62": 1
           }
         }
       ],
@@ -3580,6 +4521,9 @@
         "之下",
         {
           "1": {
+            "34": 1
+          },
+          "2": {
             "34": 1
           }
         }
@@ -3590,6 +4534,10 @@
           "1": {
             "2": 1,
             "44": 1
+          },
+          "2": {
+            "2": 1,
+            "44": 1
           }
         }
       ],
@@ -3597,6 +4545,11 @@
         "在",
         {
           "1": {
+            "34": 1,
+            "60": 1,
+            "62": 1
+          },
+          "2": {
             "34": 1,
             "60": 1,
             "62": 1
@@ -3632,6 +4585,9 @@
         {
           "1": {
             "33": 1
+          },
+          "2": {
+            "33": 1
           }
         }
       ],
@@ -3639,6 +4595,9 @@
         "顯著",
         {
           "1": {
+            "33": 1
+          },
+          "2": {
             "33": 1
           }
         }
@@ -3648,6 +4607,9 @@
         {
           "1": {
             "33": 1
+          },
+          "2": {
+            "33": 1
           }
         }
       ],
@@ -3655,6 +4617,9 @@
         "殺菌",
         {
           "1": {
+            "33": 1
+          },
+          "2": {
             "33": 1
           }
         }
@@ -3664,6 +4629,9 @@
         {
           "1": {
             "33": 1
+          },
+          "2": {
+            "33": 1
           }
         }
       ],
@@ -3671,6 +4639,9 @@
         "標準",
         {
           "1": {
+            "33": 1
+          },
+          "2": {
             "33": 1
           }
         }
@@ -3681,6 +4652,10 @@
           "1": {
             "35": 1,
             "55": 1
+          },
+          "2": {
+            "35": 1,
+            "55": 1
           }
         }
       ],
@@ -3688,6 +4663,9 @@
         "上",
         {
           "1": {
+            "34": 1
+          },
+          "2": {
             "34": 1
           }
         }
@@ -3697,6 +4675,9 @@
         {
           "1": {
             "33": 1
+          },
+          "2": {
+            "33": 1
           }
         }
       ],
@@ -3704,6 +4685,9 @@
         "上次",
         {
           "1": {
+            "1": 1
+          },
+          "2": {
             "1": 1
           }
         }
@@ -3713,6 +4697,9 @@
         {
           "1": {
             "57": 1
+          },
+          "2": {
+            "57": 1
           }
         }
       ],
@@ -3720,6 +4707,9 @@
         "新版",
         {
           "1": {
+            "33": 1
+          },
+          "2": {
             "33": 1
           }
         }
@@ -3730,6 +4720,10 @@
           "1": {
             "14": 1,
             "22": 1
+          },
+          "2": {
+            "14": 1,
+            "22": 1
           }
         }
       ],
@@ -3737,6 +4731,9 @@
         "今年",
         {
           "1": {
+            "33": 1
+          },
+          "2": {
             "33": 1
           }
         }
@@ -3750,7 +4747,10 @@
           "1": {
             "40": 1
           },
-          "3": {
+          "2": {
+            "40": 1
+          },
+          "5": {
             "33": 1,
             "63": 1
           }
@@ -3761,6 +4761,9 @@
         {
           "1": {
             "52": 1
+          },
+          "2": {
+            "52": 1
           }
         }
       ],
@@ -3769,6 +4772,9 @@
         {
           "1": {
             "40": 1
+          },
+          "2": {
+            "40": 1
           }
         }
       ],
@@ -3776,6 +4782,9 @@
         "洗衣機",
         {
           "1": {
+            "40": 1
+          },
+          "2": {
             "40": 1
           }
         }
@@ -3789,7 +4798,10 @@
           "1": {
             "40": 1
           },
-          "3": {
+          "2": {
+            "40": 1
+          },
+          "5": {
             "33": 1,
             "63": 1
           }
@@ -3803,6 +4815,9 @@
           },
           "1": {
             "38": 1
+          },
+          "2": {
+            "38": 1
           }
         }
       ],
@@ -3813,6 +4828,9 @@
             "34": 1
           },
           "1": {
+            "34": 1
+          },
+          "2": {
             "34": 1
           }
         }
@@ -3833,6 +4851,9 @@
           },
           "1": {
             "32": 1
+          },
+          "2": {
+            "32": 1
           }
         }
       ],
@@ -3840,6 +4861,9 @@
         "匪",
         {
           "1": {
+            "32": 1
+          },
+          "2": {
             "32": 1
           }
         }
@@ -3852,6 +4876,9 @@
           },
           "1": {
             "32": 1
+          },
+          "2": {
+            "32": 1
           }
         }
       ],
@@ -3860,6 +4887,9 @@
         {
           "1": {
             "21": 1
+          },
+          "2": {
+            "21": 1
           }
         }
       ],
@@ -3867,6 +4897,9 @@
         "賭",
         {
           "1": {
+            "32": 1
+          },
+          "2": {
             "32": 1
           }
         }
@@ -3881,7 +4914,11 @@
             "32": 1,
             "47": 1
           },
-          "3": {
+          "2": {
+            "32": 1,
+            "47": 1
+          },
+          "5": {
             "32": 1
           }
         }
@@ -3893,6 +4930,10 @@
             "16": 1
           },
           "1": {
+            "16": 1,
+            "33": 1
+          },
+          "2": {
             "16": 1,
             "33": 1
           }
@@ -3913,6 +4954,9 @@
         {
           "1": {
             "31": 1
+          },
+          "2": {
+            "31": 1
           }
         }
       ],
@@ -3920,6 +4964,9 @@
         "亮",
         {
           "1": {
+            "31": 1
+          },
+          "2": {
             "31": 1
           }
         }
@@ -3929,6 +4976,9 @@
         {
           "1": {
             "31": 1
+          },
+          "2": {
+            "31": 1
           }
         }
       ],
@@ -3937,6 +4987,9 @@
         {
           "1": {
             "31": 1
+          },
+          "2": {
+            "31": 1
           }
         }
       ],
@@ -3944,6 +4997,9 @@
         "推銷",
         {
           "1": {
+            "62": 1
+          },
+          "2": {
             "62": 1
           }
         }
@@ -3954,6 +5010,10 @@
           "1": {
             "39": 1,
             "46": 1
+          },
+          "2": {
+            "39": 1,
+            "46": 1
           }
         }
       ],
@@ -3961,6 +5021,9 @@
         "推",
         {
           "1": {
+            "31": 1
+          },
+          "2": {
             "31": 1
           }
         }
@@ -3971,7 +5034,7 @@
           "0": {
             "31": 1
           },
-          "3": {
+          "5": {
             "31": 1
           }
         }
@@ -3980,6 +5043,9 @@
         "拉",
         {
           "1": {
+            "30": 1
+          },
+          "2": {
             "30": 1
           }
         }
@@ -3993,6 +5059,13 @@
             "50": 1,
             "52": 1,
             "54": 1
+          },
+          "2": {
+            "30": 1,
+            "48": 1,
+            "50": 1,
+            "52": 1,
+            "54": 1
           }
         }
       ],
@@ -4000,6 +5073,9 @@
         "才有",
         {
           "1": {
+            "48": 1
+          },
+          "2": {
             "48": 1
           }
         }
@@ -4009,6 +5085,9 @@
         {
           "1": {
             "30": 1
+          },
+          "2": {
+            "30": 1
           }
         }
       ],
@@ -4016,6 +5095,9 @@
         "風扇",
         {
           "1": {
+            "31": 1
+          },
+          "2": {
             "31": 1
           }
         }
@@ -4028,6 +5110,9 @@
           },
           "1": {
             "30": 1
+          },
+          "2": {
+            "30": 1
           }
         }
       ],
@@ -4036,6 +5121,9 @@
         {
           "1": {
             "31": 1
+          },
+          "2": {
+            "31": 1
           }
         }
       ],
@@ -4043,6 +5131,9 @@
         "暖氣",
         {
           "1": {
+            "31": 1
+          },
+          "2": {
             "31": 1
           }
         }
@@ -4057,7 +5148,10 @@
           "1": {
             "30": 1
           },
-          "3": {
+          "2": {
+            "30": 1
+          },
+          "5": {
             "31": 1
           }
         }
@@ -4065,7 +5159,7 @@
       [
         "衛浴",
         {
-          "3": {
+          "5": {
             "29": 1,
             "34": 1,
             "52": 1
@@ -4077,6 +5171,9 @@
         {
           "1": {
             "29": 1
+          },
+          "2": {
+            "29": 1
           }
         }
       ],
@@ -4084,6 +5181,9 @@
         "師傅",
         {
           "1": {
+            "29": 1
+          },
+          "2": {
             "29": 1
           }
         }
@@ -4093,6 +5193,9 @@
         {
           "1": {
             "29": 1
+          },
+          "2": {
+            "29": 1
           }
         }
       ],
@@ -4100,6 +5203,9 @@
         "習慣",
         {
           "1": {
+            "29": 1
+          },
+          "2": {
             "29": 1
           }
         }
@@ -4109,6 +5215,9 @@
         {
           "1": {
             "29": 1
+          },
+          "2": {
+            "29": 1
           }
         }
       ],
@@ -4116,6 +5225,9 @@
         "奇怪",
         {
           "1": {
+            "29": 1
+          },
+          "2": {
             "29": 1
           }
         }
@@ -4125,6 +5237,9 @@
         {
           "1": {
             "29": 1
+          },
+          "2": {
+            "29": 1
           }
         }
       ],
@@ -4132,6 +5247,9 @@
         "地方",
         {
           "1": {
+            "29": 1
+          },
+          "2": {
             "29": 1
           }
         }
@@ -4141,6 +5259,9 @@
         {
           "1": {
             "29": 1
+          },
+          "2": {
+            "29": 1
           }
         }
       ],
@@ -4149,6 +5270,9 @@
         {
           "1": {
             "29": 1
+          },
+          "2": {
+            "29": 1
           }
         }
       ],
@@ -4156,6 +5280,9 @@
         "櫃子",
         {
           "1": {
+            "29": 1
+          },
+          "2": {
             "29": 1
           }
         }
@@ -4168,6 +5295,9 @@
           },
           "1": {
             "29": 1
+          },
+          "2": {
+            "29": 1
           }
         }
       ],
@@ -4175,6 +5305,9 @@
         "浴室",
         {
           "1": {
+            "30": 1
+          },
+          "2": {
             "30": 1
           }
         }
@@ -4186,6 +5319,9 @@
             "29": 1
           },
           "1": {
+            "29": 1
+          },
+          "2": {
             "29": 1
           }
         }
@@ -4218,6 +5354,9 @@
         "firetv",
         {
           "1": {
+            "5": 1
+          },
+          "2": {
             "5": 1
           }
         }
@@ -4262,6 +5401,11 @@
             "28": 1,
             "44": 1,
             "58": 1
+          },
+          "2": {
+            "28": 1,
+            "44": 1,
+            "58": 1
           }
         }
       ],
@@ -4269,6 +5413,12 @@
         "價錢",
         {
           "1": {
+            "12": 1,
+            "33": 1,
+            "34": 1,
+            "46": 1
+          },
+          "2": {
             "12": 1,
             "33": 1,
             "34": 1,
@@ -4281,6 +5431,9 @@
         {
           "1": {
             "28": 1
+          },
+          "2": {
+            "28": 1
           }
         }
       ],
@@ -4288,6 +5441,10 @@
         "什麼",
         {
           "1": {
+            "28": 1,
+            "37": 1
+          },
+          "2": {
             "28": 1,
             "37": 1
           }
@@ -4299,6 +5456,10 @@
           "1": {
             "28": 1,
             "50": 1
+          },
+          "2": {
+            "28": 1,
+            "50": 1
           }
         }
       ],
@@ -4307,6 +5468,9 @@
         {
           "1": {
             "28": 1
+          },
+          "2": {
+            "28": 1
           }
         }
       ],
@@ -4314,6 +5478,9 @@
         "沒",
         {
           "1": {
+            "28": 1
+          },
+          "2": {
             "28": 1
           }
         }
@@ -4326,6 +5493,12 @@
             "14": 1,
             "20": 1,
             "45": 1
+          },
+          "2": {
+            "8": 1,
+            "14": 1,
+            "20": 1,
+            "45": 1
           }
         }
       ],
@@ -4333,6 +5506,9 @@
         "故",
         {
           "1": {
+            "28": 1
+          },
+          "2": {
             "28": 1
           }
         }
@@ -4343,7 +5519,7 @@
           "0": {
             "28": 1
           },
-          "3": {
+          "5": {
             "28": 1
           }
         }
@@ -4354,7 +5530,7 @@
           "0": {
             "28": 1
           },
-          "3": {
+          "5": {
             "28": 1
           }
         }
@@ -4363,6 +5539,10 @@
         "亂",
         {
           "1": {
+            "27": 1,
+            "34": 1
+          },
+          "2": {
             "27": 1,
             "34": 1
           }
@@ -4376,6 +5556,48 @@
           },
           "1": {
             "65": 1
+          },
+          "2": {
+            "65": 1
+          }
+        }
+      ],
+      [
+        "jw10",
+        {
+          "0": {
+            "64": 1
+          }
+        }
+      ],
+      [
+        "j7",
+        {
+          "0": {
+            "44": 1
+          }
+        }
+      ],
+      [
+        "j5create",
+        {
+          "0": {
+            "27": 1
+          }
+        }
+      ],
+      [
+        "jp",
+        {
+          "4": {
+            "6": 1,
+            "26": 1,
+            "34": 1,
+            "50": 1,
+            "51": 1,
+            "52": 1,
+            "53": 1,
+            "64": 1
           }
         }
       ],
@@ -4383,6 +5605,9 @@
         "暗",
         {
           "1": {
+            "26": 1
+          },
+          "2": {
             "26": 1
           }
         }
@@ -4392,6 +5617,9 @@
         {
           "1": {
             "26": 1
+          },
+          "2": {
+            "26": 1
           }
         }
       ],
@@ -4399,6 +5627,9 @@
         "房間",
         {
           "1": {
+            "26": 1
+          },
+          "2": {
             "26": 1
           }
         }
@@ -4408,6 +5639,9 @@
         {
           "1": {
             "48": 1
+          },
+          "2": {
+            "48": 1
           }
         }
       ],
@@ -4416,6 +5650,9 @@
         {
           "1": {
             "33": 1
+          },
+          "2": {
+            "33": 1
           }
         }
       ],
@@ -4423,6 +5660,9 @@
         "強制",
         {
           "1": {
+            "31": 1
+          },
+          "2": {
             "31": 1
           }
         }
@@ -4433,6 +5673,10 @@
           "1": {
             "26": 1,
             "51": 1
+          },
+          "2": {
+            "26": 1,
+            "51": 1
           }
         }
       ],
@@ -4440,6 +5684,9 @@
         "方向",
         {
           "1": {
+            "26": 1
+          },
+          "2": {
             "26": 1
           }
         }
@@ -4449,6 +5696,9 @@
         {
           "1": {
             "52": 1
+          },
+          "2": {
+            "52": 1
           }
         }
       ],
@@ -4456,6 +5706,9 @@
         "水貨",
         {
           "1": {
+            "50": 1
+          },
+          "2": {
             "50": 1
           }
         }
@@ -4467,7 +5720,11 @@
             "35": 1,
             "37": 1
           },
-          "3": {
+          "2": {
+            "35": 1,
+            "37": 1
+          },
+          "5": {
             "35": 1,
             "48": 1
           }
@@ -4479,6 +5736,10 @@
           "1": {
             "29": 1,
             "52": 1
+          },
+          "2": {
+            "29": 1,
+            "52": 1
           }
         }
       ],
@@ -4486,6 +5747,9 @@
         "水管",
         {
           "1": {
+            "29": 1
+          },
+          "2": {
             "29": 1
           }
         }
@@ -4499,6 +5763,10 @@
           "1": {
             "29": 1,
             "52": 1
+          },
+          "2": {
+            "29": 1,
+            "52": 1
           }
         }
       ],
@@ -4506,6 +5774,9 @@
         "水平",
         {
           "1": {
+            "26": 1
+          },
+          "2": {
             "26": 1
           }
         }
@@ -4515,6 +5786,9 @@
         {
           "1": {
             "18": 1
+          },
+          "2": {
+            "18": 1
           }
         }
       ],
@@ -4523,6 +5797,9 @@
         {
           "1": {
             "26": 1
+          },
+          "2": {
+            "26": 1
           }
         }
       ],
@@ -4530,6 +5807,9 @@
         "導",
         {
           "1": {
+            "26": 1
+          },
+          "2": {
             "26": 1
           }
         }
@@ -4544,6 +5824,10 @@
           "1": {
             "26": 1,
             "51": 1
+          },
+          "2": {
+            "26": 1,
+            "51": 1
           }
         }
       ],
@@ -4551,6 +5835,9 @@
         "高度",
         {
           "1": {
+            "12": 1
+          },
+          "2": {
             "12": 1
           }
         }
@@ -4560,6 +5847,9 @@
         {
           "1": {
             "25": 1
+          },
+          "2": {
+            "25": 1
           }
         }
       ],
@@ -4567,6 +5857,9 @@
         "爬起來",
         {
           "1": {
+            "25": 1
+          },
+          "2": {
             "25": 1
           }
         }
@@ -4576,6 +5869,9 @@
         {
           "1": {
             "25": 1
+          },
+          "2": {
+            "25": 1
           }
         }
       ],
@@ -4584,6 +5880,9 @@
         {
           "1": {
             "25": 1
+          },
+          "2": {
+            "25": 1
           }
         }
       ],
@@ -4591,6 +5890,10 @@
         "快",
         {
           "1": {
+            "25": 1,
+            "64": 1
+          },
+          "2": {
             "25": 1,
             "64": 1
           }
@@ -4602,13 +5905,17 @@
           "1": {
             "25": 1,
             "51": 1
+          },
+          "2": {
+            "25": 1,
+            "51": 1
           }
         }
       ],
       [
         "調味料",
         {
-          "3": {
+          "5": {
             "60": 1,
             "62": 1
           }
@@ -4619,6 +5926,9 @@
         {
           "1": {
             "48": 1
+          },
+          "2": {
+            "48": 1
           }
         }
       ],
@@ -4626,6 +5936,10 @@
         "調",
         {
           "1": {
+            "25": 1,
+            "52": 1
+          },
+          "2": {
             "25": 1,
             "52": 1
           }
@@ -4636,6 +5950,9 @@
         {
           "1": {
             "25": 1
+          },
+          "2": {
+            "25": 1
           }
         }
       ],
@@ -4643,6 +5960,9 @@
         "遙控器",
         {
           "1": {
+            "56": 1
+          },
+          "2": {
             "56": 1
           }
         }
@@ -4653,6 +5973,10 @@
           "1": {
             "25": 1,
             "30": 1
+          },
+          "2": {
+            "25": 1,
+            "30": 1
           }
         }
       ],
@@ -4660,6 +5984,9 @@
         "真的",
         {
           "1": {
+            "25": 1
+          },
+          "2": {
             "25": 1
           }
         }
@@ -4683,7 +6010,10 @@
           "1": {
             "25": 1
           },
-          "3": {
+          "2": {
+            "25": 1
+          },
+          "5": {
             "25": 1,
             "26": 1,
             "51": 1
@@ -4701,7 +6031,10 @@
           "1": {
             "25": 1
           },
-          "3": {
+          "2": {
+            "25": 1
+          },
+          "5": {
             "25": 1,
             "26": 1,
             "51": 1
@@ -4712,6 +6045,9 @@
         "i5",
         {
           "1": {
+            "36": 1
+          },
+          "2": {
             "36": 1
           }
         }
@@ -4734,6 +6070,9 @@
           },
           "1": {
             "65": 1
+          },
+          "2": {
+            "65": 1
           }
         }
       ],
@@ -4742,6 +6081,9 @@
         {
           "1": {
             "48": 1
+          },
+          "2": {
+            "48": 1
           }
         }
       ],
@@ -4749,6 +6091,14 @@
         "家",
         {
           "1": {
+            "23": 1,
+            "24": 1,
+            "29": 1,
+            "30": 1,
+            "50": 1,
+            "52": 1
+          },
+          "2": {
             "23": 1,
             "24": 1,
             "29": 1,
@@ -4766,6 +6116,12 @@
             "24": 1,
             "62": 1,
             "65": 1
+          },
+          "2": {
+            "23": 1,
+            "24": 1,
+            "62": 1,
+            "65": 1
           }
         }
       ],
@@ -4773,6 +6129,9 @@
         "範圍",
         {
           "1": {
+            "22": 1
+          },
+          "2": {
             "22": 1
           }
         }
@@ -4782,6 +6141,9 @@
         {
           "1": {
             "22": 1
+          },
+          "2": {
+            "22": 1
           }
         }
       ],
@@ -4789,6 +6151,9 @@
         "兩萬",
         {
           "1": {
+            "22": 1
+          },
+          "2": {
             "22": 1
           }
         }
@@ -4798,6 +6163,9 @@
         {
           "1": {
             "16": 1
+          },
+          "2": {
+            "16": 1
           }
         }
       ],
@@ -4806,6 +6174,9 @@
         {
           "1": {
             "62": 1
+          },
+          "2": {
+            "62": 1
           }
         }
       ],
@@ -4813,6 +6184,9 @@
         "大姊",
         {
           "1": {
+            "62": 1
+          },
+          "2": {
             "62": 1
           }
         }
@@ -4830,6 +6204,9 @@
         {
           "1": {
             "49": 1
+          },
+          "2": {
+            "49": 1
           }
         }
       ],
@@ -4841,6 +6218,9 @@
           },
           "1": {
             "41": 1
+          },
+          "2": {
+            "41": 1
           }
         }
       ],
@@ -4851,25 +6231,11 @@
             "15": 1,
             "21": 1,
             "28": 1
-          }
-        }
-      ],
-      [
-        "其他",
-        {
-          "1": {
-            "21": 1
-          }
-        }
-      ],
-      [
-        "其實",
-        {
-          "1": {
-            "20": 1,
-            "42": 1,
-            "56": 1,
-            "60": 1
+          },
+          "2": {
+            "15": 1,
+            "21": 1,
+            "28": 1
           }
         }
       ],
@@ -4877,6 +6243,11 @@
         "應該",
         {
           "1": {
+            "21": 1,
+            "49": 1,
+            "55": 1
+          },
+          "2": {
             "21": 1,
             "49": 1,
             "55": 1
@@ -4891,6 +6262,12 @@
             "44": 1,
             "47": 1,
             "55": 1
+          },
+          "2": {
+            "2": 1,
+            "44": 1,
+            "47": 1,
+            "55": 1
           }
         }
       ],
@@ -4898,6 +6275,9 @@
         "系列",
         {
           "1": {
+            "21": 1
+          },
+          "2": {
             "21": 1
           }
         }
@@ -4910,6 +6290,9 @@
           },
           "1": {
             "22": 1
+          },
+          "2": {
+            "22": 1
           }
         }
       ],
@@ -4920,6 +6303,9 @@
             "21": 1
           },
           "1": {
+            "42": 1
+          },
+          "2": {
             "42": 1
           }
         }
@@ -4933,6 +6319,10 @@
           "1": {
             "17": 1,
             "19": 1
+          },
+          "2": {
+            "17": 1,
+            "19": 1
           }
         }
       ],
@@ -4940,6 +6330,9 @@
         "麻煩",
         {
           "1": {
+            "20": 1
+          },
+          "2": {
             "20": 1
           }
         }
@@ -4949,6 +6342,9 @@
         {
           "1": {
             "29": 1
+          },
+          "2": {
+            "29": 1
           }
         }
       ],
@@ -4956,6 +6352,9 @@
         "深",
         {
           "1": {
+            "20": 1
+          },
+          "2": {
             "20": 1
           }
         }
@@ -4966,6 +6365,10 @@
           "1": {
             "20": 1,
             "26": 1
+          },
+          "2": {
+            "20": 1,
+            "26": 1
           }
         }
       ],
@@ -4973,6 +6376,9 @@
         "太大",
         {
           "1": {
+            "12": 1
+          },
+          "2": {
             "12": 1
           }
         }
@@ -4982,6 +6388,9 @@
         {
           "1": {
             "20": 1
+          },
+          "2": {
+            "20": 1
           }
         }
       ],
@@ -4989,6 +6398,9 @@
         "規格",
         {
           "1": {
+            "42": 1
+          },
+          "2": {
             "42": 1
           }
         }
@@ -5000,6 +6412,12 @@
             "42": 1
           },
           "1": {
+            "20": 1,
+            "25": 1,
+            "29": 1,
+            "42": 1
+          },
+          "2": {
             "20": 1,
             "25": 1,
             "29": 1,
@@ -5016,6 +6434,10 @@
           "1": {
             "53": 1,
             "60": 1
+          },
+          "2": {
+            "53": 1,
+            "60": 1
           }
         }
       ],
@@ -5024,6 +6446,9 @@
         {
           "1": {
             "50": 1
+          },
+          "2": {
+            "50": 1
           }
         }
       ],
@@ -5031,6 +6456,10 @@
         "日立",
         {
           "1": {
+            "21": 1,
+            "56": 1
+          },
+          "2": {
             "21": 1,
             "56": 1
           }
@@ -5047,7 +6476,12 @@
             "25": 1,
             "42": 1
           },
-          "3": {
+          "2": {
+            "20": 1,
+            "25": 1,
+            "42": 1
+          },
+          "5": {
             "26": 1,
             "51": 1,
             "52": 1,
@@ -5061,6 +6495,52 @@
         {
           "1": {
             "20": 1
+          },
+          "2": {
+            "20": 1
+          }
+        }
+      ],
+      [
+        "其實",
+        {
+          "1": {
+            "20": 1,
+            "42": 1,
+            "56": 1,
+            "60": 1
+          },
+          "2": {
+            "20": 1,
+            "42": 1,
+            "56": 1,
+            "60": 1
+          }
+        }
+      ],
+      [
+        "其他",
+        {
+          "1": {
+            "21": 1
+          },
+          "2": {
+            "21": 1
+          },
+          "4": {
+            "1": 1,
+            "3": 1,
+            "8": 1,
+            "9": 1,
+            "23": 1,
+            "24": 1,
+            "29": 1,
+            "30": 1,
+            "32": 1,
+            "54": 1,
+            "60": 1,
+            "61": 1,
+            "62": 1
           }
         }
       ],
@@ -5074,7 +6554,11 @@
             "20": 1,
             "29": 1
           },
-          "3": {
+          "2": {
+            "20": 1,
+            "29": 1
+          },
+          "5": {
             "20": 1
           }
         }
@@ -5082,7 +6566,7 @@
       [
         "亞",
         {
-          "3": {
+          "5": {
             "19": 1,
             "26": 1,
             "51": 1,
@@ -5097,6 +6581,9 @@
         {
           "1": {
             "46": 1
+          },
+          "2": {
+            "46": 1
           }
         }
       ],
@@ -5106,7 +6593,10 @@
           "1": {
             "29": 1
           },
-          "3": {
+          "2": {
+            "29": 1
+          },
+          "5": {
             "19": 1
           }
         }
@@ -5116,6 +6606,9 @@
         {
           "1": {
             "50": 1
+          },
+          "2": {
+            "50": 1
           }
         }
       ],
@@ -5123,6 +6616,9 @@
         "運",
         {
           "1": {
+            "19": 1
+          },
+          "2": {
             "19": 1
           }
         }
@@ -5136,6 +6632,10 @@
           "1": {
             "19": 1,
             "50": 1
+          },
+          "2": {
+            "19": 1,
+            "50": 1
           }
         }
       ],
@@ -5143,6 +6643,9 @@
         "條",
         {
           "1": {
+            "19": 1
+          },
+          "2": {
             "19": 1
           }
         }
@@ -5152,6 +6655,9 @@
         {
           "1": {
             "64": 1
+          },
+          "2": {
+            "64": 1
           }
         }
       ],
@@ -5159,6 +6665,10 @@
         "賣",
         {
           "1": {
+            "19": 1,
+            "30": 1
+          },
+          "2": {
             "19": 1,
             "30": 1
           }
@@ -5171,6 +6681,11 @@
             "13": 1,
             "18": 1,
             "27": 1
+          },
+          "2": {
+            "13": 1,
+            "18": 1,
+            "27": 1
           }
         }
       ],
@@ -5179,6 +6694,9 @@
         {
           "1": {
             "44": 1
+          },
+          "2": {
+            "44": 1
           }
         }
       ],
@@ -5186,6 +6704,13 @@
         "款",
         {
           "1": {
+            "19": 1,
+            "26": 1,
+            "30": 1,
+            "33": 1,
+            "51": 1
+          },
+          "2": {
             "19": 1,
             "26": 1,
             "30": 1,
@@ -5202,6 +6727,9 @@
           },
           "1": {
             "19": 1
+          },
+          "2": {
+            "19": 1
           }
         }
       ],
@@ -5209,6 +6737,9 @@
         "現行",
         {
           "1": {
+            "44": 1
+          },
+          "2": {
             "44": 1
           }
         }
@@ -5218,6 +6749,9 @@
         {
           "1": {
             "40": 1
+          },
+          "2": {
+            "40": 1
           }
         }
       ],
@@ -5225,6 +6759,9 @@
         "現象",
         {
           "1": {
+            "19": 1
+          },
+          "2": {
             "19": 1
           }
         }
@@ -5239,6 +6776,14 @@
             "21": 1,
             "44": 1,
             "47": 1
+          },
+          "2": {
+            "8": 1,
+            "10": 1,
+            "19": 1,
+            "21": 1,
+            "44": 1,
+            "47": 1
           }
         }
       ],
@@ -5246,6 +6791,9 @@
         "靈異",
         {
           "1": {
+            "19": 1
+          },
+          "2": {
             "19": 1
           }
         }
@@ -5255,6 +6803,9 @@
         {
           "1": {
             "19": 1
+          },
+          "2": {
+            "19": 1
           }
         }
       ],
@@ -5262,6 +6813,9 @@
         "壞掉",
         {
           "1": {
+            "1": 1
+          },
+          "2": {
             "1": 1
           }
         }
@@ -5273,6 +6827,9 @@
             "57": 1
           },
           "1": {
+            "26": 1
+          },
+          "2": {
             "26": 1
           }
         }
@@ -5286,7 +6843,10 @@
           "1": {
             "19": 1
           },
-          "3": {
+          "2": {
+            "19": 1
+          },
+          "5": {
             "19": 1
           }
         }
@@ -5296,6 +6856,9 @@
         {
           "1": {
             "8": 1
+          },
+          "2": {
+            "8": 1
           }
         }
       ],
@@ -5303,6 +6866,9 @@
         "請看",
         {
           "1": {
+            "53": 1
+          },
+          "2": {
             "53": 1
           }
         }
@@ -5312,6 +6878,9 @@
         {
           "1": {
             "18": 1
+          },
+          "2": {
+            "18": 1
           }
         }
       ],
@@ -5320,6 +6889,9 @@
         {
           "1": {
             "60": 1
+          },
+          "2": {
+            "60": 1
           }
         }
       ],
@@ -5327,6 +6899,11 @@
         "會",
         {
           "1": {
+            "18": 1,
+            "27": 1,
+            "29": 1
+          },
+          "2": {
             "18": 1,
             "27": 1,
             "29": 1
@@ -5343,6 +6920,14 @@
             "30": 1,
             "45": 1,
             "46": 1
+          },
+          "2": {
+            "18": 1,
+            "20": 1,
+            "21": 1,
+            "30": 1,
+            "45": 1,
+            "46": 1
           }
         }
       ],
@@ -5350,6 +6935,10 @@
         "組",
         {
           "1": {
+            "18": 1,
+            "29": 1
+          },
+          "2": {
             "18": 1,
             "29": 1
           }
@@ -5360,6 +6949,9 @@
         {
           "1": {
             "52": 1
+          },
+          "2": {
+            "52": 1
           }
         }
       ],
@@ -5367,6 +6959,9 @@
         "另一",
         {
           "1": {
+            "18": 1
+          },
+          "2": {
             "18": 1
           }
         }
@@ -5378,6 +6973,10 @@
             "27": 1
           },
           "1": {
+            "18": 1,
+            "65": 1
+          },
+          "2": {
             "18": 1,
             "65": 1
           }
@@ -5395,7 +6994,11 @@
             "18": 1,
             "25": 1
           },
-          "3": {
+          "2": {
+            "18": 1,
+            "25": 1
+          },
+          "5": {
             "25": 1,
             "26": 1,
             "51": 1
@@ -5408,7 +7011,7 @@
           "0": {
             "18": 1
           },
-          "3": {
+          "5": {
             "18": 1
           }
         }
@@ -5418,6 +7021,9 @@
         {
           "1": {
             "18": 1
+          },
+          "2": {
+            "18": 1
           }
         }
       ],
@@ -5425,6 +7031,9 @@
         "拖到",
         {
           "1": {
+            "1": 1
+          },
+          "2": {
             "1": 1
           }
         }
@@ -5435,6 +7044,10 @@
           "1": {
             "17": 1,
             "22": 1
+          },
+          "2": {
+            "17": 1,
+            "22": 1
           }
         }
       ],
@@ -5442,6 +7055,9 @@
         "當然",
         {
           "1": {
+            "10": 1
+          },
+          "2": {
             "10": 1
           }
         }
@@ -5452,6 +7068,10 @@
           "1": {
             "55": 1,
             "59": 1
+          },
+          "2": {
+            "55": 1,
+            "59": 1
           }
         }
       ],
@@ -5459,6 +7079,9 @@
         "最好的",
         {
           "1": {
+            "47": 1
+          },
+          "2": {
             "47": 1
           }
         }
@@ -5468,6 +7091,9 @@
         {
           "1": {
             "44": 1
+          },
+          "2": {
+            "44": 1
           }
         }
       ],
@@ -5476,6 +7102,9 @@
         {
           "1": {
             "40": 1
+          },
+          "2": {
+            "40": 1
           }
         }
       ],
@@ -5483,6 +7112,9 @@
         "最適合",
         {
           "1": {
+            "17": 1
+          },
+          "2": {
             "17": 1
           }
         }
@@ -5495,6 +7127,12 @@
             "21": 1,
             "34": 1,
             "49": 1
+          },
+          "2": {
+            "13": 1,
+            "21": 1,
+            "34": 1,
+            "49": 1
           }
         }
       ],
@@ -5502,6 +7140,10 @@
         "喇叭",
         {
           "1": {
+            "17": 1,
+            "22": 1
+          },
+          "2": {
             "17": 1,
             "22": 1
           }
@@ -5518,7 +7160,12 @@
             "20": 1,
             "31": 1
           },
-          "3": {
+          "2": {
+            "17": 1,
+            "20": 1,
+            "31": 1
+          },
+          "5": {
             "20": 1
           }
         }
@@ -5535,6 +7182,9 @@
         "dpi",
         {
           "1": {
+            "45": 1
+          },
+          "2": {
             "45": 1
           }
         }
@@ -5555,6 +7205,9 @@
           },
           "1": {
             "16": 1
+          },
+          "2": {
+            "16": 1
           }
         }
       ],
@@ -5562,6 +7215,9 @@
         "庫存",
         {
           "1": {
+            "16": 1
+          },
+          "2": {
             "16": 1
           }
         }
@@ -5575,6 +7231,13 @@
             "41": 1,
             "60": 1,
             "62": 1
+          },
+          "2": {
+            "16": 1,
+            "18": 1,
+            "41": 1,
+            "60": 1,
+            "62": 1
           }
         }
       ],
@@ -5582,6 +7245,9 @@
         "生產",
         {
           "1": {
+            "16": 1
+          },
+          "2": {
             "16": 1
           }
         }
@@ -5591,6 +7257,9 @@
         {
           "1": {
             "16": 1
+          },
+          "2": {
+            "16": 1
           }
         }
       ],
@@ -5598,6 +7267,11 @@
         "所以",
         {
           "1": {
+            "16": 1,
+            "20": 1,
+            "29": 1
+          },
+          "2": {
             "16": 1,
             "20": 1,
             "29": 1
@@ -5611,6 +7285,11 @@
             "15": 1,
             "18": 1,
             "27": 1
+          },
+          "2": {
+            "15": 1,
+            "18": 1,
+            "27": 1
           }
         }
       ],
@@ -5619,13 +7298,16 @@
         {
           "1": {
             "15": 1
+          },
+          "2": {
+            "15": 1
           }
         }
       ],
       [
         "濾水",
         {
-          "3": {
+          "5": {
             "15": 1
           }
         }
@@ -5635,13 +7317,16 @@
         {
           "1": {
             "15": 1
+          },
+          "2": {
+            "15": 1
           }
         }
       ],
       [
         "耳機",
         {
-          "3": {
+          "5": {
             "14": 1
           }
         }
@@ -5651,6 +7336,9 @@
         {
           "1": {
             "14": 1
+          },
+          "2": {
+            "14": 1
           }
         }
       ],
@@ -5658,6 +7346,9 @@
         "出頭",
         {
           "1": {
+            "30": 1
+          },
+          "2": {
             "30": 1
           }
         }
@@ -5667,6 +7358,9 @@
         {
           "1": {
             "29": 1
+          },
+          "2": {
+            "29": 1
           }
         }
       ],
@@ -5674,6 +7368,9 @@
         "出了",
         {
           "1": {
+            "14": 1
+          },
+          "2": {
             "14": 1
           }
         }
@@ -5683,6 +7380,9 @@
         {
           "1": {
             "9": 1
+          },
+          "2": {
+            "9": 1
           }
         }
       ],
@@ -5690,6 +7390,9 @@
         "後來",
         {
           "1": {
+            "14": 1
+          },
+          "2": {
             "14": 1
           }
         }
@@ -5699,6 +7402,9 @@
         {
           "1": {
             "18": 1
+          },
+          "2": {
+            "18": 1
           }
         }
       ],
@@ -5706,6 +7412,9 @@
         "qc",
         {
           "1": {
+            "14": 1
+          },
+          "2": {
             "14": 1
           }
         }
@@ -5729,7 +7438,7 @@
       [
         "居家",
         {
-          "2": {
+          "3": {
             "13": 1,
             "18": 1,
             "21": 1,
@@ -5748,7 +7457,7 @@
             "56": 1,
             "63": 1
           },
-          "3": {
+          "5": {
             "13": 1,
             "18": 1,
             "21": 1,
@@ -5775,6 +7484,10 @@
           "1": {
             "13": 1,
             "45": 1
+          },
+          "2": {
+            "13": 1,
+            "45": 1
           }
         }
       ],
@@ -5783,6 +7496,9 @@
         {
           "1": {
             "13": 1
+          },
+          "2": {
+            "13": 1
           }
         }
       ],
@@ -5790,6 +7506,12 @@
         "台灣",
         {
           "1": {
+            "20": 1,
+            "29": 1,
+            "59": 1,
+            "61": 1
+          },
+          "2": {
             "20": 1,
             "29": 1,
             "59": 1,
@@ -5812,13 +7534,26 @@
             "50": 1,
             "55": 1,
             "64": 1
+          },
+          "2": {
+            "13": 1,
+            "20": 1,
+            "32": 1,
+            "35": 1,
+            "38": 1,
+            "41": 1,
+            "45": 1,
+            "48": 1,
+            "50": 1,
+            "55": 1,
+            "64": 1
           }
         }
       ],
       [
         "機器",
         {
-          "3": {
+          "5": {
             "44": 1
           }
         }
@@ -5828,6 +7563,9 @@
         {
           "1": {
             "44": 1
+          },
+          "2": {
+            "44": 1
           }
         }
       ],
@@ -5835,6 +7573,9 @@
         "機會",
         {
           "1": {
+            "18": 1
+          },
+          "2": {
             "18": 1
           }
         }
@@ -5849,7 +7590,10 @@
           "1": {
             "30": 1
           },
-          "3": {
+          "2": {
+            "30": 1
+          },
+          "5": {
             "13": 1,
             "36": 1
           }
@@ -5860,6 +7604,9 @@
         {
           "1": {
             "5": 1
+          },
+          "2": {
+            "5": 1
           }
         }
       ],
@@ -5869,7 +7616,7 @@
           "0": {
             "13": 1
           },
-          "3": {
+          "5": {
             "13": 1
           }
         }
@@ -5879,6 +7626,9 @@
         {
           "1": {
             "21": 1
+          },
+          "2": {
+            "21": 1
           }
         }
       ],
@@ -5886,6 +7636,9 @@
         "降",
         {
           "1": {
+            "12": 1
+          },
+          "2": {
             "12": 1
           }
         }
@@ -5895,13 +7648,16 @@
         {
           "1": {
             "12": 1
+          },
+          "2": {
+            "12": 1
           }
         }
       ],
       [
         "設備",
         {
-          "3": {
+          "5": {
             "20": 1,
             "37": 1,
             "38": 1,
@@ -5921,6 +7677,10 @@
           "1": {
             "12": 1,
             "43": 1
+          },
+          "2": {
+            "12": 1,
+            "43": 1
           }
         }
       ],
@@ -5928,6 +7688,19 @@
         "比較",
         {
           "1": {
+            "20": 1,
+            "26": 1,
+            "29": 1,
+            "31": 1,
+            "32": 1,
+            "34": 1,
+            "35": 1,
+            "42": 1,
+            "50": 1,
+            "51": 1,
+            "57": 1
+          },
+          "2": {
             "20": 1,
             "26": 1,
             "29": 1,
@@ -5950,6 +7723,12 @@
             "31": 1,
             "33": 1,
             "65": 1
+          },
+          "2": {
+            "12": 1,
+            "31": 1,
+            "33": 1,
+            "65": 1
           }
         }
       ],
@@ -5957,6 +7736,9 @@
         "3440",
         {
           "1": {
+            "43": 1
+          },
+          "2": {
             "43": 1
           }
         }
@@ -5969,6 +7751,9 @@
           },
           "1": {
             "43": 1
+          },
+          "2": {
+            "43": 1
           }
         }
       ],
@@ -5976,6 +7761,9 @@
         "32g",
         {
           "1": {
+            "36": 1
+          },
+          "2": {
             "36": 1
           }
         }
@@ -5993,6 +7781,9 @@
         {
           "1": {
             "27": 1
+          },
+          "2": {
+            "27": 1
           }
         }
       ],
@@ -6000,6 +7791,10 @@
         "3",
         {
           "1": {
+            "16": 1,
+            "29": 1
+          },
+          "2": {
             "16": 1,
             "29": 1
           }
@@ -6010,13 +7805,16 @@
         {
           "1": {
             "12": 1
+          },
+          "2": {
+            "12": 1
           }
         }
       ],
       [
         "3c",
         {
-          "2": {
+          "3": {
             "0": 1,
             "2": 1,
             "7": 1,
@@ -6027,7 +7825,7 @@
             "27": 1,
             "65": 1
           },
-          "3": {
+          "5": {
             "0": 1,
             "2": 1,
             "7": 1,
@@ -6045,6 +7843,9 @@
         {
           "1": {
             "57": 1
+          },
+          "2": {
+            "57": 1
           }
         }
       ],
@@ -6053,6 +7854,9 @@
         {
           "1": {
             "55": 1
+          },
+          "2": {
+            "55": 1
           }
         }
       ],
@@ -6060,6 +7864,9 @@
         "100",
         {
           "1": {
+            "43": 1
+          },
+          "2": {
             "43": 1
           }
         }
@@ -6077,6 +7884,9 @@
         {
           "1": {
             "49": 1
+          },
+          "2": {
+            "49": 1
           }
         }
       ],
@@ -6084,6 +7894,9 @@
         "1440",
         {
           "1": {
+            "43": 1
+          },
+          "2": {
             "43": 1
           }
         }
@@ -6104,6 +7917,9 @@
           },
           "1": {
             "36": 1
+          },
+          "2": {
+            "36": 1
           }
         }
       ],
@@ -6111,6 +7927,9 @@
         "199",
         {
           "1": {
+            "27": 1
+          },
+          "2": {
             "27": 1
           }
         }
@@ -6120,6 +7939,9 @@
         {
           "1": {
             "27": 1
+          },
+          "2": {
+            "27": 1
           }
         }
       ],
@@ -6127,6 +7949,9 @@
         "16tb",
         {
           "1": {
+            "49": 1
+          },
+          "2": {
             "49": 1
           }
         }
@@ -6136,6 +7961,9 @@
         {
           "1": {
             "15": 1
+          },
+          "2": {
+            "15": 1
           }
         }
       ],
@@ -6143,6 +7971,9 @@
         "160ppi",
         {
           "1": {
+            "12": 1
+          },
+          "2": {
             "12": 1
           }
         }
@@ -6152,6 +7983,9 @@
         {
           "1": {
             "11": 1
+          },
+          "2": {
+            "11": 1
           }
         }
       ],
@@ -6160,6 +7994,9 @@
         {
           "1": {
             "10": 1
+          },
+          "2": {
+            "10": 1
           }
         }
       ],
@@ -6167,6 +8004,9 @@
         "55",
         {
           "1": {
+            "11": 1
+          },
+          "2": {
             "11": 1
           }
         }
@@ -6216,6 +8056,9 @@
         {
           "1": {
             "50": 1
+          },
+          "2": {
+            "50": 1
           }
         }
       ],
@@ -6224,6 +8067,9 @@
         {
           "1": {
             "18": 1
+          },
+          "2": {
+            "18": 1
           }
         }
       ],
@@ -6231,6 +8077,9 @@
         "看看",
         {
           "1": {
+            "13": 1
+          },
+          "2": {
             "13": 1
           }
         }
@@ -6243,6 +8092,12 @@
             "40": 1,
             "46": 1,
             "61": 1
+          },
+          "2": {
+            "10": 1,
+            "40": 1,
+            "46": 1,
+            "61": 1
           }
         }
       ],
@@ -6250,6 +8105,11 @@
         "看起來",
         {
           "1": {
+            "2": 1,
+            "3": 1,
+            "31": 1
+          },
+          "2": {
             "2": 1,
             "3": 1,
             "31": 1
@@ -6270,13 +8130,16 @@
         {
           "1": {
             "9": 1
+          },
+          "2": {
+            "9": 1
           }
         }
       ],
       [
         "線材",
         {
-          "3": {
+          "5": {
             "9": 1,
             "19": 1,
             "23": 1,
@@ -6297,6 +8160,11 @@
             "9": 1,
             "19": 1,
             "23": 1
+          },
+          "2": {
+            "9": 1,
+            "19": 1,
+            "23": 1
           }
         }
       ],
@@ -6304,6 +8172,11 @@
         "減少",
         {
           "1": {
+            "9": 1,
+            "19": 1,
+            "26": 1
+          },
+          "2": {
             "9": 1,
             "19": 1,
             "26": 1
@@ -6315,6 +8188,9 @@
         {
           "1": {
             "9": 1
+          },
+          "2": {
+            "9": 1
           }
         }
       ],
@@ -6323,6 +8199,9 @@
         {
           "1": {
             "9": 1
+          },
+          "2": {
+            "9": 1
           }
         }
       ],
@@ -6330,6 +8209,9 @@
         "包裝",
         {
           "1": {
+            "57": 1
+          },
+          "2": {
             "57": 1
           }
         }
@@ -6340,6 +8222,10 @@
           "1": {
             "9": 1,
             "57": 1
+          },
+          "2": {
+            "9": 1,
+            "57": 1
           }
         }
       ],
@@ -6347,6 +8233,9 @@
         "旅行",
         {
           "1": {
+            "9": 1
+          },
+          "2": {
             "9": 1
           }
         }
@@ -6359,6 +8248,9 @@
             "47": 1
           },
           "1": {
+            "9": 1
+          },
+          "2": {
             "9": 1
           }
         }
@@ -6376,6 +8268,9 @@
         {
           "1": {
             "43": 1
+          },
+          "2": {
+            "43": 1
           }
         }
       ],
@@ -6392,6 +8287,9 @@
         {
           "1": {
             "36": 1
+          },
+          "2": {
+            "36": 1
           }
         }
       ],
@@ -6399,6 +8297,9 @@
         "4400",
         {
           "1": {
+            "13": 1
+          },
+          "2": {
             "13": 1
           }
         }
@@ -6408,6 +8309,9 @@
         {
           "1": {
             "10": 1
+          },
+          "2": {
+            "10": 1
           }
         }
       ],
@@ -6415,6 +8319,9 @@
         "45",
         {
           "1": {
+            "9": 1
+          },
+          "2": {
             "9": 1
           }
         }
@@ -6429,7 +8336,11 @@
             "12": 1,
             "45": 1
           },
-          "3": {
+          "2": {
+            "12": 1,
+            "45": 1
+          },
+          "5": {
             "5": 1,
             "12": 1,
             "45": 1
@@ -6441,6 +8352,9 @@
         {
           "1": {
             "49": 1
+          },
+          "2": {
+            "49": 1
           }
         }
       ],
@@ -6450,7 +8364,10 @@
           "1": {
             "43": 1
           },
-          "3": {
+          "2": {
+            "43": 1
+          },
+          "5": {
             "43": 1
           }
         }
@@ -6459,6 +8376,9 @@
         "220v",
         {
           "1": {
+            "30": 1
+          },
+          "2": {
             "30": 1
           }
         }
@@ -6472,6 +8392,10 @@
           "1": {
             "16": 1,
             "29": 1
+          },
+          "2": {
+            "16": 1,
+            "29": 1
           }
         }
       ],
@@ -6480,6 +8404,9 @@
         {
           "1": {
             "12": 1
+          },
+          "2": {
+            "12": 1
           }
         }
       ],
@@ -6487,6 +8414,9 @@
         "200",
         {
           "1": {
+            "12": 1
+          },
+          "2": {
             "12": 1
           }
         }
@@ -6497,6 +8427,10 @@
           "1": {
             "9": 1,
             "21": 1
+          },
+          "2": {
+            "9": 1,
+            "21": 1
           }
         }
       ],
@@ -6504,6 +8438,9 @@
         "2560",
         {
           "1": {
+            "12": 1
+          },
+          "2": {
             "12": 1
           }
         }
@@ -6513,6 +8450,9 @@
         {
           "1": {
             "9": 1
+          },
+          "2": {
+            "9": 1
           }
         }
       ],
@@ -6520,6 +8460,9 @@
         "是在",
         {
           "1": {
+            "29": 1
+          },
+          "2": {
             "29": 1
           }
         }
@@ -6536,6 +8479,16 @@
             "54": 1,
             "59": 1,
             "64": 1
+          },
+          "2": {
+            "9": 1,
+            "18": 1,
+            "26": 1,
+            "50": 1,
+            "51": 1,
+            "54": 1,
+            "59": 1,
+            "64": 1
           }
         }
       ],
@@ -6544,6 +8497,9 @@
         {
           "1": {
             "57": 1
+          },
+          "2": {
+            "57": 1
           }
         }
       ],
@@ -6551,6 +8507,11 @@
         "都可以",
         {
           "1": {
+            "42": 1,
+            "46": 1,
+            "56": 1
+          },
+          "2": {
             "42": 1,
             "46": 1,
             "56": 1
@@ -6567,6 +8528,14 @@
             "33": 1,
             "40": 1,
             "55": 1
+          },
+          "2": {
+            "23": 1,
+            "24": 1,
+            "25": 1,
+            "33": 1,
+            "40": 1,
+            "55": 1
           }
         }
       ],
@@ -6576,6 +8545,10 @@
           "1": {
             "9": 1,
             "60": 1
+          },
+          "2": {
+            "9": 1,
+            "60": 1
           }
         }
       ],
@@ -6583,6 +8556,9 @@
         "都有",
         {
           "1": {
+            "3": 1
+          },
+          "2": {
             "3": 1
           }
         }
@@ -6598,6 +8574,15 @@
             "49": 1,
             "51": 1,
             "65": 1
+          },
+          "2": {
+            "9": 1,
+            "26": 1,
+            "27": 1,
+            "28": 1,
+            "49": 1,
+            "51": 1,
+            "65": 1
           }
         }
       ],
@@ -6605,6 +8590,9 @@
         "這種",
         {
           "1": {
+            "57": 1
+          },
+          "2": {
             "57": 1
           }
         }
@@ -6614,6 +8602,9 @@
         {
           "1": {
             "18": 1
+          },
+          "2": {
+            "18": 1
           }
         }
       ],
@@ -6621,6 +8612,11 @@
         "這是",
         {
           "1": {
+            "17": 1,
+            "40": 1,
+            "58": 1
+          },
+          "2": {
             "17": 1,
             "40": 1,
             "58": 1
@@ -6648,6 +8644,25 @@
             "55": 1,
             "64": 1,
             "65": 1
+          },
+          "2": {
+            "9": 1,
+            "13": 1,
+            "20": 1,
+            "21": 1,
+            "26": 1,
+            "27": 1,
+            "28": 1,
+            "35": 1,
+            "38": 1,
+            "41": 1,
+            "45": 1,
+            "48": 1,
+            "50": 1,
+            "51": 1,
+            "55": 1,
+            "64": 1,
+            "65": 1
           }
         }
       ],
@@ -6655,6 +8670,10 @@
         "這個",
         {
           "1": {
+            "3": 1,
+            "65": 1
+          },
+          "2": {
             "3": 1,
             "65": 1
           }
@@ -6665,6 +8684,16 @@
         {
           "0": {
             "32": 1
+          }
+        }
+      ],
+      [
+        "costco",
+        {
+          "4": {
+            "18": 1,
+            "25": 1,
+            "63": 1
           }
         }
       ],
@@ -6686,7 +8715,11 @@
             "9": 1,
             "45": 1
           },
-          "3": {
+          "2": {
+            "9": 1,
+            "45": 1
+          },
+          "5": {
             "9": 1
           }
         }
@@ -6723,6 +8756,9 @@
           },
           "1": {
             "34": 1
+          },
+          "2": {
+            "34": 1
           }
         }
       ],
@@ -6734,6 +8770,9 @@
             "51": 1
           },
           "1": {
+            "28": 1
+          },
+          "2": {
             "28": 1
           }
         }
@@ -6747,7 +8786,10 @@
           "1": {
             "9": 1
           },
-          "3": {
+          "2": {
+            "9": 1
+          },
+          "5": {
             "9": 1
           }
         }
@@ -6762,6 +8804,11 @@
             "5": 1,
             "11": 1,
             "22": 1
+          },
+          "2": {
+            "5": 1,
+            "11": 1,
+            "22": 1
           }
         }
       ],
@@ -6772,6 +8819,11 @@
             "9": 1
           },
           "1": {
+            "9": 1,
+            "29": 1,
+            "55": 1
+          },
+          "2": {
             "9": 1,
             "29": 1,
             "55": 1
@@ -6793,6 +8845,9 @@
             "15": 1
           },
           "1": {
+            "15": 1
+          },
+          "2": {
             "15": 1
           }
         }
@@ -6824,6 +8879,10 @@
           "1": {
             "10": 1,
             "11": 1
+          },
+          "2": {
+            "10": 1,
+            "11": 1
           }
         }
       ],
@@ -6850,6 +8909,11 @@
             "26": 1,
             "45": 1,
             "52": 1
+          },
+          "2": {
+            "26": 1,
+            "45": 1,
+            "52": 1
           }
         }
       ],
@@ -6857,6 +8921,9 @@
         "問",
         {
           "1": {
+            "8": 1
+          },
+          "2": {
             "8": 1
           }
         }
@@ -6866,6 +8933,9 @@
         {
           "1": {
             "8": 1
+          },
+          "2": {
+            "8": 1
           }
         }
       ],
@@ -6873,6 +8943,9 @@
         "店員",
         {
           "1": {
+            "62": 1
+          },
+          "2": {
             "62": 1
           }
         }
@@ -6882,6 +8955,9 @@
         {
           "1": {
             "8": 1
+          },
+          "2": {
+            "8": 1
           }
         }
       ],
@@ -6889,6 +8965,9 @@
         "店面",
         {
           "1": {
+            "8": 1
+          },
+          "2": {
             "8": 1
           }
         }
@@ -6899,7 +8978,10 @@
           "1": {
             "8": 1
           },
-          "3": {
+          "2": {
+            "8": 1
+          },
+          "5": {
             "8": 1,
             "16": 1
           }
@@ -6911,6 +8993,10 @@
           "1": {
             "8": 1,
             "35": 1
+          },
+          "2": {
+            "8": 1,
+            "35": 1
           }
         }
       ],
@@ -6919,6 +9005,9 @@
         {
           "1": {
             "8": 1
+          },
+          "2": {
+            "8": 1
           }
         }
       ],
@@ -6926,6 +9015,9 @@
         "萬事",
         {
           "1": {
+            "8": 1
+          },
+          "2": {
             "8": 1
           }
         }
@@ -6938,6 +9030,12 @@
             "8": 1,
             "29": 1,
             "30": 1
+          },
+          "2": {
+            "7": 1,
+            "8": 1,
+            "29": 1,
+            "30": 1
           }
         }
       ],
@@ -6945,6 +9043,9 @@
         "顏色",
         {
           "1": {
+            "7": 1
+          },
+          "2": {
             "7": 1
           }
         }
@@ -6962,6 +9063,9 @@
         {
           "1": {
             "33": 1
+          },
+          "2": {
+            "33": 1
           }
         }
       ],
@@ -6969,6 +9073,9 @@
         "pana",
         {
           "1": {
+            "42": 1
+          },
+          "2": {
             "42": 1
           }
         }
@@ -6988,6 +9095,11 @@
             "20": 1,
             "40": 1,
             "56": 1
+          },
+          "2": {
+            "20": 1,
+            "40": 1,
+            "56": 1
           }
         }
       ],
@@ -7004,13 +9116,58 @@
         {
           "1": {
             "7": 1
+          },
+          "2": {
+            "7": 1
           }
         }
       ],
       [
         "pchome",
         {
-          "3": {
+          "4": {
+            "0": 1,
+            "2": 1,
+            "4": 1,
+            "5": 1,
+            "7": 1,
+            "10": 1,
+            "11": 1,
+            "12": 1,
+            "13": 1,
+            "14": 1,
+            "15": 1,
+            "16": 1,
+            "17": 1,
+            "20": 1,
+            "21": 1,
+            "22": 1,
+            "27": 1,
+            "28": 1,
+            "31": 1,
+            "33": 1,
+            "35": 1,
+            "36": 1,
+            "37": 1,
+            "38": 1,
+            "39": 1,
+            "40": 1,
+            "41": 1,
+            "42": 1,
+            "43": 1,
+            "44": 1,
+            "45": 1,
+            "46": 1,
+            "47": 1,
+            "48": 1,
+            "49": 1,
+            "55": 1,
+            "56": 1,
+            "57": 1,
+            "59": 1,
+            "65": 1
+          },
+          "5": {
             "0": 1,
             "2": 1,
             "4": 1,
@@ -7059,13 +9216,16 @@
         {
           "1": {
             "7": 1
+          },
+          "2": {
+            "7": 1
           }
         }
       ],
       [
         "刀具",
         {
-          "3": {
+          "5": {
             "6": 1
           }
         }
@@ -7075,13 +9235,16 @@
         {
           "1": {
             "6": 1
+          },
+          "2": {
+            "6": 1
           }
         }
       ],
       [
         "廚房",
         {
-          "2": {
+          "3": {
             "6": 1,
             "15": 1,
             "20": 1,
@@ -7096,7 +9259,7 @@
             "58": 1,
             "64": 1
           },
-          "3": {
+          "5": {
             "6": 1,
             "15": 1,
             "20": 1,
@@ -7118,6 +9281,9 @@
         {
           "1": {
             "23": 1
+          },
+          "2": {
+            "23": 1
           }
         }
       ],
@@ -7125,6 +9291,9 @@
         "手",
         {
           "1": {
+            "6": 1
+          },
+          "2": {
             "6": 1
           }
         }
@@ -7134,6 +9303,9 @@
         {
           "1": {
             "2": 1
+          },
+          "2": {
+            "2": 1
           }
         }
       ],
@@ -7141,6 +9313,9 @@
         "順",
         {
           "1": {
+            "6": 1
+          },
+          "2": {
             "6": 1
           }
         }
@@ -7151,6 +9326,10 @@
           "1": {
             "6": 1,
             "64": 1
+          },
+          "2": {
+            "6": 1,
+            "64": 1
           }
         }
       ],
@@ -7158,6 +9337,9 @@
         "切",
         {
           "1": {
+            "6": 1
+          },
+          "2": {
             "6": 1
           }
         }
@@ -7175,6 +9357,9 @@
         {
           "1": {
             "6": 1
+          },
+          "2": {
+            "6": 1
           }
         }
       ],
@@ -7187,6 +9372,10 @@
           "1": {
             "42": 1,
             "56": 1
+          },
+          "2": {
+            "42": 1,
+            "56": 1
           }
         }
       ],
@@ -7195,6 +9384,9 @@
         {
           "1": {
             "36": 1
+          },
+          "2": {
+            "36": 1
           }
         }
       ],
@@ -7202,6 +9394,9 @@
         "三號",
         {
           "1": {
+            "24": 1
+          },
+          "2": {
             "24": 1
           }
         }
@@ -7217,6 +9412,12 @@
             "9": 1,
             "19": 1,
             "55": 1
+          },
+          "2": {
+            "6": 1,
+            "9": 1,
+            "19": 1,
+            "55": 1
           }
         }
       ],
@@ -7224,6 +9425,9 @@
         "三個月",
         {
           "1": {
+            "1": 1
+          },
+          "2": {
             "1": 1
           }
         }
@@ -7237,6 +9441,10 @@
           "1": {
             "6": 1,
             "38": 1
+          },
+          "2": {
+            "6": 1,
+            "38": 1
           }
         }
       ],
@@ -7244,6 +9452,9 @@
         "鋸齒",
         {
           "1": {
+            "6": 1
+          },
+          "2": {
             "6": 1
           }
         }
@@ -7253,6 +9464,9 @@
         {
           "1": {
             "54": 1
+          },
+          "2": {
+            "54": 1
           }
         }
       ],
@@ -7260,6 +9474,9 @@
         "開",
         {
           "1": {
+            "6": 1
+          },
+          "2": {
             "6": 1
           }
         }
@@ -7283,7 +9500,7 @@
       [
         "影音",
         {
-          "2": {
+          "3": {
             "5": 1,
             "10": 1,
             "11": 1,
@@ -7294,7 +9511,7 @@
             "46": 1,
             "47": 1
           },
-          "3": {
+          "5": {
             "5": 1,
             "10": 1,
             "11": 1,
@@ -7312,6 +9529,9 @@
         {
           "1": {
             "5": 1
+          },
+          "2": {
+            "5": 1
           }
         }
       ],
@@ -7319,6 +9539,20 @@
         "了",
         {
           "1": {
+            "5": 1,
+            "11": 1,
+            "12": 1,
+            "18": 1,
+            "19": 1,
+            "33": 1,
+            "37": 1,
+            "38": 1,
+            "44": 1,
+            "51": 1,
+            "52": 1,
+            "55": 1
+          },
+          "2": {
             "5": 1,
             "11": 1,
             "12": 1,
@@ -7344,6 +9578,14 @@
             "16": 1,
             "18": 1,
             "22": 1
+          },
+          "2": {
+            "5": 1,
+            "8": 1,
+            "12": 1,
+            "16": 1,
+            "18": 1,
+            "22": 1
           }
         }
       ],
@@ -7352,6 +9594,9 @@
         {
           "1": {
             "5": 1
+          },
+          "2": {
+            "5": 1
           }
         }
       ],
@@ -7359,6 +9604,9 @@
         "至少",
         {
           "1": {
+            "5": 1
+          },
+          "2": {
             "5": 1
           }
         }
@@ -7369,6 +9617,10 @@
           "1": {
             "5": 1,
             "16": 1
+          },
+          "2": {
+            "5": 1,
+            "16": 1
           }
         }
       ],
@@ -7376,6 +9628,9 @@
         "前後",
         {
           "1": {
+            "5": 1
+          },
+          "2": {
             "5": 1
           }
         }
@@ -7386,6 +9641,10 @@
           "1": {
             "5": 1,
             "48": 1
+          },
+          "2": {
+            "5": 1,
+            "48": 1
           }
         }
       ],
@@ -7393,6 +9652,9 @@
         "更好",
         {
           "1": {
+            "31": 1
+          },
+          "2": {
             "31": 1
           }
         }
@@ -7402,6 +9664,9 @@
         {
           "1": {
             "5": 1
+          },
+          "2": {
+            "5": 1
           }
         }
       ],
@@ -7410,6 +9675,9 @@
         {
           "1": {
             "52": 1
+          },
+          "2": {
+            "52": 1
           }
         }
       ],
@@ -7417,6 +9685,9 @@
         "有趣",
         {
           "1": {
+            "29": 1
+          },
+          "2": {
             "29": 1
           }
         }
@@ -7435,6 +9706,18 @@
             "30": 1,
             "49": 1,
             "57": 1
+          },
+          "2": {
+            "5": 1,
+            "7": 1,
+            "13": 1,
+            "17": 1,
+            "18": 1,
+            "22": 1,
+            "29": 1,
+            "30": 1,
+            "49": 1,
+            "57": 1
           }
         }
       ],
@@ -7442,6 +9725,9 @@
         "有些",
         {
           "1": {
+            "4": 1
+          },
+          "2": {
             "4": 1
           }
         }
@@ -7452,6 +9738,10 @@
           "1": {
             "5": 1,
             "54": 1
+          },
+          "2": {
+            "5": 1,
+            "54": 1
           }
         }
       ],
@@ -7459,6 +9749,9 @@
         "或是",
         {
           "1": {
+            "45": 1
+          },
+          "2": {
             "45": 1
           }
         }
@@ -7472,6 +9765,13 @@
             "32": 1,
             "35": 1,
             "62": 1
+          },
+          "2": {
+            "5": 1,
+            "9": 1,
+            "32": 1,
+            "35": 1,
+            "62": 1
           }
         }
       ],
@@ -7479,6 +9779,9 @@
         "只有",
         {
           "1": {
+            "38": 1
+          },
+          "2": {
             "38": 1
           }
         }
@@ -7488,6 +9791,9 @@
         {
           "1": {
             "35": 1
+          },
+          "2": {
+            "35": 1
           }
         }
       ],
@@ -7495,6 +9801,9 @@
         "只賣",
         {
           "1": {
+            "10": 1
+          },
+          "2": {
             "10": 1
           }
         }
@@ -7504,6 +9813,9 @@
         {
           "1": {
             "5": 1
+          },
+          "2": {
+            "5": 1
           }
         }
       ],
@@ -7511,6 +9823,9 @@
         "只好",
         {
           "1": {
+            "1": 1
+          },
+          "2": {
             "1": 1
           }
         }
@@ -7522,6 +9837,11 @@
             "5": 1,
             "13": 1,
             "54": 1
+          },
+          "2": {
+            "5": 1,
+            "13": 1,
+            "54": 1
           }
         }
       ],
@@ -7529,6 +9849,10 @@
         "盒",
         {
           "1": {
+            "5": 1,
+            "57": 1
+          },
+          "2": {
             "5": 1,
             "57": 1
           }
@@ -7543,6 +9867,13 @@
             "16": 1,
             "22": 1,
             "42": 1
+          },
+          "2": {
+            "5": 1,
+            "6": 1,
+            "16": 1,
+            "22": 1,
+            "42": 1
           }
         }
       ],
@@ -7550,6 +9881,9 @@
         "朋友",
         {
           "1": {
+            "5": 1
+          },
+          "2": {
             "5": 1
           }
         }
@@ -7561,6 +9895,11 @@
             "29": 1,
             "48": 1,
             "52": 1
+          },
+          "2": {
+            "29": 1,
+            "48": 1,
+            "52": 1
           }
         }
       ],
@@ -7568,6 +9907,12 @@
         "他",
         {
           "1": {
+            "4": 1,
+            "5": 1,
+            "19": 1,
+            "35": 1
+          },
+          "2": {
             "4": 1,
             "5": 1,
             "19": 1,
@@ -7586,6 +9931,15 @@
             "29": 1,
             "30": 1,
             "57": 1
+          },
+          "2": {
+            "1": 1,
+            "16": 1,
+            "23": 1,
+            "24": 1,
+            "29": 1,
+            "30": 1,
+            "57": 1
           }
         }
       ],
@@ -7594,6 +9948,9 @@
         {
           "1": {
             "60": 1
+          },
+          "2": {
+            "60": 1
           }
         }
       ],
@@ -7601,6 +9958,9 @@
         "不服",
         {
           "1": {
+            "59": 1
+          },
+          "2": {
             "59": 1
           }
         }
@@ -7611,6 +9971,10 @@
           "1": {
             "57": 1,
             "65": 1
+          },
+          "2": {
+            "57": 1,
+            "65": 1
           }
         }
       ],
@@ -7619,6 +9983,9 @@
         {
           "1": {
             "54": 1
+          },
+          "2": {
+            "54": 1
           }
         }
       ],
@@ -7626,6 +9993,9 @@
         "不穩",
         {
           "1": {
+            "52": 1
+          },
+          "2": {
             "52": 1
           }
         }
@@ -7636,6 +10006,10 @@
           "1": {
             "51": 1,
             "58": 1
+          },
+          "2": {
+            "51": 1,
+            "58": 1
           }
         }
       ],
@@ -7643,6 +10017,9 @@
         "不想",
         {
           "1": {
+            "47": 1
+          },
+          "2": {
             "47": 1
           }
         }
@@ -7652,6 +10029,9 @@
         {
           "1": {
             "46": 1
+          },
+          "2": {
+            "46": 1
           }
         }
       ],
@@ -7659,6 +10039,9 @@
         "不然",
         {
           "1": {
+            "32": 1
+          },
+          "2": {
             "32": 1
           }
         }
@@ -7668,6 +10051,9 @@
         {
           "1": {
             "31": 1
+          },
+          "2": {
+            "31": 1
           }
         }
       ],
@@ -7676,6 +10062,9 @@
         {
           "1": {
             "29": 1
+          },
+          "2": {
+            "29": 1
           }
         }
       ],
@@ -7683,6 +10072,9 @@
         "不要",
         {
           "1": {
+            "29": 1
+          },
+          "2": {
             "29": 1
           }
         }
@@ -7693,6 +10085,10 @@
           "1": {
             "21": 1,
             "25": 1
+          },
+          "2": {
+            "21": 1,
+            "25": 1
           }
         }
       ],
@@ -7701,6 +10097,9 @@
         {
           "1": {
             "19": 1
+          },
+          "2": {
+            "19": 1
           }
         }
       ],
@@ -7708,6 +10107,9 @@
         "不行",
         {
           "1": {
+            "16": 1
+          },
+          "2": {
             "16": 1
           }
         }
@@ -7719,6 +10121,11 @@
             "12": 1,
             "29": 1,
             "64": 1
+          },
+          "2": {
+            "12": 1,
+            "29": 1,
+            "64": 1
           }
         }
       ],
@@ -7727,6 +10134,9 @@
         {
           "1": {
             "12": 1
+          },
+          "2": {
+            "12": 1
           }
         }
       ],
@@ -7734,6 +10144,9 @@
         "不到",
         {
           "1": {
+            "4": 1
+          },
+          "2": {
             "4": 1
           }
         }
@@ -7744,6 +10157,10 @@
           "1": {
             "3": 1,
             "13": 1
+          },
+          "2": {
+            "3": 1,
+            "13": 1
           }
         }
       ],
@@ -7751,6 +10168,9 @@
         "抓",
         {
           "1": {
+            "4": 1
+          },
+          "2": {
             "4": 1
           }
         }
@@ -7760,6 +10180,9 @@
         {
           "1": {
             "4": 1
+          },
+          "2": {
+            "4": 1
           }
         }
       ],
@@ -7767,6 +10190,9 @@
         "控",
         {
           "1": {
+            "4": 1
+          },
+          "2": {
             "4": 1
           }
         }
@@ -7776,6 +10202,9 @@
         {
           "1": {
             "4": 1
+          },
+          "2": {
+            "4": 1
           }
         }
       ],
@@ -7783,6 +10212,16 @@
         "但是",
         {
           "1": {
+            "4": 1,
+            "7": 1,
+            "16": 1,
+            "20": 1,
+            "33": 1,
+            "52": 1,
+            "56": 1,
+            "60": 1
+          },
+          "2": {
             "4": 1,
             "7": 1,
             "16": 1,
@@ -7801,7 +10240,7 @@
             "9": 1,
             "65": 1
           },
-          "3": {
+          "5": {
             "27": 1,
             "65": 1
           }
@@ -7817,6 +10256,10 @@
           "1": {
             "4": 1,
             "23": 1
+          },
+          "2": {
+            "4": 1,
+            "23": 1
           }
         }
       ],
@@ -7828,14 +10271,17 @@
           },
           "1": {
             "54": 1
+          },
+          "2": {
+            "54": 1
           }
         }
       ],
       [
-        "ultra",
+        "us",
         {
-          "1": {
-            "14": 1
+          "4": {
+            "19": 1
           }
         }
       ],
@@ -7845,6 +10291,21 @@
           "1": {
             "4": 1,
             "45": 1
+          },
+          "2": {
+            "4": 1,
+            "45": 1
+          }
+        }
+      ],
+      [
+        "ultra",
+        {
+          "1": {
+            "14": 1
+          },
+          "2": {
+            "14": 1
           }
         }
       ],
@@ -7866,6 +10327,14 @@
             "29": 1,
             "41": 1,
             "44": 1
+          },
+          "2": {
+            "4": 1,
+            "14": 1,
+            "18": 1,
+            "29": 1,
+            "41": 1,
+            "44": 1
           }
         }
       ],
@@ -7877,7 +10346,12 @@
             "12": 1,
             "43": 1
           },
-          "3": {
+          "2": {
+            "4": 1,
+            "12": 1,
+            "43": 1
+          },
+          "5": {
             "4": 1,
             "12": 1,
             "43": 1
@@ -7888,6 +10362,9 @@
         "還可以",
         {
           "1": {
+            "35": 1
+          },
+          "2": {
             "35": 1
           }
         }
@@ -7901,6 +10378,13 @@
             "49": 1,
             "50": 1,
             "64": 1
+          },
+          "2": {
+            "32": 1,
+            "48": 1,
+            "49": 1,
+            "50": 1,
+            "64": 1
           }
         }
       ],
@@ -7909,6 +10393,9 @@
         {
           "1": {
             "29": 1
+          },
+          "2": {
+            "29": 1
           }
         }
       ],
@@ -7916,6 +10403,12 @@
         "還",
         {
           "1": {
+            "18": 1,
+            "25": 1,
+            "36": 1,
+            "50": 1
+          },
+          "2": {
             "18": 1,
             "25": 1,
             "36": 1,
@@ -7929,6 +10422,10 @@
           "1": {
             "12": 1,
             "14": 1
+          },
+          "2": {
+            "12": 1,
+            "14": 1
           }
         }
       ],
@@ -7936,6 +10433,12 @@
         "還有",
         {
           "1": {
+            "4": 1,
+            "11": 1,
+            "16": 1,
+            "31": 1
+          },
+          "2": {
             "4": 1,
             "11": 1,
             "16": 1,
@@ -7948,6 +10451,9 @@
         {
           "1": {
             "0": 1
+          },
+          "2": {
+            "0": 1
           }
         }
       ],
@@ -7955,6 +10461,11 @@
         "面板",
         {
           "1": {
+            "4": 1,
+            "30": 1,
+            "32": 1
+          },
+          "2": {
             "4": 1,
             "30": 1,
             "32": 1
@@ -7967,6 +10478,10 @@
           "1": {
             "3": 1,
             "41": 1
+          },
+          "2": {
+            "3": 1,
+            "41": 1
           }
         }
       ],
@@ -7974,6 +10489,10 @@
         "要注意",
         {
           "1": {
+            "15": 1,
+            "41": 1
+          },
+          "2": {
             "15": 1,
             "41": 1
           }
@@ -7991,6 +10510,16 @@
             "58": 1,
             "62": 1,
             "64": 1
+          },
+          "2": {
+            "3": 1,
+            "19": 1,
+            "32": 1,
+            "41": 1,
+            "54": 1,
+            "58": 1,
+            "62": 1,
+            "64": 1
           }
         }
       ],
@@ -7998,6 +10527,9 @@
         "也要",
         {
           "1": {
+            "61": 1
+          },
+          "2": {
             "61": 1
           }
         }
@@ -8007,6 +10539,9 @@
         {
           "1": {
             "29": 1
+          },
+          "2": {
+            "29": 1
           }
         }
       ],
@@ -8014,6 +10549,9 @@
         "也有",
         {
           "1": {
+            "20": 1
+          },
+          "2": {
             "20": 1
           }
         }
@@ -8024,6 +10562,10 @@
           "1": {
             "10": 1,
             "23": 1
+          },
+          "2": {
+            "10": 1,
+            "23": 1
           }
         }
       ],
@@ -8031,6 +10573,10 @@
         "也可以",
         {
           "1": {
+            "8": 1,
+            "18": 1
+          },
+          "2": {
             "8": 1,
             "18": 1
           }
@@ -8049,6 +10595,17 @@
             "28": 1,
             "49": 1,
             "56": 1
+          },
+          "2": {
+            "3": 1,
+            "5": 1,
+            "10": 1,
+            "11": 1,
+            "12": 1,
+            "19": 1,
+            "28": 1,
+            "49": 1,
+            "56": 1
           }
         }
       ],
@@ -8056,6 +10613,9 @@
         "怎麼",
         {
           "1": {
+            "3": 1
+          },
+          "2": {
             "3": 1
           }
         }
@@ -8067,6 +10627,11 @@
             "3": 1,
             "28": 1,
             "37": 1
+          },
+          "2": {
+            "3": 1,
+            "28": 1,
+            "37": 1
           }
         }
       ],
@@ -8074,6 +10639,9 @@
         "對流",
         {
           "1": {
+            "31": 1
+          },
+          "2": {
             "31": 1
           }
         }
@@ -8084,6 +10652,10 @@
           "1": {
             "23": 1,
             "24": 1
+          },
+          "2": {
+            "23": 1,
+            "24": 1
           }
         }
       ],
@@ -8091,6 +10663,9 @@
         "對手",
         {
           "1": {
+            "22": 1
+          },
+          "2": {
             "22": 1
           }
         }
@@ -8100,6 +10675,9 @@
         {
           "1": {
             "3": 1
+          },
+          "2": {
+            "3": 1
           }
         }
       ],
@@ -8107,6 +10685,9 @@
         "對",
         {
           "1": {
+            "3": 1
+          },
+          "2": {
             "3": 1
           }
         }
@@ -8117,6 +10698,10 @@
           "1": {
             "3": 1,
             "25": 1
+          },
+          "2": {
+            "3": 1,
+            "25": 1
           }
         }
       ],
@@ -8124,6 +10709,9 @@
         "很好",
         {
           "1": {
+            "62": 1
+          },
+          "2": {
             "62": 1
           }
         }
@@ -8133,6 +10721,9 @@
         {
           "1": {
             "42": 1
+          },
+          "2": {
+            "42": 1
           }
         }
       ],
@@ -8141,6 +10732,9 @@
         {
           "1": {
             "22": 1
+          },
+          "2": {
+            "22": 1
           }
         }
       ],
@@ -8148,6 +10742,10 @@
         "很多",
         {
           "1": {
+            "19": 1,
+            "60": 1
+          },
+          "2": {
             "19": 1,
             "60": 1
           }
@@ -8161,6 +10759,12 @@
             "19": 1,
             "25": 1,
             "34": 1
+          },
+          "2": {
+            "3": 1,
+            "19": 1,
+            "25": 1,
+            "34": 1
           }
         }
       ],
@@ -8168,6 +10772,9 @@
         "夢想",
         {
           "1": {
+            "3": 1
+          },
+          "2": {
             "3": 1
           }
         }
@@ -8183,6 +10790,15 @@
             "48": 1,
             "58": 1,
             "65": 1
+          },
+          "2": {
+            "3": 1,
+            "25": 1,
+            "43": 1,
+            "45": 1,
+            "48": 1,
+            "58": 1,
+            "65": 1
           }
         }
       ],
@@ -8190,6 +10806,9 @@
         "躺著",
         {
           "1": {
+            "3": 1
+          },
+          "2": {
             "3": 1
           }
         }
@@ -8199,6 +10818,9 @@
         {
           "1": {
             "34": 1
+          },
+          "2": {
+            "34": 1
           }
         }
       ],
@@ -8207,6 +10829,9 @@
         {
           "1": {
             "3": 1
+          },
+          "2": {
+            "3": 1
           }
         }
       ],
@@ -8214,6 +10839,9 @@
         "相當",
         {
           "1": {
+            "0": 1
+          },
+          "2": {
             "0": 1
           }
         }
@@ -8224,6 +10852,10 @@
           "1": {
             "55": 1,
             "62": 1
+          },
+          "2": {
+            "55": 1,
+            "62": 1
           }
         }
       ],
@@ -8231,6 +10863,9 @@
         "一邊",
         {
           "1": {
+            "52": 1
+          },
+          "2": {
             "52": 1
           }
         }
@@ -8240,6 +10875,9 @@
         {
           "1": {
             "46": 1
+          },
+          "2": {
+            "46": 1
           }
         }
       ],
@@ -8248,6 +10886,9 @@
         {
           "1": {
             "30": 1
+          },
+          "2": {
+            "30": 1
           }
         }
       ],
@@ -8255,6 +10896,11 @@
         "一下",
         {
           "1": {
+            "15": 1,
+            "41": 1,
+            "56": 1
+          },
+          "2": {
             "15": 1,
             "41": 1,
             "56": 1
@@ -8267,6 +10913,10 @@
           "1": {
             "13": 1,
             "49": 1
+          },
+          "2": {
+            "13": 1,
+            "49": 1
           }
         }
       ],
@@ -8274,6 +10924,9 @@
         "一些",
         {
           "1": {
+            "12": 1
+          },
+          "2": {
             "12": 1
           }
         }
@@ -8283,6 +10936,9 @@
         {
           "1": {
             "12": 1
+          },
+          "2": {
+            "12": 1
           }
         }
       ],
@@ -8290,6 +10946,9 @@
         "一定",
         {
           "1": {
+            "5": 1
+          },
+          "2": {
             "5": 1
           }
         }
@@ -8299,6 +10958,9 @@
         {
           "1": {
             "5": 1
+          },
+          "2": {
+            "5": 1
           }
         }
       ],
@@ -8306,6 +10968,9 @@
         "一個",
         {
           "1": {
+            "5": 1
+          },
+          "2": {
             "5": 1
           }
         }
@@ -8316,6 +10981,10 @@
           "1": {
             "2": 1,
             "18": 1
+          },
+          "2": {
+            "2": 1,
+            "18": 1
           }
         }
       ],
@@ -8323,6 +10992,9 @@
         "一批",
         {
           "1": {
+            "2": 1
+          },
+          "2": {
             "2": 1
           }
         }
@@ -8332,6 +11004,9 @@
         {
           "1": {
             "1": 1
+          },
+          "2": {
+            "1": 1
           }
         }
       ],
@@ -8339,6 +11014,9 @@
         "那篇",
         {
           "1": {
+            "61": 1
+          },
+          "2": {
             "61": 1
           }
         }
@@ -8348,6 +11026,9 @@
         {
           "1": {
             "51": 1
+          },
+          "2": {
+            "51": 1
           }
         }
       ],
@@ -8355,6 +11036,9 @@
         "那",
         {
           "1": {
+            "2": 1
+          },
+          "2": {
             "2": 1
           }
         }
@@ -8364,6 +11048,9 @@
         {
           "1": {
             "2": 1
+          },
+          "2": {
+            "2": 1
           }
         }
       ],
@@ -8371,6 +11058,9 @@
         "蚊",
         {
           "1": {
+            "2": 1
+          },
+          "2": {
             "2": 1
           }
         }
@@ -8380,13 +11070,16 @@
         {
           "1": {
             "2": 1
+          },
+          "2": {
+            "2": 1
           }
         }
       ],
       [
         "椅",
         {
-          "3": {
+          "5": {
             "1": 1,
             "3": 1
           }
@@ -8397,6 +11090,9 @@
         {
           "1": {
             "1": 1
+          },
+          "2": {
+            "1": 1
           }
         }
       ],
@@ -8404,6 +11100,10 @@
         "電鍋",
         {
           "1": {
+            "35": 1,
+            "39": 1
+          },
+          "2": {
             "35": 1,
             "39": 1
           }
@@ -8418,7 +11118,10 @@
           "1": {
             "45": 1
           },
-          "3": {
+          "2": {
+            "45": 1
+          },
+          "5": {
             "31": 1
           }
         }
@@ -8433,7 +11136,10 @@
           "1": {
             "24": 1
           },
-          "3": {
+          "2": {
+            "24": 1
+          },
+          "5": {
             "24": 1
           }
         }
@@ -8445,7 +11151,11 @@
             "17": 1,
             "22": 1
           },
-          "3": {
+          "2": {
+            "17": 1,
+            "22": 1
+          },
+          "5": {
             "5": 1,
             "10": 1,
             "11": 1,
@@ -8461,6 +11171,9 @@
         {
           "1": {
             "5": 1
+          },
+          "2": {
+            "5": 1
           }
         }
       ],
@@ -8472,6 +11185,10 @@
             "4": 1
           },
           "2": {
+            "3": 1,
+            "4": 1
+          },
+          "3": {
             "1": 1,
             "3": 1,
             "4": 1,
@@ -8486,7 +11203,7 @@
             "54": 1,
             "55": 1
           },
-          "3": {
+          "5": {
             "1": 1,
             "3": 1,
             "4": 1,
@@ -8511,7 +11228,7 @@
             "2": 1,
             "7": 1
           },
-          "3": {
+          "5": {
             "0": 1,
             "2": 1,
             "7": 1
@@ -8523,6 +11240,9 @@
         {
           "1": {
             "1": 1
+          },
+          "2": {
+            "1": 1
           }
         }
       ],
@@ -8530,6 +11250,9 @@
         "去年",
         {
           "1": {
+            "33": 1
+          },
+          "2": {
             "33": 1
           }
         }
@@ -8540,6 +11263,10 @@
           "1": {
             "1": 1,
             "14": 1
+          },
+          "2": {
+            "1": 1,
+            "14": 1
           }
         }
       ],
@@ -8547,6 +11274,9 @@
         "辦公室",
         {
           "1": {
+            "1": 1
+          },
+          "2": {
             "1": 1
           }
         }
@@ -8556,6 +11286,9 @@
         {
           "1": {
             "52": 1
+          },
+          "2": {
+            "52": 1
           }
         }
       ],
@@ -8564,6 +11297,9 @@
         {
           "1": {
             "18": 1
+          },
+          "2": {
+            "18": 1
           }
         }
       ],
@@ -8571,6 +11307,11 @@
         "把",
         {
           "1": {
+            "1": 1,
+            "22": 1,
+            "55": 1
+          },
+          "2": {
             "1": 1,
             "22": 1,
             "55": 1
@@ -8583,6 +11324,10 @@
           "1": {
             "32": 1,
             "46": 1
+          },
+          "2": {
+            "32": 1,
+            "46": 1
           }
         }
       ],
@@ -8590,6 +11335,19 @@
         "就",
         {
           "1": {
+            "1": 1,
+            "5": 1,
+            "15": 1,
+            "19": 1,
+            "23": 1,
+            "24": 1,
+            "48": 1,
+            "52": 1,
+            "54": 1,
+            "55": 1,
+            "57": 1
+          },
+          "2": {
             "1": 1,
             "5": 1,
             "15": 1,
@@ -8622,6 +11380,22 @@
             "50": 1,
             "52": 1,
             "62": 1
+          },
+          "2": {
+            "1": 1,
+            "12": 1,
+            "13": 1,
+            "18": 1,
+            "30": 1,
+            "32": 1,
+            "35": 1,
+            "45": 1,
+            "46": 1,
+            "47": 1,
+            "48": 1,
+            "50": 1,
+            "52": 1,
+            "62": 1
           }
         }
       ],
@@ -8629,6 +11403,11 @@
         "的是",
         {
           "1": {
+            "2": 1,
+            "33": 1,
+            "42": 1
+          },
+          "2": {
             "2": 1,
             "33": 1,
             "42": 1
@@ -8687,6 +11466,56 @@
             "63": 1,
             "64": 1,
             "65": 1
+          },
+          "2": {
+            "1": 1,
+            "2": 1,
+            "3": 1,
+            "4": 1,
+            "5": 1,
+            "6": 1,
+            "8": 1,
+            "9": 1,
+            "10": 1,
+            "12": 1,
+            "13": 1,
+            "16": 1,
+            "17": 1,
+            "18": 1,
+            "19": 1,
+            "20": 1,
+            "23": 1,
+            "26": 1,
+            "29": 1,
+            "30": 1,
+            "31": 1,
+            "32": 1,
+            "33": 1,
+            "34": 1,
+            "35": 1,
+            "40": 1,
+            "41": 1,
+            "43": 1,
+            "44": 1,
+            "45": 1,
+            "46": 1,
+            "47": 1,
+            "48": 1,
+            "50": 1,
+            "51": 1,
+            "52": 1,
+            "53": 1,
+            "54": 1,
+            "55": 1,
+            "56": 1,
+            "57": 1,
+            "58": 1,
+            "59": 1,
+            "60": 1,
+            "62": 1,
+            "63": 1,
+            "64": 1,
+            "65": 1
           }
         }
       ],
@@ -8694,6 +11523,10 @@
         "如果有",
         {
           "1": {
+            "46": 1,
+            "48": 1
+          },
+          "2": {
             "46": 1,
             "48": 1
           }
@@ -8706,6 +11539,11 @@
             "1": 1,
             "47": 1,
             "52": 1
+          },
+          "2": {
+            "1": 1,
+            "47": 1,
+            "52": 1
           }
         }
       ],
@@ -8713,6 +11551,10 @@
         "叫",
         {
           "1": {
+            "1": 1,
+            "60": 1
+          },
+          "2": {
             "1": 1,
             "60": 1
           }
@@ -8723,6 +11565,9 @@
         {
           "1": {
             "1": 1
+          },
+          "2": {
+            "1": 1
           }
         }
       ],
@@ -8730,6 +11575,9 @@
         "等等",
         {
           "1": {
+            "12": 1
+          },
+          "2": {
             "12": 1
           }
         }
@@ -8740,6 +11588,10 @@
           "1": {
             "1": 1,
             "43": 1
+          },
+          "2": {
+            "1": 1,
+            "43": 1
           }
         }
       ],
@@ -8748,6 +11600,9 @@
         {
           "1": {
             "3": 1
+          },
+          "2": {
+            "3": 1
           }
         }
       ],
@@ -8755,6 +11610,28 @@
         "買",
         {
           "1": {
+            "1": 1,
+            "3": 1,
+            "5": 1,
+            "15": 1,
+            "16": 1,
+            "23": 1,
+            "24": 1,
+            "28": 1,
+            "29": 1,
+            "32": 1,
+            "35": 1,
+            "38": 1,
+            "41": 1,
+            "42": 1,
+            "44": 1,
+            "47": 1,
+            "50": 1,
+            "55": 1,
+            "56": 1,
+            "62": 1
+          },
+          "2": {
             "1": 1,
             "3": 1,
             "5": 1,
@@ -8784,6 +11661,10 @@
           "1": {
             "1": 1,
             "12": 1
+          },
+          "2": {
+            "1": 1,
+            "12": 1
           }
         }
       ],
@@ -8791,6 +11672,9 @@
         "先",
         {
           "1": {
+            "1": 1
+          },
+          "2": {
             "1": 1
           }
         }
@@ -8800,6 +11684,9 @@
         {
           "1": {
             "1": 1
+          },
+          "2": {
+            "1": 1
           }
         }
       ],
@@ -8807,6 +11694,9 @@
         "備",
         {
           "1": {
+            "1": 1
+          },
+          "2": {
             "1": 1
           }
         }
@@ -8816,6 +11706,9 @@
         {
           "1": {
             "56": 1
+          },
+          "2": {
+            "56": 1
           }
         }
       ],
@@ -8823,6 +11716,9 @@
         "我是",
         {
           "1": {
+            "31": 1
+          },
+          "2": {
             "31": 1
           }
         }
@@ -8832,6 +11728,9 @@
         {
           "1": {
             "29": 1
+          },
+          "2": {
+            "29": 1
           }
         }
       ],
@@ -8840,6 +11739,9 @@
         {
           "1": {
             "5": 1
+          },
+          "2": {
+            "5": 1
           }
         }
       ],
@@ -8847,6 +11749,19 @@
         "我",
         {
           "1": {
+            "1": 1,
+            "2": 1,
+            "3": 1,
+            "4": 1,
+            "6": 1,
+            "14": 1,
+            "16": 1,
+            "22": 1,
+            "42": 1,
+            "44": 1,
+            "60": 1
+          },
+          "2": {
             "1": 1,
             "2": 1,
             "3": 1,
@@ -8869,6 +11784,9 @@
           },
           "1": {
             "63": 1
+          },
+          "2": {
+            "63": 1
           }
         }
       ],
@@ -8887,6 +11805,22 @@
             "34": 1,
             "44": 1,
             "50": 1
+          },
+          "2": {
+            "34": 1,
+            "44": 1,
+            "50": 1
+          },
+          "4": {
+            "6": 1,
+            "19": 1,
+            "26": 1,
+            "34": 1,
+            "50": 1,
+            "51": 1,
+            "52": 1,
+            "53": 1,
+            "64": 1
           }
         }
       ],
@@ -8894,6 +11828,9 @@
         "arc",
         {
           "1": {
+            "17": 1
+          },
+          "2": {
             "17": 1
           }
         }
@@ -8910,6 +11847,9 @@
         "android",
         {
           "1": {
+            "11": 1
+          },
+          "2": {
             "11": 1
           }
         }
@@ -8929,6 +11869,10 @@
             "5": 1
           },
           "1": {
+            "5": 1,
+            "22": 1
+          },
+          "2": {
             "5": 1,
             "22": 1
           }
@@ -8989,6 +11933,19 @@
             "40": 1,
             "50": 1,
             "60": 1
+          },
+          "2": {
+            "0": 1,
+            "4": 1,
+            "5": 1,
+            "7": 1,
+            "19": 1,
+            "28": 1,
+            "31": 1,
+            "32": 1,
+            "40": 1,
+            "50": 1,
+            "60": 1
           }
         }
       ],
@@ -8997,6 +11954,9 @@
         {
           "1": {
             "49": 1
+          },
+          "2": {
+            "49": 1
           }
         }
       ],
@@ -9004,6 +11964,14 @@
         "小",
         {
           "1": {
+            "0": 1,
+            "29": 1,
+            "31": 1,
+            "37": 1,
+            "39": 1,
+            "57": 1
+          },
+          "2": {
             "0": 1,
             "29": 1,
             "31": 1,
@@ -9019,6 +11987,10 @@
           "1": {
             "0": 1,
             "31": 1
+          },
+          "2": {
+            "0": 1,
+            "31": 1
           }
         }
       ],
@@ -9030,7 +12002,7 @@
             "2": 1,
             "7": 1
           },
-          "3": {
+          "5": {
             "0": 1,
             "2": 1,
             "7": 1

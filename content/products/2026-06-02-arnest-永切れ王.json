@@ -3,10 +3,18 @@
   "status": "published",
   "name": "Arnest 永切れ王",
   "price_text": "￥3800",
+  "price": {
+    "amount": 3800,
+    "currency": "JPY",
+    "unit": "each",
+    "label": null
+  },
+  "summary": "刀刃開鋸齒型的三德，我覺得切起來超級順手的",
   "description": "刀刃開鋸齒型的三德，我覺得切起來超級順手的",
   "purchase_url": "https://amzn.asia/d/isJwOlO",
   "image_url": "https://m.media-amazon.com/images/I/61fci0cf+zL._AC_SL1500_.jpg",
-  "category": "廚房",
+  "channel_id": "amazonjp",
+  "category_id": "kitchen",
   "tags": [
     "廚房",
     "刀具"

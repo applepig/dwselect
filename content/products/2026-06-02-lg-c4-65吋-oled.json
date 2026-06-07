@@ -3,10 +3,18 @@
   "status": "published",
   "name": "LG C4 65吋 OLED",
   "price_text": "低於60000",
+  "price": {
+    "amount": null,
+    "currency": null,
+    "unit": null,
+    "label": "低於60000"
+  },
+  "summary": "OLED面板的話還是LG比較便宜，不然就是要賭人品買台牌或匪牌",
   "description": "OLED面板的話還是LG比較便宜，不然就是要賭人品買台牌或匪牌",
   "purchase_url": "https://www.3c3c.com.tw/Shop/itemDetail.aspx?mNo1=OLED65C4PTA&m=6&p=60",
   "image_url": "https://www.lg.com/content/dam/channel/wcms/tw/images/oled-tv-smart-screen/oled65c4pta_att_eatt_tw_c/OLED65C4PTA_ATT_EATT_TW_C-450x450-new.jpg",
-  "category": "影音",
+  "channel_id": "other",
+  "category_id": "av",
   "tags": [
     "電視",
     "OLED",

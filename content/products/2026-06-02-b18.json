@@ -3,10 +3,18 @@
   "status": "published",
   "name": "B18",
   "price_text": "あるよー",
+  "price": {
+    "amount": null,
+    "currency": null,
+    "unit": null,
+    "label": "あるよー"
+  },
+  "summary": "光華萬事屋，店面現在擺非常多鍵盤，店內沒有擺的東西也可以問",
   "description": "光華萬事屋，店面現在擺非常多鍵盤，店內沒有擺的東西也可以問",
   "purchase_url": "https://www.facebook.com/B18TW",
   "image_url": "https://scontent.ftpe8-4.fna.fbcdn.net/v/t39.30808-6/308492852_593092195937302_5331278784983725989_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=cw2LJYXN_8cQ7kNvgE6_sJ1&_nc_zt=23&_nc_ht=scontent.ftpe8-4.fna&_nc_gid=AiNbn07n_lOMyek5dW-Y2UT&oh=00_AYA0w2K741c1J98h05oOvOTs1gu4-ho3Qa6fculv6tRTqQ&oe=67637CD4",
-  "category": "電腦",
+  "channel_id": "other",
+  "category_id": "computer",
   "tags": [
     "電腦",
     "鍵盤"

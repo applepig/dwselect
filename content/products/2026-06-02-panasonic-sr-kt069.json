@@ -3,10 +3,18 @@
   "status": "published",
   "name": "Panasonic SR-KT069",
   "price_text": "5000",
+  "price": {
+    "amount": 5000,
+    "currency": "TWD",
+    "unit": "each",
+    "label": null
+  },
+  "summary": "四人份小電鍋唯一推薦",
   "description": "四人份小電鍋唯一推薦",
   "purchase_url": "https://24h.pchome.com.tw/prod/DMBI0H-A900AOX6V",
   "image_url": "https://img.pchome.com.tw/cs/items/DMBI0HA900AOX6V/000001_1687162992.jpg",
-  "category": "廚房",
+  "channel_id": "pchome",
+  "category_id": "kitchen",
   "tags": [
     "廚房",
     "網路設備",

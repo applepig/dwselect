@@ -3,10 +3,18 @@
   "status": "published",
   "name": "Kioxia 1TB隨身碟",
   "price_text": "2490",
+  "price": {
+    "amount": 2490,
+    "currency": "TWD",
+    "unit": "each",
+    "label": null
+  },
+  "summary": "故Toshiba，這顆沒搜尋到什麼災情，價格也便宜，大概可以買吧",
   "description": "故Toshiba，這顆沒搜尋到什麼災情，價格也便宜，大概可以買吧",
   "purchase_url": "https://24h.pchome.com.tw/prod/DRAA5D-A900FDQCR",
   "image_url": "https://img.pchome.com.tw/cs/items/DRAA5DA900FDQCR/000001_1660124876.jpg",
-  "category": "電腦",
+  "channel_id": "pchome",
+  "category_id": "computer",
   "tags": [
     "電腦",
     "隨身碟",

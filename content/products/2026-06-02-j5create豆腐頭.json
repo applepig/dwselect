@@ -3,10 +3,18 @@
   "status": "published",
   "name": "j5create豆腐頭",
   "price_text": "199",
+  "price": {
+    "amount": 199,
+    "currency": "TWD",
+    "unit": "each",
+    "label": null
+  },
+  "summary": "30W 1C1A，這顆特價會亂賣到199",
   "description": "30W 1C1A，這顆特價會亂賣到199",
   "purchase_url": "https://24h.pchome.com.tw/prod/DCAX3N-A900AD07K",
   "image_url": "https://img.pchome.com.tw/cs/items/DCAX3NA900AD07K/000001_1680747068.jpg",
-  "category": "3C",
+  "channel_id": "pchome",
+  "category_id": "three-c",
   "tags": [
     "充電器",
     "3C",

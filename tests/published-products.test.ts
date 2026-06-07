@@ -2,22 +2,35 @@ import { describe, expect, it } from 'vitest'
 import { readFileSync, readdirSync } from 'node:fs'
 
 import {
+  type CompactAppState,
+  type TaxonomyDefinitions,
   getCatalogProductId,
   getCatalogSearchProducts,
   getCatalogView,
+  getCompactAppView,
   getGroupedPublishedProducts,
+  getProductDetail,
   getPublishedProducts,
 } from '../app/utils/published-products'
+import type { LinkDefinition } from '../app/utils/product-schema'
 import type { Product } from '../app/utils/product-schema'
 
 const products_dir_url = new URL('../content/products/', import.meta.url)
 
 const base_product = {
   price_text: 'NT$ 1,990',
+  price: {
+    amount: 1990,
+    currency: 'TWD',
+    unit: 'each',
+    label: null,
+  },
+  summary: '推薦短評',
   description: '推薦文',
   purchase_url: 'https://example.com/product',
   image_url: 'https://example.com/product.jpg',
-  category: '未分類',
+  channel_id: 'other',
+  category_id: 'home',
   tags: ['tag-a'],
   reference_url: null,
   created_at: '2026-06-02T00:00:00+08:00',
@@ -26,6 +39,37 @@ const base_product = {
   unpublished_at: null,
   archived_at: null,
 } satisfies Omit<Product, 'id' | 'status' | 'name'>
+
+const test_taxonomies: TaxonomyDefinitions = {
+  categories: [
+    { id: 'home', label: '居家', short_label: '居家', sort_order: 10 },
+    { id: 'kitchen', label: '廚房', short_label: '廚房', sort_order: 20 },
+    { id: 'computer', label: '電腦', short_label: '電腦', sort_order: 30 },
+    { id: 'three-c', label: '3C', short_label: '3C', sort_order: 40 },
+    { id: 'av', label: '影音', short_label: '影音', sort_order: 50 },
+    { id: 'food', label: '食材', short_label: '食材', sort_order: 60 },
+    { id: 'other', label: '其他', short_label: '其他', sort_order: 999 },
+  ],
+  channels: [
+    { id: 'pchome', label: 'PChome', tint: 'blue', host_patterns: ['24h.pchome.com.tw'], sort_order: 10 },
+    { id: 'momo', label: 'momo', tint: 'pink', host_patterns: ['www.momoshop.com.tw'], sort_order: 20 },
+    { id: 'amazonjp', label: 'Amazon JP', tint: 'amber', host_patterns: ['www.amazon.co.jp', 'amzn.asia'], sort_order: 30 },
+    { id: 'amazonus', label: 'Amazon US', tint: 'amber', host_patterns: ['www.amazon.com'], sort_order: 40 },
+    { id: 'costco', label: 'Costco', tint: 'indigo', host_patterns: ['www.costco.com.tw'], sort_order: 50 },
+    { id: 'other', label: '其他通路', tint: 'neutral', host_patterns: [], sort_order: 999 },
+  ],
+}
+
+const test_links: LinkDefinition[] = [
+  {
+    id: 'applepig-home',
+    title: 'applepig.idv.tw',
+    subtitle: 'DW 的主站',
+    url: 'https://applepig.idv.tw',
+    icon: 'i-lucide-link',
+    sort_order: 10,
+  },
+]
 
 function makeProduct(product: Partial<Product> & Pick<Product, 'id' | 'status' | 'name'>): Product {
   return {
@@ -65,22 +109,28 @@ describe('published products mapping', () => {
         price_text: 'NT$ 2,490',
         purchase_url: 'https://example.com/buy',
         image_url: 'https://example.com/image.jpg',
-        category: '鍵盤',
+        category_id: 'computer',
+        channel_id: 'pchome',
+        summary: '卡片短評',
       }),
     ]
 
-    const published_products = getPublishedProducts(products)
+    const published_products = getPublishedProducts(products, test_taxonomies)
 
     expect(published_products).toEqual([
       {
         id: 'published-product',
-        category: '鍵盤',
+        category: '電腦',
+        category_id: 'computer',
+        channel: 'PChome',
+        channel_id: 'pchome',
         description: '推薦文',
         image: 'https://example.com/image.jpg',
         name: '已上架商品',
         price: 'NT$ 2,490',
         published_at: '2026-06-02T00:00:00+08:00',
         purchase_link: 'https://example.com/buy',
+        summary: '卡片短評',
         tags: ['tag-a'],
       },
     ])
@@ -97,41 +147,41 @@ describe('published products mapping', () => {
         id: 'mouse-new',
         status: 'published',
         name: '滑鼠新品',
-        category: '滑鼠',
+        category_id: 'home',
         published_at: '2026-06-04T00:00:00+08:00',
       }),
       makeProduct({
         id: 'keyboard-old',
         status: 'published',
         name: '鍵盤舊品',
-        category: '鍵盤',
+        category_id: 'computer',
         published_at: '2026-06-01T00:00:00+08:00',
       }),
       makeProduct({
         id: 'keyboard-new',
         status: 'published',
         name: '鍵盤新品',
-        category: '鍵盤',
+        category_id: 'computer',
         published_at: '2026-06-03T00:00:00+08:00',
       }),
       makeProduct({
         id: 'keyboard-draft',
         status: 'draft',
         name: '鍵盤草稿',
-        category: '鍵盤',
+        category_id: 'computer',
         published_at: '2026-06-05T00:00:00+08:00',
       }),
     ]
 
-    const grouped_products = getGroupedPublishedProducts(products)
+    const grouped_products = getGroupedPublishedProducts(products, test_taxonomies)
 
     expect(grouped_products).toEqual([
       {
-        category: '滑鼠',
+        category: '居家',
         products: [expect.objectContaining({ id: 'mouse-new' })],
       },
       {
-        category: '鍵盤',
+        category: '電腦',
         products: [
           expect.objectContaining({ id: 'keyboard-new' }),
           expect.objectContaining({ id: 'keyboard-old' }),
@@ -157,29 +207,29 @@ describe('published products mapping', () => {
 describe('catalog view state', () => {
   it('should expose published-only cards, category counts and sort options for UI consumption', () => {
     const products = [
-      makeProduct({ id: 'keyboard', status: 'published', name: '機械鍵盤', category: '鍵盤', tags: ['typing'] }),
-      makeProduct({ id: 'mouse', status: 'published', name: '無線滑鼠', category: '滑鼠', tags: ['wireless'] }),
-      makeProduct({ id: 'draft-keyboard', status: 'draft', name: '草稿鍵盤', category: '鍵盤', tags: ['draft'] }),
+      makeProduct({ id: 'keyboard', status: 'published', name: '機械鍵盤', category_id: 'computer', tags: ['typing'] }),
+      makeProduct({ id: 'mouse', status: 'published', name: '無線滑鼠', category_id: 'home', tags: ['wireless'] }),
+      makeProduct({ id: 'draft-keyboard', status: 'draft', name: '草稿鍵盤', category_id: 'computer', tags: ['draft'] }),
     ]
 
-    const catalog_view = getCatalogView(products)
+    const catalog_view = getCatalogView(products, {}, test_taxonomies)
 
     expect(catalog_view.counts).toEqual({ published: 2, filtered: 2 })
     expect(catalog_view.products.map((product) => product.id)).toEqual(['mouse', 'keyboard'])
     expect(catalog_view.sections).toEqual([
       {
-        category: '滑鼠',
+        category: '居家',
         products: [expect.objectContaining({ id: 'mouse' })],
       },
       {
-        category: '鍵盤',
+        category: '電腦',
         products: [expect.objectContaining({ id: 'keyboard' })],
       },
     ])
     expect(catalog_view.category_options).toEqual([
       { label: '全部', value: '全部', count: 2, active: true },
-      { label: '滑鼠', value: '滑鼠', count: 1, active: false },
-      { label: '鍵盤', value: '鍵盤', count: 1, active: false },
+      { label: '居家', value: 'home', count: 1, active: false },
+      { label: '電腦', value: 'computer', count: 1, active: false },
     ])
     expect(catalog_view.sort_options).toEqual([
       { label: '預設排序', value: 'default', active: true },
@@ -191,37 +241,37 @@ describe('catalog view state', () => {
 
   it('should use runtime-independent ordering for CJK categories during hydration', () => {
     const products = [
-      makeProduct({ id: 'food', status: 'published', name: '食材商品', category: '食材' }),
-      makeProduct({ id: 'kitchen', status: 'published', name: '廚房商品', category: '廚房' }),
-      makeProduct({ id: 'home', status: 'published', name: '居家商品', category: '居家' }),
+      makeProduct({ id: 'food', status: 'published', name: '食材商品', category_id: 'food' }),
+      makeProduct({ id: 'kitchen', status: 'published', name: '廚房商品', category_id: 'kitchen' }),
+      makeProduct({ id: 'home', status: 'published', name: '居家商品', category_id: 'home' }),
     ]
 
-    const catalog_view = getCatalogView(products)
+    const catalog_view = getCatalogView(products, {}, test_taxonomies)
 
-    expect(catalog_view.category_options.map((option) => option.value)).toEqual(['全部', '居家', '廚房', '食材'])
+    expect(catalog_view.category_options.map((option) => option.label)).toEqual(['全部', '居家', '廚房', '食材'])
     expect(catalog_view.sections.map((section) => section.category)).toEqual(['居家', '廚房', '食材'])
     expect(catalog_view.products.map((product) => product.id)).toEqual(['home', 'kitchen', 'food'])
   })
 
   it('should filter by category without counting non-published products', () => {
     const products = [
-      makeProduct({ id: 'keyboard', status: 'published', name: '機械鍵盤', category: '鍵盤' }),
-      makeProduct({ id: 'mouse', status: 'published', name: '無線滑鼠', category: '滑鼠' }),
-      makeProduct({ id: 'draft-mouse', status: 'draft', name: '草稿滑鼠', category: '滑鼠' }),
+      makeProduct({ id: 'keyboard', status: 'published', name: '機械鍵盤', category_id: 'computer' }),
+      makeProduct({ id: 'mouse', status: 'published', name: '無線滑鼠', category_id: 'home' }),
+      makeProduct({ id: 'draft-mouse', status: 'draft', name: '草稿滑鼠', category_id: 'home' }),
     ]
 
-    const catalog_view = getCatalogView(products, { category: '滑鼠' })
+    const catalog_view = getCatalogView(products, { category: 'home' }, test_taxonomies)
 
     expect(catalog_view.products.map((product) => product.id)).toEqual(['mouse'])
     expect(catalog_view.sections).toEqual([
       {
-        category: '滑鼠',
+        category: '居家',
         products: [expect.objectContaining({ id: 'mouse' })],
       },
     ])
-    expect(catalog_view.category_options.find((option) => option.value === '滑鼠')).toEqual({
-      label: '滑鼠',
-      value: '滑鼠',
+    expect(catalog_view.category_options.find((option) => option.value === 'home')).toEqual({
+      label: '居家',
+      value: 'home',
       count: 1,
       active: true,
     })
@@ -233,41 +283,41 @@ describe('catalog view state', () => {
         id: 'keyboard-old',
         status: 'published',
         name: 'B 鍵盤',
-        category: '鍵盤',
+        category_id: 'computer',
         published_at: '2026-06-01T00:00:00+08:00',
       }),
       makeProduct({
         id: 'mouse-new',
         status: 'published',
         name: 'C 滑鼠',
-        category: '滑鼠',
+        category_id: 'home',
         published_at: '2026-06-04T00:00:00+08:00',
       }),
       makeProduct({
         id: 'keyboard-new',
         status: 'published',
         name: 'A 鍵盤',
-        category: '鍵盤',
+        category_id: 'computer',
         published_at: '2026-06-03T00:00:00+08:00',
       }),
     ]
 
-    expect(getCatalogView(products, { sort: 'default' }).products.map((product) => product.id)).toEqual([
+    expect(getCatalogView(products, { sort: 'default' }, test_taxonomies).products.map((product) => product.id)).toEqual([
       'mouse-new',
       'keyboard-new',
       'keyboard-old',
     ])
-    expect(getCatalogView(products, { sort: 'latest' }).products.map((product) => product.id)).toEqual([
+    expect(getCatalogView(products, { sort: 'latest' }, test_taxonomies).products.map((product) => product.id)).toEqual([
       'mouse-new',
       'keyboard-new',
       'keyboard-old',
     ])
-    expect(getCatalogView(products, { sort: 'name' }).products.map((product) => product.id)).toEqual([
+    expect(getCatalogView(products, { sort: 'name' }, test_taxonomies).products.map((product) => product.id)).toEqual([
       'keyboard-new',
       'keyboard-old',
       'mouse-new',
     ])
-    expect(getCatalogView(products, { sort: 'category' }).products.map((product) => product.id)).toEqual([
+    expect(getCatalogView(products, { sort: 'category' }, test_taxonomies).products.map((product) => product.id)).toEqual([
       'mouse-new',
       'keyboard-new',
       'keyboard-old',
@@ -279,13 +329,13 @@ describe('catalog view state', () => {
       id: `product-${index + 1}`,
       status: 'published',
       name: `共同關鍵字商品 ${index + 1}`,
-      category: index === 12 ? '第十三分類' : '前段分類',
+      category_id: index === 12 ? 'food' : 'home',
       published_at: `2026-06-${String(index + 1).padStart(2, '0')}T00:00:00+08:00`,
     }))
     const complete_search_results = products.map((product) => ({ id: product.id }))
 
     const search_products = getCatalogSearchProducts(products, complete_search_results, '共同關鍵字')
-    const catalog_view = getCatalogView(search_products, { category: '第十三分類' })
+    const catalog_view = getCatalogView(search_products, { category: 'food' }, test_taxonomies)
 
     expect(search_products).toHaveLength(13)
     expect(catalog_view.products.map((product) => product.id)).toEqual(['product-13'])
@@ -293,14 +343,14 @@ describe('catalog view state', () => {
 
   it('should treat empty query as no query and keep the current category and sort state', () => {
     const products = [
-      makeProduct({ id: 'keyboard', status: 'published', name: '機械鍵盤', category: '鍵盤' }),
-      makeProduct({ id: 'mouse', status: 'published', name: '無線滑鼠', category: '滑鼠' }),
+      makeProduct({ id: 'keyboard', status: 'published', name: '機械鍵盤', category_id: 'computer' }),
+      makeProduct({ id: 'mouse', status: 'published', name: '無線滑鼠', category_id: 'home' }),
     ]
 
-    const catalog_view = getCatalogView(products, { query: '   ', category: '鍵盤', sort: 'name' })
+    const catalog_view = getCatalogView(products, { query: '   ', category: 'computer', sort: 'name' }, test_taxonomies)
 
     expect(catalog_view.query).toBe('')
-    expect(catalog_view.category).toBe('鍵盤')
+    expect(catalog_view.category).toBe('computer')
     expect(catalog_view.sort).toBe('name')
     expect(catalog_view.products.map((product) => product.id)).toEqual(['keyboard'])
     expect(catalog_view.empty_reason).toBeNull()
@@ -308,8 +358,8 @@ describe('catalog view state', () => {
 
   it('should return an empty-result reason when filters match no published product', () => {
     const products = [
-      makeProduct({ id: 'keyboard', status: 'published', name: '機械鍵盤', description: '打字用', category: '鍵盤' }),
-      makeProduct({ id: 'draft-monitor', status: 'draft', name: '4K 螢幕', description: '影像用', category: '螢幕' }),
+      makeProduct({ id: 'keyboard', status: 'published', name: '機械鍵盤', description: '打字用', category_id: 'computer' }),
+      makeProduct({ id: 'draft-monitor', status: 'draft', name: '4K 螢幕', description: '影像用', category_id: 'av' }),
     ]
 
     const catalog_view = getCatalogView(products, { query: '螢幕' })
@@ -330,6 +380,7 @@ describe('catalog view state', () => {
         status: 'published',
         name: long_name,
         description: long_description,
+        summary: long_description,
         tags: [long_tag],
         price_text: 'NT$ 123,456,789 起',
       }),
@@ -342,6 +393,7 @@ describe('catalog view state', () => {
         id: 'long-text-product',
         name: long_name,
         description: long_description,
+        summary: long_description,
         tags: [long_tag],
         price: 'NT$ 123,456,789 起',
       }),
@@ -359,6 +411,9 @@ describe('published product cutover content', () => {
       id: '2026-06-02-sharp-65吋-xled',
       name: 'Sharp 65吋 XLED',
       category: '影音',
+      category_id: 'av',
+      channel: 'PChome',
+      channel_id: 'pchome',
       tags: ['電視', '影音', 'PCHome'],
     }))
   })
@@ -371,5 +426,191 @@ describe('published product cutover content', () => {
     }))
     expect(getCatalogView(products, { query: '影音' }).products.length).toBeGreaterThan(0)
     expect(getCatalogView(products, { query: 'PCHome' }).products.length).toBeGreaterThan(0)
+  })
+})
+
+describe('compact app view state', () => {
+  function getCompactView(products: Product[], state: CompactAppState = {}) {
+    return getCompactAppView(products, state, test_taxonomies, test_links)
+  }
+
+  it('should expose four compact tabs and category chips for home filtering', () => {
+    const products = [
+      makeProduct({ id: 'home-product', status: 'published', name: '居家商品', category_id: 'home' }),
+      makeProduct({ id: 'computer-product', status: 'published', name: '電腦商品', category_id: 'computer' }),
+      makeProduct({ id: 'draft-product', status: 'draft', name: '草稿商品', category_id: 'home' }),
+    ]
+
+    const compact_view = getCompactView(products, { active_tab: 'home', home_category_id: 'computer' })
+
+    expect(compact_view.tabs).toEqual([
+      { id: 'home', label: '首頁', icon: 'i-lucide-house', active: true },
+      { id: 'guide', label: '指南', icon: 'i-lucide-tags', active: false },
+      { id: 'search', label: '搜尋', icon: 'i-lucide-search', active: false },
+      { id: 'links', label: '連結', icon: 'i-lucide-link', active: false },
+    ])
+    expect(compact_view.home.category_chips).toEqual([
+      { id: 'all', label: '全部', count: 2, active: false },
+      { id: 'home', label: '居家', count: 1, active: false },
+      { id: 'computer', label: '電腦', count: 1, active: true },
+    ])
+    expect(compact_view.home.products.map((product) => product.id)).toEqual(['computer-product'])
+  })
+
+  it('should AND-filter guide products by selected tags and expose clear state', () => {
+    const products = [
+      makeProduct({ id: 'keyboard', status: 'published', name: '鍵盤', category_id: 'computer', tags: ['工作', '輸入'] }),
+      makeProduct({ id: 'monitor', status: 'published', name: '螢幕', category_id: 'computer', tags: ['工作', '影音'] }),
+      makeProduct({ id: 'speaker', status: 'published', name: '喇叭', category_id: 'av', tags: ['影音'] }),
+    ]
+
+    const compact_view = getCompactView(products, { selected_tags: ['工作', '輸入'] })
+
+    expect(compact_view.guide.selected_tags).toEqual(['工作', '輸入'])
+    expect(compact_view.guide.products.map((product) => product.id)).toEqual(['keyboard'])
+    expect(compact_view.guide.can_clear_tags).toBe(true)
+    expect(compact_view.guide.empty_reason).toBeNull()
+  })
+
+  it('should expose top tags ordered by usage and label', () => {
+    const products = [
+      makeProduct({ id: 'one', status: 'published', name: '一號', tags: ['影音', '工作'] }),
+      makeProduct({ id: 'two', status: 'published', name: '二號', tags: ['影音', '居家'] }),
+      makeProduct({ id: 'three', status: 'published', name: '三號', tags: ['工作'] }),
+    ]
+
+    const compact_view = getCompactView(products)
+
+    expect(compact_view.top_tags).toEqual([
+      { label: '工作', count: 2, active: false },
+      { label: '影音', count: 2, active: false },
+      { label: '居家', count: 1, active: false },
+    ])
+  })
+
+  it('should filter search tab by query and expose empty and no-results states', () => {
+    const products = [
+      makeProduct({ id: 'keyboard', status: 'published', name: '機械鍵盤', summary: '打字工作用', tags: ['輸入'] }),
+      makeProduct({ id: 'speaker', status: 'published', name: '桌上喇叭', summary: '影音用', category_id: 'av', tags: ['影音'] }),
+    ]
+
+    expect(getCompactView(products, { search_query: '' }).search.empty_reason).toBe('empty-query')
+    expect(getCompactView(products, { search_query: '工作' }).search.products.map((product) => product.id)).toEqual(['keyboard'])
+    expect(getCompactView(products, { search_query: '不存在' }).search.empty_reason).toBe('no-results')
+  })
+
+  it('should use static search result ids for the search tab when the client index succeeds', () => {
+    const products = [
+      makeProduct({ id: 'keyboard', status: 'published', name: '機械鍵盤', summary: '本機 fallback 找不到這個查詢' }),
+      makeProduct({ id: 'speaker', status: 'published', name: '桌上喇叭', category_id: 'av', summary: '本機 fallback 也找不到' }),
+      makeProduct({ id: 'draft-match', status: 'draft', name: '草稿商品' }),
+    ]
+
+    const compact_view = getCompactView(products, {
+      search_query: 'static-index-only',
+      search_result_ids: ['speaker', 'keyboard', 'draft-match'],
+    })
+
+    expect(compact_view.search.products.map((product) => product.id)).toEqual(['speaker', 'keyboard'])
+    expect(compact_view.search.empty_reason).toBeNull()
+  })
+
+  it('should fallback to loaded Nuxt Content products when the client search index fails', () => {
+    const products = [
+      makeProduct({ id: 'keyboard', status: 'published', name: '機械鍵盤', summary: '打字工作用', tags: ['輸入'] }),
+      makeProduct({ id: 'speaker', status: 'published', name: '桌上喇叭', summary: '影音用', category_id: 'av', tags: ['影音'] }),
+    ]
+
+    const compact_view = getCompactView(products, {
+      search_query: '工作',
+      search_result_ids: null,
+    })
+
+    expect(compact_view.search.products.map((product) => product.id)).toEqual(['keyboard'])
+    expect(compact_view.search.empty_reason).toBeNull()
+  })
+
+  it('should expose the fallback other category label in compact category chips', () => {
+    const products = [
+      makeProduct({ id: 'other-product', status: 'published', name: '未知分類商品', category_id: 'other' }),
+    ]
+
+    const compact_view = getCompactView(products, { home_category_id: 'other' })
+
+    expect(compact_view.home.category_chips).toEqual([
+      { id: 'all', label: '全部', count: 1, active: false },
+      { id: 'other', label: '其他', count: 1, active: true },
+    ])
+    expect(compact_view.home.products.map((product) => product.id)).toEqual(['other-product'])
+  })
+
+  it('should expose the links panel data with safe external link attributes', () => {
+    const compact_view = getCompactView([])
+
+    expect(compact_view.links).toEqual([
+      {
+        id: 'applepig-home',
+        title: 'applepig.idv.tw',
+        subtitle: 'DW 的主站',
+        url: 'https://applepig.idv.tw',
+        icon: 'i-lucide-link',
+        target: '_blank',
+        rel: 'noopener noreferrer',
+      },
+    ])
+  })
+
+  it('should expose product detail fields, buy CTA and safe external attributes', () => {
+    const product = makeProduct({
+      id: 'products/products/detail-product.json',
+      status: 'published',
+      name: '很長很長的商品名稱'.repeat(6),
+      price_text: 'NT$ 123,456,789 起',
+      summary: 'DW 怎麼說要保留原始短評'.repeat(4),
+      description: '細節說明可以比卡片更長',
+      purchase_url: 'https://24h.pchome.com.tw/prod/detail',
+      image_url: 'https://example.com/detail.jpg',
+      category_id: 'av',
+      channel_id: 'pchome',
+      tags: ['超長 tag 名稱'.repeat(6), '影音'],
+    })
+
+    const detail = getProductDetail(product, test_taxonomies)
+
+    expect(detail).toEqual({
+      id: 'detail-product',
+      title: product.name,
+      hero_image: 'https://example.com/detail.jpg',
+      hero_alt: product.name,
+      channel_label: 'PChome',
+      channel_id: 'pchome',
+      category_label: '影音',
+      price_label: 'NT$ 123,456,789 起',
+      dw_says: product.summary,
+      description: '細節說明可以比卡片更長',
+      tags: product.tags,
+      buy_cta: {
+        label: '到 PChome 購買',
+        href: 'https://24h.pchome.com.tw/prod/detail',
+        target: '_blank',
+        rel: 'noopener noreferrer',
+      },
+      fine_print: '價格與庫存以通路頁面為準。',
+    })
+  })
+
+  it('should omit duplicated detail description when it is the same as summary', () => {
+    const product = makeProduct({
+      id: 'duplicated-description-product',
+      status: 'published',
+      name: '重複文案商品',
+      summary: '同一段推薦文字',
+      description: '同一段推薦文字',
+    })
+
+    const detail = getProductDetail(product, test_taxonomies)
+
+    expect(detail.dw_says).toBe('同一段推薦文字')
+    expect(detail.description).toBeNull()
   })
 })

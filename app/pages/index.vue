@@ -1,355 +1,356 @@
 <template>
-  <main class="catalog-page">
-    <div class="catalog-shell">
-      <header class="catalog-hero">
-        <div>
-          <p class="catalog-kicker">
+  <main class="compact-app-shell">
+    <AppNavigation
+      :tabs="compact_view.tabs"
+      :select-tab="setActiveTab"
+    />
+
+    <section class="compact-main">
+      <header class="compact-top-bar">
+        <div class="top-bar-copy">
+          <p class="top-bar-kicker">
             DW SELECT
           </p>
-          <h1 class="catalog-title">
+          <h1 class="top-bar-title">
             DW嚴選
           </h1>
-          <p class="catalog-description">
-            精選已上架商品。用分類、搜尋與排序快速找到適合的選物。
-          </p>
         </div>
 
-        <p class="catalog-summary">
-          目前收錄 {{ catalog_view.counts.published }} 件商品，顯示 {{ catalog_view.counts.filtered }} 件。
-        </p>
+        <div class="top-bar-actions">
+          <p class="product-count">
+            {{ compact_view.counts.published }} 件
+          </p>
+          <ThemeToggle />
+        </div>
       </header>
 
       <section
-        class="catalog-toolbar"
-        aria-label="商品搜尋與篩選"
+        v-if="active_tab === 'home'"
+        class="compact-panel"
+        aria-label="首頁"
       >
-        <div class="catalog-search-wrap">
-          <UInputMenu
-            v-model:search-term="search_query"
-            :items="search_menu_items"
-            :ignore-filter="true"
-            :loading="search_status === 'loading'"
-            :open-on-focus="true"
-            :reset-search-term-on-blur="false"
-            :reset-search-term-on-select="false"
-            mode="autocomplete"
-            label-key="label"
-            description-key="description"
-            value-key="label"
-            class="catalog-search"
-            placeholder="搜尋商品、分類或 tag"
-            trailing-icon="i-lucide-search"
-            clear
-          >
-            <template #empty>
-              <span>{{ search_empty_label }}</span>
-            </template>
-          </UInputMenu>
+        <div class="section-heading-row">
+          <div>
+            <p class="section-kicker">
+              Home
+            </p>
+            <h2 class="section-title">
+              最近值得看
+            </h2>
+          </div>
+        </div>
 
-          <p
-            class="catalog-search-status"
-            role="status"
-            aria-live="polite"
+        <div
+          class="category-chip-list"
+          aria-label="商品分類"
+        >
+          <button
+            v-for="chip in compact_view.home.category_chips"
+            :key="chip.id"
+            type="button"
+            class="category-chip"
+            :class="{ 'is-active': chip.active }"
+            :aria-pressed="chip.active"
+            @click="home_category_id = chip.id"
           >
-            {{ search_note }}
+            <span>{{ chip.label }}</span>
+            <span class="chip-count">{{ chip.count }}</span>
+          </button>
+        </div>
+
+        <div
+          v-if="compact_view.home.empty_reason"
+          class="compact-empty-state"
+        >
+          <p class="empty-title">
+            目前沒有已上架商品
           </p>
         </div>
 
-        <div class="catalog-controls">
-          <div
-            class="category-tabs"
-            aria-label="商品分類"
-          >
-            <button
-              v-for="option in catalog_view.category_options"
-              :key="`category-option-${option.value}`"
-              type="button"
-              class="category-tab"
-              :aria-pressed="option.active"
-              @click="selected_category = option.value"
-            >
-              {{ option.label }}
-              <span class="category-count">{{ option.count }}</span>
-            </button>
-          </div>
-
-          <label class="sort-field">
-            <span class="sort-label">排序</span>
-            <select
-              v-model="selected_sort"
-              class="sort-select"
-            >
-              <option
-                v-for="option in catalog_view.sort_options"
-                :key="option.value"
-                :value="option.value"
-              >
-                {{ option.label }}
-              </option>
-            </select>
-          </label>
+        <div
+          v-else
+          class="product-grid"
+        >
+          <ProductCard
+            v-for="product in compact_view.home.products"
+            :key="product.id"
+            :product="product"
+            @select="onProductSelected"
+          />
         </div>
       </section>
 
       <section
-        v-if="catalog_view.empty_reason"
-        class="empty-state"
-        aria-live="polite"
+        v-if="active_tab === 'guide'"
+        class="compact-panel"
+        aria-label="指南"
       >
-        <p class="empty-title">
-          {{ empty_state.title }}
-        </p>
-        <p class="empty-description">
-          {{ empty_state.description }}
-        </p>
-        <button
-          v-if="catalog_view.empty_reason === 'no-results'"
-          type="button"
-          class="clear-search-button"
-          @click="clearSearch"
+        <div class="section-heading-row">
+          <div>
+            <p class="section-kicker">
+              Guide
+            </p>
+            <h2 class="section-title">
+              用 tag 找坑
+            </h2>
+          </div>
+        </div>
+
+        <TagExplorer
+          :tags="compact_view.guide.tag_chips"
+          :selected_tags="compact_view.guide.selected_tags"
+          :can_clear="compact_view.guide.can_clear_tags"
+          @toggle-tag="toggleTag"
+          @clear-tags="selected_tags = []"
+        />
+
+        <div
+          v-if="compact_view.guide.empty_reason === 'no-results'"
+          class="compact-empty-state"
         >
-          清除搜尋
-        </button>
+          <p class="empty-title">
+            這組 tag 暫時沒東西
+          </p>
+          <button
+            type="button"
+            class="clear-tags-button"
+            @click="selected_tags = []"
+          >
+            清除已選 tag
+          </button>
+        </div>
+
+        <div
+          v-else
+          class="product-grid"
+        >
+          <ProductCard
+            v-for="product in compact_view.guide.products"
+            :key="product.id"
+            :product="product"
+            @select="onProductSelected"
+          />
+        </div>
       </section>
 
-      <div
-        v-else
-        class="product-sections"
+      <section
+        v-if="active_tab === 'search'"
+        class="compact-panel"
+        aria-label="搜尋"
       >
-        <section
-          v-for="group in catalog_view.sections"
-          :key="`product-section-${group.category}`"
-          class="product-section"
+        <div class="section-heading-row">
+          <div>
+            <p class="section-kicker">
+              Search
+            </p>
+            <h2 class="section-title">
+              搜看看
+            </h2>
+          </div>
+        </div>
+
+        <UInput
+          v-model="search_query"
+          class="search-input"
+          placeholder="在找什麼嗎？™"
+          icon="i-lucide-search"
+          size="xl"
+          autocomplete="off"
+        />
+
+        <div
+          v-if="compact_view.search.empty_reason === 'empty-query'"
+          class="search-empty-panel"
         >
-          <h2 class="section-heading">
-            {{ group.category }}
-          </h2>
-
-          <ul class="product-grid">
-            <li
-              v-for="product in group.products"
-              :key="`product-card-${product.id}`"
-              class="product-card"
-              :data-product-id="product.id"
+          <p class="empty-title">
+            熱門 tag
+          </p>
+          <div class="tag-chip-list">
+            <button
+              v-for="tag in compact_view.top_tags.slice(0, 10)"
+              :key="`search-tag-${tag.label}`"
+              type="button"
+              class="tag-chip"
+              @click="search_query = tag.label"
             >
-              <img
-                :key="`product-image-${product.id}-${product.image}`"
-                :src="product.image"
-                :alt="product.name"
-                class="product-image"
-                loading="lazy"
-              >
+              <span>{{ tag.label }}</span>
+              <span class="tag-count">{{ tag.count }}</span>
+            </button>
+          </div>
+        </div>
 
-              <div class="product-body">
-                <div class="product-meta">
-                  <span>{{ product.category }}</span>
-                  <span>{{ formatPublishedDate(product.published_at) }}</span>
-                </div>
+        <div
+          v-else-if="compact_view.search.empty_reason === 'no-results'"
+          class="compact-empty-state"
+        >
+          <p class="empty-title">
+            沒這個坑，去許願吧
+          </p>
+        </div>
 
-                <h3 class="product-name">
-                  {{ product.name }}
-                </h3>
-                <p class="product-description">
-                  {{ product.description }}
-                </p>
-                <p class="product-price">
-                  {{ product.price }}
-                </p>
+        <div
+          v-else
+          class="product-grid"
+        >
+          <ProductCard
+            v-for="product in compact_view.search.products"
+            :key="product.id"
+            :product="product"
+            @select="onProductSelected"
+          />
+        </div>
+      </section>
 
-                <ul class="product-tags">
-                  <li
-                    v-for="tag in product.tags"
-                    :key="`${product.id}-${tag}`"
-                    class="product-tag"
-                  >
-                    {{ tag }}
-                  </li>
-                </ul>
+      <section
+        v-if="active_tab === 'links'"
+        class="compact-panel"
+        aria-label="連結"
+      >
+        <div class="section-heading-row">
+          <div>
+            <p class="section-kicker">
+              Links
+            </p>
+            <h2 class="section-title">
+              相關入口
+            </h2>
+          </div>
+        </div>
 
-                <a
-                  :href="product.purchase_link"
-                  class="purchase-link"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  前往購買
-                </a>
-              </div>
-            </li>
-          </ul>
-        </section>
-      </div>
-    </div>
+        <LinkPanel :links="compact_view.links" />
+      </section>
+    </section>
   </main>
+
+  <ProductDetail
+    v-model:open="detail_open"
+    :detail="selected_product_detail"
+    :fullscreen="is_phone_detail"
+  />
 </template>
 
 <script setup lang="ts">
-import type { CatalogSort, CatalogView } from '../utils/published-products'
-import type { Product } from '../utils/product-schema'
-import type { SearchSuggestion } from '../utils/search/search-index'
-import { formatPublishedDate } from '../utils/format-published-date'
-import { getCatalogSearchProducts, getCatalogView } from '../utils/published-products'
-
-type SearchMenuItem = {
-  id: string
-  label: string
-  description: string
-}
-
-type SearchStatus = 'idle' | 'loading' | 'ready' | 'error'
+import type { CompactAppTabId, CompactCategoryChip, TaxonomyDefinitions } from '../utils/published-products'
+import type { CategoryDefinition, ChannelDefinition, LinkDefinition, Product } from '../utils/product-schema'
+import { getCatalogProductId, getCompactAppView, getProductDetail } from '../utils/published-products'
+import { getClientSearchResults } from '../utils/search/client-search'
+import { runViewTransition } from '../utils/view-transition'
 
 const { data: products } = await useAsyncData('published-products', () => queryCollection('products')
   .where('status', '=', 'published')
-  .order('category', 'ASC')
+  .order('category_id', 'ASC')
   .order('published_at', 'DESC')
   .order('name', 'ASC')
   .all())
+const { data: category_taxonomy } = await useAsyncData('taxonomy-categories', () => queryCollection('categories').first())
+const { data: channel_taxonomy } = await useAsyncData('taxonomy-channels', () => queryCollection('channels').first())
+const { data: link_taxonomy } = await useAsyncData('taxonomy-links', () => queryCollection('links').first())
 
-const selected_category = ref('全部')
-const selected_sort = ref<CatalogSort>('default')
+const active_tab = ref<CompactAppTabId>('home')
+const home_category_id = ref<CompactCategoryChip['id']>('all')
+const selected_tags = ref<string[]>([])
+const selected_product_id = ref<string | null>(null)
 const search_query = ref('')
-const search_results = ref<SearchSuggestion[]>([])
-const search_suggestions = ref<SearchSuggestion[]>([])
-const search_status = ref<SearchStatus>('idle')
-let search_request_id = 0
+const client_search_result_ids = ref<string[] | null>(null)
+const is_phone_detail = ref(false)
 
 const all_products = computed(() => (products.value ?? []) as Product[])
-const normalized_search_query = computed(() => search_query.value.trim())
-const category_view = computed(() => getCatalogView(all_products.value, {
-  category: selected_category.value,
-  sort: selected_sort.value,
-}))
-const products_for_catalog = computed(() => {
-  if (normalized_search_query.value === '' || search_status.value !== 'ready') {
-    return all_products.value
+const runtime_taxonomies = computed<TaxonomyDefinitions | undefined>(() => {
+  const categories = category_taxonomy.value?.items as CategoryDefinition[] | undefined
+  const channels = channel_taxonomy.value?.items as ChannelDefinition[] | undefined
+
+  if (categories === undefined || channels === undefined) {
+    return undefined
   }
 
-  return getCatalogSearchProducts(all_products.value, search_results.value, normalized_search_query.value)
+  return { categories, channels }
 })
-const catalog_view = computed<CatalogView>(() => {
-  const view = getCatalogView(products_for_catalog.value, {
-    category: selected_category.value,
-    sort: selected_sort.value,
-  })
-
-  return {
-    ...view,
-    category_options: category_view.value.category_options,
-    sort_options: category_view.value.sort_options,
-    query: normalized_search_query.value,
-    counts: {
-      published: category_view.value.counts.published,
-      filtered: view.counts.filtered,
-    },
-    empty_reason: getCatalogEmptyReason(view),
-  }
-})
-const search_menu_items = computed<SearchMenuItem[]>(() => search_suggestions.value.map((suggestion) => ({
-  id: suggestion.id,
-  label: suggestion.label,
-  description: `${suggestion.category}・${suggestion.price_text}`,
-})))
-const search_empty_label = computed(() => {
-  if (search_status.value === 'loading') {
-    return '搜尋中'
-  }
-
-  if (search_status.value === 'error') {
-    return '搜尋暫時無法載入'
-  }
-
-  if (normalized_search_query.value === '') {
-    return '輸入關鍵字搜尋'
-  }
-
-  return '沒有符合的建議'
-})
-const search_note = computed(() => {
-  if (search_status.value === 'loading') {
-    return '搜尋 index 載入中，稍候會顯示建議。'
-  }
-
-  if (search_status.value === 'error') {
-    return '搜尋 index 載入失敗，仍可用分類與排序瀏覽商品。'
-  }
-
-  if (normalized_search_query.value === '') {
-    return '可搜尋商品名稱、描述、分類與 tag。'
-  }
-
-  if (search_suggestions.value.length === 0) {
-    return 'MiniSearch 沒有找到建議。'
-  }
-
-  return `MiniSearch 找到 ${search_suggestions.value.length} 筆建議。`
-})
-const empty_state = computed(() => {
-  if (catalog_view.value.empty_reason === 'no-products') {
-    return {
-      title: '目前沒有已上架商品',
-      description: '商品資料會在內容更新並重新 generate 後出現在這裡。',
+const runtime_links = computed<LinkDefinition[] | undefined>(() => link_taxonomy.value?.items as LinkDefinition[] | undefined)
+const compact_view = computed(() => getCompactAppView(all_products.value, {
+  active_tab: active_tab.value,
+  home_category_id: home_category_id.value,
+  selected_tags: selected_tags.value,
+  search_query: search_query.value,
+  search_result_ids: client_search_result_ids.value,
+}, runtime_taxonomies.value, runtime_links.value))
+const selected_product = computed(() => all_products.value.find((product) => getCatalogProductId(product) === selected_product_id.value) ?? null)
+const selected_product_detail = computed(() => selected_product.value ? getProductDetail(selected_product.value, runtime_taxonomies.value) : null)
+const detail_open = computed({
+  get: () => selected_product_detail.value !== null,
+  set: (open: boolean) => {
+    if (!open) {
+      closeProductDetail()
     }
-  }
-
-  return {
-    title: '找不到符合條件的商品',
-    description: '請調整搜尋文字、分類或排序條件。',
-  }
+  },
 })
 
-watch(search_query, async (query) => {
-  const request_id = ++search_request_id
-  const normalized_query = query.trim()
+let phone_media_query: MediaQueryList | null = null
+let search_request_id = 0
 
-  if (normalized_query === '') {
-    search_status.value = 'idle'
-    search_results.value = []
-    search_suggestions.value = []
-
+function toggleTag(tag: string) {
+  if (selected_tags.value.includes(tag)) {
+    selected_tags.value = selected_tags.value.filter((selected_tag) => selected_tag !== tag)
     return
   }
 
-  search_status.value = 'loading'
-  search_results.value = []
-  search_suggestions.value = []
+  selected_tags.value = [...selected_tags.value, tag]
+}
+
+function setActiveTab(tab_id: CompactAppTabId) {
+  active_tab.value = tab_id
+}
+
+watch(search_query, async (query) => {
+  const request_id = search_request_id + 1
+  search_request_id = request_id
+  const normalized_query = query.trim()
+
+  if (normalized_query === '') {
+    client_search_result_ids.value = null
+    return
+  }
 
   try {
-    const { getClientSearchResults } = await import('../utils/search/client-search')
-    const results = await getClientSearchResults(normalized_query)
+    const search_results = await getClientSearchResults(normalized_query)
 
     if (request_id !== search_request_id) {
       return
     }
 
-    search_results.value = results
-    search_suggestions.value = results.slice(0, 12)
-    search_status.value = 'ready'
+    client_search_result_ids.value = search_results.map((result) => result.id)
   }
   catch {
     if (request_id !== search_request_id) {
       return
     }
 
-    search_results.value = []
-    search_suggestions.value = []
-    search_status.value = 'error'
+    client_search_result_ids.value = null
   }
 })
 
-function getCatalogEmptyReason(view: CatalogView): CatalogView['empty_reason'] {
-  if (category_view.value.counts.published === 0) {
-    return 'no-products'
-  }
-
-  if (view.products.length === 0) {
-    return 'no-results'
-  }
-
-  return null
+function onProductSelected(product_id: string) {
+  runViewTransition(() => {
+    selected_product_id.value = product_id
+  })
 }
 
-function clearSearch() {
-  search_query.value = ''
+function closeProductDetail() {
+  runViewTransition(() => {
+    selected_product_id.value = null
+  })
 }
 
+function updatePhoneDetailState() {
+  is_phone_detail.value = phone_media_query?.matches ?? false
+}
+
+onMounted(() => {
+  phone_media_query = window.matchMedia('(max-width: 767px)')
+  updatePhoneDetailState()
+  phone_media_query.addEventListener('change', updatePhoneDetailState)
+})
+
+onBeforeUnmount(() => {
+  phone_media_query?.removeEventListener('change', updatePhoneDetailState)
+})
 </script>

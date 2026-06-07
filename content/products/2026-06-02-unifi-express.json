@@ -3,10 +3,18 @@
   "status": "published",
   "name": "Unifi Express",
   "price_text": "5799",
+  "price": {
+    "amount": 5799,
+    "currency": null,
+    "unit": "each",
+    "label": null
+  },
+  "summary": "你遲早是要裝Unifi全家桶的，為什麼不一開始就裝呢",
   "description": "你遲早是要裝Unifi全家桶的，為什麼不一開始就裝呢",
   "purchase_url": "https://tw.store.ui.com/tw/zh-tw/category/cloud-gateways-wifi-integrated/products/ux",
   "image_url": "https://images.svc.ui.com/?u=https%3A%2F%2Fcdn.ecomm.ui.com%2Fproducts%2F4ed25b4c-db92-4b98-bbf3-b0989f007c0e%2F8ff040a0-4b16-4c98-a96c-b643cfafbc73.png&q=75&w=1920",
-  "category": "電腦",
+  "channel_id": "other",
+  "category_id": "computer",
   "tags": [
     "電腦",
     "網路設備"

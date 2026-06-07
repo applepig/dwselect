@@ -1,4 +1,47 @@
 :root {
   color-scheme: light;
-  font-family: system-ui, sans-serif;
+  font-family: Inter, 'Noto Sans TC', system-ui, sans-serif;
+  --dw-bg: #f6f1e7;
+  --dw-panel: #fffaf1;
+  --dw-panel-strong: #fff4dd;
+  --dw-text: #201c17;
+  --dw-muted: #6f6558;
+  --dw-border: #ded2bd;
+  --dw-accent: #ec7a2b;
+  --dw-accent-strong: #dd6915;
+  --dw-teal: #21756d;
+  --dw-rose: #b44c67;
+  --dw-amber: #c28522;
+  --dw-shadow: 0 18px 48px rgb(54 42 28 / 14%);
+  --ui-bg: var(--dw-bg);
+  --ui-bg-muted: var(--dw-panel);
+  --ui-bg-elevated: var(--dw-panel);
+  --ui-text: var(--dw-text);
+  --ui-text-muted: var(--dw-muted);
+  --ui-border: var(--dw-border);
+  --ui-primary: var(--dw-accent);
+  --ui-radius: 0.5rem;
+}
+
+.dark {
+  color-scheme: dark;
+  --dw-bg: #181512;
+  --dw-panel: #24201b;
+  --dw-panel-strong: #30291f;
+  --dw-text: #f5ead7;
+  --dw-muted: #baad9b;
+  --dw-border: #4b4033;
+  --dw-accent: #ff8a3d;
+  --dw-accent-strong: #f9c193;
+  --dw-teal: #63c4b6;
+  --dw-rose: #f08aa6;
+  --dw-amber: #f2bd59;
+  --dw-shadow: 0 18px 48px rgb(0 0 0 / 34%);
+  --ui-bg: var(--dw-bg);
+  --ui-bg-muted: var(--dw-panel);
+  --ui-bg-elevated: var(--dw-panel);
+  --ui-text: var(--dw-text);
+  --ui-text-muted: var(--dw-muted);
+  --ui-border: var(--dw-border);
+  --ui-primary: var(--dw-accent);
 }

@@ -3,7 +3,8 @@ import { basename, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { createHash } from 'node:crypto'
 
-import { product_schema, type Product } from '../app/utils/product-schema.ts'
+import type { Product } from '../app/utils/product-schema.ts'
+import { getCategoryFallbackWarning, getCompactProductMigration } from './migrate-product-compact-schema.ts'
 
 type MigrationOptions = {
   date?: string
@@ -50,7 +51,6 @@ type MigrationResult = {
   summary: MigrationSummary
 }
 
-const DEFAULT_CATEGORY = '未分類'
 const REQUIRED_HEADERS = ['name', 'price', 'desc', 'link_url', 'img_url', 'tags', 'category', 'reference']
 
 const PINYIN_MAP: Record<string, string> = {
@@ -114,6 +114,13 @@ export function migrateGoogleSheetProducts(tsv_text: string, options: MigrationO
       continue
     }
 
+    const category = row.category.trim()
+    const category_warning = getCategoryFallbackWarning(category)
+
+    if (category_warning !== null) {
+      summary.warnings.push({ row_number, reason: category_warning })
+    }
+
     const base_slug = getReadableSlug(name)
     const original_id = `${date}-${base_slug}`
     const resolved_id = resolveUniqueId(original_id, used_ids)
@@ -123,7 +130,7 @@ export function migrateGoogleSheetProducts(tsv_text: string, options: MigrationO
       summary.collisions.push({ row_number, original_id, resolved_id })
     }
 
-    const product = product_schema.parse({
+    const product = getCompactProductMigration({
       id: resolved_id,
       status: 'published',
       name,
@@ -131,7 +138,7 @@ export function migrateGoogleSheetProducts(tsv_text: string, options: MigrationO
       description: row.desc,
       purchase_url,
       image_url,
-      category: row.category.trim() || DEFAULT_CATEGORY,
+      category,
       tags: getTags(row.tags, purchase_url),
       reference_url,
       created_at: timestamp,

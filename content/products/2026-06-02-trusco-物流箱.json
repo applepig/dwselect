@@ -3,10 +3,18 @@
   "status": "published",
   "name": "Trusco 物流箱",
   "price_text": "￥1790",
+  "price": {
+    "amount": 1790,
+    "currency": "JPY",
+    "unit": "each",
+    "label": null
+  },
+  "summary": "從日本搬東西回來的好幫手，詳情請看下面參考資料",
   "description": "從日本搬東西回來的好幫手，詳情請看下面參考資料",
   "purchase_url": "https://www.amazon.co.jp/dp/B002A5VPSO",
   "image_url": "https://m.media-amazon.com/images/I/51lnbg1qqCL._AC_.jpg",
-  "category": "居家",
+  "channel_id": "amazonjp",
+  "category_id": "home",
   "tags": [
     "收納",
     "居家",

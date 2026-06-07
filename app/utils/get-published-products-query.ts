@@ -5,7 +5,7 @@ export function getPublishedProductsQuery() {
       status: 'published',
     },
     sort: [
-      { category: 'ASC' },
+      { category_id: 'ASC' },
       { published_at: 'DESC' },
       { name: 'ASC' },
     ],

@@ -3,10 +3,18 @@
   "status": "published",
   "name": "BenQ E43-735",
   "price_text": "10999",
+  "price": {
+    "amount": 10999,
+    "currency": "TWD",
+    "unit": "each",
+    "label": null
+  },
+  "summary": "當然43\"的也是可以看BenQ，現在也只賣11k",
   "description": "當然43\"的也是可以看BenQ，現在也只賣11k",
   "purchase_url": "https://24h.pchome.com.tw/prod/DPAD0O-1900GHE37?fq=/S/DPADTK",
   "image_url": "https://img.pchome.com.tw/cs/items/DPAD0O1900GHE37/000001_1733195326.jpg",
-  "category": "影音",
+  "channel_id": "pchome",
+  "category_id": "av",
   "tags": [
     "電視",
     "影音",

@@ -3,10 +3,18 @@
   "status": "published",
   "name": "Ducky One 2",
   "price_text": "2300",
+  "price": {
+    "amount": 2300,
+    "currency": "TWD",
+    "unit": "each",
+    "label": null
+  },
+  "summary": "我覺得Ducky One 2可以買，但是3不行，所以趁他們還有生產的時候多庫存個兩把",
   "description": "我覺得Ducky One 2可以買，但是3不行，所以趁他們還有生產的時候多庫存個兩把",
   "purchase_url": "https://24h.pchome.com.tw/prod/DCAHVA-A900GAGDQ",
   "image_url": "https://cs-a.ecimg.tw/items/DCAHVAA900GAGDQ/yt000001_1701253293.jpg",
-  "category": "電腦",
+  "channel_id": "pchome",
+  "category_id": "computer",
   "tags": [
     "電腦",
     "鍵盤",

@@ -3,10 +3,18 @@
   "status": "published",
   "name": "Iris高階吸頂燈",
   "price_text": "￥20000",
+  "price": {
+    "amount": 20000,
+    "currency": "JPY",
+    "unit": "each",
+    "label": null
+  },
+  "summary": "這顆是導光板的高階款，水平方向的擴散比較強，可以減少房間角落太暗的問題",
   "description": "這顆是導光板的高階款，水平方向的擴散比較強，可以減少房間角落太暗的問題",
   "purchase_url": "https://www.amazon.co.jp/dp/B09923R2X3",
   "image_url": "https://m.media-amazon.com/images/I/61VmU90A9-L._AC_SL1000_.jpg",
-  "category": "居家",
+  "channel_id": "amazonjp",
+  "category_id": "home",
   "tags": [
     "居家",
     "吸頂燈",

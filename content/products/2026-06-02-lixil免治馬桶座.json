@@ -3,10 +3,18 @@
   "status": "published",
   "name": "Lixil免治馬桶座",
   "price_text": "￥42000",
+  "price": {
+    "amount": 42000,
+    "currency": "JPY",
+    "unit": "each",
+    "label": null
+  },
+  "summary": "TOTO的最近在amazon上價錢很亂，相較之下Lixil的比較合理",
   "description": "TOTO的最近在amazon上價錢很亂，相較之下Lixil的比較合理",
   "purchase_url": "https://amzn.asia/d/2Bgf6KR",
   "image_url": "https://m.media-amazon.com/images/I/5114LY5TExL._AC_SL1172_.jpg",
-  "category": "居家",
+  "channel_id": "amazonjp",
+  "category_id": "home",
   "tags": [
     "衛浴",
     "居家"

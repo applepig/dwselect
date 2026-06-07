@@ -3,10 +3,18 @@
   "status": "published",
   "name": "大橋牌越光米",
   "price_text": "125/kg",
+  "price": {
+    "amount": 125,
+    "currency": "TWD",
+    "unit": "kilogram",
+    "label": null
+  },
+  "summary": "他們每年新米都會有這種8包1kg的禮盒，小包裝就比較不用怕米潮掉",
   "description": "他們每年新米都會有這種8包1kg的禮盒，小包裝就比較不用怕米潮掉",
   "purchase_url": "https://24h.pchome.com.tw/prod/DBBY0M-A900GMBY7",
   "image_url": "https://cs-a.ecimg.tw/items/DBBY0MA900GMBY7/000001_1693383527.jpg",
-  "category": "食材",
+  "channel_id": "pchome",
+  "category_id": "food",
   "tags": [
     "食材",
     "米",

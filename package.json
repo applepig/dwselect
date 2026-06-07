@@ -7,7 +7,8 @@
     "dev": "nuxt dev --host ::",
     "build": "pnpm build:search-index && nuxt build",
     "build:search-index": "node scripts/build-search-index.ts",
-    "test": "vitest run",
+    "test:e2e": "playwright test",
+    "test": "vitest run --exclude 'tests/e2e/**'",
     "generate": "pnpm build:search-index && nuxt generate",
     "preview": "nuxt preview"
   },
@@ -20,6 +21,7 @@
     "vue": "^3.5.24"
   },
   "devDependencies": {
+    "@playwright/test": "^1.60.0",
     "postcss-nesting": "^13.0.2",
     "vitest": "^4.0.14"
   },

@@ -3,10 +3,18 @@
   "status": "published",
   "name": "Brita",
   "price_text": "2200",
+  "price": {
+    "amount": 2200,
+    "currency": "TWD",
+    "unit": "each",
+    "label": null
+  },
+  "summary": "Brita濾芯要注意一下特價，大概單價$166以下就可以買",
   "description": "Brita濾芯要注意一下特價，大概單價$166以下就可以買",
   "purchase_url": "https://24h.pchome.com.tw/prod/DEAY3A-A900GLY25",
   "image_url": "https://img.pchome.com.tw/cs/items/DEAY3AA900GLY25/000001_1703232993.jpg",
-  "category": "廚房",
+  "channel_id": "pchome",
+  "category_id": "kitchen",
   "tags": [
     "濾水",
     "廚房",

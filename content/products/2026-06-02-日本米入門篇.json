@@ -3,10 +3,18 @@
   "status": "published",
   "name": "日本米入門篇",
   "price_text": "150/kg",
+  "price": {
+    "amount": 150,
+    "currency": "TWD",
+    "unit": "kilogram",
+    "label": null
+  },
+  "summary": "參考資料那篇也要看，主要是台灣米",
   "description": "參考資料那篇也要看，主要是台灣米",
   "purchase_url": "https://www.facebook.com/applepig/posts/pfbid0SxJNCFgExHegTJb9A6jPZNNUTSgNP1FW29oAnmHJheXQhi2NFWd34esgSkcAK64Dl",
   "image_url": "https://scontent.ftpe8-2.fna.fbcdn.net/v/t39.30808-6/285454481_10225222919953314_2760340429445359591_n.jpg",
-  "category": "食材",
+  "channel_id": "other",
+  "category_id": "food",
   "tags": [
     "食材",
     "米"

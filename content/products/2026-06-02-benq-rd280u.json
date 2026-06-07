@@ -3,10 +3,18 @@
   "status": "published",
   "name": "BenQ RD280U",
   "price_text": "16888",
+  "price": {
+    "amount": 16888,
+    "currency": "TWD",
+    "unit": "each",
+    "label": null
+  },
+  "summary": "28\" 3840*2560的螢幕，比一般的4K多了一些高度，160ppi設200%的話字也不算太大，不過價錢還沒降可以再等等",
   "description": "28\" 3840*2560的螢幕，比一般的4K多了一些高度，160ppi設200%的話字也不算太大，不過價錢還沒降可以再等等",
   "purchase_url": "https://24h.pchome.com.tw/prod/DSABSO-A900HJAH0?fq=/S/DSABSO",
   "image_url": "https://cs-a.ecimg.tw/items/DSABSOA900HJAH0/yt000001_1719283603.jpg",
-  "category": "電腦",
+  "channel_id": "pchome",
+  "category_id": "computer",
   "tags": [
     "螢幕",
     "電腦",

@@ -3,10 +3,18 @@
   "status": "published",
   "name": "Zyxel XGS1250-12",
   "price_text": "9000",
+  "price": {
+    "amount": 9000,
+    "currency": "TWD",
+    "unit": "each",
+    "label": null
+  },
+  "summary": "應該是目前最好買的10G switch，一孔SFP+、三孔Multigig、八孔gbe，應該這台就可以把全家的網路線都插在上面了",
   "description": "應該是目前最好買的10G switch，一孔SFP+、三孔Multigig、八孔gbe，應該這台就可以把全家的網路線都插在上面了",
   "purchase_url": "https://24h.pchome.com.tw/prod/DRAF0I-A900B7QHW",
   "image_url": "https://img.pchome.com.tw/cs/items/DRAF0IA900B7QHW/000001_1658917277.jpg",
-  "category": "電腦",
+  "channel_id": "pchome",
+  "category_id": "computer",
   "tags": [
     "電腦",
     "線材",

@@ -1,0 +1,46 @@
+{
+  "items": [
+    {
+      "id": "home",
+      "label": "居家",
+      "short_label": "居家",
+      "sort_order": 10
+    },
+    {
+      "id": "kitchen",
+      "label": "廚房",
+      "short_label": "廚房",
+      "sort_order": 20
+    },
+    {
+      "id": "computer",
+      "label": "電腦",
+      "short_label": "電腦",
+      "sort_order": 30
+    },
+    {
+      "id": "three-c",
+      "label": "3C",
+      "short_label": "3C",
+      "sort_order": 40
+    },
+    {
+      "id": "av",
+      "label": "影音",
+      "short_label": "影音",
+      "sort_order": 50
+    },
+    {
+      "id": "food",
+      "label": "食材",
+      "short_label": "食材",
+      "sort_order": 60
+    },
+    {
+      "id": "other",
+      "label": "其他",
+      "short_label": "其他",
+      "sort_order": 999
+    }
+  ]
+}

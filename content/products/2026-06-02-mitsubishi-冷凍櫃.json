@@ -3,10 +3,18 @@
   "status": "published",
   "name": "Mitsubishi 冷凍櫃",
   "price_text": "12000",
+  "price": {
+    "amount": 12000,
+    "currency": "TWD",
+    "unit": "each",
+    "label": null
+  },
+  "summary": "只是需要稍微擴充冷凍庫的話可以買這台，他身高比較低，上面還可以擺電鍋或水波爐",
   "description": "只是需要稍微擴充冷凍庫的話可以買這台，他身高比較低，上面還可以擺電鍋或水波爐",
   "purchase_url": "https://24h.pchome.com.tw/prod/DPAC34-A900H86CY",
   "image_url": "https://cs-a.ecimg.tw/items/DPAC3KA900B2TTL/000001_1676515813.jpg",
-  "category": "廚房",
+  "channel_id": "pchome",
+  "category_id": "kitchen",
   "tags": [
     "廚房",
     "水波爐",

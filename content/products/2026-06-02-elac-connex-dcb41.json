@@ -3,10 +3,18 @@
   "status": "published",
   "name": "ELAC ConneX DCB41",
   "price_text": "大概16000",
+  "price": {
+    "amount": null,
+    "currency": null,
+    "unit": null,
+    "label": "大概16000"
+  },
+  "summary": "這是有HDMI ARC的主動式喇叭，最適合拿來當電視喇叭",
   "description": "這是有HDMI ARC的主動式喇叭，最適合拿來當電視喇叭",
   "purchase_url": "https://24h.pchome.com.tw/prod/DMAAH8-A900HVR8U",
   "image_url": "https://img.pchome.com.tw/cs/items/DMAAH8A900HVR8U/000001_1727248100.jpg",
-  "category": "影音",
+  "channel_id": "pchome",
+  "category_id": "av",
   "tags": [
     "電視",
     "影音",

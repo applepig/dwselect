@@ -11,7 +11,7 @@ describe('migrate Google Sheet products', () => {
       legacy_header,
       'IKEA\t品牌 A\t第一筆描述\t居家\t收納 生活\t100\tNT$ 100\thttps://www.ikea.com.tw/product/a\thttps://example.com/ikea-a.jpg\thttps://example.com/ref-a',
       'IKEA\t品牌 B\t第二筆描述\t居家\t收納\t200\tNT$ 200\thttps://www.ikea.com.tw/product/b\thttps://example.com/ikea-b.jpg\t',
-      'Panasonic\t品牌 C\t第三筆描述\t家電\t電器\t300\tNT$ 300\thttps://example.com/panasonic\thttps://example.com/panasonic.jpg\t',
+      'Panasonic\t品牌 C\t第三筆描述\t居家\t電器\t300\tNT$ 300\thttps://example.com/panasonic\thttps://example.com/panasonic.jpg\t',
     ].join('\n')
 
     const result = migrateGoogleSheetProducts(tsv, { date: '2026-06-02' })
@@ -58,10 +58,18 @@ describe('migrate Google Sheet products', () => {
           status: 'published',
           name: '商品名稱',
           price_text: 'NT$ 1,990',
+          price: {
+            amount: 1990,
+            currency: 'TWD',
+            unit: 'each',
+            label: null,
+          },
+          summary: '推薦文字',
           description: '推薦文字',
           purchase_url: 'https://24h.pchome.com.tw/prod/ABC',
           image_url: 'https://example.com/image.jpg',
-          category: '未分類',
+          channel_id: 'pchome',
+          category_id: 'other',
           tags: ['好物', '3C', 'PCHome'],
           reference_url: 'https://example.com/ref',
           created_at: '2026-06-02T00:00:00+08:00',
@@ -73,12 +81,30 @@ describe('migrate Google Sheet products', () => {
       },
     ])
     expect(result.summary.created_count).toBe(1)
+    expect(result.summary.warnings).toEqual([
+      { row_number: 2, reason: 'missing category; fallback category_id other' },
+    ])
+  })
+
+  it('should warn and fallback unknown categories to other instead of home', () => {
+    const tsv = [
+      header,
+      '未知分類商品\tNT$ 1\t描述\thttps://example.com/product\thttps://example.com/image.jpg\ttag\t清潔用品\t',
+    ].join('\n')
+
+    const result = migrateGoogleSheetProducts(tsv, { date: '2026-06-02' })
+
+    expect(result.products).toHaveLength(1)
+    expect(result.products[0]?.content.category_id).toBe('other')
+    expect(result.summary.warnings).toEqual([
+      { row_number: 2, reason: 'unknown category "清潔用品"; fallback category_id other' },
+    ])
   })
 
   it('should keep quoted multiline TSV fields in the same product row', () => {
     const tsv = [
       header,
-      '多行商品\tNT$ 1\t"第一行\n第二行"\thttps://example.com/product\thttps://example.com/image.jpg\ttag\t分類\t',
+      '多行商品\tNT$ 1\t"第一行\n第二行"\thttps://example.com/product\thttps://example.com/image.jpg\ttag\t居家\t',
     ].join('\n')
 
     const result = migrateGoogleSheetProducts(tsv, { date: '2026-06-02' })
@@ -138,9 +164,9 @@ describe('migrate Google Sheet products', () => {
   it('should add platform tags without duplicates from purchase URL host', () => {
     const tsv = [
       header,
-      '美國商品\tUS$ 10\t描述\thttps://www.amazon.com/dp/ABC\thttps://example.com/a.jpg\t美亞 選物\t海外\t',
-      '日本商品\t¥1000\t描述\thttps://www.amazon.co.jp/dp/ABC\thttps://example.com/b.jpg\t選物\t海外\t',
-      'momo 商品\tNT$ 100\t描述\thttps://www.momoshop.com.tw/goods/GoodsDetail.jsp\thttps://example.com/c.jpg\t選物\t購物\t',
+      '美國商品\tUS$ 10\t描述\thttps://www.amazon.com/dp/ABC\thttps://example.com/a.jpg\t美亞 選物\t電腦\t',
+      '日本商品\t¥1000\t描述\thttps://www.amazon.co.jp/dp/ABC\thttps://example.com/b.jpg\t選物\t食材\t',
+      'momo 商品\tNT$ 100\t描述\thttps://www.momoshop.com.tw/goods/GoodsDetail.jsp\thttps://example.com/c.jpg\t選物\t居家\t',
     ].join('\n')
 
     const result = migrateGoogleSheetProducts(tsv, { date: '2026-06-02' })
@@ -198,8 +224,8 @@ describe('migrate Google Sheet products', () => {
   it('should append numeric suffix and summarize slug collisions', () => {
     const tsv = [
       header,
-      'Same Product\tNT$ 1\t描述\thttps://example.com/a\thttps://example.com/a.jpg\ttag\t分類\t',
-      'Same Product\tNT$ 2\t描述\thttps://example.com/b\thttps://example.com/b.jpg\ttag\t分類\t',
+      'Same Product\tNT$ 1\t描述\thttps://example.com/a\thttps://example.com/a.jpg\ttag\t居家\t',
+      'Same Product\tNT$ 2\t描述\thttps://example.com/b\thttps://example.com/b.jpg\ttag\t居家\t',
     ].join('\n')
 
     const result = migrateGoogleSheetProducts(tsv, { date: '2026-06-02' })

@@ -21,10 +21,18 @@ const base_product: Product = {
   status: 'published',
   name: '機械鍵盤',
   price_text: 'NT$ 1,990',
+  price: {
+    amount: 1990,
+    currency: 'TWD',
+    unit: 'each',
+    label: null,
+  },
+  summary: '熱插拔小尺寸鍵盤',
   description: '適合長時間寫程式的繁中鍵盤',
   purchase_url: 'https://example.com/product',
   image_url: 'https://example.com/product.jpg',
-  category: '電腦周邊',
+  channel_id: 'pchome',
+  category_id: 'computer',
   tags: ['鍵盤', 'USB-C'],
   reference_url: 'https://example.com/reference',
   created_at: '2026-06-02T00:00:00+08:00',
@@ -61,14 +69,31 @@ describe('search index', () => {
       {
         id: '2026-06-02-sample-product',
         name: '機械鍵盤',
+        summary: '熱插拔小尺寸鍵盤',
         description: '適合長時間寫程式的繁中鍵盤',
-        category: '電腦周邊',
+        category_id: 'computer',
+        category_label: '電腦',
+        channel_id: 'pchome',
+        channel_label: 'PChome',
         tags: ['鍵盤', 'USB-C'],
         price_text: 'NT$ 1,990',
-        purchase_url: 'https://example.com/product',
         image_url: 'https://example.com/product.jpg',
         published_at: '2026-06-02T00:00:00+08:00',
       },
+    ])
+  })
+
+  it('should map the fallback other category to the taxonomy label for search documents', () => {
+    expect(getSearchDocuments([{
+      ...base_product,
+      id: 'other-category-product',
+      category_id: 'other',
+    }])).toEqual([
+      expect.objectContaining({
+        id: 'other-category-product',
+        category_id: 'other',
+        category_label: '其他',
+      }),
     ])
   })
 
@@ -102,7 +127,8 @@ describe('search index', () => {
         {
           id: '2026-06-02-sample-product',
           name: '機械鍵盤',
-          category: '電腦周邊',
+          category_label: '電腦',
+          channel_label: 'PChome',
           price_text: 'NT$ 1,990',
           image_url: 'https://example.com/product.jpg',
         },
@@ -110,6 +136,9 @@ describe('search index', () => {
     })
     expect(payload.index).toEqual(expect.objectContaining({ documentCount: 1 }))
     expect(mini_search.search('鍵盤')).toHaveLength(1)
+    expect(mini_search.search('熱插拔')).toHaveLength(1)
+    expect(mini_search.search('電腦')).toHaveLength(1)
+    expect(mini_search.search('PChome')).toHaveLength(1)
   })
 
   it('should query restored index and return UI suggestions', () => {
@@ -117,8 +146,8 @@ describe('search index', () => {
       ...base_product,
       id: '2026-06-03-mouse',
       name: '人體工學滑鼠',
+      summary: '垂直握感',
       description: '長時間工作使用',
-      category: '電腦周邊',
       tags: ['滑鼠'],
       price_text: 'NT$ 990',
       image_url: 'https://example.com/mouse.jpg',
@@ -133,7 +162,10 @@ describe('search index', () => {
       {
         id: '2026-06-02-sample-product',
         label: '機械鍵盤',
-        category: '電腦周邊',
+        category: '電腦',
+        category_label: '電腦',
+        channel: 'PChome',
+        channel_label: 'PChome',
         price_text: 'NT$ 1,990',
         score: expect.any(Number),
       },
@@ -168,9 +200,29 @@ describe('search index', () => {
     const output_path = join(temp_dir, 'public', 'search-index.json')
     await mkdir(products_dir)
     await writeFile(join(products_dir, '2026-06-07-filename-stem.json'), JSON.stringify({
-      ...base_product,
       id: 'internal-json-id',
+      status: 'published',
       name: '檔名商品',
+      price_text: 'NT$ 1,990',
+      price: {
+        amount: 1990,
+        currency: 'TWD',
+        unit: 'each',
+        label: null,
+      },
+      summary: '適合長時間寫程式的繁中鍵盤',
+      description: '適合長時間寫程式的繁中鍵盤',
+      purchase_url: 'https://example.com/product',
+      image_url: 'https://example.com/product.jpg',
+      channel_id: 'other',
+      category_id: 'computer',
+      tags: ['鍵盤', 'USB-C'],
+      reference_url: 'https://example.com/reference',
+      created_at: '2026-06-02T00:00:00+08:00',
+      updated_at: '2026-06-02T00:00:00+08:00',
+      published_at: '2026-06-02T00:00:00+08:00',
+      unpublished_at: null,
+      archived_at: null,
     }))
 
     await buildSearchIndexFile(products_dir, output_path)
@@ -182,7 +234,13 @@ describe('search index', () => {
       expect.objectContaining({ id: '2026-06-07-filename-stem', name: '檔名商品' }),
     ])
     expect(querySearchIndex(mini_search, '檔名商品')).toEqual([
-      expect.objectContaining({ id: '2026-06-07-filename-stem' }),
+      expect.objectContaining({
+        id: '2026-06-07-filename-stem',
+        category: '電腦',
+        category_label: '電腦',
+        channel: '其他通路',
+        channel_label: '其他通路',
+      }),
     ])
   })
 
@@ -217,18 +275,22 @@ describe('search index', () => {
     expect(payload.documents).toContainEqual(expect.objectContaining({
       id: '2026-06-02-sharp-65吋-xled',
       name: 'Sharp 65吋 XLED',
-      category: '影音',
+      category_label: '影音',
+      channel_label: expect.any(String),
     }))
   })
 
-  it('should query real product names, categories and tags from the generated static search index', () => {
+  it('should query real product names, summaries, descriptions, category labels, channel labels and tags from the generated static search index', () => {
     const mini_search = loadSearchIndex(readStaticSearchIndexPayload())
 
     expect(querySearchIndex(mini_search, 'Sharp 65吋 XLED')).toContainEqual(expect.objectContaining({
       id: '2026-06-02-sharp-65吋-xled',
       label: 'Sharp 65吋 XLED',
       category: '影音',
+      category_label: '影音',
     }))
+    expect(querySearchIndex(mini_search, '如果不想買OLED').length).toBeGreaterThan(0)
+    expect(querySearchIndex(mini_search, 'Sharp XLED應該是最好的選擇').length).toBeGreaterThan(0)
     expect(querySearchIndex(mini_search, '影音').length).toBeGreaterThan(0)
     expect(querySearchIndex(mini_search, 'PCHome').length).toBeGreaterThan(0)
   })

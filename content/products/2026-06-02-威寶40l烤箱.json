@@ -3,10 +3,18 @@
   "status": "published",
   "name": "威寶40L烤箱",
   "price_text": "9000",
+  "price": {
+    "amount": 9000,
+    "currency": "TWD",
+    "unit": "each",
+    "label": null
+  },
+  "summary": "這是要認真烤麵包用的烤箱，價格不是走親民路線的",
   "description": "這是要認真烤麵包用的烤箱，價格不是走親民路線的",
   "purchase_url": "https://www.momoshop.com.tw/goods/GoodsDetail.jsp?i_code=11521511&fbclid=IwAR16a9uh8O9XNFHzk5BDybSfMkVZccfXvu-54vWPl8ZbC4aYLj9bkMI-NTQ",
   "image_url": "https://i1.momoshop.com.tw/1692546180/goodsimg/0011/521/511/11521511_R.webp",
-  "category": "廚房",
+  "channel_id": "momo",
+  "category_id": "kitchen",
   "tags": [
     "廚房",
     "線材",

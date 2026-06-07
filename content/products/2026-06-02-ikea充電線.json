@@ -3,10 +3,18 @@
   "status": "published",
   "name": "IKEA充電線",
   "price_text": "199",
+  "price": {
+    "amount": 199,
+    "currency": null,
+    "unit": "each",
+    "label": null
+  },
+  "summary": "手機的充電線也是都找他們家買就對了",
   "description": "手機的充電線也是都找他們家買就對了",
   "purchase_url": "https://www.ikea.com.tw/zh/products/electronics/power-supply-and-charging?tags[]=415",
   "image_url": "https://www.ikea.com.tw/dairyfarm/tw/images/456/1045699_PE842703_S4.webp",
-  "category": "3C",
+  "channel_id": "other",
+  "category_id": "three-c",
   "tags": [
     "3C",
     "線材"

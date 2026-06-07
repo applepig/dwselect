@@ -3,10 +3,18 @@
   "status": "published",
   "name": "富里牛奶皇后",
   "price_text": "200/kg",
+  "price": {
+    "amount": 200,
+    "currency": "TWD",
+    "unit": "kilogram",
+    "label": null
+  },
+  "summary": "牛奶皇后是最好吃的台灣米，不服來辯",
   "description": "牛奶皇后是最好吃的台灣米，不服來辯",
   "purchase_url": "https://24h.pchome.com.tw/prod/DBBY0J-A900F81AW",
   "image_url": "https://img.pchome.com.tw/cs/items/DBBY0JA900F81AW/000001_1656130303.jpg",
-  "category": "食材",
+  "channel_id": "pchome",
+  "category_id": "food",
   "tags": [
     "食材",
     "米",

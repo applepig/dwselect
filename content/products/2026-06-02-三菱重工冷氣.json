@@ -3,10 +3,18 @@
   "status": "published",
   "name": "三菱重工冷氣",
   "price_text": "比較貴一點",
+  "price": {
+    "amount": null,
+    "currency": null,
+    "unit": null,
+    "label": "比較貴一點"
+  },
+  "summary": "其實Panasonic、日立也都可以買，但是我要稱讚一下三菱重工的遙控器排程功能超級優秀",
   "description": "其實Panasonic、日立也都可以買，但是我要稱讚一下三菱重工的遙控器排程功能超級優秀",
   "purchase_url": "https://24h.pchome.com.tw/store/DPAF4H",
   "image_url": "https://img.pchome.com.tw/cs/items/DPAF4HA900FMJD3/000001_1700034325.jpg",
-  "category": "居家",
+  "channel_id": "pchome",
+  "category_id": "home",
   "tags": [
     "居家",
     "網路設備",

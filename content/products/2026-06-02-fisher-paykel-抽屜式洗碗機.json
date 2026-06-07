@@ -3,10 +3,18 @@
   "status": "published",
   "name": "Fisher&Paykel 抽屜式洗碗機",
   "price_text": "45000",
+  "price": {
+    "amount": 45000,
+    "currency": "TWD",
+    "unit": "each",
+    "label": null
+  },
+  "summary": "其實Panasonic也有抽屜式，但是台灣沒有進，日規的又太深比較麻煩，所以可以優先考慮這台",
   "description": "其實Panasonic也有抽屜式，但是台灣沒有進，日規的又太深比較麻煩，所以可以優先考慮這台",
   "purchase_url": "https://24h.pchome.com.tw/prod/DMBR24-A900GK0BS",
   "image_url": "https://img.pchome.com.tw/cs/items/DMBR24A900GK0BS/000001_1703010353.jpg",
-  "category": "廚房",
+  "channel_id": "pchome",
+  "category_id": "kitchen",
   "tags": [
     "抽屜式",
     "廚房",

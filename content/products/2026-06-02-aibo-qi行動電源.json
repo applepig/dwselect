@@ -3,10 +3,18 @@
   "status": "published",
   "name": "aibo Qi行動電源",
   "price_text": "899",
+  "price": {
+    "amount": 899,
+    "currency": "TWD",
+    "unit": "each",
+    "label": null
+  },
+  "summary": "我手邊的是之前捕蚊達人那一批的，看起來應該是一樣的",
   "description": "我手邊的是之前捕蚊達人那一批的，看起來應該是一樣的",
   "purchase_url": "https://24h.pchome.com.tw/prod/DYAOE1-A900HDHBH?fq=/S/DYAOAU",
   "image_url": "https://img.pchome.com.tw/cs/items/DYAOE1A900HDHBH/000001_1723775526.jpg",
-  "category": "3C",
+  "channel_id": "pchome",
+  "category_id": "three-c",
   "tags": [
     "無線",
     "行動電源",

@@ -8,10 +8,18 @@ const base_product: Product = {
   status: 'published',
   name: '機械鍵盤',
   price_text: 'NT$ 1,990',
+  price: {
+    amount: 1990,
+    currency: 'TWD',
+    unit: 'each',
+    label: null,
+  },
+  summary: '熱插拔小尺寸鍵盤',
   description: '適合長時間寫程式的繁中鍵盤',
   purchase_url: 'https://example.com/product',
   image_url: 'https://example.com/product.jpg',
-  category: '電腦周邊',
+  channel_id: 'pchome',
+  category_id: 'computer',
   tags: ['鍵盤', 'USB-C'],
   reference_url: 'https://example.com/reference',
   created_at: '2026-06-02T00:00:00+08:00',
@@ -30,6 +38,24 @@ afterEach(() => {
 })
 
 describe('client search lazy loader', () => {
+  it('should fetch the static MiniSearch index and return complete client search results', async () => {
+    const payload = buildSearchIndexPayload([base_product], { generated_at: '2026-06-06T00:00:00+08:00' })
+    const fetch_mock = vi.fn().mockResolvedValue({ ok: true, json: async () => payload })
+    vi.stubGlobal('fetch', fetch_mock)
+    const { getClientSearchResults } = await import('../app/utils/search/client-search')
+
+    const results = await getClientSearchResults('繁中鍵盤')
+
+    expect(fetch_mock).toHaveBeenCalledWith('/search-index.json')
+    expect(results).toEqual([
+      expect.objectContaining({
+        id: '2026-06-02-sample-product',
+        category_label: '電腦',
+        channel_label: 'PChome',
+      }),
+    ])
+  })
+
   it('should retry fetching the search index after a failed request', async () => {
     const payload = buildSearchIndexPayload([base_product], { generated_at: '2026-06-06T00:00:00+08:00' })
     const fetch_mock = vi.fn()
@@ -60,5 +86,11 @@ describe('client search lazy loader', () => {
 
     expect(suggestions).toHaveLength(12)
     expect(suggestions.map((suggestion) => suggestion.id)).not.toContain('shared-product-13')
+    expect(suggestions[0]).toEqual(expect.objectContaining({
+      category: '電腦',
+      category_label: '電腦',
+      channel: 'PChome',
+      channel_label: 'PChome',
+    }))
   })
 })

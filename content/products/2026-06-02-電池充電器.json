@@ -3,10 +3,18 @@
   "status": "published",
   "name": "電池充電器",
   "price_text": "249",
+  "price": {
+    "amount": 249,
+    "currency": "TWD",
+    "unit": "each",
+    "label": null
+  },
+  "summary": "這個倒是可以不用找IKEA，這顆用豆腐頭輸入的，反而比插牆上好用",
   "description": "這個倒是可以不用找IKEA，這顆用豆腐頭輸入的，反而比插牆上好用",
   "purchase_url": "https://24h.pchome.com.tw/prod/DCABC4-A900BOW1X",
   "image_url": "https://img.pchome.com.tw/cs/items/DCABC4A900BOW1X/000001_1629649165.jpg",
-  "category": "3C",
+  "channel_id": "pchome",
+  "category_id": "three-c",
   "tags": [
     "充電器",
     "3C",

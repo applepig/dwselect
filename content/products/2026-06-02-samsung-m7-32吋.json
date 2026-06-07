@@ -3,10 +3,18 @@
   "status": "published",
   "name": "Samsung M7 32吋",
   "price_text": "9900",
+  "price": {
+    "amount": 9900,
+    "currency": "TWD",
+    "unit": "each",
+    "label": null
+  },
+  "summary": "想要4K、想要USB C接筆電、或是用mac沒有dpi問題的話可以考慮這台",
   "description": "想要4K、想要USB C接筆電、或是用mac沒有dpi問題的話可以考慮這台",
   "purchase_url": "https://24h.pchome.com.tw/prod/DPADEW-A900HXG0E",
   "image_url": "https://img.pchome.com.tw/cs/items/DSABONA900E71LK/000001_1701314910.jpg",
-  "category": "電腦",
+  "channel_id": "pchome",
+  "category_id": "computer",
   "tags": [
     "電腦",
     "4K",

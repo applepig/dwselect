@@ -1,6 +1,6 @@
 import MiniSearch, { type SearchResult } from 'minisearch'
 
-import type { Product } from '../product-schema.ts'
+import type { CategoryDefinition, ChannelDefinition, Product } from '../product-schema.ts'
 import { tokenizeSearchText } from './search-tokenizer.ts'
 
 export const SEARCH_INDEX_VERSION = 1
@@ -8,18 +8,21 @@ export const SEARCH_INDEX_VERSION = 1
 export type SearchDocument = {
   id: string
   name: string
+  summary: string
   description: string
-  category: string
+  category_id: string
+  category_label: string
+  channel_id: string
+  channel_label: string
   tags: string[]
   price_text: string
-  purchase_url: string
   image_url: string
   published_at: string | null
 }
 
 export type SearchIndexDocumentSummary = Pick<
   SearchDocument,
-  'id' | 'name' | 'category' | 'price_text' | 'image_url'
+  'id' | 'name' | 'category_label' | 'channel_label' | 'price_text' | 'image_url'
 >
 
 export type SearchIndexPayload = {
@@ -33,29 +36,79 @@ export type SearchSuggestion = {
   id: string
   label: string
   category: string
+  category_label: string
+  channel: string
+  channel_label: string
   price_text: string
   score: number
 }
 
 type BuildSearchIndexOptions = {
   generated_at?: string
+  categories?: CategoryDefinition[]
+  channels?: ChannelDefinition[]
 }
 
-const SEARCH_FIELDS: Array<keyof SearchDocument> = ['name', 'description', 'category', 'tags']
-const SEARCH_STORE_FIELDS: Array<keyof SearchDocument> = ['id', 'name', 'category', 'price_text', 'image_url']
+const DEFAULT_CATEGORIES: CategoryDefinition[] = [
+  { id: 'home', label: '居家', short_label: '居家', sort_order: 10 },
+  { id: 'kitchen', label: '廚房', short_label: '廚房', sort_order: 20 },
+  { id: 'computer', label: '電腦', short_label: '電腦', sort_order: 30 },
+  { id: 'three-c', label: '3C', short_label: '3C', sort_order: 40 },
+  { id: 'av', label: '影音', short_label: '影音', sort_order: 50 },
+  { id: 'food', label: '食材', short_label: '食材', sort_order: 60 },
+  { id: 'other', label: '其他', short_label: '其他', sort_order: 999 },
+]
 
-export function getSearchDocuments(products: Product[]): SearchDocument[] {
+const DEFAULT_CHANNELS: ChannelDefinition[] = [
+  { id: 'pchome', label: 'PChome', tint: 'blue', host_patterns: ['24h.pchome.com.tw'], sort_order: 10 },
+  { id: 'momo', label: 'momo', tint: 'pink', host_patterns: ['www.momoshop.com.tw'], sort_order: 20 },
+  {
+    id: 'amazonjp',
+    label: 'Amazon JP',
+    tint: 'amber',
+    host_patterns: ['www.amazon.co.jp', 'amzn.asia'],
+    sort_order: 30,
+  },
+  { id: 'amazonus', label: 'Amazon US', tint: 'amber', host_patterns: ['www.amazon.com'], sort_order: 40 },
+  { id: 'costco', label: 'Costco', tint: 'indigo', host_patterns: ['www.costco.com.tw'], sort_order: 50 },
+  { id: 'other', label: '其他通路', tint: 'neutral', host_patterns: [], sort_order: 999 },
+]
+
+const SEARCH_FIELDS: Array<keyof SearchDocument> = [
+  'name',
+  'summary',
+  'description',
+  'category_label',
+  'channel_label',
+  'tags',
+]
+const SEARCH_STORE_FIELDS: Array<keyof SearchDocument> = [
+  'id',
+  'name',
+  'category_label',
+  'channel_label',
+  'price_text',
+  'image_url',
+]
+
+export function getSearchDocuments(
+  products: Product[],
+  options: Pick<BuildSearchIndexOptions, 'categories' | 'channels'> = {},
+): SearchDocument[] {
+  const category_labels = getCategoryLabelMap(options.categories ?? DEFAULT_CATEGORIES)
+  const channel_labels = getChannelLabelMap(options.channels ?? DEFAULT_CHANNELS)
+
   return products
     .filter((product) => product.status === 'published')
     .toSorted(compareProducts)
-    .map(mapProductToSearchDocument)
+    .map((product) => mapProductToSearchDocument(product, category_labels, channel_labels))
 }
 
 export function buildSearchIndexPayload(
   products: Product[],
   options: BuildSearchIndexOptions = {},
 ): SearchIndexPayload {
-  const documents = getSearchDocuments(products)
+  const documents = getSearchDocuments(products, options)
   const mini_search = createSearchIndex()
 
   mini_search.addAll(documents)
@@ -110,15 +163,22 @@ function createSearchIndex() {
   return new MiniSearch<SearchDocument>(getSearchOptions())
 }
 
-function mapProductToSearchDocument(product: Product): SearchDocument {
+function mapProductToSearchDocument(
+  product: Product,
+  category_labels: ReadonlyMap<Product['category_id'], string>,
+  channel_labels: ReadonlyMap<Product['channel_id'], string>,
+): SearchDocument {
   return {
     id: product.id,
     name: product.name,
+    summary: product.summary,
     description: product.description,
-    category: product.category,
+    category_id: product.category_id,
+    category_label: category_labels.get(product.category_id) ?? product.category_id,
+    channel_id: product.channel_id,
+    channel_label: channel_labels.get(product.channel_id) ?? product.channel_id,
     tags: [...product.tags],
     price_text: product.price_text,
-    purchase_url: product.purchase_url,
     image_url: product.image_url,
     published_at: product.published_at,
   }
@@ -128,7 +188,8 @@ function mapDocumentToSummary(document: SearchDocument): SearchIndexDocumentSumm
   return {
     id: document.id,
     name: document.name,
-    category: document.category,
+    category_label: document.category_label,
+    channel_label: document.channel_label,
     price_text: document.price_text,
     image_url: document.image_url,
   }
@@ -138,10 +199,21 @@ function mapSearchResultToSuggestion(result: SearchResult): SearchSuggestion {
   return {
     id: result.id,
     label: String(result.name),
-    category: String(result.category),
+    category: String(result.category_label),
+    category_label: String(result.category_label),
+    channel: String(result.channel_label),
+    channel_label: String(result.channel_label),
     price_text: String(result.price_text),
     score: result.score,
   }
+}
+
+function getCategoryLabelMap(categories: CategoryDefinition[]) {
+  return new Map(categories.map((category) => [category.id, category.label]))
+}
+
+function getChannelLabelMap(channels: ChannelDefinition[]) {
+  return new Map(channels.map((channel) => [channel.id, channel.label]))
 }
 
 function compareProducts(left_product: Product, right_product: Product) {

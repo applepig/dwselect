@@ -3,10 +3,18 @@
   "status": "published",
   "name": "Toshiba YD5000",
   "price_text": "￥100000",
+  "price": {
+    "amount": 100000,
+    "currency": "JPY",
+    "unit": "each",
+    "label": null
+  },
+  "summary": "看得懂日文的話買水貨還是比較便宜，這台是次旗艦，而且amazon還免運費直接到你家",
   "description": "看得懂日文的話買水貨還是比較便宜，這台是次旗艦，而且amazon還免運費直接到你家",
   "purchase_url": "https://amzn.asia/d/45791oT",
   "image_url": "https://m.media-amazon.com/images/I/815FU9IOtcL._AC_SL1500_.jpg",
-  "category": "廚房",
+  "channel_id": "amazonjp",
+  "category_id": "kitchen",
   "tags": [
     "廚房"
   ],

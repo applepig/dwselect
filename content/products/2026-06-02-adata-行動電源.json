@@ -3,10 +3,18 @@
   "status": "published",
   "name": "ADATA 行動電源",
   "price_text": "500",
+  "price": {
+    "amount": 500,
+    "currency": "TWD",
+    "unit": "each",
+    "label": null
+  },
+  "summary": "體積相當小，而且還很便宜",
   "description": "體積相當小，而且還很便宜",
   "purchase_url": "https://24h.pchome.com.tw/prod/DYAO44-A900HC1WQ",
   "image_url": "https://cs-a.ecimg.tw/items/DYAO44A900HC1WQ/yt000001_1711341252.jpg",
-  "category": "3C",
+  "channel_id": "pchome",
+  "category_id": "three-c",
   "tags": [
     "行動電源",
     "3C",
