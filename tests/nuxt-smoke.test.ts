@@ -101,7 +101,7 @@ describe('Nuxt SSG baseline', () => {
     expect(product_file_names).not.toContain('2026-06-02-sample-product.json')
     expect(product_sources.join('\n')).toContain('Sharp 65吋 XLED')
     expect(product_sources.join('\n')).toContain('"category": "影音"')
-    expect(search_index_source).toContain('2026-06-02-sharp-65-xled')
+    expect(search_index_source).toContain('2026-06-02-sharp-65吋-xled')
     expect(search_index_source).toContain('Sharp 65吋 XLED')
     expect(search_index_source).not.toContain('2026-06-02-sample-product')
   })

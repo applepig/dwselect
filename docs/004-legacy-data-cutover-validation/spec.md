@@ -60,7 +60,7 @@ Product JSON 範例：
 
 ```json
 {
-  "id": "2026-06-02-sharp-65-xled",
+  "id": "2026-06-02-sharp-65吋-xled",
   "status": "published",
   "name": "Sharp 65吋 XLED",
   "price_text": "43000",

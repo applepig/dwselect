@@ -215,7 +215,7 @@ describe('search index', () => {
     expect(payload.index.documentCount).toBe(published_count)
     expect(payload.documents.map((document) => document.id)).not.toContain('2026-06-02-sample-product')
     expect(payload.documents).toContainEqual(expect.objectContaining({
-      id: '2026-06-02-sharp-65-xled',
+      id: '2026-06-02-sharp-65吋-xled',
       name: 'Sharp 65吋 XLED',
       category: '影音',
     }))
@@ -225,7 +225,7 @@ describe('search index', () => {
     const mini_search = loadSearchIndex(readStaticSearchIndexPayload())
 
     expect(querySearchIndex(mini_search, 'Sharp 65吋 XLED')).toContainEqual(expect.objectContaining({
-      id: '2026-06-02-sharp-65-xled',
+      id: '2026-06-02-sharp-65吋-xled',
       label: 'Sharp 65吋 XLED',
       category: '影音',
     }))

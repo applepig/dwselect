@@ -75,6 +75,35 @@ describe('migrate Google Sheet products', () => {
     expect(result.summary.created_count).toBe(1)
   })
 
+  it('should keep quoted multiline TSV fields in the same product row', () => {
+    const tsv = [
+      header,
+      '多行商品\tNT$ 1\t"第一行\n第二行"\thttps://example.com/product\thttps://example.com/image.jpg\ttag\t分類\t',
+    ].join('\n')
+
+    const result = migrateGoogleSheetProducts(tsv, { date: '2026-06-02' })
+
+    expect(result.products).toHaveLength(1)
+    expect(result.products[0]?.content).toEqual(expect.objectContaining({
+      name: '多行商品',
+      description: '第一行\n第二行',
+      image_url: 'https://example.com/image.jpg',
+    }))
+    expect(result.summary.warnings).toEqual([])
+  })
+
+  it('should use readable Unicode slugs instead of hash fallback for CJK names', () => {
+    const tsv = [
+      header,
+      '旭ポンズ\t￥840\t描述\thttps://example.com/product\thttps://example.com/image.jpg\t食材 調味料\t食材\t',
+    ].join('\n')
+
+    const result = migrateGoogleSheetProducts(tsv, { date: '2026-06-02' })
+
+    expect(result.products[0]?.file_name).toBe('2026-06-02-旭ポンズ.json')
+    expect(result.products[0]?.content.id).toBe('2026-06-02-旭ポンズ')
+  })
+
   it('should warn and skip rows when the final reference column is omitted', () => {
     const tsv = [
       legacy_header,

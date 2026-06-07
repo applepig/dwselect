@@ -1,4 +1,4 @@
-import { mkdir, readFile, writeFile } from 'node:fs/promises'
+import { mkdir, readdir, readFile, unlink, writeFile } from 'node:fs/promises'
 import { basename, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { createHash } from 'node:crypto'
@@ -64,8 +64,8 @@ const PINYIN_MAP: Record<string, string> = {
 export function migrateGoogleSheetProducts(tsv_text: string, options: MigrationOptions = {}): MigrationResult {
   const date = options.date ?? getTodayDate()
   const timestamp = `${date}T00:00:00+08:00`
-  const lines = tsv_text.split(/\r?\n/).filter((line) => line.length > 0)
-  const headers = lines[0]?.split('\t') ?? []
+  const rows = parseTsvRows(tsv_text)
+  const headers = rows[0]?.map((header) => header.trim()) ?? []
   const products: MigratedProduct[] = []
   const used_ids = new Set<string>()
   const summary: MigrationSummary = {
@@ -77,9 +77,13 @@ export function migrateGoogleSheetProducts(tsv_text: string, options: MigrationO
     collisions: [],
   }
 
-  for (let i = 1; i < lines.length; i += 1) {
+  for (let i = 1; i < rows.length; i += 1) {
     const row_number = i + 1
-    const raw_columns = lines[i]?.split('\t') ?? []
+    const raw_columns = rows[i] ?? []
+
+    if (raw_columns.length === 1 && raw_columns[0] === '') {
+      continue
+    }
 
     if (raw_columns.length !== headers.length) {
       summary.warnings.push({
@@ -182,14 +186,19 @@ async function runCli() {
   const input_path = args.find((arg) => !arg.startsWith('--'))
   const date = getOptionValue(args, '--date')
   const output_dir = getOptionValue(args, '--out-dir') ?? 'content/products'
+  const should_replace = args.includes('--replace')
 
   if (!input_path) {
-    throw new Error('Usage: node scripts/migrate-google-sheet-products.ts <input.tsv> --date YYYY-MM-DD [--out-dir content/products]')
+    throw new Error('Usage: node scripts/migrate-google-sheet-products.ts <input.tsv-or-url> --date YYYY-MM-DD [--out-dir content/products] [--replace]')
   }
 
-  const tsv_text = await readFile(input_path, 'utf8')
+  const tsv_text = await readMigrationInput(input_path)
   const result = migrateGoogleSheetProducts(tsv_text, { date })
   await mkdir(output_dir, { recursive: true })
+
+  if (should_replace) {
+    await removeJsonFiles(output_dir)
+  }
 
   for (const product of result.products) {
     await writeFile(join(output_dir, product.file_name), `${JSON.stringify(product.content, null, 2)}\n`)
@@ -205,6 +214,109 @@ function getRow(headers: string[], columns: string[]) {
 
     return row
   }, {}) as Record<(typeof REQUIRED_HEADERS)[number], string>
+}
+
+function parseTsvRows(tsv_text: string) {
+  const text = tsv_text.replace(/\r\n/g, '\n').replace(/\r/g, '\n')
+  const rows: string[][] = []
+  let row: string[] = []
+  let field = ''
+  let in_quotes = false
+  let ended_with_row_break = false
+
+  for (let i = 0; i < text.length; i += 1) {
+    const char = text[i]
+
+    if (in_quotes) {
+      if (char === '"') {
+        if (text[i + 1] === '"') {
+          field += '"'
+          i += 1
+        }
+        else {
+          in_quotes = false
+        }
+      }
+      else {
+        field += char
+      }
+
+      ended_with_row_break = false
+      continue
+    }
+
+    if (char === '"' && field.length === 0) {
+      in_quotes = true
+      ended_with_row_break = false
+      continue
+    }
+
+    if (char === '\t') {
+      row.push(field)
+      field = ''
+      ended_with_row_break = false
+      continue
+    }
+
+    if (char === '\n') {
+      row.push(field)
+      rows.push(row)
+      row = []
+      field = ''
+      ended_with_row_break = true
+      continue
+    }
+
+    field += char
+    ended_with_row_break = false
+  }
+
+  if (field.length > 0 || row.length > 0 || !ended_with_row_break) {
+    row.push(field)
+    rows.push(row)
+  }
+
+  return rows
+}
+
+async function readMigrationInput(input_path: string) {
+  if (isHttpUrl(input_path)) {
+    const response = await fetch(input_path)
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch migration input: ${response.status} ${response.statusText}`)
+    }
+
+    return response.text()
+  }
+
+  const input_text = await readFile(input_path, 'utf8')
+
+  if (input_path.endsWith('.html')) {
+    const legacy_tsv_url = getLegacyTsvUrl(input_text)
+
+    if (!legacy_tsv_url) {
+      throw new Error(`Could not find google_tsv_url in ${input_path}`)
+    }
+
+    return readMigrationInput(legacy_tsv_url)
+  }
+
+  return input_text
+}
+
+function getLegacyTsvUrl(html_text: string) {
+  const match = html_text.match(/google_tsv_url\s*=\s*["']([^"']+)["']/)
+
+  return match?.[1]
+}
+
+async function removeJsonFiles(output_dir: string) {
+  const entries = await readdir(output_dir, { withFileTypes: true })
+
+  await Promise.all(entries
+    .filter((entry) => entry.isFile() && entry.name.endsWith('.json'))
+    .map((entry) => unlink(join(output_dir, entry.name))))
 }
 
 function getUrlError(purchase_url: string, image_url: string, reference_url: string | null) {
@@ -271,9 +383,9 @@ function getReadableSlug(name: string) {
   const slug = Array.from(name)
     .map((char) => PINYIN_MAP[char] ? `-${PINYIN_MAP[char]}-` : char)
     .join('')
-    .normalize('NFKD')
+    .normalize('NFKC')
     .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/[^\p{Letter}\p{Number}]+/gu, '-')
     .replace(/^-+|-+$/g, '')
 
   if (slug) {
@@ -312,6 +424,10 @@ function getOptionValue(args: string[], option_name: string) {
 
   if (index === -1) {
     return undefined
+  }
+
+  if (!args[index + 1] || args[index + 1].startsWith('--')) {
+    throw new Error(`Missing value for ${option_name}`)
   }
 
   return args[index + 1]

@@ -44,7 +44,7 @@ pnpm build:search-index
 
 - 未調整 migration script；維持 header-name based 欄位讀取，且未新增 runtime Google Sheets dependency。
 - 驗證 canonical id、category、tags 與 search document mapping：
-  - `Sharp 65吋 XLED` id 為 `2026-06-02-sharp-65-xled`。
+  - `Sharp 65吋 XLED` id 為 `2026-06-02-sharp-65吋-xled`。
   - category 為 `影音`。
   - tags 為 `電視`、`影音`、`PCHome`。
 - 驗證命令與結果：
@@ -66,3 +66,10 @@ pnpm build:search-index
 - xreview finding：`scripts/migrate-google-sheet-products.ts` 的 `getNormalizedColumns()` 會在 row 少一欄且最後 header 是 `reference` 時自動補空字串；若缺的是中間 tab（例如缺 `price`），可能讓 URL 欄位左移，產生 schema 通過但欄位錯位的商品 JSON。
 - 使用者決策：TSV 後續不再使用，採最小嚴格欄數修正；不再支援省略最後 `reference` 欄。
 - 修正摘要：移除欄位補齊容錯，row 欄數不等於 header 欄數時一律 warning + skip；測試改寫省略尾端 `reference` 應 skip，並新增缺中間 `price` 欄造成 URL 左移的 regression。
+
+### Hotfix：以 legacy index 入口重做 cutover
+
+- 問題：舊 cutover 的檔名對中文／日文商品退回 `product-<hash>`，且使用者觀察到部分圖片與商品對不上，需要以舊站實際使用的資料來源重新轉檔。
+- 修正：`scripts/migrate-google-sheet-products.ts` 支援 `legacy/index.html` 作為 input，會抽出舊站 `google_tsv_url` 重新抓取資料；TSV parser 改為逐字元解析 quoted field，避免欄位內換行造成錯行；slug 改為保留 Unicode letter/number，避免 CJK 商品名落入 hash fallback。
+- 重做：執行 `node scripts/migrate-google-sheet-products.ts legacy/index.html --date 2026-06-02 --out-dir content/products --replace`，產生 66 筆 product JSON，並以 `pnpm build:search-index` 重建 search index。
+- 其他：移除誤產生的 ignored `./--port` Nuxt artifact directory（使用 `trash-put`）。

@@ -342,7 +342,7 @@ describe('published product cutover content', () => {
     expect(catalog_view.counts).toEqual({ published: 66, filtered: 66 })
     expect(catalog_view.products.map((product) => product.id)).not.toContain('2026-06-02-sample-product')
     expect(catalog_view.products).toContainEqual(expect.objectContaining({
-      id: '2026-06-02-sharp-65-xled',
+      id: '2026-06-02-sharp-65吋-xled',
       name: 'Sharp 65吋 XLED',
       category: '影音',
       tags: ['電視', '影音', 'PCHome'],
@@ -353,7 +353,7 @@ describe('published product cutover content', () => {
     const products = readContentProducts()
 
     expect(getCatalogView(products, { query: 'Sharp 65吋 XLED' }).products).toContainEqual(expect.objectContaining({
-      id: '2026-06-02-sharp-65-xled',
+      id: '2026-06-02-sharp-65吋-xled',
     }))
     expect(getCatalogView(products, { query: '影音' }).products.length).toBeGreaterThan(0)
     expect(getCatalogView(products, { query: 'PCHome' }).products.length).toBeGreaterThan(0)
