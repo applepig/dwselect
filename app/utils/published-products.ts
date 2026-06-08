@@ -93,6 +93,18 @@ export type CompactAppState = {
   selected_tags?: string[]
 }
 
+export type CompactRouteQueryValue = string | string[] | null | undefined
+
+export type CompactRouteState = {
+  path: string
+  query?: Record<string, CompactRouteQueryValue>
+}
+
+export type CompactRouteStateOptions = {
+  category_ids?: string[]
+  tag_labels?: string[]
+}
+
 export type CompactAppTab = {
   id: CompactAppTabId
   label: string
@@ -358,6 +370,36 @@ export function getCompactAppView(
     counts: {
       published: published_cards.length,
     },
+  }
+}
+
+export function getCompactAppStateFromRoute(
+  route: CompactRouteState,
+  options: CompactRouteStateOptions = {},
+): CompactAppState {
+  if (route.path === '/guide') {
+    return {
+      active_tab: 'guide',
+      selected_tags: parseSelectedTags(route.query?.tags, options.tag_labels),
+    }
+  }
+
+  if (route.path === '/search') {
+    return {
+      active_tab: 'search',
+      search_query: getFirstQueryValue(route.query?.q).trim(),
+    }
+  }
+
+  if (route.path === '/links') {
+    return {
+      active_tab: 'links',
+    }
+  }
+
+  return {
+    active_tab: 'home',
+    home_category_id: parseCategoryId(route.query?.category, options.category_ids),
   }
 }
 
@@ -697,6 +739,65 @@ function normalizeCompactTab(tab: CompactAppState['active_tab']): CompactAppTabI
   }
 
   return 'home'
+}
+
+function parseCategoryId(
+  value: CompactRouteQueryValue,
+  valid_category_ids: CompactRouteStateOptions['category_ids'],
+): Product['category_id'] | 'all' {
+  const category_id = getFirstQueryValue(value).trim()
+
+  if (category_id === '' || category_id === 'all') {
+    return 'all'
+  }
+
+  if (valid_category_ids !== undefined && !valid_category_ids.includes(category_id)) {
+    return 'all'
+  }
+
+  return category_id
+}
+
+function parseSelectedTags(
+  value: CompactRouteQueryValue,
+  valid_tag_labels: CompactRouteStateOptions['tag_labels'],
+) {
+  const valid_tag_set = valid_tag_labels === undefined ? null : new Set(valid_tag_labels)
+  const selected_tags = new Set<string>()
+
+  // Why: tag 是 free-string label，可能含逗號。改用 Vue Router 原生 array query
+  // （重複 param）後，每個 query value 就是一個完整 tag，不可再以逗號二次切割。
+  for (const raw_value of getQueryValues(value)) {
+    const normalized_tag = raw_value.trim()
+
+    if (normalized_tag === '') {
+      continue
+    }
+
+    if (valid_tag_set !== null && !valid_tag_set.has(normalized_tag)) {
+      continue
+    }
+
+    selected_tags.add(normalized_tag)
+  }
+
+  return Array.from(selected_tags)
+}
+
+function getFirstQueryValue(value: CompactRouteQueryValue) {
+  return getQueryValues(value)[0] ?? ''
+}
+
+function getQueryValues(value: CompactRouteQueryValue) {
+  if (Array.isArray(value)) {
+    return value.filter((item): item is string => typeof item === 'string')
+  }
+
+  if (typeof value === 'string') {
+    return [value]
+  }
+
+  return []
 }
 
 function getNormalizedSelectedTags(tags: CompactAppState['selected_tags']) {

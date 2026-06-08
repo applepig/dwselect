@@ -2,13 +2,16 @@
   <UCard
     class="product-card"
     :data-product-id="product.id"
+    :style="{
+      'view-transition-name': `product-card-${product.id}`,
+      'view-transition-class': 'product-card',
+    }"
     :ui="{ body: 'p-0' }"
   >
-    <button
-      type="button"
-      class="product-card-button"
+    <NuxtLink
+      :to="`/products/${product.id}`"
+      class="product-card-link"
       :aria-label="`查看 ${product.name} 詳情`"
-      @click="emit('select', product.id)"
     >
       <span
         class="product-image-tile"
@@ -43,7 +46,7 @@
         <span class="product-name">{{ product.name }}</span>
         <span class="product-summary">{{ product.summary }}</span>
       </span>
-    </button>
+    </NuxtLink>
   </UCard>
 </template>
 
@@ -52,9 +55,5 @@ import type { PublishedProductCard } from '../utils/published-products'
 
 defineProps<{
   product: PublishedProductCard
-}>()
-
-const emit = defineEmits<{
-  select: [product_id: string]
 }>()
 </script>

@@ -10,6 +10,7 @@ describe('Nuxt SSG baseline', () => {
     expect(nuxt_config.modules).toContain('@nuxt/content')
     expect(nuxt_config.modules).toContain('@nuxt/ui')
     expect(nuxt_config.nitro?.preset).toBe('static')
+    expect(nuxt_config.experimental?.viewTransition).toBe(true)
   })
 
   it('should build the search index before static generation', () => {
@@ -60,29 +61,31 @@ describe('Nuxt SSG baseline', () => {
   })
 
   it('should wire the public search input to Nuxt UI with external filtering', () => {
-    const page_source = readFileSync(new URL('../app/pages/index.vue', import.meta.url), 'utf8')
+    const page_source = readFileSync(new URL('../app/pages/search.vue', import.meta.url), 'utf8')
 
     expect(page_source).toContain('<UInput')
-    expect(page_source).toContain('v-model="search_query"')
+    expect(page_source).toContain('v-model="pending_search_query"')
     expect(page_source).toContain('placeholder="在找什麼嗎？™"')
     expect(page_source).toContain('getClientSearchResults')
     expect(page_source).toContain('client_search_result_ids')
     expect(page_source).toContain('search_result_ids: client_search_result_ids.value')
+    expect(page_source).toContain('router.replace')
     expect(page_source).not.toContain('<UInputMenu')
   })
 
   it('should load runtime taxonomies and links from Nuxt Content in the compact app source', () => {
-    const page_source = readFileSync(new URL('../app/pages/index.vue', import.meta.url), 'utf8')
+    const composable_source = readFileSync(new URL('../app/composables/use-catalog-data.ts', import.meta.url), 'utf8')
+    const home_source = readFileSync(new URL('../app/pages/index.vue', import.meta.url), 'utf8')
 
-    expect(page_source).toContain("queryCollection('categories')")
-    expect(page_source).toContain("queryCollection('channels')")
-    expect(page_source).toContain("queryCollection('links')")
-    expect(page_source).toContain('runtime_taxonomies')
-    expect(page_source).toContain('runtime_links')
-    expect(page_source).toContain('getCompactAppView(all_products.value')
-    expect(page_source).toContain('runtime_taxonomies.value')
-    expect(page_source).toContain('runtime_links.value')
-    expect(page_source).toContain('getProductDetail(selected_product.value, runtime_taxonomies.value')
+    expect(composable_source).toContain("queryCollection('products')")
+    expect(composable_source).toContain("queryCollection('categories')")
+    expect(composable_source).toContain("queryCollection('channels')")
+    expect(composable_source).toContain("queryCollection('links')")
+    expect(composable_source).toContain('runtime_taxonomies')
+    expect(composable_source).toContain('runtime_links')
+    expect(home_source).toContain('useCatalogData')
+    expect(home_source).toContain('getCompactAppView(all_products.value')
+    expect(home_source).toContain('runtime_taxonomies.value')
   })
 
   it('should lazy fetch the static search index from a client helper', () => {
@@ -97,7 +100,11 @@ describe('Nuxt SSG baseline', () => {
   })
 
   it('should expose compact app empty states in the public source', () => {
-    const page_source = readFileSync(new URL('../app/pages/index.vue', import.meta.url), 'utf8')
+    const page_source = [
+      '../app/pages/index.vue',
+      '../app/pages/guide.vue',
+      '../app/pages/search.vue',
+    ].map((file_path) => readFileSync(new URL(file_path, import.meta.url), 'utf8')).join('\n')
 
     expect(page_source).toContain('目前沒有已上架商品')
     expect(page_source).toContain('這組 tag 暫時沒東西')
@@ -151,7 +158,14 @@ describe('Nuxt SSG baseline', () => {
   })
 
   it('should split compact app shell into navigation, theme, card, tag and link components', () => {
-    const page_source = readFileSync(new URL('../app/pages/index.vue', import.meta.url), 'utf8')
+    const layout_source = readFileSync(new URL('../app/layouts/default.vue', import.meta.url), 'utf8')
+    const page_sources = [
+      '../app/pages/index.vue',
+      '../app/pages/guide.vue',
+      '../app/pages/search.vue',
+      '../app/pages/links.vue',
+      '../app/pages/products/[id].vue',
+    ].map((file_path) => readFileSync(new URL(file_path, import.meta.url), 'utf8')).join('\n')
     const component_files = [
       '../app/components/app-navigation.vue',
       '../app/components/theme-toggle.vue',
@@ -161,31 +175,31 @@ describe('Nuxt SSG baseline', () => {
       '../app/components/link-panel.vue',
     ]
 
-    expect(page_source).toContain('<AppNavigation')
-    expect(page_source).toContain('<ThemeToggle')
-    expect(page_source).toContain('<ProductCard')
-    expect(page_source).toContain('<ProductDetail')
-    expect(page_source).toContain('<TagExplorer')
-    expect(page_source).toContain('<LinkPanel')
+    expect(layout_source).toContain('<AppNavigation')
+    expect(layout_source).toContain('<ThemeToggle')
+    expect(layout_source).toContain('<slot />')
+    expect(page_sources).toContain('<ProductCard')
+    expect(page_sources).toContain('<ProductDetail')
+    expect(page_sources).toContain('<TagExplorer')
+    expect(page_sources).toContain('<LinkPanel')
 
     for (const file_path of component_files) {
       expect(readFileSync(new URL(file_path, import.meta.url), 'utf8')).toBeTruthy()
     }
   })
 
-  it('should expose compact tabs, theme toggle and external link row in source', () => {
-    const page_source = readFileSync(new URL('../app/pages/index.vue', import.meta.url), 'utf8')
+  it('should expose routed compact tabs, theme toggle and external link row in source', () => {
     const nav_source = readFileSync(new URL('../app/components/app-navigation.vue', import.meta.url), 'utf8')
     const theme_source = readFileSync(new URL('../app/components/theme-toggle.vue', import.meta.url), 'utf8')
     const link_source = readFileSync(new URL('../app/components/link-panel.vue', import.meta.url), 'utf8')
     const view_model_source = readFileSync(new URL('../app/utils/published-products.ts', import.meta.url), 'utf8')
 
-    expect(page_source).toContain(':select-tab="setActiveTab"')
-    expect(page_source).toContain("active_tab === 'home'")
-    expect(page_source).toContain("active_tab === 'guide'")
-    expect(page_source).toContain("active_tab === 'search'")
-    expect(page_source).toContain("active_tab === 'links'")
-    expect(page_source).toContain('沒這個坑，去許願吧')
+    expect(nav_source).toContain('<NuxtLink')
+    expect(nav_source).toContain("to: '/'")
+    expect(nav_source).toContain("to: '/guide'")
+    expect(nav_source).toContain("to: '/search'")
+    expect(nav_source).toContain("to: '/links'")
+    expect(nav_source).not.toContain('selectTab')
     expect(nav_source).toContain('compact-app-bottom-tabs')
     expect(nav_source).toContain('compact-app-rail')
     expect(nav_source).toContain('compact-app-sidebar')
@@ -196,33 +210,70 @@ describe('Nuxt SSG baseline', () => {
     expect(view_model_source).toContain('https://applepig.idv.tw')
   })
 
-  it('should wire product detail modal, buy CTA and view transition fallback in source', () => {
-    const page_source = readFileSync(new URL('../app/pages/index.vue', import.meta.url), 'utf8')
+  it('should wire product detail route, buy CTA and view transition contracts in source', () => {
+    const detail_page_source = readFileSync(new URL('../app/pages/products/[id].vue', import.meta.url), 'utf8')
     const card_source = readFileSync(new URL('../app/components/product-card.vue', import.meta.url), 'utf8')
     const detail_source = readFileSync(new URL('../app/components/product-detail.vue', import.meta.url), 'utf8')
-    const view_transition_source = readFileSync(new URL('../app/utils/view-transition.ts', import.meta.url), 'utf8')
     const catalog_css = readFileSync(new URL('../app/assets/styles/catalog.css', import.meta.url), 'utf8')
 
-    expect(page_source).toContain('selected_product_id')
-    expect(page_source).toContain('runViewTransition')
-    expect(page_source).toContain('getProductDetail')
-    expect(page_source).toContain('v-model:open')
-    expect(page_source).toContain(':fullscreen="is_phone_detail"')
+    expect(detail_page_source).toContain('getProductDetail')
+    expect(detail_page_source).toContain('createError')
+    expect(detail_page_source).toContain('statusCode: 404')
+    expect(detail_page_source).toContain('<ProductDetail')
     expect(card_source).toContain('查看')
     expect(card_source).toContain('詳情')
+    expect(card_source).toContain('<NuxtLink')
+    expect(card_source).toContain('`/products/${product.id}`')
     expect(card_source).toContain('view-transition-name')
-    expect(detail_source).toContain('<UModal')
+    expect(detail_source).not.toContain('<UModal')
+    expect(detail_source).toContain('detail-hero-tile')
+    expect(detail_source).toContain('view-transition-name')
     expect(detail_source).toContain('DW 怎麼說')
     expect(detail_source).toContain('v-if="detail.description"')
     expect(detail_source).toContain('到 {{ detail.channel_label }} 購買')
     expect(detail_source).toContain('target="_blank"')
     expect(detail_source).toContain('rel="noopener noreferrer"')
     expect(detail_source).toContain('價格與庫存以通路頁面為準。')
-    expect(view_transition_source).toContain('startViewTransition')
-    expect(view_transition_source).toContain('prefers-reduced-motion')
-    expect(catalog_css).toContain('.product-detail-modal')
-    expect(catalog_css).toContain('.product-detail-sheet')
+    expect(catalog_css).toContain('view-transition-class: product-card')
+    expect(catalog_css).toContain('::view-transition-group(.product-card)')
+    expect(catalog_css).toContain('@media (prefers-reduced-motion: reduce)')
+    expect(catalog_css).toContain('.product-detail-page')
     expect(catalog_css).toContain('.detail-buy-cta')
+  })
+
+  it('should register product detail head metadata before async catalog loading', () => {
+    const detail_page_source = readFileSync(new URL('../app/pages/products/[id].vue', import.meta.url), 'utf8')
+    const use_head_index = detail_page_source.indexOf('useHead(')
+    const catalog_await_index = detail_page_source.indexOf('await useCatalogData()')
+
+    expect(use_head_index).toBeGreaterThanOrEqual(0)
+    expect(catalog_await_index).toBeGreaterThanOrEqual(0)
+    expect(use_head_index).toBeLessThan(catalog_await_index)
+  })
+
+  it('should define routed page files and prerender every product detail route', () => {
+    const page_files = [
+      '../app/pages/index.vue',
+      '../app/pages/guide.vue',
+      '../app/pages/search.vue',
+      '../app/pages/links.vue',
+      '../app/pages/products/[id].vue',
+    ]
+    const product_route_count = readdirSync(new URL('../content/products/', import.meta.url))
+      .filter((file_name) => file_name.endsWith('.json'))
+      .length
+    const prerender_routes = nuxt_config.nitro?.prerender?.routes ?? []
+
+    for (const file_path of page_files) {
+      expect(readFileSync(new URL(file_path, import.meta.url), 'utf8')).toBeTruthy()
+    }
+
+    expect(prerender_routes).toContain('/')
+    expect(prerender_routes).toContain('/guide')
+    expect(prerender_routes).toContain('/search')
+    expect(prerender_routes).toContain('/links')
+    expect(prerender_routes.filter((route) => route.startsWith('/products/'))).toHaveLength(product_route_count)
+    expect(prerender_routes).toContain('/products/2026-06-02-sharp-65吋-xled')
   })
 
   it('should define light and dark handoff CSS tokens without a single-hue palette', () => {

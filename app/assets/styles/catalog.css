@@ -153,7 +153,7 @@
   overflow: hidden;
 }
 
-.product-card-button {
+.product-card-link {
   display: grid;
   grid-template-rows: auto 1fr;
   width: 100%;
@@ -166,9 +166,10 @@
   cursor: pointer;
   font: inherit;
   text-align: left;
+  text-decoration: none;
 }
 
-.product-card-button:hover {
+.product-card-link:hover {
   background: color-mix(in srgb, var(--dw-accent) 5%, transparent);
 }
 
@@ -364,6 +365,7 @@
   font-size: 0.875rem;
 }
 
+.product-detail-page,
 .product-detail-sheet,
 .product-detail-modal {
   position: relative;
@@ -373,6 +375,12 @@
   overflow: hidden;
   background: var(--dw-panel);
   color: var(--dw-text);
+}
+
+.product-detail-page {
+  border: 1px solid var(--dw-border);
+  border-radius: 8px;
+  box-shadow: var(--dw-shadow);
 }
 
 .product-detail-sheet {
@@ -538,7 +546,7 @@
 .category-chip:focus-visible,
 .tag-chip:focus-visible,
 .clear-tags-button:focus-visible,
-.product-card-button:focus-visible,
+.product-card-link:focus-visible,
 .link-row:focus-visible,
 .detail-close-button:focus-visible,
 .detail-buy-cta:focus-visible {
@@ -547,10 +555,43 @@
 }
 
 @media (prefers-reduced-motion: no-preference) {
+  .product-card {
+    view-transition-class: product-card;
+  }
+
   ::view-transition-old(root),
   ::view-transition-new(root) {
     animation-duration: 180ms;
     animation-timing-function: ease-out;
+  }
+
+  ::view-transition-group(.product-card) {
+    animation-duration: 260ms;
+    animation-timing-function: ease;
+  }
+
+  ::view-transition-old(.product-card) {
+    animation-duration: 180ms;
+    animation-timing-function: ease-out;
+  }
+
+  ::view-transition-new(.product-card) {
+    animation-duration: 220ms;
+    animation-timing-function: ease-out;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .product-card,
+  .product-image-tile,
+  .detail-hero-tile {
+    view-transition-name: none !important;
+  }
+
+  ::view-transition-old(*),
+  ::view-transition-new(*),
+  ::view-transition-group(*) {
+    animation: none !important;
   }
 }
 

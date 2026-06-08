@@ -1,47 +1,41 @@
-import { describe, expect, it, vi } from 'vitest'
+import { describe, expect, it } from 'vitest'
+import { readFileSync } from 'node:fs'
 
-import { runViewTransition } from '../app/utils/view-transition'
+import nuxt_config from '../nuxt.config'
 
-describe('view transition helper', () => {
-  it('should run synchronously when document is unavailable', () => {
-    const action = vi.fn()
-
-    runViewTransition(action, { document: null })
-
-    expect(action).toHaveBeenCalledOnce()
+describe('route-driven view transition contract', () => {
+  it('should enable Nuxt built-in same-document view transitions', () => {
+    expect(nuxt_config.experimental?.viewTransition).toBe(true)
   })
 
-  it('should skip startViewTransition when the browser does not support it', () => {
-    const action = vi.fn()
-    const document_stub = {}
+  it('should not use the legacy helper for route or query state changes', () => {
+    const routed_sources = [
+      '../app/pages/index.vue',
+      '../app/pages/guide.vue',
+      '../app/pages/search.vue',
+      '../app/pages/links.vue',
+      '../app/pages/products/[id].vue',
+      '../app/components/app-navigation.vue',
+      '../app/components/product-card.vue',
+    ].map((file_path) => readFileSync(new URL(file_path, import.meta.url), 'utf8')).join('\n')
 
-    runViewTransition(action, { document: document_stub })
-
-    expect(action).toHaveBeenCalledOnce()
+    expect(routed_sources).not.toContain('runViewTransition')
+    expect(routed_sources).not.toContain("from '../utils/view-transition'")
+    expect(routed_sources).not.toContain("from '~/utils/view-transition'")
   })
 
-  it('should skip startViewTransition when reduced motion is requested', () => {
-    const action = vi.fn()
-    const startViewTransition = vi.fn()
-    const document_stub = { startViewTransition }
-    const matchMedia = vi.fn(() => ({ matches: true }))
+  it('should define shared hero names, product-card groups and reduced-motion fallback CSS', () => {
+    const card_source = readFileSync(new URL('../app/components/product-card.vue', import.meta.url), 'utf8')
+    const detail_source = readFileSync(new URL('../app/components/product-detail.vue', import.meta.url), 'utf8')
+    const catalog_css = readFileSync(new URL('../app/assets/styles/catalog.css', import.meta.url), 'utf8')
 
-    runViewTransition(action, { document: document_stub, matchMedia })
-
-    expect(action).toHaveBeenCalledOnce()
-    expect(startViewTransition).not.toHaveBeenCalled()
-    expect(matchMedia).toHaveBeenCalledWith('(prefers-reduced-motion: reduce)')
-  })
-
-  it('should use startViewTransition when supported and motion is allowed', () => {
-    const action = vi.fn()
-    const startViewTransition = vi.fn((callback: () => void) => callback())
-    const document_stub = { startViewTransition }
-    const matchMedia = vi.fn(() => ({ matches: false }))
-
-    runViewTransition(action, { document: document_stub, matchMedia })
-
-    expect(startViewTransition).toHaveBeenCalledOnce()
-    expect(action).toHaveBeenCalledOnce()
+    expect(card_source).toContain('`product-image-${product.id}`')
+    expect(detail_source).toContain('`product-image-${detail.id}`')
+    expect(catalog_css).toContain('view-transition-class: product-card')
+    expect(catalog_css).toContain('::view-transition-group(.product-card)')
+    expect(catalog_css).toContain('::view-transition-old(.product-card)')
+    expect(catalog_css).toContain('::view-transition-new(.product-card)')
+    expect(catalog_css).toContain('@media (prefers-reduced-motion: reduce)')
+    expect(catalog_css).toContain('animation: none')
   })
 })

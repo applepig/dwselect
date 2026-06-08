@@ -8,72 +8,70 @@
         DW嚴選
       </p>
       <div class="nav-items">
-        <button
-          v-for="tab in tabs"
-          :key="`sidebar-${tab.id}`"
-          type="button"
+        <NuxtLink
+          v-for="item in nav_items"
+          :key="`sidebar-${item.id}`"
+          :to="item.to"
           class="app-nav-button"
-          :class="{ 'is-active': tab.active }"
-          :aria-current="tab.active ? 'page' : undefined"
-          @click="onTabClicked(tab.id)"
+          :class="{ 'is-active': isActive(item.to) }"
+          :aria-current="isActive(item.to) ? 'page' : undefined"
         >
           <UIcon
-            :name="tab.icon"
+            :name="item.icon"
             class="app-nav-icon"
           />
-          <span>{{ tab.label }}</span>
-        </button>
+          <span>{{ item.label }}</span>
+        </NuxtLink>
       </div>
     </div>
 
     <div class="compact-app-rail">
-      <button
-        v-for="tab in tabs"
-        :key="`rail-${tab.id}`"
-        type="button"
+      <NuxtLink
+        v-for="item in nav_items"
+        :key="`rail-${item.id}`"
+        :to="item.to"
         class="app-nav-button"
-        :class="{ 'is-active': tab.active }"
-        :aria-label="tab.label"
-        :aria-current="tab.active ? 'page' : undefined"
-        @click="onTabClicked(tab.id)"
+        :class="{ 'is-active': isActive(item.to) }"
+        :aria-label="item.label"
+        :aria-current="isActive(item.to) ? 'page' : undefined"
       >
         <UIcon
-          :name="tab.icon"
+          :name="item.icon"
           class="app-nav-icon"
         />
-        <span>{{ tab.label }}</span>
-      </button>
+        <span>{{ item.label }}</span>
+      </NuxtLink>
     </div>
 
     <div class="compact-app-bottom-tabs">
-      <button
-        v-for="tab in tabs"
-        :key="`bottom-${tab.id}`"
-        type="button"
+      <NuxtLink
+        v-for="item in nav_items"
+        :key="`bottom-${item.id}`"
+        :to="item.to"
         class="app-nav-button"
-        :class="{ 'is-active': tab.active }"
-        :aria-current="tab.active ? 'page' : undefined"
-        @click="onTabClicked(tab.id)"
+        :class="{ 'is-active': isActive(item.to) }"
+        :aria-current="isActive(item.to) ? 'page' : undefined"
       >
         <UIcon
-          :name="tab.icon"
+          :name="item.icon"
           class="app-nav-icon"
         />
-        <span>{{ tab.label }}</span>
-      </button>
+        <span>{{ item.label }}</span>
+      </NuxtLink>
     </div>
   </nav>
 </template>
 
 <script setup lang="ts">
-import type { CompactAppTab, CompactAppTabId } from '../utils/published-products'
+const route = useRoute()
+const nav_items = [
+  { id: 'home', label: '首頁', icon: 'i-lucide-house', to: '/' },
+  { id: 'guide', label: '指南', icon: 'i-lucide-tags', to: '/guide' },
+  { id: 'search', label: '搜尋', icon: 'i-lucide-search', to: '/search' },
+  { id: 'links', label: '連結', icon: 'i-lucide-link', to: '/links' },
+]
 
-const props = defineProps<{
-  tabs: CompactAppTab[]
-  selectTab: (tab_id: CompactAppTabId) => void
-}>()
-
-function onTabClicked(tab_id: CompactAppTabId) {
-  props.selectTab(tab_id)
+function isActive(path: string) {
+  return route.path === path
 }
 </script>

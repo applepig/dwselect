@@ -8,6 +8,7 @@ import {
   getCatalogSearchProducts,
   getCatalogView,
   getCompactAppView,
+  getCompactAppStateFromRoute,
   getGroupedPublishedProducts,
   getProductDetail,
   getPublishedProducts,
@@ -612,5 +613,104 @@ describe('compact app view state', () => {
 
     expect(detail.dw_says).toBe('同一段推薦文字')
     expect(detail.description).toBeNull()
+  })
+})
+
+describe('route-driven compact app state', () => {
+  it('should derive active compact tab from route path', () => {
+    expect(getCompactAppStateFromRoute({ path: '/', query: {} })).toEqual({
+      active_tab: 'home',
+      home_category_id: 'all',
+    })
+    expect(getCompactAppStateFromRoute({ path: '/guide', query: {} })).toEqual({
+      active_tab: 'guide',
+      selected_tags: [],
+    })
+    expect(getCompactAppStateFromRoute({ path: '/search', query: {} })).toEqual({
+      active_tab: 'search',
+      search_query: '',
+    })
+    expect(getCompactAppStateFromRoute({ path: '/links', query: {} })).toEqual({
+      active_tab: 'links',
+    })
+  })
+
+  it('should parse valid category, tag and search query values from route query', () => {
+    expect(getCompactAppStateFromRoute(
+      { path: '/', query: { category: 'computer' } },
+      { category_ids: ['home', 'computer'], tag_labels: [] },
+    )).toEqual({
+      active_tab: 'home',
+      home_category_id: 'computer',
+    })
+
+    expect(getCompactAppStateFromRoute(
+      { path: '/guide', query: { tags: [' 工作 ', '輸入', '不存在', '', '工作'] } },
+      { category_ids: [], tag_labels: ['工作', '輸入'] },
+    )).toEqual({
+      active_tab: 'guide',
+      selected_tags: ['工作', '輸入'],
+    })
+
+    expect(getCompactAppStateFromRoute({ path: '/search', query: { q: '  機械鍵盤  ' } })).toEqual({
+      active_tab: 'search',
+      search_query: '機械鍵盤',
+    })
+  })
+
+  it('should fallback invalid or empty query values to the route defaults', () => {
+    expect(getCompactAppStateFromRoute(
+      { path: '/', query: { category: 'missing' } },
+      { category_ids: ['home', 'computer'], tag_labels: [] },
+    )).toEqual({
+      active_tab: 'home',
+      home_category_id: 'all',
+    })
+    expect(getCompactAppStateFromRoute(
+      { path: '/guide', query: { tags: ['不存在', '影音'] } },
+      { category_ids: [], tag_labels: ['影音'] },
+    )).toEqual({
+      active_tab: 'guide',
+      selected_tags: ['影音'],
+    })
+    expect(getCompactAppStateFromRoute({ path: '/search', query: { q: ['  ', 'ignored'] } })).toEqual({
+      active_tab: 'search',
+      search_query: '',
+    })
+  })
+
+  it('should accept a single tag delivered as a Vue Router string query', () => {
+    expect(getCompactAppStateFromRoute(
+      { path: '/guide', query: { tags: '工作' } },
+      { tag_labels: ['工作'] },
+    )).toEqual({
+      active_tab: 'guide',
+      selected_tags: ['工作'],
+    })
+  })
+
+  it('should accept multiple tags delivered as a Vue Router array query', () => {
+    expect(getCompactAppStateFromRoute(
+      { path: '/guide', query: { tags: ['工作', '輸入'] } },
+      { tag_labels: ['工作', '輸入'] },
+    )).toEqual({
+      active_tab: 'guide',
+      selected_tags: ['工作', '輸入'],
+    })
+  })
+
+  it('should round-trip a tag whose label contains a comma without splitting it', () => {
+    const tag_with_comma = 'a,b'
+    const selected_tags = ['a,b', 'c']
+    // Vue Router serialises an array query as repeated params and parses it back to an array.
+    const round_tripped_query = { tags: selected_tags }
+
+    expect(getCompactAppStateFromRoute(
+      { path: '/guide', query: round_tripped_query },
+      { tag_labels: [tag_with_comma, 'c'] },
+    )).toEqual({
+      active_tab: 'guide',
+      selected_tags: ['a,b', 'c'],
+    })
   })
 })
