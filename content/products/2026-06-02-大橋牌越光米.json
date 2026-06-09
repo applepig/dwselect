@@ -15,10 +15,8 @@
   "image_url": "https://cs-a.ecimg.tw/items/DBBY0MA900GMBY7/000001_1693383527.jpg",
   "channel_id": "pchome",
   "category_id": "food",
-  "tags": [
-    "食材",
-    "米",
-    "PCHome"
+  "tag_ids": [
+    "rice"
   ],
   "reference_url": "https://www.facebook.com/applepig/posts/pfbid037AcHMyNMrZPFBvDg7GgQbquN8j2UNmPb1mvkM7YV9rJKuv8Us5BvASrcG8zzxRqjl",
   "created_at": "2026-06-02T00:00:00+08:00",

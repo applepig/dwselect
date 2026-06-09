@@ -3,8 +3,10 @@ import { defineCollection, defineContentConfig } from '@nuxt/content'
 import {
   category_taxonomy_schema,
   channel_taxonomy_schema,
-  link_taxonomy_schema,
+  guide_schema,
+  link_schema,
   product_schema,
+  tag_taxonomy_schema,
 } from './app/utils/product-schema'
 
 export default defineContentConfig({
@@ -13,6 +15,16 @@ export default defineContentConfig({
       type: 'data',
       source: 'products/*.json',
       schema: product_schema,
+    }),
+    guides: defineCollection({
+      type: 'data',
+      source: 'guides/*.json',
+      schema: guide_schema,
+    }),
+    links: defineCollection({
+      type: 'data',
+      source: 'links/*.json',
+      schema: link_schema,
     }),
     categories: defineCollection({
       type: 'data',
@@ -24,10 +36,10 @@ export default defineContentConfig({
       source: 'taxonomies/channels.json',
       schema: channel_taxonomy_schema,
     }),
-    links: defineCollection({
+    tags: defineCollection({
       type: 'data',
-      source: 'taxonomies/links.json',
-      schema: link_taxonomy_schema,
+      source: 'taxonomies/tags.json',
+      schema: tag_taxonomy_schema,
     }),
   },
 })

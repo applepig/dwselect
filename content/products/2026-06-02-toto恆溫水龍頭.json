@@ -15,12 +15,7 @@
   "image_url": "https://m.media-amazon.com/images/I/51xa1Xtqc3L._AC_SL1100_.jpg",
   "channel_id": "amazonjp",
   "category_id": "home",
-  "tags": [
-    "恆溫",
-    "衛浴",
-    "居家",
-    "日亞"
-  ],
+  "tag_ids": [],
   "reference_url": null,
   "created_at": "2026-06-02T00:00:00+08:00",
   "updated_at": "2026-06-02T00:00:00+08:00",

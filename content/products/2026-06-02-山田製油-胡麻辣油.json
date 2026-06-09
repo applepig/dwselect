@@ -15,10 +15,7 @@
   "image_url": "https://shoplineimg.com/5d08366e3f64c1000128316b/63bf65758cd22b3421747f3e/2000x.webp?source_format=jpg",
   "channel_id": "other",
   "category_id": "food",
-  "tags": [
-    "食材",
-    "調味料"
-  ],
+  "tag_ids": [],
   "reference_url": null,
   "created_at": "2026-06-02T00:00:00+08:00",
   "updated_at": "2026-06-02T00:00:00+08:00",

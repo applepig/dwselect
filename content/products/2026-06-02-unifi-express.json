@@ -15,10 +15,7 @@
   "image_url": "https://images.svc.ui.com/?u=https%3A%2F%2Fcdn.ecomm.ui.com%2Fproducts%2F4ed25b4c-db92-4b98-bbf3-b0989f007c0e%2F8ff040a0-4b16-4c98-a96c-b643cfafbc73.png&q=75&w=1920",
   "channel_id": "other",
   "category_id": "computer",
-  "tags": [
-    "電腦",
-    "網路設備"
-  ],
+  "tag_ids": [],
   "reference_url": null,
   "created_at": "2026-06-02T00:00:00+08:00",
   "updated_at": "2026-06-02T00:00:00+08:00",

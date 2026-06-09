@@ -1,0 +1,36 @@
+{
+  "items": [
+    {
+      "id": "display",
+      "label": "顯示設備",
+      "description": "螢幕、電視與影像顯示相關屬性。",
+      "aliases": [
+        "電視",
+        "螢幕"
+      ],
+      "nav_visible": true,
+      "sort_order": 10
+    },
+    {
+      "id": "ergonomic",
+      "label": "人體工學",
+      "description": "人體工學、坐姿、工作站與長時間使用舒適度相關屬性。",
+      "aliases": [
+        "人體工學",
+        "電腦椅"
+      ],
+      "nav_visible": true,
+      "sort_order": 20
+    },
+    {
+      "id": "rice",
+      "label": "米食",
+      "description": "白米、糙米、米飯料理與米類研究相關屬性。",
+      "aliases": [
+        "米"
+      ],
+      "nav_visible": true,
+      "sort_order": 30
+    }
+  ]
+}

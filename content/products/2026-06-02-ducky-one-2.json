@@ -15,11 +15,7 @@
   "image_url": "https://cs-a.ecimg.tw/items/DCAHVAA900GAGDQ/yt000001_1701253293.jpg",
   "channel_id": "pchome",
   "category_id": "computer",
-  "tags": [
-    "電腦",
-    "鍵盤",
-    "PCHome"
-  ],
+  "tag_ids": [],
   "reference_url": null,
   "created_at": "2026-06-02T00:00:00+08:00",
   "updated_at": "2026-06-02T00:00:00+08:00",

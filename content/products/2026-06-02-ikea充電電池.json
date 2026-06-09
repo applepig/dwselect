@@ -15,10 +15,7 @@
   "image_url": "https://www.ikea.com.tw/dairyfarm/tw/images/685/0968547_PE810493_S4.webp",
   "channel_id": "other",
   "category_id": "three-c",
-  "tags": [
-    "電池",
-    "3C"
-  ],
+  "tag_ids": [],
   "reference_url": null,
   "created_at": "2026-06-02T00:00:00+08:00",
   "updated_at": "2026-06-02T00:00:00+08:00",
