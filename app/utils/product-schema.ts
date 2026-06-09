@@ -1,4 +1,4 @@
-import { z } from '@nuxt/content'
+import { z } from 'zod'
 
 const TIMESTAMP_PATTERN = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}[+-]\d{2}:\d{2}$/
 const CATEGORY_IDS = ['home', 'kitchen', 'computer', 'three-c', 'av', 'food', 'other'] as const
@@ -152,7 +152,7 @@ export type ContentTaxonomyReferenceInput = {
 }
 
 export function validateContentTaxonomyReferences(input: ContentTaxonomyReferenceInput): ContentTaxonomyReferenceViolation[] {
-  const category_ids = new Set(input.categories.map((category) => category.id))
+  const category_ids = new Set<string>(input.categories.map((category) => category.id))
   const tag_ids = new Set(input.tags.map((tag) => tag.id))
   const violations: ContentTaxonomyReferenceViolation[] = []
 

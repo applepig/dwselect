@@ -748,7 +748,7 @@ describe('compact app view state', () => {
       image_url: 'https://example.com/detail.jpg',
       category_id: 'av',
       channel_id: 'pchome',
-        tag_ids: ['超長 tag 名稱'.repeat(6), '影音'],
+      tag_ids: ['超長 tag 名稱'.repeat(6), '影音'],
     })
 
     const detail = getProductDetail(product, test_taxonomies)

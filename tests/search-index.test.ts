@@ -1,8 +1,10 @@
 import MiniSearch from 'minisearch'
+import { execFile } from 'node:child_process'
 import { readFileSync, readdirSync } from 'node:fs'
 import { mkdir, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join, parse } from 'node:path'
+import { promisify } from 'node:util'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
 import type { Guide, LinkDefinition, Product, TagDefinition } from '../app/utils/product-schema'
@@ -45,6 +47,7 @@ const products_dir_url = new URL('../content/products/', import.meta.url)
 const guides_dir_url = new URL('../content/guides/', import.meta.url)
 const links_dir_url = new URL('../content/links/', import.meta.url)
 const search_index_url = new URL('../public/search-index.json', import.meta.url)
+const execFileAsync = promisify(execFile)
 
 const base_guide: Guide = {
   id: '2026-06-02-guide',
@@ -235,10 +238,10 @@ describe('search index', () => {
     const mini_search = loadSearchIndex(payload)
 
     expect(payload).toMatchObject({
-          version: SEARCH_INDEX_VERSION,
-          generated_at: '2026-06-06T00:00:00+08:00',
-          documents: [
-            {
+      version: SEARCH_INDEX_VERSION,
+      generated_at: '2026-06-06T00:00:00+08:00',
+      documents: [
+        {
           document_id: 'product:2026-06-02-sample-product',
           content_id: '2026-06-02-sample-product',
           type: 'product',
@@ -373,6 +376,34 @@ describe('search index', () => {
         content_id: '2026-06-07-filename-stem',
         category_labels: ['電腦'],
         channel_label: '其他通路',
+      }),
+    ])
+  })
+
+  it('should run the search index build script directly with Node ESM', async () => {
+    const temp_dir = await mkdtemp(join(tmpdir(), 'dwselect-search-index-cli-'))
+    temp_paths.push(temp_dir)
+    const products_dir = join(temp_dir, 'products')
+    const output_path = join(temp_dir, 'public', 'search-index.json')
+    await mkdir(products_dir)
+    await writeFile(join(products_dir, '2026-06-08-node-esm.json'), JSON.stringify(base_product))
+
+    const { stdout } = await execFileAsync(process.execPath, [
+      'scripts/build-search-index.ts',
+      '--products-dir',
+      products_dir,
+      '--out',
+      output_path,
+      '--taxonomies-dir',
+      join(temp_dir, 'taxonomies'),
+    ])
+    const payload = JSON.parse(await readFile(output_path, 'utf8')) as ReturnType<typeof buildSearchIndexPayload>
+
+    expect(stdout).toContain(`Search index written: ${output_path}`)
+    expect(payload.documents).toEqual([
+      expect.objectContaining({
+        document_id: 'product:2026-06-08-node-esm',
+        content_id: '2026-06-08-node-esm',
       }),
     ])
   })

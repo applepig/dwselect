@@ -42,12 +42,12 @@
     <div class="compact-app-rail">
       <NuxtLink
         v-for="item in nav_items"
-          :key="`rail-${item.id}`"
-          :to="item.to"
-          class="app-nav-button"
-          :class="{ 'is-active': isRouteActive(item.to) }"
-          :aria-label="item.label"
-          :aria-current="isRouteActive(item.to) ? 'page' : undefined"
+        :key="`rail-${item.id}`"
+        :to="item.to"
+        class="app-nav-button"
+        :class="{ 'is-active': isRouteActive(item.to) }"
+        :aria-label="item.label"
+        :aria-current="isRouteActive(item.to) ? 'page' : undefined"
       >
         <UIcon
           :name="item.icon"
@@ -60,11 +60,11 @@
     <div class="compact-app-bottom-tabs">
       <NuxtLink
         v-for="item in nav_items"
-          :key="`bottom-${item.id}`"
-          :to="item.to"
-          class="app-nav-button"
-          :class="{ 'is-active': isRouteActive(item.to) }"
-          :aria-current="isRouteActive(item.to) ? 'page' : undefined"
+        :key="`bottom-${item.id}`"
+        :to="item.to"
+        class="app-nav-button"
+        :class="{ 'is-active': isRouteActive(item.to) }"
+        :aria-current="isRouteActive(item.to) ? 'page' : undefined"
       >
         <UIcon
           :name="item.icon"

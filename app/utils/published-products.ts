@@ -26,7 +26,7 @@ export type ProductDetailView = {
   category_label: string
   price_label: string
   dw_says: string
-  description: string
+  description: string | null
   tags: string[]
   buy_cta: {
     label: string
@@ -94,7 +94,7 @@ export type CompactAppState = {
   selected_tags?: string[]
 }
 
-export type CompactRouteQueryValue = string | string[] | null | undefined
+export type CompactRouteQueryValue = string | Array<string | null> | null | undefined
 
 export type CompactRouteState = {
   path: string
@@ -176,7 +176,7 @@ export type CompactAppView = {
 const ALL_CATEGORIES_VALUE = '全部'
 
 const DEFAULT_TAXONOMIES: TaxonomyDefinitions = {
-    categories: [
+  categories: [
     { id: 'home', label: '居家', short_label: '居家', nav_visible: true, sort_order: 10 },
     { id: 'kitchen', label: '廚房', short_label: '廚房', nav_visible: true, sort_order: 20 },
     { id: 'computer', label: '電腦', short_label: '電腦', nav_visible: true, sort_order: 30 },
@@ -195,6 +195,8 @@ const DEFAULT_TAXONOMIES: TaxonomyDefinitions = {
   ],
   tags: [],
 }
+
+const PRODUCT_CATEGORY_IDS = new Set<Product['category_id']>(DEFAULT_TAXONOMIES.categories.map((category) => category.id))
 
 const CATALOG_SORT_OPTIONS: Array<Omit<CatalogSortOption, 'active'>> = [
   { label: '預設排序', value: 'default' },
@@ -715,14 +717,6 @@ function compareGuides(left_guide: Guide, right_guide: Guide) {
   return compareText(left_guide.title, right_guide.title)
 }
 
-function getGuideProducts(products: PublishedProductCard[], selected_tags: string[]) {
-  if (selected_tags.length === 0) {
-    return products
-  }
-
-  return products.filter((product) => selected_tags.every((tag) => product.tags.includes(tag)))
-}
-
 function getSearchProducts(
   products: PublishedProductCard[],
   query: string,
@@ -825,33 +819,15 @@ function parseCategoryId(
     return 'all'
   }
 
+  if (!isProductCategoryId(category_id)) {
+    return 'all'
+  }
+
   return category_id
 }
 
-function parseSelectedTags(
-  value: CompactRouteQueryValue,
-  valid_tag_labels: CompactRouteStateOptions['tag_labels'],
-) {
-  const valid_tag_set = valid_tag_labels === undefined ? null : new Set(valid_tag_labels)
-  const selected_tags = new Set<string>()
-
-  // Why: tag 是 free-string label，可能含逗號。改用 Vue Router 原生 array query
-  // （重複 param）後，每個 query value 就是一個完整 tag，不可再以逗號二次切割。
-  for (const raw_value of getQueryValues(value)) {
-    const normalized_tag = raw_value.trim()
-
-    if (normalized_tag === '') {
-      continue
-    }
-
-    if (valid_tag_set !== null && !valid_tag_set.has(normalized_tag)) {
-      continue
-    }
-
-    selected_tags.add(normalized_tag)
-  }
-
-  return Array.from(selected_tags)
+function isProductCategoryId(value: string): value is Product['category_id'] {
+  return PRODUCT_CATEGORY_IDS.has(value as Product['category_id'])
 }
 
 function getFirstQueryValue(value: CompactRouteQueryValue) {

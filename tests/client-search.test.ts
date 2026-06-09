@@ -20,7 +20,7 @@ const base_product: Product = {
   image_url: 'https://example.com/product.jpg',
   channel_id: 'pchome',
   category_id: 'computer',
-    tag_ids: ['keyboard', 'usb-c'],
+  tag_ids: ['keyboard', 'usb-c'],
   reference_url: 'https://example.com/reference',
   created_at: '2026-06-02T00:00:00+08:00',
   updated_at: '2026-06-02T00:00:00+08:00',
@@ -82,7 +82,7 @@ describe('client search lazy loader', () => {
       ...base_product,
       id: `shared-product-${index + 1}`,
       name: index === 12 ? 'Lower Relevance Product' : `Shared Token Product ${index + 1}`,
-        tag_ids: ['shared-token'],
+      tag_ids: ['shared-token'],
       published_at: `2026-06-${String(index + 1).padStart(2, '0')}T00:00:00+08:00`,
     }))
     const payload = buildSearchIndexPayload({ products, guides: [], links: [] }, { generated_at: '2026-06-06T00:00:00+08:00' })
