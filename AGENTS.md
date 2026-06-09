@@ -15,9 +15,11 @@
 - 單一 Vitest 檔：`pnpm test tests/product-schema.test.ts`。
 - E2E：`pnpm test:e2e`；Playwright 會自行啟動 `NUXT_IGNORE_LOCK=1 pnpm dev --host 127.0.0.1 --port 4173`，`workers: 1`，projects 是 `phone`、`tablet`、`desktop`。
 - 單一 E2E project：`pnpm test:e2e -- --project=desktop tests/e2e/compact-app.spec.ts`。
+- Lint：`pnpm lint` 等同 `eslint . --max-warnings=0`；單檔自動修正用 `pnpm lint:file -- <file>`。
+- Format：`pnpm format` 等同 `eslint . --fix`，使用 ESLint `@stylistic`，不使用 Prettier。
+- Typecheck：`pnpm typecheck` 固定走 `nuxt typecheck`，fresh checkout 先由 `prepare: nuxt prepare` 產生 `.nuxt` types/config。
 - Static generate：`pnpm generate` 會先跑 `pnpm build:search-index` 再 `nuxt generate`，輸出到 `.output/public`。
-- CI 等級驗證順序：`pnpm test` → `pnpm generate` → `node scripts/assert-runtime-google-sheet-clean.ts`。
-- 目前沒有 repo script 叫 `lint`、`typecheck` 或 `format`；不要假設 `pnpm lint` 可用。
+- CI 等級驗證順序：`pnpm test` → `pnpm lint` → `pnpm typecheck` → `pnpm generate` → `node scripts/assert-runtime-google-sheet-clean.ts`。
 
 ## Content Model
 

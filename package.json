@@ -4,11 +4,16 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "prepare": "nuxt prepare",
     "dev": "nuxt dev --host ::",
     "build": "pnpm build:search-index && nuxt build",
     "build:search-index": "node scripts/build-search-index.ts",
     "test:e2e": "playwright test",
     "test": "vitest run --exclude 'tests/e2e/**'",
+    "lint": "eslint . --max-warnings=0",
+    "lint:file": "eslint --fix --max-warnings=0",
+    "format": "eslint . --fix",
+    "typecheck": "nuxt typecheck",
     "generate": "pnpm build:search-index && nuxt generate",
     "preview": "nuxt preview"
   },
@@ -18,12 +23,18 @@
     "better-sqlite3": "^12.5.0",
     "minisearch": "^7.2.0",
     "nuxt": "^4.4.8",
-    "vue": "^3.5.24"
+    "vue": "^3.5.24",
+    "zod": "^4.4.3"
   },
   "devDependencies": {
+    "@nuxt/eslint": "^1.15.2",
     "@playwright/test": "^1.60.0",
+    "@types/node": "^25.9.2",
+    "eslint": "^9.39.4",
     "postcss-nesting": "^13.0.2",
-    "vitest": "^4.0.14"
+    "typescript": "^6.0.3",
+    "vitest": "^4.0.14",
+    "vue-tsc": "^3.3.4"
   },
   "pnpm": {
     "onlyBuiltDependencies": [
