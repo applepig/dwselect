@@ -3,8 +3,10 @@ import { join } from 'node:path'
 
 import { product_schema, type Product } from '../app/utils/product-schema.ts'
 
-type LegacyProduct = Omit<Product, 'price' | 'summary' | 'channel_id' | 'category_id'> & {
+type LegacyProduct = Omit<Product, 'price' | 'summary' | 'channel_id' | 'category_id' | 'tag_ids'> & {
   category: string
+  tags?: string[]
+  tag_ids?: string[]
 }
 
 type MigrationSummary = {
@@ -150,7 +152,7 @@ export function parseProductPrice(price_text: string, channel_id: Product['chann
 }
 
 export function getCompactProductMigration(legacy_product: LegacyProduct): Product {
-  const { category, ...product_without_category } = legacy_product
+  const { category, tags: _legacy_tags, tag_ids, ...product_without_category } = legacy_product
   const channel_id = inferChannelId(legacy_product.purchase_url)
   const migrated_product = {
     ...product_without_category,
@@ -158,6 +160,7 @@ export function getCompactProductMigration(legacy_product: LegacyProduct): Produ
     summary: legacy_product.description,
     channel_id,
     category_id: getMigratedCategoryId(category),
+    tag_ids: tag_ids ?? [],
   }
 
   return product_schema.parse(migrated_product)

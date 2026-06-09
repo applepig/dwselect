@@ -6,6 +6,8 @@ import { createHash } from 'node:crypto'
 import type { Product } from '../app/utils/product-schema.ts'
 import { getCategoryFallbackWarning, getCompactProductMigration } from './migrate-product-compact-schema.ts'
 
+export const MIGRATE_GOOGLE_SHEET_PRODUCTS_DEPRECATED_NOTICE = 'Deprecated legacy Google Sheet importer: use Git-backed content domain migration for current content schema.'
+
 type MigrationOptions = {
   date?: string
 }
@@ -161,6 +163,7 @@ export function migrateGoogleSheetProducts(tsv_text: string, options: MigrationO
 
 export function formatMigrationSummary(summary: MigrationSummary): string {
   const lines = [
+    MIGRATE_GOOGLE_SHEET_PRODUCTS_DEPRECATED_NOTICE,
     `Created: ${summary.created_count}`,
     `Skipped: ${summary.skipped_count}`,
   ]

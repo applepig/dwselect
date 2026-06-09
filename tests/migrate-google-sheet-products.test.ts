@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { migrateGoogleSheetProducts, formatMigrationSummary } from '../scripts/migrate-google-sheet-products'
+import { MIGRATE_GOOGLE_SHEET_PRODUCTS_DEPRECATED_NOTICE, migrateGoogleSheetProducts, formatMigrationSummary } from '../scripts/migrate-google-sheet-products'
 
 const header = 'name\tprice\tdesc\tlink_url\timg_url\ttags\tcategory\treference'
 const legacy_header = 'name\tbrand\tdesc\tcategory\ttags\tprice_value\tprice\tlink_url\timg_url\treference'
@@ -70,7 +70,7 @@ describe('migrate Google Sheet products', () => {
           image_url: 'https://example.com/image.jpg',
           channel_id: 'pchome',
           category_id: 'other',
-          tags: ['好物', '3C', 'PCHome'],
+          tag_ids: [],
           reference_url: 'https://example.com/ref',
           created_at: '2026-06-02T00:00:00+08:00',
           updated_at: '2026-06-02T00:00:00+08:00',
@@ -161,7 +161,7 @@ describe('migrate Google Sheet products', () => {
     expect(result.summary.skipped_count).toBe(1)
   })
 
-  it('should add platform tags without duplicates from purchase URL host', () => {
+  it('should keep legacy platform tags out of the deprecated importer output', () => {
     const tsv = [
       header,
       '美國商品\tUS$ 10\t描述\thttps://www.amazon.com/dp/ABC\thttps://example.com/a.jpg\t美亞 選物\t電腦\t',
@@ -171,9 +171,10 @@ describe('migrate Google Sheet products', () => {
 
     const result = migrateGoogleSheetProducts(tsv, { date: '2026-06-02' })
 
-    expect(result.products[0]?.content.tags).toEqual(['美亞', '選物'])
-    expect(result.products[1]?.content.tags).toEqual(['選物', '日亞'])
-    expect(result.products[2]?.content.tags).toEqual(['選物', 'momo'])
+    expect(result.products[0]?.content.tag_ids).toEqual([])
+    expect(result.products[1]?.content.tag_ids).toEqual([])
+    expect(result.products[2]?.content.tag_ids).toEqual([])
+    expect(result.products.map((product) => 'tags' in product.content)).toEqual([false, false, false])
   })
 
   it('should skip rows without a product name', () => {
@@ -254,6 +255,7 @@ describe('migrate Google Sheet products', () => {
     })
 
     expect(summary).toContain('Created: 1')
+    expect(summary).toContain(MIGRATE_GOOGLE_SHEET_PRODUCTS_DEPRECATED_NOTICE)
     expect(summary).toContain('Skipped: 2')
     expect(summary).toContain('row 2: missing name')
     expect(summary).toContain('row 4 purchase_url: must be a valid HTTP(S) URL')

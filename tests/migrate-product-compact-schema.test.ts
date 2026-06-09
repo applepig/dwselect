@@ -121,7 +121,7 @@ describe('compact product migration helpers', () => {
       image_url: 'https://example.com/product.jpg',
       channel_id: 'pchome',
       category_id: 'food',
-      tags: ['米'],
+      tag_ids: [],
       reference_url: null,
       created_at: '2026-06-02T00:00:00+08:00',
       updated_at: '2026-06-02T00:00:00+08:00',
@@ -130,6 +130,7 @@ describe('compact product migration helpers', () => {
       archived_at: null,
     })
     expect(migrated_product).not.toHaveProperty('category')
+    expect(migrated_product).not.toHaveProperty('tags')
   })
 
   it('should migrate unknown categories to the other category', () => {
