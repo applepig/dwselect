@@ -57,3 +57,21 @@
   - **更正先前驗收條件**：上方第 41–44、46 行那些「`#nuxt-ui-colors` 不存在 / `colors-plugin-absent`」的成功條件，是當時拔掉 plugin 才成立的。還原後 Nuxt UI colors plugin 恢復正常運作、會正常注入 `#nuxt-ui-colors` style 元素，因此該元素「存在」才是正確狀態，舊條件已不適用。
 - **延後項目（→ sprint 008）**：reviewer 另提 tag 應改用 stable id（現為 free-string label）。因 tag 目前無 id、需新建 tag taxonomy + schema + 資料遷移 + UI 對應，屬獨立 sprint 份量，另開 008 經 /ddd.plan 規劃，不併入本次。
 - 驗收：`pnpm test` 13 檔 112 全綠；`pnpm generate` 成功 prerender 146 routes；實機 `https://dwselect.toybox.local/` 與商品詳情頁皆 HTTP 200、無錯誤關鍵字。
+
+### 2026-06-09 dev hydration 事故復盤
+
+- 症狀：使用者回報 `500 Internal Server Error`，訊息為 `useHead() was called without provide context`，stack 指到 `@nuxt/ui/dist/runtime/plugins/colors.js:55`。
+- flow：`colors.js` 經 `#imports` 實際 import Nuxt wrapper `nuxt/dist/app/composables/head.js`，而不是直接 import `@unhead/vue`；client plugin list 中 `nuxt:head` 也早於 Nuxt UI colors plugin。`colors.js` 是 dev app initialization 失去 head provide context 時第一個爆炸的位置，不代表應直接修改 Nuxt UI colors production code。
+- 定位：同時看到 browser console 有 Vite connection lost / reconnect 與 `currentRenderingInstance.ce` hydration mismatch；host 上曾存在本 repo dev server 與 `/app` 容器 dev server 兩組 Nuxt process。`pnpm generate` 在未改 code 狀態下可完整通過，表示 production prerender flow 不穩定重現此錯。
+- 處置：未改 `nuxt.config.ts`、未移除 Nuxt UI colors plugin；經使用者確認後，只重啟 cwd 為 `/home/applepig/Dropbox/projects/dwselect` 且 listen `:3000` / `:24678` 的本 repo dev server，保留 `/app` 容器 process 不動。
+- 驗證：重啟後 host 上只有本 repo dev server listen `0.0.0.0:3000` 與 HMR `:24678`；browser fresh reload 首頁無 `Internal Server Error` / `useHead()`，`.compact-app-shell` 存在、`.product-card` 62 張、`#nuxt-ui-colors` 正常存在；直連 `/products/2026-06-02-blueair-3250空氣清淨機` 無錯誤且 `.product-detail-page` 存在。
+
+### 2026-06-09 Nuxt 4.4.8 head runtime hotfix
+
+- 症狀：使用者瀏覽器在重啟 dev server 後仍可看到同一個 `useHead() was called without provide context`，stack 仍指向 `@nuxt/ui/dist/runtime/plugins/colors.js`。這代表單純清 dev server / Vite cache 不是完整修復。
+- upstream：查到 `nuxt/ui#5229`（`Safari: useHead() was called without provide context`）描述同一 stack，原回報在 Safari / iOS Safari，comments 也有人在 Chrome 遇到並指出 cache 清除可暫解。該 issue 因 stale 關閉，沒有 Nuxt UI 正式 patch。`@nuxt/ui` 最新仍是 `4.8.2`。
+- 根因：本 repo lockfile 安裝 `nuxt@4.4.7`，其 `package.json` direct dependency 是 `unhead: ^3.1.1`；但 Nuxt runtime 與 Nuxt UI colors plugin 仍解析 `@unhead/vue@2.1.15` / `unhead@2.1.15`。Nuxt `4.4.8` release note 明確包含「Revert unhead dependency back to v2」，正好對應這個 head runtime version mismatch。
+- Red：新增 `tests/nuxt-smoke.test.ts` regression guard，確認 Nuxt direct `unhead` dependency 必須維持 v2。升級前 `pnpm test tests/nuxt-smoke.test.ts` 失敗：收到 `^3.1.1`，預期 `/^\^?2\./`。
+- Green：執行 `pnpm add nuxt@^4.4.8`，更新 `package.json` 與 `pnpm-lock.yaml`；未 patch `node_modules`，未移除 Nuxt UI colors plugin。升級後 `pnpm why unhead` 顯示 Nuxt、Nitro、Nuxt UI 全部收斂到 `unhead@2.1.15`。
+- 驗證：`pnpm test tests/nuxt-smoke.test.ts`：22 passed；`pnpm test`：13 files、125 tests passed；`pnpm generate`：成功 build search index（67 documents）並 prerender 140 routes；`node scripts/assert-runtime-google-sheet-clean.ts`：無輸出，通過。
+- browser：重啟本 repo `:3000` dev server 後，log 顯示 Nuxt `4.4.8`。`agent-browser` 檢查 `https://dwselect.toybox.local/`：無 Nuxt error、`.compact-app-shell` 存在、`.product-card` 62 張、`#nuxt-ui-colors` 正常存在；檢查 `/products/2026-06-02-blueair-3250空氣清淨機`：title 正確、無 Nuxt error、`.product-detail-page` 與 `#nuxt-ui-colors` 存在。清 console 後重新載入，`agent-browser errors` 無輸出。

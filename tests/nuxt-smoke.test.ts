@@ -251,6 +251,16 @@ describe('Nuxt SSG baseline', () => {
     expect(use_head_index).toBeLessThan(catalog_await_index)
   })
 
+  it('should keep Nuxt head runtime on Unhead v2 for Nuxt UI color injection', () => {
+    const nuxt_package = JSON.parse(readFileSync(
+      new URL('../node_modules/nuxt/package.json', import.meta.url),
+      'utf8',
+    )) as { dependencies?: Record<string, string> }
+    const unhead_range = nuxt_package.dependencies?.unhead ?? ''
+
+    expect(unhead_range).toMatch(/^\^?2\./)
+  })
+
   it('should define routed page files and prerender every product detail route', () => {
     const page_files = [
       '../app/pages/index.vue',
