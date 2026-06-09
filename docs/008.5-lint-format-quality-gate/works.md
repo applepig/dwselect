@@ -34,6 +34,12 @@
 - `pnpm generate`：passed，search index documents 67，prerendered 140 routes；僅有 sourcemap／Rollup PURE annotation warnings。
 - `node scripts/assert-runtime-google-sheet-clean.ts`：passed。
 
+### Xreview Issue #2 修正
+
+- Red：新增 `tests/eslint-nuxt-ui-compat.test.ts` negative fixture，確認非 items domain object `{ label: 'hero cta', click: 1 }` 會被 `nuxt-ui-v4-compat/no-deprecated-click-in-items` 誤報而失敗。
+- Green：將 `no-deprecated-click-in-items` 的 script/template object 掃描收斂到明確 `items`／`actions` context，保留 `const items = [{ label: 'Open', click: () => {} }]` deprecated fixture 報錯。
+- 驗證：`pnpm test tests/eslint-nuxt-ui-compat.test.ts` passed，11 tests passed；`pnpm lint` passed。
+
 ### 風險與後續
 
 - `pnpm generate` 會重建 `public/search-index.json`；本次 diff 只有 build output 更新。

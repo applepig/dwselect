@@ -437,7 +437,7 @@ const rules = {
   /**
    * 偵測 items 陣列中使用 click 而非 onClick 的情況。
    * v4 中 item 物件的 click callback 已改名為 onClick。
-   * 簡化方案：掃描物件字面值，
+   * 簡化方案：只掃描明確 items/actions context 內的物件字面值，
    * 若物件同時有 label（或 icon）和 click property，就報告。
    * 同時檢查 <script setup> 和 <template> 中的內嵌物件。
    * 提供 autofix：把 property key click 替換為 onClick。
@@ -460,22 +460,70 @@ const rules = {
       const services = context.sourceCode.parserServices
       if (!services?.defineTemplateBodyVisitor) return {}
 
+      const item_context_names = new Set(['items', 'actions'])
+
+      function getPropertyKeyName(prop) {
+        if (prop.key.type === 'Identifier') return prop.key.name
+        if (prop.key.type === 'Literal') return prop.key.value
+        return null
+      }
+
+      function isNamedItemsOrActionsContext(node) {
+        if (!node) return false
+
+        if (node.type === 'VariableDeclarator' && node.id.type === 'Identifier') {
+          return item_context_names.has(node.id.name)
+        }
+
+        if (node.type === 'Property') {
+          return item_context_names.has(getPropertyKeyName(node))
+        }
+
+        if (node.type === 'AssignmentExpression') {
+          if (node.left.type === 'Identifier') return item_context_names.has(node.left.name)
+          if (node.left.type !== 'MemberExpression') return false
+          if (node.left.property.type === 'Identifier') return item_context_names.has(node.left.property.name)
+          if (node.left.property.type === 'Literal') return item_context_names.has(node.left.property.value)
+        }
+
+        return false
+      }
+
+      function isBoundItemsOrActionsAttribute(node) {
+        return node?.type === 'VAttribute'
+          && node.directive
+          && node.key.name.name === 'bind'
+          && node.key.argument
+          && item_context_names.has(node.key.argument.name)
+      }
+
+      function isInItemsOrActionsContext(node) {
+        let current = node.parent
+        while (current) {
+          if (current.type === 'ArrayExpression' && isNamedItemsOrActionsContext(current.parent)) {
+            return true
+          }
+
+          if (isBoundItemsOrActionsAttribute(current)) return true
+          current = current.parent
+        }
+
+        return false
+      }
+
       /**
-       * 檢查 ObjectExpression 是否為 items 物件（有 label/icon + click）。
+       * 檢查 ObjectExpression 是否為 items/actions 物件（有 label/icon + click）。
        * 共用於 template visitor 和 script visitor。
        */
       function checkObjectExpression(node) {
+        if (!isInItemsOrActionsContext(node)) return
+
         const prop_names = new Set()
         let click_prop = null
 
         for (const prop of node.properties) {
           if (prop.type !== 'Property') continue
-          const key_name
-            = prop.key.type === 'Identifier'
-              ? prop.key.name
-              : prop.key.type === 'Literal'
-                ? prop.key.value
-                : null
+          const key_name = getPropertyKeyName(prop)
           if (key_name) prop_names.add(key_name)
           if (key_name === 'click') click_prop = prop
         }

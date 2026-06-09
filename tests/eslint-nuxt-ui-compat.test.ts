@@ -84,6 +84,17 @@ describe('nuxt-ui-v4-compat eslint plugin', () => {
     expect(messages.filter((message) => message.ruleId?.startsWith('nuxt-ui-v4-compat/'))).toEqual([])
   })
 
+  it('does not report deprecated click for non-items data objects', async () => {
+    const messages = await lintVue(`
+      <script setup lang="ts">
+      const analytics_event = { label: 'hero cta', click: 1 }
+      </script>
+    `, 'valid-non-items-click-fixture.vue')
+
+    expect(messages.some((message) => message.ruleId === 'nuxt-ui-v4-compat/no-deprecated-click-in-items'))
+      .toBe(false)
+  })
+
   it('has zero compat baseline findings in the real app tree', async () => {
     const eslint = new ESLint({
       cwd: project_root_url.pathname,
