@@ -47,7 +47,7 @@ test('switches tabs without navigation reload and exposes search and link contra
 
   await nav_root.getByRole('link', { name: '指南' }).click()
   await expect(page).toHaveURL('/guide')
-  await expect(page.getByRole('heading', { name: '用 tag 找坑' })).toBeVisible()
+  await expect(page.getByRole('heading', { name: '指南列表' })).toBeVisible()
 
   await nav_root.getByRole('link', { name: '搜尋' }).click()
   await expect(page).toHaveURL('/search')
@@ -91,19 +91,33 @@ test('renders direct product detail routes and unknown product not-found states'
   await expect(page.getByRole('heading', { name: '404' })).toBeVisible()
 })
 
-test('restores category, tag and search state from query strings', async ({ page }) => {
+test('restores category and search state from query strings', async ({ page }) => {
   await page.goto('/?category=av', { waitUntil: 'domcontentloaded' })
   await expect(page.locator('vite-error-overlay')).toHaveCount(0)
   await expect(page.locator('.category-chip.is-active')).toContainText('影音')
 
   await page.goto('/guide?tags=影音', { waitUntil: 'domcontentloaded' })
   await expect(page.locator('vite-error-overlay')).toHaveCount(0)
-  await expect(page.locator('.tag-chip.is-active').first()).toContainText('影音')
+  await expect(page.getByRole('heading', { name: '指南列表' })).toBeVisible()
+  await expect(page.locator('.tag-chip.is-active')).toHaveCount(0)
 
   await page.goto('/search?q=Sharp', { waitUntil: 'domcontentloaded' })
   await expect(page.locator('vite-error-overlay')).toHaveCount(0)
   await expect(page.getByPlaceholder('在找什麼嗎？™')).toHaveValue('Sharp')
-  await expect(page.locator('.product-card').first()).toContainText('Sharp')
+  await expect(page.locator('.search-result-card').first()).toContainText('Sharp')
+})
+
+test('expands product categories in desktop sidebar only', async ({ page }, test_info) => {
+  test.skip(test_info.project.name !== 'desktop', 'desktop category sidebar check only runs on desktop')
+
+  await page.goto('/', { waitUntil: 'domcontentloaded' })
+  await expect(page.locator('vite-error-overlay')).toHaveCount(0)
+
+  const sidebar = page.locator('.compact-app-sidebar')
+  await expect(sidebar.locator('.desktop-category-items')).toBeVisible()
+  await sidebar.getByRole('link', { name: /影音/ }).click()
+  await expect(page).toHaveURL('/?category=av')
+  await expect(sidebar.getByRole('link', { name: /影音/ })).toHaveAttribute('aria-current', 'page')
 })
 
 test('uses the wide desktop canvas without leaving a large blank gutter', async ({ page }, test_info) => {

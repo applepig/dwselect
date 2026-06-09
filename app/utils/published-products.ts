@@ -1,4 +1,4 @@
-import type { CategoryDefinition, ChannelDefinition, LinkDefinition, Product } from './product-schema'
+import type { CategoryDefinition, ChannelDefinition, Guide, LinkDefinition, Product, TagDefinition } from './product-schema'
 
 export type PublishedProductCard = {
   id: string
@@ -81,6 +81,7 @@ export type CatalogView = {
 export type TaxonomyDefinitions = {
   categories: CategoryDefinition[]
   channels: ChannelDefinition[]
+  tags?: TagDefinition[]
 }
 
 export type CompactAppTabId = 'home' | 'guide' | 'search' | 'links'
@@ -135,6 +136,19 @@ export type CompactLinkRow = {
   rel: 'noopener noreferrer'
 }
 
+export type CompactGuideRow = {
+  id: string
+  title: string
+  summary: string
+  source_url: string
+  image_url: string | null
+  category_labels: string[]
+  tag_labels: string[]
+  published_at: string | null
+  target: '_blank'
+  rel: 'noopener noreferrer'
+}
+
 export type CompactAppView = {
   tabs: CompactAppTab[]
   active_tab: CompactAppTabId
@@ -145,10 +159,7 @@ export type CompactAppView = {
     empty_reason: 'no-products' | 'no-results' | null
   }
   guide: {
-    tag_chips: CompactTagChip[]
-    selected_tags: string[]
-    products: PublishedProductCard[]
-    can_clear_tags: boolean
+    guides: CompactGuideRow[]
     empty_reason: 'no-products' | 'no-results' | null
   }
   search: {
@@ -165,14 +176,14 @@ export type CompactAppView = {
 const ALL_CATEGORIES_VALUE = '全部'
 
 const DEFAULT_TAXONOMIES: TaxonomyDefinitions = {
-  categories: [
-    { id: 'home', label: '居家', short_label: '居家', sort_order: 10 },
-    { id: 'kitchen', label: '廚房', short_label: '廚房', sort_order: 20 },
-    { id: 'computer', label: '電腦', short_label: '電腦', sort_order: 30 },
-    { id: 'three-c', label: '3C', short_label: '3C', sort_order: 40 },
-    { id: 'av', label: '影音', short_label: '影音', sort_order: 50 },
-    { id: 'food', label: '食材', short_label: '食材', sort_order: 60 },
-    { id: 'other', label: '其他', short_label: '其他', sort_order: 999 },
+    categories: [
+    { id: 'home', label: '居家', short_label: '居家', nav_visible: true, sort_order: 10 },
+    { id: 'kitchen', label: '廚房', short_label: '廚房', nav_visible: true, sort_order: 20 },
+    { id: 'computer', label: '電腦', short_label: '電腦', nav_visible: true, sort_order: 30 },
+    { id: 'three-c', label: '3C', short_label: '3C', nav_visible: true, sort_order: 40 },
+    { id: 'av', label: '影音', short_label: '影音', nav_visible: true, sort_order: 50 },
+    { id: 'food', label: '食材', short_label: '食材', nav_visible: true, sort_order: 60 },
+    { id: 'other', label: '其他', short_label: '其他', nav_visible: true, sort_order: 999 },
   ],
   channels: [
     { id: 'pchome', label: 'PChome', tint: 'blue', host_patterns: ['24h.pchome.com.tw'], sort_order: 10 },
@@ -182,6 +193,7 @@ const DEFAULT_TAXONOMIES: TaxonomyDefinitions = {
     { id: 'costco', label: 'Costco', tint: 'indigo', host_patterns: ['www.costco.com.tw'], sort_order: 50 },
     { id: 'other', label: '其他通路', tint: 'neutral', host_patterns: [], sort_order: 999 },
   ],
+  tags: [],
 }
 
 const CATALOG_SORT_OPTIONS: Array<Omit<CatalogSortOption, 'active'>> = [
@@ -200,11 +212,19 @@ const COMPACT_APP_TABS: Array<Omit<CompactAppTab, 'active'>> = [
 const DEFAULT_LINKS: LinkDefinition[] = [
   {
     id: 'applepig-home',
+    status: 'published',
     title: 'applepig.idv.tw',
-    subtitle: 'DW 的主站',
+    summary: 'DW 的主站',
     url: 'https://applepig.idv.tw',
     icon: 'i-lucide-link',
+    category_ids: ['other'],
+    tag_ids: [],
     sort_order: 10,
+    created_at: '2026-06-02T00:00:00+08:00',
+    updated_at: '2026-06-02T00:00:00+08:00',
+    published_at: '2026-06-02T00:00:00+08:00',
+    unpublished_at: null,
+    archived_at: null,
   },
 ]
 
@@ -237,7 +257,7 @@ export function getProductDetail(
     price_label,
     dw_says: product.summary,
     description: product.description === product.summary ? null : product.description,
-    tags: [...product.tags],
+    tags: getTagLabels(product.tag_ids, taxonomies),
     buy_cta: {
       label: `到 ${channel_definition.label} 購買`,
       href: product.purchase_url,
@@ -253,6 +273,23 @@ export function getGroupedPublishedProducts(
   taxonomies: TaxonomyDefinitions = DEFAULT_TAXONOMIES,
 ): GroupedPublishedProducts[] {
   return groupCardsByCategory(getPublishedProducts(products, taxonomies))
+}
+
+export function getPublishedGuides(
+  guides: Guide[],
+  taxonomies: TaxonomyDefinitions = DEFAULT_TAXONOMIES,
+): CompactGuideRow[] {
+  return guides
+    .filter((guide) => guide.status === 'published')
+    .toSorted(compareGuides)
+    .map((guide) => mapGuideToRow(guide, taxonomies))
+}
+
+export function getPublishedLinks(links: LinkDefinition[]): CompactLinkRow[] {
+  return links
+    .filter((link) => link.status === 'published')
+    .toSorted((left_link, right_link) => left_link.sort_order - right_link.sort_order)
+    .map(mapLinkToRow)
 }
 
 export function getCatalogProductId(product: Pick<Product, 'id'>): string {
@@ -316,6 +353,7 @@ export function getCompactAppView(
   state: CompactAppState = {},
   taxonomies: TaxonomyDefinitions = DEFAULT_TAXONOMIES,
   links: LinkDefinition[] = DEFAULT_LINKS,
+  guides: Guide[] = [],
 ): CompactAppView {
   const active_tab = normalizeCompactTab(state.active_tab)
   const selected_category_id = state.home_category_id ?? 'all'
@@ -329,7 +367,7 @@ export function getCompactAppView(
   const home_products = selected_category_id === 'all'
     ? published_cards
     : published_cards.filter((product) => product.category_id === selected_category_id)
-  const guide_products = getGuideProducts(published_cards, selected_tags)
+  const guide_rows = getPublishedGuides(guides, taxonomies)
   const search_products = getSearchProducts(published_cards, search_query, state.search_result_ids)
 
   return {
@@ -345,28 +383,15 @@ export function getCompactAppView(
       empty_reason: getEmptyReason(published_cards.length, home_products.length),
     },
     guide: {
-      tag_chips: top_tags,
-      selected_tags,
-      products: guide_products,
-      can_clear_tags: selected_tags.length > 0,
-      empty_reason: getEmptyReason(published_cards.length, guide_products.length),
+      guides: guide_rows,
+      empty_reason: getEmptyReason(guide_rows.length, guide_rows.length),
     },
     search: {
       query: search_query,
       products: search_products,
       empty_reason: getSearchEmptyReason(search_query, search_products.length),
     },
-    links: links
-      .toSorted((left_link, right_link) => left_link.sort_order - right_link.sort_order)
-      .map((link) => ({
-        id: link.id,
-        title: link.title,
-        subtitle: link.subtitle,
-        url: link.url,
-        icon: link.icon,
-        target: '_blank',
-        rel: 'noopener noreferrer',
-      })),
+    links: getPublishedLinks(links),
     counts: {
       published: published_cards.length,
     },
@@ -380,7 +405,6 @@ export function getCompactAppStateFromRoute(
   if (route.path === '/guide') {
     return {
       active_tab: 'guide',
-      selected_tags: parseSelectedTags(route.query?.tags, options.tag_labels),
     }
   }
 
@@ -490,7 +514,34 @@ function mapProductToCard(product: Product, taxonomies: TaxonomyDefinitions): Pu
     purchase_link: product.purchase_url,
     published_at: product.published_at,
     summary: product.summary,
-    tags: [...product.tags],
+    tags: getTagLabels(product.tag_ids, taxonomies),
+  }
+}
+
+function mapGuideToRow(guide: Guide, taxonomies: TaxonomyDefinitions): CompactGuideRow {
+  return {
+    id: guide.id,
+    title: guide.title,
+    summary: guide.summary,
+    source_url: guide.source_url,
+    image_url: guide.image_url,
+    category_labels: guide.category_ids.map((category_id) => getCategoryDefinition(category_id, taxonomies).label),
+    tag_labels: getTagLabels(guide.tag_ids, taxonomies),
+    published_at: guide.published_at,
+    target: '_blank',
+    rel: 'noopener noreferrer',
+  }
+}
+
+function mapLinkToRow(link: LinkDefinition): CompactLinkRow {
+  return {
+    id: link.id,
+    title: link.title,
+    subtitle: link.summary,
+    url: link.url,
+    icon: link.icon,
+    target: '_blank',
+    rel: 'noopener noreferrer',
   }
 }
 
@@ -540,7 +591,7 @@ function matchesQuery(product: Product, query: string, taxonomies: TaxonomyDefin
     product.description,
     category_definition.label,
     channel_definition.label,
-    ...product.tags,
+    ...getTagLabels(product.tag_ids, taxonomies),
   ].join(' ').toLocaleLowerCase()
 
   return searchable_text.includes(normalized_query)
@@ -579,11 +630,11 @@ function getCategoryOptions(
       count: products.length,
       active: active_category === ALL_CATEGORIES_VALUE,
     },
-    ...Array.from(category_counts, ([category_id, count]) => ({
-      label: getCategoryDefinition(category_id, taxonomies).label,
-      value: category_id,
-      count,
-      active: category_id === active_category,
+    ...getVisibleCategories(taxonomies).map((category) => ({
+      label: category.label,
+      value: category.id,
+      count: category_counts.get(category.id) ?? 0,
+      active: category.id === active_category,
     })),
   ]
 }
@@ -622,16 +673,12 @@ function getCompactCategoryChips(
       count: published_products.length,
       active: active_category_id === 'all',
     },
-    ...Array.from(category_counts, ([category_id, count]) => {
-      const category_definition = getCategoryDefinition(category_id, taxonomies)
-
-      return {
-        id: category_id,
-        label: category_definition.short_label,
-        count,
-        active: category_id === active_category_id,
-      }
-    }),
+    ...getVisibleCategories(taxonomies).map((category) => ({
+      id: category.id,
+      label: category.short_label,
+      count: category_counts.get(category.id) ?? 0,
+      active: category.id === active_category_id,
+    })),
   ]
 }
 
@@ -656,6 +703,16 @@ function getTopTags(products: PublishedProductCard[], selected_tags: string[]): 
 
     return compareText(left_tag.label, right_tag.label)
   })
+}
+
+function compareGuides(left_guide: Guide, right_guide: Guide) {
+  const published_at_order = compareNullableTimestampDesc(left_guide.published_at, right_guide.published_at)
+
+  if (published_at_order !== 0) {
+    return published_at_order
+  }
+
+  return compareText(left_guide.title, right_guide.title)
 }
 
 function getGuideProducts(products: PublishedProductCard[], selected_tags: string[]) {
@@ -691,8 +748,21 @@ function getCategoryDefinition(category_id: Product['category_id'], taxonomies: 
     id: category_id,
     label: category_id,
     short_label: category_id,
+    nav_visible: false,
     sort_order: Number.MAX_SAFE_INTEGER,
   }
+}
+
+function getVisibleCategories(taxonomies: TaxonomyDefinitions) {
+  return taxonomies.categories
+    .filter((category) => category.nav_visible)
+    .toSorted((left_category, right_category) => left_category.sort_order - right_category.sort_order)
+}
+
+function getTagLabels(tag_ids: string[], taxonomies: TaxonomyDefinitions) {
+  const tag_labels = new Map((taxonomies.tags ?? []).map((tag) => [tag.id, tag.label]))
+
+  return tag_ids.map((tag_id) => tag_labels.get(tag_id) ?? tag_id)
 }
 
 function getChannelDefinition(channel_id: Product['channel_id'], taxonomies: TaxonomyDefinitions) {

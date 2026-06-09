@@ -20,7 +20,7 @@ const base_product: Product = {
   image_url: 'https://example.com/product.jpg',
   channel_id: 'pchome',
   category_id: 'computer',
-  tags: ['鍵盤', 'USB-C'],
+    tag_ids: ['keyboard', 'usb-c'],
   reference_url: 'https://example.com/reference',
   created_at: '2026-06-02T00:00:00+08:00',
   updated_at: '2026-06-02T00:00:00+08:00',
@@ -39,7 +39,7 @@ afterEach(() => {
 
 describe('client search lazy loader', () => {
   it('should fetch the static MiniSearch index and return complete client search results', async () => {
-    const payload = buildSearchIndexPayload([base_product], { generated_at: '2026-06-06T00:00:00+08:00' })
+    const payload = buildSearchIndexPayload({ products: [base_product], guides: [], links: [] }, { generated_at: '2026-06-06T00:00:00+08:00' })
     const fetch_mock = vi.fn().mockResolvedValue({ ok: true, json: async () => payload })
     vi.stubGlobal('fetch', fetch_mock)
     const { getClientSearchResults } = await import('../app/utils/search/client-search')
@@ -49,15 +49,22 @@ describe('client search lazy loader', () => {
     expect(fetch_mock).toHaveBeenCalledWith('/search-index.json')
     expect(results).toEqual([
       expect.objectContaining({
-        id: '2026-06-02-sample-product',
-        category_label: '電腦',
+        document_id: 'product:2026-06-02-sample-product',
+        content_id: '2026-06-02-sample-product',
+        type: 'product',
+        title: '機械鍵盤',
+        href: '/products/2026-06-02-sample-product',
+        external: false,
+        price_text: 'NT$ 1,990',
+        image_url: 'https://example.com/product.jpg',
+        channel_id: 'pchome',
         channel_label: 'PChome',
       }),
     ])
   })
 
   it('should retry fetching the search index after a failed request', async () => {
-    const payload = buildSearchIndexPayload([base_product], { generated_at: '2026-06-06T00:00:00+08:00' })
+    const payload = buildSearchIndexPayload({ products: [base_product], guides: [], links: [] }, { generated_at: '2026-06-06T00:00:00+08:00' })
     const fetch_mock = vi.fn()
       .mockResolvedValueOnce({ ok: false, status: 503 })
       .mockResolvedValueOnce({ ok: true, json: async () => payload })
@@ -75,21 +82,19 @@ describe('client search lazy loader', () => {
       ...base_product,
       id: `shared-product-${index + 1}`,
       name: index === 12 ? 'Lower Relevance Product' : `Shared Token Product ${index + 1}`,
-      tags: ['shared-token'],
+        tag_ids: ['shared-token'],
       published_at: `2026-06-${String(index + 1).padStart(2, '0')}T00:00:00+08:00`,
     }))
-    const payload = buildSearchIndexPayload(products, { generated_at: '2026-06-06T00:00:00+08:00' })
+    const payload = buildSearchIndexPayload({ products, guides: [], links: [] }, { generated_at: '2026-06-06T00:00:00+08:00' })
     vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true, json: async () => payload }))
     const { getClientSearchSuggestions } = await import('../app/utils/search/client-search')
 
     const suggestions = await getClientSearchSuggestions('shared-token')
 
     expect(suggestions).toHaveLength(12)
-    expect(suggestions.map((suggestion) => suggestion.id)).not.toContain('shared-product-13')
+    expect(suggestions.map((suggestion) => suggestion.document_id)).not.toContain('product:shared-product-13')
     expect(suggestions[0]).toEqual(expect.objectContaining({
-      category: '電腦',
-      category_label: '電腦',
-      channel: 'PChome',
+      category_labels: ['電腦'],
       channel_label: 'PChome',
     }))
   })

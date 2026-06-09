@@ -1,13 +1,19 @@
 import { mkdir, readFile, writeFile } from 'node:fs/promises'
-import { join, parse } from 'node:path'
+import { dirname, join, parse } from 'node:path'
 
 import {
   category_taxonomy_schema,
   channel_taxonomy_schema,
+  guide_schema,
+  link_schema,
   product_schema,
+  tag_taxonomy_schema,
   type CategoryDefinition,
   type ChannelDefinition,
+  type Guide,
+  type LinkDefinition,
   type Product,
+  type TagDefinition,
 } from '../app/utils/product-schema.ts'
 import { buildSearchIndexPayload } from '../app/utils/search/search-index.ts'
 
@@ -24,12 +30,17 @@ export async function buildSearchIndexFile(
   products_dir = DEFAULT_PRODUCTS_DIR,
   output_path = DEFAULT_OUTPUT_PATH,
   taxonomies_dir = DEFAULT_TAXONOMIES_DIR,
+  guides_dir = join(dirname(products_dir), 'guides'),
+  links_dir = join(dirname(products_dir), 'links'),
 ): Promise<BuildSearchIndexSummary> {
   const products = await readProducts(products_dir)
+  const guides = await readGuides(guides_dir)
+  const links = await readLinks(links_dir)
   const taxonomies = await readTaxonomies(taxonomies_dir)
-  const payload = buildSearchIndexPayload(products, {
+  const payload = buildSearchIndexPayload({ products, guides, links }, {
     categories: taxonomies.categories,
     channels: taxonomies.channels,
+    tags: taxonomies.tags,
   })
   await mkdir(getDirectoryName(output_path), { recursive: true })
   await writeFile(output_path, `${JSON.stringify(payload, null, 2)}\n`)
@@ -41,38 +52,42 @@ export async function buildSearchIndexFile(
 }
 
 async function readProducts(products_dir: string): Promise<Product[]> {
-  const { readdir } = await import('node:fs/promises')
-  const entries = await readdir(products_dir, { withFileTypes: true })
-  const products: Product[] = []
+  return readContentFiles(products_dir, (raw_content, file_name) => product_schema.parse({
+    ...JSON.parse(raw_content),
+    id: parse(file_name).name,
+  }))
+}
 
-  for (const entry of entries.toSorted((left_entry, right_entry) => left_entry.name.localeCompare(right_entry.name))) {
-    if (!entry.isFile() || !entry.name.endsWith('.json')) {
-      continue
-    }
+async function readGuides(guides_dir: string): Promise<Guide[]> {
+  return readContentFiles(guides_dir, (raw_content, file_name) => guide_schema.parse({
+    ...JSON.parse(raw_content),
+    id: parse(file_name).name,
+  }))
+}
 
-    const raw_content = await readFile(join(products_dir, entry.name), 'utf8')
-    products.push(product_schema.parse({
-      ...JSON.parse(raw_content),
-      id: parse(entry.name).name,
-    }))
-  }
-
-  return products
+async function readLinks(links_dir: string): Promise<LinkDefinition[]> {
+  return readContentFiles(links_dir, (raw_content, file_name) => link_schema.parse({
+    ...JSON.parse(raw_content),
+    id: parse(file_name).name,
+  }))
 }
 
 async function readTaxonomies(taxonomies_dir: string): Promise<{
   categories?: CategoryDefinition[]
   channels?: ChannelDefinition[]
+  tags?: TagDefinition[]
 }> {
   try {
-    const [category_source, channel_source] = await Promise.all([
+    const [category_source, channel_source, tag_source] = await Promise.all([
       readFile(join(taxonomies_dir, 'categories.json'), 'utf8'),
       readFile(join(taxonomies_dir, 'channels.json'), 'utf8'),
+      readFile(join(taxonomies_dir, 'tags.json'), 'utf8'),
     ])
 
     return {
       categories: category_taxonomy_schema.parse(JSON.parse(category_source)).items,
       channels: channel_taxonomy_schema.parse(JSON.parse(channel_source)).items,
+      tags: tag_taxonomy_schema.parse(JSON.parse(tag_source)).items,
     }
   }
   catch (error) {
@@ -82,6 +97,34 @@ async function readTaxonomies(taxonomies_dir: string): Promise<{
 
     throw error
   }
+}
+
+async function readContentFiles<T>(content_dir: string, parseContent: (raw_content: string, file_name: string) => T): Promise<T[]> {
+  const { readdir } = await import('node:fs/promises')
+  let entries
+
+  try {
+    entries = await readdir(content_dir, { withFileTypes: true })
+  }
+  catch (error) {
+    if (isMissingFileError(error)) {
+      return []
+    }
+
+    throw error
+  }
+
+  const content_items: T[] = []
+
+  for (const entry of entries.toSorted((left_entry, right_entry) => left_entry.name.localeCompare(right_entry.name))) {
+    if (!entry.isFile() || !entry.name.endsWith('.json')) {
+      continue
+    }
+
+    content_items.push(parseContent(await readFile(join(content_dir, entry.name), 'utf8'), entry.name))
+  }
+
+  return content_items
 }
 
 function isMissingFileError(error: unknown) {

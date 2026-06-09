@@ -17,7 +17,7 @@ describe('Nuxt SSG baseline', () => {
     expect(package_json.scripts.generate).toContain('pnpm build:search-index')
   })
 
-  it('should expose taxonomy JSON data collections as object payloads', () => {
+  it('should expose taxonomy JSON data collections and content domain collections', () => {
     const category_taxonomy = JSON.parse(readFileSync(
       new URL('../content/taxonomies/categories.json', import.meta.url),
       'utf8',
@@ -26,24 +26,31 @@ describe('Nuxt SSG baseline', () => {
       new URL('../content/taxonomies/channels.json', import.meta.url),
       'utf8',
     )) as { items: Array<{ id: string, label: string }> }
-    const link_taxonomy = JSON.parse(readFileSync(
-      new URL('../content/taxonomies/links.json', import.meta.url),
+    const tag_taxonomy = JSON.parse(readFileSync(
+      new URL('../content/taxonomies/tags.json', import.meta.url),
       'utf8',
-    )) as { items: Array<{ id: string, url: string }> }
+    )) as { items: Array<{ id: string, label: string }> }
+    const link_files = readdirSync(new URL('../content/links/', import.meta.url)).filter((file_name) => file_name.endsWith('.json'))
+    const guide_files = readdirSync(new URL('../content/guides/', import.meta.url)).filter((file_name) => file_name.endsWith('.json'))
 
     expect(category_taxonomy.items).toContainEqual(expect.objectContaining({ id: 'av', label: '影音' }))
     expect(channel_taxonomy.items).toContainEqual(expect.objectContaining({ id: 'pchome', label: 'PChome' }))
-    expect(link_taxonomy.items).toEqual([
-      expect.objectContaining({ id: 'applepig-home', url: 'https://applepig.idv.tw' }),
-    ])
+    expect(tag_taxonomy.items.length).toBeGreaterThan(0)
+    expect(link_files).toEqual(expect.arrayContaining(['applepig-home.json', '2026-06-02-b18.json']))
+    expect(guide_files).toEqual(expect.arrayContaining(['2026-06-02-日本米入門篇.json', '2026-06-02-aeron-chair.json']))
 
     const content_config_source = readFileSync(new URL('../content.config.ts', import.meta.url), 'utf8')
+    expect(content_config_source).toContain('guides: defineCollection')
+    expect(content_config_source).toContain("source: 'guides/*.json'")
+    expect(content_config_source).toContain('links: defineCollection')
+    expect(content_config_source).toContain("source: 'links/*.json'")
     expect(content_config_source).toContain('categories: defineCollection')
     expect(content_config_source).toContain("source: 'taxonomies/categories.json'")
     expect(content_config_source).toContain('channels: defineCollection')
     expect(content_config_source).toContain("source: 'taxonomies/channels.json'")
-    expect(content_config_source).toContain('links: defineCollection')
-    expect(content_config_source).toContain("source: 'taxonomies/links.json'")
+    expect(content_config_source).toContain('tags: defineCollection')
+    expect(content_config_source).toContain("source: 'taxonomies/tags.json'")
+    expect(content_config_source).not.toContain("source: 'taxonomies/links.json'")
   })
 
   it('should expose a published products query helper skeleton', () => {
@@ -67,25 +74,31 @@ describe('Nuxt SSG baseline', () => {
     expect(page_source).toContain('v-model="pending_search_query"')
     expect(page_source).toContain('placeholder="在找什麼嗎？™"')
     expect(page_source).toContain('getClientSearchResults')
-    expect(page_source).toContain('client_search_result_ids')
-    expect(page_source).toContain('search_result_ids: client_search_result_ids.value')
+    expect(page_source).toContain('client_search_results')
+    expect(page_source).toContain('search_results')
     expect(page_source).toContain('router.replace')
     expect(page_source).not.toContain('<UInputMenu')
   })
 
-  it('should load runtime taxonomies and links from Nuxt Content in the compact app source', () => {
+  it('should load runtime taxonomies, guides and links from Nuxt Content in the compact app source', () => {
     const composable_source = readFileSync(new URL('../app/composables/use-catalog-data.ts', import.meta.url), 'utf8')
     const home_source = readFileSync(new URL('../app/pages/index.vue', import.meta.url), 'utf8')
 
     expect(composable_source).toContain("queryCollection('products')")
+    expect(composable_source).toContain("queryCollection('guides')")
     expect(composable_source).toContain("queryCollection('categories')")
     expect(composable_source).toContain("queryCollection('channels')")
+    expect(composable_source).toContain("queryCollection('tags')")
     expect(composable_source).toContain("queryCollection('links')")
     expect(composable_source).toContain('runtime_taxonomies')
+    expect(composable_source).toContain('runtime_guides')
     expect(composable_source).toContain('runtime_links')
     expect(home_source).toContain('useCatalogData')
-    expect(home_source).toContain('getCompactAppView(all_products.value')
+    expect(home_source).toContain('getCompactAppView(')
+    expect(home_source).toContain('all_products.value')
     expect(home_source).toContain('runtime_taxonomies.value')
+    expect(home_source).toContain('runtime_guides.value')
+    expect(home_source).toContain('runtime_links.value')
   })
 
   it('should lazy fetch the static search index from a client helper', () => {
@@ -104,10 +117,12 @@ describe('Nuxt SSG baseline', () => {
       '../app/pages/index.vue',
       '../app/pages/guide.vue',
       '../app/pages/search.vue',
+      '../app/pages/links.vue',
     ].map((file_path) => readFileSync(new URL(file_path, import.meta.url), 'utf8')).join('\n')
 
     expect(page_source).toContain('目前沒有已上架商品')
-    expect(page_source).toContain('這組 tag 暫時沒東西')
+    expect(page_source).toContain('目前沒有已發布指南')
+    expect(page_source).toContain('目前沒有已發布連結')
     expect(page_source).toContain('熱門 tag')
     expect(page_source).toContain('沒這個坑，去許願吧')
   })
@@ -180,7 +195,7 @@ describe('Nuxt SSG baseline', () => {
     expect(layout_source).toContain('<slot />')
     expect(page_sources).toContain('<ProductCard')
     expect(page_sources).toContain('<ProductDetail')
-    expect(page_sources).toContain('<TagExplorer')
+    expect(page_sources).not.toContain('<TagExplorer')
     expect(page_sources).toContain('<LinkPanel')
 
     for (const file_path of component_files) {
@@ -197,17 +212,56 @@ describe('Nuxt SSG baseline', () => {
     expect(nav_source).toContain('<NuxtLink')
     expect(nav_source).toContain("to: '/'")
     expect(nav_source).toContain("to: '/guide'")
-    expect(nav_source).toContain("to: '/search'")
     expect(nav_source).toContain("to: '/links'")
+    expect(nav_source).toContain("to: '/search'")
+    expect(nav_source.indexOf("id: 'links'")).toBeLessThan(nav_source.indexOf("id: 'search'"))
     expect(nav_source).not.toContain('selectTab')
     expect(nav_source).toContain('compact-app-bottom-tabs')
     expect(nav_source).toContain('compact-app-rail')
     expect(nav_source).toContain('compact-app-sidebar')
+    expect(nav_source).toContain('desktop_category_items')
+    expect(nav_source).toContain('desktop-route-items')
+    expect(nav_source).toContain('isCategoryActive')
+    expect(nav_source).toContain('aria-current')
     expect(nav_source).toContain('app-nav-button')
     expect(theme_source).toContain('<UColorModeButton')
     expect(link_source).toContain('target="_blank"')
     expect(link_source).toContain('rel="noopener noreferrer"')
-    expect(view_model_source).toContain('https://applepig.idv.tw')
+    expect(view_model_source).toContain('getPublishedLinks')
+  })
+
+  it('should expose desktop product category navigation without adding it to mobile or tablet nav', () => {
+    const nav_source = readFileSync(new URL('../app/components/app-navigation.vue', import.meta.url), 'utf8')
+    const catalog_css = readFileSync(new URL('../app/assets/styles/catalog.css', import.meta.url), 'utf8')
+
+    expect(nav_source).toContain('desktop-category-items')
+    expect(nav_source).toContain('desktop-category-link')
+    expect(nav_source).toContain('category.id === \'all\' ? \'/\' : `/?category=${category.id}`')
+    expect(nav_source).toContain('runtime_taxonomies')
+    expect(catalog_css).toContain('.desktop-category-items')
+    expect(catalog_css).toContain('.desktop-category-link')
+    expect(catalog_css).toContain('.compact-app-bottom-tabs .app-nav-button')
+    expect(catalog_css).toContain('.compact-app-rail .app-nav-button')
+  })
+
+  it('should render guide, link and mixed search results with external safety attributes in source', () => {
+    const guide_source = readFileSync(new URL('../app/pages/guide.vue', import.meta.url), 'utf8')
+    const links_source = readFileSync(new URL('../app/pages/links.vue', import.meta.url), 'utf8')
+    const search_source = readFileSync(new URL('../app/pages/search.vue', import.meta.url), 'utf8')
+
+    expect(guide_source).toContain('compact_view.guide.guides')
+    expect(guide_source).not.toContain('<TagExplorer')
+    expect(guide_source).not.toContain('query: tags.length')
+    expect(guide_source).toContain('target="_blank"')
+    expect(guide_source).toContain('rel="noopener noreferrer"')
+    expect(links_source).toContain('<LinkPanel')
+    expect(links_source).toContain('compact_view.links.length')
+    expect(search_source).toContain('client_search_results')
+    expect(search_source).toContain('result.external')
+    expect(search_source).toContain('target="_blank"')
+    expect(search_source).toContain('rel="noopener noreferrer"')
+    expect(search_source).toContain('result.price_text')
+    expect(search_source).toContain('result.channel_label')
   })
 
   it('should wire product detail route, buy CTA and view transition contracts in source', () => {
@@ -317,15 +371,35 @@ describe('Nuxt SSG baseline', () => {
       'utf8',
     ))
     const search_index_source = readFileSync(new URL('../public/search-index.json', import.meta.url), 'utf8')
+    const search_index_payload = JSON.parse(search_index_source) as {
+      documents: Array<{
+        document_id: string
+        type: string
+        title: string
+        category_labels?: string[]
+        channel_label?: string
+      }>
+    }
 
-    expect(product_file_names).toHaveLength(66)
+    expect(product_file_names).toHaveLength(62)
     expect(product_file_names).not.toContain('2026-06-02-sample-product.json')
     expect(product_sources.join('\n')).toContain('Sharp 65吋 XLED')
     expect(product_sources.join('\n')).toContain('"category_id": "av"')
     expect(product_sources.join('\n')).not.toContain('"category":')
-    expect(search_index_source).toContain('2026-06-02-sharp-65吋-xled')
-    expect(search_index_source).toContain('Sharp 65吋 XLED')
-    expect(search_index_source).toContain('"category_label": "影音"')
+    expect(search_index_payload.documents).toHaveLength(67)
+    expect(search_index_payload.documents).toContainEqual(expect.objectContaining({
+      document_id: 'product:2026-06-02-sharp-65吋-xled',
+      type: 'product',
+      title: 'Sharp 65吋 XLED',
+      category_labels: ['影音'],
+      channel_label: expect.any(String),
+    }))
+    expect(search_index_payload.documents).toEqual(expect.arrayContaining([
+      expect.objectContaining({ document_id: 'guide:2026-06-02-日本米入門篇', type: 'guide' }),
+      expect.objectContaining({ document_id: 'link:2026-06-02-b18', type: 'link' }),
+      expect.objectContaining({ document_id: 'link:applepig-home', type: 'link' }),
+    ]))
+    expect(search_index_source).toContain('"category_labels"')
     expect(search_index_source).toContain('"channel_label":')
     expect(search_index_source).not.toContain('"category": "')
     expect(search_index_source).not.toContain('2026-06-02-sample-product')

@@ -60,13 +60,19 @@ import { getCompactAppStateFromRoute, getCompactAppView } from '../utils/publish
 
 const route = useRoute()
 const router = useRouter()
-const { all_products, runtime_taxonomies, runtime_links } = await useCatalogData()
-const category_ids = computed(() => Array.from(new Set(all_products.value.map((product) => product.category_id))))
+const { all_products, runtime_taxonomies, runtime_guides, runtime_links } = await useCatalogData()
+const category_ids = computed(() => runtime_taxonomies.value?.categories.map((category) => category.id) ?? [])
 const route_state = computed(() => getCompactAppStateFromRoute(
   { path: route.path, query: route.query },
   { category_ids: category_ids.value },
 ))
-const compact_view = computed(() => getCompactAppView(all_products.value, route_state.value, runtime_taxonomies.value, runtime_links.value))
+const compact_view = computed(() => getCompactAppView(
+  all_products.value,
+  route_state.value,
+  runtime_taxonomies.value,
+  runtime_links.value,
+  runtime_guides.value,
+))
 
 function onCategoryChipClicked(category_id: CompactCategoryChip['id']) {
   router.push({

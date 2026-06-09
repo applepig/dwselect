@@ -14,7 +14,19 @@
       </div>
     </div>
 
-    <LinkPanel :links="compact_view.links" />
+    <div
+      v-if="compact_view.links.length === 0"
+      class="compact-empty-state"
+    >
+      <p class="empty-title">
+        目前沒有已發布連結
+      </p>
+    </div>
+
+    <LinkPanel
+      v-else
+      :links="compact_view.links"
+    />
   </section>
 </template>
 
@@ -22,12 +34,13 @@
 import { getCompactAppStateFromRoute, getCompactAppView } from '../utils/published-products'
 
 const route = useRoute()
-const { all_products, runtime_taxonomies, runtime_links } = await useCatalogData()
+const { all_products, runtime_taxonomies, runtime_guides, runtime_links } = await useCatalogData()
 const route_state = computed(() => getCompactAppStateFromRoute({ path: route.path, query: route.query }))
 const compact_view = computed(() => getCompactAppView(
   all_products.value,
   route_state.value,
   runtime_taxonomies.value,
   runtime_links.value,
+  runtime_guides.value,
 ))
 </script>

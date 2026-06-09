@@ -10,13 +10,16 @@ import {
   getCompactAppView,
   getCompactAppStateFromRoute,
   getGroupedPublishedProducts,
+  getPublishedGuides,
+  getPublishedLinks,
   getProductDetail,
   getPublishedProducts,
 } from '../app/utils/published-products'
-import type { LinkDefinition } from '../app/utils/product-schema'
-import type { Product } from '../app/utils/product-schema'
+import type { Guide, LinkDefinition, Product, TagDefinition } from '../app/utils/product-schema'
 
 const products_dir_url = new URL('../content/products/', import.meta.url)
+const guides_dir_url = new URL('../content/guides/', import.meta.url)
+const links_dir_url = new URL('../content/links/', import.meta.url)
 
 const base_product = {
   price_text: 'NT$ 1,990',
@@ -32,7 +35,7 @@ const base_product = {
   image_url: 'https://example.com/product.jpg',
   channel_id: 'other',
   category_id: 'home',
-  tags: ['tag-a'],
+  tag_ids: ['tag-a'],
   reference_url: null,
   created_at: '2026-06-02T00:00:00+08:00',
   updated_at: '2026-06-02T00:00:00+08:00',
@@ -43,13 +46,13 @@ const base_product = {
 
 const test_taxonomies: TaxonomyDefinitions = {
   categories: [
-    { id: 'home', label: '居家', short_label: '居家', sort_order: 10 },
-    { id: 'kitchen', label: '廚房', short_label: '廚房', sort_order: 20 },
-    { id: 'computer', label: '電腦', short_label: '電腦', sort_order: 30 },
-    { id: 'three-c', label: '3C', short_label: '3C', sort_order: 40 },
-    { id: 'av', label: '影音', short_label: '影音', sort_order: 50 },
-    { id: 'food', label: '食材', short_label: '食材', sort_order: 60 },
-    { id: 'other', label: '其他', short_label: '其他', sort_order: 999 },
+    { id: 'home', label: '居家', short_label: '居家', nav_visible: true, sort_order: 10 },
+    { id: 'kitchen', label: '廚房', short_label: '廚房', nav_visible: true, sort_order: 20 },
+    { id: 'computer', label: '電腦', short_label: '電腦', nav_visible: true, sort_order: 30 },
+    { id: 'three-c', label: '3C', short_label: '3C', nav_visible: true, sort_order: 40 },
+    { id: 'av', label: '影音', short_label: '影音', nav_visible: true, sort_order: 50 },
+    { id: 'food', label: '食材', short_label: '食材', nav_visible: true, sort_order: 60 },
+    { id: 'other', label: '其他', short_label: '其他', nav_visible: true, sort_order: 999 },
   ],
   channels: [
     { id: 'pchome', label: 'PChome', tint: 'blue', host_patterns: ['24h.pchome.com.tw'], sort_order: 10 },
@@ -59,18 +62,48 @@ const test_taxonomies: TaxonomyDefinitions = {
     { id: 'costco', label: 'Costco', tint: 'indigo', host_patterns: ['www.costco.com.tw'], sort_order: 50 },
     { id: 'other', label: '其他通路', tint: 'neutral', host_patterns: [], sort_order: 999 },
   ],
+  tags: [
+    { id: 'tag-a', label: '標籤 A', description: '測試標籤 A', aliases: [], nav_visible: true, sort_order: 10 },
+    { id: 'typing', label: '輸入', description: '輸入設備', aliases: [], nav_visible: true, sort_order: 20 },
+    { id: 'wireless', label: '無線', description: '無線設備', aliases: [], nav_visible: true, sort_order: 30 },
+    { id: 'shared-token', label: '共同關鍵字', description: '共同關鍵字', aliases: [], nav_visible: true, sort_order: 40 },
+  ] satisfies TagDefinition[],
 }
 
 const test_links: LinkDefinition[] = [
   {
     id: 'applepig-home',
+    status: 'published',
     title: 'applepig.idv.tw',
-    subtitle: 'DW 的主站',
+    summary: 'DW 的主站',
     url: 'https://applepig.idv.tw',
     icon: 'i-lucide-link',
+    category_ids: ['other'],
+    tag_ids: [],
     sort_order: 10,
+    created_at: '2026-06-02T00:00:00+08:00',
+    updated_at: '2026-06-02T00:00:00+08:00',
+    published_at: '2026-06-02T00:00:00+08:00',
+    unpublished_at: null,
+    archived_at: null,
   },
 ]
+
+const base_guide = {
+  status: 'published',
+  title: '指南文章',
+  summary: '指南摘要',
+  source_url: 'https://example.com/guide',
+  image_url: null,
+  category_ids: ['computer'],
+  tag_ids: ['typing'],
+  related_product_ids: [],
+  created_at: '2026-06-02T00:00:00+08:00',
+  updated_at: '2026-06-02T00:00:00+08:00',
+  published_at: '2026-06-02T00:00:00+08:00',
+  unpublished_at: null,
+  archived_at: null,
+} satisfies Omit<Guide, 'id'>
 
 function makeProduct(product: Partial<Product> & Pick<Product, 'id' | 'status' | 'name'>): Product {
   return {
@@ -84,6 +117,20 @@ function readContentProducts(): Product[] {
     .filter((file_name) => file_name.endsWith('.json'))
     .toSorted((left_file_name, right_file_name) => left_file_name.localeCompare(right_file_name))
     .map((file_name) => JSON.parse(readFileSync(new URL(file_name, products_dir_url), 'utf8')) as Product)
+}
+
+function readContentGuides(): Guide[] {
+  return readdirSync(guides_dir_url)
+    .filter((file_name) => file_name.endsWith('.json'))
+    .toSorted((left_file_name, right_file_name) => left_file_name.localeCompare(right_file_name))
+    .map((file_name) => JSON.parse(readFileSync(new URL(file_name, guides_dir_url), 'utf8')) as Guide)
+}
+
+function readContentLinks(): LinkDefinition[] {
+  return readdirSync(links_dir_url)
+    .filter((file_name) => file_name.endsWith('.json'))
+    .toSorted((left_file_name, right_file_name) => left_file_name.localeCompare(right_file_name))
+    .map((file_name) => JSON.parse(readFileSync(new URL(file_name, links_dir_url), 'utf8')) as LinkDefinition)
 }
 
 describe('published products mapping', () => {
@@ -132,7 +179,7 @@ describe('published products mapping', () => {
         published_at: '2026-06-02T00:00:00+08:00',
         purchase_link: 'https://example.com/buy',
         summary: '卡片短評',
-        tags: ['tag-a'],
+        tags: ['標籤 A'],
       },
     ])
     expect(published_products[0]).not.toHaveProperty('price_text')
@@ -208,9 +255,9 @@ describe('published products mapping', () => {
 describe('catalog view state', () => {
   it('should expose published-only cards, category counts and sort options for UI consumption', () => {
     const products = [
-      makeProduct({ id: 'keyboard', status: 'published', name: '機械鍵盤', category_id: 'computer', tags: ['typing'] }),
-      makeProduct({ id: 'mouse', status: 'published', name: '無線滑鼠', category_id: 'home', tags: ['wireless'] }),
-      makeProduct({ id: 'draft-keyboard', status: 'draft', name: '草稿鍵盤', category_id: 'computer', tags: ['draft'] }),
+      makeProduct({ id: 'keyboard', status: 'published', name: '機械鍵盤', category_id: 'computer', tag_ids: ['typing'] }),
+      makeProduct({ id: 'mouse', status: 'published', name: '無線滑鼠', category_id: 'home', tag_ids: ['wireless'] }),
+      makeProduct({ id: 'draft-keyboard', status: 'draft', name: '草稿鍵盤', category_id: 'computer', tag_ids: ['draft'] }),
     ]
 
     const catalog_view = getCatalogView(products, {}, test_taxonomies)
@@ -230,7 +277,12 @@ describe('catalog view state', () => {
     expect(catalog_view.category_options).toEqual([
       { label: '全部', value: '全部', count: 2, active: true },
       { label: '居家', value: 'home', count: 1, active: false },
+      { label: '廚房', value: 'kitchen', count: 0, active: false },
       { label: '電腦', value: 'computer', count: 1, active: false },
+      { label: '3C', value: 'three-c', count: 0, active: false },
+      { label: '影音', value: 'av', count: 0, active: false },
+      { label: '食材', value: 'food', count: 0, active: false },
+      { label: '其他', value: 'other', count: 0, active: false },
     ])
     expect(catalog_view.sort_options).toEqual([
       { label: '預設排序', value: 'default', active: true },
@@ -249,7 +301,7 @@ describe('catalog view state', () => {
 
     const catalog_view = getCatalogView(products, {}, test_taxonomies)
 
-    expect(catalog_view.category_options.map((option) => option.label)).toEqual(['全部', '居家', '廚房', '食材'])
+    expect(catalog_view.category_options.map((option) => option.label)).toEqual(['全部', '居家', '廚房', '電腦', '3C', '影音', '食材', '其他'])
     expect(catalog_view.sections.map((section) => section.category)).toEqual(['居家', '廚房', '食材'])
     expect(catalog_view.products.map((product) => product.id)).toEqual(['home', 'kitchen', 'food'])
   })
@@ -382,7 +434,7 @@ describe('catalog view state', () => {
         name: long_name,
         description: long_description,
         summary: long_description,
-        tags: [long_tag],
+        tag_ids: [long_tag],
         price_text: 'NT$ 123,456,789 起',
       }),
     ]
@@ -402,37 +454,117 @@ describe('catalog view state', () => {
   })
 })
 
-describe('published product cutover content', () => {
-  it('should expose 66 real published products without the sample product', () => {
-    const catalog_view = getCatalogView(readContentProducts())
+describe('post-migration product content', () => {
+  it('should keep only product content with taxonomy tag ids after Milestone 2 migration', () => {
+    const products = readContentProducts()
+    const product_ids = products.map((product) => product.id)
 
-    expect(catalog_view.counts).toEqual({ published: 66, filtered: 66 })
-    expect(catalog_view.products.map((product) => product.id)).not.toContain('2026-06-02-sample-product')
-    expect(catalog_view.products).toContainEqual(expect.objectContaining({
-      id: '2026-06-02-sharp-65吋-xled',
-      name: 'Sharp 65吋 XLED',
-      category: '影音',
-      category_id: 'av',
-      channel: 'PChome',
-      channel_id: 'pchome',
-      tags: ['電視', '影音', 'PCHome'],
-    }))
+    expect(products).toHaveLength(62)
+    expect(product_ids).not.toContain('2026-06-02-sample-product')
+    expect(product_ids).not.toEqual(expect.arrayContaining([
+      '2026-06-02-日本米入門篇',
+      '2026-06-02-aeron-chair',
+      '2026-06-02-b18',
+      '2026-06-02-altwork-station',
+    ]))
+    expect(product_ids).toEqual(expect.arrayContaining([
+      '2026-06-02-ikea充電線',
+      '2026-06-02-三菱重工冷氣',
+    ]))
+    expect(products.every((product) => Array.isArray(product.tag_ids) && !('tags' in product))).toBe(true)
+  })
+})
+
+describe('published guide and link mapping', () => {
+  it('should map only published guides to external guide rows with taxonomy labels', () => {
+    const guides: Guide[] = [
+      {
+        ...base_guide,
+        id: 'published-guide',
+        title: '已發布指南',
+        source_url: 'https://example.com/published-guide',
+        image_url: null,
+        category_ids: ['computer'],
+        tag_ids: ['typing'],
+      },
+      {
+        ...base_guide,
+        id: 'draft-guide',
+        status: 'draft',
+        title: '草稿指南',
+      },
+    ]
+
+    expect(getPublishedGuides(guides, test_taxonomies)).toEqual([
+      {
+        id: 'published-guide',
+        title: '已發布指南',
+        summary: '指南摘要',
+        source_url: 'https://example.com/published-guide',
+        image_url: null,
+        category_labels: ['電腦'],
+        tag_labels: ['輸入'],
+        published_at: '2026-06-02T00:00:00+08:00',
+        target: '_blank',
+        rel: 'noopener noreferrer',
+      },
+    ])
   })
 
-  it('should search real product names, categories and tags from the cutover content', () => {
-    const products = readContentProducts()
+  it('should map only published links to external link rows with safe attributes', () => {
+    const links: LinkDefinition[] = [
+      ...test_links,
+      {
+        ...test_links[0]!,
+        id: 'archived-link',
+        status: 'archived',
+        title: '封存連結',
+      },
+    ]
 
-    expect(getCatalogView(products, { query: 'Sharp 65吋 XLED' }).products).toContainEqual(expect.objectContaining({
-      id: '2026-06-02-sharp-65吋-xled',
-    }))
-    expect(getCatalogView(products, { query: '影音' }).products.length).toBeGreaterThan(0)
-    expect(getCatalogView(products, { query: 'PCHome' }).products.length).toBeGreaterThan(0)
+    expect(getPublishedLinks(links)).toEqual([
+      {
+        id: 'applepig-home',
+        title: 'applepig.idv.tw',
+        subtitle: 'DW 的主站',
+        url: 'https://applepig.idv.tw',
+        icon: 'i-lucide-link',
+        target: '_blank',
+        rel: 'noopener noreferrer',
+      },
+    ])
+  })
+
+  it('should keep migrated guide and link content available outside products', () => {
+    expect(readContentGuides().map((guide) => guide.id)).toEqual([
+      '2026-06-02-aeron-chair',
+      '2026-06-02-日本米入門篇',
+    ])
+    expect(readContentLinks().map((link) => link.id)).toEqual([
+      '2026-06-02-altwork-station',
+      '2026-06-02-b18',
+      'applepig-home',
+    ])
   })
 })
 
 describe('compact app view state', () => {
-  function getCompactView(products: Product[], state: CompactAppState = {}) {
-    return getCompactAppView(products, state, test_taxonomies, test_links)
+  const test_guides: Guide[] = [
+    {
+      ...base_guide,
+      id: 'guide-keyboard',
+      title: '鍵盤入門',
+      summary: '挑選鍵盤前先看這篇',
+      source_url: 'https://example.com/keyboard-guide',
+      image_url: 'https://example.com/keyboard-guide.jpg',
+      category_ids: ['computer'],
+      tag_ids: ['typing'],
+      published_at: '2026-06-03T00:00:00+08:00',
+    },
+  ]
+
+  function getCompactView(products: Product[], state: CompactAppState = {}, links = test_links, guides = test_guides) {
+    return getCompactAppView(products, state, test_taxonomies, links, guides)
   }
 
   it('should expose four compact tabs and category chips for home filtering', () => {
@@ -453,31 +585,59 @@ describe('compact app view state', () => {
     expect(compact_view.home.category_chips).toEqual([
       { id: 'all', label: '全部', count: 2, active: false },
       { id: 'home', label: '居家', count: 1, active: false },
+      { id: 'kitchen', label: '廚房', count: 0, active: false },
       { id: 'computer', label: '電腦', count: 1, active: true },
+      { id: 'three-c', label: '3C', count: 0, active: false },
+      { id: 'av', label: '影音', count: 0, active: false },
+      { id: 'food', label: '食材', count: 0, active: false },
+      { id: 'other', label: '其他', count: 0, active: false },
     ])
     expect(compact_view.home.products.map((product) => product.id)).toEqual(['computer-product'])
   })
 
-  it('should AND-filter guide products by selected tags and expose clear state', () => {
-    const products = [
-      makeProduct({ id: 'keyboard', status: 'published', name: '鍵盤', category_id: 'computer', tags: ['工作', '輸入'] }),
-      makeProduct({ id: 'monitor', status: 'published', name: '螢幕', category_id: 'computer', tags: ['工作', '影音'] }),
-      makeProduct({ id: 'speaker', status: 'published', name: '喇叭', category_id: 'av', tags: ['影音'] }),
+  it('should expose published guides from the guides content domain', () => {
+    const guides: Guide[] = [
+      {
+        ...base_guide,
+        id: 'published-guide',
+        title: '已發布指南',
+        summary: '指南摘要',
+        source_url: 'https://example.com/published-guide',
+        category_ids: ['computer'],
+        tag_ids: ['typing'],
+      },
+      {
+        ...base_guide,
+        id: 'draft-guide',
+        status: 'draft',
+        title: '草稿指南',
+      },
     ]
 
-    const compact_view = getCompactView(products, { selected_tags: ['工作', '輸入'] })
+    const compact_view = getCompactView([], { active_tab: 'guide' }, test_links, guides)
 
-    expect(compact_view.guide.selected_tags).toEqual(['工作', '輸入'])
-    expect(compact_view.guide.products.map((product) => product.id)).toEqual(['keyboard'])
-    expect(compact_view.guide.can_clear_tags).toBe(true)
+    expect(compact_view.guide.guides).toEqual([
+      {
+        id: 'published-guide',
+        title: '已發布指南',
+        summary: '指南摘要',
+        source_url: 'https://example.com/published-guide',
+        image_url: null,
+        category_labels: ['電腦'],
+        tag_labels: ['輸入'],
+        published_at: '2026-06-02T00:00:00+08:00',
+        target: '_blank',
+        rel: 'noopener noreferrer',
+      },
+    ])
     expect(compact_view.guide.empty_reason).toBeNull()
   })
 
   it('should expose top tags ordered by usage and label', () => {
     const products = [
-      makeProduct({ id: 'one', status: 'published', name: '一號', tags: ['影音', '工作'] }),
-      makeProduct({ id: 'two', status: 'published', name: '二號', tags: ['影音', '居家'] }),
-      makeProduct({ id: 'three', status: 'published', name: '三號', tags: ['工作'] }),
+      makeProduct({ id: 'one', status: 'published', name: '一號', tag_ids: ['影音', '工作'] }),
+      makeProduct({ id: 'two', status: 'published', name: '二號', tag_ids: ['影音', '居家'] }),
+      makeProduct({ id: 'three', status: 'published', name: '三號', tag_ids: ['工作'] }),
     ]
 
     const compact_view = getCompactView(products)
@@ -491,8 +651,8 @@ describe('compact app view state', () => {
 
   it('should filter search tab by query and expose empty and no-results states', () => {
     const products = [
-      makeProduct({ id: 'keyboard', status: 'published', name: '機械鍵盤', summary: '打字工作用', tags: ['輸入'] }),
-      makeProduct({ id: 'speaker', status: 'published', name: '桌上喇叭', summary: '影音用', category_id: 'av', tags: ['影音'] }),
+      makeProduct({ id: 'keyboard', status: 'published', name: '機械鍵盤', summary: '打字工作用', tag_ids: ['輸入'] }),
+      makeProduct({ id: 'speaker', status: 'published', name: '桌上喇叭', summary: '影音用', category_id: 'av', tag_ids: ['影音'] }),
     ]
 
     expect(getCompactView(products, { search_query: '' }).search.empty_reason).toBe('empty-query')
@@ -518,8 +678,8 @@ describe('compact app view state', () => {
 
   it('should fallback to loaded Nuxt Content products when the client search index fails', () => {
     const products = [
-      makeProduct({ id: 'keyboard', status: 'published', name: '機械鍵盤', summary: '打字工作用', tags: ['輸入'] }),
-      makeProduct({ id: 'speaker', status: 'published', name: '桌上喇叭', summary: '影音用', category_id: 'av', tags: ['影音'] }),
+      makeProduct({ id: 'keyboard', status: 'published', name: '機械鍵盤', summary: '打字工作用', tag_ids: ['輸入'] }),
+      makeProduct({ id: 'speaker', status: 'published', name: '桌上喇叭', summary: '影音用', category_id: 'av', tag_ids: ['影音'] }),
     ]
 
     const compact_view = getCompactView(products, {
@@ -540,13 +700,28 @@ describe('compact app view state', () => {
 
     expect(compact_view.home.category_chips).toEqual([
       { id: 'all', label: '全部', count: 1, active: false },
+      { id: 'home', label: '居家', count: 0, active: false },
+      { id: 'kitchen', label: '廚房', count: 0, active: false },
+      { id: 'computer', label: '電腦', count: 0, active: false },
+      { id: 'three-c', label: '3C', count: 0, active: false },
+      { id: 'av', label: '影音', count: 0, active: false },
+      { id: 'food', label: '食材', count: 0, active: false },
       { id: 'other', label: '其他', count: 1, active: true },
     ])
     expect(compact_view.home.products.map((product) => product.id)).toEqual(['other-product'])
   })
 
-  it('should expose the links panel data with safe external link attributes', () => {
-    const compact_view = getCompactView([])
+  it('should expose only published links panel data with safe external link attributes', () => {
+    const compact_view = getCompactView([], {}, [
+      ...test_links,
+      {
+        ...test_links[0]!,
+        id: 'draft-link',
+        status: 'draft',
+        title: '草稿連結',
+        sort_order: 1,
+      },
+    ])
 
     expect(compact_view.links).toEqual([
       {
@@ -573,7 +748,7 @@ describe('compact app view state', () => {
       image_url: 'https://example.com/detail.jpg',
       category_id: 'av',
       channel_id: 'pchome',
-      tags: ['超長 tag 名稱'.repeat(6), '影音'],
+        tag_ids: ['超長 tag 名稱'.repeat(6), '影音'],
     })
 
     const detail = getProductDetail(product, test_taxonomies)
@@ -589,7 +764,7 @@ describe('compact app view state', () => {
       price_label: 'NT$ 123,456,789 起',
       dw_says: product.summary,
       description: '細節說明可以比卡片更長',
-      tags: product.tags,
+      tags: product.tag_ids,
       buy_cta: {
         label: '到 PChome 購買',
         href: 'https://24h.pchome.com.tw/prod/detail',
@@ -624,7 +799,6 @@ describe('route-driven compact app state', () => {
     })
     expect(getCompactAppStateFromRoute({ path: '/guide', query: {} })).toEqual({
       active_tab: 'guide',
-      selected_tags: [],
     })
     expect(getCompactAppStateFromRoute({ path: '/search', query: {} })).toEqual({
       active_tab: 'search',
@@ -635,21 +809,13 @@ describe('route-driven compact app state', () => {
     })
   })
 
-  it('should parse valid category, tag and search query values from route query', () => {
+  it('should parse valid category and search query values from route query', () => {
     expect(getCompactAppStateFromRoute(
       { path: '/', query: { category: 'computer' } },
       { category_ids: ['home', 'computer'], tag_labels: [] },
     )).toEqual({
       active_tab: 'home',
       home_category_id: 'computer',
-    })
-
-    expect(getCompactAppStateFromRoute(
-      { path: '/guide', query: { tags: [' 工作 ', '輸入', '不存在', '', '工作'] } },
-      { category_ids: [], tag_labels: ['工作', '輸入'] },
-    )).toEqual({
-      active_tab: 'guide',
-      selected_tags: ['工作', '輸入'],
     })
 
     expect(getCompactAppStateFromRoute({ path: '/search', query: { q: '  機械鍵盤  ' } })).toEqual({
@@ -669,37 +835,32 @@ describe('route-driven compact app state', () => {
     expect(getCompactAppStateFromRoute(
       { path: '/guide', query: { tags: ['不存在', '影音'] } },
       { category_ids: [], tag_labels: ['影音'] },
-    )).toEqual({
-      active_tab: 'guide',
-      selected_tags: ['影音'],
-    })
+    )).toEqual({ active_tab: 'guide' })
     expect(getCompactAppStateFromRoute({ path: '/search', query: { q: ['  ', 'ignored'] } })).toEqual({
       active_tab: 'search',
       search_query: '',
     })
   })
 
-  it('should accept a single tag delivered as a Vue Router string query', () => {
+  it('should ignore a single guide tag delivered as a Vue Router string query', () => {
     expect(getCompactAppStateFromRoute(
       { path: '/guide', query: { tags: '工作' } },
       { tag_labels: ['工作'] },
     )).toEqual({
       active_tab: 'guide',
-      selected_tags: ['工作'],
     })
   })
 
-  it('should accept multiple tags delivered as a Vue Router array query', () => {
+  it('should ignore multiple guide tags delivered as a Vue Router array query', () => {
     expect(getCompactAppStateFromRoute(
       { path: '/guide', query: { tags: ['工作', '輸入'] } },
       { tag_labels: ['工作', '輸入'] },
     )).toEqual({
       active_tab: 'guide',
-      selected_tags: ['工作', '輸入'],
     })
   })
 
-  it('should round-trip a tag whose label contains a comma without splitting it', () => {
+  it('should not create a guide tag URL contract for labels containing commas', () => {
     const tag_with_comma = 'a,b'
     const selected_tags = ['a,b', 'c']
     // Vue Router serialises an array query as repeated params and parses it back to an array.
@@ -710,7 +871,6 @@ describe('route-driven compact app state', () => {
       { tag_labels: [tag_with_comma, 'c'] },
     )).toEqual({
       active_tab: 'guide',
-      selected_tags: ['a,b', 'c'],
     })
   })
 })
