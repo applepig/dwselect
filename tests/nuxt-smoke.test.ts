@@ -10,7 +10,7 @@ describe('Nuxt SSG baseline', () => {
     expect(nuxt_config.modules).toContain('@nuxt/content')
     expect(nuxt_config.modules).toContain('@nuxt/ui')
     expect(nuxt_config.nitro?.preset).toBe('static')
-    expect(nuxt_config.experimental?.viewTransition).toBe(true)
+    expect(nuxt_config.experimental?.viewTransition).toBe(false)
   })
 
   it('should build the search index before static generation', () => {

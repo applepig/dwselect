@@ -10,7 +10,7 @@ export default defineNuxtConfig({
   modules: ['@nuxt/content', '@nuxt/ui'],
   css: ['~/assets/styles/main.css'],
   experimental: {
-    viewTransition: true,
+    viewTransition: false,
   },
   vite: {
     server: {

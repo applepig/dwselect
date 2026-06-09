@@ -4,8 +4,11 @@ import { readFileSync } from 'node:fs'
 import nuxt_config from '../nuxt.config'
 
 describe('route-driven view transition contract', () => {
-  it('should enable Nuxt built-in same-document view transitions', () => {
-    expect(nuxt_config.experimental?.viewTransition).toBe(true)
+  it('should keep Nuxt experimental view transitions suppressed for mobile Safari safety', () => {
+    // iOS Safari 的 startViewTransition 會在 hydration 視窗內 crash（useHead without context /
+    // currentRenderingInstance.ce），且為 WebKit 層級 bug，手刻同樣會踩；公開站行動 Safari 受眾大，
+    // 故 WebKit 修穩前刻意停用。詳見 docs/007-routed-navigation-view-transitions/works.md 決策。
+    expect(nuxt_config.experimental?.viewTransition).toBe(false)
   })
 
   it('should not use the legacy helper for route or query state changes', () => {
