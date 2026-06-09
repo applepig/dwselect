@@ -1,0 +1,15 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|MultiEdit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash -lc 'payload=$(cat); printf \"%s\" \"$payload\" | jq -r \".. | objects | .file_path? // .path? // .filename? // empty\" | sort -u | while IFS= read -r file_path; do [ -n \"$file_path\" ] || continue; case \"$file_path\" in /*) scripts/post-edit-hook.sh \"$file_path\" ;; *) scripts/post-edit-hook.sh \"$PWD/$file_path\" ;; esac; done || true'"
+          }
+        ]
+      }
+    ]
+  }
+}
