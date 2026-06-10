@@ -4,6 +4,18 @@
     class="product-detail-page"
     :data-product-id="detail.id"
   >
+    <button
+      type="button"
+      class="detail-back-button"
+      aria-label="返回"
+      @click="onBackClicked"
+    >
+      <UIcon
+        name="i-lucide-arrow-left"
+        aria-hidden="true"
+      />
+    </button>
+
     <div
       class="detail-hero-tile"
       :style="{ 'view-transition-name': `product-image-${detail.id}` }"
@@ -140,6 +152,8 @@
 <script setup lang="ts">
 import type { ProductDetailView } from '../utils/published-products'
 
+const router = useRouter()
+
 const props = defineProps<{
   detail: ProductDetailView
 }>()
@@ -183,5 +197,9 @@ function onRelatedImageError(product_id: string) {
 
 function isBrokenImage(image: HTMLImageElement | null): boolean {
   return image !== null && image.complete && image.naturalWidth === 0
+}
+
+function onBackClicked() {
+  router.back()
 }
 </script>

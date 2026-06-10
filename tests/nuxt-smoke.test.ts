@@ -167,7 +167,7 @@ describe('Nuxt SSG baseline', () => {
     expect(card_source).toContain('product-card-price')
     expect(detail_source).toContain('<UBadge')
     expect(detail_source).toContain('<UButton')
-    expect(catalog_css).toContain('.compact-main {\n  min-width: 0;\n  padding: 0 0 92px;')
+    expect(catalog_css).toContain('.compact-main {\n  width: 100%;\n  min-width: 0;\n  padding: 0 0 92px;')
     expect(catalog_css).toContain('.compact-top-bar {\n  position: sticky;')
     expect(catalog_css).toContain('padding: 18px 16px 14px;')
     expect(catalog_css).toContain('grid-template-columns: repeat(auto-fit, minmax(clamp(280px, 10vw, 400px), 1fr));')

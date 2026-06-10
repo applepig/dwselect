@@ -62,59 +62,55 @@
     </div>
 
     <div
-      v-else-if="search_mode === 'idle' && history_items.length > 0"
-      class="search-empty-panel search-history-panel"
-    >
-      <div class="search-panel-heading">
-        <p class="empty-title">
-          搜尋紀錄
-        </p>
-        <button
-          type="button"
-          class="search-clear-button"
-          @click="onClearHistoryClicked"
-        >
-          清除紀錄
-        </button>
-      </div>
-      <div class="search-history-list">
-        <button
-          v-for="history_item in history_items"
-          :key="`search-history-${history_item}`"
-          type="button"
-          class="search-history-item"
-          @click="submitSearch(history_item)"
-        >
-          {{ history_item }}
-        </button>
-      </div>
-    </div>
-
-    <div
       v-else-if="search_mode === 'idle'"
-      class="search-empty-panel search-popular-panel"
+      class="search-idle-container"
     >
-      <p class="empty-title">
-        熱門 tag
-      </p>
-      <div class="tag-chip-list">
-        <NuxtLink
-          v-for="tag in compact_all_tags"
-          :key="`search-tag-${tag.label}`"
-          :to="{ path: '/search', query: { q: tag.label } }"
-          class="tag-chip"
-          @click="onPopularTagClicked(tag.label)"
-        >
-          <span>{{ tag.label }}</span>
-          <span class="tag-count">{{ tag.count }}</span>
-        </NuxtLink>
-      </div>
-      <p
-        v-if="compact_all_tags.length === 0"
-        class="search-helper-text"
+      <div
+        v-if="history_items.length > 0"
+        class="search-empty-panel search-history-panel"
       >
-        目前還沒有搜尋紀錄。
-      </p>
+        <div class="search-panel-heading">
+          <p class="empty-title">
+            搜尋紀錄
+          </p>
+          <button
+            type="button"
+            class="search-clear-button"
+            @click="onClearHistoryClicked"
+          >
+            清除紀錄
+          </button>
+        </div>
+        <div class="search-history-list">
+          <button
+            v-for="history_item in history_items"
+            :key="`search-history-${history_item}`"
+            type="button"
+            class="search-history-item"
+            @click="submitSearch(history_item)"
+          >
+            {{ history_item }}
+          </button>
+        </div>
+      </div>
+
+      <div class="search-empty-panel search-popular-panel">
+        <p class="empty-title">
+          熱門 tag
+        </p>
+        <div class="tag-chip-list">
+          <NuxtLink
+            v-for="tag in compact_all_tags"
+            :key="`search-tag-${tag.label}`"
+            :to="{ path: '/search', query: { q: tag.label } }"
+            class="tag-chip"
+            @click="onPopularTagClicked(tag.label)"
+          >
+            <span>{{ tag.label }}</span>
+            <span class="tag-count">{{ tag.count }}</span>
+          </NuxtLink>
+        </div>
+      </div>
     </div>
 
     <div
