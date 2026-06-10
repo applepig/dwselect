@@ -874,6 +874,26 @@
 }
 
 @media (prefers-reduced-motion: no-preference) {
+  .compact-page-fade-enter-active,
+  .compact-page-fade-leave-active {
+    transition:
+      opacity 320ms ease,
+      transform 320ms cubic-bezier(0.2, 0.85, 0.3, 1);
+    will-change: opacity, transform;
+  }
+
+  .compact-page-fade-enter-from,
+  .compact-page-fade-leave-to {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  .compact-page-fade-enter-to,
+  .compact-page-fade-leave-from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
   .product-card {
     view-transition-class: product-card;
   }
@@ -901,6 +921,17 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .compact-page-fade-enter-active,
+  .compact-page-fade-leave-active {
+    transition: none;
+  }
+
+  .compact-page-fade-enter-from,
+  .compact-page-fade-leave-to {
+    opacity: inherit;
+    transform: none;
+  }
+
   .product-card,
   .product-image-tile,
   .detail-hero-tile {

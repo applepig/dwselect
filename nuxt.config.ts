@@ -7,6 +7,13 @@ const product_routes = buildProductRoutes(fileURLToPath(new URL('./content/produ
 
 export default defineNuxtConfig({
   modules: ['@nuxt/eslint', '@nuxt/content', '@nuxt/ui'],
+  app: {
+    pageTransition: {
+      name: 'compact-page-fade',
+      mode: 'out-in',
+      duration: 320,
+    },
+  },
   css: ['~/assets/styles/main.css'],
   colorMode: {
     storage: 'cookie',

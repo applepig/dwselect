@@ -67,13 +67,14 @@
         class="detail-tag-list"
         aria-label="商品 tags"
       >
-        <span
+        <NuxtLink
           v-for="tag in detail.tags"
           :key="tag"
           class="detail-tag"
+          :to="{ path: '/search', query: { q: tag } }"
         >
           {{ tag }}
-        </span>
+        </NuxtLink>
       </div>
 
       <UButton

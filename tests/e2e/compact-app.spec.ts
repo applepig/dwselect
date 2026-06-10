@@ -176,6 +176,20 @@ test('keeps product detail and related image slots stable when images fail to lo
   expect(Math.abs(media_contract.related_width - media_contract.related_height)).toBeLessThan(1)
 })
 
+test('navigates to search by tag from product detail', async ({ page }) => {
+  await page.goto('/products/2026-06-02-sharp-65吋-xled', { waitUntil: 'domcontentloaded' })
+  await expect(page.locator('vite-error-overlay')).toHaveCount(0)
+
+  const first_tag = page.locator('.detail-tag').first()
+  const tag_label = (await first_tag.textContent())?.trim() ?? ''
+
+  await expect(first_tag).toHaveAttribute('href', /\/search\?q=/)
+  await first_tag.click()
+
+  await expect(page).toHaveURL(new RegExp(`\\/search\\?q=${encodeURIComponent(tag_label)}`))
+  await expect(page.getByPlaceholder('在找什麼嗎？™')).toHaveValue(tag_label)
+})
+
 test('renders direct product detail routes and unknown product not-found states', async ({ page }) => {
   await page.goto('/products/2026-06-02-sharp-65吋-xled', { waitUntil: 'domcontentloaded' })
   await expect(page.locator('vite-error-overlay')).toHaveCount(0)

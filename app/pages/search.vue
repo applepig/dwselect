@@ -99,7 +99,7 @@
       </p>
       <div class="tag-chip-list">
         <NuxtLink
-          v-for="tag in compact_view.top_tags"
+          v-for="tag in compact_all_tags"
           :key="`search-tag-${tag.label}`"
           :to="{ path: '/search', query: { q: tag.label } }"
           class="tag-chip"
@@ -110,7 +110,7 @@
         </NuxtLink>
       </div>
       <p
-        v-if="compact_view.top_tags.length === 0"
+        v-if="compact_all_tags.length === 0"
         class="search-helper-text"
       >
         目前還沒有搜尋紀錄。
@@ -195,7 +195,7 @@
 </template>
 
 <script setup lang="ts">
-import { getCompactAppStateFromRoute, getCompactAppView, getSearchResultSections } from '../utils/published-products'
+import { getCompactAppStateFromRoute, getSearchResultSections, getTagChips } from '../utils/published-products'
 import type { SearchSuggestion } from '../utils/search/search-index'
 import {
   clearSearchHistory,
@@ -225,12 +225,19 @@ const route_state = computed(() => ({
     ?.filter((result) => result.type === 'product')
     .map((result) => result.content_id) ?? null,
 }))
-const compact_view = computed(() => getCompactAppView(
-  all_products.value,
-  route_state.value,
-  runtime_taxonomies.value,
-  runtime_links.value,
-  runtime_guides.value,
+const compact_all_tags = computed(() => getTagChips(
+  {
+    products: all_products.value,
+    guides: runtime_guides.value ?? [],
+    links: runtime_links.value ?? [],
+  },
+  [],
+  runtime_taxonomies.value ?? {
+    categories: [],
+    channels: [],
+    tags: [],
+  },
+  Number.MAX_SAFE_INTEGER,
 ))
 const pending_search_query = ref(route_state.value.search_query ?? '')
 const submitted_search_query = computed(() => route_state.value.search_query ?? '')

@@ -40,5 +40,8 @@ describe('route-driven view transition contract', () => {
     expect(catalog_css).toContain('::view-transition-new(.product-card)')
     expect(catalog_css).toContain('@media (prefers-reduced-motion: reduce)')
     expect(catalog_css).toContain('animation: none')
+    expect(catalog_css).toContain('.compact-page-fade-enter-active')
+    expect(catalog_css).toContain('.compact-page-fade-leave-active')
+    expect(catalog_css).toContain('.compact-page-fade-enter-from')
   })
 })
