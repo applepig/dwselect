@@ -36,7 +36,12 @@ export default defineNuxtConfig({
   },
   vite: {
     server: {
-      allowedHosts: ['dwselect.toybox.local'],
+      allowedHosts: [process.env.APP_URL ?? 'localhost'],
+      hmr: {
+        protocol: 'wss',
+        host: process.env.APP_URL,
+        clientPort: 443,
+      },
     },
   },
   eslint: {

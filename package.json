@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "prepare": "nuxt prepare",
-    "dev": "nuxt dev --host ::",
+    "dev": "nuxt dev",
     "build": "pnpm build:search-index && nuxt build",
     "build:search-index": "node scripts/build-search-index.ts",
     "test:e2e": "playwright test",
@@ -41,7 +41,9 @@
     "onlyBuiltDependencies": [
       "@parcel/watcher",
       "better-sqlite3",
-      "esbuild"
+      "esbuild",
+      "unrs-resolver",
+      "vue-demi"
     ]
   }
 }

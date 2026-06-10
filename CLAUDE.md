@@ -15,11 +15,12 @@
 
 ## Local Runtime
 
-- 專案入口通常透過 `https://dwselect.toybox.local/` 經 Traefik 反向代理到本機或容器內 Nuxt dev server。
-- 除錯 `toybox.local` 壞掉時，先看 Traefik route/service 與 upstream 狀態，再沿路追到 container、process、port 與 Nuxt log；不要先從瀏覽器症狀直接猜 dev server 問題。
-- 若 `toybox.local` 回 `Bad Gateway`，優先檢查 Traefik 是否能連到目標 service/port，以及 Nuxt dev server 是否真的 listen 在該 upstream address。
-- 不要只因為看到 `nuxt` 或 `node` process 就判定是本專案 dev server；必須確認 route 對應的 service、upstream、container identity、cwd 或 compose project，避免把其他專案的 dev server 當成本專案。
-- 未確認目前沒有正確 dev server 前，不要自行啟動第二個 dev server；若需要啟動，先說明 upstream 目前無 listener 與預定 listen address。
+- 開發環境透過 Docker 容器執行，用 `./dev.sh start` 啟動，透過 Traefik docker label 自動註冊路由到 `https://${APP_URL}/`（預設 `dwselect.toybox.local`）。
+- 環境設定集中在 `.env`（不進 git）：`APP_URL` 控制 Traefik 路由與 Vite allowedHosts；`NUXT_MODE=dev` 跑 dev server（含 HMR），未設定或其他值則跑 `nuxt generate` + `nuxt preview`。
+- 容器管理用 `./dev.sh`（start/stop/restart/build/rebuild/logs/exec/shell/install/status/clean）。不要直接在 host 上跑 `pnpm dev`——應透過 Docker 容器。
+- 除錯 `toybox.local` 壞掉時，先用 `./dev.sh status` 確認容器狀態，再看 `./dev.sh logs` 查 Nuxt log；接著檢查 Traefik route/service 與 container 的 network 連線。
+- `package.json` 的依賴更新後，用 `./dev.sh install`（container 內 `pnpm install`）同步；若 native module 版本不對，用 `./dev.sh rebuild` 重建 image 和 volumes。
+- 不要在同一專案目錄同時跑兩個 Nuxt dev 實例（host + container），會共用 Vite cache 導致 chunk hash 衝突。
 
 ## Frontend Handoff
 

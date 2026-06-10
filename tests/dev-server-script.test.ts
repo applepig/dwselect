@@ -4,11 +4,16 @@ import package_json from '../package.json' with { type: 'json' }
 import nuxt_config from '../nuxt.config'
 
 describe('dev server script', () => {
-  it('should listen on IPv4 and IPv6 interfaces for LAN device testing', () => {
-    expect(package_json.scripts.dev).toContain('--host ::')
+  it('should not bind to a specific host (Docker uses NUXT_HOST env var)', () => {
+    expect(package_json.scripts.dev).toBe('nuxt dev')
+    expect(package_json.scripts.dev).not.toContain('--host')
   })
 
-  it('should allow the Traefik development host', () => {
-    expect(nuxt_config.vite?.server?.allowedHosts).toContain('dwselect.toybox.local')
+  it('should read APP_URL for Vite allowed hosts with localhost fallback', () => {
+    const allowed_hosts = nuxt_config.vite?.server?.allowedHosts
+    expect(allowed_hosts).toBeDefined()
+    expect(Array.isArray(allowed_hosts)).toBe(true)
+    // Without APP_URL env var set, falls back to 'localhost'
+    expect(allowed_hosts).toContain(process.env.APP_URL ?? 'localhost')
   })
 })

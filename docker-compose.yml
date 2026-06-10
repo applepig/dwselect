@@ -1,0 +1,31 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: dwselect-app
+    restart: unless-stopped
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      - NUXT_HOST=0.0.0.0
+      - NUXT_PORT=3000
+      - CHOKIDAR_USEPOLLING=true
+    volumes:
+      - .:/app
+      - /app/node_modules
+      - /app/.nuxt
+      - /app/.output
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.dwselect.rule=Host(`${APP_URL:-localhost}`)"
+      - "traefik.http.routers.dwselect.entrypoints=websecure"
+      - "traefik.http.routers.dwselect.tls=true"
+      - "traefik.http.services.dwselect.loadbalancer.server.port=3000"
+    networks:
+      - web
+
+networks:
+  web:
+    external: true

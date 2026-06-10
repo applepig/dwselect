@@ -6,13 +6,13 @@ export default defineConfig({
   workers: 1,
   reporter: 'list',
   use: {
-    baseURL: 'https://dwselect.toybox.local',
+    baseURL: `https://${process.env.APP_URL ?? 'dwselect.toybox.local'}`,
     ignoreHTTPSErrors: true,
     trace: 'on-first-retry',
   },
   webServer: {
-    command: 'pnpm dev --host ::',
-    url: 'https://dwselect.toybox.local',
+    command: 'pnpm dev',
+    url: `https://${process.env.APP_URL ?? 'dwselect.toybox.local'}`,
     ignoreHTTPSErrors: true,
     reuseExistingServer: true,
     timeout: 120_000,
