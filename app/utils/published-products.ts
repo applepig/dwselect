@@ -1,4 +1,5 @@
 import type { CategoryDefinition, ChannelDefinition, Guide, LinkDefinition, Product, TagDefinition } from './product-schema'
+import type { SearchSuggestion } from './search/search-index'
 
 export type PublishedProductCard = {
   id: string
@@ -35,6 +36,7 @@ export type ProductDetailView = {
     rel: 'noopener noreferrer'
   }
   fine_print: string
+  related_products: PublishedProductCard[]
 }
 
 export type GroupedPublishedProducts = {
@@ -126,28 +128,38 @@ export type CompactTagChip = {
   active: boolean
 }
 
-export type CompactLinkRow = {
+export type CompactResourceRow = {
   id: string
+  type: 'product' | 'guide' | 'link'
   title: string
   subtitle: string
-  url: string
-  icon: string
-  target: '_blank'
-  rel: 'noopener noreferrer'
+  meta: string | null
+  href: string
+  image_url: string | null
+  icon: string | null
+  external: boolean
+  target: '_blank' | null
+  rel: 'noopener noreferrer' | null
 }
 
-export type CompactGuideRow = {
-  id: string
-  title: string
-  summary: string
-  source_url: string
-  image_url: string | null
-  category_labels: string[]
-  tag_labels: string[]
-  published_at: string | null
-  target: '_blank'
-  rel: 'noopener noreferrer'
+export type CompactLinkRow = CompactResourceRow
+export type CompactGuideRow = CompactResourceRow
+
+export type SearchResultSection = {
+  id: 'products' | 'guides' | 'links'
+  label: '商品' | '指南' | '連結'
+  rows: CompactResourceRow[]
 }
+
+export type ResourceRowLinkAttributes
+  = | {
+    href: string
+    target: '_blank'
+    rel: 'noopener noreferrer'
+  }
+  | {
+    to: string
+  }
 
 export type CompactAppView = {
   tabs: CompactAppTab[]
@@ -159,7 +171,7 @@ export type CompactAppView = {
     empty_reason: 'no-products' | 'no-results' | null
   }
   guide: {
-    guides: CompactGuideRow[]
+    guides: CompactResourceRow[]
     empty_reason: 'no-products' | 'no-results' | null
   }
   search: {
@@ -167,7 +179,7 @@ export type CompactAppView = {
     products: PublishedProductCard[]
     empty_reason: 'empty-query' | 'no-results' | null
   }
-  links: CompactLinkRow[]
+  links: CompactResourceRow[]
   counts: {
     published: number
   }
@@ -267,7 +279,22 @@ export function getProductDetail(
       rel: 'noopener noreferrer',
     },
     fine_print: '價格與庫存以通路頁面為準。',
+    related_products: [],
   }
+}
+
+export function getRelatedProductCards(
+  current_product: Product,
+  products: Product[],
+  taxonomies: TaxonomyDefinitions = DEFAULT_TAXONOMIES,
+): PublishedProductCard[] {
+  const current_product_id = getCatalogProductId(current_product)
+
+  return products
+    .filter((product) => product.status === 'published')
+    .filter((product) => getCatalogProductId(product) !== current_product_id)
+    .toSorted((left_product, right_product) => compareRelatedProducts(current_product, left_product, right_product))
+    .map((product) => mapProductToCard(product, taxonomies))
 }
 
 export function getGroupedPublishedProducts(
@@ -280,18 +307,51 @@ export function getGroupedPublishedProducts(
 export function getPublishedGuides(
   guides: Guide[],
   taxonomies: TaxonomyDefinitions = DEFAULT_TAXONOMIES,
-): CompactGuideRow[] {
+): CompactResourceRow[] {
   return guides
     .filter((guide) => guide.status === 'published')
     .toSorted(compareGuides)
     .map((guide) => mapGuideToRow(guide, taxonomies))
 }
 
-export function getPublishedLinks(links: LinkDefinition[]): CompactLinkRow[] {
+export function getPublishedLinks(links: LinkDefinition[]): CompactResourceRow[] {
   return links
     .filter((link) => link.status === 'published')
     .toSorted((left_link, right_link) => left_link.sort_order - right_link.sort_order)
     .map(mapLinkToRow)
+}
+
+export function getResourceRowLinkAttributes(row: CompactResourceRow): ResourceRowLinkAttributes {
+  if (!row.external) {
+    return {
+      to: row.href,
+    }
+  }
+
+  return {
+    href: row.href,
+    target: '_blank',
+    rel: 'noopener noreferrer',
+  }
+}
+
+export function getSearchResultSections(results: SearchSuggestion[]): SearchResultSection[] {
+  const sections: SearchResultSection[] = [
+    { id: 'products', label: '商品', rows: [] },
+    { id: 'guides', label: '指南', rows: [] },
+    { id: 'links', label: '連結', rows: [] },
+  ]
+  const sections_by_type = new Map<SearchSuggestion['type'], SearchResultSection>([
+    ['product', sections[0]!],
+    ['guide', sections[1]!],
+    ['link', sections[2]!],
+  ])
+
+  for (const result of results) {
+    sections_by_type.get(result.type)?.rows.push(mapSearchSuggestionToRow(result))
+  }
+
+  return sections.filter((section) => section.rows.length > 0)
 }
 
 export function getCatalogProductId(product: Pick<Product, 'id'>): string {
@@ -365,7 +425,7 @@ export function getCompactAppView(
     .toSorted(getProductComparator(taxonomies))
     .map((product) => mapProductToCard(product, taxonomies))
   const selected_tags = getNormalizedSelectedTags(state.selected_tags)
-  const top_tags = getTopTags(published_cards, selected_tags)
+  const top_tags = getTopTags({ products, guides, links }, selected_tags, taxonomies)
   const home_products = selected_category_id === 'all'
     ? published_cards
     : published_cards.filter((product) => product.category_id === selected_category_id)
@@ -380,7 +440,7 @@ export function getCompactAppView(
     active_tab,
     top_tags,
     home: {
-      category_chips: getCompactCategoryChips(published_products, selected_category_id, taxonomies),
+      category_chips: getCompactCategoryOptions(published_products, selected_category_id, taxonomies),
       products: home_products,
       empty_reason: getEmptyReason(published_cards.length, home_products.length),
     },
@@ -520,31 +580,76 @@ function mapProductToCard(product: Product, taxonomies: TaxonomyDefinitions): Pu
   }
 }
 
-function mapGuideToRow(guide: Guide, taxonomies: TaxonomyDefinitions): CompactGuideRow {
+function mapGuideToRow(guide: Guide, taxonomies: TaxonomyDefinitions): CompactResourceRow {
+  const category_labels = guide.category_ids.map((category_id) => getCategoryDefinition(category_id, taxonomies).label)
+
   return {
     id: guide.id,
+    type: 'guide',
     title: guide.title,
-    summary: guide.summary,
-    source_url: guide.source_url,
+    subtitle: guide.summary,
+    meta: category_labels.length === 0 ? null : category_labels.join('、'),
+    href: guide.source_url,
     image_url: guide.image_url,
-    category_labels: guide.category_ids.map((category_id) => getCategoryDefinition(category_id, taxonomies).label),
-    tag_labels: getTagLabels(guide.tag_ids, taxonomies),
-    published_at: guide.published_at,
+    icon: 'i-lucide-book-open',
+    external: true,
     target: '_blank',
     rel: 'noopener noreferrer',
   }
 }
 
-function mapLinkToRow(link: LinkDefinition): CompactLinkRow {
+function mapLinkToRow(link: LinkDefinition): CompactResourceRow {
   return {
     id: link.id,
+    type: 'link',
     title: link.title,
     subtitle: link.summary,
-    url: link.url,
+    meta: link.url,
+    href: link.url,
+    image_url: link.image_url ?? null,
     icon: link.icon,
+    external: true,
     target: '_blank',
     rel: 'noopener noreferrer',
   }
+}
+
+function mapSearchSuggestionToRow(result: SearchSuggestion): CompactResourceRow {
+  return {
+    id: result.document_id,
+    type: result.type,
+    title: result.title,
+    subtitle: result.summary,
+    meta: getSearchSuggestionMeta(result),
+    href: result.href,
+    image_url: result.image_url,
+    icon: getSearchSuggestionIcon(result.type),
+    external: result.external,
+    target: result.external ? '_blank' : null,
+    rel: result.external ? 'noopener noreferrer' : null,
+  }
+}
+
+function getSearchSuggestionMeta(result: SearchSuggestion): string | null {
+  if (result.type === 'product') {
+    return [result.channel_label, result.price_text]
+      .filter((meta): meta is string => meta !== undefined && meta !== '')
+      .join(' · ') || null
+  }
+
+  return result.category_labels.length === 0 ? null : result.category_labels.join('、')
+}
+
+function getSearchSuggestionIcon(type: SearchSuggestion['type']): string | null {
+  if (type === 'guide') {
+    return 'i-lucide-book-open'
+  }
+
+  if (type === 'link') {
+    return 'i-lucide-link'
+  }
+
+  return null
 }
 
 function getProductComparator(taxonomies: TaxonomyDefinitions) {
@@ -656,10 +761,10 @@ function groupCardsByCategory(products: PublishedProductCard[]): GroupedPublishe
   }))
 }
 
-function getCompactCategoryChips(
+export function getCompactCategoryOptions(
   products: Product[],
   active_category_id: Product['category_id'] | 'all',
-  taxonomies: TaxonomyDefinitions,
+  taxonomies: TaxonomyDefinitions = DEFAULT_TAXONOMIES,
 ): CompactCategoryChip[] {
   const published_products = products.filter((product) => product.status === 'published')
   const category_counts = new Map<Product['category_id'], number>()
@@ -675,23 +780,70 @@ function getCompactCategoryChips(
       count: published_products.length,
       active: active_category_id === 'all',
     },
-    ...getVisibleCategories(taxonomies).map((category) => ({
-      id: category.id,
-      label: category.short_label,
-      count: category_counts.get(category.id) ?? 0,
-      active: category.id === active_category_id,
-    })),
+    ...getVisibleCategories(taxonomies)
+      .map((category) => ({
+        id: category.id,
+        label: category.short_label,
+        count: category_counts.get(category.id) ?? 0,
+        active: category.id === active_category_id,
+      }))
+      .filter((category) => category.count > 0),
   ]
 }
 
-function getTopTags(products: PublishedProductCard[], selected_tags: string[]): CompactTagChip[] {
+function compareRelatedProducts(current_product: Product, left_product: Product, right_product: Product) {
+  const left_score = getRelatedProductScore(current_product, left_product)
+  const right_score = getRelatedProductScore(current_product, right_product)
+
+  if (left_score.same_category !== right_score.same_category) {
+    return Number(right_score.same_category) - Number(left_score.same_category)
+  }
+
+  if (left_score.shared_tag_count !== right_score.shared_tag_count) {
+    return right_score.shared_tag_count - left_score.shared_tag_count
+  }
+
+  if (left_score.same_channel !== right_score.same_channel) {
+    return Number(right_score.same_channel) - Number(left_score.same_channel)
+  }
+
+  const published_at_order = compareNullableTimestampDesc(left_product.published_at, right_product.published_at)
+
+  if (published_at_order !== 0) {
+    return published_at_order
+  }
+
+  return compareText(left_product.name, right_product.name)
+}
+
+function getRelatedProductScore(current_product: Product, candidate_product: Product) {
+  const current_tag_ids = new Set(current_product.tag_ids)
+  const shared_tag_count = candidate_product.tag_ids
+    .filter((tag_id) => current_tag_ids.has(tag_id))
+    .length
+
+  return {
+    same_category: candidate_product.category_id === current_product.category_id,
+    shared_tag_count,
+    same_channel: candidate_product.channel_id === current_product.channel_id,
+  }
+}
+
+function getTopTags(
+  content: {
+    products: Product[]
+    guides: Guide[]
+    links: LinkDefinition[]
+  },
+  selected_tags: string[],
+  taxonomies: TaxonomyDefinitions,
+): CompactTagChip[] {
   const selected_tag_set = new Set(selected_tags)
   const tag_counts = new Map<string, number>()
 
-  for (const product of products) {
-    for (const tag of product.tags) {
-      tag_counts.set(tag, (tag_counts.get(tag) ?? 0) + 1)
-    }
+  for (const tag_id of getPublishedContentTagIds(content)) {
+    const label = getTagLabel(tag_id, taxonomies)
+    tag_counts.set(label, (tag_counts.get(label) ?? 0) + 1)
   }
 
   return Array.from(tag_counts, ([label, count]) => ({
@@ -704,7 +856,25 @@ function getTopTags(products: PublishedProductCard[], selected_tags: string[]): 
     }
 
     return compareText(left_tag.label, right_tag.label)
-  })
+  }).slice(0, 10)
+}
+
+function getPublishedContentTagIds(content: {
+  products: Product[]
+  guides: Guide[]
+  links: LinkDefinition[]
+}) {
+  return [
+    ...content.products
+      .filter((product) => product.status === 'published')
+      .flatMap((product) => product.tag_ids),
+    ...content.guides
+      .filter((guide) => guide.status === 'published')
+      .flatMap((guide) => guide.tag_ids),
+    ...content.links
+      .filter((link) => link.status === 'published')
+      .flatMap((link) => link.tag_ids),
+  ]
 }
 
 function compareGuides(left_guide: Guide, right_guide: Guide) {
@@ -754,9 +924,11 @@ function getVisibleCategories(taxonomies: TaxonomyDefinitions) {
 }
 
 function getTagLabels(tag_ids: string[], taxonomies: TaxonomyDefinitions) {
-  const tag_labels = new Map((taxonomies.tags ?? []).map((tag) => [tag.id, tag.label]))
+  return tag_ids.map((tag_id) => getTagLabel(tag_id, taxonomies))
+}
 
-  return tag_ids.map((tag_id) => tag_labels.get(tag_id) ?? tag_id)
+function getTagLabel(tag_id: string, taxonomies: TaxonomyDefinitions) {
+  return taxonomies.tags?.find((tag) => tag.id === tag_id)?.label ?? tag_id
 }
 
 function getChannelDefinition(channel_id: Product['channel_id'], taxonomies: TaxonomyDefinitions) {

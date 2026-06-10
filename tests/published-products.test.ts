@@ -9,11 +9,15 @@ import {
   getCatalogView,
   getCompactAppView,
   getCompactAppStateFromRoute,
+  getCompactCategoryOptions,
   getGroupedPublishedProducts,
   getPublishedGuides,
   getPublishedLinks,
   getProductDetail,
   getPublishedProducts,
+  getRelatedProductCards,
+  getResourceRowLinkAttributes,
+  getSearchResultSections,
 } from '../app/utils/published-products'
 import type { Guide, LinkDefinition, Product, TagDefinition } from '../app/utils/product-schema'
 
@@ -77,6 +81,7 @@ const test_links: LinkDefinition[] = [
     title: 'applepig.idv.tw',
     summary: 'DW 的主站',
     url: 'https://applepig.idv.tw',
+    image_url: null,
     icon: 'i-lucide-link',
     category_ids: ['other'],
     tag_ids: [],
@@ -476,7 +481,7 @@ describe('post-migration product content', () => {
 })
 
 describe('published guide and link mapping', () => {
-  it('should map only published guides to external guide rows with taxonomy labels', () => {
+  it('should map only published guides to external resource rows with taxonomy labels', () => {
     const guides: Guide[] = [
       {
         ...base_guide,
@@ -498,20 +503,21 @@ describe('published guide and link mapping', () => {
     expect(getPublishedGuides(guides, test_taxonomies)).toEqual([
       {
         id: 'published-guide',
+        type: 'guide',
         title: '已發布指南',
-        summary: '指南摘要',
-        source_url: 'https://example.com/published-guide',
+        subtitle: '指南摘要',
+        meta: '電腦',
+        href: 'https://example.com/published-guide',
         image_url: null,
-        category_labels: ['電腦'],
-        tag_labels: ['輸入'],
-        published_at: '2026-06-02T00:00:00+08:00',
+        icon: 'i-lucide-book-open',
+        external: true,
         target: '_blank',
         rel: 'noopener noreferrer',
       },
     ])
   })
 
-  it('should map only published links to external link rows with safe attributes', () => {
+  it('should map only published links to external resource rows with image fallback and safe attributes', () => {
     const links: LinkDefinition[] = [
       ...test_links,
       {
@@ -525,14 +531,71 @@ describe('published guide and link mapping', () => {
     expect(getPublishedLinks(links)).toEqual([
       {
         id: 'applepig-home',
+        type: 'link',
         title: 'applepig.idv.tw',
         subtitle: 'DW 的主站',
-        url: 'https://applepig.idv.tw',
+        meta: 'https://applepig.idv.tw',
+        href: 'https://applepig.idv.tw',
+        image_url: null,
         icon: 'i-lucide-link',
+        external: true,
         target: '_blank',
         rel: 'noopener noreferrer',
       },
     ])
+  })
+
+  it('should preserve optional link images in resource rows', () => {
+    const links: LinkDefinition[] = [
+      {
+        ...test_links[0]!,
+        image_url: 'https://example.com/applepig-logo.png',
+      },
+    ]
+
+    expect(getPublishedLinks(links)).toEqual([
+      expect.objectContaining({
+        id: 'applepig-home',
+        image_url: 'https://example.com/applepig-logo.png',
+        icon: 'i-lucide-link',
+      }),
+    ])
+  })
+
+  it('should derive safe attributes for external and internal resource rows', () => {
+    expect(getResourceRowLinkAttributes({
+      id: 'external-guide',
+      type: 'guide',
+      title: '外部指南',
+      subtitle: '外部摘要',
+      meta: null,
+      href: 'https://example.com/guide',
+      image_url: null,
+      icon: 'i-lucide-book-open',
+      external: true,
+      target: '_blank',
+      rel: 'noopener noreferrer',
+    })).toEqual({
+      href: 'https://example.com/guide',
+      target: '_blank',
+      rel: 'noopener noreferrer',
+    })
+
+    expect(getResourceRowLinkAttributes({
+      id: 'internal-guide',
+      type: 'guide',
+      title: '站內指南',
+      subtitle: '站內摘要',
+      meta: null,
+      href: '/guide/internal-guide',
+      image_url: null,
+      icon: 'i-lucide-book-open',
+      external: false,
+      target: null,
+      rel: null,
+    })).toEqual({
+      to: '/guide/internal-guide',
+    })
   })
 
   it('should keep migrated guide and link content available outside products', () => {
@@ -585,17 +648,31 @@ describe('compact app view state', () => {
     expect(compact_view.home.category_chips).toEqual([
       { id: 'all', label: '全部', count: 2, active: false },
       { id: 'home', label: '居家', count: 1, active: false },
-      { id: 'kitchen', label: '廚房', count: 0, active: false },
       { id: 'computer', label: '電腦', count: 1, active: true },
-      { id: 'three-c', label: '3C', count: 0, active: false },
-      { id: 'av', label: '影音', count: 0, active: false },
-      { id: 'food', label: '食材', count: 0, active: false },
-      { id: 'other', label: '其他', count: 0, active: false },
     ])
     expect(compact_view.home.products.map((product) => product.id)).toEqual(['computer-product'])
   })
 
-  it('should expose published guides from the guides content domain', () => {
+  it('should share compact category options between home chips and desktop sidebar', () => {
+    const products = [
+      makeProduct({ id: 'home-product', status: 'published', name: '居家商品', category_id: 'home' }),
+      makeProduct({ id: 'draft-kitchen-product', status: 'draft', name: '廚房草稿', category_id: 'kitchen' }),
+      makeProduct({ id: 'computer-product', status: 'published', name: '電腦商品', category_id: 'computer' }),
+    ]
+
+    const shared_category_options = getCompactCategoryOptions(products, 'all', test_taxonomies)
+    const compact_view = getCompactView(products, { active_tab: 'home' })
+
+    expect(shared_category_options).toEqual([
+      { id: 'all', label: '全部', count: 2, active: true },
+      { id: 'home', label: '居家', count: 1, active: false },
+      { id: 'computer', label: '電腦', count: 1, active: false },
+    ])
+    expect(compact_view.home.category_chips).toEqual(shared_category_options)
+    expect(shared_category_options.map((option) => option.id)).not.toContain('kitchen')
+  })
+
+  it('should expose published guide resources from the guides content domain', () => {
     const guides: Guide[] = [
       {
         ...base_guide,
@@ -619,13 +696,14 @@ describe('compact app view state', () => {
     expect(compact_view.guide.guides).toEqual([
       {
         id: 'published-guide',
+        type: 'guide',
         title: '已發布指南',
-        summary: '指南摘要',
-        source_url: 'https://example.com/published-guide',
+        subtitle: '指南摘要',
+        meta: '電腦',
+        href: 'https://example.com/published-guide',
         image_url: null,
-        category_labels: ['電腦'],
-        tag_labels: ['輸入'],
-        published_at: '2026-06-02T00:00:00+08:00',
+        icon: 'i-lucide-book-open',
+        external: true,
         target: '_blank',
         rel: 'noopener noreferrer',
       },
@@ -646,7 +724,70 @@ describe('compact app view state', () => {
       { label: '工作', count: 2, active: false },
       { label: '影音', count: 2, active: false },
       { label: '居家', count: 1, active: false },
+      { label: '輸入', count: 1, active: false },
     ])
+  })
+
+  it('should expose top tags from published products, guides and links with taxonomy labels and a 10 item limit', () => {
+    const tag_ids = Array.from({ length: 12 }, (_, index) => `tag-${index + 1}`)
+    const taxonomies: TaxonomyDefinitions = {
+      ...test_taxonomies,
+      tags: tag_ids.map((tag_id, index) => ({
+        id: tag_id,
+        label: index === 0 ? 'Alpha' : `標籤 ${String(index + 1).padStart(2, '0')}`,
+        description: tag_id,
+        aliases: [],
+        nav_visible: true,
+        sort_order: index + 1,
+      })),
+    }
+    const products = [
+      makeProduct({ id: 'published-product', status: 'published', name: '已上架商品', tag_ids }),
+      makeProduct({ id: 'draft-product', status: 'draft', name: '草稿商品', tag_ids: ['tag-1'] }),
+    ]
+    const guides: Guide[] = [
+      {
+        ...base_guide,
+        id: 'published-guide',
+        tag_ids: ['tag-1', 'tag-2'],
+      },
+      {
+        ...base_guide,
+        id: 'draft-guide',
+        status: 'draft',
+        tag_ids: ['tag-1'],
+      },
+    ]
+    const links: LinkDefinition[] = [
+      {
+        ...test_links[0]!,
+        id: 'published-link',
+        tag_ids: ['tag-2', 'tag-3'],
+      },
+      {
+        ...test_links[0]!,
+        id: 'archived-link',
+        status: 'archived',
+        tag_ids: ['tag-1'],
+      },
+    ]
+
+    const compact_view = getCompactView(products, {}, links, guides)
+    const compact_view_with_taxonomies = getCompactAppView(products, {}, taxonomies, links, guides)
+
+    expect(compact_view_with_taxonomies.top_tags).toEqual([
+      { label: '標籤 02', count: 3, active: false },
+      { label: 'Alpha', count: 2, active: false },
+      { label: '標籤 03', count: 2, active: false },
+      { label: '標籤 04', count: 1, active: false },
+      { label: '標籤 05', count: 1, active: false },
+      { label: '標籤 06', count: 1, active: false },
+      { label: '標籤 07', count: 1, active: false },
+      { label: '標籤 08', count: 1, active: false },
+      { label: '標籤 09', count: 1, active: false },
+      { label: '標籤 10', count: 1, active: false },
+    ])
+    expect(compact_view.top_tags).toHaveLength(10)
   })
 
   it('should filter search tab by query and expose empty and no-results states', () => {
@@ -676,6 +817,136 @@ describe('compact app view state', () => {
     expect(compact_view.search.empty_reason).toBeNull()
   })
 
+  it('should group mixed search suggestions into fixed non-empty resource sections', () => {
+    const sections = getSearchResultSections([
+      {
+        document_id: 'link:applepig-home',
+        content_id: 'applepig-home',
+        type: 'link',
+        label: 'applepig.idv.tw',
+        title: 'applepig.idv.tw',
+        summary: 'DW 的主站',
+        category_labels: ['其他'],
+        tag_labels: [],
+        image_url: 'https://example.com/applepig-logo.png',
+        href: 'https://applepig.idv.tw',
+        external: true,
+        score: 3,
+      },
+      {
+        document_id: 'guide:keyboard-guide',
+        content_id: 'keyboard-guide',
+        type: 'guide',
+        label: '鍵盤指南',
+        title: '鍵盤指南',
+        summary: '鍵盤挑選重點',
+        category_labels: ['電腦'],
+        tag_labels: ['輸入'],
+        image_url: null,
+        href: 'https://example.com/keyboard-guide',
+        external: true,
+        score: 2,
+      },
+      {
+        document_id: 'product:keyboard',
+        content_id: 'keyboard',
+        type: 'product',
+        label: '機械鍵盤',
+        title: '機械鍵盤',
+        summary: '打字工作用',
+        category_labels: ['電腦'],
+        tag_labels: ['輸入'],
+        image_url: 'https://example.com/keyboard.jpg',
+        href: '/products/keyboard',
+        external: false,
+        price_text: 'NT$ 1,990',
+        channel_label: 'PChome',
+        score: 1,
+      },
+    ])
+
+    expect(sections).toEqual([
+      {
+        id: 'products',
+        label: '商品',
+        rows: [
+          {
+            id: 'product:keyboard',
+            type: 'product',
+            title: '機械鍵盤',
+            subtitle: '打字工作用',
+            meta: 'PChome · NT$ 1,990',
+            href: '/products/keyboard',
+            image_url: 'https://example.com/keyboard.jpg',
+            icon: null,
+            external: false,
+            target: null,
+            rel: null,
+          },
+        ],
+      },
+      {
+        id: 'guides',
+        label: '指南',
+        rows: [
+          {
+            id: 'guide:keyboard-guide',
+            type: 'guide',
+            title: '鍵盤指南',
+            subtitle: '鍵盤挑選重點',
+            meta: '電腦',
+            href: 'https://example.com/keyboard-guide',
+            image_url: null,
+            icon: 'i-lucide-book-open',
+            external: true,
+            target: '_blank',
+            rel: 'noopener noreferrer',
+          },
+        ],
+      },
+      {
+        id: 'links',
+        label: '連結',
+        rows: [
+          {
+            id: 'link:applepig-home',
+            type: 'link',
+            title: 'applepig.idv.tw',
+            subtitle: 'DW 的主站',
+            meta: '其他',
+            href: 'https://applepig.idv.tw',
+            image_url: 'https://example.com/applepig-logo.png',
+            icon: 'i-lucide-link',
+            external: true,
+            target: '_blank',
+            rel: 'noopener noreferrer',
+          },
+        ],
+      },
+    ])
+  })
+
+  it('should skip empty mixed search sections', () => {
+    const sections = getSearchResultSections([
+      {
+        document_id: 'guide:keyboard-guide',
+        content_id: 'keyboard-guide',
+        type: 'guide',
+        label: '鍵盤指南',
+        title: '鍵盤指南',
+        summary: '鍵盤挑選重點',
+        category_labels: ['電腦'],
+        tag_labels: [],
+        image_url: null,
+        href: 'https://example.com/keyboard-guide',
+        external: true,
+        score: 1,
+      },
+    ])
+
+    expect(sections.map((section) => section.id)).toEqual(['guides'])
+  })
+
   it('should fallback to loaded Nuxt Content products when the client search index fails', () => {
     const products = [
       makeProduct({ id: 'keyboard', status: 'published', name: '機械鍵盤', summary: '打字工作用', tag_ids: ['輸入'] }),
@@ -700,18 +971,12 @@ describe('compact app view state', () => {
 
     expect(compact_view.home.category_chips).toEqual([
       { id: 'all', label: '全部', count: 1, active: false },
-      { id: 'home', label: '居家', count: 0, active: false },
-      { id: 'kitchen', label: '廚房', count: 0, active: false },
-      { id: 'computer', label: '電腦', count: 0, active: false },
-      { id: 'three-c', label: '3C', count: 0, active: false },
-      { id: 'av', label: '影音', count: 0, active: false },
-      { id: 'food', label: '食材', count: 0, active: false },
       { id: 'other', label: '其他', count: 1, active: true },
     ])
     expect(compact_view.home.products.map((product) => product.id)).toEqual(['other-product'])
   })
 
-  it('should expose only published links panel data with safe external link attributes', () => {
+  it('should expose only published link resources with safe external link attributes', () => {
     const compact_view = getCompactView([], {}, [
       ...test_links,
       {
@@ -726,10 +991,14 @@ describe('compact app view state', () => {
     expect(compact_view.links).toEqual([
       {
         id: 'applepig-home',
+        type: 'link',
         title: 'applepig.idv.tw',
         subtitle: 'DW 的主站',
-        url: 'https://applepig.idv.tw',
+        meta: 'https://applepig.idv.tw',
+        href: 'https://applepig.idv.tw',
+        image_url: null,
         icon: 'i-lucide-link',
+        external: true,
         target: '_blank',
         rel: 'noopener noreferrer',
       },
@@ -772,6 +1041,7 @@ describe('compact app view state', () => {
         rel: 'noopener noreferrer',
       },
       fine_print: '價格與庫存以通路頁面為準。',
+      related_products: [],
     })
   })
 
@@ -788,6 +1058,95 @@ describe('compact app view state', () => {
 
     expect(detail.dw_says).toBe('同一段推薦文字')
     expect(detail.description).toBeNull()
+    expect(detail.related_products).toEqual([])
+  })
+
+  it('should sort related products deterministically and exclude the current product', () => {
+    const current_product = makeProduct({
+      id: 'current-product',
+      status: 'published',
+      name: '目前商品',
+      category_id: 'computer',
+      channel_id: 'pchome',
+      tag_ids: ['typing', 'wireless'],
+      published_at: '2026-06-05T00:00:00+08:00',
+    })
+    const products = [
+      current_product,
+      makeProduct({
+        id: 'same-category-two-tags-old',
+        status: 'published',
+        name: '同分類兩個標籤較舊',
+        category_id: 'computer',
+        channel_id: 'momo',
+        tag_ids: ['typing', 'wireless'],
+        published_at: '2026-06-01T00:00:00+08:00',
+      }),
+      makeProduct({
+        id: 'same-category-one-tag-same-channel-old',
+        status: 'published',
+        name: '同分類同通路較舊',
+        category_id: 'computer',
+        channel_id: 'pchome',
+        tag_ids: ['typing'],
+        published_at: '2026-06-02T00:00:00+08:00',
+      }),
+      makeProduct({
+        id: 'same-category-one-tag-new',
+        status: 'published',
+        name: '同分類較新',
+        category_id: 'computer',
+        channel_id: 'momo',
+        tag_ids: ['typing'],
+        published_at: '2026-06-04T00:00:00+08:00',
+      }),
+      makeProduct({
+        id: 'different-category-two-tags-new',
+        status: 'published',
+        name: '不同分類兩個標籤較新',
+        category_id: 'home',
+        channel_id: 'pchome',
+        tag_ids: ['typing', 'wireless'],
+        published_at: '2026-06-06T00:00:00+08:00',
+      }),
+      makeProduct({
+        id: 'draft-related',
+        status: 'draft',
+        name: '草稿推薦',
+        category_id: 'computer',
+        channel_id: 'pchome',
+        tag_ids: ['typing', 'wireless'],
+        published_at: '2026-06-07T00:00:00+08:00',
+      }),
+    ]
+
+    const related_products = getRelatedProductCards(current_product, products, test_taxonomies)
+
+    expect(related_products.map((product) => product.id)).toEqual([
+      'same-category-two-tags-old',
+      'same-category-one-tag-same-channel-old',
+      'same-category-one-tag-new',
+      'different-category-two-tags-new',
+    ])
+  })
+
+  it('should return no related products when every other product is unpublished or current', () => {
+    const current_product = makeProduct({
+      id: 'current-product',
+      status: 'published',
+      name: '目前商品',
+    })
+    const products = [
+      current_product,
+      makeProduct({
+        id: 'draft-product',
+        status: 'draft',
+        name: '草稿商品',
+        category_id: 'computer',
+      }),
+    ]
+
+    expect(getRelatedProductCards(current_product, products, test_taxonomies)).toEqual([])
   })
 })
 

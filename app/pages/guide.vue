@@ -23,26 +23,11 @@
       </p>
     </div>
 
-    <div
+    <ResourceList
       v-else
-      class="link-list"
-    >
-      <a
-        v-for="guide in compact_view.guide.guides"
-        :key="guide.id"
-        class="link-row"
-        :href="guide.source_url"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        <span class="link-row-icon">📘</span>
-        <span class="link-row-body">
-          <span class="link-row-title">{{ guide.title }}</span>
-          <span class="link-row-subtitle">{{ guide.summary }}</span>
-          <span class="link-row-subtitle">{{ guide.category_labels.join('、') }}</span>
-        </span>
-      </a>
-    </div>
+      :rows="compact_view.guide.guides"
+      aria_label="指南列表"
+    />
   </section>
 </template>
 

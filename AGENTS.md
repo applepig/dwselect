@@ -13,8 +13,8 @@
 - Dev server：`pnpm dev` 等同 `nuxt dev --host ::`；本機常透過 Traefik 的 `https://dwselect.toybox.local/` 進入，`nuxt.config.ts` 只允許 `dwselect.toybox.local` 作為 Vite host。
 - Unit／integration：`pnpm test`，會跑 Vitest 並排除 `tests/e2e/**`。
 - 單一 Vitest 檔：`pnpm test tests/product-schema.test.ts`。
-- E2E：`pnpm test:e2e`；Playwright 會自行啟動 `NUXT_IGNORE_LOCK=1 pnpm dev --host 127.0.0.1 --port 4173`，`workers: 1`，projects 是 `phone`、`tablet`、`desktop`。
-- 單一 E2E project：`pnpm test:e2e -- --project=desktop tests/e2e/compact-app.spec.ts`。
+- E2E：`pnpm test:e2e`；Playwright 預設以 `https://dwselect.toybox.local` 為 `baseURL`，必要時自行啟動 `pnpm dev --host ::`，透過 Traefik 實際入口測試，`workers: 1`，projects 是 `phone`、`tablet`、`desktop`。
+- 單一 E2E project：`pnpm test:e2e --project=desktop tests/e2e/compact-app.spec.ts`。
 - Lint：`pnpm lint` 等同 `eslint . --max-warnings=0`；單檔自動修正用 `pnpm lint:file -- <file>`。
 - Format：`pnpm format` 等同 `eslint . --fix`，使用 ESLint `@stylistic`，不使用 Prettier。
 - Typecheck：`pnpm typecheck` 固定走 `nuxt typecheck`，fresh checkout 先由 `prepare: nuxt prepare` 產生 `.nuxt` types/config。

@@ -13,17 +13,21 @@
 <script setup lang="ts">
 import type { Product } from '../../utils/product-schema'
 import type { TaxonomyDefinitions } from '../../utils/published-products'
-import { getCatalogProductId, getProductDetail } from '../../utils/published-products'
+import { getCatalogProductId, getProductDetail, getRelatedProductCards } from '../../utils/published-products'
 
 const route = useRoute()
 const product = shallowRef<Product | null>(null)
+const all_products = shallowRef<Product[]>([])
 const runtime_taxonomies = shallowRef<TaxonomyDefinitions | undefined>()
 const product_detail = computed(() => {
   if (product.value === null) {
     return null
   }
 
-  return getProductDetail(product.value, runtime_taxonomies.value)
+  return {
+    ...getProductDetail(product.value, runtime_taxonomies.value),
+    related_products: getRelatedProductCards(product.value, all_products.value, runtime_taxonomies.value),
+  }
 })
 
 useHead(() => ({
@@ -43,5 +47,6 @@ if (matched_product === null) {
 }
 
 runtime_taxonomies.value = catalog_data.runtime_taxonomies.value
+all_products.value = catalog_data.all_products.value
 product.value = matched_product
 </script>

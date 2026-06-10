@@ -8,6 +8,9 @@ const product_routes = buildProductRoutes(fileURLToPath(new URL('./content/produ
 export default defineNuxtConfig({
   modules: ['@nuxt/eslint', '@nuxt/content', '@nuxt/ui'],
   css: ['~/assets/styles/main.css'],
+  colorMode: {
+    storage: 'cookie',
+  },
   experimental: {
     viewTransition: false,
   },

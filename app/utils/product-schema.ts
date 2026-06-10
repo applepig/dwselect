@@ -73,6 +73,7 @@ export const link_schema = z.object({
   title: z.string().min(1),
   summary: z.string(),
   url: http_url_schema,
+  image_url: http_url_schema.nullable().optional(),
   icon: z.string().min(1),
   category_ids: z.array(category_id_schema),
   tag_ids: z.array(tag_id_schema),

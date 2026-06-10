@@ -183,6 +183,42 @@ describe('search index', () => {
     ])
   })
 
+  it('should preserve optional link images in search documents, payload summaries and query results', () => {
+    const payload = buildSearchIndexPayload({
+      products: [],
+      guides: [],
+      links: [{
+        ...base_link,
+        title: '圖片連結',
+        image_url: 'https://example.com/link-logo.png',
+      }],
+    }, { generated_at: '2026-06-06T00:00:00+08:00' })
+    const mini_search = loadSearchIndex(payload)
+
+    expect(getSearchDocuments({ products: [], guides: [], links: [{
+      ...base_link,
+      title: '圖片連結',
+      image_url: 'https://example.com/link-logo.png',
+    }] })).toEqual([
+      expect.objectContaining({
+        document_id: 'link:applepig-home',
+        image_url: 'https://example.com/link-logo.png',
+      }),
+    ])
+    expect(payload.documents).toEqual([
+      expect.objectContaining({
+        document_id: 'link:applepig-home',
+        image_url: 'https://example.com/link-logo.png',
+      }),
+    ])
+    expect(querySearchIndex(mini_search, '圖片連結')).toEqual([
+      expect.objectContaining({
+        document_id: 'link:applepig-home',
+        image_url: 'https://example.com/link-logo.png',
+      }),
+    ])
+  })
+
   it('should map the fallback other category to the taxonomy label for search documents', () => {
     expect(getSearchDocuments({ products: [{
       ...base_product,

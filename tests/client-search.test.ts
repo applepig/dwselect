@@ -2,6 +2,14 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 import type { Product } from '../app/utils/product-schema'
 import { buildSearchIndexPayload } from '../app/utils/search/search-index'
+import {
+  createLatestSearchRequestRunner,
+  getSafeBrowserLocalStorage,
+  getSearchPageMode,
+  readSearchHistory,
+  saveSearchHistoryItem,
+  SEARCH_HISTORY_STORAGE_KEY,
+} from '../app/utils/search/client-search'
 
 const base_product: Product = {
   id: '2026-06-02-sample-product',
@@ -97,5 +105,117 @@ describe('client search lazy loader', () => {
       category_labels: ['電腦'],
       channel_label: 'PChome',
     }))
+  })
+
+  it('should keep the latest autocomplete request from being overwritten by a stale response', async () => {
+    const request_runner = createLatestSearchRequestRunner<string[]>()
+    const slow_request = request_runner.run('keyboard', async () => ['舊建議'])
+    const fast_request = request_runner.run('keyboard case', async () => ['新建議'])
+
+    await expect(fast_request).resolves.toEqual({ query: 'keyboard case', value: ['新建議'] })
+    await expect(slow_request).resolves.toBeNull()
+  })
+
+  it('should derive idle mode from empty submitted and pending queries', () => {
+    expect(getSearchPageMode({ pending_query: '   ', submitted_query: '' })).toBe('idle')
+    expect(getSearchPageMode({ pending_query: ' 鍵盤 ', submitted_query: '' })).toBe('suggesting')
+    expect(getSearchPageMode({ pending_query: '滑鼠', submitted_query: '滑鼠' })).toBe('searching')
+  })
+
+  it('should serialize search history with exact dedupe, latest first and a 12 item limit', () => {
+    const storage = new Map<string, string>()
+
+    for (const query of ['Sharp', '咖啡', '機械鍵盤', '耳機', '螢幕', '椅子', '日本米', '收納', '喇叭', '滑鼠', '螢幕架', '桌燈', 'Sharp']) {
+      saveSearchHistoryItem(query, {
+        getItem: (key) => storage.get(key) ?? null,
+        setItem: (key, value) => storage.set(key, value),
+        removeItem: (key) => storage.delete(key),
+      })
+    }
+
+    expect(JSON.parse(storage.get(SEARCH_HISTORY_STORAGE_KEY) ?? '[]')).toEqual([
+      'Sharp',
+      '桌燈',
+      '螢幕架',
+      '滑鼠',
+      '喇叭',
+      '收納',
+      '日本米',
+      '椅子',
+      '螢幕',
+      '耳機',
+      '機械鍵盤',
+      '咖啡',
+    ])
+  })
+
+  it('should trim parsed history and cap persisted values to 12 items', () => {
+    const stored_history = JSON.stringify([
+      '  Sharp  ',
+      '咖啡',
+      '',
+      '機械鍵盤',
+      '耳機',
+      '螢幕',
+      '椅子',
+      '日本米',
+      '收納',
+      '喇叭',
+      '滑鼠',
+      '螢幕架',
+      '桌燈',
+      '多出的第十三筆',
+    ])
+
+    expect(readSearchHistory({
+      getItem: () => stored_history,
+      setItem: vi.fn(),
+      removeItem: vi.fn(),
+    })).toEqual([
+      'Sharp',
+      '咖啡',
+      '機械鍵盤',
+      '耳機',
+      '螢幕',
+      '椅子',
+      '日本米',
+      '收納',
+      '喇叭',
+      '滑鼠',
+      '螢幕架',
+      '桌燈',
+    ])
+  })
+
+  it('should fallback to empty history when localStorage is unavailable or corrupted', () => {
+    expect(readSearchHistory({
+      getItem: () => '{broken-json',
+      setItem: vi.fn(),
+      removeItem: vi.fn(),
+    })).toEqual([])
+
+    expect(saveSearchHistoryItem('鍵盤', {
+      getItem: () => {
+        throw new Error('localStorage unavailable')
+      },
+      setItem: () => {
+        throw new Error('localStorage unavailable')
+      },
+      removeItem: vi.fn(),
+    })).toEqual([])
+  })
+
+  it('should return null when the browser localStorage getter throws', () => {
+    const blocked_window = Object.create(null, {
+      localStorage: {
+        configurable: true,
+        get() {
+          throw new Error('localStorage blocked')
+        },
+      },
+    })
+    vi.stubGlobal('window', blocked_window)
+
+    expect(getSafeBrowserLocalStorage()).toBeNull()
   })
 })

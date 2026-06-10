@@ -6,13 +6,15 @@ export default defineConfig({
   workers: 1,
   reporter: 'list',
   use: {
-    baseURL: 'http://127.0.0.1:4173',
+    baseURL: 'https://dwselect.toybox.local',
+    ignoreHTTPSErrors: true,
     trace: 'on-first-retry',
   },
   webServer: {
-    command: 'NUXT_IGNORE_LOCK=1 pnpm dev --host 127.0.0.1 --port 4173',
-    url: 'http://127.0.0.1:4173',
-    reuseExistingServer: false,
+    command: 'pnpm dev --host ::',
+    url: 'https://dwselect.toybox.local',
+    ignoreHTTPSErrors: true,
+    reuseExistingServer: true,
     timeout: 120_000,
   },
   projects: [

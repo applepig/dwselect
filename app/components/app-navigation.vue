@@ -77,8 +77,12 @@
 </template>
 
 <script setup lang="ts">
+import type { CompactCategoryChip } from '../utils/published-products'
+import { getCompactCategoryOptions } from '../utils/published-products'
+
 const route = useRoute()
 const { all_products, runtime_taxonomies } = await useCatalogData()
+const category_ids = computed(() => new Set(runtime_taxonomies.value?.categories.map((category) => category.id) ?? []))
 const nav_items = [
   { id: 'home', label: '首頁', icon: 'i-lucide-house', to: '/' },
   { id: 'guide', label: '指南', icon: 'i-lucide-tags', to: '/guide' },
@@ -86,42 +90,37 @@ const nav_items = [
   { id: 'search', label: '搜尋', icon: 'i-lucide-search', to: '/search' },
 ]
 const desktop_route_items = nav_items.filter((item) => item.id !== 'home')
-const desktop_category_items = computed(() => {
-  const published_products = all_products.value.filter((product) => product.status === 'published')
-  const category_counts = new Map<string, number>()
-
-  for (const product of published_products) {
-    category_counts.set(product.category_id, (category_counts.get(product.category_id) ?? 0) + 1)
-  }
-
-  return [
-    { id: 'all', label: '全部', count: published_products.length },
-    ...(runtime_taxonomies.value?.categories ?? [])
-      .filter((category) => category.nav_visible)
-      .toSorted((left_category, right_category) => left_category.sort_order - right_category.sort_order)
-      .map((category) => ({
-        id: category.id,
-        label: category.short_label,
-        count: category_counts.get(category.id) ?? 0,
-      })),
-  ]
-})
+const desktop_category_items = computed(() => getCompactCategoryOptions(
+  all_products.value,
+  getActiveCategoryId(),
+  runtime_taxonomies.value,
+))
 
 function isRouteActive(path: string) {
   return route.path === path
 }
 
-function isCategoryActive(category_id: string) {
+function isCategoryActive(category_id: CompactCategoryChip['id']) {
   if (route.path !== '/') {
     return false
   }
 
+  return getActiveCategoryId() === category_id
+}
+
+function getActiveCategoryId(): CompactCategoryChip['id'] {
   const active_category = typeof route.query.category === 'string' ? route.query.category : 'all'
 
-  if (category_id === 'all') {
-    return active_category === 'all' || active_category === ''
+  if (active_category === '' || active_category === 'all') {
+    return 'all'
   }
 
-  return active_category === category_id
+  const category_id = active_category as Exclude<CompactCategoryChip['id'], 'all'>
+
+  if (!category_ids.value.has(category_id)) {
+    return 'all'
+  }
+
+  return category_id
 }
 </script>

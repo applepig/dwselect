@@ -203,6 +203,18 @@ describe('product schema', () => {
     expect(() => link_schema.parse(valid_link)).not.toThrow()
   })
 
+  it('should accept link content with an optional image URL', () => {
+    expect(() => link_schema.parse({
+      ...valid_link,
+      image_url: 'https://example.com/link-logo.png',
+    })).not.toThrow()
+    expect(() => link_schema.parse({
+      ...valid_link,
+      image_url: null,
+    })).not.toThrow()
+    expect(() => link_schema.parse(valid_link)).not.toThrow()
+  })
+
   it('should reject non HTTP(S) guide and link URLs', () => {
     expect(() => guide_schema.parse({
       ...valid_guide,
@@ -215,6 +227,10 @@ describe('product schema', () => {
     expect(() => link_schema.parse({
       ...valid_link,
       url: 'mailto:hello@example.com',
+    })).toThrow()
+    expect(() => link_schema.parse({
+      ...valid_link,
+      image_url: 'ftp://example.com/link.jpg',
     })).toThrow()
   })
 

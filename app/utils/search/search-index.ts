@@ -289,7 +289,7 @@ function mapLinkToSearchDocument(
     category_labels: link.category_ids.map((category_id) => category_labels.get(category_id) ?? category_id),
     tag_ids: [...link.tag_ids],
     tag_labels: getTagLabels(link.tag_ids, tag_labels),
-    image_url: null,
+    image_url: link.image_url ?? null,
     href: link.url,
     external: true,
     published_at: link.published_at,
