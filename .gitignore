@@ -14,6 +14,7 @@ dist-ssr
 .nuxt
 .output
 test-results
+tests/post-edit-hook-fixture-*/
 *.local
 .env
 

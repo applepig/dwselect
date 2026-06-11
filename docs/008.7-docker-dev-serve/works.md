@@ -25,3 +25,16 @@
 
 - CLAUDE.md Local Runtime 區段改寫為 Docker 化流程：`./dev.sh start` 啟動、`.env` 設定、container 管理指令
 - Frontend Handoff 區段未修改（內容仍適用）
+
+## 驗收：Frontend Handoff
+
+- container `dwselect-app` 穩定運作，Traefik 路由 `https://dwselect.toybox.local/` 回 200（178KB SSR）
+- 實際以瀏覽器開啟驗收：
+  - 首頁渲染完整——header、`62 件`、分類 chips（居家 17／廚房 13／電腦 9／3C 9／影音 9／食材 4）、商品卡片（圖片／價格／描述）、底部 nav，client hydration 無異常
+  - 商品詳情頁 `/products/2026-06-02-blueair-3250空氣清淨機` routing 正常——back button、商品大圖＋尺寸標註、tag chips、標題、價格皆正確
+- 結論：Docker 化後可見頁面與主要互動正常，008.7 可交還
+
+## 收尾雜項
+
+- 清除 `tests/post-edit-hook.test.ts` 被中斷時殘留的孤兒臨時目錄
+- `.gitignore` 加入 `tests/post-edit-hook-fixture-*/`，避免測試中斷時的臨時目錄污染 git status
