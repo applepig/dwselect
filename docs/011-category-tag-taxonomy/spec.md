@@ -34,40 +34,40 @@
 
 資料驅動化（解耦）：
 
-- [ ] `app/utils/product-schema.ts` 移除 `CATEGORY_IDS` 與 `CHANNEL_IDS` hardcoded enum；`category_id`、`offers[*].channel_id` 改為 kebab-case ASCII string schema（同 `tag_id_schema` 模式），category / tag 引用完整性統一由 `validateContentTaxonomyReferences()` 對 `content/taxonomies/` 把關；channel 僅格式檢查即可，不強制 referential。
-- [ ] `app/utils/published-products/shared.ts` 的 `DEFAULT_TAXONOMIES` 與 `compact-app.ts` 的 `DEFAULT_LINKS` 複本移除；`taxonomies` / `links` 參數改為必填，呼叫端（頁面與測試）明確傳入。
-- [ ] `compact-app.ts` 的 `PRODUCT_CATEGORY_IDS` hardcode Set 移除；route 解析（`parseCategoryId`）只依呼叫端傳入的 `category_ids` 判斷有效性。
-- [ ] brands 進入 runtime 讀取鏈：`content.config.ts` 新增 brands collection、`app/composables/use-catalog-data.ts` query brands 並納入 `runtime_taxonomies`、`app/utils/published-products/types.ts` 的 `TaxonomyDefinitions` 增加 `brands` 欄位、`scripts/build-search-index.ts` 讀取 brands；product card / detail / tag-explorer 的 label resolution 與 search index 才能取得 tags + brands 聯集。
-- [ ] `tests/taxonomy-sync.test.ts` 移除（複本不存在即無同步需求）；`tests/product-schema.test.ts` 中 hardcoded taxonomy id / label snapshot 改寫為資料驅動的 shape、唯一 id、排序規則驗證。
-- [ ] 真實 content 的 referential 完整性驗證位於 `tests/product-schema.test.ts` 的「should validate all migrated content domains against schemas and taxonomy references」測試（呼叫 `validateContentTaxonomyReferences()`），必須保留並擴充 brands 規則：products 的 `tag_ids` 可引用 tags 或 brands，guides / links 的 `tag_ids` 只能引用 tags。`tests/content-taxonomy-references.test.ts` 的職責是 post-migration 內容鎖定（筆數與舊 id 排除），於 M2 同步更新斷言。
-- [ ] 解耦演練通過：在測試中以 fixture 模擬「categories.json 新增一個分類」與「brands.json 新增一個品牌」，不改任何 app 程式碼，schema 驗證、route 解析、導覽資料（`getVisibleCategories`）、product tag label resolution 都正確接受新 taxonomy。
+- [x] `app/utils/product-schema.ts` 移除 `CATEGORY_IDS` 與 `CHANNEL_IDS` hardcoded enum；`category_id`、`offers[*].channel_id` 改為 kebab-case ASCII string schema（同 `tag_id_schema` 模式），category / tag 引用完整性統一由 `validateContentTaxonomyReferences()` 對 `content/taxonomies/` 把關；channel 僅格式檢查即可，不強制 referential。
+- [x] `app/utils/published-products/shared.ts` 的 `DEFAULT_TAXONOMIES` 與 `compact-app.ts` 的 `DEFAULT_LINKS` 複本移除；`taxonomies` / `links` 參數改為必填，呼叫端（頁面與測試）明確傳入。
+- [x] `compact-app.ts` 的 `PRODUCT_CATEGORY_IDS` hardcode Set 移除；route 解析（`parseCategoryId`）只依呼叫端傳入的 `category_ids` 判斷有效性。
+- [x] brands 進入 runtime 讀取鏈：`content.config.ts` 新增 brands collection、`app/composables/use-catalog-data.ts` query brands 並納入 `runtime_taxonomies`、`app/utils/published-products/types.ts` 的 `TaxonomyDefinitions` 增加 `brands` 欄位、`scripts/build-search-index.ts` 讀取 brands；product card / detail / tag-explorer 的 label resolution 與 search index 才能取得 tags + brands 聯集。
+- [x] `tests/taxonomy-sync.test.ts` 移除（複本不存在即無同步需求）；`tests/product-schema.test.ts` 中 hardcoded taxonomy id / label snapshot 改寫為資料驅動的 shape、唯一 id、排序規則驗證。
+- [x] 真實 content 的 referential 完整性驗證位於 `tests/product-schema.test.ts` 的「should validate all migrated content domains against schemas and taxonomy references」測試（呼叫 `validateContentTaxonomyReferences()`），必須保留並擴充 brands 規則：products 的 `tag_ids` 可引用 tags 或 brands，guides / links 的 `tag_ids` 只能引用 tags。`tests/content-taxonomy-references.test.ts` 的職責是 post-migration 內容鎖定（筆數與舊 id 排除），於 M2 同步更新斷言。
+- [x] 解耦演練通過：在測試中以 fixture 模擬「categories.json 新增一個分類」與「brands.json 新增一個品牌」，不改任何 app 程式碼，schema 驗證、route 解析、導覽資料（`getVisibleCategories`）、product tag label resolution 都正確接受新 taxonomy。
 
 Taxonomy 內容與遷移：
 
-- [ ] `content/taxonomies/categories.json` 更新為七個新分類（id、label、nav_visible、sort_order 見介面段）。
-- [ ] `content/taxonomies/tags.json` 更新為新一般 tag 集合（含 label、description、aliases），並保留既有 `ergonomic`、`rice`。
-- [ ] 新增 `content/taxonomies/brands.json`，schema 與 tags 相同（`id`、`label`、`description`、`aliases`、`nav_visible`、`sort_order`），內容從 62 筆商品的品牌語意抽出；brand id 使用 kebab-case ASCII，label 使用正式品牌名。
-- [ ] 新增一次性遷移 script `scripts/legacy/migrate-category-tag-taxonomy.ts`（pattern 沿用 `scripts/legacy/migrate-content-domain-taxonomy.ts`）：依 script 內的 mapping 表改寫商品 `category_id` 與 `tag_ids`，輸出遷移 summary；可重複執行——skip 判定使用新 schema 特徵（已有 `offers` 欄位者視為已遷移），不以 category id 判定（`other` 新舊沿用，category-based 判定無法區分「已遷移」與「本來就是 other」）。
-- [ ] 62 筆 published 商品全數遷移：每筆 `category_id` 為新分類 id；`tag_ids` 引用皆存在於 tags 或 brands；無任何商品殘留舊 category id（home、kitchen、computer、three-c、av、food）。
-- [ ] 5 筆 guides / links 的 `category_ids` / `tag_ids` 同步更新為新 id（語意不變：Aeron guide 與 Altwork link 保留 `ergonomic`，日本米入門篇保留 `rice`）；guides / links 不引用 brands。
-- [ ] `pnpm build:search-index` 重建後，`public/search-index.json` 的 `category_labels` / `tag_labels` 反映新 taxonomy；`app/utils/search/search-index.ts` 會把 tags 與 brands 的 `aliases` 當作搜尋同義詞納入 index，以舊分類詞、品牌名或常用同義詞（如「廚房」、「充電器」、「HDMI」、「網通」）搜尋仍可透過 tag / brand label / aliases 命中商品。
+- [x] `content/taxonomies/categories.json` 更新為七個新分類（id、label、nav_visible、sort_order 見介面段）。
+- [x] `content/taxonomies/tags.json` 更新為新一般 tag 集合（含 label、description、aliases），並保留既有 `ergonomic`、`rice`。
+- [x] 新增 `content/taxonomies/brands.json`，schema 與 tags 相同（`id`、`label`、`description`、`aliases`、`nav_visible`、`sort_order`），內容從 62 筆商品的品牌語意抽出；brand id 使用 kebab-case ASCII，label 使用正式品牌名。
+- [x] 新增一次性遷移 script `scripts/legacy/migrate-category-tag-taxonomy.ts`（pattern 沿用 `scripts/legacy/migrate-content-domain-taxonomy.ts`）：依 script 內的 mapping 表改寫商品 `category_id` 與 `tag_ids`，輸出遷移 summary；可重複執行——skip 判定使用新 schema 特徵（已有 `offers` 欄位者視為已遷移），不以 category id 判定（`other` 新舊沿用，category-based 判定無法區分「已遷移」與「本來就是 other」）。
+- [x] 62 筆 published 商品全數遷移：每筆 `category_id` 為新分類 id；`tag_ids` 引用皆存在於 tags 或 brands；無任何商品殘留舊 category id（home、kitchen、computer、three-c、av、food）。
+- [x] 5 筆 guides / links 的 `category_ids` / `tag_ids` 同步更新為新 id（語意不變：Aeron guide 與 Altwork link 保留 `ergonomic`，日本米入門篇保留 `rice`）；guides / links 不引用 brands。
+- [x] `pnpm build:search-index` 重建後，`public/search-index.json` 的 `category_labels` / `tag_labels` 反映新 taxonomy；`app/utils/search/search-index.ts` 會把 tags 與 brands 的 `aliases` 當作搜尋同義詞納入 index，以舊分類詞、品牌名或常用同義詞（如「廚房」、「充電器」、「HDMI」、「網通」）搜尋仍可透過 tag / brand label / aliases 命中商品。
 
 Product 欄位重整：
 
-- [ ] Products 新增 `english_name: string`；authoring 時必填，作為產生 ASCII product id、JSON 檔名 stem 與 `/products/:id` URL 的來源。`id` 仍必須等於 JSON 檔名 stem，格式為 `<YYYY-MM-DD>-<english-name-slug>`，slug 使用 kebab-case ASCII。
-- [ ] Products 新增 `search_aliases: string[]` 與 `model_numbers: string[]`；兩者都納入 search index searchable fields，不需要在前台顯示。
-- [ ] Products 以 `offers[]` 取代頂層 `channel_id`、`purchase_url`、`price`、`price_text`；每筆 offer 把 `channel_id`、`url`、`price`、`price_text`、`checked_at` 放在同一列，避免多通路價格與日期錯位。
-- [ ] Product card / detail 的既有價格、通路、購買 CTA 顯示使用 `offers[0]` 作為 primary offer；多 offer 不新增 UI，保留資料可搜尋與後續擴充。
-- [ ] Products 描述欄位拆為三欄：`summary`（使用者撰寫短摘要）、`long_description`（使用者撰寫長描述）、`llm_description`（LLM 維護的補充描述，可包含規格與結構化筆記）；移除舊 `description` 欄位。
-- [ ] 一次性遷移時，為 62 筆 products 補 `english_name`，並以 `english_name` 產生新 `id` / JSON 檔名；同步更新 guides 的 `related_product_ids`、本地 `image_url` 與 `content/products/images/` 圖檔名，避免舊 id 殘留。
-- [ ] 一次性遷移時，既有 `description` 搬到 `long_description`；`search_aliases`、`model_numbers`、`llm_description` 初始可為空值，後續由人工與 LLM 補齊；既有 `channel_id` / `purchase_url` / `price` / `price_text` 搬成單筆 `offers[0]`，`checked_at` 使用既有 `updated_at`。
-- [ ] `tests/product-schema.test.ts`、`tests/published-products/*.test.ts`、`tests/search-index.test.ts` 覆蓋新欄位 schema、product id / filename slug 規則、primary offer mapping、english name / search aliases / model numbers / llm description 搜尋命中。
+- [x] Products 新增 `english_name: string`；authoring 時必填，作為產生 ASCII product id、JSON 檔名 stem 與 `/products/:id` URL 的來源。`id` 仍必須等於 JSON 檔名 stem，格式為 `<YYYY-MM-DD>-<english-name-slug>`，slug 使用 kebab-case ASCII。
+- [x] Products 新增 `search_aliases: string[]` 與 `model_numbers: string[]`；兩者都納入 search index searchable fields，不需要在前台顯示。
+- [x] Products 以 `offers[]` 取代頂層 `channel_id`、`purchase_url`、`price`、`price_text`；每筆 offer 把 `channel_id`、`url`、`price`、`price_text`、`checked_at` 放在同一列，避免多通路價格與日期錯位。
+- [x] Product card / detail 的既有價格、通路、購買 CTA 顯示使用 `offers[0]` 作為 primary offer；多 offer 不新增 UI，保留資料可搜尋與後續擴充。
+- [x] Products 描述欄位拆為三欄：`summary`（使用者撰寫短摘要）、`long_description`（使用者撰寫長描述）、`llm_description`（LLM 維護的補充描述，可包含規格與結構化筆記）；移除舊 `description` 欄位。
+- [x] 一次性遷移時，為 62 筆 products 補 `english_name`，並以 `english_name` 產生新 `id` / JSON 檔名；同步更新 guides 的 `related_product_ids`、本地 `image_url` 與 `content/products/images/` 圖檔名，避免舊 id 殘留。
+- [x] 一次性遷移時，既有 `description` 搬到 `long_description`；`search_aliases`、`model_numbers`、`llm_description` 初始可為空值，後續由人工與 LLM 補齊；既有 `channel_id` / `purchase_url` / `price` / `price_text` 搬成單筆 `offers[0]`，`checked_at` 使用既有 `updated_at`。
+- [x] `tests/product-schema.test.ts`、`tests/published-products/*.test.ts`、`tests/search-index.test.ts` 覆蓋新欄位 schema、product id / filename slug 規則、primary offer mapping、english name / search aliases / model numbers / llm description 搜尋命中。
 
 回歸與交付：
 
-- [ ] 既有行為鎖定：URL `/?category=<不存在的id>`（含舊 id 如 `kitchen`）fallback 為全部商品，有測試覆蓋。
-- [ ] 全部 quality gates 通過：`pnpm lint`、`pnpm typecheck`、`pnpm test`、`pnpm test:e2e`、`pnpm generate`。
-- [ ] Frontend handoff：以 agent-browser 實際確認首頁分類導覽切換、tag-explorer 篩選、商品詳情 tag 連結、搜尋結果四個流程在新 taxonomy 下正常。
+- [x] 既有行為鎖定：URL `/?category=<不存在的id>`（含舊 id 如 `kitchen`）fallback 為全部商品，有測試覆蓋。
+- [x] 全部 quality gates 通過：`pnpm lint`、`pnpm typecheck`、`pnpm test`、`pnpm test:e2e`、`pnpm generate`。
+- [x] Frontend handoff：以 agent-browser 實際確認首頁分類導覽切換、tag-explorer 篩選、商品詳情 tag 連結、搜尋結果四個流程在新 taxonomy 下正常。
 
 ## 相關檔案
 
@@ -342,8 +342,8 @@ const channel_id_schema = z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, 'must b
 
 ### Milestone 2：product schema 切換、新 taxonomy 定義與內容遷移
 
-> 範圍：`app/utils/product-schema.ts`（欄位重整 schema 切換：必填 `english_name` / `offers`，移除舊頂層 `channel_id` / `purchase_url` / `price` / `price_text` 與 `description`，與 content 遷移原子完成）、`content/taxonomies/{categories,tags,brands}.json`、`scripts/migrate-category-tag-taxonomy.ts`（新增＋mapping 表）、`content/{products,guides,links}/*.json`、`app/utils/search/search-index.ts`（offers[0] 映射）、`scripts/build-search-index.ts`（讀 brands）、`public/search-index.json`、`tests/content-taxonomy-references.test.ts`、`tests/search-index.test.ts`、`tests/e2e/compact-app.spec.ts`（分類 id / label 斷言更新）、route fallback 測試
-> 驗證：`pnpm test`、`pnpm test:e2e`、`node scripts/migrate-category-tag-taxonomy.ts --dry-run` 後執行、`pnpm build:search-index`
+> 範圍：`app/utils/product-schema.ts`（欄位重整 schema 切換：必填 `english_name` / `offers`，移除舊頂層 `channel_id` / `purchase_url` / `price` / `price_text` 與 `description`，與 content 遷移原子完成）、`content/taxonomies/{categories,tags,brands}.json`、`scripts/legacy/migrate-category-tag-taxonomy.ts`（新增＋mapping 表，M3 歸檔）、`content/{products,guides,links}/*.json`、`app/utils/search/search-index.ts`（offers[0] 映射）、`scripts/build-search-index.ts`（讀 brands）、`public/search-index.json`、`tests/content-taxonomy-references.test.ts`、`tests/search-index.test.ts`、`tests/e2e/compact-app.spec.ts`（分類 id / label 斷言更新）、route fallback 測試
+> 驗證：`pnpm test`、`pnpm test:e2e`、`node scripts/legacy/migrate-category-tag-taxonomy.ts --dry-run` 後執行、`pnpm build:search-index`
 > 預期結果：62 商品＋5 guides/links 完成遷移、品牌 ids 進入 products `tag_ids`、products 全數改為 english_name / ASCII id + filename / offers / long_description / llm_description / search_aliases / model_numbers schema、summary 無 unmapped、referential 測試綠、e2e 斷言同步更新後綠、mapping 結果列入 works.md 供人工抽查；schema 切換與 content 遷移在同一 milestone 原子完成，commit 時全測試綠
 
 - [x] Red → Green → Refactor
