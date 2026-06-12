@@ -221,6 +221,26 @@ test('restores category and search state from query strings', async ({ page }) =
   })
 })
 
+test('hydrates direct search query routes without mismatch warnings', async ({ page }) => {
+  const hydration_messages: string[] = []
+
+  page.on('console', (message) => {
+    const text = message.text()
+
+    if (text.includes('Hydration')) {
+      hydration_messages.push(text)
+    }
+  })
+
+  await page.goto('/search?q=Sharp', { waitUntil: 'networkidle' })
+  await expect(page.locator('vite-error-overlay')).toHaveCount(0)
+  await expect(page.locator('.search-result-section[data-section-id="products"] .resource-row').first()).toBeVisible({
+    timeout: SEARCH_RESULT_TIMEOUT_MS,
+  })
+
+  expect(hydration_messages).toEqual([])
+})
+
 test('separates search typing, autocomplete and submitted query state', async ({ page }) => {
   await page.goto('/search', { waitUntil: 'networkidle' })
   await expect(page.locator('vite-error-overlay')).toHaveCount(0)

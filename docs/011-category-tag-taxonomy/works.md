@@ -164,3 +164,32 @@
 - `pnpm test:e2e`：通過（48 passed / 6 skipped）。
 - `pnpm generate`：通過（prerendered 141 routes；保留既有 sourcemap / Rollup PURE comment warnings）。
 - `node scripts/assert-runtime-google-sheet-clean.ts`：通過。
+
+## 2026-06-13：Milestone 3 回歸驗證與 Frontend Handoff
+
+### Frontend Handoff
+
+- 首頁分類導覽：實際打開 `https://dwselect.toybox.local/`，確認新 taxonomy 顯示「電腦3C、網路通訊、影音劇院、小家電、大家電、生活百貨」，「其他」因無商品維持隱藏；點「影音劇院」後 URL 成為 `/?category=av-theater`，商品數 10。
+- Tag explorer 篩選：實際打開 `/search`，確認熱門 tag / brand 清單來自新 taxonomy；點「廚房」後搜尋欄為「廚房」，商品結果 15 筆。
+- 商品詳情：實際打開 `/products/2026-06-02-sharp-65-inch-xled`，確認頁面 200、title 正常、tag 顯示「顯示器」與 brand「Sharp」、CTA 為「到 PChome 購買」、相關商品顯示。
+- 商品詳情 tag 連結：點「顯示器」導到 `/search?q=顯示器` 且商品結果 7 筆；點 brand「Sharp」導到 `/search?q=Sharp` 且商品結果 2 筆。
+
+### Red / Green
+
+- 實看時 agent-browser 長時間 dev session 的 console 留有舊 HMR / hydration mismatch 訊息；用 fresh Playwright page 補 regression test `hydrates direct search query routes without mismatch warnings`，確認直開 `/search?q=Sharp` 不會輸出 hydration mismatch。
+- 新增 regression test 後，完整 E2E 三個 viewport 通過，判定該 console 訊息是舊 dev session noise，不是目前可重現 production bug。
+
+### Refactor／收尾
+
+- `scripts/migrate-category-tag-taxonomy.ts` 移入 `scripts/legacy/migrate-category-tag-taxonomy.ts`，完成一次性遷移 script 歸檔。
+- `spec.md` M3 checkbox 已勾選，並更新遷移 script 的最終 legacy 路徑。
+
+### 驗證
+
+- `pnpm test`：通過（25 files / 187 tests）。
+- `pnpm lint`：通過。
+- `pnpm typecheck`：通過。
+- `pnpm test:e2e --project=phone tests/e2e/compact-app.spec.ts --grep "hydrates direct search query routes"`：通過。
+- `pnpm test:e2e`：通過（51 passed / 6 skipped）。
+- `pnpm generate`：通過（67 search documents；prerendered 141 routes；保留既有 sourcemap / Rollup PURE comment warnings）。
+- `node scripts/assert-runtime-google-sheet-clean.ts`：通過。
