@@ -41,7 +41,8 @@ export type ProductDetailView = {
 export type TaxonomyDefinitions = {
   categories: CategoryDefinition[]
   channels: ChannelDefinition[]
-  tags?: TagDefinition[]
+  tags: TagDefinition[]
+  brands: TagDefinition[]
 }
 
 export type CompactAppTabId = 'home' | 'guide' | 'search' | 'links'

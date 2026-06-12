@@ -64,4 +64,37 @@ describe('compact app tag chips', () => {
       '標籤 12',
     ])
   })
+
+  it('should resolve brands for product tag chips without applying brands to guides or links', () => {
+    const taxonomies: TaxonomyDefinitions = {
+      ...test_taxonomies,
+      brands: [
+        { id: 'fixture-brand', label: 'Fixture Brand', description: '測試品牌', aliases: [], nav_visible: true, sort_order: 10 },
+      ],
+    }
+    const products = [
+      makeProduct({ id: 'branded-product', status: 'published', name: '品牌商品', tag_ids: ['fixture-brand'] }),
+    ]
+    const guides: Guide[] = [
+      {
+        ...base_guide,
+        id: 'guide-with-brand-id-like-tag',
+        tag_ids: ['fixture-brand'],
+      },
+    ]
+    const links: LinkDefinition[] = [
+      {
+        ...test_links[0]!,
+        id: 'link-with-brand-id-like-tag',
+        tag_ids: ['fixture-brand'],
+      },
+    ]
+
+    const tag_chips = getTagChips({ products, guides, links }, [], taxonomies, Number.MAX_SAFE_INTEGER)
+
+    expect(tag_chips).toEqual([
+      { label: 'fixture-brand', count: 2, active: false },
+      { label: 'Fixture Brand', count: 1, active: false },
+    ])
+  })
 })

@@ -66,13 +66,19 @@ const route_state = computed(() => getCompactAppStateFromRoute(
   { path: route.path, query: route.query },
   { category_ids: category_ids.value },
 ))
-const compact_view = computed(() => getCompactAppView(
-  all_products.value,
-  route_state.value,
-  runtime_taxonomies.value,
-  runtime_links.value,
-  runtime_guides.value,
-))
+const compact_view = computed(() => {
+  if (runtime_taxonomies.value === undefined || runtime_links.value === undefined || runtime_guides.value === undefined) {
+    throw new Error('Catalog runtime data is not available')
+  }
+
+  return getCompactAppView(
+    all_products.value,
+    route_state.value,
+    runtime_taxonomies.value,
+    runtime_links.value,
+    runtime_guides.value,
+  )
+})
 
 function onCategoryChipClicked(category_id: CompactCategoryChip['id']) {
   router.push({

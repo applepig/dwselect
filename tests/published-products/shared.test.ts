@@ -13,7 +13,7 @@ describe('published products mapping', () => {
       makeProduct({ id: 'archived-product', status: 'archived', name: '封存商品' }),
     ]
 
-    const published_products = getPublishedProducts(products)
+    const published_products = getPublishedProducts(products, test_taxonomies)
 
     expect(published_products).toHaveLength(1)
     expect(published_products[0]?.name).toBe('已上架商品')
@@ -68,8 +68,29 @@ describe('published products mapping', () => {
     })
 
     expect(getCatalogProductId(product)).toBe('2026-06-02-sample-product')
-    expect(getPublishedProducts([product])).toEqual([
+    expect(getPublishedProducts([product], test_taxonomies)).toEqual([
       expect.objectContaining({ id: '2026-06-02-sample-product' }),
     ])
+  })
+
+  it('should resolve product tag labels from taxonomy tags and brands', () => {
+    const products = [
+      makeProduct({
+        id: 'branded-product',
+        status: 'published',
+        name: '品牌商品',
+        tag_ids: ['tag-a', 'fixture-brand'],
+      }),
+    ]
+    const taxonomies = {
+      ...test_taxonomies,
+      brands: [
+        { id: 'fixture-brand', label: 'Fixture Brand', description: '測試品牌', aliases: [], nav_visible: true, sort_order: 10 },
+      ],
+    }
+
+    const published_products = getPublishedProducts(products, taxonomies)
+
+    expect(published_products[0]?.tags).toEqual(['標籤 A', 'Fixture Brand'])
   })
 })

@@ -2,6 +2,7 @@ import { defineCollection, defineContentConfig } from '@nuxt/content'
 
 import {
   category_taxonomy_schema,
+  brand_taxonomy_schema,
   channel_taxonomy_schema,
   guide_schema,
   link_schema,
@@ -40,6 +41,11 @@ export default defineContentConfig({
       type: 'data',
       source: 'taxonomies/tags.json',
       schema: tag_taxonomy_schema,
+    }),
+    brands: defineCollection({
+      type: 'data',
+      source: 'taxonomies/brands.json',
+      schema: brand_taxonomy_schema,
     }),
   },
 })

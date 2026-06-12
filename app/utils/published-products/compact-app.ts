@@ -11,11 +11,9 @@ import type {
   PublishedProductCard,
   TaxonomyDefinitions,
 } from './types'
-import { DEFAULT_TAXONOMIES, getCategorySortOrder, getPublishedProducts } from './shared'
+import { getCategorySortOrder, getPublishedProducts } from './shared'
 import { getPublishedGuides, getPublishedLinks } from './resource-rows'
 import { getTagChips } from './tags'
-
-const PRODUCT_CATEGORY_IDS = new Set<Product['category_id']>(DEFAULT_TAXONOMIES.categories.map((category) => category.id))
 
 const COMPACT_APP_TABS: Array<Omit<CompactAppTab, 'active'>> = [
   { id: 'home', label: '首頁', icon: 'i-lucide-house' },
@@ -24,62 +22,11 @@ const COMPACT_APP_TABS: Array<Omit<CompactAppTab, 'active'>> = [
   { id: 'links', label: '連結', icon: 'i-lucide-link' },
 ]
 
-export const DEFAULT_LINKS: LinkDefinition[] = [
-  {
-    id: '2026-06-02-altwork-station',
-    status: 'published',
-    title: 'Altwork Station',
-    summary: '相信每個人都有「躺著用電腦」的夢想，這個看起來很棒，對吧？  （對不起我不知道怎麼買、也不知道買回來要放哪裡',
-    url: 'https://altwork.com/',
-    icon: 'i-lucide-link',
-    category_ids: ['computer'],
-    tag_ids: ['ergonomic'],
-    sort_order: 30,
-    created_at: '2026-06-02T00:00:00+08:00',
-    updated_at: '2026-06-02T00:00:00+08:00',
-    published_at: '2026-06-02T00:00:00+08:00',
-    unpublished_at: null,
-    archived_at: null,
-  },
-  {
-    id: '2026-06-02-b18',
-    status: 'published',
-    title: 'B18',
-    summary: '光華萬事屋，店面現在擺非常多鍵盤，店內沒有擺的東西也可以問',
-    url: 'https://www.facebook.com/B18TW',
-    icon: 'i-lucide-link',
-    category_ids: ['computer'],
-    tag_ids: [],
-    sort_order: 20,
-    created_at: '2026-06-02T00:00:00+08:00',
-    updated_at: '2026-06-02T00:00:00+08:00',
-    published_at: '2026-06-02T00:00:00+08:00',
-    unpublished_at: null,
-    archived_at: null,
-  },
-  {
-    id: 'applepig-home',
-    status: 'published',
-    title: 'applepig.idv.tw',
-    summary: 'DW 的主站',
-    url: 'https://applepig.idv.tw',
-    icon: 'i-lucide-link',
-    category_ids: ['other'],
-    tag_ids: [],
-    sort_order: 10,
-    created_at: '2026-06-02T00:00:00+08:00',
-    updated_at: '2026-06-02T00:00:00+08:00',
-    published_at: '2026-06-02T00:00:00+08:00',
-    unpublished_at: null,
-    archived_at: null,
-  },
-]
-
 export function getCompactAppView(
   products: Product[],
   state: CompactAppState = {},
-  taxonomies: TaxonomyDefinitions = DEFAULT_TAXONOMIES,
-  links: LinkDefinition[] = DEFAULT_LINKS,
+  taxonomies: TaxonomyDefinitions,
+  links: LinkDefinition[],
   guides: Guide[] = [],
 ): CompactAppView {
   const active_tab = normalizeCompactTab(state.active_tab)
@@ -126,7 +73,7 @@ export function getCompactAppView(
 export function getCompactCategoryOptions(
   products: Product[],
   active_category_id: Product['category_id'] | 'all',
-  taxonomies: TaxonomyDefinitions = DEFAULT_TAXONOMIES,
+  taxonomies: TaxonomyDefinitions,
 ): CompactCategoryChip[] {
   const published_products = products.filter((product) => product.status === 'published')
   const category_counts = new Map<Product['category_id'], number>()
@@ -202,19 +149,11 @@ function parseCategoryId(
     return 'all'
   }
 
-  if (valid_category_ids !== undefined && !valid_category_ids.includes(category_id)) {
-    return 'all'
-  }
-
-  if (!isProductCategoryId(category_id)) {
+  if (valid_category_ids === undefined || !valid_category_ids.includes(category_id)) {
     return 'all'
   }
 
   return category_id
-}
-
-function isProductCategoryId(value: string): value is Product['category_id'] {
-  return PRODUCT_CATEGORY_IDS.has(value as Product['category_id'])
 }
 
 function getFirstQueryValue(value: CompactRouteQueryValue) {

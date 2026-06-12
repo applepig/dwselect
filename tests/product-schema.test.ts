@@ -8,6 +8,7 @@ import {
   guide_schema,
   link_schema,
   product_schema,
+  tag_taxonomy_schema as brand_taxonomy_schema,
   tag_taxonomy_schema,
   validateContentTaxonomyReferences,
 } from '../app/utils/product-schema'
@@ -78,6 +79,7 @@ const links_dir_url = new URL('../content/links/', import.meta.url)
 const taxonomies_dir_url = new URL('../content/taxonomies/', import.meta.url)
 const LEGACY_PLATFORM_TAGS = ['PCHome', 'momo', '日亞', '美亞']
 const LEGACY_ROOT_CATEGORY_TAGS = ['居家', '電腦', '廚房', '3C', '影音', '食材']
+const KEBAB_CASE_ASCII_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/
 
 function readTaxonomy(file_name: string) {
   return JSON.parse(readFileSync(new URL(file_name, taxonomies_dir_url), 'utf8'))
@@ -137,6 +139,27 @@ describe('product schema', () => {
       ...valid_product,
       category_id: 'other',
     })).not.toThrow()
+  })
+
+  it('should accept kebab-case ASCII product category and channel ids without hardcoded enum coupling', () => {
+    expect(() => product_schema.parse({
+      ...valid_product,
+      category_id: 'new-audio-gear',
+      channel_id: 'new-shop-24h',
+    })).not.toThrow()
+  })
+
+  it('should reject malformed product category and channel ids', () => {
+    for (const invalid_id of ['NewCategory', 'new_category', 'new category', '新分類', '-new-category', 'new-category-']) {
+      expect(() => product_schema.parse({
+        ...valid_product,
+        category_id: invalid_id,
+      })).toThrow()
+      expect(() => product_schema.parse({
+        ...valid_product,
+        channel_id: invalid_id,
+      })).toThrow()
+    }
   })
 
   it('should reject status outside allowed enum', () => {
@@ -285,30 +308,24 @@ describe('product schema', () => {
     })).toThrow()
   })
 
-  it('should validate taxonomy content for channels, categories and tags', () => {
+  it('should validate taxonomy content shape, unique ids and sort order', () => {
     const channels = channel_taxonomy_schema.parse(readTaxonomy('channels.json'))
     const categories = category_taxonomy_schema.parse(readTaxonomy('categories.json'))
     const tags = tag_taxonomy_schema.parse(readTaxonomy('tags.json'))
+    const brands = brand_taxonomy_schema.parse(readTaxonomy('brands.json'))
 
-    expect(channels.items.map((channel) => channel.id)).toEqual([
-      'pchome',
-      'momo',
-      'amazonjp',
-      'amazonus',
-      'costco',
-      'other',
-    ])
-    expect(categories.items.map((category) => [category.id, category.label, category.nav_visible, category.sort_order])).toEqual([
-      ['home', '居家', true, 10],
-      ['kitchen', '廚房', true, 20],
-      ['computer', '電腦', true, 30],
-      ['three-c', '3C', true, 40],
-      ['av', '影音', true, 50],
-      ['food', '食材', true, 60],
-      ['other', '其他', true, 999],
-    ])
-    expect(tags.items.length).toBeGreaterThan(0)
-    expect(tags.items.map((tag) => tag.id)).toEqual(tags.items.map((tag) => tag.id).toSorted())
+    expectTaxonomyIdsToBeKebabCaseAndUnique(channels.items)
+    expectTaxonomyIdsToBeKebabCaseAndUnique(categories.items)
+    expectTaxonomyIdsToBeKebabCaseAndUnique(tags.items)
+    expectTaxonomyIdsToBeKebabCaseAndUnique(brands.items)
+    expectTaxonomyIdsNotToCollide(tags.items, brands.items)
+    expectSortOrderToBeAscending(channels.items)
+    expectSortOrderToBeAscending(categories.items)
+    expectSortOrderToBeAscending(tags.items)
+    expectSortOrderToBeAscending(brands.items)
+    expect(categories.items.every((category) => category.label !== '' && category.short_label !== '')).toBe(true)
+    expect(channels.items.every((channel) => channel.label !== '' && channel.tint !== '')).toBe(true)
+    expect(tags.items.every((tag) => tag.label !== '')).toBe(true)
     expect(tags.items).not.toContainEqual(expect.objectContaining({ id: 'PCHome' }))
     expect(tags.items).not.toContainEqual(expect.objectContaining({ id: 'home' }))
   })
@@ -343,6 +360,9 @@ describe('product schema', () => {
       tags: [
         { id: 'tag-a', label: 'Tag A', description: '測試 tag', aliases: [], nav_visible: true, sort_order: 10 },
       ],
+      brands: [
+        { id: 'brand-a', label: 'Brand A', description: '測試 brand', aliases: [], nav_visible: true, sort_order: 10 },
+      ],
     })
 
     expect(reference_violations).toEqual([
@@ -350,6 +370,46 @@ describe('product schema', () => {
       { content_type: 'product', content_id: 'missing-product-references', field: 'tag_ids', value: 'missing-tag' },
       { content_type: 'guide', content_id: 'missing-guide-references', field: 'category_ids', value: 'missing-guide-category' },
       { content_type: 'link', content_id: 'missing-link-references', field: 'tag_ids', value: 'missing-link-tag' },
+    ])
+  })
+
+  it('should allow product tag ids to reference brands but keep guides and links limited to tags', () => {
+    const reference_violations = validateContentTaxonomyReferences({
+      products: [
+        {
+          ...valid_product,
+          id: 'product-with-brand-reference',
+          tag_ids: ['tag-a', 'brand-a'],
+        },
+      ],
+      guides: [
+        {
+          ...valid_guide,
+          id: 'guide-with-brand-reference',
+          tag_ids: ['brand-a'],
+        },
+      ],
+      links: [
+        {
+          ...valid_link,
+          id: 'link-with-brand-reference',
+          tag_ids: ['brand-a'],
+        },
+      ],
+      categories: [
+        { id: 'home', label: '居家', short_label: '居家', nav_visible: true, sort_order: 10 },
+      ],
+      tags: [
+        { id: 'tag-a', label: 'Tag A', description: '測試 tag', aliases: [], nav_visible: true, sort_order: 10 },
+      ],
+      brands: [
+        { id: 'brand-a', label: 'Brand A', description: '測試 brand', aliases: [], nav_visible: true, sort_order: 10 },
+      ],
+    })
+
+    expect(reference_violations).toEqual([
+      { content_type: 'guide', content_id: 'guide-with-brand-reference', field: 'tag_ids', value: 'brand-a' },
+      { content_type: 'link', content_id: 'link-with-brand-reference', field: 'tag_ids', value: 'brand-a' },
     ])
   })
 
@@ -384,6 +444,7 @@ describe('product schema', () => {
     const channels = channel_taxonomy_schema.parse(readTaxonomy('channels.json')).items
     const categories = category_taxonomy_schema.parse(readTaxonomy('categories.json')).items
     const tags = tag_taxonomy_schema.parse(readTaxonomy('tags.json')).items
+    const brands = brand_taxonomy_schema.parse(readTaxonomy('brands.json')).items
 
     for (const entry of product_entries) {
       expect(entry.content.id).toBe(entry.file_stem)
@@ -408,6 +469,7 @@ describe('product schema', () => {
       links: link_entries.map((entry) => entry.content),
       categories,
       tags,
+      brands,
     })).toEqual([])
     expect(new Set(channels.map((channel) => channel.id)).has('other')).toBe(true)
   })
@@ -426,3 +488,25 @@ describe('product schema', () => {
     expect(readContentProductEntries().find((entry) => entry.file_stem === '2026-06-02-三菱重工冷氣')?.content.tag_ids).toEqual([])
   })
 })
+
+function expectTaxonomyIdsToBeKebabCaseAndUnique(items: Array<{ id: string }>) {
+  const ids = items.map((item) => item.id)
+
+  expect(ids.every((id) => KEBAB_CASE_ASCII_PATTERN.test(id))).toBe(true)
+  expect(new Set(ids).size).toBe(ids.length)
+}
+
+function expectSortOrderToBeAscending(items: Array<{ sort_order: number }>) {
+  const sort_orders = items.map((item) => item.sort_order)
+
+  expect(sort_orders).toEqual([...sort_orders].toSorted((left_order, right_order) => left_order - right_order))
+}
+
+function expectTaxonomyIdsNotToCollide(left_items: Array<{ id: string }>, right_items: Array<{ id: string }>) {
+  const left_ids = new Set(left_items.map((item) => item.id))
+  const collision_ids = right_items
+    .map((item) => item.id)
+    .filter((id) => left_ids.has(id))
+
+  expect(collision_ids).toEqual([])
+}

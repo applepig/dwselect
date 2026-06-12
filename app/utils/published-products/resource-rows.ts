@@ -1,11 +1,11 @@
 import type { SearchSuggestion } from '../search/search-index'
 import type { Guide, LinkDefinition } from '../product-schema'
 import type { CompactResourceRow, ResourceRowLinkAttributes, SearchResultSection, TaxonomyDefinitions } from './types'
-import { DEFAULT_TAXONOMIES, compareText, getCategoryDefinition } from './shared'
+import { compareText, getCategoryDefinition } from './shared'
 
 export function getPublishedGuides(
   guides: Guide[],
-  taxonomies: TaxonomyDefinitions = DEFAULT_TAXONOMIES,
+  taxonomies: TaxonomyDefinitions,
 ): CompactResourceRow[] {
   return guides
     .filter((guide) => guide.status === 'published')

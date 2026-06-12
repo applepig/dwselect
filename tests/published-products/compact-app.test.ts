@@ -226,6 +226,49 @@ describe('compact app view state', () => {
     expect(compact_view.home.products.map((product) => product.id)).toEqual(['other-product'])
   })
 
+  it('should accept newly added taxonomy categories and brands without production code changes', () => {
+    const taxonomies: TaxonomyDefinitions = {
+      ...test_taxonomies,
+      categories: [
+        ...test_taxonomies.categories,
+        { id: 'audio-gear', label: '音響器材', short_label: '音響', nav_visible: true, sort_order: 35 },
+        { id: 'empty-new-category', label: '空新分類', short_label: '空分類', nav_visible: true, sort_order: 36 },
+      ],
+      brands: [
+        { id: 'fixture-brand', label: 'Fixture Brand', description: '測試品牌', aliases: [], nav_visible: true, sort_order: 10 },
+      ],
+    }
+    const products = [
+      makeProduct({
+        id: 'audio-product',
+        status: 'published',
+        name: '新分類商品',
+        category_id: 'audio-gear',
+        tag_ids: ['fixture-brand'],
+      }),
+    ]
+    const route_state = getCompactAppStateFromRoute(
+      { path: '/', query: { category: 'audio-gear' } },
+      { category_ids: taxonomies.categories.map((category) => category.id) },
+    )
+
+    const compact_view = getCompactAppView(products, route_state, taxonomies, test_links, test_guides)
+
+    expect(route_state.home_category_id).toBe('audio-gear')
+    expect(compact_view.home.category_chips).toEqual([
+      { id: 'all', label: '全部', count: 1, active: false },
+      { id: 'audio-gear', label: '音響', count: 1, active: true },
+    ])
+    expect(compact_view.home.category_chips.map((chip) => chip.id)).not.toContain('empty-new-category')
+    expect(compact_view.home.products).toEqual([
+      expect.objectContaining({
+        id: 'audio-product',
+        category: '音響器材',
+        tags: ['Fixture Brand'],
+      }),
+    ])
+  })
+
   it('should expose only published link resources with safe external link attributes', () => {
     const compact_view = getCompactView([], {}, [
       ...test_links,
@@ -286,6 +329,24 @@ describe('route-driven compact app state', () => {
     expect(getCompactAppStateFromRoute({ path: '/search', query: { q: '  機械鍵盤  ' } })).toEqual({
       active_tab: 'search',
       search_query: '機械鍵盤',
+    })
+  })
+
+  it('should parse category ids from caller supplied taxonomy ids only', () => {
+    expect(getCompactAppStateFromRoute(
+      { path: '/', query: { category: 'audio-gear' } },
+      { category_ids: ['home', 'audio-gear'] },
+    )).toEqual({
+      active_tab: 'home',
+      home_category_id: 'audio-gear',
+    })
+
+    expect(getCompactAppStateFromRoute(
+      { path: '/', query: { category: 'audio-gear' } },
+      { category_ids: ['home'] },
+    )).toEqual({
+      active_tab: 'home',
+      home_category_id: 'all',
     })
   })
 

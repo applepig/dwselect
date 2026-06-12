@@ -147,4 +147,23 @@ describe('product detail mapping', () => {
 
     expect(getRelatedProductCards(current_product, products, test_taxonomies)).toEqual([])
   })
+
+  it('should resolve product detail tag labels from taxonomy tags and brands', () => {
+    const product = makeProduct({
+      id: 'brand-detail-product',
+      status: 'published',
+      name: '品牌詳情商品',
+      tag_ids: ['typing', 'fixture-brand'],
+    })
+    const taxonomies = {
+      ...test_taxonomies,
+      brands: [
+        { id: 'fixture-brand', label: 'Fixture Brand', description: '測試品牌', aliases: [], nav_visible: true, sort_order: 10 },
+      ],
+    }
+
+    const detail = getProductDetail(product, taxonomies)
+
+    expect(detail.tags).toEqual(['輸入', 'Fixture Brand'])
+  })
 })

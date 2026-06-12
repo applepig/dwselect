@@ -24,6 +24,10 @@ const product_detail = computed(() => {
     return null
   }
 
+  if (runtime_taxonomies.value === undefined) {
+    throw new Error('Catalog runtime taxonomies are not available')
+  }
+
   return {
     ...getProductDetail(product.value, runtime_taxonomies.value),
     related_products: getRelatedProductCards(product.value, all_products.value, runtime_taxonomies.value),

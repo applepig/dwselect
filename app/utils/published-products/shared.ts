@@ -1,55 +1,9 @@
 import type { Product } from '../product-schema'
 import type { PublishedProductCard, TaxonomyDefinitions } from './types'
 
-export const DEFAULT_TAXONOMIES: TaxonomyDefinitions = {
-  categories: [
-    { id: 'home', label: '居家', short_label: '居家', nav_visible: true, sort_order: 10 },
-    { id: 'kitchen', label: '廚房', short_label: '廚房', nav_visible: true, sort_order: 20 },
-    { id: 'computer', label: '電腦', short_label: '電腦', nav_visible: true, sort_order: 30 },
-    { id: 'three-c', label: '3C', short_label: '3C', nav_visible: true, sort_order: 40 },
-    { id: 'av', label: '影音', short_label: '影音', nav_visible: true, sort_order: 50 },
-    { id: 'food', label: '食材', short_label: '食材', nav_visible: true, sort_order: 60 },
-    { id: 'other', label: '其他', short_label: '其他', nav_visible: true, sort_order: 999 },
-  ],
-  channels: [
-    { id: 'pchome', label: 'PChome', tint: 'blue', host_patterns: ['24h.pchome.com.tw'], sort_order: 10 },
-    { id: 'momo', label: 'momo', tint: 'pink', host_patterns: ['www.momoshop.com.tw'], sort_order: 20 },
-    { id: 'amazonjp', label: 'Amazon JP', tint: 'amber', host_patterns: ['www.amazon.co.jp', 'amzn.asia'], sort_order: 30 },
-    { id: 'amazonus', label: 'Amazon US', tint: 'amber', host_patterns: ['www.amazon.com'], sort_order: 40 },
-    { id: 'costco', label: 'Costco', tint: 'indigo', host_patterns: ['www.costco.com.tw'], sort_order: 50 },
-    { id: 'other', label: '其他通路', tint: 'neutral', host_patterns: [], sort_order: 999 },
-  ],
-  tags: [
-    {
-      id: 'display',
-      label: '顯示設備',
-      description: '螢幕、電視與影像顯示相關屬性。',
-      aliases: ['電視', '螢幕'],
-      nav_visible: true,
-      sort_order: 10,
-    },
-    {
-      id: 'ergonomic',
-      label: '人體工學',
-      description: '人體工學、坐姿、工作站與長時間使用舒適度相關屬性。',
-      aliases: ['人體工學', '電腦椅'],
-      nav_visible: true,
-      sort_order: 20,
-    },
-    {
-      id: 'rice',
-      label: '米食',
-      description: '白米、糙米、米飯料理與米類研究相關屬性。',
-      aliases: ['米'],
-      nav_visible: true,
-      sort_order: 30,
-    },
-  ],
-}
-
 export function getPublishedProducts(
   products: Product[],
-  taxonomies: TaxonomyDefinitions = DEFAULT_TAXONOMIES,
+  taxonomies: TaxonomyDefinitions,
 ): PublishedProductCard[] {
   return products
     .filter((product) => product.status === 'published')
@@ -74,7 +28,7 @@ export function mapProductToCard(product: Product, taxonomies: TaxonomyDefinitio
     purchase_link: product.purchase_url,
     published_at: product.published_at,
     summary: product.summary,
-    tags: getTagLabels(product.tag_ids, taxonomies),
+    tags: getProductTagLabels(product.tag_ids, taxonomies),
   }
 }
 
@@ -156,12 +110,18 @@ function compareNullableTimestampDesc(left_value: string | null, right_value: st
   return right_value.localeCompare(left_value)
 }
 
-function getTagLabels(tag_ids: string[], taxonomies: TaxonomyDefinitions) {
-  return tag_ids.map((tag_id) => getTagLabel(tag_id, taxonomies))
+export function getProductTagLabels(tag_ids: string[], taxonomies: TaxonomyDefinitions) {
+  return tag_ids.map((tag_id) => getProductTagLabel(tag_id, taxonomies))
 }
 
-function getTagLabel(tag_id: string, taxonomies: TaxonomyDefinitions) {
-  return taxonomies.tags?.find((tag) => tag.id === tag_id)?.label ?? tag_id
+export function getProductTagLabel(tag_id: string, taxonomies: TaxonomyDefinitions) {
+  return taxonomies.tags.find((tag) => tag.id === tag_id)?.label
+    ?? taxonomies.brands.find((brand) => brand.id === tag_id)?.label
+    ?? tag_id
+}
+
+export function getContentTagLabel(tag_id: string, taxonomies: TaxonomyDefinitions) {
+  return taxonomies.tags.find((tag) => tag.id === tag_id)?.label ?? tag_id
 }
 
 function getProductCardId(product: Pick<Product, 'id'>): string {

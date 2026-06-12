@@ -90,11 +90,17 @@ const nav_items = [
   { id: 'search', label: '搜尋', icon: 'i-lucide-search', to: '/search' },
 ]
 const desktop_route_items = nav_items.filter((item) => item.id !== 'home')
-const desktop_category_items = computed(() => getCompactCategoryOptions(
-  all_products.value,
-  getActiveCategoryId(),
-  runtime_taxonomies.value,
-))
+const desktop_category_items = computed(() => {
+  if (runtime_taxonomies.value === undefined) {
+    return []
+  }
+
+  return getCompactCategoryOptions(
+    all_products.value,
+    getActiveCategoryId(),
+    runtime_taxonomies.value,
+  )
+})
 
 function isRouteActive(path: string) {
   return route.path === path

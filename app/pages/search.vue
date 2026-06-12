@@ -118,20 +118,22 @@ const {
   submitted_search_query,
   navigateToSearch,
 })
-const compact_all_tags = computed(() => getTagChips(
-  {
-    products: all_products.value,
-    guides: runtime_guides.value ?? [],
-    links: runtime_links.value ?? [],
-  },
-  [],
-  runtime_taxonomies.value ?? {
-    categories: [],
-    channels: [],
-    tags: [],
-  },
-  Number.MAX_SAFE_INTEGER,
-))
+const compact_all_tags = computed(() => {
+  if (runtime_taxonomies.value === undefined) {
+    return []
+  }
+
+  return getTagChips(
+    {
+      products: all_products.value,
+      guides: runtime_guides.value ?? [],
+      links: runtime_links.value ?? [],
+    },
+    [],
+    runtime_taxonomies.value,
+    Number.MAX_SAFE_INTEGER,
+  )
+})
 const search_results = computed(() => client_search_results.value)
 const search_result_sections = computed(() => getSearchResultSections(search_results.value))
 const search_empty_reason = computed(() => {

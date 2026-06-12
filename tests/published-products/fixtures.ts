@@ -54,6 +54,7 @@ export const test_taxonomies: TaxonomyDefinitions = {
     { id: 'wireless', label: '無線', description: '無線設備', aliases: [], nav_visible: true, sort_order: 30 },
     { id: 'shared-token', label: '共同關鍵字', description: '共同關鍵字', aliases: [], nav_visible: true, sort_order: 40 },
   ] satisfies TagDefinition[],
+  brands: [],
 }
 
 export const test_links: LinkDefinition[] = [

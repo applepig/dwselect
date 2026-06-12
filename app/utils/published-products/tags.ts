@@ -1,6 +1,6 @@
 import type { Guide, LinkDefinition, Product } from '../product-schema'
 import type { CompactTagChip, TaxonomyDefinitions } from './types'
-import { compareText } from './shared'
+import { compareText, getContentTagLabel, getProductTagLabel } from './shared'
 
 export function getTagChips(
   content: {
@@ -15,10 +15,9 @@ export function getTagChips(
   const selected_tag_set = new Set(selected_tags)
   const tag_counts = new Map<string, number>()
 
-  for (const tag_id of getPublishedContentTagIds(content)) {
-    const label = getTagLabel(tag_id, taxonomies)
-    tag_counts.set(label, (tag_counts.get(label) ?? 0) + 1)
-  }
+  addTagCounts(tag_counts, getPublishedProductTagIds(content.products), (tag_id) => getProductTagLabel(tag_id, taxonomies))
+  addTagCounts(tag_counts, getPublishedGuideTagIds(content.guides), (tag_id) => getContentTagLabel(tag_id, taxonomies))
+  addTagCounts(tag_counts, getPublishedLinkTagIds(content.links), (tag_id) => getContentTagLabel(tag_id, taxonomies))
 
   return Array.from(tag_counts, ([label, count]) => ({
     label,
@@ -33,24 +32,31 @@ export function getTagChips(
   }).slice(0, max_count)
 }
 
-function getPublishedContentTagIds(content: {
-  products: Product[]
-  guides: Guide[]
-  links: LinkDefinition[]
-}) {
-  return [
-    ...content.products
-      .filter((product) => product.status === 'published')
-      .flatMap((product) => product.tag_ids),
-    ...content.guides
-      .filter((guide) => guide.status === 'published')
-      .flatMap((guide) => guide.tag_ids),
-    ...content.links
-      .filter((link) => link.status === 'published')
-      .flatMap((link) => link.tag_ids),
-  ]
+function addTagCounts(
+  tag_counts: Map<string, number>,
+  tag_ids: string[],
+  get_label: (tag_id: string) => string,
+) {
+  for (const tag_id of tag_ids) {
+    const label = get_label(tag_id)
+    tag_counts.set(label, (tag_counts.get(label) ?? 0) + 1)
+  }
 }
 
-function getTagLabel(tag_id: string, taxonomies: TaxonomyDefinitions) {
-  return taxonomies.tags?.find((tag) => tag.id === tag_id)?.label ?? tag_id
+function getPublishedProductTagIds(products: Product[]) {
+  return products
+    .filter((product) => product.status === 'published')
+    .flatMap((product) => product.tag_ids)
+}
+
+function getPublishedGuideTagIds(guides: Guide[]) {
+  return guides
+    .filter((guide) => guide.status === 'published')
+    .flatMap((guide) => guide.tag_ids)
+}
+
+function getPublishedLinkTagIds(links: LinkDefinition[]) {
+  return links
+    .filter((link) => link.status === 'published')
+    .flatMap((link) => link.tag_ids)
 }

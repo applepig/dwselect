@@ -1,13 +1,13 @@
 import { z } from 'zod'
 
 const TIMESTAMP_PATTERN = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}[+-]\d{2}:\d{2}$/
-export const CATEGORY_IDS = ['home', 'kitchen', 'computer', 'three-c', 'av', 'food', 'other'] as const
-export const CHANNEL_IDS = ['pchome', 'momo', 'amazonjp', 'amazonus', 'costco', 'other'] as const
+const KEBAB_CASE_ASCII_ID_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/
 
 const content_status_schema = z.enum(['draft', 'published', 'unpublished', 'archived'])
-const category_id_schema = z.enum(CATEGORY_IDS)
-const channel_id_schema = z.enum(CHANNEL_IDS)
-const tag_id_schema = z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, 'must be a kebab-case ASCII tag id')
+const taxonomy_id_schema = z.string().regex(KEBAB_CASE_ASCII_ID_PATTERN, 'must be a kebab-case ASCII taxonomy id')
+const category_id_schema = taxonomy_id_schema
+const channel_id_schema = taxonomy_id_schema
+const tag_id_schema = taxonomy_id_schema
 
 const http_url_schema = z.string().refine((value) => {
   try {
@@ -155,6 +155,7 @@ export const legacy_link_taxonomy_schema = z.object({
 export const tag_taxonomy_schema = z.object({
   items: z.array(tag_definition_schema),
 }).strict()
+export const brand_taxonomy_schema = tag_taxonomy_schema
 
 export type ContentTypeWithTaxonomyReferences = 'product' | 'guide' | 'link'
 
@@ -171,11 +172,16 @@ export type ContentTaxonomyReferenceInput = {
   links?: Array<{ id: string, category_ids: string[], tag_ids: string[] }>
   categories: Array<Pick<CategoryDefinition, 'id'>>
   tags: Array<Pick<TagDefinition, 'id'>>
+  brands?: Array<Pick<TagDefinition, 'id'>>
 }
 
 export function validateContentTaxonomyReferences(input: ContentTaxonomyReferenceInput): ContentTaxonomyReferenceViolation[] {
   const category_ids = new Set<string>(input.categories.map((category) => category.id))
   const tag_ids = new Set(input.tags.map((tag) => tag.id))
+  const product_tag_ids = new Set([
+    ...input.tags.map((tag) => tag.id),
+    ...(input.brands ?? []).map((brand) => brand.id),
+  ])
   const violations: ContentTaxonomyReferenceViolation[] = []
 
   for (const product of input.products ?? []) {
@@ -188,7 +194,7 @@ export function validateContentTaxonomyReferences(input: ContentTaxonomyReferenc
       })
     }
 
-    addMissingTagViolations(violations, 'product', product.id, product.tag_ids, tag_ids)
+    addMissingTagViolations(violations, 'product', product.id, product.tag_ids, product_tag_ids)
   }
 
   for (const guide of input.guides ?? []) {

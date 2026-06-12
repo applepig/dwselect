@@ -1,10 +1,10 @@
 import type { Product } from '../product-schema'
 import type { ProductDetailView, PublishedProductCard, TaxonomyDefinitions } from './types'
-import { DEFAULT_TAXONOMIES, compareText, getCategoryDefinition, getChannelDefinition, mapProductToCard } from './shared'
+import { compareText, getCategoryDefinition, getChannelDefinition, getProductTagLabels, mapProductToCard } from './shared'
 
 export function getProductDetail(
   product: Product,
-  taxonomies: TaxonomyDefinitions = DEFAULT_TAXONOMIES,
+  taxonomies: TaxonomyDefinitions,
 ): ProductDetailView {
   const channel_definition = getChannelDefinition(product.channel_id, taxonomies)
   const category_definition = getCategoryDefinition(product.category_id, taxonomies)
@@ -21,7 +21,7 @@ export function getProductDetail(
     price_label,
     dw_says: product.summary,
     description: product.description === product.summary ? null : product.description,
-    tags: getTagLabels(product.tag_ids, taxonomies),
+    tags: getProductTagLabels(product.tag_ids, taxonomies),
     buy_cta: {
       label: `到 ${channel_definition.label} 購買`,
       href: product.purchase_url,
@@ -36,7 +36,7 @@ export function getProductDetail(
 export function getRelatedProductCards(
   current_product: Product,
   products: Product[],
-  taxonomies: TaxonomyDefinitions = DEFAULT_TAXONOMIES,
+  taxonomies: TaxonomyDefinitions,
 ): PublishedProductCard[] {
   const current_product_id = getCatalogProductId(current_product)
 
@@ -106,12 +106,4 @@ function compareNullableTimestampDesc(left_value: string | null, right_value: st
   }
 
   return right_value.localeCompare(left_value)
-}
-
-function getTagLabels(tag_ids: string[], taxonomies: TaxonomyDefinitions) {
-  return tag_ids.map((tag_id) => getTagLabel(tag_id, taxonomies))
-}
-
-function getTagLabel(tag_id: string, taxonomies: TaxonomyDefinitions) {
-  return taxonomies.tags?.find((tag) => tag.id === tag_id)?.label ?? tag_id
 }
