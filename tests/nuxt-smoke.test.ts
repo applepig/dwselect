@@ -137,7 +137,8 @@ describe('Nuxt SSG baseline', () => {
     expect(page_source).toContain('目前沒有已上架商品')
     expect(page_source).toContain('目前沒有已發布指南')
     expect(page_source).toContain('目前沒有已發布連結')
-    expect(page_source).toContain('熱門 tag')
+    expect(page_source).toContain('熱門標籤')
+    expect(page_source).toContain('熱門品牌')
     expect(page_source).toContain('沒這個坑，去許願吧')
   })
 

@@ -28,7 +28,7 @@
     <SearchIdlePanel
       v-else-if="search_mode === 'idle'"
       :history_items="history_items"
-      :compact_all_tags="compact_all_tags"
+      :popular_search_tags="popular_search_tags"
       @history-clicked="submitSearch"
       @tag-clicked="saveSearchHistoryItem"
       @clear-history="clearSearchHistoryItems"
@@ -89,7 +89,7 @@ import SearchSuggestionList from '../components/search/search-suggestion-list.vu
 import { useSearchPage } from '../composables/use-search-page'
 import { getCompactAppStateFromRoute } from '../utils/published-products/compact-app'
 import { getSearchResultSections } from '../utils/published-products/resource-rows'
-import { getTagChips } from '../utils/published-products/tags'
+import { getPopularSearchTagGroups } from '../utils/published-products/tags'
 import type { SearchSuggestion } from '../utils/search/search-index'
 
 const route = useRoute()
@@ -118,20 +118,18 @@ const {
   submitted_search_query,
   navigateToSearch,
 })
-const compact_all_tags = computed(() => {
+const popular_search_tags = computed(() => {
   if (runtime_taxonomies.value === undefined) {
-    return []
+    return { tags: [], brands: [] }
   }
 
-  return getTagChips(
+  return getPopularSearchTagGroups(
     {
       products: all_products.value,
       guides: runtime_guides.value ?? [],
       links: runtime_links.value ?? [],
     },
-    [],
     runtime_taxonomies.value,
-    Number.MAX_SAFE_INTEGER,
   )
 })
 const search_results = computed(() => client_search_results.value)

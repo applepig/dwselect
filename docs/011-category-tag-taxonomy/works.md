@@ -193,3 +193,30 @@
 - `pnpm test:e2e`：通過（51 passed / 6 skipped）。
 - `pnpm generate`：通過（67 search documents；prerendered 141 routes；保留既有 sourcemap / Rollup PURE comment warnings）。
 - `node scripts/assert-runtime-google-sheet-clean.ts`：通過。
+
+## 2026-06-13：搜尋 idle 熱門標籤／品牌分組 follow-up
+
+### 需求
+
+- 搜尋 idle 頁原本把一般 tags 與 brands 混在同一個「熱門 tag」區塊，調整為「熱門標籤」與「熱門品牌」兩個區塊。
+- 兩個區塊各自只顯示 `count > 3` 的項目，且各自最多 10 個。
+
+### 實作
+
+- 新增 `getPopularSearchTagGroups()`，使用 taxonomy id 將一般 tags 與 brands 分開計數；brands 只從 published products 計數，guides / links 仍只套用一般 tags。
+- `SearchIdlePanel` 改吃 `popular_search_tags` 分組資料，依序顯示「熱門標籤」與「熱門品牌」，空分組不渲染。
+- `search.vue` 改用搜尋 idle 專用 helper，避免原本 `getTagChips()` 的全量 chips 行為影響其他頁面。
+
+### 測試
+
+- `tests/published-products/tags.test.ts` 新增 unit coverage，驗證分組、`count > 3`、每組 max limit 與 draft content 排除。
+- `tests/e2e/compact-app.spec.ts` 更新搜尋 idle regression，驗證兩個 heading、每組最多 10 個、所有 chip count 大於 3，並保留點擊 chip 送出搜尋的行為。
+- `tests/nuxt-smoke.test.ts` 同步新文案。
+
+### 驗證
+
+- `pnpm test tests/published-products/tags.test.ts tests/published-products/compact-app.test.ts`：通過（2 files / 21 tests）。
+- `pnpm test:e2e --project=desktop tests/e2e/compact-app.spec.ts -g "separates search typing"`：通過（1 passed）。
+- `pnpm test`：通過（25 files / 188 tests）。
+- `pnpm lint`：通過。
+- `pnpm typecheck`：通過。

@@ -13,7 +13,7 @@ import type {
 } from './types'
 import { getCategorySortOrder, getPublishedProducts } from './shared'
 import { getPublishedGuides, getPublishedLinks } from './resource-rows'
-import { getTagChips } from './tags'
+import { getPopularSearchTagGroups, getTagChips } from './tags'
 
 const COMPACT_APP_TABS: Array<Omit<CompactAppTab, 'active'>> = [
   { id: 'home', label: '首頁', icon: 'i-lucide-house' },
@@ -36,6 +36,7 @@ export function getCompactAppView(
   const published_cards = getPublishedProducts(products, taxonomies)
   const selected_tags = getNormalizedSelectedTags(state.selected_tags)
   const top_tags = getTagChips({ products, guides, links }, selected_tags, taxonomies, 10)
+  const popular_search_tags = getPopularSearchTagGroups({ products, guides, links }, taxonomies)
   const home_products = selected_category_id === 'all'
     ? published_cards
     : published_cards.filter((product) => product.category_id === selected_category_id)
@@ -49,6 +50,7 @@ export function getCompactAppView(
     })),
     active_tab,
     top_tags,
+    popular_search_tags,
     home: {
       category_chips: getCompactCategoryOptions(published_products, selected_category_id, taxonomies),
       products: home_products,

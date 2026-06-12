@@ -29,36 +29,59 @@
       </div>
     </div>
 
-    <div class="search-empty-panel search-popular-panel">
-      <p class="empty-title">
-        熱門 tag
-      </p>
-      <div class="tag-chip-list">
-        <NuxtLink
-          v-for="tag in compact_all_tags"
-          :key="`search-tag-${tag.label}`"
-          :to="{ path: '/search', query: { q: tag.label } }"
-          class="tag-chip"
-          @click="$emit('tag-clicked', tag.label)"
-        >
-          <span>{{ tag.label }}</span>
-          <span class="tag-count">{{ tag.count }}</span>
-        </NuxtLink>
+    <div
+      v-if="popular_search_sections.length > 0"
+      class="search-empty-panel search-popular-panel"
+    >
+      <div
+        v-for="section in popular_search_sections"
+        :key="section.id"
+        class="search-popular-section"
+        :data-section-id="section.id"
+      >
+        <p class="empty-title">
+          {{ section.title }}
+        </p>
+        <div class="tag-chip-list">
+          <NuxtLink
+            v-for="tag in section.tags"
+            :key="`search-${section.id}-${tag.label}`"
+            :to="{ path: '/search', query: { q: tag.label } }"
+            class="tag-chip"
+            @click="$emit('tag-clicked', tag.label)"
+          >
+            <span>{{ tag.label }}</span>
+            <span class="tag-count">{{ tag.count }}</span>
+          </NuxtLink>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import type { CompactTagChip } from '../../utils/published-products/types'
+import type { CompactSearchTagGroups } from '../../utils/published-products/types'
 
-defineProps<{
+const props = defineProps<{
   history_items: string[]
-  compact_all_tags: CompactTagChip[]
+  popular_search_tags: CompactSearchTagGroups
 }>()
 defineEmits<{
   'history-clicked': [query: string]
   'tag-clicked': [tag: string]
   'clear-history': []
 }>()
+
+const popular_search_sections = computed(() => [
+  {
+    id: 'tags',
+    title: '熱門標籤',
+    tags: props.popular_search_tags.tags,
+  },
+  {
+    id: 'brands',
+    title: '熱門品牌',
+    tags: props.popular_search_tags.brands,
+  },
+].filter((section) => section.tags.length > 0))
 </script>

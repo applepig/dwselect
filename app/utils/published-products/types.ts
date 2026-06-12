@@ -87,6 +87,11 @@ export type CompactTagChip = {
   active: boolean
 }
 
+export type CompactSearchTagGroups = {
+  tags: CompactTagChip[]
+  brands: CompactTagChip[]
+}
+
 export type CompactResourceRow = {
   id: string
   type: 'product' | 'guide' | 'link'
@@ -124,6 +129,7 @@ export type CompactAppView = {
   tabs: CompactAppTab[]
   active_tab: CompactAppTabId
   top_tags: CompactTagChip[]
+  popular_search_tags: CompactSearchTagGroups
   home: {
     category_chips: CompactCategoryChip[]
     products: PublishedProductCard[]
