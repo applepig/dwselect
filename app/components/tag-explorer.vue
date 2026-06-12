@@ -39,7 +39,7 @@
 </template>
 
 <script setup lang="ts">
-import type { CompactTagChip } from '../utils/published-products'
+import type { CompactTagChip } from '../utils/published-products/types'
 
 defineProps<{
   tags: CompactTagChip[]

@@ -1,5 +1,5 @@
 import type { CategoryDefinition, ChannelDefinition, Guide, LinkDefinition, Product, TagDefinition } from '../utils/product-schema'
-import type { TaxonomyDefinitions } from '../utils/published-products'
+import type { TaxonomyDefinitions } from '../utils/published-products/types'
 
 export async function useCatalogData() {
   const products_request = useAsyncData('published-products', () => queryCollection('products')

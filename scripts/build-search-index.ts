@@ -73,29 +73,20 @@ async function readLinks(links_dir: string): Promise<LinkDefinition[]> {
 }
 
 async function readTaxonomies(taxonomies_dir: string): Promise<{
-  categories?: CategoryDefinition[]
-  channels?: ChannelDefinition[]
-  tags?: TagDefinition[]
+  categories: CategoryDefinition[]
+  channels: ChannelDefinition[]
+  tags: TagDefinition[]
 }> {
-  try {
-    const [category_source, channel_source, tag_source] = await Promise.all([
-      readFile(join(taxonomies_dir, 'categories.json'), 'utf8'),
-      readFile(join(taxonomies_dir, 'channels.json'), 'utf8'),
-      readFile(join(taxonomies_dir, 'tags.json'), 'utf8'),
-    ])
+  const [category_source, channel_source, tag_source] = await Promise.all([
+    readFile(join(taxonomies_dir, 'categories.json'), 'utf8'),
+    readFile(join(taxonomies_dir, 'channels.json'), 'utf8'),
+    readFile(join(taxonomies_dir, 'tags.json'), 'utf8'),
+  ])
 
-    return {
-      categories: category_taxonomy_schema.parse(JSON.parse(category_source)).items,
-      channels: channel_taxonomy_schema.parse(JSON.parse(channel_source)).items,
-      tags: tag_taxonomy_schema.parse(JSON.parse(tag_source)).items,
-    }
-  }
-  catch (error) {
-    if (isMissingFileError(error)) {
-      return {}
-    }
-
-    throw error
+  return {
+    categories: category_taxonomy_schema.parse(JSON.parse(category_source)).items,
+    channels: channel_taxonomy_schema.parse(JSON.parse(channel_source)).items,
+    tags: tag_taxonomy_schema.parse(JSON.parse(tag_source)).items,
   }
 }
 

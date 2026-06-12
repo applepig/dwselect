@@ -77,8 +77,8 @@
 </template>
 
 <script setup lang="ts">
-import type { CompactCategoryChip } from '../utils/published-products'
-import { getCompactCategoryOptions } from '../utils/published-products'
+import type { CompactCategoryChip } from '../utils/published-products/types'
+import { getCompactCategoryOptions } from '../utils/published-products/compact-app'
 
 const route = useRoute()
 const { all_products, runtime_taxonomies } = await useCatalogData()

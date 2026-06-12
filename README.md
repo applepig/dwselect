@@ -34,18 +34,18 @@ pnpm build:search-index
 
 Google Sheets TSV 只作為 legacy migration input 或參考來源，不應在公開站 client/runtime fetch。
 
-`scripts/migrate-google-sheet-products.ts` 已 deprecated，僅保留給 cutover 前 legacy 資料追溯與測試，不是新版 product content importer。008 之後的公開內容以 Git-backed `content/products/*.json`、`content/guides/*.json`、`content/links/*.json` 與 taxonomy files 為 SSOT。
+`scripts/legacy/migrate-google-sheet-products.ts` 已 deprecated，僅保留給 cutover 前 legacy 資料追溯與測試，不是新版 product content importer。008 之後的公開內容以 Git-backed `content/products/*.json`、`content/guides/*.json`、`content/links/*.json` 與 taxonomy files 為 SSOT。
 
 如需追溯 cutover 流程，可參考一次性 content domain migration script：
 
 ```bash
-node scripts/migrate-content-domain-taxonomy.ts
+node scripts/legacy/migrate-content-domain-taxonomy.ts
 ```
 
 legacy Google Sheets importer 的歷史用法如下；不要用它建立新內容：
 
 ```bash
-node scripts/migrate-google-sheet-products.ts legacy/products.tsv --date 2026-06-02
+node scripts/legacy/migrate-google-sheet-products.ts legacy/products.tsv --date 2026-06-02
 ```
 
 ## Static generate

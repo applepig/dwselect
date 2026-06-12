@@ -1,7 +1,7 @@
 import { readFile, readdir, writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
 
-import { product_schema, type Product } from '../app/utils/product-schema.ts'
+import { product_schema, type Product } from '../../app/utils/product-schema.ts'
 
 type LegacyProduct = Omit<Product, 'price' | 'summary' | 'channel_id' | 'category_id' | 'tag_ids'> & {
   category: string

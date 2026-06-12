@@ -5,7 +5,7 @@ import {
   getMigratedCategoryId,
   inferChannelId,
   parseProductPrice,
-} from '../scripts/migrate-product-compact-schema'
+} from '../scripts/legacy/migrate-product-compact-schema'
 
 const legacy_product = {
   id: 'sample-product',

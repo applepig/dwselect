@@ -23,6 +23,7 @@ services:
       - "traefik.http.routers.dwselect.entrypoints=websecure"
       - "traefik.http.routers.dwselect.tls=true"
       - "traefik.http.services.dwselect.loadbalancer.server.port=3000"
+      - "traefik.docker.network=web"
     networks:
       - web
 

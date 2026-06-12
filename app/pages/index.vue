@@ -55,8 +55,8 @@
 </template>
 
 <script setup lang="ts">
-import type { CompactCategoryChip } from '../utils/published-products'
-import { getCompactAppStateFromRoute, getCompactAppView } from '../utils/published-products'
+import type { CompactCategoryChip } from '../utils/published-products/types'
+import { getCompactAppStateFromRoute, getCompactAppView } from '../utils/published-products/compact-app'
 
 const route = useRoute()
 const router = useRouter()

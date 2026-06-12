@@ -24,6 +24,16 @@ export default defineNuxtConfig({
   compatibilityDate: '2026-06-05',
   nitro: {
     preset: 'static',
+    publicAssets: [
+      {
+        dir: fileURLToPath(new URL('./content/products/images/', import.meta.url)),
+        baseURL: '/images/products',
+      },
+      {
+        dir: fileURLToPath(new URL('./content/guides/images/', import.meta.url)),
+        baseURL: '/images/guides',
+      },
+    ],
     prerender: {
       routes: [
         '/',

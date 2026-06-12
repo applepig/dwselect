@@ -51,8 +51,8 @@
 import type { Component } from 'vue'
 import { resolveComponent } from 'vue'
 
-import type { CompactResourceRow } from '../utils/published-products'
-import { getResourceRowLinkAttributes } from '../utils/published-products'
+import type { CompactResourceRow } from '../utils/published-products/types'
+import { getResourceRowLinkAttributes } from '../utils/published-products/resource-rows'
 
 withDefaults(defineProps<{
   rows: CompactResourceRow[]

@@ -27,7 +27,7 @@
 </template>
 
 <script setup lang="ts">
-import { getCompactAppView } from '../utils/published-products'
+import { getCompactAppView } from '../utils/published-products/compact-app'
 
 const { all_products, runtime_taxonomies, runtime_links } = await useCatalogData()
 const compact_view = computed(() => getCompactAppView(

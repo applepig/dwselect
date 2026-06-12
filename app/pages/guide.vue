@@ -32,7 +32,7 @@
 </template>
 
 <script setup lang="ts">
-import { getCompactAppStateFromRoute, getCompactAppView } from '../utils/published-products'
+import { getCompactAppStateFromRoute, getCompactAppView } from '../utils/published-products/compact-app'
 
 const route = useRoute()
 const { all_products, runtime_taxonomies, runtime_guides, runtime_links } = await useCatalogData()

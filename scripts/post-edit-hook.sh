@@ -18,8 +18,13 @@ case "$file_path" in
   *) abs_path="$PWD/$file_path" ;;
 esac
 
+case "$abs_path" in
+  "$project_root"/*) lint_path="${abs_path#$project_root/}" ;;
+  *) lint_path="$abs_path" ;;
+esac
+
 lint_output="$(mktemp)"
-(cd "$project_root" && pnpm --silent lint:file -- "$abs_path" >"$lint_output" 2>&1)
+(cd "$project_root" && pnpm --silent exec eslint --fix --max-warnings=0 --no-ignore "$lint_path" >"$lint_output" 2>&1)
 lint_status="$?"
 
 if [ "$lint_status" -eq 0 ]; then

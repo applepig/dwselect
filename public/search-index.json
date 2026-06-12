@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generated_at": "2026-06-10T05:55:15.076Z",
+  "generated_at": "2026-06-12T14:48:33.317Z",
   "documents": [
     {
       "document_id": "product:2026-06-02-adata-行動電源",
@@ -16,7 +16,7 @@
       ],
       "tag_ids": [],
       "tag_labels": [],
-      "image_url": "https://cs-a.ecimg.tw/items/DYAO44A900HC1WQ/yt000001_1711341252.jpg",
+      "image_url": "/images/products/2026-06-02-adata-行動電源.jpg",
       "href": "/products/2026-06-02-adata-行動電源",
       "external": false,
       "price_text": "500",
@@ -38,7 +38,7 @@
       ],
       "tag_ids": [],
       "tag_labels": [],
-      "image_url": "https://img.pchome.com.tw/cs/items/DYAOE1A900HDHBH/000001_1723775526.jpg",
+      "image_url": "/images/products/2026-06-02-aibo-qi行動電源.jpg",
       "href": "/products/2026-06-02-aibo-qi行動電源",
       "external": false,
       "price_text": "899",
@@ -64,7 +64,7 @@
       "tag_labels": [
         "顯示設備"
       ],
-      "image_url": "https://img.pchome.com.tw/cs/items/DCAR15A900AU2RL/000001_1598318654.jpg",
+      "image_url": "/images/products/2026-06-02-aplus-ups.jpg",
       "href": "/products/2026-06-02-aplus-ups",
       "external": false,
       "price_text": "1450",
@@ -90,7 +90,7 @@
       "tag_labels": [
         "顯示設備"
       ],
-      "image_url": "https://img.pchome.com.tw/cs/items/DYAJFN1900H1P8W/000001_1734071736.jpg",
+      "image_url": "/images/products/2026-06-02-apple-tv-4k.jpg",
       "href": "/products/2026-06-02-apple-tv-4k",
       "external": false,
       "price_text": "4490",
@@ -112,7 +112,7 @@
       ],
       "tag_ids": [],
       "tag_labels": [],
-      "image_url": "https://m.media-amazon.com/images/I/61fci0cf+zL._AC_SL1500_.jpg",
+      "image_url": "/images/products/2026-06-02-arnest-永切れ王.jpg",
       "href": "/products/2026-06-02-arnest-永切れ王",
       "external": false,
       "price_text": "￥3800",
@@ -134,7 +134,7 @@
       ],
       "tag_ids": [],
       "tag_labels": [],
-      "image_url": "https://img.pchome.com.tw/cs/items/DYAO44A900GLJQ6/000001_1701165477.jpg",
+      "image_url": "/images/products/2026-06-02-avier行動電源.jpg",
       "href": "/products/2026-06-02-avier行動電源",
       "external": false,
       "price_text": "479",
@@ -156,7 +156,7 @@
       ],
       "tag_ids": [],
       "tag_labels": [],
-      "image_url": "https://img.pchome.com.tw/cs/items/DCAD6E1900H8FBD/000001_1716168950.jpg",
+      "image_url": "/images/products/2026-06-02-belkin-三孔type-c充電器.jpg",
       "href": "/products/2026-06-02-belkin-三孔type-c充電器",
       "external": false,
       "price_text": "790",
@@ -182,7 +182,7 @@
       "tag_labels": [
         "顯示設備"
       ],
-      "image_url": "https://img.pchome.com.tw/cs/items/DPAD0O1900GHE37/000001_1733195326.jpg",
+      "image_url": "/images/products/2026-06-02-benq-e43-735.jpg",
       "href": "/products/2026-06-02-benq-e43-735",
       "external": false,
       "price_text": "10999",
@@ -208,7 +208,7 @@
       "tag_labels": [
         "顯示設備"
       ],
-      "image_url": "https://img.pchome.com.tw/cs/items/DPAD0O1900GHE46/000001_1733903546.jpg",
+      "image_url": "/images/products/2026-06-02-benq-e55-735.jpg",
       "href": "/products/2026-06-02-benq-e55-735",
       "external": false,
       "price_text": "13999",
@@ -234,7 +234,7 @@
       "tag_labels": [
         "顯示設備"
       ],
-      "image_url": "https://cs-a.ecimg.tw/items/DSABSOA900HJAH0/yt000001_1719283603.jpg",
+      "image_url": "/images/products/2026-06-02-benq-rd280u.jpg",
       "href": "/products/2026-06-02-benq-rd280u",
       "external": false,
       "price_text": "16888",
@@ -256,7 +256,7 @@
       ],
       "tag_ids": [],
       "tag_labels": [],
-      "image_url": "https://img.pchome.com.tw/cs/items/DMAUE4A900HS6J6/i010011_1725438230.jpg",
+      "image_url": "/images/products/2026-06-02-blueair-3250空氣清淨機.jpg",
       "href": "/products/2026-06-02-blueair-3250空氣清淨機",
       "external": false,
       "price_text": "一台4400",
@@ -278,7 +278,7 @@
       ],
       "tag_ids": [],
       "tag_labels": [],
-      "image_url": "https://img.pchome.com.tw/cs/items/DGCT18A900GN5LD/000001_1702626142.jpg",
+      "image_url": "/images/products/2026-06-02-bose-qc45.jpg",
       "href": "/products/2026-06-02-bose-qc45",
       "external": false,
       "price_text": "8000",
@@ -300,7 +300,7 @@
       ],
       "tag_ids": [],
       "tag_labels": [],
-      "image_url": "https://img.pchome.com.tw/cs/items/DEAY3AA900GLY25/000001_1703232993.jpg",
+      "image_url": "/images/products/2026-06-02-brita.jpg",
       "href": "/products/2026-06-02-brita",
       "external": false,
       "price_text": "2200",
@@ -322,7 +322,7 @@
       ],
       "tag_ids": [],
       "tag_labels": [],
-      "image_url": "https://cs-a.ecimg.tw/items/DCAHVAA900GAGDQ/yt000001_1701253293.jpg",
+      "image_url": "/images/products/2026-06-02-ducky-one-2.jpg",
       "href": "/products/2026-06-02-ducky-one-2",
       "external": false,
       "price_text": "2300",
@@ -348,7 +348,7 @@
       "tag_labels": [
         "顯示設備"
       ],
-      "image_url": "https://img.pchome.com.tw/cs/items/DMAAH8A900HVR8U/000001_1727248100.jpg",
+      "image_url": "/images/products/2026-06-02-elac-connex-dcb41.jpg",
       "href": "/products/2026-06-02-elac-connex-dcb41",
       "external": false,
       "price_text": "大概16000",
@@ -370,7 +370,7 @@
       ],
       "tag_ids": [],
       "tag_labels": [],
-      "image_url": "https://www.costco.com.tw/mediapermalink/20231225-20240104_12",
+      "image_url": "/images/products/2026-06-02-electrolux吸塵器.jpg",
       "href": "/products/2026-06-02-electrolux吸塵器",
       "external": false,
       "price_text": "11999",
@@ -392,7 +392,7 @@
       ],
       "tag_ids": [],
       "tag_labels": [],
-      "image_url": "https://m.media-amazon.com/images/I/61buqTkTaSL._SL1500_.jpg",
+      "image_url": "/images/products/2026-06-02-fibbr光纖hdmi線.jpg",
       "href": "/products/2026-06-02-fibbr光纖hdmi線",
       "external": false,
       "price_text": "20~30鎂",
@@ -414,7 +414,7 @@
       ],
       "tag_ids": [],
       "tag_labels": [],
-      "image_url": "https://img.pchome.com.tw/cs/items/DMBR24A900GK0BS/000001_1703010353.jpg",
+      "image_url": "/images/products/2026-06-02-fisher-paykel-抽屜式洗碗機.jpg",
       "href": "/products/2026-06-02-fisher-paykel-抽屜式洗碗機",
       "external": false,
       "price_text": "45000",
@@ -436,7 +436,7 @@
       ],
       "tag_ids": [],
       "tag_labels": [],
-      "image_url": "https://img.pchome.com.tw/cs/items/DMBQ01A900GSFE3/000001_1700533478.jpg",
+      "image_url": "/images/products/2026-06-02-hitachi-rd-14fr.jpg",
       "href": "/products/2026-06-02-hitachi-rd-14fr",
       "external": false,
       "price_text": "5999",
@@ -462,7 +462,7 @@
       "tag_labels": [
         "顯示設備"
       ],
-      "image_url": "https://img.pchome.com.tw/cs/items/DYAJKI1900GB142/000001_1683606077.jpg",
+      "image_url": "/images/products/2026-06-02-homepod-大.jpg",
       "href": "/products/2026-06-02-homepod-大",
       "external": false,
       "price_text": "22000",
@@ -484,7 +484,7 @@
       ],
       "tag_ids": [],
       "tag_labels": [],
-      "image_url": "https://www.ikea.com.tw/dairyfarm/tw/images/456/1045699_PE842703_S4.webp",
+      "image_url": "/images/products/2026-06-02-ikea充電線.webp",
       "href": "/products/2026-06-02-ikea充電線",
       "external": false,
       "price_text": "199",
@@ -506,7 +506,7 @@
       ],
       "tag_ids": [],
       "tag_labels": [],
-      "image_url": "https://www.ikea.com.tw/dairyfarm/tw/images/685/0968547_PE810493_S4.webp",
+      "image_url": "/images/products/2026-06-02-ikea充電電池.webp",
       "href": "/products/2026-06-02-ikea充電電池",
       "external": false,
       "price_text": "249~349",
@@ -528,7 +528,7 @@
       ],
       "tag_ids": [],
       "tag_labels": [],
-      "image_url": "https://www.costco.com.tw/medias/sys_master/images/he6/h87/100246339026974.webp",
+      "image_url": "/images/products/2026-06-02-iris吸頂燈-並.webp",
       "href": "/products/2026-06-02-iris吸頂燈-並",
       "external": false,
       "price_text": "2699",
@@ -550,7 +550,7 @@
       ],
       "tag_ids": [],
       "tag_labels": [],
-      "image_url": "https://m.media-amazon.com/images/I/61VmU90A9-L._AC_SL1000_.jpg",
+      "image_url": "/images/products/2026-06-02-iris高階吸頂燈.jpg",
       "href": "/products/2026-06-02-iris高階吸頂燈",
       "external": false,
       "price_text": "￥20000",
@@ -572,7 +572,7 @@
       ],
       "tag_ids": [],
       "tag_labels": [],
-      "image_url": "https://img.pchome.com.tw/cs/items/DCAX3NA900AD07K/000001_1680747068.jpg",
+      "image_url": "/images/products/2026-06-02-j5create豆腐頭.jpg",
       "href": "/products/2026-06-02-j5create豆腐頭",
       "external": false,
       "price_text": "199",
@@ -594,7 +594,7 @@
       ],
       "tag_ids": [],
       "tag_labels": [],
-      "image_url": "https://img.pchome.com.tw/cs/items/DRAA5DA900FDQCR/000001_1660124876.jpg",
+      "image_url": "/images/products/2026-06-02-kioxia-1tb隨身碟.jpg",
       "href": "/products/2026-06-02-kioxia-1tb隨身碟",
       "external": false,
       "price_text": "2490",
@@ -616,7 +616,7 @@
       ],
       "tag_ids": [],
       "tag_labels": [],
-      "image_url": "https://cdn11.bigcommerce.com/s-71ht0mylo2/images/stencil/1280x1280/products/288/841/a__99517.1698132192.jpg?c=1",
+      "image_url": "/images/products/2026-06-02-kohler-familycare浴櫃.jpg",
       "href": "/products/2026-06-02-kohler-familycare浴櫃",
       "external": false,
       "price_text": "20000",
@@ -638,7 +638,7 @@
       ],
       "tag_ids": [],
       "tag_labels": [],
-      "image_url": "https://cdn11.bigcommerce.com/s-71ht0mylo2/images/stencil/1280x1280/products/731/2456/10623367_O__33401.1691461503.jpg?c=1",
+      "image_url": "/images/products/2026-06-02-kohler暖風機.jpg",
       "href": "/products/2026-06-02-kohler暖風機",
       "external": false,
       "price_text": "10900",
@@ -660,7 +660,7 @@
       ],
       "tag_ids": [],
       "tag_labels": [],
-      "image_url": "https://img.pchome.com.tw/cs/items/DMAZ0FA900H16LY/000001_1703236548.jpg",
+      "image_url": "/images/products/2026-06-02-kolin-電暖器.jpg",
       "href": "/products/2026-06-02-kolin-電暖器",
       "external": false,
       "price_text": "1180",
@@ -686,7 +686,7 @@
       "tag_labels": [
         "顯示設備"
       ],
-      "image_url": "https://www.lg.com/content/dam/channel/wcms/tw/images/oled-tv-smart-screen/oled65c4pta_att_eatt_tw_c/OLED65C4PTA_ATT_EATT_TW_C-450x450-new.jpg",
+      "image_url": "/images/products/2026-06-02-lg-c4-65吋-oled.jpg",
       "href": "/products/2026-06-02-lg-c4-65吋-oled",
       "external": false,
       "price_text": "低於60000",
@@ -708,7 +708,7 @@
       ],
       "tag_ids": [],
       "tag_labels": [],
-      "image_url": "https://img.pchome.com.tw/cs/items/DAAK2J1900H333K/000001_1733713845.jpg",
+      "image_url": "/images/products/2026-06-02-lion-nanox洗衣精.jpg",
       "href": "/products/2026-06-02-lion-nanox洗衣精",
       "external": false,
       "price_text": "1099",
@@ -730,7 +730,7 @@
       ],
       "tag_ids": [],
       "tag_labels": [],
-      "image_url": "https://m.media-amazon.com/images/I/5114LY5TExL._AC_SL1172_.jpg",
+      "image_url": "/images/products/2026-06-02-lixil免治馬桶座.jpg",
       "href": "/products/2026-06-02-lixil免治馬桶座",
       "external": false,
       "price_text": "￥42000",
@@ -752,7 +752,7 @@
       ],
       "tag_ids": [],
       "tag_labels": [],
-      "image_url": "https://cs-a.ecimg.tw/items/DPAC3KA900B2TTL/000001_1676515813.jpg",
+      "image_url": "/images/products/2026-06-02-mitsubishi-冷凍櫃.jpg",
       "href": "/products/2026-06-02-mitsubishi-冷凍櫃",
       "external": false,
       "price_text": "12000",
@@ -774,7 +774,7 @@
       ],
       "tag_ids": [],
       "tag_labels": [],
-      "image_url": "https://img.pchome.com.tw/cs/items/DSAANL1900I1LVY/000001_1732513100.jpg",
+      "image_url": "/images/products/2026-06-02-msi桌上型.jpg",
       "href": "/products/2026-06-02-msi桌上型",
       "external": false,
       "price_text": "29990",
@@ -796,7 +796,7 @@
       ],
       "tag_ids": [],
       "tag_labels": [],
-      "image_url": "https://img.pchome.com.tw/cs/items/DMBJ02A900HB5FS/000001_1710409790.jpg",
+      "image_url": "/images/products/2026-06-02-panasonic-nn-bs607.jpg",
       "href": "/products/2026-06-02-panasonic-nn-bs607",
       "external": false,
       "price_text": "12900",
@@ -818,7 +818,7 @@
       ],
       "tag_ids": [],
       "tag_labels": [],
-      "image_url": "https://img.pchome.com.tw/cs/items/DMBR1PA900GT5EO/000001_1699497746.jpg",
+      "image_url": "/images/products/2026-06-02-panasonic-np-th4.jpg",
       "href": "/products/2026-06-02-panasonic-np-th4",
       "external": false,
       "price_text": "21000",
@@ -840,7 +840,7 @@
       ],
       "tag_ids": [],
       "tag_labels": [],
-      "image_url": "https://img.pchome.com.tw/cs/items/DMBI0HA900AOX6V/000001_1687162992.jpg",
+      "image_url": "/images/products/2026-06-02-panasonic-sr-kt069.jpg",
       "href": "/products/2026-06-02-panasonic-sr-kt069",
       "external": false,
       "price_text": "5000",
@@ -862,7 +862,7 @@
       ],
       "tag_ids": [],
       "tag_labels": [],
-      "image_url": "https://img.pchome.com.tw/cs/items/DPAI1HA900FQ5GC/000001_1702519023.jpg",
+      "image_url": "/images/products/2026-06-02-panasonic-v150mdh.jpg",
       "href": "/products/2026-06-02-panasonic-v150mdh",
       "external": false,
       "price_text": "41000",
@@ -884,7 +884,7 @@
       ],
       "tag_ids": [],
       "tag_labels": [],
-      "image_url": "https://img.pchome.com.tw/cs/items/DPAC1TA900ALMUG/000001_1619054781.jpg",
+      "image_url": "/images/products/2026-06-02-panasonic-冷凍櫃.jpg",
       "href": "/products/2026-06-02-panasonic-冷凍櫃",
       "external": false,
       "price_text": "19000",
@@ -906,7 +906,7 @@
       ],
       "tag_ids": [],
       "tag_labels": [],
-      "image_url": "https://img.pchome.com.tw/cs/items/DPAC74A900BNXAJ/000001_1628842716.jpg",
+      "image_url": "/images/products/2026-06-02-panasonic-日規冰箱.jpg",
       "href": "/products/2026-06-02-panasonic-日規冰箱",
       "external": false,
       "price_text": "67000",
@@ -932,7 +932,7 @@
       "tag_labels": [
         "顯示設備"
       ],
-      "image_url": "https://img.pchome.com.tw/cs/items/DSABQKA900HLMQG/000001_1730023435.jpg",
+      "image_url": "/images/products/2026-06-02-philips-40b1u5600.jpg",
       "href": "/products/2026-06-02-philips-40b1u5600",
       "external": false,
       "price_text": "15000",
@@ -954,7 +954,7 @@
       ],
       "tag_ids": [],
       "tag_labels": [],
-      "image_url": "https://cs-a.ecimg.tw/items/DMBL0JA900DZHJ9/yt000001_1701345400.jpg",
+      "image_url": "/images/products/2026-06-02-roomba-j7.jpg",
       "href": "/products/2026-06-02-roomba-j7",
       "external": false,
       "price_text": "26000",
@@ -976,7 +976,7 @@
       ],
       "tag_ids": [],
       "tag_labels": [],
-      "image_url": "https://img.pchome.com.tw/cs/items/DSABONA900E71LK/000001_1701314910.jpg",
+      "image_url": "/images/products/2026-06-02-samsung-m7-32吋.jpg",
       "href": "/products/2026-06-02-samsung-m7-32吋",
       "external": false,
       "price_text": "9900",
@@ -998,7 +998,7 @@
       ],
       "tag_ids": [],
       "tag_labels": [],
-      "image_url": "https://img.pchome.com.tw/cs/items/DMAAEEA900GPR35/i010004_1696574787.jpg",
+      "image_url": "/images/products/2026-06-02-sennheiser-ambeo-max.jpg",
       "href": "/products/2026-06-02-sennheiser-ambeo-max",
       "external": false,
       "price_text": "84900",
@@ -1024,7 +1024,7 @@
       "tag_labels": [
         "顯示設備"
       ],
-      "image_url": "https://img.pchome.com.tw/cs/items/DPADN9A900HQHS6/000001_1724033495.jpg",
+      "image_url": "/images/products/2026-06-02-sharp-65吋-xled.jpg",
       "href": "/products/2026-06-02-sharp-65吋-xled",
       "external": false,
       "price_text": "43000",
@@ -1046,7 +1046,7 @@
       ],
       "tag_ids": [],
       "tag_labels": [],
-      "image_url": "https://img.pchome.com.tw/cs/items/DMBJ03A900FTXFP/000001_1670575743.jpg",
+      "image_url": "/images/products/2026-06-02-sharp-xp10t.jpg",
       "href": "/products/2026-06-02-sharp-xp10t",
       "external": false,
       "price_text": "29900",
@@ -1068,7 +1068,7 @@
       ],
       "tag_ids": [],
       "tag_labels": [],
-      "image_url": "https://img.pchome.com.tw/cs/items/DRAG08A900FWNSJ/000001_1681108395.jpg",
+      "image_url": "/images/products/2026-06-02-synology-ds723.jpg",
       "href": "/products/2026-06-02-synology-ds723",
       "external": false,
       "price_text": "15000",
@@ -1090,7 +1090,7 @@
       ],
       "tag_ids": [],
       "tag_labels": [],
-      "image_url": "https://m.media-amazon.com/images/I/815FU9IOtcL._AC_SL1500_.jpg",
+      "image_url": "/images/products/2026-06-02-toshiba-yd5000.jpg",
       "href": "/products/2026-06-02-toshiba-yd5000",
       "external": false,
       "price_text": "￥100000",
@@ -1112,7 +1112,7 @@
       ],
       "tag_ids": [],
       "tag_labels": [],
-      "image_url": "https://m.media-amazon.com/images/I/51l80QQ5itL._AC_SL1500_.jpg",
+      "image_url": "/images/products/2026-06-02-toshiba高階吸頂燈.jpg",
       "href": "/products/2026-06-02-toshiba高階吸頂燈",
       "external": false,
       "price_text": "￥30000",
@@ -1134,7 +1134,7 @@
       ],
       "tag_ids": [],
       "tag_labels": [],
-      "image_url": "https://m.media-amazon.com/images/I/51xa1Xtqc3L._AC_SL1100_.jpg",
+      "image_url": "/images/products/2026-06-02-toto恆溫水龍頭.jpg",
       "href": "/products/2026-06-02-toto恆溫水龍頭",
       "external": false,
       "price_text": "￥18000",
@@ -1156,7 +1156,7 @@
       ],
       "tag_ids": [],
       "tag_labels": [],
-      "image_url": "https://m.media-amazon.com/images/I/51lnbg1qqCL._AC_.jpg",
+      "image_url": "/images/products/2026-06-02-trusco-物流箱.jpg",
       "href": "/products/2026-06-02-trusco-物流箱",
       "external": false,
       "price_text": "￥1790",
@@ -1178,7 +1178,7 @@
       ],
       "tag_ids": [],
       "tag_labels": [],
-      "image_url": "https://images.svc.ui.com/?u=https%3A%2F%2Fcdn.ecomm.ui.com%2Fproducts%2F4ed25b4c-db92-4b98-bbf3-b0989f007c0e%2F8ff040a0-4b16-4c98-a96c-b643cfafbc73.png&q=75&w=1920",
+      "image_url": "/images/products/2026-06-02-unifi-express.png",
       "href": "/products/2026-06-02-unifi-express",
       "external": false,
       "price_text": "5799",
@@ -1200,7 +1200,7 @@
       ],
       "tag_ids": [],
       "tag_labels": [],
-      "image_url": "https://img.pchome.com.tw/cs/items/DRAF0IA900B7QHW/000001_1658917277.jpg",
+      "image_url": "/images/products/2026-06-02-zyxel-xgs1250-12.jpg",
       "href": "/products/2026-06-02-zyxel-xgs1250-12",
       "external": false,
       "price_text": "9000",
@@ -1222,7 +1222,7 @@
       ],
       "tag_ids": [],
       "tag_labels": [],
-      "image_url": "https://img.pchome.com.tw/cs/items/DPAF4HA900FMJD3/000001_1700034325.jpg",
+      "image_url": "/images/products/2026-06-02-三菱重工冷氣.jpg",
       "href": "/products/2026-06-02-三菱重工冷氣",
       "external": false,
       "price_text": "比較貴一點",
@@ -1248,7 +1248,7 @@
       "tag_labels": [
         "米食"
       ],
-      "image_url": "https://cs-a.ecimg.tw/items/DBBY0MA900GMBY7/000001_1693383527.jpg",
+      "image_url": "/images/products/2026-06-02-大橋牌越光米.jpg",
       "href": "/products/2026-06-02-大橋牌越光米",
       "external": false,
       "price_text": "125/kg",
@@ -1270,7 +1270,7 @@
       ],
       "tag_ids": [],
       "tag_labels": [],
-      "image_url": "https://i1.momoshop.com.tw/1692546180/goodsimg/0011/521/511/11521511_R.webp",
+      "image_url": "/images/products/2026-06-02-威寶40l烤箱.webp",
       "href": "/products/2026-06-02-威寶40l烤箱",
       "external": false,
       "price_text": "9000",
@@ -1296,7 +1296,7 @@
       "tag_labels": [
         "米食"
       ],
-      "image_url": "https://img.pchome.com.tw/cs/items/DBBY0JA900F81AW/000001_1656130303.jpg",
+      "image_url": "/images/products/2026-06-02-富里牛奶皇后.jpg",
       "href": "/products/2026-06-02-富里牛奶皇后",
       "external": false,
       "price_text": "200/kg",
@@ -1318,7 +1318,7 @@
       ],
       "tag_ids": [],
       "tag_labels": [],
-      "image_url": "https://shoplineimg.com/5d08366e3f64c1000128316b/63bf65758cd22b3421747f3e/2000x.webp?source_format=jpg",
+      "image_url": "/images/products/2026-06-02-山田製油-胡麻辣油.webp",
       "href": "/products/2026-06-02-山田製油-胡麻辣油",
       "external": false,
       "price_text": "￥972",
@@ -1340,7 +1340,7 @@
       ],
       "tag_ids": [],
       "tag_labels": [],
-      "image_url": "https://item-shopping.c.yimg.jp/i/n/sake-nishida_asp-1005_1",
+      "image_url": "/images/products/2026-06-02-旭ポンズ.jpg",
       "href": "/products/2026-06-02-旭ポンズ",
       "external": false,
       "price_text": "￥840",
@@ -1362,7 +1362,7 @@
       ],
       "tag_ids": [],
       "tag_labels": [],
-      "image_url": "https://www.costco.com.tw/medias/sys_master/images/h16/h10/275511669325854.webp",
+      "image_url": "/images/products/2026-06-02-花王-attack-zero.webp",
       "href": "/products/2026-06-02-花王-attack-zero",
       "external": false,
       "price_text": "579",
@@ -1384,7 +1384,7 @@
       ],
       "tag_ids": [],
       "tag_labels": [],
-      "image_url": "https://m.media-amazon.com/images/I/61dGv0BJc2L._AC_SL1000_.jpg",
+      "image_url": "/images/products/2026-06-02-象印nw-jw10.jpg",
       "href": "/products/2026-06-02-象印nw-jw10",
       "external": false,
       "price_text": "￥45000",
@@ -1406,7 +1406,7 @@
       ],
       "tag_ids": [],
       "tag_labels": [],
-      "image_url": "https://img.pchome.com.tw/cs/items/DCABC4A900BOW1X/000001_1629649165.jpg",
+      "image_url": "/images/products/2026-06-02-電池充電器.jpg",
       "href": "/products/2026-06-02-電池充電器",
       "external": false,
       "price_text": "249",
@@ -1432,7 +1432,7 @@
       "tag_labels": [
         "人體工學"
       ],
-      "image_url": "https://cdn-next.cybassets.com/media/W1siZiIsIjEyMjkwL2F0dGFjaGVkX3Bob3Rvcy8xNzYyMjQ1MTkzXzEwMDFf5L-d5Zu657at5L-u6YGL6LK76Kqq5piOQTQtMV92Mi5qcGcuanBlZyJdXQ.jpeg?sha=9b24df7f10db7f74",
+      "image_url": "/images/guides/2026-06-02-aeron-chair.jpg",
       "href": "https://www.facebook.com/share/p/165wXVWFFW/",
       "external": true,
       "published_at": "2026-06-02T00:00:00+08:00"
@@ -2154,7 +2154,7 @@
           "3C"
         ],
         "tag_labels": [],
-        "image_url": "https://cs-a.ecimg.tw/items/DYAO44A900HC1WQ/yt000001_1711341252.jpg",
+        "image_url": "/images/products/2026-06-02-adata-行動電源.jpg",
         "href": "/products/2026-06-02-adata-行動電源",
         "external": false,
         "price_text": "500",
@@ -2171,7 +2171,7 @@
           "3C"
         ],
         "tag_labels": [],
-        "image_url": "https://img.pchome.com.tw/cs/items/DYAOE1A900HDHBH/000001_1723775526.jpg",
+        "image_url": "/images/products/2026-06-02-aibo-qi行動電源.jpg",
         "href": "/products/2026-06-02-aibo-qi行動電源",
         "external": false,
         "price_text": "899",
@@ -2190,7 +2190,7 @@
         "tag_labels": [
           "顯示設備"
         ],
-        "image_url": "https://img.pchome.com.tw/cs/items/DCAR15A900AU2RL/000001_1598318654.jpg",
+        "image_url": "/images/products/2026-06-02-aplus-ups.jpg",
         "href": "/products/2026-06-02-aplus-ups",
         "external": false,
         "price_text": "1450",
@@ -2209,7 +2209,7 @@
         "tag_labels": [
           "顯示設備"
         ],
-        "image_url": "https://img.pchome.com.tw/cs/items/DYAJFN1900H1P8W/000001_1734071736.jpg",
+        "image_url": "/images/products/2026-06-02-apple-tv-4k.jpg",
         "href": "/products/2026-06-02-apple-tv-4k",
         "external": false,
         "price_text": "4490",
@@ -2226,7 +2226,7 @@
           "廚房"
         ],
         "tag_labels": [],
-        "image_url": "https://m.media-amazon.com/images/I/61fci0cf+zL._AC_SL1500_.jpg",
+        "image_url": "/images/products/2026-06-02-arnest-永切れ王.jpg",
         "href": "/products/2026-06-02-arnest-永切れ王",
         "external": false,
         "price_text": "￥3800",
@@ -2243,7 +2243,7 @@
           "3C"
         ],
         "tag_labels": [],
-        "image_url": "https://img.pchome.com.tw/cs/items/DYAO44A900GLJQ6/000001_1701165477.jpg",
+        "image_url": "/images/products/2026-06-02-avier行動電源.jpg",
         "href": "/products/2026-06-02-avier行動電源",
         "external": false,
         "price_text": "479",
@@ -2260,7 +2260,7 @@
           "3C"
         ],
         "tag_labels": [],
-        "image_url": "https://img.pchome.com.tw/cs/items/DCAD6E1900H8FBD/000001_1716168950.jpg",
+        "image_url": "/images/products/2026-06-02-belkin-三孔type-c充電器.jpg",
         "href": "/products/2026-06-02-belkin-三孔type-c充電器",
         "external": false,
         "price_text": "790",
@@ -2279,7 +2279,7 @@
         "tag_labels": [
           "顯示設備"
         ],
-        "image_url": "https://img.pchome.com.tw/cs/items/DPAD0O1900GHE37/000001_1733195326.jpg",
+        "image_url": "/images/products/2026-06-02-benq-e43-735.jpg",
         "href": "/products/2026-06-02-benq-e43-735",
         "external": false,
         "price_text": "10999",
@@ -2298,7 +2298,7 @@
         "tag_labels": [
           "顯示設備"
         ],
-        "image_url": "https://img.pchome.com.tw/cs/items/DPAD0O1900GHE46/000001_1733903546.jpg",
+        "image_url": "/images/products/2026-06-02-benq-e55-735.jpg",
         "href": "/products/2026-06-02-benq-e55-735",
         "external": false,
         "price_text": "13999",
@@ -2317,7 +2317,7 @@
         "tag_labels": [
           "顯示設備"
         ],
-        "image_url": "https://cs-a.ecimg.tw/items/DSABSOA900HJAH0/yt000001_1719283603.jpg",
+        "image_url": "/images/products/2026-06-02-benq-rd280u.jpg",
         "href": "/products/2026-06-02-benq-rd280u",
         "external": false,
         "price_text": "16888",
@@ -2334,7 +2334,7 @@
           "居家"
         ],
         "tag_labels": [],
-        "image_url": "https://img.pchome.com.tw/cs/items/DMAUE4A900HS6J6/i010011_1725438230.jpg",
+        "image_url": "/images/products/2026-06-02-blueair-3250空氣清淨機.jpg",
         "href": "/products/2026-06-02-blueair-3250空氣清淨機",
         "external": false,
         "price_text": "一台4400",
@@ -2351,7 +2351,7 @@
           "3C"
         ],
         "tag_labels": [],
-        "image_url": "https://img.pchome.com.tw/cs/items/DGCT18A900GN5LD/000001_1702626142.jpg",
+        "image_url": "/images/products/2026-06-02-bose-qc45.jpg",
         "href": "/products/2026-06-02-bose-qc45",
         "external": false,
         "price_text": "8000",
@@ -2368,7 +2368,7 @@
           "廚房"
         ],
         "tag_labels": [],
-        "image_url": "https://img.pchome.com.tw/cs/items/DEAY3AA900GLY25/000001_1703232993.jpg",
+        "image_url": "/images/products/2026-06-02-brita.jpg",
         "href": "/products/2026-06-02-brita",
         "external": false,
         "price_text": "2200",
@@ -2385,7 +2385,7 @@
           "電腦"
         ],
         "tag_labels": [],
-        "image_url": "https://cs-a.ecimg.tw/items/DCAHVAA900GAGDQ/yt000001_1701253293.jpg",
+        "image_url": "/images/products/2026-06-02-ducky-one-2.jpg",
         "href": "/products/2026-06-02-ducky-one-2",
         "external": false,
         "price_text": "2300",
@@ -2404,7 +2404,7 @@
         "tag_labels": [
           "顯示設備"
         ],
-        "image_url": "https://img.pchome.com.tw/cs/items/DMAAH8A900HVR8U/000001_1727248100.jpg",
+        "image_url": "/images/products/2026-06-02-elac-connex-dcb41.jpg",
         "href": "/products/2026-06-02-elac-connex-dcb41",
         "external": false,
         "price_text": "大概16000",
@@ -2421,7 +2421,7 @@
           "居家"
         ],
         "tag_labels": [],
-        "image_url": "https://www.costco.com.tw/mediapermalink/20231225-20240104_12",
+        "image_url": "/images/products/2026-06-02-electrolux吸塵器.jpg",
         "href": "/products/2026-06-02-electrolux吸塵器",
         "external": false,
         "price_text": "11999",
@@ -2438,7 +2438,7 @@
           "影音"
         ],
         "tag_labels": [],
-        "image_url": "https://m.media-amazon.com/images/I/61buqTkTaSL._SL1500_.jpg",
+        "image_url": "/images/products/2026-06-02-fibbr光纖hdmi線.jpg",
         "href": "/products/2026-06-02-fibbr光纖hdmi線",
         "external": false,
         "price_text": "20~30鎂",
@@ -2455,7 +2455,7 @@
           "廚房"
         ],
         "tag_labels": [],
-        "image_url": "https://img.pchome.com.tw/cs/items/DMBR24A900GK0BS/000001_1703010353.jpg",
+        "image_url": "/images/products/2026-06-02-fisher-paykel-抽屜式洗碗機.jpg",
         "href": "/products/2026-06-02-fisher-paykel-抽屜式洗碗機",
         "external": false,
         "price_text": "45000",
@@ -2472,7 +2472,7 @@
           "居家"
         ],
         "tag_labels": [],
-        "image_url": "https://img.pchome.com.tw/cs/items/DMBQ01A900GSFE3/000001_1700533478.jpg",
+        "image_url": "/images/products/2026-06-02-hitachi-rd-14fr.jpg",
         "href": "/products/2026-06-02-hitachi-rd-14fr",
         "external": false,
         "price_text": "5999",
@@ -2491,7 +2491,7 @@
         "tag_labels": [
           "顯示設備"
         ],
-        "image_url": "https://img.pchome.com.tw/cs/items/DYAJKI1900GB142/000001_1683606077.jpg",
+        "image_url": "/images/products/2026-06-02-homepod-大.jpg",
         "href": "/products/2026-06-02-homepod-大",
         "external": false,
         "price_text": "22000",
@@ -2508,7 +2508,7 @@
           "3C"
         ],
         "tag_labels": [],
-        "image_url": "https://www.ikea.com.tw/dairyfarm/tw/images/456/1045699_PE842703_S4.webp",
+        "image_url": "/images/products/2026-06-02-ikea充電線.webp",
         "href": "/products/2026-06-02-ikea充電線",
         "external": false,
         "price_text": "199",
@@ -2525,7 +2525,7 @@
           "3C"
         ],
         "tag_labels": [],
-        "image_url": "https://www.ikea.com.tw/dairyfarm/tw/images/685/0968547_PE810493_S4.webp",
+        "image_url": "/images/products/2026-06-02-ikea充電電池.webp",
         "href": "/products/2026-06-02-ikea充電電池",
         "external": false,
         "price_text": "249~349",
@@ -2542,7 +2542,7 @@
           "居家"
         ],
         "tag_labels": [],
-        "image_url": "https://www.costco.com.tw/medias/sys_master/images/he6/h87/100246339026974.webp",
+        "image_url": "/images/products/2026-06-02-iris吸頂燈-並.webp",
         "href": "/products/2026-06-02-iris吸頂燈-並",
         "external": false,
         "price_text": "2699",
@@ -2559,7 +2559,7 @@
           "居家"
         ],
         "tag_labels": [],
-        "image_url": "https://m.media-amazon.com/images/I/61VmU90A9-L._AC_SL1000_.jpg",
+        "image_url": "/images/products/2026-06-02-iris高階吸頂燈.jpg",
         "href": "/products/2026-06-02-iris高階吸頂燈",
         "external": false,
         "price_text": "￥20000",
@@ -2576,7 +2576,7 @@
           "3C"
         ],
         "tag_labels": [],
-        "image_url": "https://img.pchome.com.tw/cs/items/DCAX3NA900AD07K/000001_1680747068.jpg",
+        "image_url": "/images/products/2026-06-02-j5create豆腐頭.jpg",
         "href": "/products/2026-06-02-j5create豆腐頭",
         "external": false,
         "price_text": "199",
@@ -2593,7 +2593,7 @@
           "電腦"
         ],
         "tag_labels": [],
-        "image_url": "https://img.pchome.com.tw/cs/items/DRAA5DA900FDQCR/000001_1660124876.jpg",
+        "image_url": "/images/products/2026-06-02-kioxia-1tb隨身碟.jpg",
         "href": "/products/2026-06-02-kioxia-1tb隨身碟",
         "external": false,
         "price_text": "2490",
@@ -2610,7 +2610,7 @@
           "居家"
         ],
         "tag_labels": [],
-        "image_url": "https://cdn11.bigcommerce.com/s-71ht0mylo2/images/stencil/1280x1280/products/288/841/a__99517.1698132192.jpg?c=1",
+        "image_url": "/images/products/2026-06-02-kohler-familycare浴櫃.jpg",
         "href": "/products/2026-06-02-kohler-familycare浴櫃",
         "external": false,
         "price_text": "20000",
@@ -2627,7 +2627,7 @@
           "居家"
         ],
         "tag_labels": [],
-        "image_url": "https://cdn11.bigcommerce.com/s-71ht0mylo2/images/stencil/1280x1280/products/731/2456/10623367_O__33401.1691461503.jpg?c=1",
+        "image_url": "/images/products/2026-06-02-kohler暖風機.jpg",
         "href": "/products/2026-06-02-kohler暖風機",
         "external": false,
         "price_text": "10900",
@@ -2644,7 +2644,7 @@
           "居家"
         ],
         "tag_labels": [],
-        "image_url": "https://img.pchome.com.tw/cs/items/DMAZ0FA900H16LY/000001_1703236548.jpg",
+        "image_url": "/images/products/2026-06-02-kolin-電暖器.jpg",
         "href": "/products/2026-06-02-kolin-電暖器",
         "external": false,
         "price_text": "1180",
@@ -2663,7 +2663,7 @@
         "tag_labels": [
           "顯示設備"
         ],
-        "image_url": "https://www.lg.com/content/dam/channel/wcms/tw/images/oled-tv-smart-screen/oled65c4pta_att_eatt_tw_c/OLED65C4PTA_ATT_EATT_TW_C-450x450-new.jpg",
+        "image_url": "/images/products/2026-06-02-lg-c4-65吋-oled.jpg",
         "href": "/products/2026-06-02-lg-c4-65吋-oled",
         "external": false,
         "price_text": "低於60000",
@@ -2680,7 +2680,7 @@
           "居家"
         ],
         "tag_labels": [],
-        "image_url": "https://img.pchome.com.tw/cs/items/DAAK2J1900H333K/000001_1733713845.jpg",
+        "image_url": "/images/products/2026-06-02-lion-nanox洗衣精.jpg",
         "href": "/products/2026-06-02-lion-nanox洗衣精",
         "external": false,
         "price_text": "1099",
@@ -2697,7 +2697,7 @@
           "居家"
         ],
         "tag_labels": [],
-        "image_url": "https://m.media-amazon.com/images/I/5114LY5TExL._AC_SL1172_.jpg",
+        "image_url": "/images/products/2026-06-02-lixil免治馬桶座.jpg",
         "href": "/products/2026-06-02-lixil免治馬桶座",
         "external": false,
         "price_text": "￥42000",
@@ -2714,7 +2714,7 @@
           "廚房"
         ],
         "tag_labels": [],
-        "image_url": "https://cs-a.ecimg.tw/items/DPAC3KA900B2TTL/000001_1676515813.jpg",
+        "image_url": "/images/products/2026-06-02-mitsubishi-冷凍櫃.jpg",
         "href": "/products/2026-06-02-mitsubishi-冷凍櫃",
         "external": false,
         "price_text": "12000",
@@ -2731,7 +2731,7 @@
           "電腦"
         ],
         "tag_labels": [],
-        "image_url": "https://img.pchome.com.tw/cs/items/DSAANL1900I1LVY/000001_1732513100.jpg",
+        "image_url": "/images/products/2026-06-02-msi桌上型.jpg",
         "href": "/products/2026-06-02-msi桌上型",
         "external": false,
         "price_text": "29990",
@@ -2748,7 +2748,7 @@
           "廚房"
         ],
         "tag_labels": [],
-        "image_url": "https://img.pchome.com.tw/cs/items/DMBJ02A900HB5FS/000001_1710409790.jpg",
+        "image_url": "/images/products/2026-06-02-panasonic-nn-bs607.jpg",
         "href": "/products/2026-06-02-panasonic-nn-bs607",
         "external": false,
         "price_text": "12900",
@@ -2765,7 +2765,7 @@
           "廚房"
         ],
         "tag_labels": [],
-        "image_url": "https://img.pchome.com.tw/cs/items/DMBR1PA900GT5EO/000001_1699497746.jpg",
+        "image_url": "/images/products/2026-06-02-panasonic-np-th4.jpg",
         "href": "/products/2026-06-02-panasonic-np-th4",
         "external": false,
         "price_text": "21000",
@@ -2782,7 +2782,7 @@
           "廚房"
         ],
         "tag_labels": [],
-        "image_url": "https://img.pchome.com.tw/cs/items/DMBI0HA900AOX6V/000001_1687162992.jpg",
+        "image_url": "/images/products/2026-06-02-panasonic-sr-kt069.jpg",
         "href": "/products/2026-06-02-panasonic-sr-kt069",
         "external": false,
         "price_text": "5000",
@@ -2799,7 +2799,7 @@
           "居家"
         ],
         "tag_labels": [],
-        "image_url": "https://img.pchome.com.tw/cs/items/DPAI1HA900FQ5GC/000001_1702519023.jpg",
+        "image_url": "/images/products/2026-06-02-panasonic-v150mdh.jpg",
         "href": "/products/2026-06-02-panasonic-v150mdh",
         "external": false,
         "price_text": "41000",
@@ -2816,7 +2816,7 @@
           "廚房"
         ],
         "tag_labels": [],
-        "image_url": "https://img.pchome.com.tw/cs/items/DPAC1TA900ALMUG/000001_1619054781.jpg",
+        "image_url": "/images/products/2026-06-02-panasonic-冷凍櫃.jpg",
         "href": "/products/2026-06-02-panasonic-冷凍櫃",
         "external": false,
         "price_text": "19000",
@@ -2833,7 +2833,7 @@
           "廚房"
         ],
         "tag_labels": [],
-        "image_url": "https://img.pchome.com.tw/cs/items/DPAC74A900BNXAJ/000001_1628842716.jpg",
+        "image_url": "/images/products/2026-06-02-panasonic-日規冰箱.jpg",
         "href": "/products/2026-06-02-panasonic-日規冰箱",
         "external": false,
         "price_text": "67000",
@@ -2852,7 +2852,7 @@
         "tag_labels": [
           "顯示設備"
         ],
-        "image_url": "https://img.pchome.com.tw/cs/items/DSABQKA900HLMQG/000001_1730023435.jpg",
+        "image_url": "/images/products/2026-06-02-philips-40b1u5600.jpg",
         "href": "/products/2026-06-02-philips-40b1u5600",
         "external": false,
         "price_text": "15000",
@@ -2869,7 +2869,7 @@
           "居家"
         ],
         "tag_labels": [],
-        "image_url": "https://cs-a.ecimg.tw/items/DMBL0JA900DZHJ9/yt000001_1701345400.jpg",
+        "image_url": "/images/products/2026-06-02-roomba-j7.jpg",
         "href": "/products/2026-06-02-roomba-j7",
         "external": false,
         "price_text": "26000",
@@ -2886,7 +2886,7 @@
           "電腦"
         ],
         "tag_labels": [],
-        "image_url": "https://img.pchome.com.tw/cs/items/DSABONA900E71LK/000001_1701314910.jpg",
+        "image_url": "/images/products/2026-06-02-samsung-m7-32吋.jpg",
         "href": "/products/2026-06-02-samsung-m7-32吋",
         "external": false,
         "price_text": "9900",
@@ -2903,7 +2903,7 @@
           "影音"
         ],
         "tag_labels": [],
-        "image_url": "https://img.pchome.com.tw/cs/items/DMAAEEA900GPR35/i010004_1696574787.jpg",
+        "image_url": "/images/products/2026-06-02-sennheiser-ambeo-max.jpg",
         "href": "/products/2026-06-02-sennheiser-ambeo-max",
         "external": false,
         "price_text": "84900",
@@ -2922,7 +2922,7 @@
         "tag_labels": [
           "顯示設備"
         ],
-        "image_url": "https://img.pchome.com.tw/cs/items/DPADN9A900HQHS6/000001_1724033495.jpg",
+        "image_url": "/images/products/2026-06-02-sharp-65吋-xled.jpg",
         "href": "/products/2026-06-02-sharp-65吋-xled",
         "external": false,
         "price_text": "43000",
@@ -2939,7 +2939,7 @@
           "廚房"
         ],
         "tag_labels": [],
-        "image_url": "https://img.pchome.com.tw/cs/items/DMBJ03A900FTXFP/000001_1670575743.jpg",
+        "image_url": "/images/products/2026-06-02-sharp-xp10t.jpg",
         "href": "/products/2026-06-02-sharp-xp10t",
         "external": false,
         "price_text": "29900",
@@ -2956,7 +2956,7 @@
           "電腦"
         ],
         "tag_labels": [],
-        "image_url": "https://img.pchome.com.tw/cs/items/DRAG08A900FWNSJ/000001_1681108395.jpg",
+        "image_url": "/images/products/2026-06-02-synology-ds723.jpg",
         "href": "/products/2026-06-02-synology-ds723",
         "external": false,
         "price_text": "15000",
@@ -2973,7 +2973,7 @@
           "廚房"
         ],
         "tag_labels": [],
-        "image_url": "https://m.media-amazon.com/images/I/815FU9IOtcL._AC_SL1500_.jpg",
+        "image_url": "/images/products/2026-06-02-toshiba-yd5000.jpg",
         "href": "/products/2026-06-02-toshiba-yd5000",
         "external": false,
         "price_text": "￥100000",
@@ -2990,7 +2990,7 @@
           "居家"
         ],
         "tag_labels": [],
-        "image_url": "https://m.media-amazon.com/images/I/51l80QQ5itL._AC_SL1500_.jpg",
+        "image_url": "/images/products/2026-06-02-toshiba高階吸頂燈.jpg",
         "href": "/products/2026-06-02-toshiba高階吸頂燈",
         "external": false,
         "price_text": "￥30000",
@@ -3007,7 +3007,7 @@
           "居家"
         ],
         "tag_labels": [],
-        "image_url": "https://m.media-amazon.com/images/I/51xa1Xtqc3L._AC_SL1100_.jpg",
+        "image_url": "/images/products/2026-06-02-toto恆溫水龍頭.jpg",
         "href": "/products/2026-06-02-toto恆溫水龍頭",
         "external": false,
         "price_text": "￥18000",
@@ -3024,7 +3024,7 @@
           "居家"
         ],
         "tag_labels": [],
-        "image_url": "https://m.media-amazon.com/images/I/51lnbg1qqCL._AC_.jpg",
+        "image_url": "/images/products/2026-06-02-trusco-物流箱.jpg",
         "href": "/products/2026-06-02-trusco-物流箱",
         "external": false,
         "price_text": "￥1790",
@@ -3041,7 +3041,7 @@
           "電腦"
         ],
         "tag_labels": [],
-        "image_url": "https://images.svc.ui.com/?u=https%3A%2F%2Fcdn.ecomm.ui.com%2Fproducts%2F4ed25b4c-db92-4b98-bbf3-b0989f007c0e%2F8ff040a0-4b16-4c98-a96c-b643cfafbc73.png&q=75&w=1920",
+        "image_url": "/images/products/2026-06-02-unifi-express.png",
         "href": "/products/2026-06-02-unifi-express",
         "external": false,
         "price_text": "5799",
@@ -3058,7 +3058,7 @@
           "電腦"
         ],
         "tag_labels": [],
-        "image_url": "https://img.pchome.com.tw/cs/items/DRAF0IA900B7QHW/000001_1658917277.jpg",
+        "image_url": "/images/products/2026-06-02-zyxel-xgs1250-12.jpg",
         "href": "/products/2026-06-02-zyxel-xgs1250-12",
         "external": false,
         "price_text": "9000",
@@ -3075,7 +3075,7 @@
           "居家"
         ],
         "tag_labels": [],
-        "image_url": "https://img.pchome.com.tw/cs/items/DPAF4HA900FMJD3/000001_1700034325.jpg",
+        "image_url": "/images/products/2026-06-02-三菱重工冷氣.jpg",
         "href": "/products/2026-06-02-三菱重工冷氣",
         "external": false,
         "price_text": "比較貴一點",
@@ -3094,7 +3094,7 @@
         "tag_labels": [
           "米食"
         ],
-        "image_url": "https://cs-a.ecimg.tw/items/DBBY0MA900GMBY7/000001_1693383527.jpg",
+        "image_url": "/images/products/2026-06-02-大橋牌越光米.jpg",
         "href": "/products/2026-06-02-大橋牌越光米",
         "external": false,
         "price_text": "125/kg",
@@ -3111,7 +3111,7 @@
           "廚房"
         ],
         "tag_labels": [],
-        "image_url": "https://i1.momoshop.com.tw/1692546180/goodsimg/0011/521/511/11521511_R.webp",
+        "image_url": "/images/products/2026-06-02-威寶40l烤箱.webp",
         "href": "/products/2026-06-02-威寶40l烤箱",
         "external": false,
         "price_text": "9000",
@@ -3130,7 +3130,7 @@
         "tag_labels": [
           "米食"
         ],
-        "image_url": "https://img.pchome.com.tw/cs/items/DBBY0JA900F81AW/000001_1656130303.jpg",
+        "image_url": "/images/products/2026-06-02-富里牛奶皇后.jpg",
         "href": "/products/2026-06-02-富里牛奶皇后",
         "external": false,
         "price_text": "200/kg",
@@ -3147,7 +3147,7 @@
           "食材"
         ],
         "tag_labels": [],
-        "image_url": "https://shoplineimg.com/5d08366e3f64c1000128316b/63bf65758cd22b3421747f3e/2000x.webp?source_format=jpg",
+        "image_url": "/images/products/2026-06-02-山田製油-胡麻辣油.webp",
         "href": "/products/2026-06-02-山田製油-胡麻辣油",
         "external": false,
         "price_text": "￥972",
@@ -3164,7 +3164,7 @@
           "食材"
         ],
         "tag_labels": [],
-        "image_url": "https://item-shopping.c.yimg.jp/i/n/sake-nishida_asp-1005_1",
+        "image_url": "/images/products/2026-06-02-旭ポンズ.jpg",
         "href": "/products/2026-06-02-旭ポンズ",
         "external": false,
         "price_text": "￥840",
@@ -3181,7 +3181,7 @@
           "居家"
         ],
         "tag_labels": [],
-        "image_url": "https://www.costco.com.tw/medias/sys_master/images/h16/h10/275511669325854.webp",
+        "image_url": "/images/products/2026-06-02-花王-attack-zero.webp",
         "href": "/products/2026-06-02-花王-attack-zero",
         "external": false,
         "price_text": "579",
@@ -3198,7 +3198,7 @@
           "廚房"
         ],
         "tag_labels": [],
-        "image_url": "https://m.media-amazon.com/images/I/61dGv0BJc2L._AC_SL1000_.jpg",
+        "image_url": "/images/products/2026-06-02-象印nw-jw10.jpg",
         "href": "/products/2026-06-02-象印nw-jw10",
         "external": false,
         "price_text": "￥45000",
@@ -3215,7 +3215,7 @@
           "3C"
         ],
         "tag_labels": [],
-        "image_url": "https://img.pchome.com.tw/cs/items/DCABC4A900BOW1X/000001_1629649165.jpg",
+        "image_url": "/images/products/2026-06-02-電池充電器.jpg",
         "href": "/products/2026-06-02-電池充電器",
         "external": false,
         "price_text": "249",
@@ -3234,7 +3234,7 @@
         "tag_labels": [
           "人體工學"
         ],
-        "image_url": "https://cdn-next.cybassets.com/media/W1siZiIsIjEyMjkwL2F0dGFjaGVkX3Bob3Rvcy8xNzYyMjQ1MTkzXzEwMDFf5L-d5Zu657at5L-u6YGL6LK76Kqq5piOQTQtMV92Mi5qcGcuanBlZyJdXQ.jpeg?sha=9b24df7f10db7f74",
+        "image_url": "/images/guides/2026-06-02-aeron-chair.jpg",
         "href": "https://www.facebook.com/share/p/165wXVWFFW/",
         "external": true
       },

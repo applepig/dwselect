@@ -150,7 +150,7 @@
 </template>
 
 <script setup lang="ts">
-import type { ProductDetailView } from '../utils/published-products'
+import type { ProductDetailView } from '../utils/published-products/types'
 
 const router = useRouter()
 

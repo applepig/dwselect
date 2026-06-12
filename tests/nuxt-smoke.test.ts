@@ -74,18 +74,20 @@ describe('Nuxt SSG baseline', () => {
 
   it('should wire the public search input with submitted query search state', () => {
     const page_source = readFileSync(new URL('../app/pages/search.vue', import.meta.url), 'utf8')
+    const input_source = readFileSync(new URL('../app/components/search/search-input.vue', import.meta.url), 'utf8')
+    const composable_source = readFileSync(new URL('../app/composables/use-search-page.ts', import.meta.url), 'utf8')
 
-    expect(page_source).toContain('<input')
-    expect(page_source).toContain('v-model="pending_search_query"')
-    expect(page_source).toContain('@keydown.enter="submitPendingSearchFromEvent"')
-    expect(page_source).toContain('event.isComposing')
-    expect(page_source).toContain('event.preventDefault()')
-    expect(page_source).toContain('placeholder="在找什麼嗎？™"')
-    expect(page_source).toContain('getClientSearchResults')
-    expect(page_source).toContain('getClientSearchSuggestions')
+    expect(page_source).toContain('v-model:query="pending_search_query"')
     expect(page_source).toContain('client_search_results')
     expect(page_source).toContain('search_result_sections')
     expect(page_source).toContain('router.push')
+    expect(input_source).toContain('<input')
+    expect(input_source).toContain('@keydown.enter="submitPendingSearchFromEvent"')
+    expect(input_source).toContain('event.isComposing')
+    expect(input_source).toContain('event.preventDefault()')
+    expect(input_source).toContain('placeholder="在找什麼嗎？™"')
+    expect(composable_source).toContain('getClientSearchResults')
+    expect(composable_source).toContain('getClientSearchSuggestions')
     expect(page_source).not.toContain('<UInputMenu')
   })
 
@@ -127,6 +129,7 @@ describe('Nuxt SSG baseline', () => {
       '../app/pages/guide.vue',
       '../app/pages/search.vue',
       '../app/pages/links.vue',
+      '../app/components/search/search-idle-panel.vue',
     ].map((file_path) => readFileSync(new URL(file_path, import.meta.url), 'utf8')).join('\n')
 
     expect(page_source).toContain('目前沒有已上架商品')
@@ -216,7 +219,7 @@ describe('Nuxt SSG baseline', () => {
     const nav_source = readFileSync(new URL('../app/components/app-navigation.vue', import.meta.url), 'utf8')
     const theme_source = readFileSync(new URL('../app/components/theme-toggle.vue', import.meta.url), 'utf8')
     const link_source = readFileSync(new URL('../app/components/link-panel.vue', import.meta.url), 'utf8')
-    const view_model_source = readFileSync(new URL('../app/utils/published-products.ts', import.meta.url), 'utf8')
+    const link_rows_source = readFileSync(new URL('../app/utils/published-products/resource-rows.ts', import.meta.url), 'utf8')
 
     expect(nav_source).toContain('<NuxtLink')
     expect(nav_source).toContain("to: '/'")
@@ -235,10 +238,10 @@ describe('Nuxt SSG baseline', () => {
     expect(nav_source).toContain('app-nav-button')
     expect(theme_source).toContain('<UColorModeButton')
     expect(link_source).toContain('<ResourceList')
-    expect(view_model_source).toContain('getPublishedLinks')
-    expect(view_model_source).toContain('getResourceRowLinkAttributes')
-    expect(view_model_source).toContain("target: '_blank'")
-    expect(view_model_source).toContain("rel: 'noopener noreferrer'")
+    expect(link_rows_source).toContain('getPublishedLinks')
+    expect(link_rows_source).toContain('getResourceRowLinkAttributes')
+    expect(link_rows_source).toContain("target: '_blank'")
+    expect(link_rows_source).toContain("rel: 'noopener noreferrer'")
   })
 
   it('should expose desktop product category navigation without adding it to mobile or tablet nav', () => {
@@ -259,7 +262,7 @@ describe('Nuxt SSG baseline', () => {
     const guide_source = readFileSync(new URL('../app/pages/guide.vue', import.meta.url), 'utf8')
     const links_source = readFileSync(new URL('../app/pages/links.vue', import.meta.url), 'utf8')
     const search_source = readFileSync(new URL('../app/pages/search.vue', import.meta.url), 'utf8')
-    const view_model_source = readFileSync(new URL('../app/utils/published-products.ts', import.meta.url), 'utf8')
+    const resource_rows_source = readFileSync(new URL('../app/utils/published-products/resource-rows.ts', import.meta.url), 'utf8')
 
     expect(guide_source).toContain('compact_view.guide.guides')
     expect(guide_source).not.toContain('<TagExplorer')
@@ -271,11 +274,11 @@ describe('Nuxt SSG baseline', () => {
     expect(search_source).toContain('getSearchResultSections')
     expect(search_source).toContain('search-result-section')
     expect(search_source).toContain('<ResourceList')
-    expect(view_model_source).toContain('getSearchSuggestionMeta')
-    expect(view_model_source).toContain('result.price_text')
-    expect(view_model_source).toContain('result.channel_label')
-    expect(view_model_source).toContain("target: result.external ? '_blank' : null")
-    expect(view_model_source).toContain("rel: result.external ? 'noopener noreferrer' : null")
+    expect(resource_rows_source).toContain('getSearchSuggestionMeta')
+    expect(resource_rows_source).toContain('result.price_text')
+    expect(resource_rows_source).toContain('result.channel_label')
+    expect(resource_rows_source).toContain("target: result.external ? '_blank' : null")
+    expect(resource_rows_source).toContain("rel: result.external ? 'noopener noreferrer' : null")
   })
 
   it('should wire product detail route, buy CTA and view transition contracts in source', () => {

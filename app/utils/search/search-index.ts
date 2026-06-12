@@ -78,29 +78,10 @@ export type SearchSuggestion = {
 
 type BuildSearchIndexOptions = {
   generated_at?: string
-  categories?: CategoryDefinition[]
-  channels?: ChannelDefinition[]
-  tags?: TagDefinition[]
+  categories: CategoryDefinition[]
+  channels: ChannelDefinition[]
+  tags: TagDefinition[]
 }
-
-const DEFAULT_CATEGORIES: CategoryDefinition[] = [
-  { id: 'home', label: '居家', short_label: '居家', nav_visible: true, sort_order: 10 },
-  { id: 'kitchen', label: '廚房', short_label: '廚房', nav_visible: true, sort_order: 20 },
-  { id: 'computer', label: '電腦', short_label: '電腦', nav_visible: true, sort_order: 30 },
-  { id: 'three-c', label: '3C', short_label: '3C', nav_visible: true, sort_order: 40 },
-  { id: 'av', label: '影音', short_label: '影音', nav_visible: true, sort_order: 50 },
-  { id: 'food', label: '食材', short_label: '食材', nav_visible: true, sort_order: 60 },
-  { id: 'other', label: '其他', short_label: '其他', nav_visible: true, sort_order: 999 },
-]
-
-const DEFAULT_CHANNELS: ChannelDefinition[] = [
-  { id: 'pchome', label: 'PChome', tint: 'blue', host_patterns: ['24h.pchome.com.tw'], sort_order: 10 },
-  { id: 'momo', label: 'momo', tint: 'pink', host_patterns: ['www.momoshop.com.tw'], sort_order: 20 },
-  { id: 'amazonjp', label: 'Amazon JP', tint: 'amber', host_patterns: ['www.amazon.co.jp', 'amzn.asia'], sort_order: 30 },
-  { id: 'amazonus', label: 'Amazon US', tint: 'amber', host_patterns: ['www.amazon.com'], sort_order: 40 },
-  { id: 'costco', label: 'Costco', tint: 'indigo', host_patterns: ['www.costco.com.tw'], sort_order: 50 },
-  { id: 'other', label: '其他通路', tint: 'neutral', host_patterns: [], sort_order: 999 },
-]
 
 const SEARCH_FIELDS: Array<keyof SearchDocument> = [
   'title',
@@ -128,12 +109,12 @@ const SEARCH_STORE_FIELDS: Array<keyof SearchDocument> = [
 
 export function getSearchDocuments(
   input: Product[] | SearchContentInput,
-  options: Pick<BuildSearchIndexOptions, 'categories' | 'channels' | 'tags'> = {},
+  options: Pick<BuildSearchIndexOptions, 'categories' | 'channels' | 'tags'>,
 ): SearchDocument[] {
   const content = normalizeSearchContentInput(input)
-  const category_labels = getCategoryLabelMap(options.categories ?? DEFAULT_CATEGORIES)
-  const channel_labels = getChannelLabelMap(options.channels ?? DEFAULT_CHANNELS)
-  const tag_labels = getTagLabelMap(options.tags ?? [])
+  const category_labels = getCategoryLabelMap(options.categories)
+  const channel_labels = getChannelLabelMap(options.channels)
+  const tag_labels = getTagLabelMap(options.tags)
 
   return [
     ...content.products
@@ -153,7 +134,7 @@ export function getSearchDocuments(
 
 export function buildSearchIndexPayload(
   input: Product[] | SearchContentInput,
-  options: BuildSearchIndexOptions = {},
+  options: BuildSearchIndexOptions,
 ): SearchIndexPayload {
   const documents = getSearchDocuments(input, options)
   const mini_search = createSearchIndex()

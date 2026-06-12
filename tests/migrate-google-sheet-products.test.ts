@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { MIGRATE_GOOGLE_SHEET_PRODUCTS_DEPRECATED_NOTICE, migrateGoogleSheetProducts, formatMigrationSummary } from '../scripts/migrate-google-sheet-products'
+import { MIGRATE_GOOGLE_SHEET_PRODUCTS_DEPRECATED_NOTICE, migrateGoogleSheetProducts, formatMigrationSummary } from '../scripts/legacy/migrate-google-sheet-products'
 
 const header = 'name\tprice\tdesc\tlink_url\timg_url\ttags\tcategory\treference'
 const legacy_header = 'name\tbrand\tdesc\tcategory\ttags\tprice_value\tprice\tlink_url\timg_url\treference'

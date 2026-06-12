@@ -3,7 +3,7 @@ import { basename, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { createHash } from 'node:crypto'
 
-import type { Product } from '../app/utils/product-schema.ts'
+import type { Product } from '../../app/utils/product-schema.ts'
 import { getCategoryFallbackWarning, getCompactProductMigration } from './migrate-product-compact-schema.ts'
 
 export const MIGRATE_GOOGLE_SHEET_PRODUCTS_DEPRECATED_NOTICE = 'Deprecated legacy Google Sheet importer: use Git-backed content domain migration for current content schema.'
@@ -199,7 +199,7 @@ async function runCli() {
   const should_replace = args.includes('--replace')
 
   if (!input_path) {
-    throw new Error('Usage: node scripts/migrate-google-sheet-products.ts <input.tsv-or-url> --date YYYY-MM-DD [--out-dir content/products] [--replace]')
+    throw new Error('Usage: node scripts/legacy/migrate-google-sheet-products.ts <input.tsv-or-url> --date YYYY-MM-DD [--out-dir content/products] [--replace]')
   }
 
   const tsv_text = await readMigrationInput(input_path)

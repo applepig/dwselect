@@ -7,7 +7,7 @@ import { join, parse } from 'node:path'
 import { promisify } from 'node:util'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
-import type { Guide, LinkDefinition, Product, TagDefinition } from '../app/utils/product-schema'
+import type { CategoryDefinition, ChannelDefinition, Guide, LinkDefinition, Product, TagDefinition } from '../app/utils/product-schema'
 import { buildSearchIndexFile } from '../scripts/build-search-index'
 import {
   SEARCH_INDEX_VERSION,
@@ -83,6 +83,25 @@ const base_link: LinkDefinition = {
   archived_at: null,
 }
 
+const test_categories: CategoryDefinition[] = [
+  { id: 'home', label: '居家', short_label: '居家', nav_visible: true, sort_order: 10 },
+  { id: 'kitchen', label: '廚房', short_label: '廚房', nav_visible: true, sort_order: 20 },
+  { id: 'computer', label: '電腦', short_label: '電腦', nav_visible: true, sort_order: 30 },
+  { id: 'three-c', label: '3C', short_label: '3C', nav_visible: true, sort_order: 40 },
+  { id: 'av', label: '影音', short_label: '影音', nav_visible: true, sort_order: 50 },
+  { id: 'food', label: '食材', short_label: '食材', nav_visible: true, sort_order: 60 },
+  { id: 'other', label: '其他', short_label: '其他', nav_visible: true, sort_order: 999 },
+]
+
+const test_channels: ChannelDefinition[] = [
+  { id: 'pchome', label: 'PChome', tint: 'blue', host_patterns: ['24h.pchome.com.tw'], sort_order: 10 },
+  { id: 'momo', label: 'momo', tint: 'pink', host_patterns: ['www.momoshop.com.tw'], sort_order: 20 },
+  { id: 'amazonjp', label: 'Amazon JP', tint: 'amber', host_patterns: ['www.amazon.co.jp', 'amzn.asia'], sort_order: 30 },
+  { id: 'amazonus', label: 'Amazon US', tint: 'amber', host_patterns: ['www.amazon.com'], sort_order: 40 },
+  { id: 'costco', label: 'Costco', tint: 'indigo', host_patterns: ['www.costco.com.tw'], sort_order: 50 },
+  { id: 'other', label: '其他通路', tint: 'neutral', host_patterns: [], sort_order: 999 },
+]
+
 const test_tags: TagDefinition[] = [
   { id: 'keyboard', label: '鍵盤', description: '鍵盤', aliases: [], nav_visible: true, sort_order: 10 },
   { id: 'usb-c', label: 'USB-C', description: 'USB-C', aliases: [], nav_visible: true, sort_order: 20 },
@@ -90,6 +109,12 @@ const test_tags: TagDefinition[] = [
   { id: 'rice', label: '日本米', description: '日本米', aliases: [], nav_visible: true, sort_order: 40 },
   { id: 'shared-token', label: 'shared-token', description: 'shared-token', aliases: [], nav_visible: true, sort_order: 50 },
 ]
+
+const test_taxonomies = {
+  categories: test_categories,
+  channels: test_channels,
+  tags: test_tags,
+}
 
 const temp_paths: string[] = []
 
@@ -126,7 +151,7 @@ function readStaticSearchIndexPayload() {
 
 describe('search index', () => {
   it('should map published products to search documents', () => {
-    expect(getSearchDocuments({ products: [base_product], guides: [], links: [] }, { tags: test_tags })).toEqual([
+    expect(getSearchDocuments({ products: [base_product], guides: [], links: [] }, test_taxonomies)).toEqual([
       {
         document_id: 'product:2026-06-02-sample-product',
         content_id: '2026-06-02-sample-product',
@@ -149,7 +174,7 @@ describe('search index', () => {
   })
 
   it('should map published guides and links to external search documents', () => {
-    expect(getSearchDocuments({ products: [], guides: [base_guide], links: [base_link] }, { tags: test_tags })).toEqual([
+    expect(getSearchDocuments({ products: [], guides: [base_guide], links: [base_link] }, test_taxonomies)).toEqual([
       {
         document_id: 'guide:2026-06-02-guide',
         content_id: '2026-06-02-guide',
@@ -192,14 +217,14 @@ describe('search index', () => {
         title: '圖片連結',
         image_url: 'https://example.com/link-logo.png',
       }],
-    }, { generated_at: '2026-06-06T00:00:00+08:00' })
+    }, { ...test_taxonomies, generated_at: '2026-06-06T00:00:00+08:00' })
     const mini_search = loadSearchIndex(payload)
 
     expect(getSearchDocuments({ products: [], guides: [], links: [{
       ...base_link,
       title: '圖片連結',
       image_url: 'https://example.com/link-logo.png',
-    }] })).toEqual([
+    }] }, test_taxonomies)).toEqual([
       expect.objectContaining({
         document_id: 'link:applepig-home',
         image_url: 'https://example.com/link-logo.png',
@@ -224,7 +249,7 @@ describe('search index', () => {
       ...base_product,
       id: 'other-category-product',
       category_id: 'other',
-    }], guides: [], links: [] })).toEqual([
+    }], guides: [], links: [] }, test_taxonomies)).toEqual([
       expect.objectContaining({
         document_id: 'product:other-category-product',
         category_ids: ['other'],
@@ -249,7 +274,7 @@ describe('search index', () => {
       { ...base_link, id: 'archived-link', status: 'archived' as const, title: '封存連結' },
     ]
 
-    const payload = buildSearchIndexPayload({ products, guides, links }, { generated_at: '2026-06-06T00:00:00+08:00' })
+    const payload = buildSearchIndexPayload({ products, guides, links }, { ...test_taxonomies, generated_at: '2026-06-06T00:00:00+08:00' })
     const mini_search = MiniSearch.loadJSON(JSON.stringify(payload.index), {
       ...getSearchOptions(),
     })
@@ -268,8 +293,8 @@ describe('search index', () => {
 
   it('should build the static JSON contract and restore it with MiniSearch.loadJSON', () => {
     const payload = buildSearchIndexPayload({ products: [base_product], guides: [], links: [] }, {
+      ...test_taxonomies,
       generated_at: '2026-06-06T00:00:00+08:00',
-      tags: test_tags,
     })
     const mini_search = loadSearchIndex(payload)
 
@@ -312,8 +337,8 @@ describe('search index', () => {
       published_at: '2026-06-03T00:00:00+08:00',
     }
     const payload = buildSearchIndexPayload({ products: [base_product, second_product], guides: [], links: [] }, {
+      ...test_taxonomies,
       generated_at: '2026-06-06T00:00:00+08:00',
-      tags: test_tags,
     })
     const mini_search = loadSearchIndex(payload)
 
@@ -348,8 +373,8 @@ describe('search index', () => {
       published_at: `2026-06-${String(index + 1).padStart(2, '0')}T00:00:00+08:00`,
     }))
     const payload = buildSearchIndexPayload({ products, guides: [], links: [] }, {
+      ...test_taxonomies,
       generated_at: '2026-06-06T00:00:00+08:00',
-      tags: test_tags,
     })
     const mini_search = loadSearchIndex(payload)
 
@@ -420,9 +445,14 @@ describe('search index', () => {
     const temp_dir = await mkdtemp(join(tmpdir(), 'dwselect-search-index-cli-'))
     temp_paths.push(temp_dir)
     const products_dir = join(temp_dir, 'products')
+    const taxonomies_dir = join(temp_dir, 'taxonomies')
     const output_path = join(temp_dir, 'public', 'search-index.json')
     await mkdir(products_dir)
+    await mkdir(taxonomies_dir)
     await writeFile(join(products_dir, '2026-06-08-node-esm.json'), JSON.stringify(base_product))
+    await writeFile(join(taxonomies_dir, 'categories.json'), JSON.stringify({ items: test_categories }))
+    await writeFile(join(taxonomies_dir, 'channels.json'), JSON.stringify({ items: test_channels }))
+    await writeFile(join(taxonomies_dir, 'tags.json'), JSON.stringify({ items: test_tags }))
 
     const { stdout } = await execFileAsync(process.execPath, [
       'scripts/build-search-index.ts',
@@ -431,7 +461,7 @@ describe('search index', () => {
       '--out',
       output_path,
       '--taxonomies-dir',
-      join(temp_dir, 'taxonomies'),
+      taxonomies_dir,
     ])
     const payload = JSON.parse(await readFile(output_path, 'utf8')) as ReturnType<typeof buildSearchIndexPayload>
 
@@ -456,8 +486,8 @@ describe('search index', () => {
 
     vi.stubGlobal('Intl', { ...Intl, Segmenter })
     const payload = buildSearchIndexPayload({ products: [base_product], guides: [], links: [] }, {
+      ...test_taxonomies,
       generated_at: '2026-06-06T00:00:00+08:00',
-      tags: test_tags,
     })
     vi.stubGlobal('Intl', { ...Intl, Segmenter: undefined })
     const mini_search = loadSearchIndex(payload)

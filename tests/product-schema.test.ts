@@ -162,6 +162,53 @@ describe('product schema', () => {
     })).toThrow()
   })
 
+  it('should accept local image URLs from products and guides', () => {
+    for (const extension of ['jpg', 'jpeg', 'png', 'webp', 'gif', 'avif']) {
+      expect(() => product_schema.parse({
+        ...valid_product,
+        image_url: `/images/products/2026-06-02-sample-product.${extension}`,
+      })).not.toThrow()
+
+      expect(() => guide_schema.parse({
+        ...valid_guide,
+        image_url: `/images/guides/sample-guide.${extension}`,
+      })).not.toThrow()
+    }
+  })
+
+  it('should reject malformed or unsupported local image URLs', () => {
+    const invalid_local_image_urls = [
+      '/images/products/',
+      '/images/products//',
+      '/images/products/sample-product',
+      '/images/products/sample-product.bmp',
+      '/images/products/subdir/sample-product.jpg',
+      '/images/other/sample-product.jpg',
+      'images/products/sample-product.jpg',
+      '/images/products/../secret.jpg',
+      '/images/products/sample-product.jpg?v=1',
+      '/images/guides/sample-guide.jpg#x',
+    ]
+
+    for (const image_url of invalid_local_image_urls) {
+      expect(() => product_schema.parse({
+        ...valid_product,
+        image_url,
+      })).toThrow()
+    }
+  })
+
+  it('should keep rejecting javascript: and data: URLs for image fields', () => {
+    expect(() => product_schema.parse({
+      ...valid_product,
+      image_url: 'javascript:alert(1)',
+    })).toThrow()
+    expect(() => guide_schema.parse({
+      ...valid_guide,
+      image_url: 'data:text/plain,test',
+    })).toThrow()
+  })
+
   it('should allow empty reference URL as null', () => {
     expect(() => product_schema.parse({
       ...valid_product,
@@ -207,6 +254,10 @@ describe('product schema', () => {
     expect(() => link_schema.parse({
       ...valid_link,
       image_url: 'https://example.com/link-logo.png',
+    })).not.toThrow()
+    expect(() => link_schema.parse({
+      ...valid_link,
+      image_url: '/images/guides/sample-link.png',
     })).not.toThrow()
     expect(() => link_schema.parse({
       ...valid_link,

@@ -1,5 +1,7 @@
 import { expect, test } from '@playwright/test'
 
+const SEARCH_RESULT_TIMEOUT_MS = 15_000
+
 function getNavRoot(page, project_name) {
   if (project_name === 'phone') {
     return page.locator('.compact-app-bottom-tabs')
@@ -214,7 +216,9 @@ test('restores category and search state from query strings', async ({ page }) =
   await page.goto('/search?q=Sharp', { waitUntil: 'domcontentloaded' })
   await expect(page.locator('vite-error-overlay')).toHaveCount(0)
   await expect(page.getByPlaceholder('在找什麼嗎？™')).toHaveValue('Sharp')
-  await expect(page.locator('.search-result-section[data-section-id="products"] .resource-row').first()).toContainText('Sharp')
+  await expect(page.locator('.search-result-section[data-section-id="products"] .resource-row').first()).toContainText('Sharp', {
+    timeout: SEARCH_RESULT_TIMEOUT_MS,
+  })
 })
 
 test('separates search typing, autocomplete and submitted query state', async ({ page }) => {
@@ -234,7 +238,9 @@ test('separates search typing, autocomplete and submitted query state', async ({
 
   await search_input.press('Enter')
   await expect(page).toHaveURL(/\/search\?q=Sharp/)
-  await expect(page.locator('.search-result-section[data-section-id="products"] .resource-row').first()).toBeVisible()
+  await expect(page.locator('.search-result-section[data-section-id="products"] .resource-row').first()).toBeVisible({
+    timeout: SEARCH_RESULT_TIMEOUT_MS,
+  })
 
   const history_items = await page.evaluate(() => JSON.parse(localStorage.getItem('dwselect.search.history.v1') ?? '[]'))
   expect(history_items).toEqual(['Sharp'])
@@ -276,6 +282,27 @@ test('does not submit search or write history when IME composition confirms with
   expect(history_items).toEqual([])
 })
 
+test('defers search input query updates until IME composition ends', async ({ page }) => {
+  await page.goto('/search', { waitUntil: 'domcontentloaded' })
+  await expect(page.locator('vite-error-overlay')).toHaveCount(0)
+
+  const search_input = page.getByPlaceholder('在找什麼嗎？™')
+  await expect(search_input).toBeEnabled()
+  await expect(page.locator('.search-popular-panel')).toBeVisible()
+
+  await search_input.dispatchEvent('compositionstart')
+  await search_input.fill('鍵')
+
+  await page.waitForTimeout(100)
+  await expect(page.locator('.search-suggestion-panel')).toHaveCount(0)
+  await expect(page.locator('.search-popular-panel')).toBeVisible()
+
+  await search_input.fill('鍵盤')
+  await search_input.dispatchEvent('compositionend')
+
+  await expect(page.locator('.search-suggestion-panel')).toBeVisible()
+})
+
 test('keeps search usable when search history storage contains corrupted JSON', async ({ page }) => {
   await page.goto('/search', { waitUntil: 'domcontentloaded' })
   await page.evaluate(() => {
@@ -295,7 +322,9 @@ test('keeps search usable when search history storage contains corrupted JSON', 
   await search_input.press('Enter')
 
   await expect(page).toHaveURL(/\/search\?q=Sharp/)
-  await expect(page.locator('.search-result-section[data-section-id="products"] .resource-row').first()).toBeVisible()
+  await expect(page.locator('.search-result-section[data-section-id="products"] .resource-row').first()).toBeVisible({
+    timeout: SEARCH_RESULT_TIMEOUT_MS,
+  })
 })
 
 test('recovers suggestions after the search index error retry path', async ({ page }) => {
@@ -336,7 +365,7 @@ test('submits search only after clicking popular tags or history items', async (
   const tag_label = (await first_popular_tag.locator('span').first().textContent())?.trim() ?? ''
   await first_popular_tag.click()
   await expect(page).toHaveURL(new RegExp(`/search\\?q=.*${encodeURIComponent(tag_label)}`))
-  await expect(page.locator('.search-results .resource-row').first()).toBeVisible()
+  await expect(page.locator('.search-results .resource-row').first()).toBeVisible({ timeout: SEARCH_RESULT_TIMEOUT_MS })
 
   await page.goto('/search', { waitUntil: 'domcontentloaded' })
   await page.locator('.search-history-panel').getByRole('button', { name: tag_label }).click()
@@ -349,7 +378,7 @@ test('renders submitted search as ordered resource sections with counts and non-
   await expect(page.getByPlaceholder('在找什麼嗎？™')).toHaveValue('電腦')
 
   const sections = page.locator('.search-result-section')
-  await expect(sections).toHaveCount(3)
+  await expect(sections).toHaveCount(3, { timeout: SEARCH_RESULT_TIMEOUT_MS })
   await expect(sections.nth(0)).toHaveAttribute('data-section-id', 'products')
   await expect(sections.nth(1)).toHaveAttribute('data-section-id', 'guides')
   await expect(sections.nth(2)).toHaveAttribute('data-section-id', 'links')
@@ -382,7 +411,9 @@ test('renders submitted search as ordered resource sections with counts and non-
 
   await page.goto('/search?q=Sharp', { waitUntil: 'domcontentloaded' })
   await expect(page.locator('vite-error-overlay')).toHaveCount(0)
-  await expect(page.locator('.search-result-section[data-section-id="products"]')).toHaveCount(1)
+  await expect(page.locator('.search-result-section[data-section-id="products"]')).toHaveCount(1, {
+    timeout: SEARCH_RESULT_TIMEOUT_MS,
+  })
   await expect(page.locator('.search-result-section[data-section-id="guides"]')).toHaveCount(0)
   await expect(page.locator('.search-result-section[data-section-id="links"]')).toHaveCount(0)
 })

@@ -12,8 +12,8 @@
 
 <script setup lang="ts">
 import type { Product } from '../../utils/product-schema'
-import type { TaxonomyDefinitions } from '../../utils/published-products'
-import { getCatalogProductId, getProductDetail, getRelatedProductCards } from '../../utils/published-products'
+import type { TaxonomyDefinitions } from '../../utils/published-products/types'
+import { getCatalogProductId, getProductDetail, getRelatedProductCards } from '../../utils/published-products/product-detail'
 
 const route = useRoute()
 const product = shallowRef<Product | null>(null)

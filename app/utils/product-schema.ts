@@ -1,8 +1,8 @@
 import { z } from 'zod'
 
 const TIMESTAMP_PATTERN = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}[+-]\d{2}:\d{2}$/
-const CATEGORY_IDS = ['home', 'kitchen', 'computer', 'three-c', 'av', 'food', 'other'] as const
-const CHANNEL_IDS = ['pchome', 'momo', 'amazonjp', 'amazonus', 'costco', 'other'] as const
+export const CATEGORY_IDS = ['home', 'kitchen', 'computer', 'three-c', 'av', 'food', 'other'] as const
+export const CHANNEL_IDS = ['pchome', 'momo', 'amazonjp', 'amazonus', 'costco', 'other'] as const
 
 const content_status_schema = z.enum(['draft', 'published', 'unpublished', 'archived'])
 const category_id_schema = z.enum(CATEGORY_IDS)
@@ -19,6 +19,27 @@ const http_url_schema = z.string().refine((value) => {
     return false
   }
 }, 'must be a valid HTTP(S) URL')
+
+const LOCAL_IMAGE_PATH_PATTERN = /^\/images\/(products|guides)\/[^/?#.][^/?#]*\.(jpe?g|png|webp|gif|avif)$/
+
+const local_image_path_schema = z.string().refine((value) => {
+  try {
+    if (!LOCAL_IMAGE_PATH_PATTERN.test(value)) {
+      return false
+    }
+
+    if (value.includes('..') || value.includes('?') || value.includes('#')) {
+      return false
+    }
+
+    return true
+  }
+  catch {
+    return false
+  }
+}, 'must be a /images/(products|guides)/<filename>.<ext> path')
+
+const local_or_http_url_schema = z.union([http_url_schema, local_image_path_schema])
 
 const timestamp_schema = z.string().regex(TIMESTAMP_PATTERN, 'must be a timestamp with timezone offset')
 
@@ -38,7 +59,7 @@ export const product_schema = z.object({
   summary: z.string(),
   description: z.string(),
   purchase_url: http_url_schema,
-  image_url: http_url_schema,
+  image_url: local_or_http_url_schema,
   channel_id: channel_id_schema,
   category_id: category_id_schema,
   tag_ids: z.array(tag_id_schema),
@@ -56,7 +77,7 @@ export const guide_schema = z.object({
   title: z.string().min(1),
   summary: z.string(),
   source_url: http_url_schema,
-  image_url: http_url_schema.nullable(),
+  image_url: local_or_http_url_schema.nullable(),
   category_ids: z.array(category_id_schema),
   tag_ids: z.array(tag_id_schema),
   related_product_ids: z.array(z.string().min(1)),
@@ -73,7 +94,7 @@ export const link_schema = z.object({
   title: z.string().min(1),
   summary: z.string(),
   url: http_url_schema,
-  image_url: http_url_schema.nullable().optional(),
+  image_url: local_or_http_url_schema.nullable().optional(),
   icon: z.string().min(1),
   category_ids: z.array(category_id_schema),
   tag_ids: z.array(tag_id_schema),
