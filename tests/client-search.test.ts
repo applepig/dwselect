@@ -15,18 +15,27 @@ const base_product: Product = {
   id: '2026-06-02-sample-product',
   status: 'published',
   name: '機械鍵盤',
-  price_text: 'NT$ 1,990',
-  price: {
-    amount: 1990,
-    currency: 'TWD',
-    unit: 'each',
-    label: null,
-  },
+  english_name: 'Mechanical Keyboard',
   summary: '熱插拔小尺寸鍵盤',
-  description: '適合長時間寫程式的繁中鍵盤',
-  purchase_url: 'https://example.com/product',
+  long_description: '適合長時間寫程式的繁中鍵盤',
+  llm_description: '',
+  search_aliases: [],
+  model_numbers: [],
+  offers: [
+    {
+      channel_id: 'pchome',
+      url: 'https://example.com/product',
+      price_text: 'NT$ 1,990',
+      price: {
+        amount: 1990,
+        currency: 'TWD',
+        unit: 'each',
+        label: null,
+      },
+      checked_at: '2026-06-02T00:00:00+08:00',
+    },
+  ],
   image_url: 'https://example.com/product.jpg',
-  channel_id: 'pchome',
   category_id: 'computer',
   tag_ids: ['keyboard', 'usb-c'],
   reference_url: 'https://example.com/reference',
@@ -41,6 +50,7 @@ const test_taxonomies: {
   categories: CategoryDefinition[]
   channels: ChannelDefinition[]
   tags: TagDefinition[]
+  brands: TagDefinition[]
 } = {
   categories: [
     { id: 'computer', label: '電腦', short_label: '電腦', nav_visible: true, sort_order: 30 },
@@ -53,6 +63,7 @@ const test_taxonomies: {
     { id: 'usb-c', label: 'USB-C', description: 'USB-C', aliases: [], nav_visible: true, sort_order: 20 },
     { id: 'shared-token', label: 'shared-token', description: 'shared-token', aliases: [], nav_visible: true, sort_order: 30 },
   ],
+  brands: [],
 }
 
 beforeEach(() => {

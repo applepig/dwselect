@@ -1,0 +1,37 @@
+{
+  "id": "2026-06-02-lixil-bidet-seat",
+  "status": "published",
+  "name": "Lixil免治馬桶座",
+  "english_name": "LIXIL Bidet Seat",
+  "summary": "TOTO的最近在amazon上價錢很亂，相較之下Lixil的比較合理",
+  "long_description": "TOTO的最近在amazon上價錢很亂，相較之下Lixil的比較合理",
+  "llm_description": "",
+  "search_aliases": [],
+  "model_numbers": [],
+  "offers": [
+    {
+      "channel_id": "amazonjp",
+      "url": "https://amzn.asia/d/2Bgf6KR",
+      "price_text": "￥42000",
+      "price": {
+        "amount": 42000,
+        "currency": "JPY",
+        "unit": "each",
+        "label": null
+      },
+      "checked_at": "2026-06-02T00:00:00+08:00"
+    }
+  ],
+  "image_url": "/images/products/2026-06-02-lixil-bidet-seat.jpg",
+  "category_id": "small-appliance",
+  "tag_ids": [
+    "bathroom",
+    "lixil"
+  ],
+  "reference_url": "https://www.facebook.com/photo/?fbid=10225665699022514&set=a.4011662783214",
+  "created_at": "2026-06-02T00:00:00+08:00",
+  "updated_at": "2026-06-02T00:00:00+08:00",
+  "published_at": "2026-06-02T00:00:00+08:00",
+  "unpublished_at": null,
+  "archived_at": null
+}

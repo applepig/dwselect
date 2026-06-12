@@ -17,18 +17,27 @@ const valid_product = {
   id: '2026-06-02-sample-product',
   status: 'published',
   name: '商品名稱',
-  price_text: 'NT$ 1,990',
-  price: {
-    amount: 1990,
-    currency: 'TWD',
-    unit: 'each',
-    label: null,
-  },
+  english_name: 'Sample Product',
   summary: '推薦短評',
-  description: '推薦文或商品描述',
-  purchase_url: 'https://example.com/product',
+  long_description: '推薦文或商品描述',
+  llm_description: '',
+  search_aliases: [],
+  model_numbers: [],
+  offers: [
+    {
+      channel_id: 'other',
+      url: 'https://example.com/product',
+      price_text: 'NT$ 1,990',
+      price: {
+        amount: 1990,
+        currency: 'TWD',
+        unit: 'each',
+        label: null,
+      },
+      checked_at: '2026-06-02T00:00:00+08:00',
+    },
+  ],
   image_url: 'https://example.com/product.jpg',
-  channel_id: 'other',
   category_id: 'home',
   tag_ids: ['tag-a', 'tag-b'],
   reference_url: 'https://example.com/reference',
@@ -141,15 +150,20 @@ describe('product schema', () => {
     })).not.toThrow()
   })
 
-  it('should accept kebab-case ASCII product category and channel ids without hardcoded enum coupling', () => {
+  it('should accept kebab-case ASCII product category and offer channel ids without hardcoded enum coupling', () => {
     expect(() => product_schema.parse({
       ...valid_product,
       category_id: 'new-audio-gear',
-      channel_id: 'new-shop-24h',
+      offers: [
+        {
+          ...valid_product.offers[0],
+          channel_id: 'new-shop-24h',
+        },
+      ],
     })).not.toThrow()
   })
 
-  it('should reject malformed product category and channel ids', () => {
+  it('should reject malformed product category and offer channel ids', () => {
     for (const invalid_id of ['NewCategory', 'new_category', 'new category', '新分類', '-new-category', 'new-category-']) {
       expect(() => product_schema.parse({
         ...valid_product,
@@ -157,7 +171,12 @@ describe('product schema', () => {
       })).toThrow()
       expect(() => product_schema.parse({
         ...valid_product,
-        channel_id: invalid_id,
+        offers: [
+          {
+            ...valid_product.offers[0],
+            channel_id: invalid_id,
+          },
+        ],
       })).toThrow()
     }
   })
@@ -169,11 +188,32 @@ describe('product schema', () => {
     })).toThrow()
   })
 
-  it('should reject non HTTP(S) product URLs', () => {
-    for (const purchase_url of ['javascript:alert(1)', 'data:text/plain,test', '/relative-path']) {
+  it('should reject non HTTP(S) product offer URLs', () => {
+    for (const url of ['javascript:alert(1)', 'data:text/plain,test', '/relative-path']) {
       expect(() => product_schema.parse({
         ...valid_product,
-        purchase_url,
+        offers: [
+          {
+            ...valid_product.offers[0],
+            url,
+          },
+        ],
+      })).toThrow()
+    }
+  })
+
+  it('should reject product documents without a primary offer', () => {
+    expect(() => product_schema.parse({
+      ...valid_product,
+      offers: [],
+    })).toThrow()
+  })
+
+  it('should reject legacy top-level purchase and description fields after product schema cutover', () => {
+    for (const legacy_field of ['channel_id', 'purchase_url', 'price', 'price_text', 'description']) {
+      expect(() => product_schema.parse({
+        ...valid_product,
+        [legacy_field]: legacy_field,
       })).toThrow()
     }
   })
@@ -419,8 +459,8 @@ describe('product schema', () => {
     const link_entries = readContentLinkEntries()
 
     expect(product_entries).toHaveLength(62)
-    expect(product_entries.map((entry) => entry.file_name)).toContain('2026-06-02-ikea充電線.json')
-    expect(product_entries.map((entry) => entry.file_name)).toContain('2026-06-02-三菱重工冷氣.json')
+    expect(product_entries.map((entry) => entry.file_name)).toContain('2026-06-02-ikea-charging-cable.json')
+    expect(product_entries.map((entry) => entry.file_name)).toContain('2026-06-02-mitsubishi-heavy-industries-air-conditioner.json')
     expect(product_entries.map((entry) => entry.file_name)).not.toContain('2026-06-02-日本米入門篇.json')
     expect(product_entries.map((entry) => entry.file_name)).not.toContain('2026-06-02-aeron-chair.json')
     expect(product_entries.map((entry) => entry.file_name)).not.toContain('2026-06-02-b18.json')
@@ -448,8 +488,17 @@ describe('product schema', () => {
 
     for (const entry of product_entries) {
       expect(entry.content.id).toBe(entry.file_stem)
+      expect(entry.content.id).toBe(`${entry.content.created_at.slice(0, 10)}-${slugifyEnglishName(entry.content.english_name)}`)
+      expect(entry.content.image_url).not.toMatch(/[\u3040-\u30ff\u3400-\u9fff]/u)
       expect(entry.content).not.toHaveProperty('category')
       expect(entry.content).not.toHaveProperty('tags')
+      expect(entry.content).not.toHaveProperty('channel_id')
+      expect(entry.content).not.toHaveProperty('purchase_url')
+      expect(entry.content).not.toHaveProperty('price')
+      expect(entry.content).not.toHaveProperty('price_text')
+      expect(entry.content).not.toHaveProperty('description')
+      expect(entry.content.offers).toHaveLength(1)
+      expect(entry.content.offers[0].checked_at).toBe(entry.content.updated_at)
       expect(() => product_schema.parse(entry.content)).not.toThrow()
     }
     for (const entry of guide_entries) {
@@ -484,10 +533,18 @@ describe('product schema', () => {
 
     expect(tag_ids).not.toEqual(expect.arrayContaining(LEGACY_PLATFORM_TAGS))
     expect(tag_ids).not.toEqual(expect.arrayContaining(LEGACY_ROOT_CATEGORY_TAGS))
-    expect(readContentProductEntries().find((entry) => entry.file_stem === '2026-06-02-ikea充電線')?.content.tag_ids).toEqual([])
-    expect(readContentProductEntries().find((entry) => entry.file_stem === '2026-06-02-三菱重工冷氣')?.content.tag_ids).toEqual([])
+    expect(readContentProductEntries().find((entry) => entry.file_stem === '2026-06-02-ikea-charging-cable')?.content.tag_ids).toEqual(expect.arrayContaining(['ikea', 'cable-adapter']))
+    expect(readContentProductEntries().find((entry) => entry.file_stem === '2026-06-02-mitsubishi-heavy-industries-air-conditioner')?.content.tag_ids).toEqual(expect.arrayContaining(['mitsubishi-heavy-industries', 'aircon']))
   })
 })
+
+function slugifyEnglishName(english_name: string) {
+  return english_name
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/-+/g, '-')
+    .replace(/^-|-$/g, '')
+}
 
 function expectTaxonomyIdsToBeKebabCaseAndUnique(items: Array<{ id: string }>) {
   const ids = items.map((item) => item.id)

@@ -1,0 +1,38 @@
+{
+  "id": "2026-06-02-asahi-ponzu",
+  "status": "published",
+  "name": "旭ポンズ",
+  "english_name": "Asahi Ponzu",
+  "summary": "在黑門市場的時候被店員大姊推銷，從此一試成主顧的橘醋  大阪附近的話很好買，東京附近的話要找百貨公司超市或成城石井之類的",
+  "long_description": "在黑門市場的時候被店員大姊推銷，從此一試成主顧的橘醋  大阪附近的話很好買，東京附近的話要找百貨公司超市或成城石井之類的",
+  "llm_description": "",
+  "search_aliases": [],
+  "model_numbers": [],
+  "offers": [
+    {
+      "channel_id": "other",
+      "url": "https://www.asahi-syokuhin.co.jp/product/ponzu",
+      "price_text": "￥840",
+      "price": {
+        "amount": 840,
+        "currency": "JPY",
+        "unit": "each",
+        "label": null
+      },
+      "checked_at": "2026-06-02T00:00:00+08:00"
+    }
+  ],
+  "image_url": "/images/products/2026-06-02-asahi-ponzu.jpg",
+  "category_id": "household",
+  "tag_ids": [
+    "asahi-ponzu",
+    "food",
+    "kitchen"
+  ],
+  "reference_url": null,
+  "created_at": "2026-06-02T00:00:00+08:00",
+  "updated_at": "2026-06-02T00:00:00+08:00",
+  "published_at": "2026-06-02T00:00:00+08:00",
+  "unpublished_at": null,
+  "archived_at": null
+}

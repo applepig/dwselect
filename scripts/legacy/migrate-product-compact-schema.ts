@@ -1,9 +1,12 @@
 import { readFile, readdir, writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
 
-import { product_schema, type Product } from '../../app/utils/product-schema.ts'
+import { product_schema, type Product, type ProductOffer } from '../../app/utils/product-schema.ts'
 
-type LegacyProduct = Omit<Product, 'price' | 'summary' | 'channel_id' | 'category_id' | 'tag_ids'> & {
+type LegacyProduct = Omit<Product, 'summary' | 'category_id' | 'tag_ids' | 'english_name' | 'long_description' | 'llm_description' | 'search_aliases' | 'model_numbers' | 'offers'> & {
+  price_text: string
+  description: string
+  purchase_url: string
   category: string
   tags?: string[]
   tag_ids?: string[]
@@ -65,7 +68,7 @@ export function getCategoryFallbackWarning(category: string) {
   return `unknown category "${normalized_category}"; fallback category_id other`
 }
 
-export function parseProductPrice(price_text: string, channel_id: Product['channel_id']): Product['price'] {
+export function parseProductPrice(price_text: string, channel_id: ProductOffer['channel_id']): ProductOffer['price'] {
   const normalized_price = price_text.trim()
 
   if (normalized_price === '') {
@@ -152,13 +155,32 @@ export function parseProductPrice(price_text: string, channel_id: Product['chann
 }
 
 export function getCompactProductMigration(legacy_product: LegacyProduct): Product {
-  const { category, tags: _legacy_tags, tag_ids, ...product_without_category } = legacy_product
+  const {
+    category,
+    tags: _legacy_tags,
+    tag_ids,
+    price_text: _price_text,
+    description: _description,
+    purchase_url: _purchase_url,
+    ...product_without_legacy_fields
+  } = legacy_product
   const channel_id = inferChannelId(legacy_product.purchase_url)
+  const price = parseProductPrice(legacy_product.price_text, channel_id)
   const migrated_product = {
-    ...product_without_category,
-    price: parseProductPrice(legacy_product.price_text, channel_id),
+    ...product_without_legacy_fields,
+    english_name: legacy_product.name,
     summary: legacy_product.description,
-    channel_id,
+    long_description: legacy_product.description,
+    llm_description: '',
+    search_aliases: [],
+    model_numbers: [],
+    offers: [{
+      channel_id,
+      url: legacy_product.purchase_url,
+      price_text: legacy_product.price_text,
+      price,
+      checked_at: legacy_product.updated_at,
+    }],
     category_id: getMigratedCategoryId(category),
     tag_ids: tag_ids ?? [],
   }
@@ -186,7 +208,7 @@ export async function migrateProductCompactSchema(products_dir = DEFAULT_PRODUCT
   return { migrated_count }
 }
 
-function getCurrencyForPlainNumber(channel_id: Product['channel_id']): Product['price']['currency'] {
+function getCurrencyForPlainNumber(channel_id: ProductOffer['channel_id']): ProductOffer['price']['currency'] {
   if (channel_id === 'amazonjp') {
     return 'JPY'
   }
@@ -202,7 +224,7 @@ function getCurrencyForPlainNumber(channel_id: Product['channel_id']): Product['
   return null
 }
 
-function getLabelPrice(price_text: string): Product['price'] {
+function getLabelPrice(price_text: string): ProductOffer['price'] {
   return {
     amount: null,
     currency: null,

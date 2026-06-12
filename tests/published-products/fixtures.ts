@@ -8,18 +8,27 @@ export const guides_dir_url = new URL('../../content/guides/', import.meta.url)
 export const links_dir_url = new URL('../../content/links/', import.meta.url)
 
 export const base_product = {
-  price_text: 'NT$ 1,990',
-  price: {
-    amount: 1990,
-    currency: 'TWD',
-    unit: 'each',
-    label: null,
-  },
+  english_name: 'Sample Product',
   summary: '推薦短評',
-  description: '推薦文',
-  purchase_url: 'https://example.com/product',
+  long_description: '推薦文',
+  llm_description: '',
+  search_aliases: [],
+  model_numbers: [],
+  offers: [
+    {
+      channel_id: 'other',
+      url: 'https://example.com/product',
+      price_text: 'NT$ 1,990',
+      price: {
+        amount: 1990,
+        currency: 'TWD',
+        unit: 'each',
+        label: null,
+      },
+      checked_at: '2026-06-02T00:00:00+08:00',
+    },
+  ],
   image_url: 'https://example.com/product.jpg',
-  channel_id: 'other',
   category_id: 'home',
   tag_ids: ['tag-a'],
   reference_url: null,

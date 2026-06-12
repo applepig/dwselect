@@ -1,14 +1,15 @@
 import type { Product } from '../product-schema'
 import type { ProductDetailView, PublishedProductCard, TaxonomyDefinitions } from './types'
-import { compareText, getCategoryDefinition, getChannelDefinition, getProductTagLabels, mapProductToCard } from './shared'
+import { compareText, getCategoryDefinition, getChannelDefinition, getPrimaryOffer, getProductTagLabels, mapProductToCard } from './shared'
 
 export function getProductDetail(
   product: Product,
   taxonomies: TaxonomyDefinitions,
 ): ProductDetailView {
-  const channel_definition = getChannelDefinition(product.channel_id, taxonomies)
+  const primary_offer = getPrimaryOffer(product)
+  const channel_definition = getChannelDefinition(primary_offer.channel_id, taxonomies)
   const category_definition = getCategoryDefinition(product.category_id, taxonomies)
-  const price_label = product.price.label ?? product.price_text
+  const price_label = primary_offer.price.label ?? primary_offer.price_text
 
   return {
     id: getCatalogProductId(product),
@@ -16,15 +17,15 @@ export function getProductDetail(
     hero_image: product.image_url,
     hero_alt: product.name,
     channel_label: channel_definition.label,
-    channel_id: product.channel_id,
+    channel_id: primary_offer.channel_id,
     category_label: category_definition.label,
     price_label,
     dw_says: product.summary,
-    description: product.description === product.summary ? null : product.description,
+    description: product.long_description === product.summary ? null : product.long_description,
     tags: getProductTagLabels(product.tag_ids, taxonomies),
     buy_cta: {
       label: `到 ${channel_definition.label} 購買`,
-      href: product.purchase_url,
+      href: primary_offer.url,
       target: '_blank',
       rel: 'noopener noreferrer',
     },
@@ -88,7 +89,7 @@ function getRelatedProductScore(current_product: Product, candidate_product: Pro
   return {
     same_category: candidate_product.category_id === current_product.category_id,
     shared_tag_count,
-    same_channel: candidate_product.channel_id === current_product.channel_id,
+    same_channel: getPrimaryOffer(candidate_product).channel_id === getPrimaryOffer(current_product).channel_id,
   }
 }
 

@@ -2,20 +2,32 @@
   "id": "2026-06-02-ducky-one-2",
   "status": "published",
   "name": "Ducky One 2",
-  "price_text": "2300",
-  "price": {
-    "amount": 2300,
-    "currency": "TWD",
-    "unit": "each",
-    "label": null
-  },
+  "english_name": "Ducky One 2",
   "summary": "我覺得Ducky One 2可以買，但是3不行，所以趁他們還有生產的時候多庫存個兩把",
-  "description": "我覺得Ducky One 2可以買，但是3不行，所以趁他們還有生產的時候多庫存個兩把",
-  "purchase_url": "https://24h.pchome.com.tw/prod/DCAHVA-A900GAGDQ",
+  "long_description": "我覺得Ducky One 2可以買，但是3不行，所以趁他們還有生產的時候多庫存個兩把",
+  "llm_description": "",
+  "search_aliases": [],
+  "model_numbers": [],
+  "offers": [
+    {
+      "channel_id": "pchome",
+      "url": "https://24h.pchome.com.tw/prod/DCAHVA-A900GAGDQ",
+      "price_text": "2300",
+      "price": {
+        "amount": 2300,
+        "currency": "TWD",
+        "unit": "each",
+        "label": null
+      },
+      "checked_at": "2026-06-02T00:00:00+08:00"
+    }
+  ],
   "image_url": "/images/products/2026-06-02-ducky-one-2.jpg",
-  "channel_id": "pchome",
-  "category_id": "computer",
-  "tag_ids": [],
+  "category_id": "computer-3c",
+  "tag_ids": [
+    "desk-setup",
+    "ducky"
+  ],
   "reference_url": null,
   "created_at": "2026-06-02T00:00:00+08:00",
   "updated_at": "2026-06-02T00:00:00+08:00",

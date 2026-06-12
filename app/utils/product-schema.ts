@@ -50,17 +50,26 @@ const product_price_schema = z.object({
   label: z.string().nullable(),
 }).strict()
 
+const product_offer_schema = z.object({
+  channel_id: channel_id_schema,
+  url: http_url_schema,
+  price_text: z.string(),
+  price: product_price_schema,
+  checked_at: timestamp_schema,
+}).strict()
+
 export const product_schema = z.object({
   id: z.string().min(1),
   status: content_status_schema,
   name: z.string().min(1),
-  price_text: z.string(),
-  price: product_price_schema,
+  english_name: z.string().min(1),
   summary: z.string(),
-  description: z.string(),
-  purchase_url: http_url_schema,
+  long_description: z.string(),
+  llm_description: z.string(),
+  search_aliases: z.array(z.string()),
+  model_numbers: z.array(z.string()),
+  offers: z.array(product_offer_schema).min(1),
   image_url: local_or_http_url_schema,
-  channel_id: channel_id_schema,
   category_id: category_id_schema,
   tag_ids: z.array(tag_id_schema),
   reference_url: http_url_schema.nullable(),
@@ -253,6 +262,7 @@ function addMissingTagViolations(
 }
 
 export type ProductPrice = z.infer<typeof product_price_schema>
+export type ProductOffer = z.infer<typeof product_offer_schema>
 export type Product = z.infer<typeof product_schema>
 export type Guide = z.infer<typeof guide_schema>
 export type Link = z.infer<typeof link_schema>

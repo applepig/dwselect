@@ -22,20 +22,29 @@ const base_product: Product = {
   id: '2026-06-02-sample-product',
   status: 'published',
   name: '機械鍵盤',
-  price_text: 'NT$ 1,990',
-  price: {
-    amount: 1990,
-    currency: 'TWD',
-    unit: 'each',
-    label: null,
-  },
+  english_name: 'Mechanical Keyboard',
   summary: '熱插拔小尺寸鍵盤',
-  description: '適合長時間寫程式的繁中鍵盤',
-  purchase_url: 'https://example.com/product',
+  long_description: '適合長時間寫程式的繁中鍵盤',
+  llm_description: 'Alice layout with gasket mount',
+  search_aliases: ['客製化鍵盤'],
+  model_numbers: ['MK-01'],
+  offers: [
+    {
+      channel_id: 'pchome',
+      url: 'https://example.com/product',
+      price_text: 'NT$ 1,990',
+      price: {
+        amount: 1990,
+        currency: 'TWD',
+        unit: 'each',
+        label: null,
+      },
+      checked_at: '2026-06-02T00:00:00+08:00',
+    },
+  ],
   image_url: 'https://example.com/product.jpg',
-  channel_id: 'pchome',
   category_id: 'computer',
-  tag_ids: ['keyboard', 'usb-c'],
+  tag_ids: ['keyboard', 'usb-c', 'fixture-brand'],
   reference_url: 'https://example.com/reference',
   created_at: '2026-06-02T00:00:00+08:00',
   updated_at: '2026-06-02T00:00:00+08:00',
@@ -103,17 +112,22 @@ const test_channels: ChannelDefinition[] = [
 ]
 
 const test_tags: TagDefinition[] = [
-  { id: 'keyboard', label: '鍵盤', description: '鍵盤', aliases: [], nav_visible: true, sort_order: 10 },
+  { id: 'keyboard', label: '鍵盤', description: '鍵盤', aliases: ['打字'], nav_visible: true, sort_order: 10 },
   { id: 'usb-c', label: 'USB-C', description: 'USB-C', aliases: [], nav_visible: true, sort_order: 20 },
   { id: 'mouse', label: '滑鼠', description: '滑鼠', aliases: [], nav_visible: true, sort_order: 30 },
   { id: 'rice', label: '日本米', description: '日本米', aliases: [], nav_visible: true, sort_order: 40 },
   { id: 'shared-token', label: 'shared-token', description: 'shared-token', aliases: [], nav_visible: true, sort_order: 50 },
 ]
 
+const test_brands: TagDefinition[] = [
+  { id: 'fixture-brand', label: 'Fixture Brand', description: 'Fixture Brand', aliases: ['測試牌'], nav_visible: true, sort_order: 10 },
+]
+
 const test_taxonomies = {
   categories: test_categories,
   channels: test_channels,
   tags: test_tags,
+  brands: test_brands,
 }
 
 const temp_paths: string[] = []
@@ -160,8 +174,8 @@ describe('search index', () => {
         summary: '熱插拔小尺寸鍵盤',
         category_ids: ['computer'],
         category_labels: ['電腦'],
-        tag_ids: ['keyboard', 'usb-c'],
-        tag_labels: ['鍵盤', 'USB-C'],
+        tag_ids: ['keyboard', 'usb-c', 'fixture-brand'],
+        tag_labels: ['鍵盤', 'USB-C', 'Fixture Brand'],
         image_url: 'https://example.com/product.jpg',
         href: '/products/2026-06-02-sample-product',
         external: false,
@@ -308,7 +322,7 @@ describe('search index', () => {
           type: 'product',
           title: '機械鍵盤',
           category_labels: ['電腦'],
-          tag_labels: ['鍵盤', 'USB-C'],
+          tag_labels: ['鍵盤', 'USB-C', 'Fixture Brand'],
           href: '/products/2026-06-02-sample-product',
           external: false,
           channel_label: 'PChome',
@@ -324,15 +338,34 @@ describe('search index', () => {
     expect(mini_search.search('PChome')).toHaveLength(1)
   })
 
+  it('should index product english names, aliases, model numbers, llm descriptions and taxonomy aliases', () => {
+    const payload = buildSearchIndexPayload({ products: [base_product], guides: [], links: [] }, {
+      ...test_taxonomies,
+      generated_at: '2026-06-06T00:00:00+08:00',
+    })
+    const mini_search = loadSearchIndex(payload)
+
+    expect(querySearchIndex(mini_search, 'Mechanical Keyboard')).toContainEqual(expect.objectContaining({ document_id: 'product:2026-06-02-sample-product' }))
+    expect(querySearchIndex(mini_search, '客製化鍵盤')).toContainEqual(expect.objectContaining({ document_id: 'product:2026-06-02-sample-product' }))
+    expect(querySearchIndex(mini_search, 'MK-01')).toContainEqual(expect.objectContaining({ document_id: 'product:2026-06-02-sample-product' }))
+    expect(querySearchIndex(mini_search, 'gasket mount')).toContainEqual(expect.objectContaining({ document_id: 'product:2026-06-02-sample-product' }))
+    expect(querySearchIndex(mini_search, '打字')).toContainEqual(expect.objectContaining({ document_id: 'product:2026-06-02-sample-product' }))
+    expect(querySearchIndex(mini_search, '測試牌')).toContainEqual(expect.objectContaining({ document_id: 'product:2026-06-02-sample-product' }))
+  })
+
   it('should query restored index and return UI suggestions', () => {
     const second_product = {
       ...base_product,
       id: '2026-06-03-mouse',
       name: '人體工學滑鼠',
+      english_name: 'Ergonomic Mouse',
       summary: '垂直握感',
-      description: '長時間工作使用',
+      long_description: '長時間工作使用',
+      llm_description: '',
+      search_aliases: [],
+      model_numbers: [],
       tag_ids: ['mouse'],
-      price_text: 'NT$ 990',
+      offers: [{ ...base_product.offers[0], price_text: 'NT$ 990' }],
       image_url: 'https://example.com/mouse.jpg',
       published_at: '2026-06-03T00:00:00+08:00',
     }
@@ -342,7 +375,7 @@ describe('search index', () => {
     })
     const mini_search = loadSearchIndex(payload)
 
-    expect(querySearchIndex(mini_search, '繁中鍵盤')).toEqual([
+    expect(querySearchIndex(mini_search, '客製化鍵盤')).toEqual([
       {
         document_id: 'product:2026-06-02-sample-product',
         content_id: '2026-06-02-sample-product',
@@ -351,7 +384,7 @@ describe('search index', () => {
         title: '機械鍵盤',
         summary: '熱插拔小尺寸鍵盤',
         category_labels: ['電腦'],
-        tag_labels: ['鍵盤', 'USB-C'],
+        tag_labels: ['鍵盤', 'USB-C', 'Fixture Brand'],
         image_url: 'https://example.com/product.jpg',
         href: '/products/2026-06-02-sample-product',
         external: false,
@@ -397,19 +430,28 @@ describe('search index', () => {
       id: 'internal-json-id',
       status: 'published',
       name: '檔名商品',
-      price_text: 'NT$ 1,990',
-      price: {
-        amount: 1990,
-        currency: 'TWD',
-        unit: 'each',
-        label: null,
-      },
+      english_name: 'Filename Stem',
       summary: '適合長時間寫程式的繁中鍵盤',
-      description: '適合長時間寫程式的繁中鍵盤',
-      purchase_url: 'https://example.com/product',
+      long_description: '適合長時間寫程式的繁中鍵盤',
+      llm_description: '',
+      search_aliases: [],
+      model_numbers: [],
+      offers: [
+        {
+          channel_id: 'other',
+          url: 'https://example.com/product',
+          price_text: 'NT$ 1,990',
+          price: {
+            amount: 1990,
+            currency: 'TWD',
+            unit: 'each',
+            label: null,
+          },
+          checked_at: '2026-06-02T00:00:00+08:00',
+        },
+      ],
       image_url: 'https://example.com/product.jpg',
-      channel_id: 'other',
-      category_id: 'computer',
+      category_id: 'computer-3c',
       tag_ids: ['keyboard', 'usb-c'],
       reference_url: 'https://example.com/reference',
       created_at: '2026-06-02T00:00:00+08:00',
@@ -435,7 +477,7 @@ describe('search index', () => {
       expect.objectContaining({
         document_id: 'product:2026-06-07-filename-stem',
         content_id: '2026-06-07-filename-stem',
-        category_labels: ['電腦'],
+        category_labels: ['電腦3C'],
         channel_label: '其他通路',
       }),
     ])
@@ -453,6 +495,7 @@ describe('search index', () => {
     await writeFile(join(taxonomies_dir, 'categories.json'), JSON.stringify({ items: test_categories }))
     await writeFile(join(taxonomies_dir, 'channels.json'), JSON.stringify({ items: test_channels }))
     await writeFile(join(taxonomies_dir, 'tags.json'), JSON.stringify({ items: test_tags }))
+    await writeFile(join(taxonomies_dir, 'brands.json'), JSON.stringify({ items: test_brands }))
 
     const { stdout } = await execFileAsync(process.execPath, [
       'scripts/build-search-index.ts',
@@ -514,6 +557,7 @@ describe('search index', () => {
       'product:2026-06-02-aeron-chair',
       'product:2026-06-02-b18',
       'product:2026-06-02-altwork-station',
+      'product:2026-06-02-sharp-65吋-xled',
     ]))
     expect(payload.documents.map((document) => document.document_id)).toEqual(expect.arrayContaining([
       'guide:2026-06-02-日本米入門篇',
@@ -529,9 +573,9 @@ describe('search index', () => {
         .toSorted((left_file_name, right_file_name) => left_file_name.localeCompare(right_file_name)),
     )
     expect(payload.documents).toContainEqual(expect.objectContaining({
-      document_id: 'product:2026-06-02-sharp-65吋-xled',
+      document_id: 'product:2026-06-02-sharp-65-inch-xled',
       title: 'Sharp 65吋 XLED',
-      category_labels: ['影音'],
+      category_labels: ['影音劇院'],
       channel_label: expect.any(String),
     }))
   })
@@ -540,10 +584,10 @@ describe('search index', () => {
     const mini_search = loadSearchIndex(readStaticSearchIndexPayload())
 
     expect(querySearchIndex(mini_search, 'Sharp 65吋 XLED')).toContainEqual(expect.objectContaining({
-      document_id: 'product:2026-06-02-sharp-65吋-xled',
+      document_id: 'product:2026-06-02-sharp-65-inch-xled',
       label: 'Sharp 65吋 XLED',
       type: 'product',
-      category_labels: ['影音'],
+      category_labels: ['影音劇院'],
     }))
     expect(querySearchIndex(mini_search, '日本米入門篇')).toContainEqual(expect.objectContaining({
       document_id: 'guide:2026-06-02-日本米入門篇',
@@ -559,7 +603,9 @@ describe('search index', () => {
     }))
     expect(querySearchIndex(mini_search, '如果不想買OLED').length).toBeGreaterThan(0)
     expect(querySearchIndex(mini_search, 'Sharp XLED應該是最好的選擇').length).toBeGreaterThan(0)
-    expect(querySearchIndex(mini_search, '影音').length).toBeGreaterThan(0)
+    expect(querySearchIndex(mini_search, '廚房').length).toBeGreaterThan(0)
+    expect(querySearchIndex(mini_search, '網通').length).toBeGreaterThan(0)
     expect(querySearchIndex(mini_search, 'PCHome').length).toBeGreaterThan(0)
+    expect(querySearchIndex(mini_search, '國際牌').length).toBeGreaterThan(0)
   })
 })

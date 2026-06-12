@@ -121,3 +121,46 @@
 - `pnpm test`：通過（25 files / 184 tests）。
 - `pnpm typecheck`：通過。
 - `pnpm lint`：通過。
+
+## 2026-06-13：Milestone 2 product schema 切換、新 taxonomy 定義與內容遷移
+
+### Red
+
+- 更新 product schema 與 fixture 測試，先鎖定 `english_name`、`offers[]`、`long_description`、`llm_description`、`search_aliases`、`model_numbers`，並拒絕舊頂層 `channel_id` / `purchase_url` / `price` / `price_text` / `description`。
+- 更新 search index、published product、Nuxt smoke、content taxonomy reference 與 E2E 測試，要求新 category ids、brands taxonomy、primary offer mapping、英文 id / route、舊 category fallback 與 search alias / model number / LLM description 命中。
+- 新增 `scripts/migrate-category-tag-taxonomy.ts` 的遷移與 idempotency 測試路徑，要求 mapping 遺漏 fail-fast、dry-run 不寫檔、已遷移內容可重複執行。
+
+### Green
+
+- `app/utils/product-schema.ts` 切換為新 product shape：必填 `english_name`、`offers[]`、`long_description`、`llm_description`、`search_aliases`、`model_numbers`；移除舊購買與 description 欄位。
+- `content/taxonomies/categories.json` 更新為七個新分類；`tags.json` 改為一般 tag taxonomy；`brands.json` 填入從 62 筆商品抽出的 brand taxonomy。
+- 62 筆 published products 已遷移到 ASCII `id` / JSON 檔名 / local image path，並改用新 `category_id`、tags＋brands `tag_ids` 與 `offers[0]` primary offer；2 筆 guides 與 3 筆 links 同步更新 taxonomy references。
+- `app/utils/published-products/*` 與 `app/utils/search/search-index.ts` 改讀 primary offer、`long_description`、brands label / aliases，並讓 search index 納入 `english_name`、`search_aliases`、`model_numbers`、`llm_description`。
+- legacy Google Sheet / compact schema migration helper 已同步輸出新 product shape，避免 deprecated script 測試仍鎖住舊欄位。
+- `tests/e2e/compact-app.spec.ts` 更新 hardcoded route / category label，包含 `/products/2026-06-02-sharp-65-inch-xled` 與 `av-theater` / `影音劇院`。
+
+### Refactor／設計取捨
+
+- 多通路資料只建立資料模型；UI 維持既有單一 CTA，全部 card / detail 顯示使用 `offers[0]`，避免 M2 同時改前台資訊架構。
+- Product id rename 明確接受舊 `/products/<old-id>` 404，不加 redirect stub；E2E 與 generate 已改走新 ASCII route。
+- 遷移 script 保留在 `scripts/migrate-category-tag-taxonomy.ts`，本 milestone 不移入 `scripts/legacy/`，方便 M2 review mapping 與重跑 idempotency。
+- E2E 初次失敗的 product detail 500 不是 production code 問題，而是 Docker dev container 的 Nuxt Content / module cache 尚未重新解析大規模 rename；重啟 `dwselect-app` 與 Traefik 後，product detail route 恢復 200，完整 E2E 通過。
+
+### 遷移摘要
+
+- 最終 idempotency 檢查：`node scripts/migrate-category-tag-taxonomy.ts --dry-run` 輸出 `migrated: 0`、`skipped: 62`、`unmapped: []`、`renamed_ids: []`。
+- 正式重跑：`node scripts/migrate-category-tag-taxonomy.ts` 輸出同上，確認目前工作樹內容已全數遷移且 script 可重複執行。
+- `pnpm build:search-index` 重建 `public/search-index.json`：67 documents。
+
+### 驗證
+
+- `node scripts/migrate-category-tag-taxonomy.ts --dry-run`：通過。
+- `node scripts/migrate-category-tag-taxonomy.ts`：通過，idempotent no-op。
+- `pnpm build:search-index`：通過（67 documents）。
+- `pnpm test`：通過（25 files / 187 tests）。
+- `pnpm lint`：通過。
+- `pnpm typecheck`：通過。
+- `pnpm test:e2e --project=phone tests/e2e/compact-app.spec.ts`：通過（15 passed / 3 skipped）。
+- `pnpm test:e2e`：通過（48 passed / 6 skipped）。
+- `pnpm generate`：通過（prerendered 141 routes；保留既有 sourcemap / Rollup PURE comment warnings）。
+- `node scripts/assert-runtime-google-sheet-clean.ts`：通過。

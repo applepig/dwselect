@@ -2,20 +2,32 @@
   "id": "2026-06-02-unifi-express",
   "status": "published",
   "name": "Unifi Express",
-  "price_text": "5799",
-  "price": {
-    "amount": 5799,
-    "currency": null,
-    "unit": "each",
-    "label": null
-  },
+  "english_name": "UniFi Express",
   "summary": "你遲早是要裝Unifi全家桶的，為什麼不一開始就裝呢",
-  "description": "你遲早是要裝Unifi全家桶的，為什麼不一開始就裝呢",
-  "purchase_url": "https://tw.store.ui.com/tw/zh-tw/category/cloud-gateways-wifi-integrated/products/ux",
+  "long_description": "你遲早是要裝Unifi全家桶的，為什麼不一開始就裝呢",
+  "llm_description": "",
+  "search_aliases": [],
+  "model_numbers": [],
+  "offers": [
+    {
+      "channel_id": "other",
+      "url": "https://tw.store.ui.com/tw/zh-tw/category/cloud-gateways-wifi-integrated/products/ux",
+      "price_text": "5799",
+      "price": {
+        "amount": 5799,
+        "currency": null,
+        "unit": "each",
+        "label": null
+      },
+      "checked_at": "2026-06-02T00:00:00+08:00"
+    }
+  ],
   "image_url": "/images/products/2026-06-02-unifi-express.png",
-  "channel_id": "other",
-  "category_id": "computer",
-  "tag_ids": [],
+  "category_id": "network",
+  "tag_ids": [
+    "network-gear",
+    "ubiquiti"
+  ],
   "reference_url": null,
   "created_at": "2026-06-02T00:00:00+08:00",
   "updated_at": "2026-06-02T00:00:00+08:00",

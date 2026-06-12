@@ -3,19 +3,45 @@ import { describe, expect, it } from 'vitest'
 import { getProductDetail, getRelatedProductCards } from '../../app/utils/published-products/product-detail'
 import { makeProduct, test_taxonomies } from './fixtures'
 
+function makeOffer(channel_id: string) {
+  return {
+    channel_id,
+    url: `https://example.com/${channel_id}`,
+    price_text: 'NT$ 1,990',
+    price: {
+      amount: 1990,
+      currency: 'TWD' as const,
+      unit: 'each' as const,
+      label: null,
+    },
+    checked_at: '2026-06-02T00:00:00+08:00',
+  }
+}
+
 describe('product detail mapping', () => {
   it('should expose product detail fields, buy CTA and safe external attributes', () => {
     const product = makeProduct({
       id: 'products/products/detail-product.json',
       status: 'published',
       name: '很長很長的商品名稱'.repeat(6),
-      price_text: 'NT$ 123,456,789 起',
       summary: 'DW 怎麼說要保留原始短評'.repeat(4),
-      description: '細節說明可以比卡片更長',
-      purchase_url: 'https://24h.pchome.com.tw/prod/detail',
+      long_description: '細節說明可以比卡片更長',
+      offers: [
+        {
+          channel_id: 'pchome',
+          url: 'https://24h.pchome.com.tw/prod/detail',
+          price_text: 'NT$ 123,456,789 起',
+          price: {
+            amount: null,
+            currency: 'TWD',
+            unit: 'each',
+            label: 'NT$ 123,456,789 起',
+          },
+          checked_at: '2026-06-02T00:00:00+08:00',
+        },
+      ],
       image_url: 'https://example.com/detail.jpg',
       category_id: 'av',
-      channel_id: 'pchome',
       tag_ids: ['超長 tag 名稱'.repeat(6), '影音'],
     })
 
@@ -50,7 +76,7 @@ describe('product detail mapping', () => {
       status: 'published',
       name: '重複文案商品',
       summary: '同一段推薦文字',
-      description: '同一段推薦文字',
+      long_description: '同一段推薦文字',
     })
 
     const detail = getProductDetail(product, test_taxonomies)
@@ -66,7 +92,7 @@ describe('product detail mapping', () => {
       status: 'published',
       name: '目前商品',
       category_id: 'computer',
-      channel_id: 'pchome',
+      offers: [makeOffer('pchome')],
       tag_ids: ['typing', 'wireless'],
       published_at: '2026-06-05T00:00:00+08:00',
     })
@@ -77,7 +103,7 @@ describe('product detail mapping', () => {
         status: 'published',
         name: '同分類兩個標籤較舊',
         category_id: 'computer',
-        channel_id: 'momo',
+        offers: [makeOffer('momo')],
         tag_ids: ['typing', 'wireless'],
         published_at: '2026-06-01T00:00:00+08:00',
       }),
@@ -86,7 +112,7 @@ describe('product detail mapping', () => {
         status: 'published',
         name: '同分類同通路較舊',
         category_id: 'computer',
-        channel_id: 'pchome',
+        offers: [makeOffer('pchome')],
         tag_ids: ['typing'],
         published_at: '2026-06-02T00:00:00+08:00',
       }),
@@ -95,7 +121,7 @@ describe('product detail mapping', () => {
         status: 'published',
         name: '同分類較新',
         category_id: 'computer',
-        channel_id: 'momo',
+        offers: [makeOffer('momo')],
         tag_ids: ['typing'],
         published_at: '2026-06-04T00:00:00+08:00',
       }),
@@ -104,7 +130,7 @@ describe('product detail mapping', () => {
         status: 'published',
         name: '不同分類兩個標籤較新',
         category_id: 'home',
-        channel_id: 'pchome',
+        offers: [makeOffer('pchome')],
         tag_ids: ['typing', 'wireless'],
         published_at: '2026-06-06T00:00:00+08:00',
       }),
@@ -113,7 +139,7 @@ describe('product detail mapping', () => {
         status: 'draft',
         name: '草稿推薦',
         category_id: 'computer',
-        channel_id: 'pchome',
+        offers: [makeOffer('pchome')],
         tag_ids: ['typing', 'wireless'],
         published_at: '2026-06-07T00:00:00+08:00',
       }),

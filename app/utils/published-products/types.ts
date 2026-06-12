@@ -1,11 +1,11 @@
-import type { CategoryDefinition, ChannelDefinition, Product, TagDefinition } from '../product-schema'
+import type { CategoryDefinition, ChannelDefinition, Product, ProductOffer, TagDefinition } from '../product-schema'
 
 export type PublishedProductCard = {
   id: string
   category: string
   category_id: Product['category_id']
   channel: string
-  channel_id: Product['channel_id']
+  channel_id: ProductOffer['channel_id']
   description: string | null
   image: string
   name: string
@@ -22,7 +22,7 @@ export type ProductDetailView = {
   hero_image: string
   hero_alt: string
   channel_label: string
-  channel_id: Product['channel_id']
+  channel_id: ProductOffer['channel_id']
   category_label: string
   price_label: string
   dw_says: string

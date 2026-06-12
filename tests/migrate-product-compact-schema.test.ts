@@ -108,18 +108,27 @@ describe('compact product migration helpers', () => {
       id: 'sample-product',
       status: 'published',
       name: '範例商品',
-      price_text: '125/kg',
-      price: {
-        amount: 125,
-        currency: 'TWD',
-        unit: 'kilogram',
-        label: null,
-      },
+      english_name: '範例商品',
       summary: '推薦短評',
-      description: '推薦短評',
-      purchase_url: 'https://24h.pchome.com.tw/prod/DBBY0M-A900GMBY7',
+      long_description: '推薦短評',
+      llm_description: '',
+      search_aliases: [],
+      model_numbers: [],
+      offers: [
+        {
+          channel_id: 'pchome',
+          url: 'https://24h.pchome.com.tw/prod/DBBY0M-A900GMBY7',
+          price_text: '125/kg',
+          price: {
+            amount: 125,
+            currency: 'TWD',
+            unit: 'kilogram',
+            label: null,
+          },
+          checked_at: '2026-06-02T00:00:00+08:00',
+        },
+      ],
       image_url: 'https://example.com/product.jpg',
-      channel_id: 'pchome',
       category_id: 'food',
       tag_ids: [],
       reference_url: null,
@@ -131,6 +140,10 @@ describe('compact product migration helpers', () => {
     })
     expect(migrated_product).not.toHaveProperty('category')
     expect(migrated_product).not.toHaveProperty('tags')
+    expect(migrated_product).not.toHaveProperty('price_text')
+    expect(migrated_product).not.toHaveProperty('description')
+    expect(migrated_product).not.toHaveProperty('purchase_url')
+    expect(migrated_product).not.toHaveProperty('channel_id')
   })
 
   it('should migrate unknown categories to the other category', () => {

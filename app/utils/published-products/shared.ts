@@ -1,4 +1,4 @@
-import type { Product } from '../product-schema'
+import type { Product, ProductOffer } from '../product-schema'
 import type { PublishedProductCard, TaxonomyDefinitions } from './types'
 
 export function getPublishedProducts(
@@ -13,19 +13,20 @@ export function getPublishedProducts(
 
 export function mapProductToCard(product: Product, taxonomies: TaxonomyDefinitions): PublishedProductCard {
   const category_definition = getCategoryDefinition(product.category_id, taxonomies)
-  const channel_definition = getChannelDefinition(product.channel_id, taxonomies)
+  const primary_offer = getPrimaryOffer(product)
+  const channel_definition = getChannelDefinition(primary_offer.channel_id, taxonomies)
 
   return {
     id: getProductCardId(product),
     category: category_definition.label,
     category_id: product.category_id,
     channel: channel_definition.label,
-    channel_id: product.channel_id,
-    description: product.description,
+    channel_id: primary_offer.channel_id,
+    description: product.long_description,
     image: product.image_url,
     name: product.name,
-    price: product.price_text,
-    purchase_link: product.purchase_url,
+    price: primary_offer.price_text,
+    purchase_link: primary_offer.url,
     published_at: product.published_at,
     summary: product.summary,
     tags: getProductTagLabels(product.tag_ids, taxonomies),
@@ -42,7 +43,7 @@ export function getCategoryDefinition(category_id: Product['category_id'], taxon
   }
 }
 
-export function getChannelDefinition(channel_id: Product['channel_id'], taxonomies: TaxonomyDefinitions) {
+export function getChannelDefinition(channel_id: ProductOffer['channel_id'], taxonomies: TaxonomyDefinitions) {
   return taxonomies.channels.find((channel) => channel.id === channel_id) ?? {
     id: channel_id,
     label: channel_id,
@@ -50,6 +51,10 @@ export function getChannelDefinition(channel_id: Product['channel_id'], taxonomi
     host_patterns: [],
     sort_order: Number.MAX_SAFE_INTEGER,
   }
+}
+
+export function getPrimaryOffer(product: Product): ProductOffer {
+  return product.offers[0]!
 }
 
 export function getCategorySortOrder(category_id: Product['category_id'], taxonomies: TaxonomyDefinitions) {

@@ -1,0 +1,37 @@
+{
+  "id": "2026-06-02-samsung-m7-32-inch",
+  "status": "published",
+  "name": "Samsung M7 32吋",
+  "english_name": "Samsung M7 32 Inch",
+  "summary": "想要4K、想要USB C接筆電、或是用mac沒有dpi問題的話可以考慮這台",
+  "long_description": "想要4K、想要USB C接筆電、或是用mac沒有dpi問題的話可以考慮這台",
+  "llm_description": "",
+  "search_aliases": [],
+  "model_numbers": [],
+  "offers": [
+    {
+      "channel_id": "pchome",
+      "url": "https://24h.pchome.com.tw/prod/DPADEW-A900HXG0E",
+      "price_text": "9900",
+      "price": {
+        "amount": 9900,
+        "currency": "TWD",
+        "unit": "each",
+        "label": null
+      },
+      "checked_at": "2026-06-02T00:00:00+08:00"
+    }
+  ],
+  "image_url": "/images/products/2026-06-02-samsung-m7-32-inch.jpg",
+  "category_id": "computer-3c",
+  "tag_ids": [
+    "display",
+    "samsung"
+  ],
+  "reference_url": "https://www.facebook.com/applepig/posts/pfbid0JCoQJTRYpcGmQqrV4ryTVfj1NsHhEQADq6nipBzBgbJNpkX6WDgJj3LyLew5DQajl",
+  "created_at": "2026-06-02T00:00:00+08:00",
+  "updated_at": "2026-06-02T00:00:00+08:00",
+  "published_at": "2026-06-02T00:00:00+08:00",
+  "unpublished_at": null,
+  "archived_at": null
+}

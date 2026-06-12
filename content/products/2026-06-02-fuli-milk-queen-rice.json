@@ -1,0 +1,38 @@
+{
+  "id": "2026-06-02-fuli-milk-queen-rice",
+  "status": "published",
+  "name": "富里牛奶皇后",
+  "english_name": "Fuli Milk Queen Rice",
+  "summary": "牛奶皇后是最好吃的台灣米，不服來辯",
+  "long_description": "牛奶皇后是最好吃的台灣米，不服來辯",
+  "llm_description": "",
+  "search_aliases": [],
+  "model_numbers": [],
+  "offers": [
+    {
+      "channel_id": "pchome",
+      "url": "https://24h.pchome.com.tw/prod/DBBY0J-A900F81AW",
+      "price_text": "200/kg",
+      "price": {
+        "amount": 200,
+        "currency": "TWD",
+        "unit": "kilogram",
+        "label": null
+      },
+      "checked_at": "2026-06-02T00:00:00+08:00"
+    }
+  ],
+  "image_url": "/images/products/2026-06-02-fuli-milk-queen-rice.jpg",
+  "category_id": "household",
+  "tag_ids": [
+    "food",
+    "fuli",
+    "rice"
+  ],
+  "reference_url": "https://www.facebook.com/applepig/posts/pfbid037AcHMyNMrZPFBvDg7GgQbquN8j2UNmPb1mvkM7YV9rJKuv8Us5BvASrcG8zzxRqjl",
+  "created_at": "2026-06-02T00:00:00+08:00",
+  "updated_at": "2026-06-02T00:00:00+08:00",
+  "published_at": "2026-06-02T00:00:00+08:00",
+  "unpublished_at": null,
+  "archived_at": null
+}

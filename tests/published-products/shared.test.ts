@@ -25,11 +25,22 @@ describe('published products mapping', () => {
         id: 'published-product',
         status: 'published',
         name: '已上架商品',
-        price_text: 'NT$ 2,490',
-        purchase_url: 'https://example.com/buy',
+        offers: [
+          {
+            channel_id: 'pchome',
+            url: 'https://example.com/buy',
+            price_text: 'NT$ 2,490',
+            price: {
+              amount: 2490,
+              currency: 'TWD',
+              unit: 'each',
+              label: null,
+            },
+            checked_at: '2026-06-02T00:00:00+08:00',
+          },
+        ],
         image_url: 'https://example.com/image.jpg',
         category_id: 'computer',
-        channel_id: 'pchome',
         summary: '卡片短評',
       }),
     ]

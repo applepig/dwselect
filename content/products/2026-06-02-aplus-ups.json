@@ -2,21 +2,31 @@
   "id": "2026-06-02-aplus-ups",
   "status": "published",
   "name": "APlus UPS",
-  "price_text": "1450",
-  "price": {
-    "amount": 1450,
-    "currency": "TWD",
-    "unit": "each",
-    "label": null
-  },
+  "english_name": "APlus UPS",
   "summary": "便宜、MIT、而且面板還有螢幕跟USB充電，但是我有些電腦的監控軟體抓不到他",
-  "description": "便宜、MIT、而且面板還有螢幕跟USB充電，但是我有些電腦的監控軟體抓不到他",
-  "purchase_url": "https://24h.pchome.com.tw/prod/DCAR15-A900AU2RL",
+  "long_description": "便宜、MIT、而且面板還有螢幕跟USB充電，但是我有些電腦的監控軟體抓不到他",
+  "llm_description": "",
+  "search_aliases": [],
+  "model_numbers": [],
+  "offers": [
+    {
+      "channel_id": "pchome",
+      "url": "https://24h.pchome.com.tw/prod/DCAR15-A900AU2RL",
+      "price_text": "1450",
+      "price": {
+        "amount": 1450,
+        "currency": "TWD",
+        "unit": "each",
+        "label": null
+      },
+      "checked_at": "2026-06-02T00:00:00+08:00"
+    }
+  ],
   "image_url": "/images/products/2026-06-02-aplus-ups.jpg",
-  "channel_id": "pchome",
-  "category_id": "computer",
+  "category_id": "computer-3c",
   "tag_ids": [
-    "display"
+    "aplus",
+    "power-charging"
   ],
   "reference_url": null,
   "created_at": "2026-06-02T00:00:00+08:00",

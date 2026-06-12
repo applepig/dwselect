@@ -38,7 +38,7 @@ describe('Nuxt SSG baseline', () => {
     const link_files = readdirSync(new URL('../content/links/', import.meta.url)).filter((file_name) => file_name.endsWith('.json'))
     const guide_files = readdirSync(new URL('../content/guides/', import.meta.url)).filter((file_name) => file_name.endsWith('.json'))
 
-    expect(category_taxonomy.items).toContainEqual(expect.objectContaining({ id: 'av', label: '影音' }))
+    expect(category_taxonomy.items).toContainEqual(expect.objectContaining({ id: 'av-theater', label: '影音劇院' }))
     expect(channel_taxonomy.items).toContainEqual(expect.objectContaining({ id: 'pchome', label: 'PChome' }))
     expect(tag_taxonomy.items.length).toBeGreaterThan(0)
     expect(link_files).toEqual(expect.arrayContaining(['applepig-home.json', '2026-06-02-b18.json']))
@@ -55,6 +55,8 @@ describe('Nuxt SSG baseline', () => {
     expect(content_config_source).toContain("source: 'taxonomies/channels.json'")
     expect(content_config_source).toContain('tags: defineCollection')
     expect(content_config_source).toContain("source: 'taxonomies/tags.json'")
+    expect(content_config_source).toContain('brands: defineCollection')
+    expect(content_config_source).toContain("source: 'taxonomies/brands.json'")
     expect(content_config_source).not.toContain("source: 'taxonomies/links.json'")
   })
 
@@ -354,7 +356,7 @@ describe('Nuxt SSG baseline', () => {
     expect(prerender_routes).toContain('/search')
     expect(prerender_routes).toContain('/links')
     expect(prerender_routes.filter((route) => route.startsWith('/products/'))).toHaveLength(product_route_count)
-    expect(prerender_routes).toContain('/products/2026-06-02-sharp-65吋-xled')
+    expect(prerender_routes).toContain('/products/2026-06-02-sharp-65-inch-xled')
   })
 
   it('should define light and dark handoff CSS tokens without a single-hue palette', () => {
@@ -401,14 +403,14 @@ describe('Nuxt SSG baseline', () => {
     expect(product_file_names).toHaveLength(62)
     expect(product_file_names).not.toContain('2026-06-02-sample-product.json')
     expect(product_sources.join('\n')).toContain('Sharp 65吋 XLED')
-    expect(product_sources.join('\n')).toContain('"category_id": "av"')
+    expect(product_sources.join('\n')).toContain('"category_id": "av-theater"')
     expect(product_sources.join('\n')).not.toContain('"category":')
     expect(search_index_payload.documents).toHaveLength(67)
     expect(search_index_payload.documents).toContainEqual(expect.objectContaining({
-      document_id: 'product:2026-06-02-sharp-65吋-xled',
+      document_id: 'product:2026-06-02-sharp-65-inch-xled',
       type: 'product',
       title: 'Sharp 65吋 XLED',
-      category_labels: ['影音'],
+      category_labels: ['影音劇院'],
       channel_label: expect.any(String),
     }))
     expect(search_index_payload.documents).toEqual(expect.arrayContaining([

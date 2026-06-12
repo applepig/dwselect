@@ -1,0 +1,37 @@
+{
+  "id": "2026-06-02-kioxia-1tb-usb-flash-drive",
+  "status": "published",
+  "name": "Kioxia 1TB隨身碟",
+  "english_name": "Kioxia 1TB USB Flash Drive",
+  "summary": "故Toshiba，這顆沒搜尋到什麼災情，價格也便宜，大概可以買吧",
+  "long_description": "故Toshiba，這顆沒搜尋到什麼災情，價格也便宜，大概可以買吧",
+  "llm_description": "",
+  "search_aliases": [],
+  "model_numbers": [],
+  "offers": [
+    {
+      "channel_id": "pchome",
+      "url": "https://24h.pchome.com.tw/prod/DRAA5D-A900FDQCR",
+      "price_text": "2490",
+      "price": {
+        "amount": 2490,
+        "currency": "TWD",
+        "unit": "each",
+        "label": null
+      },
+      "checked_at": "2026-06-02T00:00:00+08:00"
+    }
+  ],
+  "image_url": "/images/products/2026-06-02-kioxia-1tb-usb-flash-drive.jpg",
+  "category_id": "computer-3c",
+  "tag_ids": [
+    "kioxia",
+    "storage-backup"
+  ],
+  "reference_url": null,
+  "created_at": "2026-06-02T00:00:00+08:00",
+  "updated_at": "2026-06-02T00:00:00+08:00",
+  "published_at": "2026-06-02T00:00:00+08:00",
+  "unpublished_at": null,
+  "archived_at": null
+}

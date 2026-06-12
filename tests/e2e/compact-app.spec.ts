@@ -144,7 +144,7 @@ test('navigates to product detail route with a safe buy CTA', async ({ page }) =
 })
 
 test('keeps product detail and related image slots stable when images fail to load', async ({ page }) => {
-  await page.goto('/products/2026-06-02-sharp-65吋-xled', { waitUntil: 'domcontentloaded' })
+  await page.goto('/products/2026-06-02-sharp-65-inch-xled', { waitUntil: 'domcontentloaded' })
   await expect(page.locator('vite-error-overlay')).toHaveCount(0)
   await page.getByRole('button', { name: '切換色彩模式' }).click()
 
@@ -179,7 +179,7 @@ test('keeps product detail and related image slots stable when images fail to lo
 })
 
 test('navigates to search by tag from product detail', async ({ page }) => {
-  await page.goto('/products/2026-06-02-sharp-65吋-xled', { waitUntil: 'domcontentloaded' })
+  await page.goto('/products/2026-06-02-sharp-65-inch-xled', { waitUntil: 'domcontentloaded' })
   await expect(page.locator('vite-error-overlay')).toHaveCount(0)
 
   const first_tag = page.locator('.detail-tag').first()
@@ -193,7 +193,7 @@ test('navigates to search by tag from product detail', async ({ page }) => {
 })
 
 test('renders direct product detail routes and unknown product not-found states', async ({ page }) => {
-  await page.goto('/products/2026-06-02-sharp-65吋-xled', { waitUntil: 'domcontentloaded' })
+  await page.goto('/products/2026-06-02-sharp-65-inch-xled', { waitUntil: 'domcontentloaded' })
   await expect(page.locator('vite-error-overlay')).toHaveCount(0)
   await expect(page.locator('.product-detail-page')).toBeVisible()
   await expect(page.getByRole('heading', { name: /Sharp 65吋 XLED/ })).toBeVisible()
@@ -204,11 +204,11 @@ test('renders direct product detail routes and unknown product not-found states'
 })
 
 test('restores category and search state from query strings', async ({ page }) => {
-  await page.goto('/?category=av', { waitUntil: 'domcontentloaded' })
+  await page.goto('/?category=av-theater', { waitUntil: 'domcontentloaded' })
   await expect(page.locator('vite-error-overlay')).toHaveCount(0)
-  await expect(page.locator('.category-chip.is-active')).toContainText('影音')
+  await expect(page.locator('.category-chip.is-active')).toContainText('影音劇院')
 
-  await page.goto('/guide?tags=影音', { waitUntil: 'domcontentloaded' })
+  await page.goto('/guide?tags=影音劇院', { waitUntil: 'domcontentloaded' })
   await expect(page.locator('vite-error-overlay')).toHaveCount(0)
   await expect(page.getByRole('heading', { name: '指南列表' })).toBeVisible()
   await expect(page.locator('.tag-chip.is-active')).toHaveCount(0)
@@ -427,9 +427,9 @@ test('expands product categories in desktop sidebar only', async ({ page }, test
   const sidebar = page.locator('.compact-app-sidebar')
   await expect(sidebar.locator('.desktop-category-items')).toBeVisible()
   await expect(sidebar.locator('.desktop-category-items').getByRole('link', { name: /其他/ })).toHaveCount(0)
-  await sidebar.getByRole('link', { name: /影音/ }).click()
-  await expect(page).toHaveURL('/?category=av')
-  await expect(sidebar.getByRole('link', { name: /影音/ })).toHaveAttribute('aria-current', 'page')
+  await sidebar.getByRole('link', { name: /影音劇院/ }).click()
+  await expect(page).toHaveURL('/?category=av-theater')
+  await expect(sidebar.getByRole('link', { name: /影音劇院/ })).toHaveAttribute('aria-current', 'page')
 })
 
 test('hides empty general categories from home chips and desktop sidebar', async ({ page }, test_info) => {

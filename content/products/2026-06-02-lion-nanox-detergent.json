@@ -1,0 +1,38 @@
+{
+  "id": "2026-06-02-lion-nanox-detergent",
+  "status": "published",
+  "name": "Lion Nanox洗衣精",
+  "english_name": "Lion Nanox Detergent",
+  "summary": "今年Nanox One新版上市了，橘色的是標準款、紫色的強化殺菌、藍綠色的PRO全面強化，但是價錢都顯著的比去年貴",
+  "long_description": "今年Nanox One新版上市了，橘色的是標準款、紫色的強化殺菌、藍綠色的PRO全面強化，但是價錢都顯著的比去年貴",
+  "llm_description": "",
+  "search_aliases": [],
+  "model_numbers": [],
+  "offers": [
+    {
+      "channel_id": "pchome",
+      "url": "https://24h.pchome.com.tw/prod/DAAK2J-1900H333K?fq=/S/DAAK2J",
+      "price_text": "1099",
+      "price": {
+        "amount": 1099,
+        "currency": "TWD",
+        "unit": "each",
+        "label": null
+      },
+      "checked_at": "2026-06-02T00:00:00+08:00"
+    }
+  ],
+  "image_url": "/images/products/2026-06-02-lion-nanox-detergent.jpg",
+  "category_id": "household",
+  "tag_ids": [
+    "cleaning",
+    "daily-goods",
+    "lion"
+  ],
+  "reference_url": "https://www.facebook.com/applepig/posts/pfbid0FhDw2JMyJfPJ8pGNG5U8ujWYGevTxEnRNobThWiBFzp24riVpstAuTLP8An66rc9l",
+  "created_at": "2026-06-02T00:00:00+08:00",
+  "updated_at": "2026-06-02T00:00:00+08:00",
+  "published_at": "2026-06-02T00:00:00+08:00",
+  "unpublished_at": null,
+  "archived_at": null
+}

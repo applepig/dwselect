@@ -2,20 +2,32 @@
   "id": "2026-06-02-panasonic-v150mdh",
   "status": "published",
   "name": "Panasonic V150MDH",
-  "price_text": "41000",
-  "price": {
-    "amount": 41000,
-    "currency": "TWD",
-    "unit": "each",
-    "label": null
-  },
+  "english_name": "Panasonic V150MDH",
   "summary": "總之洗衣機都現看Panasonic，這是自動加洗衣精的洗脫烘中最便宜的",
-  "description": "總之洗衣機都現看Panasonic，這是自動加洗衣精的洗脫烘中最便宜的",
-  "purchase_url": "https://24h.pchome.com.tw/prod/DPAI1H-A900FQ5GC",
+  "long_description": "總之洗衣機都現看Panasonic，這是自動加洗衣精的洗脫烘中最便宜的",
+  "llm_description": "",
+  "search_aliases": [],
+  "model_numbers": [],
+  "offers": [
+    {
+      "channel_id": "pchome",
+      "url": "https://24h.pchome.com.tw/prod/DPAI1H-A900FQ5GC",
+      "price_text": "41000",
+      "price": {
+        "amount": 41000,
+        "currency": "TWD",
+        "unit": "each",
+        "label": null
+      },
+      "checked_at": "2026-06-02T00:00:00+08:00"
+    }
+  ],
   "image_url": "/images/products/2026-06-02-panasonic-v150mdh.jpg",
-  "channel_id": "pchome",
-  "category_id": "home",
-  "tag_ids": [],
+  "category_id": "major-appliance",
+  "tag_ids": [
+    "laundry",
+    "panasonic"
+  ],
   "reference_url": null,
   "created_at": "2026-06-02T00:00:00+08:00",
   "updated_at": "2026-06-02T00:00:00+08:00",

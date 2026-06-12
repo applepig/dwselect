@@ -1,0 +1,38 @@
+{
+  "id": "2026-06-02-zojirushi-nw-jw10",
+  "status": "published",
+  "name": "象印NW-JW10",
+  "english_name": "Zojirushi NW JW10",
+  "summary": "這台的賣點是煮飯快、要清洗的零件少，不過煮起來還是略輸本炭釜",
+  "long_description": "這台的賣點是煮飯快、要清洗的零件少，不過煮起來還是略輸本炭釜",
+  "llm_description": "",
+  "search_aliases": [],
+  "model_numbers": [],
+  "offers": [
+    {
+      "channel_id": "amazonjp",
+      "url": "https://www.amazon.co.jp/dp/B089M6CRXJ",
+      "price_text": "￥45000",
+      "price": {
+        "amount": 45000,
+        "currency": "JPY",
+        "unit": "each",
+        "label": null
+      },
+      "checked_at": "2026-06-02T00:00:00+08:00"
+    }
+  ],
+  "image_url": "/images/products/2026-06-02-zojirushi-nw-jw10.jpg",
+  "category_id": "small-appliance",
+  "tag_ids": [
+    "countertop",
+    "kitchen",
+    "zojirushi"
+  ],
+  "reference_url": null,
+  "created_at": "2026-06-02T00:00:00+08:00",
+  "updated_at": "2026-06-02T00:00:00+08:00",
+  "published_at": "2026-06-02T00:00:00+08:00",
+  "unpublished_at": null,
+  "archived_at": null
+}

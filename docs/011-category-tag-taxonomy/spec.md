@@ -346,7 +346,7 @@ const channel_id_schema = z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, 'must b
 > 驗證：`pnpm test`、`pnpm test:e2e`、`node scripts/migrate-category-tag-taxonomy.ts --dry-run` 後執行、`pnpm build:search-index`
 > 預期結果：62 商品＋5 guides/links 完成遷移、品牌 ids 進入 products `tag_ids`、products 全數改為 english_name / ASCII id + filename / offers / long_description / llm_description / search_aliases / model_numbers schema、summary 無 unmapped、referential 測試綠、e2e 斷言同步更新後綠、mapping 結果列入 works.md 供人工抽查；schema 切換與 content 遷移在同一 milestone 原子完成，commit 時全測試綠
 
-- [ ] Red → Green → Refactor
+- [x] Red → Green → Refactor
 
 ### Milestone 3：回歸驗證與 Frontend Handoff
 

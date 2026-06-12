@@ -41,6 +41,7 @@ export async function buildSearchIndexFile(
     categories: taxonomies.categories,
     channels: taxonomies.channels,
     tags: taxonomies.tags,
+    brands: taxonomies.brands,
   })
   await mkdir(getDirectoryName(output_path), { recursive: true })
   await writeFile(output_path, `${JSON.stringify(payload, null, 2)}\n`)
@@ -76,17 +77,20 @@ async function readTaxonomies(taxonomies_dir: string): Promise<{
   categories: CategoryDefinition[]
   channels: ChannelDefinition[]
   tags: TagDefinition[]
+  brands: TagDefinition[]
 }> {
-  const [category_source, channel_source, tag_source] = await Promise.all([
+  const [category_source, channel_source, tag_source, brand_source] = await Promise.all([
     readFile(join(taxonomies_dir, 'categories.json'), 'utf8'),
     readFile(join(taxonomies_dir, 'channels.json'), 'utf8'),
     readFile(join(taxonomies_dir, 'tags.json'), 'utf8'),
+    readFile(join(taxonomies_dir, 'brands.json'), 'utf8'),
   ])
 
   return {
     categories: category_taxonomy_schema.parse(JSON.parse(category_source)).items,
     channels: channel_taxonomy_schema.parse(JSON.parse(channel_source)).items,
     tags: tag_taxonomy_schema.parse(JSON.parse(tag_source)).items,
+    brands: tag_taxonomy_schema.parse(JSON.parse(brand_source)).items,
   }
 }
 

@@ -2,20 +2,32 @@
   "id": "2026-06-02-hitachi-rd-14fr",
   "status": "published",
   "name": "Hitachi RD-14FR",
-  "price_text": "5999",
-  "price": {
-    "amount": 5999,
-    "currency": "TWD",
-    "unit": "each",
-    "label": null
-  },
+  "english_name": "Hitachi RD 14FR",
   "summary": "日立這系列最近大概降了20%，現在應該不需要考慮其他牌子",
-  "description": "日立這系列最近大概降了20%，現在應該不需要考慮其他牌子",
-  "purchase_url": "https://24h.pchome.com.tw/prod/DMBQ01-A900GSFE3",
+  "long_description": "日立這系列最近大概降了20%，現在應該不需要考慮其他牌子",
+  "llm_description": "",
+  "search_aliases": [],
+  "model_numbers": [],
+  "offers": [
+    {
+      "channel_id": "pchome",
+      "url": "https://24h.pchome.com.tw/prod/DMBQ01-A900GSFE3",
+      "price_text": "5999",
+      "price": {
+        "amount": 5999,
+        "currency": "TWD",
+        "unit": "each",
+        "label": null
+      },
+      "checked_at": "2026-06-02T00:00:00+08:00"
+    }
+  ],
   "image_url": "/images/products/2026-06-02-hitachi-rd-14fr.jpg",
-  "channel_id": "pchome",
-  "category_id": "home",
-  "tag_ids": [],
+  "category_id": "small-appliance",
+  "tag_ids": [
+    "air-care",
+    "hitachi"
+  ],
   "reference_url": "https://www.facebook.com/applepig/posts/pfbid02NJssM3r5EVu8ekue21HnszURe3KdzudkyFDY1t6sfrF1hL6PkWueXR5Gvg1kEQE9l",
   "created_at": "2026-06-02T00:00:00+08:00",
   "updated_at": "2026-06-02T00:00:00+08:00",
