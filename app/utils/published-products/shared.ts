@@ -1,5 +1,6 @@
 import type { Product, ProductOffer } from '../product-schema'
 import type { PublishedProductCard, TaxonomyDefinitions } from './types'
+import { resolveProductImageUrl } from '../content-images/resolve-product-image-url'
 
 export function getPublishedProducts(
   products: Product[],
@@ -23,7 +24,7 @@ export function mapProductToCard(product: Product, taxonomies: TaxonomyDefinitio
     channel: channel_definition.label,
     channel_id: primary_offer.channel_id,
     description: product.long_description,
-    image: product.image_url,
+    image: resolveProductImageUrl(product),
     name: product.name,
     price: primary_offer.price_text,
     purchase_link: primary_offer.url,

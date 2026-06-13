@@ -115,6 +115,7 @@
   gap: 6px;
   align-items: center;
   justify-content: center;
+  width: fit-content;
   max-width: 100%;
   min-height: 44px;
   padding: 0 14px;
@@ -329,7 +330,7 @@
 
 .search-input-shell {
   display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
+  grid-template-columns: auto minmax(0, 1fr) auto;
   gap: 10px;
   align-items: center;
   width: 100%;
@@ -372,6 +373,12 @@
   opacity: 0.72;
 }
 
+.search-input-actions {
+  display: inline-flex;
+  gap: 6px;
+  align-items: center;
+}
+
 .search-empty-panel,
 .search-error-panel,
 .compact-empty-state {
@@ -412,14 +419,12 @@
   min-width: 0;
 }
 
-.search-history-list,
 .search-suggestion-list {
   display: grid;
   gap: 8px;
   min-width: 0;
 }
 
-.search-history-item,
 .search-suggestion-item {
   display: grid;
   gap: 5px;
@@ -436,10 +441,9 @@
   text-align: left;
 }
 
-.search-history-item:hover,
 .search-suggestion-item:hover,
 .search-action-button:hover,
-.search-clear-button:hover {
+.tag-chip:hover {
   background: color-mix(in srgb, var(--dw-accent) 7%, var(--dw-panel));
 }
 
@@ -465,8 +469,7 @@
   word-break: break-word;
 }
 
-.search-action-button,
-.search-clear-button {
+.search-action-button {
   display: inline-flex;
   min-height: 38px;
   align-items: center;
@@ -882,7 +885,6 @@
 .clear-tags-button:focus-visible,
 .search-action-button:focus-visible,
 .search-clear-button:focus-visible,
-.search-history-item:focus-visible,
 .search-suggestion-item:focus-visible,
 .product-card-link:focus-visible,
 .related-product-card:focus-visible,

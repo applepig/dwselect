@@ -49,6 +49,7 @@ type LocalizeEntry = {
   file_path: string
   file_name: string
   domain: 'products' | 'guides'
+  image_file: unknown
   image_url: unknown
 }
 
@@ -137,6 +138,7 @@ async function localizeContentEntry(params: {
   file_path: string
   file_name: string
   domain: 'products' | 'guides'
+  image_file: unknown
   image_url: unknown
   output_dir: string
   timeout_ms: number
@@ -147,6 +149,10 @@ async function localizeContentEntry(params: {
   | { status: 'skipped' }
   | { status: 'failed', image_url: string, reason: string }
 > {
+  if (params.image_file !== null && params.image_file !== undefined) {
+    return { status: 'skipped' }
+  }
+
   if (params.image_url === null || params.image_url === undefined) {
     return { status: 'skipped' }
   }
@@ -156,7 +162,21 @@ async function localizeContentEntry(params: {
   }
 
   if (params.image_url.startsWith('/images/')) {
-    return { status: 'skipped' }
+    const image_file = getLegacyLocalImageFile(params.image_url, params.domain)
+
+    if (image_file === null) {
+      return { status: 'failed', image_url: params.image_url, reason: 'invalid local image URL' }
+    }
+
+    if (!params.dry_run) {
+      const content = await readAndParseContent(params.file_path)
+
+      content.image_file = image_file
+      content.image_url = null
+      await writeFile(params.file_path, `${JSON.stringify(content, null, 2)}\n`)
+    }
+
+    return { status: 'localized' }
   }
 
   if (!isHttpUrl(params.image_url)) {
@@ -188,7 +208,7 @@ async function localizeContentEntry(params: {
     }
   }
 
-  const image_url = `/images/${params.domain}/${params.id}.${extension}`
+  const image_file = getImageFileName(params.id, extension)
   const output_path = join(params.output_dir, `${params.id}.${extension}`)
   const image_data = Buffer.from(await response.arrayBuffer())
   const warning = image_data.byteLength > MAX_RECOMMENDED_IMAGE_SIZE_BYTES
@@ -203,7 +223,8 @@ async function localizeContentEntry(params: {
     await mkdir(params.output_dir, { recursive: true })
     await writeFile(output_path, image_data)
 
-    content.image_url = image_url
+    content.image_file = image_file
+    content.image_url = null
     await writeFile(params.file_path, `${JSON.stringify(content, null, 2)}\n`)
   }
 
@@ -310,6 +331,7 @@ async function readContentEntries(content_dir: string, domain: 'products' | 'gui
       file_name,
       file_path,
       domain,
+      image_file: content.image_file,
       image_url: content.image_url,
     })
   }
@@ -318,7 +340,23 @@ async function readContentEntries(content_dir: string, domain: 'products' | 'gui
 }
 
 async function readAndParseContent(file_path: string) {
-  return JSON.parse(await readFile(file_path, 'utf8')) as { image_url?: unknown }
+  return JSON.parse(await readFile(file_path, 'utf8')) as { image_file?: unknown, image_url?: unknown }
+}
+
+function getLegacyLocalImageFile(image_url: string, domain: 'products' | 'guides'): string | null {
+  const prefix = `/images/${domain}/`
+
+  if (!image_url.startsWith(prefix)) {
+    return null
+  }
+
+  const image_file = image_url.slice(prefix.length)
+
+  if (image_file === '' || image_file.includes('/') || image_file.includes('..') || image_file.includes('?') || image_file.includes('#')) {
+    return null
+  }
+
+  return image_file
 }
 
 function isHttpUrl(value: string) {

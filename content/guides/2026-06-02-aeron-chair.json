@@ -4,7 +4,7 @@
   "title": "Aeron Chair",
   "summary": "我上次椅子壞掉備料三個月，我只好先再買一張等雅浩叫料。下次如果再壞掉的話，我就自己把椅子拖到他們辦公室去砸",
   "source_url": "https://www.facebook.com/share/p/165wXVWFFW/",
-  "image_url": "/images/guides/2026-06-02-aeron-chair.jpg",
+  "image_url": null,
   "category_ids": [
     "computer-3c"
   ],
@@ -16,5 +16,6 @@
   "updated_at": "2026-06-02T00:00:00+08:00",
   "published_at": "2026-06-02T00:00:00+08:00",
   "unpublished_at": null,
-  "archived_at": null
+  "archived_at": null,
+  "image_file": "2026-06-02-aeron-chair.jpg"
 }

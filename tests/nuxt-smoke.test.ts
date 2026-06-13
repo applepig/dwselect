@@ -142,6 +142,19 @@ describe('Nuxt SSG baseline', () => {
     expect(page_source).toContain('沒這個坑，去許願吧')
   })
 
+  it('should keep search idle pills on the shared chip layout', () => {
+    const idle_panel_source = readFileSync(
+      new URL('../app/components/search/search-idle-panel.vue', import.meta.url),
+      'utf8',
+    )
+    const catalog_css = readFileSync(new URL('../app/assets/styles/catalog.css', import.meta.url), 'utf8')
+
+    expect(idle_panel_source).toContain('class="tag-chip"')
+    expect(idle_panel_source).not.toContain('search-history-item')
+    expect(catalog_css).toContain('width: fit-content')
+    expect(catalog_css).not.toContain('.search-history-item')
+  })
+
   it('should keep catalog controls and long product text responsive across phone, tablet and desktop widths', () => {
     const catalog_css = readFileSync(new URL('../app/assets/styles/catalog.css', import.meta.url), 'utf8')
 

@@ -22,7 +22,7 @@
       "checked_at": "2026-06-02T00:00:00+08:00"
     }
   ],
-  "image_url": "/images/products/2026-06-02-mitsubishi-heavy-industries-air-conditioner.jpg",
+  "image_url": null,
   "category_id": "major-appliance",
   "tag_ids": [
     "aircon",
@@ -34,5 +34,6 @@
   "updated_at": "2026-06-02T00:00:00+08:00",
   "published_at": "2026-06-02T00:00:00+08:00",
   "unpublished_at": null,
-  "archived_at": null
+  "archived_at": null,
+  "image_file": "2026-06-02-mitsubishi-heavy-industries-air-conditioner.jpg"
 }

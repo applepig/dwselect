@@ -22,7 +22,7 @@
       "checked_at": "2026-06-02T00:00:00+08:00"
     }
   ],
-  "image_url": "/images/products/2026-06-02-zojirushi-nw-jw10.jpg",
+  "image_url": null,
   "category_id": "small-appliance",
   "tag_ids": [
     "countertop",
@@ -34,5 +34,6 @@
   "updated_at": "2026-06-02T00:00:00+08:00",
   "published_at": "2026-06-02T00:00:00+08:00",
   "unpublished_at": null,
-  "archived_at": null
+  "archived_at": null,
+  "image_file": "2026-06-02-zojirushi-nw-jw10.jpg"
 }

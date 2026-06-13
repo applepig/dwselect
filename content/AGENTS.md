@@ -32,6 +32,8 @@
 
 本站有三種內容類型，全部是 JSON 檔案，schema 由 Zod 嚴格驗證。
 
+完整 content 檔案、圖片實體檔、公開 URL、runtime view model 與 generated artifact 關係，請先閱讀 `docs/CONTENT.md`。
+
 ### 通用規則
 
 - **檔案 ID**：JSON 中的 `id` 欄位必須與檔名（不含 `.json`）完全一致
@@ -70,7 +72,8 @@
       "checked_at": "2026-06-13T00:00:00+08:00"
     }
   ],
-  "image_url": "/images/products/2026-06-13-samsung-galaxy-s25.jpg",
+  "image_file": "2026-06-13-samsung-galaxy-s25.jpg",
+  "image_url": null,
   "category_id": "computer-3c",
   "tag_ids": ["samsung", "phone"],
   "reference_url": "https://www.samsung.com/tw/smartphones/galaxy-s25/",
@@ -96,7 +99,8 @@
 | `search_aliases` | string[] | Agent | 替代搜尋詞（中文別名、縮寫等） |
 | `model_numbers` | string[] | Agent | 產品型號 |
 | `offers` | array | Agent | 至少一筆賣場資訊（見下方） |
-| `image_url` | string | Agent | 本地圖片路徑 `/images/products/{id}.{ext}` |
+| `image_file` | string \| null | Agent | 本地圖片檔名 `{id}.{ext}`。Product 必須填 `image_file` 或 HTTP(S) `image_url`，且只能擇一 |
+| `image_url` | string \| null | Agent | 只有外部圖片 fallback 才填 HTTP(S) URL；本地圖片不要填 `/images/...` |
 | `category_id` | string | Agent | **單一** category ID（見 Taxonomy） |
 | `tag_ids` | string[] | Agent | tag ID 與 brand ID 混合陣列 |
 | `reference_url` | string \| null | Agent | 產品官網、評測文章等參考連結 |
@@ -142,7 +146,8 @@
   "title": "螢幕選購指南",
   "summary": "使用者提供的摘要",
   "source_url": "https://www.facebook.com/applepig/posts/example",
-  "image_url": "/images/guides/2026-06-13-monitor-buying-guide.jpg",
+  "image_file": "2026-06-13-monitor-buying-guide.jpg",
+  "image_url": null,
   "category_ids": ["computer-3c"],
   "tag_ids": ["display"],
   "related_product_ids": ["2026-06-02-benq-rd280u"],
@@ -161,7 +166,8 @@
 | `title` | string | 指南標題 |
 | `summary` | string | 由使用者提供 |
 | `source_url` | string | 原始文章 URL（如 Facebook 貼文） |
-| `image_url` | string \| null | 本地圖片路徑 `/images/guides/{id}.{ext}` 或 null |
+| `image_file` | string \| null | 本地圖片檔名 `{id}.{ext}`；無圖時可省略或設為 `null` |
+| `image_url` | string \| null | 只有外部圖片 fallback 才填 HTTP(S) URL；本地圖片不要填 `/images/...` |
 | `category_ids` | string[] | **複數** category ID 陣列（注意：Guide 用複數） |
 | `tag_ids` | string[] | tag ID 陣列（Guide 不包含 brand ID） |
 | `related_product_ids` | string[] | 相關商品的 ID 陣列 |
@@ -196,7 +202,7 @@
 | `title` | string | 連結標題 |
 | `summary` | string | 簡短說明 |
 | `url` | string | 目標 URL |
-| `image_url` | string \| null | 選填，本地圖片路徑或 null |
+| `image_url` | string \| null | 選填，只能是 HTTP(S) URL、`null` 或省略；Link 不支援本地 `image_file` |
 | `icon` | string | Lucide icon class，如 `i-lucide-link`、`i-lucide-shopping-cart` |
 | `category_ids` | string[] | category ID 陣列 |
 | `tag_ids` | string[] | tag ID 陣列 |
@@ -299,7 +305,7 @@ Taxonomy item 結構：
    - 副檔名根據圖片實際格式決定（jpg、png、webp）
    - 優先使用 jpg 或 webp
    - 檔名使用與 JSON 相同的 id
-3. `image_url` 欄位設為 `/images/products/{id}.{ext}`
+3. JSON 欄位設為 `image_file: "{id}.{ext}"` 與 `image_url: null`
 
 #### 步驟 4：建立 JSON 檔案
 
@@ -337,7 +343,7 @@ pnpm test
 - 使用 `title` 而非 `name` / `english_name`
 - 需要 `source_url`（原始文章連結）
 - `tag_ids` 只用 tag，不含 brand
-- 圖片存到 `content/guides/images/{id}.{ext}`，路徑用 `/images/guides/{id}.{ext}`
+- 圖片存到 `content/guides/images/{id}.{ext}`，JSON 寫 `image_file: "{id}.{ext}"` 與 `image_url: null`
 - `related_product_ids` 填入相關商品的 ID，沒有則為空陣列
 
 ### 新增連結（Link）
@@ -345,8 +351,8 @@ pnpm test
 - 使用 `category_ids`（複數陣列）
 - 需要 `icon`（Lucide icon class）
 - 需要 `sort_order`（排序數字）
-- `image_url` 是選填的（可以是 `null` 或省略）
-- Link 目前沒有獨立的本地圖片目錄。若要填 local path，只能使用 schema 和 runtime 已支援的 `/images/products/{filename}` 或 `/images/guides/{filename}`；不要建立 `/images/links/` 或 `content/links/images/`
+- `image_url` 是選填的，只能是 HTTP(S) URL、`null` 或省略
+- Link 不支援本地 `image_file`，不要建立 `/images/links/` 或 `content/links/images/`，也不要填 `/images/products/...` 或 `/images/guides/...` local path
 
 ### 更新內容
 

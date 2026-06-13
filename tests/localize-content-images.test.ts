@@ -40,7 +40,7 @@ describe('localize-content-images', () => {
     temp_roots.length = 0
   })
 
-  it('should localize external HTTP(S) image URLs and rewrite content image_url', async () => {
+  it('should localize external HTTP(S) image URLs and rewrite content image_file', async () => {
     const { products_dir, guides_dir, cleanup_paths } = createFixtureDirs()
     temp_roots.push(...cleanup_paths)
 
@@ -90,7 +90,8 @@ describe('localize-content-images', () => {
     })
 
     const updated_content = JSON.parse(readFileSync(join(products_dir, `${id}.json`), 'utf8')) as {
-      image_url: string
+      image_file: string
+      image_url: string | null
     }
 
     expect(summary).toEqual({
@@ -100,12 +101,13 @@ describe('localize-content-images', () => {
       failures: [],
       warnings: [],
     } satisfies LocalizedImageSummary)
-    expect(updated_content.image_url).toBe('/images/products/2026-06-02-sample-product.jpg')
+    expect(updated_content.image_file).toBe('2026-06-02-sample-product.jpg')
+    expect(updated_content.image_url).toBeNull()
     expect(existsSync(join(products_dir, 'images', '2026-06-02-sample-product.jpg'))).toBe(true)
     expect(fetcher).toHaveBeenCalledOnce()
   })
 
-  it('should skip content already on /images/* paths and avoid download calls', async () => {
+  it('should convert legacy local image URLs to image_file and avoid download calls', async () => {
     const { products_dir, guides_dir, cleanup_paths } = createFixtureDirs()
     temp_roots.push(...cleanup_paths)
 
@@ -159,14 +161,72 @@ describe('localize-content-images', () => {
       guides_dir,
       fetcher,
     })
+    const updated_product = JSON.parse(readFileSync(join(products_dir, '2026-06-02-local-product.json'), 'utf8')) as {
+      image_file: string
+      image_url: string | null
+    }
+    const updated_guide = JSON.parse(readFileSync(join(guides_dir, '2026-06-02-local-guide.json'), 'utf8')) as {
+      image_file: string
+      image_url: string | null
+    }
 
     expect(summary).toEqual({
-      localized: 0,
-      skipped: 2,
+      localized: 2,
+      skipped: 0,
       failed: 0,
       failures: [],
       warnings: [],
     } satisfies LocalizedImageSummary)
+    expect(updated_product.image_file).toBe('2026-06-02-local-product.jpg')
+    expect(updated_product.image_url).toBeNull()
+    expect(updated_guide.image_file).toBe('2026-06-02-local-guide.png')
+    expect(updated_guide.image_url).toBeNull()
+    expect(fetcher).not.toHaveBeenCalled()
+  })
+
+  it('should skip content that already has a local image_file', async () => {
+    const { products_dir, guides_dir, cleanup_paths } = createFixtureDirs()
+    temp_roots.push(...cleanup_paths)
+
+    const fetcher = vi.fn()
+    const id = '2026-06-02-local-image-file-product'
+
+    writeProductFile(products_dir, id, {
+      id,
+      status: 'published',
+      name: '已使用 image_file 商品',
+      summary: '測試摘要',
+      image_file: `${id}.webp`,
+      image_url: null,
+      category_id: 'home',
+      tag_ids: ['tag-a'],
+      reference_url: null,
+      created_at: '2026-06-02T00:00:00+08:00',
+      updated_at: '2026-06-02T00:00:00+08:00',
+      published_at: '2026-06-02T00:00:00+08:00',
+      unpublished_at: null,
+      archived_at: null,
+    })
+
+    const summary = await localizeContentImages({
+      products_dir,
+      guides_dir,
+      fetcher,
+    })
+    const updated_content = JSON.parse(readFileSync(join(products_dir, `${id}.json`), 'utf8')) as {
+      image_file: string
+      image_url: string | null
+    }
+
+    expect(summary).toEqual({
+      localized: 0,
+      skipped: 1,
+      failed: 0,
+      failures: [],
+      warnings: [],
+    } satisfies LocalizedImageSummary)
+    expect(updated_content.image_file).toBe(`${id}.webp`)
+    expect(updated_content.image_url).toBeNull()
     expect(fetcher).not.toHaveBeenCalled()
   })
 
@@ -215,6 +275,7 @@ describe('localize-content-images', () => {
     })
 
     const updated_content = JSON.parse(readFileSync(join(products_dir, `${id}.json`), 'utf8')) as {
+      image_file?: string
       image_url: string
     }
 
@@ -347,6 +408,7 @@ describe('localize-content-images', () => {
       warnings: [],
     } satisfies LocalizedImageSummary)
     expect(updated_content.image_url).toBe('https://example.com/image.png')
+    expect(updated_content).not.toHaveProperty('image_file')
     expect(existsSync(join(products_dir, 'images', `${id}.png`))).toBe(false)
   })
 
@@ -403,7 +465,8 @@ describe('localize-content-images', () => {
       fetcher,
     })
     const updated_content = JSON.parse(readFileSync(join(products_dir, `${id}.json`), 'utf8')) as {
-      image_url: string
+      image_file: string
+      image_url: string | null
     }
 
     expect(summary).toEqual({
@@ -420,7 +483,8 @@ describe('localize-content-images', () => {
         },
       ],
     } satisfies LocalizedImageSummary)
-    expect(updated_content.image_url).toBe(`/images/products/${id}.png`)
+    expect(updated_content.image_file).toBe(`${id}.png`)
+    expect(updated_content.image_url).toBeNull()
     expect(readFileSync(join(products_dir, 'images', `${id}.png`))).toHaveLength(image_payload.byteLength)
   })
 

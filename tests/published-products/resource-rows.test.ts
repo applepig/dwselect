@@ -41,6 +41,44 @@ describe('published guide and link mapping', () => {
     ])
   })
 
+  it('should resolve local guide image files for resource rows', () => {
+    const guides: Guide[] = [
+      {
+        ...base_guide,
+        id: 'local-guide',
+        title: '本地圖片指南',
+        image_file: 'local-guide.png',
+        image_url: null,
+      },
+    ]
+
+    expect(getPublishedGuides(guides, test_taxonomies)).toEqual([
+      expect.objectContaining({
+        id: 'local-guide',
+        image_url: '/images/guides/local-guide.png',
+      }),
+    ])
+  })
+
+  it('should normalize quote-wrapped local guide image files for resource rows', () => {
+    const guides: Guide[] = [
+      {
+        ...base_guide,
+        id: 'quote-wrapped-guide',
+        title: '引號圖片指南',
+        image_file: '"quote-wrapped-guide.webp"',
+        image_url: null,
+      },
+    ]
+
+    expect(getPublishedGuides(guides, test_taxonomies)).toEqual([
+      expect.objectContaining({
+        id: 'quote-wrapped-guide',
+        image_url: '/images/guides/quote-wrapped-guide.webp',
+      }),
+    ])
+  })
+
   it('should map only published links to external resource rows with image fallback and safe attributes', () => {
     const links: LinkDefinition[] = [
       ...test_links,

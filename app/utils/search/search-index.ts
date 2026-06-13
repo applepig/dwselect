@@ -217,7 +217,7 @@ function mapProductToSearchDocument(
     category_labels: [category_labels.get(product.category_id) ?? product.category_id],
     tag_ids: [...product.tag_ids],
     tag_labels: getTagLabels(product.tag_ids, tag_labels),
-    image_url: product.image_url,
+    image_url: resolveProductSearchImageUrl(product),
     href: `/products/${content_id}`,
     external: false,
     price_text: primary_offer.price_text,
@@ -260,7 +260,7 @@ function mapGuideToSearchDocument(
     category_labels: guide.category_ids.map((category_id) => category_labels.get(category_id) ?? category_id),
     tag_ids: [...guide.tag_ids],
     tag_labels: getTagLabels(guide.tag_ids, tag_labels),
-    image_url: guide.image_url,
+    image_url: resolveGuideSearchImageUrl(guide),
     href: guide.source_url,
     external: true,
     published_at: guide.published_at,
@@ -366,6 +366,26 @@ function getContentId(content_id: string) {
     .split('/')
     .at(-1)
     ?.replace(/\.json$/, '') ?? content_id
+}
+
+function resolveProductSearchImageUrl(product: Pick<Product, 'image_file' | 'image_url'>): string {
+  const image_url = product.image_file === null || product.image_file === undefined
+    ? product.image_url
+    : `/images/products/${product.image_file}`
+
+  if (image_url === null || image_url === undefined) {
+    throw new Error('Product image source is required')
+  }
+
+  return image_url
+}
+
+function resolveGuideSearchImageUrl(guide: Pick<Guide, 'image_file' | 'image_url'>): string | null {
+  if (guide.image_file === null || guide.image_file === undefined) {
+    return guide.image_url ?? null
+  }
+
+  return `/images/guides/${guide.image_file}`
 }
 
 function getTagLabels(tag_ids: string[], tag_labels: ReadonlyMap<string, string>) {

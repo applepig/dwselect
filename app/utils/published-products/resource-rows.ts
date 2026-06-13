@@ -1,6 +1,7 @@
 import type { SearchSuggestion } from '../search/search-index'
 import type { Guide, LinkDefinition } from '../product-schema'
 import type { CompactResourceRow, ResourceRowLinkAttributes, SearchResultSection, TaxonomyDefinitions } from './types'
+import { resolveGuideImageUrl } from '../content-images/resolve-guide-image-url'
 import { compareText, getCategoryDefinition } from './shared'
 
 export function getPublishedGuides(
@@ -63,7 +64,7 @@ function mapGuideToRow(guide: Guide, taxonomies: TaxonomyDefinitions): CompactRe
     subtitle: guide.summary,
     meta: category_labels.length === 0 ? null : category_labels.join('、'),
     href: guide.source_url,
-    image_url: guide.image_url,
+    image_url: resolveGuideImageUrl(guide),
     icon: 'i-lucide-book-open',
     external: true,
     target: '_blank',

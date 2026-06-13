@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { readFileSync, readdirSync } from 'node:fs'
+import { existsSync, readFileSync, readdirSync } from 'node:fs'
 import { parse } from 'node:path'
 
 import {
@@ -218,47 +218,95 @@ describe('product schema', () => {
     }
   })
 
-  it('should reject non HTTP(S) image URLs', () => {
+  it('should reject non HTTP(S) product image URLs', () => {
     expect(() => product_schema.parse({
       ...valid_product,
       image_url: 'ftp://example.com/product.jpg',
     })).toThrow()
   })
 
-  it('should accept local image URLs from products and guides', () => {
+  it('should accept local image files from products and guides', () => {
     for (const extension of ['jpg', 'jpeg', 'png', 'webp', 'gif', 'avif']) {
       expect(() => product_schema.parse({
         ...valid_product,
-        image_url: `/images/products/2026-06-02-sample-product.${extension}`,
+        image_file: `2026-06-02-sample-product.${extension}`,
+        image_url: null,
       })).not.toThrow()
 
       expect(() => guide_schema.parse({
         ...valid_guide,
-        image_url: `/images/guides/sample-guide.${extension}`,
+        image_file: `sample-guide.${extension}`,
+        image_url: null,
       })).not.toThrow()
     }
   })
 
-  it('should reject malformed or unsupported local image URLs', () => {
-    const invalid_local_image_urls = [
-      '/images/products/',
-      '/images/products//',
-      '/images/products/sample-product',
-      '/images/products/sample-product.bmp',
-      '/images/products/subdir/sample-product.jpg',
-      '/images/other/sample-product.jpg',
-      'images/products/sample-product.jpg',
-      '/images/products/../secret.jpg',
-      '/images/products/sample-product.jpg?v=1',
-      '/images/guides/sample-guide.jpg#x',
+  it('should reject malformed or unsupported local image files', () => {
+    const invalid_image_files = [
+      '',
+      'sample-product',
+      'sample-product.bmp',
+      'sample-product.JPG',
+      'subdir/sample-product.jpg',
+      '../secret.jpg',
+      'sample-product.jpg?v=1',
+      'sample-product.jpg#x',
     ]
 
-    for (const image_url of invalid_local_image_urls) {
+    for (const image_file of invalid_image_files) {
       expect(() => product_schema.parse({
         ...valid_product,
-        image_url,
+        image_file,
+        image_url: null,
+      })).toThrow()
+      expect(() => guide_schema.parse({
+        ...valid_guide,
+        image_file,
       })).toThrow()
     }
+  })
+
+  it('should reject local paths in product and guide image URLs', () => {
+    expect(() => product_schema.parse({
+      ...valid_product,
+      image_url: '/images/products/2026-06-02-sample-product.jpg',
+    })).toThrow()
+    expect(() => guide_schema.parse({
+      ...valid_guide,
+      image_url: '/images/guides/sample-guide.jpg',
+    })).toThrow()
+  })
+
+  it('should require products to have exactly one image source', () => {
+    expect(() => product_schema.parse({
+      ...valid_product,
+      image_file: '2026-06-02-sample-product.jpg',
+      image_url: 'https://example.com/product.jpg',
+    })).toThrow()
+    expect(() => product_schema.parse({
+      ...valid_product,
+      image_url: null,
+    })).toThrow()
+    expect(() => product_schema.parse({
+      ...valid_product,
+      image_url: undefined,
+    })).toThrow()
+  })
+
+  it('should allow guides to omit images but reject ambiguous image sources', () => {
+    expect(() => guide_schema.parse({
+      ...valid_guide,
+      image_url: null,
+    })).not.toThrow()
+    expect(() => guide_schema.parse({
+      ...valid_guide,
+      image_url: undefined,
+    })).not.toThrow()
+    expect(() => guide_schema.parse({
+      ...valid_guide,
+      image_file: 'sample-guide.jpg',
+      image_url: 'https://example.com/guide.jpg',
+    })).toThrow()
   })
 
   it('should keep rejecting javascript: and data: URLs for image fields', () => {
@@ -320,13 +368,24 @@ describe('product schema', () => {
     })).not.toThrow()
     expect(() => link_schema.parse({
       ...valid_link,
-      image_url: '/images/guides/sample-link.png',
-    })).not.toThrow()
-    expect(() => link_schema.parse({
-      ...valid_link,
       image_url: null,
     })).not.toThrow()
     expect(() => link_schema.parse(valid_link)).not.toThrow()
+  })
+
+  it('should reject local image fields from links', () => {
+    expect(() => link_schema.parse({
+      ...valid_link,
+      image_file: 'sample-link.png',
+    })).toThrow()
+    expect(() => link_schema.parse({
+      ...valid_link,
+      image_url: '/images/guides/sample-link.png',
+    })).toThrow()
+    expect(() => link_schema.parse({
+      ...valid_link,
+      image_url: '/images/links/sample-link.png',
+    })).toThrow()
   })
 
   it('should reject non HTTP(S) guide and link URLs', () => {
@@ -489,7 +548,8 @@ describe('product schema', () => {
     for (const entry of product_entries) {
       expect(entry.content.id).toBe(entry.file_stem)
       expect(entry.content.id).toBe(`${entry.content.created_at.slice(0, 10)}-${slugifyEnglishName(entry.content.english_name)}`)
-      expect(entry.content.image_url).not.toMatch(/[\u3040-\u30ff\u3400-\u9fff]/u)
+      expect(entry.content.image_url === null || isHttpUrl(entry.content.image_url)).toBe(true)
+      expectContentImageFileToExist(entry.content.image_file, products_dir_url)
       expect(entry.content).not.toHaveProperty('category')
       expect(entry.content).not.toHaveProperty('tags')
       expect(entry.content).not.toHaveProperty('channel_id')
@@ -504,6 +564,8 @@ describe('product schema', () => {
     for (const entry of guide_entries) {
       expect(entry.content.id).toBe(entry.file_stem)
       expect(entry.content).not.toHaveProperty('tags')
+      expect(entry.content.image_url === null || isHttpUrl(entry.content.image_url)).toBe(true)
+      expectContentImageFileToExist(entry.content.image_file, guides_dir_url)
       expect(() => guide_schema.parse(entry.content)).not.toThrow()
     }
     for (const entry of link_entries) {
@@ -544,6 +606,30 @@ function slugifyEnglishName(english_name: string) {
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/-+/g, '-')
     .replace(/^-|-$/g, '')
+}
+
+function isHttpUrl(value: unknown) {
+  if (typeof value !== 'string') {
+    return false
+  }
+
+  try {
+    const url = new URL(value)
+
+    return url.protocol === 'http:' || url.protocol === 'https:'
+  }
+  catch {
+    return false
+  }
+}
+
+function expectContentImageFileToExist(image_file: unknown, content_dir_url: URL) {
+  if (image_file === null || image_file === undefined) {
+    return
+  }
+
+  expect(typeof image_file).toBe('string')
+  expect(existsSync(new URL(`images/${image_file}`, content_dir_url))).toBe(true)
 }
 
 function expectTaxonomyIdsToBeKebabCaseAndUnique(items: Array<{ id: string }>) {

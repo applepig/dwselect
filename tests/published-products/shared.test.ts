@@ -71,6 +71,38 @@ describe('published products mapping', () => {
     expect(published_products[0]).not.toHaveProperty('img_url')
   })
 
+  it('should resolve local product image files for cards', () => {
+    const products = [
+      makeProduct({
+        id: 'local-image-product',
+        status: 'published',
+        name: '本地圖片商品',
+        image_file: 'local-image-product.webp',
+        image_url: null,
+      }),
+    ]
+
+    const published_products = getPublishedProducts(products, test_taxonomies)
+
+    expect(published_products[0]?.image).toBe('/images/products/local-image-product.webp')
+  })
+
+  it('should normalize quote-wrapped local product image files for cards', () => {
+    const products = [
+      makeProduct({
+        id: 'quote-wrapped-image-product',
+        status: 'published',
+        name: '引號圖片商品',
+        image_file: '"quote-wrapped-image-product.jpg"',
+        image_url: null,
+      }),
+    ]
+
+    const published_products = getPublishedProducts(products, test_taxonomies)
+
+    expect(published_products[0]?.image).toBe('/images/products/quote-wrapped-image-product.jpg')
+  })
+
   it('should normalize Nuxt Content runtime ids to canonical product ids', () => {
     const product = makeProduct({
       id: 'products/products/2026-06-02-sample-product.json',

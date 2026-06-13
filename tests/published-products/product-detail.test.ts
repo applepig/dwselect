@@ -86,6 +86,20 @@ describe('product detail mapping', () => {
     expect(detail.related_products).toEqual([])
   })
 
+  it('should resolve local product image files for detail hero image', () => {
+    const product = makeProduct({
+      id: 'local-detail-product',
+      status: 'published',
+      name: '本地詳情商品',
+      image_file: 'local-detail-product.avif',
+      image_url: null,
+    })
+
+    const detail = getProductDetail(product, test_taxonomies)
+
+    expect(detail.hero_image).toBe('/images/products/local-detail-product.avif')
+  })
+
   it('should sort related products deterministically and exclude the current product', () => {
     const current_product = makeProduct({
       id: 'current-product',

@@ -4,24 +4,15 @@
       v-if="history_items.length > 0"
       class="search-empty-panel search-history-panel"
     >
-      <div class="search-panel-heading">
-        <p class="empty-title">
-          搜尋紀錄
-        </p>
-        <button
-          type="button"
-          class="search-clear-button"
-          @click="$emit('clear-history')"
-        >
-          清除紀錄
-        </button>
-      </div>
-      <div class="search-history-list">
+      <p class="empty-title">
+        搜尋紀錄
+      </p>
+      <div class="tag-chip-list">
         <button
           v-for="history_item in history_items"
           :key="`search-history-${history_item}`"
           type="button"
-          class="search-history-item"
+          class="tag-chip"
           @click="$emit('history-clicked', history_item)"
         >
           {{ history_item }}
@@ -29,14 +20,11 @@
       </div>
     </div>
 
-    <div
-      v-if="popular_search_sections.length > 0"
-      class="search-empty-panel search-popular-panel"
-    >
+    <template v-if="popular_search_sections.length > 0">
       <div
         v-for="section in popular_search_sections"
         :key="section.id"
-        class="search-popular-section"
+        class="search-empty-panel search-popular-panel"
         :data-section-id="section.id"
       >
         <p class="empty-title">
@@ -55,7 +43,7 @@
           </NuxtLink>
         </div>
       </div>
-    </div>
+    </template>
   </div>
 </template>
 
@@ -69,7 +57,6 @@ const props = defineProps<{
 defineEmits<{
   'history-clicked': [query: string]
   'tag-clicked': [tag: string]
-  'clear-history': []
 }>()
 
 const popular_search_sections = computed(() => [

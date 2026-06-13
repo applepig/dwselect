@@ -1,5 +1,6 @@
 import type { Product } from '../product-schema'
 import type { ProductDetailView, PublishedProductCard, TaxonomyDefinitions } from './types'
+import { resolveProductImageUrl } from '../content-images/resolve-product-image-url'
 import { compareText, getCategoryDefinition, getChannelDefinition, getPrimaryOffer, getProductTagLabels, mapProductToCard } from './shared'
 
 export function getProductDetail(
@@ -14,7 +15,7 @@ export function getProductDetail(
   return {
     id: getCatalogProductId(product),
     title: product.name,
-    hero_image: product.image_url,
+    hero_image: resolveProductImageUrl(product),
     hero_alt: product.name,
     channel_label: channel_definition.label,
     channel_id: primary_offer.channel_id,

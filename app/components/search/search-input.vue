@@ -18,6 +18,27 @@
       @compositionend="endPendingSearchComposition"
       @keydown.enter="submitPendingSearchFromEvent"
     >
+    <div class="search-input-actions">
+      <UButton
+        v-if="has_query"
+        type="button"
+        icon="i-lucide-x"
+        color="neutral"
+        variant="ghost"
+        size="sm"
+        aria-label="清除搜尋"
+        @click="clearPendingSearch"
+      />
+      <UButton
+        type="button"
+        icon="i-lucide-arrow-right"
+        color="primary"
+        variant="solid"
+        size="sm"
+        aria-label="送出搜尋"
+        @click="submitPendingSearch()"
+      />
+    </div>
   </div>
 </template>
 
@@ -35,10 +56,12 @@ const props = defineProps<{
 const emit = defineEmits<{
   'update:query': [query: string]
   submit: [query: string]
+  clear: []
 }>()
 const search_input = ref<HTMLInputElement | null>(null)
 const is_search_input_ready = ref(false)
 const composition_state = createSearchInputCompositionState()
+const has_query = computed(() => props.query.trim() !== '')
 
 onMounted(() => {
   syncPendingSearchInputValue()
@@ -51,7 +74,16 @@ function submitPendingSearchFromEvent(event: KeyboardEvent) {
   }
 
   event.preventDefault()
-  emit('submit', getInputEventValue(event))
+  submitPendingSearch(getInputEventValue(event))
+}
+
+function submitPendingSearch(query = props.query) {
+  emit('submit', query)
+}
+
+function clearPendingSearch() {
+  emit('update:query', '')
+  emit('clear')
 }
 
 function startPendingSearchComposition() {

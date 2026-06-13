@@ -22,7 +22,7 @@
       "checked_at": "2026-06-02T00:00:00+08:00"
     }
   ],
-  "image_url": "/images/products/2026-06-02-benq-e55-735.jpg",
+  "image_url": null,
   "category_id": "av-theater",
   "tag_ids": [
     "benq",
@@ -33,5 +33,6 @@
   "updated_at": "2026-06-02T00:00:00+08:00",
   "published_at": "2026-06-02T00:00:00+08:00",
   "unpublished_at": null,
-  "archived_at": null
+  "archived_at": null,
+  "image_file": "2026-06-02-benq-e55-735.jpg"
 }

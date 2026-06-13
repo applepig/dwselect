@@ -17,6 +17,7 @@
     <SearchInput
       v-model:query="pending_search_query"
       @submit="submitSearch"
+      @clear="clearSubmittedSearch"
     />
 
     <SearchErrorPanel
@@ -31,7 +32,6 @@
       :popular_search_tags="popular_search_tags"
       @history-clicked="submitSearch"
       @tag-clicked="saveSearchHistoryItem"
-      @clear-history="clearSearchHistoryItems"
     />
 
     <SearchSuggestionList
@@ -113,7 +113,6 @@ const {
   clearSubmittedSearch,
   submitSearch,
   saveSearchHistoryItem,
-  clearSearchHistoryItems,
 } = useSearchPage({
   submitted_search_query,
   navigateToSearch,

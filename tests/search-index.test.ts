@@ -187,6 +187,23 @@ describe('search index', () => {
     ])
   })
 
+  it('should resolve local product image files in search documents', () => {
+    expect(getSearchDocuments({
+      products: [{
+        ...base_product,
+        image_file: '2026-06-02-sample-product.jpg',
+        image_url: null,
+      }],
+      guides: [],
+      links: [],
+    }, test_taxonomies)).toEqual([
+      expect.objectContaining({
+        document_id: 'product:2026-06-02-sample-product',
+        image_url: '/images/products/2026-06-02-sample-product.jpg',
+      }),
+    ])
+  })
+
   it('should map published guides and links to external search documents', () => {
     expect(getSearchDocuments({ products: [], guides: [base_guide], links: [base_link] }, test_taxonomies)).toEqual([
       {
@@ -219,6 +236,23 @@ describe('search index', () => {
         external: true,
         published_at: '2026-06-02T00:00:00+08:00',
       },
+    ])
+  })
+
+  it('should resolve local guide image files in search documents', () => {
+    expect(getSearchDocuments({
+      products: [],
+      guides: [{
+        ...base_guide,
+        image_file: '2026-06-02-guide.webp',
+        image_url: null,
+      }],
+      links: [],
+    }, test_taxonomies)).toEqual([
+      expect.objectContaining({
+        document_id: 'guide:2026-06-02-guide',
+        image_url: '/images/guides/2026-06-02-guide.webp',
+      }),
     ])
   })
 

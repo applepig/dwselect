@@ -22,7 +22,7 @@
       "checked_at": "2026-06-02T00:00:00+08:00"
     }
   ],
-  "image_url": "/images/products/2026-06-02-j5create-usb-c-charger.jpg",
+  "image_url": null,
   "category_id": "computer-3c",
   "tag_ids": [
     "j5create",
@@ -33,5 +33,6 @@
   "updated_at": "2026-06-02T00:00:00+08:00",
   "published_at": "2026-06-02T00:00:00+08:00",
   "unpublished_at": null,
-  "archived_at": null
+  "archived_at": null,
+  "image_file": "2026-06-02-j5create-usb-c-charger.jpg"
 }
