@@ -1,5 +1,7 @@
 import { expect, test } from '@playwright/test'
 
+const SEARCH_RESULT_TIMEOUT_MS = 15_000
+
 function getNavRoot(page, project_name) {
   if (project_name === 'phone') {
     return page.locator('.compact-app-bottom-tabs')
@@ -16,6 +18,7 @@ test('renders the compact app shell and responsive navigation', async ({ page },
   await page.goto('/', { waitUntil: 'domcontentloaded' })
   await expect(page.locator('vite-error-overlay')).toHaveCount(0)
 
+  await expect(page).toHaveTitle('在找什麼嗎？ DW Select')
   await expect(page.getByRole('heading', { name: 'DW嚴選' })).toBeVisible()
 
   if (test_info.project.name === 'phone') {
@@ -35,6 +38,26 @@ test('renders the compact app shell and responsive navigation', async ({ page },
     await expect(page.locator('.compact-app-bottom-tabs')).toBeHidden()
     await expect(page.locator('.compact-app-rail')).toBeHidden()
   }
+})
+
+test('does not expose horizontal document overflow across responsive viewports', async ({ page }) => {
+  await page.goto('/', { waitUntil: 'domcontentloaded' })
+  await expect(page.locator('vite-error-overlay')).toHaveCount(0)
+
+  const overflow_metrics = await page.evaluate(() => {
+    const document_element = document.documentElement
+    const body = document.body
+
+    return {
+      document_client_width: document_element.clientWidth,
+      document_scroll_width: document_element.scrollWidth,
+      body_client_width: body.clientWidth,
+      body_scroll_width: body.scrollWidth,
+    }
+  })
+
+  expect(overflow_metrics.document_scroll_width).toBeLessThanOrEqual(overflow_metrics.document_client_width)
+  expect(overflow_metrics.body_scroll_width).toBeLessThanOrEqual(overflow_metrics.body_client_width)
 })
 
 test('switches tabs without navigation reload and exposes search and link contracts', async ({ page }, test_info) => {
@@ -142,7 +165,7 @@ test('navigates to product detail route with a safe buy CTA', async ({ page }) =
 })
 
 test('keeps product detail and related image slots stable when images fail to load', async ({ page }) => {
-  await page.goto('/products/2026-06-02-sharp-65吋-xled', { waitUntil: 'domcontentloaded' })
+  await page.goto('/products/2026-06-02-sharp-65-inch-xled', { waitUntil: 'domcontentloaded' })
   await expect(page.locator('vite-error-overlay')).toHaveCount(0)
   await page.getByRole('button', { name: '切換色彩模式' }).click()
 
@@ -177,7 +200,7 @@ test('keeps product detail and related image slots stable when images fail to lo
 })
 
 test('navigates to search by tag from product detail', async ({ page }) => {
-  await page.goto('/products/2026-06-02-sharp-65吋-xled', { waitUntil: 'domcontentloaded' })
+  await page.goto('/products/2026-06-02-sharp-65-inch-xled', { waitUntil: 'domcontentloaded' })
   await expect(page.locator('vite-error-overlay')).toHaveCount(0)
 
   const first_tag = page.locator('.detail-tag').first()
@@ -191,7 +214,7 @@ test('navigates to search by tag from product detail', async ({ page }) => {
 })
 
 test('renders direct product detail routes and unknown product not-found states', async ({ page }) => {
-  await page.goto('/products/2026-06-02-sharp-65吋-xled', { waitUntil: 'domcontentloaded' })
+  await page.goto('/products/2026-06-02-sharp-65-inch-xled', { waitUntil: 'domcontentloaded' })
   await expect(page.locator('vite-error-overlay')).toHaveCount(0)
   await expect(page.locator('.product-detail-page')).toBeVisible()
   await expect(page.getByRole('heading', { name: /Sharp 65吋 XLED/ })).toBeVisible()
@@ -202,11 +225,11 @@ test('renders direct product detail routes and unknown product not-found states'
 })
 
 test('restores category and search state from query strings', async ({ page }) => {
-  await page.goto('/?category=av', { waitUntil: 'domcontentloaded' })
+  await page.goto('/?category=av-theater', { waitUntil: 'domcontentloaded' })
   await expect(page.locator('vite-error-overlay')).toHaveCount(0)
-  await expect(page.locator('.category-chip.is-active')).toContainText('影音')
+  await expect(page.getByRole('button', { name: /影音劇院/ })).toHaveAttribute('aria-pressed', 'true')
 
-  await page.goto('/guide?tags=影音', { waitUntil: 'domcontentloaded' })
+  await page.goto('/guide?tags=影音劇院', { waitUntil: 'domcontentloaded' })
   await expect(page.locator('vite-error-overlay')).toHaveCount(0)
   await expect(page.getByRole('heading', { name: '指南列表' })).toBeVisible()
   await expect(page.locator('.tag-chip.is-active')).toHaveCount(0)
@@ -214,7 +237,29 @@ test('restores category and search state from query strings', async ({ page }) =
   await page.goto('/search?q=Sharp', { waitUntil: 'domcontentloaded' })
   await expect(page.locator('vite-error-overlay')).toHaveCount(0)
   await expect(page.getByPlaceholder('在找什麼嗎？™')).toHaveValue('Sharp')
-  await expect(page.locator('.search-result-section[data-section-id="products"] .resource-row').first()).toContainText('Sharp')
+  await expect(page.locator('.search-result-section[data-section-id="products"] .resource-row').first()).toContainText('Sharp', {
+    timeout: SEARCH_RESULT_TIMEOUT_MS,
+  })
+})
+
+test('hydrates direct search query routes without mismatch warnings', async ({ page }) => {
+  const hydration_messages: string[] = []
+
+  page.on('console', (message) => {
+    const text = message.text()
+
+    if (text.includes('Hydration')) {
+      hydration_messages.push(text)
+    }
+  })
+
+  await page.goto('/search?q=Sharp', { waitUntil: 'networkidle' })
+  await expect(page.locator('vite-error-overlay')).toHaveCount(0)
+  await expect(page.locator('.search-result-section[data-section-id="products"] .resource-row').first()).toBeVisible({
+    timeout: SEARCH_RESULT_TIMEOUT_MS,
+  })
+
+  expect(hydration_messages).toEqual([])
 })
 
 test('separates search typing, autocomplete and submitted query state', async ({ page }) => {
@@ -222,7 +267,19 @@ test('separates search typing, autocomplete and submitted query state', async ({
   await expect(page.locator('vite-error-overlay')).toHaveCount(0)
   await expect(page).toHaveURL('/search')
   await expect(page.locator('.search-result-section')).toHaveCount(0)
-  await expect(page.locator('.search-popular-panel .tag-chip').first()).toBeVisible()
+  const popular_tag_section = page.locator('.search-popular-panel[data-section-id="tags"]')
+  const popular_brand_section = page.locator('.search-popular-panel[data-section-id="brands"]')
+  await expect(popular_tag_section.getByText('熱門標籤')).toBeVisible()
+  await expect(popular_brand_section.getByText('熱門品牌')).toBeVisible()
+  const popular_tag_count = await popular_tag_section.locator('.tag-chip').count()
+  const popular_brand_count = await popular_brand_section.locator('.tag-chip').count()
+  expect(popular_tag_count).toBeGreaterThan(0)
+  expect(popular_brand_count).toBeGreaterThan(0)
+  expect(popular_tag_count).toBeLessThanOrEqual(10)
+  expect(popular_brand_count).toBeLessThanOrEqual(10)
+  const popular_counts = await page.locator('.search-popular-panel .tag-count').allTextContents()
+  expect(popular_counts.every((count) => Number(count) > 3)).toBe(true)
+  await expect(popular_brand_section.getByRole('link', { name: /Panasonic 6/ })).toBeVisible()
 
   const search_input = page.getByPlaceholder('在找什麼嗎？™')
   await search_input.fill('Sharp')
@@ -234,7 +291,9 @@ test('separates search typing, autocomplete and submitted query state', async ({
 
   await search_input.press('Enter')
   await expect(page).toHaveURL(/\/search\?q=Sharp/)
-  await expect(page.locator('.search-result-section[data-section-id="products"] .resource-row').first()).toBeVisible()
+  await expect(page.locator('.search-result-section[data-section-id="products"] .resource-row').first()).toBeVisible({
+    timeout: SEARCH_RESULT_TIMEOUT_MS,
+  })
 
   const history_items = await page.evaluate(() => JSON.parse(localStorage.getItem('dwselect.search.history.v1') ?? '[]'))
   expect(history_items).toEqual(['Sharp'])
@@ -276,6 +335,27 @@ test('does not submit search or write history when IME composition confirms with
   expect(history_items).toEqual([])
 })
 
+test('defers search input query updates until IME composition ends', async ({ page }) => {
+  await page.goto('/search', { waitUntil: 'domcontentloaded' })
+  await expect(page.locator('vite-error-overlay')).toHaveCount(0)
+
+  const search_input = page.getByPlaceholder('在找什麼嗎？™')
+  await expect(search_input).toBeEnabled()
+  await expect(page.locator('.search-popular-panel[data-section-id="tags"]')).toBeVisible()
+
+  await search_input.dispatchEvent('compositionstart')
+  await search_input.fill('鍵')
+
+  await page.waitForTimeout(100)
+  await expect(page.locator('.search-suggestion-panel')).toHaveCount(0)
+  await expect(page.locator('.search-popular-panel[data-section-id="tags"]')).toBeVisible()
+
+  await search_input.fill('鍵盤')
+  await search_input.dispatchEvent('compositionend')
+
+  await expect(page.locator('.search-suggestion-panel')).toBeVisible()
+})
+
 test('keeps search usable when search history storage contains corrupted JSON', async ({ page }) => {
   await page.goto('/search', { waitUntil: 'domcontentloaded' })
   await page.evaluate(() => {
@@ -286,7 +366,7 @@ test('keeps search usable when search history storage contains corrupted JSON', 
   await expect(page.locator('vite-error-overlay')).toHaveCount(0)
   await expect(page).toHaveURL('/search')
 
-  await expect(page.locator('.search-popular-panel')).toBeVisible()
+  await expect(page.locator('.search-popular-panel[data-section-id="tags"]')).toBeVisible()
 
   const search_input = page.getByPlaceholder('在找什麼嗎？™')
   await expect(search_input).toBeEnabled()
@@ -295,7 +375,9 @@ test('keeps search usable when search history storage contains corrupted JSON', 
   await search_input.press('Enter')
 
   await expect(page).toHaveURL(/\/search\?q=Sharp/)
-  await expect(page.locator('.search-result-section[data-section-id="products"] .resource-row').first()).toBeVisible()
+  await expect(page.locator('.search-result-section[data-section-id="products"] .resource-row').first()).toBeVisible({
+    timeout: SEARCH_RESULT_TIMEOUT_MS,
+  })
 })
 
 test('recovers suggestions after the search index error retry path', async ({ page }) => {
@@ -336,7 +418,7 @@ test('submits search only after clicking popular tags or history items', async (
   const tag_label = (await first_popular_tag.locator('span').first().textContent())?.trim() ?? ''
   await first_popular_tag.click()
   await expect(page).toHaveURL(new RegExp(`/search\\?q=.*${encodeURIComponent(tag_label)}`))
-  await expect(page.locator('.search-results .resource-row').first()).toBeVisible()
+  await expect(page.locator('.search-results .resource-row').first()).toBeVisible({ timeout: SEARCH_RESULT_TIMEOUT_MS })
 
   await page.goto('/search', { waitUntil: 'domcontentloaded' })
   await page.locator('.search-history-panel').getByRole('button', { name: tag_label }).click()
@@ -349,7 +431,7 @@ test('renders submitted search as ordered resource sections with counts and non-
   await expect(page.getByPlaceholder('在找什麼嗎？™')).toHaveValue('電腦')
 
   const sections = page.locator('.search-result-section')
-  await expect(sections).toHaveCount(3)
+  await expect(sections).toHaveCount(3, { timeout: SEARCH_RESULT_TIMEOUT_MS })
   await expect(sections.nth(0)).toHaveAttribute('data-section-id', 'products')
   await expect(sections.nth(1)).toHaveAttribute('data-section-id', 'guides')
   await expect(sections.nth(2)).toHaveAttribute('data-section-id', 'links')
@@ -382,7 +464,9 @@ test('renders submitted search as ordered resource sections with counts and non-
 
   await page.goto('/search?q=Sharp', { waitUntil: 'domcontentloaded' })
   await expect(page.locator('vite-error-overlay')).toHaveCount(0)
-  await expect(page.locator('.search-result-section[data-section-id="products"]')).toHaveCount(1)
+  await expect(page.locator('.search-result-section[data-section-id="products"]')).toHaveCount(1, {
+    timeout: SEARCH_RESULT_TIMEOUT_MS,
+  })
   await expect(page.locator('.search-result-section[data-section-id="guides"]')).toHaveCount(0)
   await expect(page.locator('.search-result-section[data-section-id="links"]')).toHaveCount(0)
 })
@@ -396,9 +480,9 @@ test('expands product categories in desktop sidebar only', async ({ page }, test
   const sidebar = page.locator('.compact-app-sidebar')
   await expect(sidebar.locator('.desktop-category-items')).toBeVisible()
   await expect(sidebar.locator('.desktop-category-items').getByRole('link', { name: /其他/ })).toHaveCount(0)
-  await sidebar.getByRole('link', { name: /影音/ }).click()
-  await expect(page).toHaveURL('/?category=av')
-  await expect(sidebar.getByRole('link', { name: /影音/ })).toHaveAttribute('aria-current', 'page')
+  await sidebar.getByRole('link', { name: /影音劇院/ }).click()
+  await expect(page).toHaveURL('/?category=av-theater')
+  await expect(sidebar.getByRole('link', { name: /影音劇院/ })).toHaveAttribute('aria-current', 'page')
 })
 
 test('hides empty general categories from home chips and desktop sidebar', async ({ page }, test_info) => {

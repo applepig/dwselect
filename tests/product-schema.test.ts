@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { readFileSync, readdirSync } from 'node:fs'
+import { existsSync, readFileSync, readdirSync } from 'node:fs'
 import { parse } from 'node:path'
 
 import {
@@ -8,6 +8,7 @@ import {
   guide_schema,
   link_schema,
   product_schema,
+  tag_taxonomy_schema as brand_taxonomy_schema,
   tag_taxonomy_schema,
   validateContentTaxonomyReferences,
 } from '../app/utils/product-schema'
@@ -16,18 +17,27 @@ const valid_product = {
   id: '2026-06-02-sample-product',
   status: 'published',
   name: '商品名稱',
-  price_text: 'NT$ 1,990',
-  price: {
-    amount: 1990,
-    currency: 'TWD',
-    unit: 'each',
-    label: null,
-  },
+  english_name: 'Sample Product',
   summary: '推薦短評',
-  description: '推薦文或商品描述',
-  purchase_url: 'https://example.com/product',
+  long_description: '推薦文或商品描述',
+  llm_description: '',
+  search_aliases: [],
+  model_numbers: [],
+  offers: [
+    {
+      channel_id: 'other',
+      url: 'https://example.com/product',
+      price_text: 'NT$ 1,990',
+      price: {
+        amount: 1990,
+        currency: 'TWD',
+        unit: 'each',
+        label: null,
+      },
+      checked_at: '2026-06-02T00:00:00+08:00',
+    },
+  ],
   image_url: 'https://example.com/product.jpg',
-  channel_id: 'other',
   category_id: 'home',
   tag_ids: ['tag-a', 'tag-b'],
   reference_url: 'https://example.com/reference',
@@ -78,6 +88,7 @@ const links_dir_url = new URL('../content/links/', import.meta.url)
 const taxonomies_dir_url = new URL('../content/taxonomies/', import.meta.url)
 const LEGACY_PLATFORM_TAGS = ['PCHome', 'momo', '日亞', '美亞']
 const LEGACY_ROOT_CATEGORY_TAGS = ['居家', '電腦', '廚房', '3C', '影音', '食材']
+const KEBAB_CASE_ASCII_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/
 
 function readTaxonomy(file_name: string) {
   return JSON.parse(readFileSync(new URL(file_name, taxonomies_dir_url), 'utf8'))
@@ -139,6 +150,37 @@ describe('product schema', () => {
     })).not.toThrow()
   })
 
+  it('should accept kebab-case ASCII product category and offer channel ids without hardcoded enum coupling', () => {
+    expect(() => product_schema.parse({
+      ...valid_product,
+      category_id: 'new-audio-gear',
+      offers: [
+        {
+          ...valid_product.offers[0],
+          channel_id: 'new-shop-24h',
+        },
+      ],
+    })).not.toThrow()
+  })
+
+  it('should reject malformed product category and offer channel ids', () => {
+    for (const invalid_id of ['NewCategory', 'new_category', 'new category', '新分類', '-new-category', 'new-category-']) {
+      expect(() => product_schema.parse({
+        ...valid_product,
+        category_id: invalid_id,
+      })).toThrow()
+      expect(() => product_schema.parse({
+        ...valid_product,
+        offers: [
+          {
+            ...valid_product.offers[0],
+            channel_id: invalid_id,
+          },
+        ],
+      })).toThrow()
+    }
+  })
+
   it('should reject status outside allowed enum', () => {
     expect(() => product_schema.parse({
       ...valid_product,
@@ -146,19 +188,135 @@ describe('product schema', () => {
     })).toThrow()
   })
 
-  it('should reject non HTTP(S) product URLs', () => {
-    for (const purchase_url of ['javascript:alert(1)', 'data:text/plain,test', '/relative-path']) {
+  it('should reject non HTTP(S) product offer URLs', () => {
+    for (const url of ['javascript:alert(1)', 'data:text/plain,test', '/relative-path']) {
       expect(() => product_schema.parse({
         ...valid_product,
-        purchase_url,
+        offers: [
+          {
+            ...valid_product.offers[0],
+            url,
+          },
+        ],
       })).toThrow()
     }
   })
 
-  it('should reject non HTTP(S) image URLs', () => {
+  it('should reject product documents without a primary offer', () => {
+    expect(() => product_schema.parse({
+      ...valid_product,
+      offers: [],
+    })).toThrow()
+  })
+
+  it('should reject legacy top-level purchase and description fields after product schema cutover', () => {
+    for (const legacy_field of ['channel_id', 'purchase_url', 'price', 'price_text', 'description']) {
+      expect(() => product_schema.parse({
+        ...valid_product,
+        [legacy_field]: legacy_field,
+      })).toThrow()
+    }
+  })
+
+  it('should reject non HTTP(S) product image URLs', () => {
     expect(() => product_schema.parse({
       ...valid_product,
       image_url: 'ftp://example.com/product.jpg',
+    })).toThrow()
+  })
+
+  it('should accept local image files from products and guides', () => {
+    for (const extension of ['jpg', 'jpeg', 'png', 'webp', 'gif', 'avif']) {
+      expect(() => product_schema.parse({
+        ...valid_product,
+        image_file: `2026-06-02-sample-product.${extension}`,
+        image_url: null,
+      })).not.toThrow()
+
+      expect(() => guide_schema.parse({
+        ...valid_guide,
+        image_file: `sample-guide.${extension}`,
+        image_url: null,
+      })).not.toThrow()
+    }
+  })
+
+  it('should reject malformed or unsupported local image files', () => {
+    const invalid_image_files = [
+      '',
+      'sample-product',
+      'sample-product.bmp',
+      'sample-product.JPG',
+      'subdir/sample-product.jpg',
+      '../secret.jpg',
+      'sample-product.jpg?v=1',
+      'sample-product.jpg#x',
+    ]
+
+    for (const image_file of invalid_image_files) {
+      expect(() => product_schema.parse({
+        ...valid_product,
+        image_file,
+        image_url: null,
+      })).toThrow()
+      expect(() => guide_schema.parse({
+        ...valid_guide,
+        image_file,
+      })).toThrow()
+    }
+  })
+
+  it('should reject local paths in product and guide image URLs', () => {
+    expect(() => product_schema.parse({
+      ...valid_product,
+      image_url: '/images/products/2026-06-02-sample-product.jpg',
+    })).toThrow()
+    expect(() => guide_schema.parse({
+      ...valid_guide,
+      image_url: '/images/guides/sample-guide.jpg',
+    })).toThrow()
+  })
+
+  it('should require products to have exactly one image source', () => {
+    expect(() => product_schema.parse({
+      ...valid_product,
+      image_file: '2026-06-02-sample-product.jpg',
+      image_url: 'https://example.com/product.jpg',
+    })).toThrow()
+    expect(() => product_schema.parse({
+      ...valid_product,
+      image_url: null,
+    })).toThrow()
+    expect(() => product_schema.parse({
+      ...valid_product,
+      image_url: undefined,
+    })).toThrow()
+  })
+
+  it('should allow guides to omit images but reject ambiguous image sources', () => {
+    expect(() => guide_schema.parse({
+      ...valid_guide,
+      image_url: null,
+    })).not.toThrow()
+    expect(() => guide_schema.parse({
+      ...valid_guide,
+      image_url: undefined,
+    })).not.toThrow()
+    expect(() => guide_schema.parse({
+      ...valid_guide,
+      image_file: 'sample-guide.jpg',
+      image_url: 'https://example.com/guide.jpg',
+    })).toThrow()
+  })
+
+  it('should keep rejecting javascript: and data: URLs for image fields', () => {
+    expect(() => product_schema.parse({
+      ...valid_product,
+      image_url: 'javascript:alert(1)',
+    })).toThrow()
+    expect(() => guide_schema.parse({
+      ...valid_guide,
+      image_url: 'data:text/plain,test',
     })).toThrow()
   })
 
@@ -215,6 +373,21 @@ describe('product schema', () => {
     expect(() => link_schema.parse(valid_link)).not.toThrow()
   })
 
+  it('should reject local image fields from links', () => {
+    expect(() => link_schema.parse({
+      ...valid_link,
+      image_file: 'sample-link.png',
+    })).toThrow()
+    expect(() => link_schema.parse({
+      ...valid_link,
+      image_url: '/images/guides/sample-link.png',
+    })).toThrow()
+    expect(() => link_schema.parse({
+      ...valid_link,
+      image_url: '/images/links/sample-link.png',
+    })).toThrow()
+  })
+
   it('should reject non HTTP(S) guide and link URLs', () => {
     expect(() => guide_schema.parse({
       ...valid_guide,
@@ -234,30 +407,24 @@ describe('product schema', () => {
     })).toThrow()
   })
 
-  it('should validate taxonomy content for channels, categories and tags', () => {
+  it('should validate taxonomy content shape, unique ids and sort order', () => {
     const channels = channel_taxonomy_schema.parse(readTaxonomy('channels.json'))
     const categories = category_taxonomy_schema.parse(readTaxonomy('categories.json'))
     const tags = tag_taxonomy_schema.parse(readTaxonomy('tags.json'))
+    const brands = brand_taxonomy_schema.parse(readTaxonomy('brands.json'))
 
-    expect(channels.items.map((channel) => channel.id)).toEqual([
-      'pchome',
-      'momo',
-      'amazonjp',
-      'amazonus',
-      'costco',
-      'other',
-    ])
-    expect(categories.items.map((category) => [category.id, category.label, category.nav_visible, category.sort_order])).toEqual([
-      ['home', '居家', true, 10],
-      ['kitchen', '廚房', true, 20],
-      ['computer', '電腦', true, 30],
-      ['three-c', '3C', true, 40],
-      ['av', '影音', true, 50],
-      ['food', '食材', true, 60],
-      ['other', '其他', true, 999],
-    ])
-    expect(tags.items.length).toBeGreaterThan(0)
-    expect(tags.items.map((tag) => tag.id)).toEqual(tags.items.map((tag) => tag.id).toSorted())
+    expectTaxonomyIdsToBeKebabCaseAndUnique(channels.items)
+    expectTaxonomyIdsToBeKebabCaseAndUnique(categories.items)
+    expectTaxonomyIdsToBeKebabCaseAndUnique(tags.items)
+    expectTaxonomyIdsToBeKebabCaseAndUnique(brands.items)
+    expectTaxonomyIdsNotToCollide(tags.items, brands.items)
+    expectSortOrderToBeAscending(channels.items)
+    expectSortOrderToBeAscending(categories.items)
+    expectSortOrderToBeAscending(tags.items)
+    expectSortOrderToBeAscending(brands.items)
+    expect(categories.items.every((category) => category.label !== '' && category.short_label !== '')).toBe(true)
+    expect(channels.items.every((channel) => channel.label !== '' && channel.tint !== '')).toBe(true)
+    expect(tags.items.every((tag) => tag.label !== '')).toBe(true)
     expect(tags.items).not.toContainEqual(expect.objectContaining({ id: 'PCHome' }))
     expect(tags.items).not.toContainEqual(expect.objectContaining({ id: 'home' }))
   })
@@ -292,6 +459,9 @@ describe('product schema', () => {
       tags: [
         { id: 'tag-a', label: 'Tag A', description: '測試 tag', aliases: [], nav_visible: true, sort_order: 10 },
       ],
+      brands: [
+        { id: 'brand-a', label: 'Brand A', description: '測試 brand', aliases: [], nav_visible: true, sort_order: 10 },
+      ],
     })
 
     expect(reference_violations).toEqual([
@@ -302,14 +472,54 @@ describe('product schema', () => {
     ])
   })
 
+  it('should allow product tag ids to reference brands but keep guides and links limited to tags', () => {
+    const reference_violations = validateContentTaxonomyReferences({
+      products: [
+        {
+          ...valid_product,
+          id: 'product-with-brand-reference',
+          tag_ids: ['tag-a', 'brand-a'],
+        },
+      ],
+      guides: [
+        {
+          ...valid_guide,
+          id: 'guide-with-brand-reference',
+          tag_ids: ['brand-a'],
+        },
+      ],
+      links: [
+        {
+          ...valid_link,
+          id: 'link-with-brand-reference',
+          tag_ids: ['brand-a'],
+        },
+      ],
+      categories: [
+        { id: 'home', label: '居家', short_label: '居家', nav_visible: true, sort_order: 10 },
+      ],
+      tags: [
+        { id: 'tag-a', label: 'Tag A', description: '測試 tag', aliases: [], nav_visible: true, sort_order: 10 },
+      ],
+      brands: [
+        { id: 'brand-a', label: 'Brand A', description: '測試 brand', aliases: [], nav_visible: true, sort_order: 10 },
+      ],
+    })
+
+    expect(reference_violations).toEqual([
+      { content_type: 'guide', content_id: 'guide-with-brand-reference', field: 'tag_ids', value: 'brand-a' },
+      { content_type: 'link', content_id: 'link-with-brand-reference', field: 'tag_ids', value: 'brand-a' },
+    ])
+  })
+
   it('should keep migrated content in the correct product, guide and link domains', () => {
     const product_entries = readContentProductEntries()
     const guide_entries = readContentGuideEntries()
     const link_entries = readContentLinkEntries()
 
     expect(product_entries).toHaveLength(62)
-    expect(product_entries.map((entry) => entry.file_name)).toContain('2026-06-02-ikea充電線.json')
-    expect(product_entries.map((entry) => entry.file_name)).toContain('2026-06-02-三菱重工冷氣.json')
+    expect(product_entries.map((entry) => entry.file_name)).toContain('2026-06-02-ikea-charging-cable.json')
+    expect(product_entries.map((entry) => entry.file_name)).toContain('2026-06-02-mitsubishi-heavy-industries-air-conditioner.json')
     expect(product_entries.map((entry) => entry.file_name)).not.toContain('2026-06-02-日本米入門篇.json')
     expect(product_entries.map((entry) => entry.file_name)).not.toContain('2026-06-02-aeron-chair.json')
     expect(product_entries.map((entry) => entry.file_name)).not.toContain('2026-06-02-b18.json')
@@ -333,16 +543,29 @@ describe('product schema', () => {
     const channels = channel_taxonomy_schema.parse(readTaxonomy('channels.json')).items
     const categories = category_taxonomy_schema.parse(readTaxonomy('categories.json')).items
     const tags = tag_taxonomy_schema.parse(readTaxonomy('tags.json')).items
+    const brands = brand_taxonomy_schema.parse(readTaxonomy('brands.json')).items
 
     for (const entry of product_entries) {
       expect(entry.content.id).toBe(entry.file_stem)
+      expect(entry.content.id).toBe(`${entry.content.created_at.slice(0, 10)}-${slugifyEnglishName(entry.content.english_name)}`)
+      expect(entry.content.image_url === null || isHttpUrl(entry.content.image_url)).toBe(true)
+      expectContentImageFileToExist(entry.content.image_file, products_dir_url)
       expect(entry.content).not.toHaveProperty('category')
       expect(entry.content).not.toHaveProperty('tags')
+      expect(entry.content).not.toHaveProperty('channel_id')
+      expect(entry.content).not.toHaveProperty('purchase_url')
+      expect(entry.content).not.toHaveProperty('price')
+      expect(entry.content).not.toHaveProperty('price_text')
+      expect(entry.content).not.toHaveProperty('description')
+      expect(entry.content.offers).toHaveLength(1)
+      expect(entry.content.offers[0].checked_at).toBe(entry.content.updated_at)
       expect(() => product_schema.parse(entry.content)).not.toThrow()
     }
     for (const entry of guide_entries) {
       expect(entry.content.id).toBe(entry.file_stem)
       expect(entry.content).not.toHaveProperty('tags')
+      expect(entry.content.image_url === null || isHttpUrl(entry.content.image_url)).toBe(true)
+      expectContentImageFileToExist(entry.content.image_file, guides_dir_url)
       expect(() => guide_schema.parse(entry.content)).not.toThrow()
     }
     for (const entry of link_entries) {
@@ -357,6 +580,7 @@ describe('product schema', () => {
       links: link_entries.map((entry) => entry.content),
       categories,
       tags,
+      brands,
     })).toEqual([])
     expect(new Set(channels.map((channel) => channel.id)).has('other')).toBe(true)
   })
@@ -371,7 +595,61 @@ describe('product schema', () => {
 
     expect(tag_ids).not.toEqual(expect.arrayContaining(LEGACY_PLATFORM_TAGS))
     expect(tag_ids).not.toEqual(expect.arrayContaining(LEGACY_ROOT_CATEGORY_TAGS))
-    expect(readContentProductEntries().find((entry) => entry.file_stem === '2026-06-02-ikea充電線')?.content.tag_ids).toEqual([])
-    expect(readContentProductEntries().find((entry) => entry.file_stem === '2026-06-02-三菱重工冷氣')?.content.tag_ids).toEqual([])
+    expect(readContentProductEntries().find((entry) => entry.file_stem === '2026-06-02-ikea-charging-cable')?.content.tag_ids).toEqual(expect.arrayContaining(['ikea', 'cable-adapter']))
+    expect(readContentProductEntries().find((entry) => entry.file_stem === '2026-06-02-mitsubishi-heavy-industries-air-conditioner')?.content.tag_ids).toEqual(expect.arrayContaining(['mitsubishi-heavy-industries', 'aircon']))
   })
 })
+
+function slugifyEnglishName(english_name: string) {
+  return english_name
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/-+/g, '-')
+    .replace(/^-|-$/g, '')
+}
+
+function isHttpUrl(value: unknown) {
+  if (typeof value !== 'string') {
+    return false
+  }
+
+  try {
+    const url = new URL(value)
+
+    return url.protocol === 'http:' || url.protocol === 'https:'
+  }
+  catch {
+    return false
+  }
+}
+
+function expectContentImageFileToExist(image_file: unknown, content_dir_url: URL) {
+  if (image_file === null || image_file === undefined) {
+    return
+  }
+
+  expect(typeof image_file).toBe('string')
+  expect(existsSync(new URL(`images/${image_file}`, content_dir_url))).toBe(true)
+}
+
+function expectTaxonomyIdsToBeKebabCaseAndUnique(items: Array<{ id: string }>) {
+  const ids = items.map((item) => item.id)
+
+  expect(ids.every((id) => KEBAB_CASE_ASCII_PATTERN.test(id))).toBe(true)
+  expect(new Set(ids).size).toBe(ids.length)
+}
+
+function expectSortOrderToBeAscending(items: Array<{ sort_order: number }>) {
+  const sort_orders = items.map((item) => item.sort_order)
+
+  expect(sort_orders).toEqual([...sort_orders].toSorted((left_order, right_order) => left_order - right_order))
+}
+
+function expectTaxonomyIdsNotToCollide(left_items: Array<{ id: string }>, right_items: Array<{ id: string }>) {
+  const left_ids = new Set(left_items.map((item) => item.id))
+  const collision_ids = right_items
+    .map((item) => item.id)
+    .filter((id) => left_ids.has(id))
+
+  expect(collision_ids).toEqual([])
+}

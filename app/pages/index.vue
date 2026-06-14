@@ -18,28 +18,28 @@
       class="category-chip-list"
       aria-label="商品分類"
     >
-      <button
+      <UButton
         v-for="chip in compact_view.home.category_chips"
         :key="chip.id"
         type="button"
         class="category-chip"
-        :class="{ 'is-active': chip.active }"
+        :color="chip.active ? 'primary' : 'neutral'"
+        :variant="chip.active ? 'solid' : 'subtle'"
         :aria-pressed="chip.active"
         @click="onCategoryChipClicked(chip.id)"
       >
         <span>{{ chip.label }}</span>
-        <span class="chip-count">{{ chip.count }}</span>
-      </button>
+        <template #trailing>
+          <span class="chip-count">{{ chip.count }}</span>
+        </template>
+      </UButton>
     </div>
 
-    <div
+    <UEmpty
       v-if="compact_view.home.empty_reason"
-      class="compact-empty-state"
-    >
-      <p class="empty-title">
-        目前沒有已上架商品
-      </p>
-    </div>
+      icon="i-lucide-package-open"
+      title="目前沒有已上架商品"
+    />
 
     <div
       v-else
@@ -55,8 +55,8 @@
 </template>
 
 <script setup lang="ts">
-import type { CompactCategoryChip } from '../utils/published-products'
-import { getCompactAppStateFromRoute, getCompactAppView } from '../utils/published-products'
+import type { CompactCategoryChip } from '../utils/published-products/types'
+import { getCompactAppStateFromRoute, getCompactAppView } from '../utils/published-products/compact-app'
 
 const route = useRoute()
 const router = useRouter()
@@ -66,13 +66,19 @@ const route_state = computed(() => getCompactAppStateFromRoute(
   { path: route.path, query: route.query },
   { category_ids: category_ids.value },
 ))
-const compact_view = computed(() => getCompactAppView(
-  all_products.value,
-  route_state.value,
-  runtime_taxonomies.value,
-  runtime_links.value,
-  runtime_guides.value,
-))
+const compact_view = computed(() => {
+  if (runtime_taxonomies.value === undefined || runtime_links.value === undefined || runtime_guides.value === undefined) {
+    throw new Error('Catalog runtime data is not available')
+  }
+
+  return getCompactAppView(
+    all_products.value,
+    route_state.value,
+    runtime_taxonomies.value,
+    runtime_links.value,
+    runtime_guides.value,
+  )
+})
 
 function onCategoryChipClicked(category_id: CompactCategoryChip['id']) {
   router.push({

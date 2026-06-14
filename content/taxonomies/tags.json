@@ -2,14 +2,315 @@
   "items": [
     {
       "id": "display",
-      "label": "顯示設備",
-      "description": "螢幕、電視與影像顯示相關屬性。",
+      "label": "顯示器",
+      "description": "螢幕、電視與影像顯示相關商品。",
       "aliases": [
         "電視",
-        "螢幕"
+        "螢幕",
+        "顯示器"
       ],
       "nav_visible": true,
       "sort_order": 10
+    },
+    {
+      "id": "power-charging",
+      "label": "電源充電",
+      "description": "充電器、行動電源、電池與備援電力。",
+      "aliases": [
+        "充電",
+        "行動電源",
+        "充電器",
+        "電池",
+        "UPS"
+      ],
+      "nav_visible": true,
+      "sort_order": 20
+    },
+    {
+      "id": "cable-adapter",
+      "label": "線材轉接",
+      "description": "線材、轉接器與影音傳輸線。",
+      "aliases": [
+        "線材",
+        "轉接",
+        "HDMI"
+      ],
+      "nav_visible": true,
+      "sort_order": 30
+    },
+    {
+      "id": "storage-backup",
+      "label": "儲存備份",
+      "description": "NAS、隨身碟與備份儲存設備。",
+      "aliases": [
+        "儲存",
+        "NAS",
+        "隨身碟"
+      ],
+      "nav_visible": true,
+      "sort_order": 40
+    },
+    {
+      "id": "desk-setup",
+      "label": "桌面周邊",
+      "description": "鍵盤、滑鼠、桌機與桌面工作周邊。",
+      "aliases": [
+        "鍵盤",
+        "滑鼠",
+        "周邊"
+      ],
+      "nav_visible": true,
+      "sort_order": 50
+    },
+    {
+      "id": "network-gear",
+      "label": "網路設備",
+      "description": "路由器、交換器與家庭網路設備。",
+      "aliases": [
+        "路由器",
+        "交換器",
+        "網通"
+      ],
+      "nav_visible": true,
+      "sort_order": 60
+    },
+    {
+      "id": "phone",
+      "label": "手機",
+      "description": "手機與行動裝置。",
+      "aliases": [
+        "手機"
+      ],
+      "nav_visible": true,
+      "sort_order": 70
+    },
+    {
+      "id": "tablet",
+      "label": "平板",
+      "description": "平板與平板相關裝置。",
+      "aliases": [
+        "平板"
+      ],
+      "nav_visible": true,
+      "sort_order": 80
+    },
+    {
+      "id": "comm-accessory",
+      "label": "通訊配件",
+      "description": "通訊與行動裝置配件。",
+      "aliases": [
+        "配件"
+      ],
+      "nav_visible": true,
+      "sort_order": 90
+    },
+    {
+      "id": "av-source",
+      "label": "訊源",
+      "description": "串流盒與影音播放器。",
+      "aliases": [
+        "串流",
+        "播放器"
+      ],
+      "nav_visible": true,
+      "sort_order": 100
+    },
+    {
+      "id": "amplifier",
+      "label": "擴大機",
+      "description": "擴大機與影音放大設備。",
+      "aliases": [
+        "擴大機"
+      ],
+      "nav_visible": true,
+      "sort_order": 110
+    },
+    {
+      "id": "speaker",
+      "label": "喇叭",
+      "description": "喇叭、Soundbar 與音響設備。",
+      "aliases": [
+        "喇叭",
+        "音響",
+        "Soundbar"
+      ],
+      "nav_visible": true,
+      "sort_order": 120
+    },
+    {
+      "id": "headphone",
+      "label": "耳機",
+      "description": "耳機與個人聆聽設備。",
+      "aliases": [
+        "耳機"
+      ],
+      "nav_visible": true,
+      "sort_order": 130
+    },
+    {
+      "id": "kitchen",
+      "label": "廚房",
+      "description": "廚房用品、廚電與料理相關商品。",
+      "aliases": [
+        "廚房",
+        "廚電"
+      ],
+      "nav_visible": true,
+      "sort_order": 140
+    },
+    {
+      "id": "cleaning",
+      "label": "清潔",
+      "description": "清潔家電、洗劑與掃除用品。",
+      "aliases": [
+        "清潔",
+        "掃除"
+      ],
+      "nav_visible": true,
+      "sort_order": 150
+    },
+    {
+      "id": "air-care",
+      "label": "空氣調節",
+      "description": "空氣清淨、除濕、暖房與空氣相關小家電。",
+      "aliases": [
+        "空氣清淨",
+        "除濕",
+        "電暖"
+      ],
+      "nav_visible": true,
+      "sort_order": 160
+    },
+    {
+      "id": "bathroom",
+      "label": "衛浴",
+      "description": "衛浴設備、浴室家電與浴室用品。",
+      "aliases": [
+        "衛浴",
+        "浴室"
+      ],
+      "nav_visible": true,
+      "sort_order": 170
+    },
+    {
+      "id": "countertop",
+      "label": "桌上型",
+      "description": "桌上型與可移動式設備。",
+      "aliases": [
+        "桌上型"
+      ],
+      "nav_visible": true,
+      "sort_order": 180
+    },
+    {
+      "id": "lighting",
+      "label": "照明",
+      "description": "燈具、吸頂燈與居家照明。",
+      "aliases": [
+        "燈",
+        "吸頂燈",
+        "照明"
+      ],
+      "nav_visible": true,
+      "sort_order": 190
+    },
+    {
+      "id": "refrigeration",
+      "label": "冷藏冷凍",
+      "description": "冰箱與冷凍櫃。",
+      "aliases": [
+        "冰箱",
+        "冷凍櫃"
+      ],
+      "nav_visible": true,
+      "sort_order": 200
+    },
+    {
+      "id": "laundry",
+      "label": "洗衣烘衣",
+      "description": "洗衣機、乾衣機與洗烘衣設備。",
+      "aliases": [
+        "洗衣機",
+        "烘衣機"
+      ],
+      "nav_visible": true,
+      "sort_order": 210
+    },
+    {
+      "id": "aircon",
+      "label": "空調",
+      "description": "冷氣與空調設備。",
+      "aliases": [
+        "冷氣",
+        "空調"
+      ],
+      "nav_visible": true,
+      "sort_order": 220
+    },
+    {
+      "id": "fixed-install",
+      "label": "固定安裝",
+      "description": "需固定安裝或施工的設備。",
+      "aliases": [
+        "安裝"
+      ],
+      "nav_visible": true,
+      "sort_order": 230
+    },
+    {
+      "id": "food",
+      "label": "食材",
+      "description": "食材、食品與調味品。",
+      "aliases": [
+        "食材",
+        "食品"
+      ],
+      "nav_visible": true,
+      "sort_order": 240
+    },
+    {
+      "id": "daily-goods",
+      "label": "日用品",
+      "description": "日用品、補充包與消耗品。",
+      "aliases": [
+        "日用品",
+        "消耗品"
+      ],
+      "nav_visible": true,
+      "sort_order": 250
+    },
+    {
+      "id": "organizing",
+      "label": "收納整理",
+      "description": "收納箱與整理用品。",
+      "aliases": [
+        "收納",
+        "整理箱"
+      ],
+      "nav_visible": true,
+      "sort_order": 260
+    },
+    {
+      "id": "hardware-tools",
+      "label": "五金工具",
+      "description": "五金、工具與維修用品。",
+      "aliases": [
+        "五金",
+        "工具"
+      ],
+      "nav_visible": true,
+      "sort_order": 270
+    },
+    {
+      "id": "furniture-decor",
+      "label": "家具家飾",
+      "description": "家具、家飾與居家擺設。",
+      "aliases": [
+        "家具",
+        "家飾"
+      ],
+      "nav_visible": true,
+      "sort_order": 280
     },
     {
       "id": "ergonomic",
@@ -20,7 +321,7 @@
         "電腦椅"
       ],
       "nav_visible": true,
-      "sort_order": 20
+      "sort_order": 290
     },
     {
       "id": "rice",
@@ -30,7 +331,7 @@
         "米"
       ],
       "nav_visible": true,
-      "sort_order": 30
+      "sort_order": 300
     }
   ]
 }

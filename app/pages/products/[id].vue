@@ -12,8 +12,8 @@
 
 <script setup lang="ts">
 import type { Product } from '../../utils/product-schema'
-import type { TaxonomyDefinitions } from '../../utils/published-products'
-import { getCatalogProductId, getProductDetail, getRelatedProductCards } from '../../utils/published-products'
+import type { TaxonomyDefinitions } from '../../utils/published-products/types'
+import { getCatalogProductId, getProductDetail, getRelatedProductCards } from '../../utils/published-products/product-detail'
 
 const route = useRoute()
 const product = shallowRef<Product | null>(null)
@@ -22,6 +22,10 @@ const runtime_taxonomies = shallowRef<TaxonomyDefinitions | undefined>()
 const product_detail = computed(() => {
   if (product.value === null) {
     return null
+  }
+
+  if (runtime_taxonomies.value === undefined) {
+    throw new Error('Catalog runtime taxonomies are not available')
   }
 
   return {

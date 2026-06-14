@@ -29,7 +29,7 @@
 - Product 使用 `category_id`、`channel_id`、`tag_ids`；Guide／Link 使用 `category_ids`、`tag_ids`；不要新增 legacy `category` 或自由字串 `tags`。
 - `status = "published"` 才能出現在首頁、指南、連結、category counts 與 search index。
 - `content/taxonomies/links.json` 不是 runtime links SSOT；runtime links 來自 `content/links/*.json`。
-- Google Sheets TSV importer `scripts/migrate-google-sheet-products.ts` 是 deprecated legacy-only，不可用來建立新版內容。
+- Google Sheets TSV importer `scripts/legacy/migrate-google-sheet-products.ts` 是 deprecated legacy-only，不可用來建立新版內容。
 
 ## Search And Static Output
 

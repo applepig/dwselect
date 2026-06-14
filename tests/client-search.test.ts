@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
-import type { Product } from '../app/utils/product-schema'
+import type { CategoryDefinition, ChannelDefinition, Product, TagDefinition } from '../app/utils/product-schema'
 import { buildSearchIndexPayload } from '../app/utils/search/search-index'
 import {
   createLatestSearchRequestRunner,
@@ -15,18 +15,27 @@ const base_product: Product = {
   id: '2026-06-02-sample-product',
   status: 'published',
   name: '機械鍵盤',
-  price_text: 'NT$ 1,990',
-  price: {
-    amount: 1990,
-    currency: 'TWD',
-    unit: 'each',
-    label: null,
-  },
+  english_name: 'Mechanical Keyboard',
   summary: '熱插拔小尺寸鍵盤',
-  description: '適合長時間寫程式的繁中鍵盤',
-  purchase_url: 'https://example.com/product',
+  long_description: '適合長時間寫程式的繁中鍵盤',
+  llm_description: '',
+  search_aliases: [],
+  model_numbers: [],
+  offers: [
+    {
+      channel_id: 'pchome',
+      url: 'https://example.com/product',
+      price_text: 'NT$ 1,990',
+      price: {
+        amount: 1990,
+        currency: 'TWD',
+        unit: 'each',
+        label: null,
+      },
+      checked_at: '2026-06-02T00:00:00+08:00',
+    },
+  ],
   image_url: 'https://example.com/product.jpg',
-  channel_id: 'pchome',
   category_id: 'computer',
   tag_ids: ['keyboard', 'usb-c'],
   reference_url: 'https://example.com/reference',
@@ -35,6 +44,26 @@ const base_product: Product = {
   published_at: '2026-06-02T00:00:00+08:00',
   unpublished_at: null,
   archived_at: null,
+}
+
+const test_taxonomies: {
+  categories: CategoryDefinition[]
+  channels: ChannelDefinition[]
+  tags: TagDefinition[]
+  brands: TagDefinition[]
+} = {
+  categories: [
+    { id: 'computer', label: '電腦', short_label: '電腦', nav_visible: true, sort_order: 30 },
+  ],
+  channels: [
+    { id: 'pchome', label: 'PChome', tint: 'blue', host_patterns: ['24h.pchome.com.tw'], sort_order: 10 },
+  ],
+  tags: [
+    { id: 'keyboard', label: '鍵盤', description: '鍵盤', aliases: [], nav_visible: true, sort_order: 10 },
+    { id: 'usb-c', label: 'USB-C', description: 'USB-C', aliases: [], nav_visible: true, sort_order: 20 },
+    { id: 'shared-token', label: 'shared-token', description: 'shared-token', aliases: [], nav_visible: true, sort_order: 30 },
+  ],
+  brands: [],
 }
 
 beforeEach(() => {
@@ -47,7 +76,7 @@ afterEach(() => {
 
 describe('client search lazy loader', () => {
   it('should fetch the static MiniSearch index and return complete client search results', async () => {
-    const payload = buildSearchIndexPayload({ products: [base_product], guides: [], links: [] }, { generated_at: '2026-06-06T00:00:00+08:00' })
+    const payload = buildSearchIndexPayload({ products: [base_product], guides: [], links: [] }, { ...test_taxonomies, generated_at: '2026-06-06T00:00:00+08:00' })
     const fetch_mock = vi.fn().mockResolvedValue({ ok: true, json: async () => payload })
     vi.stubGlobal('fetch', fetch_mock)
     const { getClientSearchResults } = await import('../app/utils/search/client-search')
@@ -72,7 +101,7 @@ describe('client search lazy loader', () => {
   })
 
   it('should retry fetching the search index after a failed request', async () => {
-    const payload = buildSearchIndexPayload({ products: [base_product], guides: [], links: [] }, { generated_at: '2026-06-06T00:00:00+08:00' })
+    const payload = buildSearchIndexPayload({ products: [base_product], guides: [], links: [] }, { ...test_taxonomies, generated_at: '2026-06-06T00:00:00+08:00' })
     const fetch_mock = vi.fn()
       .mockResolvedValueOnce({ ok: false, status: 503 })
       .mockResolvedValueOnce({ ok: true, json: async () => payload })
@@ -93,7 +122,7 @@ describe('client search lazy loader', () => {
       tag_ids: ['shared-token'],
       published_at: `2026-06-${String(index + 1).padStart(2, '0')}T00:00:00+08:00`,
     }))
-    const payload = buildSearchIndexPayload({ products, guides: [], links: [] }, { generated_at: '2026-06-06T00:00:00+08:00' })
+    const payload = buildSearchIndexPayload({ products, guides: [], links: [] }, { ...test_taxonomies, generated_at: '2026-06-06T00:00:00+08:00' })
     vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true, json: async () => payload }))
     const { getClientSearchSuggestions } = await import('../app/utils/search/client-search')
 

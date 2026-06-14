@@ -2,26 +2,37 @@
   "id": "2026-06-02-philips-40b1u5600",
   "status": "published",
   "name": "Philips 40B1U5600",
-  "price_text": "15000",
-  "price": {
-    "amount": 15000,
-    "currency": "TWD",
-    "unit": "each",
-    "label": null
-  },
+  "english_name": "Philips 40B1U5600",
   "summary": "40\" 3440*1440的螢幕，等於是32\" 2K的加寬版本，94ppi可以直接設100%來用",
-  "description": "40\" 3440*1440的螢幕，等於是32\" 2K的加寬版本，94ppi可以直接設100%來用",
-  "purchase_url": "https://24h.pchome.com.tw/prod/DSABQK-A900HLMQG?fq=/S/DSABQI",
-  "image_url": "https://img.pchome.com.tw/cs/items/DSABQKA900HLMQG/000001_1730023435.jpg",
-  "channel_id": "pchome",
-  "category_id": "computer",
+  "long_description": "40\" 3440*1440的螢幕，等於是32\" 2K的加寬版本，94ppi可以直接設100%來用",
+  "llm_description": "",
+  "search_aliases": [],
+  "model_numbers": [],
+  "offers": [
+    {
+      "channel_id": "pchome",
+      "url": "https://24h.pchome.com.tw/prod/DSABQK-A900HLMQG?fq=/S/DSABQI",
+      "price_text": "15000",
+      "price": {
+        "amount": 15000,
+        "currency": "TWD",
+        "unit": "each",
+        "label": null
+      },
+      "checked_at": "2026-06-02T00:00:00+08:00"
+    }
+  ],
+  "image_url": null,
+  "category_id": "computer-3c",
   "tag_ids": [
-    "display"
+    "display",
+    "philips"
   ],
   "reference_url": null,
   "created_at": "2026-06-02T00:00:00+08:00",
   "updated_at": "2026-06-02T00:00:00+08:00",
   "published_at": "2026-06-02T00:00:00+08:00",
   "unpublished_at": null,
-  "archived_at": null
+  "archived_at": null,
+  "image_file": "2026-06-02-philips-40b1u5600.jpg"
 }

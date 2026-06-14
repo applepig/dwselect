@@ -51,7 +51,7 @@
 </template>
 
 <script setup lang="ts">
-import type { PublishedProductCard } from '../utils/published-products'
+import type { PublishedProductCard } from '../utils/published-products/types'
 
 defineProps<{
   product: PublishedProductCard

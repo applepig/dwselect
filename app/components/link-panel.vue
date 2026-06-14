@@ -7,7 +7,7 @@
 </template>
 
 <script setup lang="ts">
-import type { CompactResourceRow } from '../utils/published-products'
+import type { CompactResourceRow } from '../utils/published-products/types'
 
 defineProps<{
   links: CompactResourceRow[]

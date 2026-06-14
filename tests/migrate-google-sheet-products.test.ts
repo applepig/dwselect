@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { MIGRATE_GOOGLE_SHEET_PRODUCTS_DEPRECATED_NOTICE, migrateGoogleSheetProducts, formatMigrationSummary } from '../scripts/migrate-google-sheet-products'
+import { MIGRATE_GOOGLE_SHEET_PRODUCTS_DEPRECATED_NOTICE, migrateGoogleSheetProducts, formatMigrationSummary } from '../scripts/legacy/migrate-google-sheet-products'
 
 const header = 'name\tprice\tdesc\tlink_url\timg_url\ttags\tcategory\treference'
 const legacy_header = 'name\tbrand\tdesc\tcategory\ttags\tprice_value\tprice\tlink_url\timg_url\treference'
@@ -57,18 +57,27 @@ describe('migrate Google Sheet products', () => {
           id: '2026-06-02-shang-pin-ming-cheng',
           status: 'published',
           name: '商品名稱',
-          price_text: 'NT$ 1,990',
-          price: {
-            amount: 1990,
-            currency: 'TWD',
-            unit: 'each',
-            label: null,
-          },
+          english_name: '商品名稱',
           summary: '推薦文字',
-          description: '推薦文字',
-          purchase_url: 'https://24h.pchome.com.tw/prod/ABC',
+          long_description: '推薦文字',
+          llm_description: '',
+          search_aliases: [],
+          model_numbers: [],
+          offers: [
+            {
+              channel_id: 'pchome',
+              url: 'https://24h.pchome.com.tw/prod/ABC',
+              price_text: 'NT$ 1,990',
+              price: {
+                amount: 1990,
+                currency: 'TWD',
+                unit: 'each',
+                label: null,
+              },
+              checked_at: '2026-06-02T00:00:00+08:00',
+            },
+          ],
           image_url: 'https://example.com/image.jpg',
-          channel_id: 'pchome',
           category_id: 'other',
           tag_ids: [],
           reference_url: 'https://example.com/ref',
@@ -112,7 +121,7 @@ describe('migrate Google Sheet products', () => {
     expect(result.products).toHaveLength(1)
     expect(result.products[0]?.content).toEqual(expect.objectContaining({
       name: '多行商品',
-      description: '第一行\n第二行',
+      long_description: '第一行\n第二行',
       image_url: 'https://example.com/image.jpg',
     }))
     expect(result.summary.warnings).toEqual([])

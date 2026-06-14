@@ -27,13 +27,19 @@
 </template>
 
 <script setup lang="ts">
-import { getCompactAppView } from '../utils/published-products'
+import { getCompactAppView } from '../utils/published-products/compact-app'
 
 const { all_products, runtime_taxonomies, runtime_links } = await useCatalogData()
-const compact_view = computed(() => getCompactAppView(
-  all_products.value,
-  {},
-  runtime_taxonomies.value,
-  runtime_links.value,
-))
+const compact_view = computed(() => {
+  if (runtime_taxonomies.value === undefined || runtime_links.value === undefined) {
+    throw new Error('Catalog runtime data is not available')
+  }
+
+  return getCompactAppView(
+    all_products.value,
+    {},
+    runtime_taxonomies.value,
+    runtime_links.value,
+  )
+})
 </script>

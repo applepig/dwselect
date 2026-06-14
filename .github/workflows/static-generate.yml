@@ -4,10 +4,13 @@ on:
   pull_request:
   push:
     branches:
-      - main
+      - master
+
+permissions:
+  contents: read
 
 jobs:
-  static-generate:
+  quality-gate:
     runs-on: ubuntu-latest
 
     steps:
@@ -31,6 +34,12 @@ jobs:
       - name: Run tests
         run: pnpm test
 
+      - name: Run lint
+        run: pnpm lint
+
+      - name: Run typecheck
+        run: pnpm typecheck
+
       - name: Generate static site
         run: pnpm generate
 
@@ -43,3 +52,26 @@ jobs:
           name: static-site
           path: .output/public
           if-no-files-found: error
+
+  deploy:
+    needs: quality-gate
+    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      deployments: write
+
+    steps:
+      - name: Download static artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: static-site
+          path: .output/public
+
+      - name: Deploy to Cloudflare Pages
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+          command: pages deploy .output/public --project-name=dwselect

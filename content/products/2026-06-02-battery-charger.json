@@ -1,0 +1,37 @@
+{
+  "id": "2026-06-02-battery-charger",
+  "status": "published",
+  "name": "電池充電器",
+  "english_name": "Battery Charger",
+  "summary": "這個倒是可以不用找IKEA，這顆用豆腐頭輸入的，反而比插牆上好用",
+  "long_description": "這個倒是可以不用找IKEA，這顆用豆腐頭輸入的，反而比插牆上好用",
+  "llm_description": "",
+  "search_aliases": [],
+  "model_numbers": [],
+  "offers": [
+    {
+      "channel_id": "pchome",
+      "url": "https://24h.pchome.com.tw/prod/DCABC4-A900BOW1X",
+      "price_text": "249",
+      "price": {
+        "amount": 249,
+        "currency": "TWD",
+        "unit": "each",
+        "label": null
+      },
+      "checked_at": "2026-06-02T00:00:00+08:00"
+    }
+  ],
+  "image_url": null,
+  "category_id": "computer-3c",
+  "tag_ids": [
+    "power-charging"
+  ],
+  "reference_url": null,
+  "created_at": "2026-06-02T00:00:00+08:00",
+  "updated_at": "2026-06-02T00:00:00+08:00",
+  "published_at": "2026-06-02T00:00:00+08:00",
+  "unpublished_at": null,
+  "archived_at": null,
+  "image_file": "2026-06-02-battery-charger.jpg"
+}

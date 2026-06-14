@@ -2,24 +2,37 @@
   "id": "2026-06-02-zyxel-xgs1250-12",
   "status": "published",
   "name": "Zyxel XGS1250-12",
-  "price_text": "9000",
-  "price": {
-    "amount": 9000,
-    "currency": "TWD",
-    "unit": "each",
-    "label": null
-  },
+  "english_name": "Zyxel XGS1250 12",
   "summary": "應該是目前最好買的10G switch，一孔SFP+、三孔Multigig、八孔gbe，應該這台就可以把全家的網路線都插在上面了",
-  "description": "應該是目前最好買的10G switch，一孔SFP+、三孔Multigig、八孔gbe，應該這台就可以把全家的網路線都插在上面了",
-  "purchase_url": "https://24h.pchome.com.tw/prod/DRAF0I-A900B7QHW",
-  "image_url": "https://img.pchome.com.tw/cs/items/DRAF0IA900B7QHW/000001_1658917277.jpg",
-  "channel_id": "pchome",
-  "category_id": "computer",
-  "tag_ids": [],
+  "long_description": "應該是目前最好買的10G switch，一孔SFP+、三孔Multigig、八孔gbe，應該這台就可以把全家的網路線都插在上面了",
+  "llm_description": "",
+  "search_aliases": [],
+  "model_numbers": [],
+  "offers": [
+    {
+      "channel_id": "pchome",
+      "url": "https://24h.pchome.com.tw/prod/DRAF0I-A900B7QHW",
+      "price_text": "9000",
+      "price": {
+        "amount": 9000,
+        "currency": "TWD",
+        "unit": "each",
+        "label": null
+      },
+      "checked_at": "2026-06-02T00:00:00+08:00"
+    }
+  ],
+  "image_url": null,
+  "category_id": "network",
+  "tag_ids": [
+    "network-gear",
+    "zyxel"
+  ],
   "reference_url": "https://www.facebook.com/applepig/posts/pfbid0h5V9UwDvLD96ZTSEvoHctNK8sEqvfHaPKqMz5DWf1MrMZfuPyw9GoQj8k6C6RsCbl",
   "created_at": "2026-06-02T00:00:00+08:00",
   "updated_at": "2026-06-02T00:00:00+08:00",
   "published_at": "2026-06-02T00:00:00+08:00",
   "unpublished_at": null,
-  "archived_at": null
+  "archived_at": null,
+  "image_file": "2026-06-02-zyxel-xgs1250-12.jpg"
 }

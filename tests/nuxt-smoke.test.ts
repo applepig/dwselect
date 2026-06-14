@@ -38,7 +38,7 @@ describe('Nuxt SSG baseline', () => {
     const link_files = readdirSync(new URL('../content/links/', import.meta.url)).filter((file_name) => file_name.endsWith('.json'))
     const guide_files = readdirSync(new URL('../content/guides/', import.meta.url)).filter((file_name) => file_name.endsWith('.json'))
 
-    expect(category_taxonomy.items).toContainEqual(expect.objectContaining({ id: 'av', label: '影音' }))
+    expect(category_taxonomy.items).toContainEqual(expect.objectContaining({ id: 'av-theater', label: '影音劇院' }))
     expect(channel_taxonomy.items).toContainEqual(expect.objectContaining({ id: 'pchome', label: 'PChome' }))
     expect(tag_taxonomy.items.length).toBeGreaterThan(0)
     expect(link_files).toEqual(expect.arrayContaining(['applepig-home.json', '2026-06-02-b18.json']))
@@ -55,6 +55,8 @@ describe('Nuxt SSG baseline', () => {
     expect(content_config_source).toContain("source: 'taxonomies/channels.json'")
     expect(content_config_source).toContain('tags: defineCollection')
     expect(content_config_source).toContain("source: 'taxonomies/tags.json'")
+    expect(content_config_source).toContain('brands: defineCollection')
+    expect(content_config_source).toContain("source: 'taxonomies/brands.json'")
     expect(content_config_source).not.toContain("source: 'taxonomies/links.json'")
   })
 
@@ -74,18 +76,20 @@ describe('Nuxt SSG baseline', () => {
 
   it('should wire the public search input with submitted query search state', () => {
     const page_source = readFileSync(new URL('../app/pages/search.vue', import.meta.url), 'utf8')
+    const input_source = readFileSync(new URL('../app/components/search/search-input.vue', import.meta.url), 'utf8')
+    const composable_source = readFileSync(new URL('../app/composables/use-search-page.ts', import.meta.url), 'utf8')
 
-    expect(page_source).toContain('<input')
-    expect(page_source).toContain('v-model="pending_search_query"')
-    expect(page_source).toContain('@keydown.enter="submitPendingSearchFromEvent"')
-    expect(page_source).toContain('event.isComposing')
-    expect(page_source).toContain('event.preventDefault()')
-    expect(page_source).toContain('placeholder="在找什麼嗎？™"')
-    expect(page_source).toContain('getClientSearchResults')
-    expect(page_source).toContain('getClientSearchSuggestions')
+    expect(page_source).toContain('v-model:query="pending_search_query"')
     expect(page_source).toContain('client_search_results')
     expect(page_source).toContain('search_result_sections')
     expect(page_source).toContain('router.push')
+    expect(input_source).toContain('<UInput')
+    expect(input_source).toContain('@keydown.enter="submitPendingSearchFromEvent"')
+    expect(input_source).toContain('event.isComposing')
+    expect(input_source).toContain('event.preventDefault()')
+    expect(input_source).toContain('placeholder="在找什麼嗎？™"')
+    expect(composable_source).toContain('getClientSearchResults')
+    expect(composable_source).toContain('getClientSearchSuggestions')
     expect(page_source).not.toContain('<UInputMenu')
   })
 
@@ -127,13 +131,28 @@ describe('Nuxt SSG baseline', () => {
       '../app/pages/guide.vue',
       '../app/pages/search.vue',
       '../app/pages/links.vue',
+      '../app/components/search/search-idle-panel.vue',
     ].map((file_path) => readFileSync(new URL(file_path, import.meta.url), 'utf8')).join('\n')
 
     expect(page_source).toContain('目前沒有已上架商品')
     expect(page_source).toContain('目前沒有已發布指南')
     expect(page_source).toContain('目前沒有已發布連結')
-    expect(page_source).toContain('熱門 tag')
+    expect(page_source).toContain('熱門標籤')
+    expect(page_source).toContain('熱門品牌')
     expect(page_source).toContain('沒這個坑，去許願吧')
+  })
+
+  it('should keep search idle pills on the shared chip layout', () => {
+    const idle_panel_source = readFileSync(
+      new URL('../app/components/search/search-idle-panel.vue', import.meta.url),
+      'utf8',
+    )
+    const catalog_css = readFileSync(new URL('../app/assets/styles/catalog.css', import.meta.url), 'utf8')
+
+    expect(idle_panel_source).toContain('class="tag-chip"')
+    expect(idle_panel_source).not.toContain('search-history-item')
+    expect(catalog_css).toContain('width: fit-content')
+    expect(catalog_css).not.toContain('.search-history-item')
   })
 
   it('should keep catalog controls and long product text responsive across phone, tablet and desktop widths', () => {
@@ -181,6 +200,23 @@ describe('Nuxt SSG baseline', () => {
     expect(app_source).toContain('<NuxtPage />')
   })
 
+  it('should set the production document title from the app shell', () => {
+    const app_source = readFileSync(new URL('../app/app.vue', import.meta.url), 'utf8')
+
+    expect(app_source).toContain('useHead(')
+    expect(app_source).toContain("title: '在找什麼嗎？ DW Select'")
+  })
+
+  it('should prevent horizontal rubber-band overflow on tablet viewports', () => {
+    const reset_css = readFileSync(new URL('../app/assets/styles/reset.css', import.meta.url), 'utf8')
+    const catalog_css = readFileSync(new URL('../app/assets/styles/catalog.css', import.meta.url), 'utf8')
+
+    expect(reset_css).toContain('overflow-x: clip')
+    expect(catalog_css).toContain('.compact-app-shell')
+    expect(catalog_css).toContain('max-width: 100%')
+    expect(catalog_css).toContain('overflow-x: clip')
+  })
+
   it('should split compact app shell into navigation, theme, card, tag and link components', () => {
     const layout_source = readFileSync(new URL('../app/layouts/default.vue', import.meta.url), 'utf8')
     const page_sources = [
@@ -216,7 +252,7 @@ describe('Nuxt SSG baseline', () => {
     const nav_source = readFileSync(new URL('../app/components/app-navigation.vue', import.meta.url), 'utf8')
     const theme_source = readFileSync(new URL('../app/components/theme-toggle.vue', import.meta.url), 'utf8')
     const link_source = readFileSync(new URL('../app/components/link-panel.vue', import.meta.url), 'utf8')
-    const view_model_source = readFileSync(new URL('../app/utils/published-products.ts', import.meta.url), 'utf8')
+    const link_rows_source = readFileSync(new URL('../app/utils/published-products/resource-rows.ts', import.meta.url), 'utf8')
 
     expect(nav_source).toContain('<NuxtLink')
     expect(nav_source).toContain("to: '/'")
@@ -235,10 +271,10 @@ describe('Nuxt SSG baseline', () => {
     expect(nav_source).toContain('app-nav-button')
     expect(theme_source).toContain('<UColorModeButton')
     expect(link_source).toContain('<ResourceList')
-    expect(view_model_source).toContain('getPublishedLinks')
-    expect(view_model_source).toContain('getResourceRowLinkAttributes')
-    expect(view_model_source).toContain("target: '_blank'")
-    expect(view_model_source).toContain("rel: 'noopener noreferrer'")
+    expect(link_rows_source).toContain('getPublishedLinks')
+    expect(link_rows_source).toContain('getResourceRowLinkAttributes')
+    expect(link_rows_source).toContain("target: '_blank'")
+    expect(link_rows_source).toContain("rel: 'noopener noreferrer'")
   })
 
   it('should expose desktop product category navigation without adding it to mobile or tablet nav', () => {
@@ -259,7 +295,7 @@ describe('Nuxt SSG baseline', () => {
     const guide_source = readFileSync(new URL('../app/pages/guide.vue', import.meta.url), 'utf8')
     const links_source = readFileSync(new URL('../app/pages/links.vue', import.meta.url), 'utf8')
     const search_source = readFileSync(new URL('../app/pages/search.vue', import.meta.url), 'utf8')
-    const view_model_source = readFileSync(new URL('../app/utils/published-products.ts', import.meta.url), 'utf8')
+    const resource_rows_source = readFileSync(new URL('../app/utils/published-products/resource-rows.ts', import.meta.url), 'utf8')
 
     expect(guide_source).toContain('compact_view.guide.guides')
     expect(guide_source).not.toContain('<TagExplorer')
@@ -271,11 +307,11 @@ describe('Nuxt SSG baseline', () => {
     expect(search_source).toContain('getSearchResultSections')
     expect(search_source).toContain('search-result-section')
     expect(search_source).toContain('<ResourceList')
-    expect(view_model_source).toContain('getSearchSuggestionMeta')
-    expect(view_model_source).toContain('result.price_text')
-    expect(view_model_source).toContain('result.channel_label')
-    expect(view_model_source).toContain("target: result.external ? '_blank' : null")
-    expect(view_model_source).toContain("rel: result.external ? 'noopener noreferrer' : null")
+    expect(resource_rows_source).toContain('getSearchSuggestionMeta')
+    expect(resource_rows_source).toContain('result.price_text')
+    expect(resource_rows_source).toContain('result.channel_label')
+    expect(resource_rows_source).toContain("target: result.external ? '_blank' : null")
+    expect(resource_rows_source).toContain("rel: result.external ? 'noopener noreferrer' : null")
   })
 
   it('should wire product detail route, buy CTA and view transition contracts in source', () => {
@@ -351,7 +387,7 @@ describe('Nuxt SSG baseline', () => {
     expect(prerender_routes).toContain('/search')
     expect(prerender_routes).toContain('/links')
     expect(prerender_routes.filter((route) => route.startsWith('/products/'))).toHaveLength(product_route_count)
-    expect(prerender_routes).toContain('/products/2026-06-02-sharp-65吋-xled')
+    expect(prerender_routes).toContain('/products/2026-06-02-sharp-65-inch-xled')
   })
 
   it('should define light and dark handoff CSS tokens without a single-hue palette', () => {
@@ -398,14 +434,14 @@ describe('Nuxt SSG baseline', () => {
     expect(product_file_names).toHaveLength(62)
     expect(product_file_names).not.toContain('2026-06-02-sample-product.json')
     expect(product_sources.join('\n')).toContain('Sharp 65吋 XLED')
-    expect(product_sources.join('\n')).toContain('"category_id": "av"')
+    expect(product_sources.join('\n')).toContain('"category_id": "av-theater"')
     expect(product_sources.join('\n')).not.toContain('"category":')
     expect(search_index_payload.documents).toHaveLength(67)
     expect(search_index_payload.documents).toContainEqual(expect.objectContaining({
-      document_id: 'product:2026-06-02-sharp-65吋-xled',
+      document_id: 'product:2026-06-02-sharp-65-inch-xled',
       type: 'product',
       title: 'Sharp 65吋 XLED',
-      category_labels: ['影音'],
+      category_labels: ['影音劇院'],
       channel_label: expect.any(String),
     }))
     expect(search_index_payload.documents).toEqual(expect.arrayContaining([

@@ -29,6 +29,7 @@ export type SearchDocument = {
   channel_label?: string
   published_at: string | null
   description?: string
+  search_text?: string
 }
 
 export type SearchIndexDocumentSummary = Pick<
@@ -78,34 +79,17 @@ export type SearchSuggestion = {
 
 type BuildSearchIndexOptions = {
   generated_at?: string
-  categories?: CategoryDefinition[]
-  channels?: ChannelDefinition[]
-  tags?: TagDefinition[]
+  categories: CategoryDefinition[]
+  channels: ChannelDefinition[]
+  tags: TagDefinition[]
+  brands: TagDefinition[]
 }
-
-const DEFAULT_CATEGORIES: CategoryDefinition[] = [
-  { id: 'home', label: '居家', short_label: '居家', nav_visible: true, sort_order: 10 },
-  { id: 'kitchen', label: '廚房', short_label: '廚房', nav_visible: true, sort_order: 20 },
-  { id: 'computer', label: '電腦', short_label: '電腦', nav_visible: true, sort_order: 30 },
-  { id: 'three-c', label: '3C', short_label: '3C', nav_visible: true, sort_order: 40 },
-  { id: 'av', label: '影音', short_label: '影音', nav_visible: true, sort_order: 50 },
-  { id: 'food', label: '食材', short_label: '食材', nav_visible: true, sort_order: 60 },
-  { id: 'other', label: '其他', short_label: '其他', nav_visible: true, sort_order: 999 },
-]
-
-const DEFAULT_CHANNELS: ChannelDefinition[] = [
-  { id: 'pchome', label: 'PChome', tint: 'blue', host_patterns: ['24h.pchome.com.tw'], sort_order: 10 },
-  { id: 'momo', label: 'momo', tint: 'pink', host_patterns: ['www.momoshop.com.tw'], sort_order: 20 },
-  { id: 'amazonjp', label: 'Amazon JP', tint: 'amber', host_patterns: ['www.amazon.co.jp', 'amzn.asia'], sort_order: 30 },
-  { id: 'amazonus', label: 'Amazon US', tint: 'amber', host_patterns: ['www.amazon.com'], sort_order: 40 },
-  { id: 'costco', label: 'Costco', tint: 'indigo', host_patterns: ['www.costco.com.tw'], sort_order: 50 },
-  { id: 'other', label: '其他通路', tint: 'neutral', host_patterns: [], sort_order: 999 },
-]
 
 const SEARCH_FIELDS: Array<keyof SearchDocument> = [
   'title',
   'summary',
   'description',
+  'search_text',
   'category_labels',
   'tag_labels',
   'channel_label',
@@ -128,32 +112,35 @@ const SEARCH_STORE_FIELDS: Array<keyof SearchDocument> = [
 
 export function getSearchDocuments(
   input: Product[] | SearchContentInput,
-  options: Pick<BuildSearchIndexOptions, 'categories' | 'channels' | 'tags'> = {},
+  options: Pick<BuildSearchIndexOptions, 'categories' | 'channels' | 'tags' | 'brands'>,
 ): SearchDocument[] {
   const content = normalizeSearchContentInput(input)
-  const category_labels = getCategoryLabelMap(options.categories ?? DEFAULT_CATEGORIES)
-  const channel_labels = getChannelLabelMap(options.channels ?? DEFAULT_CHANNELS)
-  const tag_labels = getTagLabelMap(options.tags ?? [])
+  const category_labels = getCategoryLabelMap(options.categories)
+  const channel_labels = getChannelLabelMap(options.channels)
+  const tag_labels = getTagLabelMap(options.tags)
+  const product_tag_labels = getTagLabelMap([...options.tags, ...options.brands])
+  const tag_aliases = getTagAliasMap(options.tags)
+  const product_tag_aliases = getTagAliasMap([...options.tags, ...options.brands])
 
   return [
     ...content.products
       .filter((product) => product.status === 'published')
       .toSorted(compareProducts)
-      .map((product) => mapProductToSearchDocument(product, category_labels, channel_labels, tag_labels)),
+      .map((product) => mapProductToSearchDocument(product, category_labels, channel_labels, product_tag_labels, product_tag_aliases)),
     ...content.guides
       .filter((guide) => guide.status === 'published')
       .toSorted(compareGuides)
-      .map((guide) => mapGuideToSearchDocument(guide, category_labels, tag_labels)),
+      .map((guide) => mapGuideToSearchDocument(guide, category_labels, tag_labels, tag_aliases)),
     ...content.links
       .filter((link) => link.status === 'published')
       .toSorted((left_link, right_link) => left_link.sort_order - right_link.sort_order)
-      .map((link) => mapLinkToSearchDocument(link, category_labels, tag_labels)),
+      .map((link) => mapLinkToSearchDocument(link, category_labels, tag_labels, tag_aliases)),
   ]
 }
 
 export function buildSearchIndexPayload(
   input: Product[] | SearchContentInput,
-  options: BuildSearchIndexOptions = {},
+  options: BuildSearchIndexOptions,
 ): SearchIndexPayload {
   const documents = getSearchDocuments(input, options)
   const mini_search = createSearchIndex()
@@ -214,10 +201,12 @@ function createSearchIndex() {
 function mapProductToSearchDocument(
   product: Product,
   category_labels: ReadonlyMap<Product['category_id'], string>,
-  channel_labels: ReadonlyMap<Product['channel_id'], string>,
+  channel_labels: ReadonlyMap<string, string>,
   tag_labels: ReadonlyMap<string, string>,
+  tag_aliases: ReadonlyMap<string, string[]>,
 ): SearchDocument {
   const content_id = getContentId(product.id)
+  const primary_offer = product.offers[0]!
   const document = {
     document_id: `product:${content_id}`,
     content_id,
@@ -228,17 +217,27 @@ function mapProductToSearchDocument(
     category_labels: [category_labels.get(product.category_id) ?? product.category_id],
     tag_ids: [...product.tag_ids],
     tag_labels: getTagLabels(product.tag_ids, tag_labels),
-    image_url: product.image_url,
+    image_url: resolveProductSearchImageUrl(product),
     href: `/products/${content_id}`,
     external: false,
-    price_text: product.price_text,
-    channel_id: product.channel_id,
-    channel_label: channel_labels.get(product.channel_id) ?? product.channel_id,
+    price_text: primary_offer.price_text,
+    channel_id: primary_offer.channel_id,
+    channel_label: channel_labels.get(primary_offer.channel_id) ?? primary_offer.channel_id,
     published_at: product.published_at,
   }
 
   Object.defineProperty(document, 'description', {
-    value: product.description,
+    value: product.long_description,
+    enumerable: false,
+  })
+  Object.defineProperty(document, 'search_text', {
+    value: [
+      product.english_name,
+      product.llm_description,
+      ...product.search_aliases,
+      ...product.model_numbers,
+      ...getTagAliases(product.tag_ids, tag_aliases),
+    ].join(' '),
     enumerable: false,
   })
 
@@ -249,6 +248,7 @@ function mapGuideToSearchDocument(
   guide: Guide,
   category_labels: ReadonlyMap<string, string>,
   tag_labels: ReadonlyMap<string, string>,
+  tag_aliases: ReadonlyMap<string, string[]>,
 ): SearchDocument {
   const document = {
     document_id: `guide:${guide.id}`,
@@ -260,7 +260,7 @@ function mapGuideToSearchDocument(
     category_labels: guide.category_ids.map((category_id) => category_labels.get(category_id) ?? category_id),
     tag_ids: [...guide.tag_ids],
     tag_labels: getTagLabels(guide.tag_ids, tag_labels),
-    image_url: guide.image_url,
+    image_url: resolveGuideSearchImageUrl(guide),
     href: guide.source_url,
     external: true,
     published_at: guide.published_at,
@@ -268,6 +268,10 @@ function mapGuideToSearchDocument(
 
   Object.defineProperty(document, 'description', {
     value: guide.summary,
+    enumerable: false,
+  })
+  Object.defineProperty(document, 'search_text', {
+    value: getTagAliases(guide.tag_ids, tag_aliases).join(' '),
     enumerable: false,
   })
 
@@ -278,6 +282,7 @@ function mapLinkToSearchDocument(
   link: LinkDefinition,
   category_labels: ReadonlyMap<string, string>,
   tag_labels: ReadonlyMap<string, string>,
+  tag_aliases: ReadonlyMap<string, string[]>,
 ): SearchDocument {
   const document = {
     document_id: `link:${link.id}`,
@@ -297,6 +302,10 @@ function mapLinkToSearchDocument(
 
   Object.defineProperty(document, 'description', {
     value: link.summary,
+    enumerable: false,
+  })
+  Object.defineProperty(document, 'search_text', {
+    value: getTagAliases(link.tag_ids, tag_aliases).join(' '),
     enumerable: false,
   })
 
@@ -359,8 +368,32 @@ function getContentId(content_id: string) {
     ?.replace(/\.json$/, '') ?? content_id
 }
 
+function resolveProductSearchImageUrl(product: Pick<Product, 'image_file' | 'image_url'>): string {
+  const image_url = product.image_file === null || product.image_file === undefined
+    ? product.image_url
+    : `/images/products/${product.image_file}`
+
+  if (image_url === null || image_url === undefined) {
+    throw new Error('Product image source is required')
+  }
+
+  return image_url
+}
+
+function resolveGuideSearchImageUrl(guide: Pick<Guide, 'image_file' | 'image_url'>): string | null {
+  if (guide.image_file === null || guide.image_file === undefined) {
+    return guide.image_url ?? null
+  }
+
+  return `/images/guides/${guide.image_file}`
+}
+
 function getTagLabels(tag_ids: string[], tag_labels: ReadonlyMap<string, string>) {
   return tag_ids.map((tag_id) => tag_labels.get(tag_id) ?? tag_id)
+}
+
+function getTagAliases(tag_ids: string[], tag_aliases: ReadonlyMap<string, string[]>) {
+  return tag_ids.flatMap((tag_id) => tag_aliases.get(tag_id) ?? [])
 }
 
 function toStringArray(value: unknown) {
@@ -385,6 +418,10 @@ function getChannelLabelMap(channels: ChannelDefinition[]) {
 
 function getTagLabelMap(tags: TagDefinition[]) {
   return new Map(tags.map((tag) => [tag.id, tag.label]))
+}
+
+function getTagAliasMap(tags: TagDefinition[]) {
+  return new Map(tags.map((tag) => [tag.id, tag.aliases]))
 }
 
 function compareProducts(left_product: Product, right_product: Product) {

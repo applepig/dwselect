@@ -12,7 +12,7 @@ describe('runtime Google Sheets references', () => {
     const root_path = makeFixtureRoot()
     writeFileSync(join(root_path, 'legacy/index.html'), 'https://docs.google.com/spreadsheets/d/example/pub?output=tsv')
     writeFileSync(join(root_path, 'docs/spec.md'), 'docs.google.com/spreadsheets is allowed in docs')
-    writeFileSync(join(root_path, 'scripts/migrate-google-sheet-products.ts'), 'const source = "pub?output=tsv"')
+    writeFileSync(join(root_path, 'scripts/legacy/migrate-google-sheet-products.ts'), 'const source = "pub?output=tsv"')
     writeFileSync(join(root_path, 'tests/runtime.test.ts'), 'docs.google.com/spreadsheets')
 
     const result = findRuntimeGoogleSheetReferences(root_path)
@@ -60,7 +60,7 @@ function makeFixtureRoot() {
     'content',
     'docs',
     'legacy',
-    'scripts',
+    'scripts/legacy',
     'tests',
     '.output/public/_nuxt',
   ]

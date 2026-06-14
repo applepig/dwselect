@@ -1,13 +1,13 @@
 import { z } from 'zod'
 
 const TIMESTAMP_PATTERN = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}[+-]\d{2}:\d{2}$/
-const CATEGORY_IDS = ['home', 'kitchen', 'computer', 'three-c', 'av', 'food', 'other'] as const
-const CHANNEL_IDS = ['pchome', 'momo', 'amazonjp', 'amazonus', 'costco', 'other'] as const
+const KEBAB_CASE_ASCII_ID_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/
 
 const content_status_schema = z.enum(['draft', 'published', 'unpublished', 'archived'])
-const category_id_schema = z.enum(CATEGORY_IDS)
-const channel_id_schema = z.enum(CHANNEL_IDS)
-const tag_id_schema = z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, 'must be a kebab-case ASCII tag id')
+const taxonomy_id_schema = z.string().regex(KEBAB_CASE_ASCII_ID_PATTERN, 'must be a kebab-case ASCII taxonomy id')
+const category_id_schema = taxonomy_id_schema
+const channel_id_schema = taxonomy_id_schema
+const tag_id_schema = taxonomy_id_schema
 
 const http_url_schema = z.string().refine((value) => {
   try {
@@ -20,6 +20,18 @@ const http_url_schema = z.string().refine((value) => {
   }
 }, 'must be a valid HTTP(S) URL')
 
+const IMAGE_FILE_PATTERN = /^[^./\\/?#][^\\/?#]*\.(jpg|jpeg|png|webp|gif|avif)$/
+
+const image_file_schema = z.string().refine((value) => {
+  if (!IMAGE_FILE_PATTERN.test(value)) {
+    return false
+  }
+
+  return !value.includes('..')
+}, 'must be a local image filename with a supported extension')
+const optional_image_file_schema = image_file_schema.nullable().optional()
+const optional_http_image_url_schema = http_url_schema.nullable().optional()
+
 const timestamp_schema = z.string().regex(TIMESTAMP_PATTERN, 'must be a timestamp with timezone offset')
 
 const product_price_schema = z.object({
@@ -29,17 +41,27 @@ const product_price_schema = z.object({
   label: z.string().nullable(),
 }).strict()
 
+const product_offer_schema = z.object({
+  channel_id: channel_id_schema,
+  url: http_url_schema,
+  price_text: z.string(),
+  price: product_price_schema,
+  checked_at: timestamp_schema,
+}).strict()
+
 export const product_schema = z.object({
   id: z.string().min(1),
   status: content_status_schema,
   name: z.string().min(1),
-  price_text: z.string(),
-  price: product_price_schema,
+  english_name: z.string().min(1),
   summary: z.string(),
-  description: z.string(),
-  purchase_url: http_url_schema,
-  image_url: http_url_schema,
-  channel_id: channel_id_schema,
+  long_description: z.string(),
+  llm_description: z.string(),
+  search_aliases: z.array(z.string()),
+  model_numbers: z.array(z.string()),
+  offers: z.array(product_offer_schema).min(1),
+  image_file: optional_image_file_schema,
+  image_url: optional_http_image_url_schema,
   category_id: category_id_schema,
   tag_ids: z.array(tag_id_schema),
   reference_url: http_url_schema.nullable(),
@@ -48,7 +70,9 @@ export const product_schema = z.object({
   published_at: timestamp_schema.nullable(),
   unpublished_at: timestamp_schema.nullable(),
   archived_at: timestamp_schema.nullable(),
-}).strict()
+}).strict().superRefine((product, context) => {
+  addExclusiveImageSourceIssue(product, context, true)
+})
 
 export const guide_schema = z.object({
   id: z.string().min(1),
@@ -56,7 +80,8 @@ export const guide_schema = z.object({
   title: z.string().min(1),
   summary: z.string(),
   source_url: http_url_schema,
-  image_url: http_url_schema.nullable(),
+  image_file: optional_image_file_schema,
+  image_url: optional_http_image_url_schema,
   category_ids: z.array(category_id_schema),
   tag_ids: z.array(tag_id_schema),
   related_product_ids: z.array(z.string().min(1)),
@@ -65,7 +90,9 @@ export const guide_schema = z.object({
   published_at: timestamp_schema.nullable(),
   unpublished_at: timestamp_schema.nullable(),
   archived_at: timestamp_schema.nullable(),
-}).strict()
+}).strict().superRefine((guide, context) => {
+  addExclusiveImageSourceIssue(guide, context, false)
+})
 
 export const link_schema = z.object({
   id: z.string().min(1),
@@ -73,7 +100,7 @@ export const link_schema = z.object({
   title: z.string().min(1),
   summary: z.string(),
   url: http_url_schema,
-  image_url: http_url_schema.nullable().optional(),
+  image_url: optional_http_image_url_schema,
   icon: z.string().min(1),
   category_ids: z.array(category_id_schema),
   tag_ids: z.array(tag_id_schema),
@@ -84,6 +111,31 @@ export const link_schema = z.object({
   unpublished_at: timestamp_schema.nullable(),
   archived_at: timestamp_schema.nullable(),
 }).strict()
+
+function addExclusiveImageSourceIssue(
+  content: { image_file?: string | null, image_url?: string | null },
+  context: z.RefinementCtx,
+  require_image: boolean,
+) {
+  const has_image_file = content.image_file !== null && content.image_file !== undefined
+  const has_image_url = content.image_url !== null && content.image_url !== undefined
+
+  if (has_image_file && has_image_url) {
+    context.addIssue({
+      code: 'custom',
+      path: ['image_file'],
+      message: 'must not be provided with image_url',
+    })
+  }
+
+  if (require_image && !has_image_file && !has_image_url) {
+    context.addIssue({
+      code: 'custom',
+      path: ['image_file'],
+      message: 'must provide exactly one image source',
+    })
+  }
+}
 
 export const channel_definition_schema = z.object({
   id: channel_id_schema,
@@ -134,6 +186,7 @@ export const legacy_link_taxonomy_schema = z.object({
 export const tag_taxonomy_schema = z.object({
   items: z.array(tag_definition_schema),
 }).strict()
+export const brand_taxonomy_schema = tag_taxonomy_schema
 
 export type ContentTypeWithTaxonomyReferences = 'product' | 'guide' | 'link'
 
@@ -150,11 +203,16 @@ export type ContentTaxonomyReferenceInput = {
   links?: Array<{ id: string, category_ids: string[], tag_ids: string[] }>
   categories: Array<Pick<CategoryDefinition, 'id'>>
   tags: Array<Pick<TagDefinition, 'id'>>
+  brands?: Array<Pick<TagDefinition, 'id'>>
 }
 
 export function validateContentTaxonomyReferences(input: ContentTaxonomyReferenceInput): ContentTaxonomyReferenceViolation[] {
   const category_ids = new Set<string>(input.categories.map((category) => category.id))
   const tag_ids = new Set(input.tags.map((tag) => tag.id))
+  const product_tag_ids = new Set([
+    ...input.tags.map((tag) => tag.id),
+    ...(input.brands ?? []).map((brand) => brand.id),
+  ])
   const violations: ContentTaxonomyReferenceViolation[] = []
 
   for (const product of input.products ?? []) {
@@ -167,7 +225,7 @@ export function validateContentTaxonomyReferences(input: ContentTaxonomyReferenc
       })
     }
 
-    addMissingTagViolations(violations, 'product', product.id, product.tag_ids, tag_ids)
+    addMissingTagViolations(violations, 'product', product.id, product.tag_ids, product_tag_ids)
   }
 
   for (const guide of input.guides ?? []) {
@@ -226,6 +284,7 @@ function addMissingTagViolations(
 }
 
 export type ProductPrice = z.infer<typeof product_price_schema>
+export type ProductOffer = z.infer<typeof product_offer_schema>
 export type Product = z.infer<typeof product_schema>
 export type Guide = z.infer<typeof guide_schema>
 export type Link = z.infer<typeof link_schema>

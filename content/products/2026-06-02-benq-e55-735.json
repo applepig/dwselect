@@ -2,20 +2,30 @@
   "id": "2026-06-02-benq-e55-735",
   "status": "published",
   "name": "BenQ E55-735",
-  "price_text": "13999",
-  "price": {
-    "amount": 13999,
-    "currency": "TWD",
-    "unit": "each",
-    "label": null
-  },
+  "english_name": "BenQ E55 735",
   "summary": "BenQ 55\"也低於15k了，而且還有Android TV",
-  "description": "BenQ 55\"也低於15k了，而且還有Android TV",
-  "purchase_url": "https://24h.pchome.com.tw/prod/DPAD0O-1900GHE46?fq=/S/DPAD0O",
-  "image_url": "https://img.pchome.com.tw/cs/items/DPAD0O1900GHE46/000001_1733903546.jpg",
-  "channel_id": "pchome",
-  "category_id": "av",
+  "long_description": "BenQ 55\"也低於15k了，而且還有Android TV",
+  "llm_description": "",
+  "search_aliases": [],
+  "model_numbers": [],
+  "offers": [
+    {
+      "channel_id": "pchome",
+      "url": "https://24h.pchome.com.tw/prod/DPAD0O-1900GHE46?fq=/S/DPAD0O",
+      "price_text": "13999",
+      "price": {
+        "amount": 13999,
+        "currency": "TWD",
+        "unit": "each",
+        "label": null
+      },
+      "checked_at": "2026-06-02T00:00:00+08:00"
+    }
+  ],
+  "image_url": null,
+  "category_id": "av-theater",
   "tag_ids": [
+    "benq",
     "display"
   ],
   "reference_url": null,
@@ -23,5 +33,6 @@
   "updated_at": "2026-06-02T00:00:00+08:00",
   "published_at": "2026-06-02T00:00:00+08:00",
   "unpublished_at": null,
-  "archived_at": null
+  "archived_at": null,
+  "image_file": "2026-06-02-benq-e55-735.jpg"
 }
