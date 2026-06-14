@@ -74,4 +74,4 @@ jobs:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
-          command: pages deploy .output/public --project-name=dwselect
+          command: pages deploy .output/public --project-name=dwselect --branch=master

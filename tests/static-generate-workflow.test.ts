@@ -40,7 +40,7 @@ describe('static generate workflow', () => {
     expect(workflow_source).toContain('deployments: write')
     expect(workflow_source).toContain("if: github.event_name == 'push' && github.ref == 'refs/heads/master'")
     expect(workflow_source).toContain('cloudflare/wrangler-action@v3')
-    expect(workflow_source).toContain('command: pages deploy .output/public --project-name=dwselect')
+    expect(workflow_source).toContain('command: pages deploy .output/public --project-name=dwselect --branch=master')
     expect(workflow_source).toContain('apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}')
     expect(workflow_source).toContain('accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}')
     expect(workflow_source).toContain('gitHubToken: ${{ secrets.GITHUB_TOKEN }}')

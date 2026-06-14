@@ -196,6 +196,39 @@ function isBrokenImage(image: HTMLImageElement | null): boolean {
 }
 
 function onBackClicked() {
-  router.back()
+  if (canReturnToSameOriginPage()) {
+    router.back()
+
+    return
+  }
+
+  router.push('/')
+}
+
+function canReturnToSameOriginPage(): boolean {
+  if (!import.meta.client) {
+    return false
+  }
+
+  if (window.history.length <= 1) {
+    return false
+  }
+
+  const previous_route = window.history.state?.back
+
+  if (typeof previous_route === 'string' && previous_route.startsWith('/') && !previous_route.startsWith('//')) {
+    return true
+  }
+
+  if (document.referrer === '') {
+    return false
+  }
+
+  try {
+    return new URL(document.referrer).origin === window.location.origin
+  }
+  catch {
+    return false
+  }
 }
 </script>
