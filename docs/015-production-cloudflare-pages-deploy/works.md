@@ -23,3 +23,11 @@
 - 新增 `tests/nuxt-smoke.test.ts` regression，先確認 title 與 horizontal overflow guard 會 fail，再修到通過。
 - 更新 `tests/e2e/compact-app.spec.ts`，在 responsive shell E2E 驗證 title，並新增 document/body scroll width 不超過 client width 的 viewport 回歸。
 - 驗證：`pnpm test tests/nuxt-smoke.test.ts` 25 passed；`pnpm test:e2e --project=tablet tests/e2e/compact-app.spec.ts` 17 passed / 3 skipped；`pnpm test` 30 files / 235 tests passed；`pnpm lint` passed；`pnpm typecheck` passed；`pnpm generate` passed；`node scripts/assert-runtime-google-sheet-clean.ts` passed。
+
+## 2026-06-15 — v3 publish PR routing
+
+- 發現目前 `master` 與 Nuxt app history 沒有共同祖先，直接從 feature branch 開 PR 到 `master` 會被 GitHub compare API 拒絕。
+- 依使用者指示，將目前 `origin/master` 舊版站台封存為 `v2-archive` 並 push 到 GitHub。
+- 將本次部署、title、iPad overflow 修正合併進 `v3-dev`，改由 `v3-dev` 開 PR 回 `master`。
+- 驗證：`v3-dev` 上 `pnpm test` 30 files / 235 tests passed、`pnpm lint` passed、`pnpm typecheck` passed、`pnpm generate` passed、`node scripts/assert-runtime-google-sheet-clean.ts` passed、`pnpm test:e2e --project=tablet tests/e2e/compact-app.spec.ts` 17 passed / 3 skipped。
+- 注意：曾把 `pnpm generate` 與 Playwright E2E 並行執行，導致 dev server / build cache 被重寫而出現 search input disabled 與 search result missing；改為序列執行後 E2E 通過，判定為本專案既有 generate/dev-server 並行 gotcha，不是本次 UI 修正回歸。
