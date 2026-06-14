@@ -1,0 +1,12 @@
+{
+  "items": [
+    {
+      "id": "applepig-home",
+      "title": "applepig.idv.tw",
+      "subtitle": "DW 的主站",
+      "url": "https://applepig.idv.tw",
+      "icon": "i-lucide-link",
+      "sort_order": 10
+    }
+  ]
+}

@@ -1,0 +1,468 @@
+{
+  "items": [
+    {
+      "id": "adata",
+      "label": "ADATA",
+      "description": "ADATA 品牌商品",
+      "aliases": [
+        "威剛"
+      ],
+      "nav_visible": true,
+      "sort_order": 10
+    },
+    {
+      "id": "aibo",
+      "label": "aibo",
+      "description": "aibo 品牌商品",
+      "aliases": [],
+      "nav_visible": true,
+      "sort_order": 20
+    },
+    {
+      "id": "aplus",
+      "label": "APlus",
+      "description": "APlus 品牌商品",
+      "aliases": [],
+      "nav_visible": true,
+      "sort_order": 30
+    },
+    {
+      "id": "apple",
+      "label": "Apple",
+      "description": "Apple 品牌商品",
+      "aliases": [
+        "蘋果",
+        "HomePod"
+      ],
+      "nav_visible": true,
+      "sort_order": 40
+    },
+    {
+      "id": "arnest",
+      "label": "Arnest",
+      "description": "Arnest 品牌商品",
+      "aliases": [
+        "アーネスト"
+      ],
+      "nav_visible": true,
+      "sort_order": 50
+    },
+    {
+      "id": "avier",
+      "label": "Avier",
+      "description": "Avier 品牌商品",
+      "aliases": [],
+      "nav_visible": true,
+      "sort_order": 60
+    },
+    {
+      "id": "belkin",
+      "label": "Belkin",
+      "description": "Belkin 品牌商品",
+      "aliases": [],
+      "nav_visible": true,
+      "sort_order": 70
+    },
+    {
+      "id": "benq",
+      "label": "BenQ",
+      "description": "BenQ 品牌商品",
+      "aliases": [
+        "明基"
+      ],
+      "nav_visible": true,
+      "sort_order": 80
+    },
+    {
+      "id": "blueair",
+      "label": "Blueair",
+      "description": "Blueair 品牌商品",
+      "aliases": [],
+      "nav_visible": true,
+      "sort_order": 90
+    },
+    {
+      "id": "bose",
+      "label": "Bose",
+      "description": "Bose 品牌商品",
+      "aliases": [],
+      "nav_visible": true,
+      "sort_order": 100
+    },
+    {
+      "id": "brita",
+      "label": "BRITA",
+      "description": "BRITA 品牌商品",
+      "aliases": [
+        "Brita"
+      ],
+      "nav_visible": true,
+      "sort_order": 110
+    },
+    {
+      "id": "ducky",
+      "label": "Ducky",
+      "description": "Ducky 品牌商品",
+      "aliases": [
+        "創傑"
+      ],
+      "nav_visible": true,
+      "sort_order": 120
+    },
+    {
+      "id": "elac",
+      "label": "ELAC",
+      "description": "ELAC 品牌商品",
+      "aliases": [],
+      "nav_visible": true,
+      "sort_order": 130
+    },
+    {
+      "id": "electrolux",
+      "label": "Electrolux",
+      "description": "Electrolux 品牌商品",
+      "aliases": [
+        "伊萊克斯"
+      ],
+      "nav_visible": true,
+      "sort_order": 140
+    },
+    {
+      "id": "fibbr",
+      "label": "FIBBR",
+      "description": "FIBBR 品牌商品",
+      "aliases": [],
+      "nav_visible": true,
+      "sort_order": 150
+    },
+    {
+      "id": "fisher-paykel",
+      "label": "Fisher & Paykel",
+      "description": "Fisher & Paykel 品牌商品",
+      "aliases": [
+        "Fisher&Paykel"
+      ],
+      "nav_visible": true,
+      "sort_order": 160
+    },
+    {
+      "id": "fuli",
+      "label": "富里",
+      "description": "富里 品牌商品",
+      "aliases": [
+        "富里鄉農會"
+      ],
+      "nav_visible": true,
+      "sort_order": 170
+    },
+    {
+      "id": "hitachi",
+      "label": "Hitachi",
+      "description": "Hitachi 品牌商品",
+      "aliases": [
+        "日立"
+      ],
+      "nav_visible": true,
+      "sort_order": 180
+    },
+    {
+      "id": "ikea",
+      "label": "IKEA",
+      "description": "IKEA 品牌商品",
+      "aliases": [
+        "宜家"
+      ],
+      "nav_visible": true,
+      "sort_order": 190
+    },
+    {
+      "id": "irobot",
+      "label": "iRobot",
+      "description": "iRobot 品牌商品",
+      "aliases": [
+        "Roomba"
+      ],
+      "nav_visible": true,
+      "sort_order": 200
+    },
+    {
+      "id": "iris-ohyama",
+      "label": "IRIS OHYAMA",
+      "description": "IRIS OHYAMA 品牌商品",
+      "aliases": [
+        "Iris",
+        "アイリスオーヤマ"
+      ],
+      "nav_visible": true,
+      "sort_order": 210
+    },
+    {
+      "id": "j5create",
+      "label": "j5create",
+      "description": "j5create 品牌商品",
+      "aliases": [
+        "凱捷"
+      ],
+      "nav_visible": true,
+      "sort_order": 220
+    },
+    {
+      "id": "kao",
+      "label": "Kao",
+      "description": "Kao 品牌商品",
+      "aliases": [
+        "花王"
+      ],
+      "nav_visible": true,
+      "sort_order": 230
+    },
+    {
+      "id": "kioxia",
+      "label": "Kioxia",
+      "description": "Kioxia 品牌商品",
+      "aliases": [
+        "鎧俠"
+      ],
+      "nav_visible": true,
+      "sort_order": 240
+    },
+    {
+      "id": "kohler",
+      "label": "Kohler",
+      "description": "Kohler 品牌商品",
+      "aliases": [
+        "科勒"
+      ],
+      "nav_visible": true,
+      "sort_order": 250
+    },
+    {
+      "id": "kolin",
+      "label": "Kolin",
+      "description": "Kolin 品牌商品",
+      "aliases": [
+        "歌林"
+      ],
+      "nav_visible": true,
+      "sort_order": 260
+    },
+    {
+      "id": "lg",
+      "label": "LG",
+      "description": "LG 品牌商品",
+      "aliases": [],
+      "nav_visible": true,
+      "sort_order": 270
+    },
+    {
+      "id": "lion",
+      "label": "Lion",
+      "description": "Lion 品牌商品",
+      "aliases": [
+        "獅王"
+      ],
+      "nav_visible": true,
+      "sort_order": 280
+    },
+    {
+      "id": "lixil",
+      "label": "LIXIL",
+      "description": "LIXIL 品牌商品",
+      "aliases": [
+        "Lixil"
+      ],
+      "nav_visible": true,
+      "sort_order": 290
+    },
+    {
+      "id": "mitsubishi-electric",
+      "label": "Mitsubishi Electric",
+      "description": "Mitsubishi Electric 品牌商品",
+      "aliases": [
+        "三菱電機",
+        "Mitsubishi"
+      ],
+      "nav_visible": true,
+      "sort_order": 300
+    },
+    {
+      "id": "mitsubishi-heavy-industries",
+      "label": "Mitsubishi Heavy Industries",
+      "description": "Mitsubishi Heavy Industries 品牌商品",
+      "aliases": [
+        "三菱重工"
+      ],
+      "nav_visible": true,
+      "sort_order": 310
+    },
+    {
+      "id": "msi",
+      "label": "MSI",
+      "description": "MSI 品牌商品",
+      "aliases": [
+        "微星"
+      ],
+      "nav_visible": true,
+      "sort_order": 320
+    },
+    {
+      "id": "ohashi",
+      "label": "大橋牌",
+      "description": "大橋牌 品牌商品",
+      "aliases": [
+        "Ohashi"
+      ],
+      "nav_visible": true,
+      "sort_order": 330
+    },
+    {
+      "id": "panasonic",
+      "label": "Panasonic",
+      "description": "Panasonic 品牌商品",
+      "aliases": [
+        "國際牌"
+      ],
+      "nav_visible": true,
+      "sort_order": 340
+    },
+    {
+      "id": "philips",
+      "label": "Philips",
+      "description": "Philips 品牌商品",
+      "aliases": [
+        "飛利浦"
+      ],
+      "nav_visible": true,
+      "sort_order": 350
+    },
+    {
+      "id": "samsung",
+      "label": "Samsung",
+      "description": "Samsung 品牌商品",
+      "aliases": [
+        "三星"
+      ],
+      "nav_visible": true,
+      "sort_order": 360
+    },
+    {
+      "id": "sennheiser",
+      "label": "Sennheiser",
+      "description": "Sennheiser 品牌商品",
+      "aliases": [
+        "森海塞爾"
+      ],
+      "nav_visible": true,
+      "sort_order": 370
+    },
+    {
+      "id": "sharp",
+      "label": "Sharp",
+      "description": "Sharp 品牌商品",
+      "aliases": [
+        "夏普"
+      ],
+      "nav_visible": true,
+      "sort_order": 380
+    },
+    {
+      "id": "synology",
+      "label": "Synology",
+      "description": "Synology 品牌商品",
+      "aliases": [
+        "群暉"
+      ],
+      "nav_visible": true,
+      "sort_order": 390
+    },
+    {
+      "id": "toshiba",
+      "label": "Toshiba",
+      "description": "Toshiba 品牌商品",
+      "aliases": [
+        "東芝"
+      ],
+      "nav_visible": true,
+      "sort_order": 400
+    },
+    {
+      "id": "toto",
+      "label": "TOTO",
+      "description": "TOTO 品牌商品",
+      "aliases": [],
+      "nav_visible": true,
+      "sort_order": 410
+    },
+    {
+      "id": "trusco",
+      "label": "TRUSCO",
+      "description": "TRUSCO 品牌商品",
+      "aliases": [
+        "Trusco"
+      ],
+      "nav_visible": true,
+      "sort_order": 420
+    },
+    {
+      "id": "ubiquiti",
+      "label": "Ubiquiti",
+      "description": "Ubiquiti 品牌商品",
+      "aliases": [
+        "UniFi",
+        "Unifi"
+      ],
+      "nav_visible": true,
+      "sort_order": 430
+    },
+    {
+      "id": "vibo",
+      "label": "Vibo",
+      "description": "Vibo 品牌商品",
+      "aliases": [
+        "威寶"
+      ],
+      "nav_visible": true,
+      "sort_order": 440
+    },
+    {
+      "id": "yamada-seiyu",
+      "label": "山田製油",
+      "description": "山田製油 品牌商品",
+      "aliases": [
+        "Yamada Seiyu"
+      ],
+      "nav_visible": true,
+      "sort_order": 450
+    },
+    {
+      "id": "asahi-ponzu",
+      "label": "旭ポンズ",
+      "description": "旭ポンズ 品牌商品",
+      "aliases": [
+        "Asahi Ponzu"
+      ],
+      "nav_visible": true,
+      "sort_order": 460
+    },
+    {
+      "id": "zojirushi",
+      "label": "Zojirushi",
+      "description": "Zojirushi 品牌商品",
+      "aliases": [
+        "象印"
+      ],
+      "nav_visible": true,
+      "sort_order": 470
+    },
+    {
+      "id": "zyxel",
+      "label": "Zyxel",
+      "description": "Zyxel 品牌商品",
+      "aliases": [
+        "合勤"
+      ],
+      "nav_visible": true,
+      "sort_order": 480
+    }
+  ]
+}

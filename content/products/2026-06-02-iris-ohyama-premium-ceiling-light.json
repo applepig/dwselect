@@ -1,0 +1,38 @@
+{
+  "id": "2026-06-02-iris-ohyama-premium-ceiling-light",
+  "status": "published",
+  "name": "Iris高階吸頂燈",
+  "english_name": "IRIS OHYAMA Premium Ceiling Light",
+  "summary": "這顆是導光板的高階款，水平方向的擴散比較強，可以減少房間角落太暗的問題",
+  "long_description": "這顆是導光板的高階款，水平方向的擴散比較強，可以減少房間角落太暗的問題",
+  "llm_description": "",
+  "search_aliases": [],
+  "model_numbers": [],
+  "offers": [
+    {
+      "channel_id": "amazonjp",
+      "url": "https://www.amazon.co.jp/dp/B09923R2X3",
+      "price_text": "￥20000",
+      "price": {
+        "amount": 20000,
+        "currency": "JPY",
+        "unit": "each",
+        "label": null
+      },
+      "checked_at": "2026-06-02T00:00:00+08:00"
+    }
+  ],
+  "image_url": null,
+  "category_id": "small-appliance",
+  "tag_ids": [
+    "iris-ohyama",
+    "lighting"
+  ],
+  "reference_url": "https://www.facebook.com/applepig/posts/pfbid0qLvB8BELCJiUZrbXYL11uhKJWWUrEqtRK4zxx3JTjX2xjJwj4zK9rWhNvqLMesR3l",
+  "created_at": "2026-06-02T00:00:00+08:00",
+  "updated_at": "2026-06-02T00:00:00+08:00",
+  "published_at": "2026-06-02T00:00:00+08:00",
+  "unpublished_at": null,
+  "archived_at": null,
+  "image_file": "2026-06-02-iris-ohyama-premium-ceiling-light.jpg"
+}

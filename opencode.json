@@ -1,0 +1,9 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "formatter": {
+    "dwselect_lint_file": {
+      "command": ["bash", "scripts/post-edit-hook.sh", "$FILE"],
+      "extensions": [".vue", ".ts", ".js", ".mjs"]
+    }
+  }
+}

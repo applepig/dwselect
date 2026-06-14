@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>DW嚴選 · 重新設計</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700;800;900&family=Noto+Serif+TC:wght@500;600;700;800;900&display=swap" rel="stylesheet" />
+<style>
+  html, body { margin: 0; padding: 0; height: 100%; background: #2b2722; }
+  * { box-sizing: border-box; }
+  /* View Transition — quick page crossfade, the hero does the morph */
+  ::view-transition-group(*) { animation-duration: .44s; animation-timing-function: cubic-bezier(.45,0,.15,1); }
+  ::view-transition-old(root), ::view-transition-new(root) { animation-duration: .28s; }
+  @media (prefers-reduced-motion: reduce) {
+    ::view-transition-group(*) { animation-duration: .01ms !important; }
+  }
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<!-- data (plain JS, sets window.DW) -->
+<script src="frames/dw-data.js"></script>
+
+<!-- components (babel) -->
+<script type="text/babel" src="frames/ios-frame.jsx"></script>
+<script type="text/babel" src="frames/design-canvas.jsx"></script>
+<script type="text/babel" src="frames/dw-shared.jsx"></script>
+<script type="text/babel" src="frames/dw-dir-a.jsx"></script>
+<script type="text/babel" src="frames/dw-dir-b.jsx"></script>
+<script type="text/babel" src="frames/dw-dir-c.jsx"></script>
+
+<script type="text/babel">
+  function App() {
+    const board = { background: 'transparent', boxShadow: 'none' };
+    return (
+      <DesignCanvas>
+        <DCSection id="dirs" title="DW嚴選 · 重新設計"
+          subtitle="三種瀏覽方向 — 深色＋橘、有梗口吻；點任一商品看詳情（View Transition 開展），可搜尋／切換分類">
+          <DCArtboard id="a" label="A · 雜誌精選 Editorial" width={402} height={874} style={board}>
+            <IOSDevice dark><DWDirEditorial /></IOSDevice>
+          </DCArtboard>
+          <DCArtboard id="b" label="B · 標籤探索 Tag Explorer" width={402} height={874} style={board}>
+            <IOSDevice dark><DWDirTags /></IOSDevice>
+          </DCArtboard>
+          <DCArtboard id="c" label="C · 俐落清單 Compact App" width={402} height={874} style={board}>
+            <IOSDevice dark><DWDirCompact /></IOSDevice>
+          </DCArtboard>
+        </DCSection>
+      </DesignCanvas>
+    );
+  }
+  ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>

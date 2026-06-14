@@ -1,0 +1,18 @@
+{
+  "id": "2026-06-02-b18",
+  "status": "published",
+  "title": "B18",
+  "summary": "光華萬事屋，店面現在擺非常多鍵盤，店內沒有擺的東西也可以問",
+  "url": "https://www.facebook.com/B18TW",
+  "icon": "i-lucide-link",
+  "category_ids": [
+    "computer-3c"
+  ],
+  "tag_ids": [],
+  "sort_order": 20,
+  "created_at": "2026-06-02T00:00:00+08:00",
+  "updated_at": "2026-06-02T00:00:00+08:00",
+  "published_at": "2026-06-02T00:00:00+08:00",
+  "unpublished_at": null,
+  "archived_at": null
+}

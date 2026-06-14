@@ -1,0 +1,57 @@
+{
+  "items": [
+    {
+      "id": "pchome",
+      "label": "PChome",
+      "tint": "blue",
+      "host_patterns": [
+        "24h.pchome.com.tw"
+      ],
+      "sort_order": 10
+    },
+    {
+      "id": "momo",
+      "label": "momo",
+      "tint": "pink",
+      "host_patterns": [
+        "www.momoshop.com.tw"
+      ],
+      "sort_order": 20
+    },
+    {
+      "id": "amazonjp",
+      "label": "Amazon JP",
+      "tint": "amber",
+      "host_patterns": [
+        "www.amazon.co.jp",
+        "amzn.asia"
+      ],
+      "sort_order": 30
+    },
+    {
+      "id": "amazonus",
+      "label": "Amazon US",
+      "tint": "amber",
+      "host_patterns": [
+        "www.amazon.com"
+      ],
+      "sort_order": 40
+    },
+    {
+      "id": "costco",
+      "label": "Costco",
+      "tint": "indigo",
+      "host_patterns": [
+        "www.costco.com.tw"
+      ],
+      "sort_order": 50
+    },
+    {
+      "id": "other",
+      "label": "其他通路",
+      "tint": "neutral",
+      "host_patterns": [],
+      "sort_order": 999
+    }
+  ]
+}

@@ -1,0 +1,53 @@
+{
+  "items": [
+    {
+      "id": "computer-3c",
+      "label": "電腦3C",
+      "short_label": "電腦3C",
+      "nav_visible": true,
+      "sort_order": 10
+    },
+    {
+      "id": "network",
+      "label": "網路通訊",
+      "short_label": "網路通訊",
+      "nav_visible": true,
+      "sort_order": 20
+    },
+    {
+      "id": "av-theater",
+      "label": "影音劇院",
+      "short_label": "影音劇院",
+      "nav_visible": true,
+      "sort_order": 30
+    },
+    {
+      "id": "small-appliance",
+      "label": "小家電",
+      "short_label": "小家電",
+      "nav_visible": true,
+      "sort_order": 40
+    },
+    {
+      "id": "major-appliance",
+      "label": "大家電",
+      "short_label": "大家電",
+      "nav_visible": true,
+      "sort_order": 50
+    },
+    {
+      "id": "household",
+      "label": "生活百貨",
+      "short_label": "生活百貨",
+      "nav_visible": true,
+      "sort_order": 60
+    },
+    {
+      "id": "other",
+      "label": "其他",
+      "short_label": "其他",
+      "nav_visible": true,
+      "sort_order": 999
+    }
+  ]
+}

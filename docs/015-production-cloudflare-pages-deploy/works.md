@@ -1,0 +1,41 @@
+# Works
+
+## 2026-06-14 — Repo deployment workflow implementation
+
+- 更新 `.github/workflows/static-generate.yml`，讓 PR 只跑品質驗證，`master` push 通過品質閘門後才用 Wrangler direct upload 部署 `.output/public` 到 Cloudflare Pages project `dwselect`。
+- 新增 `tests/static-generate-workflow.test.ts`，覆蓋 branch trigger、品質閘門順序、Cloudflare Pages deploy 條件與 secrets wiring。
+- 更新 `README.md`，補充 production deploy、required GitHub secrets、build output、正式網址與 custom domain 首次設定注意事項。
+
+## 2026-06-15 — Cloudflare production setup and verification
+
+- 以 Wrangler 建立 Cloudflare Pages project `dwselect`，production branch 設為 `master`。
+- 透過一次性 bootstrap token 建立 CI deploy token `dwselect-github-actions-pages-deploy`，並寫入 GitHub secrets `CLOUDFLARE_ACCOUNT_ID` 與 `CLOUDFLARE_API_TOKEN`；操作期間未輸出 token value。
+- 透過 Cloudflare API 建立 Pages custom domain `dwselect.applepig.net`，並在 `applepig.net` zone 新增 proxied CNAME：`dwselect.applepig.net -> dwselect.pages.dev`。
+- 完成首次 Wrangler deployment：`.output/public` 部署到 `dwselect` 的 `master` branch，Cloudflare 回傳 deployment URL `https://c381de59.dwselect.pages.dev`。
+- 驗證 `https://dwselect.pages.dev/` 與 `https://dwselect.applepig.net/` 皆可用 HTTPS 載入首頁。
+- 用後撤銷原始 `CF_BOOTSTRAP_TOKEN`，避免 bootstrap token 長期保留。
+- Coordinator 端驗證：`pnpm test` 30 files / 233 tests passed、`pnpm lint` passed、`pnpm typecheck` passed、`pnpm generate` passed、`node scripts/assert-runtime-google-sheet-clean.ts` passed。
+
+## 2026-06-15 — Auto publish validation fixes
+
+- 修正首頁缺少 document title：在 `app/app.vue` 設定全站 title 為 `在找什麼嗎？ DW Select`。
+- 修正 iPad 類 viewport 可短暫左右滑動再彈回的橫向 overflow：在 root / body / `#__nuxt` 與 `.compact-app-shell` 限制 `max-width: 100%` 與 `overflow-x: clip`。
+- 新增 `tests/nuxt-smoke.test.ts` regression，先確認 title 與 horizontal overflow guard 會 fail，再修到通過。
+- 更新 `tests/e2e/compact-app.spec.ts`，在 responsive shell E2E 驗證 title，並新增 document/body scroll width 不超過 client width 的 viewport 回歸。
+- 驗證：`pnpm test tests/nuxt-smoke.test.ts` 25 passed；`pnpm test:e2e --project=tablet tests/e2e/compact-app.spec.ts` 17 passed / 3 skipped；`pnpm test` 30 files / 235 tests passed；`pnpm lint` passed；`pnpm typecheck` passed；`pnpm generate` passed；`node scripts/assert-runtime-google-sheet-clean.ts` passed。
+
+## 2026-06-15 — v3 publish PR routing
+
+- 發現目前 `master` 與 Nuxt app history 沒有共同祖先，直接從 feature branch 開 PR 到 `master` 會被 GitHub compare API 拒絕。
+- 依使用者指示，將目前 `origin/master` 舊版站台封存為 `v2-archive` 並 push 到 GitHub。
+- 將本次部署、title、iPad overflow 修正合併進 `v3-dev`，改由 `v3-dev` 開 PR 回 `master`。
+- 驗證：`v3-dev` 上 `pnpm test` 30 files / 235 tests passed、`pnpm lint` passed、`pnpm typecheck` passed、`pnpm generate` passed、`node scripts/assert-runtime-google-sheet-clean.ts` passed、`pnpm test:e2e --project=tablet tests/e2e/compact-app.spec.ts` 17 passed / 3 skipped。
+- 注意：曾把 `pnpm generate` 與 Playwright E2E 並行執行，導致 dev server / build cache 被重寫而出現 search input disabled 與 search result missing；改為序列執行後 E2E 通過，判定為本專案既有 generate/dev-server 並行 gotcha，不是本次 UI 修正回歸。
+
+## 2026-06-15 — PR #2 Codex review follow-up
+
+- 修正 Cloudflare Pages Wrangler direct upload command，明確加上 `--branch=master`，避免 production branch 歸類不明確。
+- 修正商品詳情返回按鈕：只有 client 端、history 長度足夠且 Vue Router `window.history.state.back` 是站內路徑，或 `document.referrer` 與目前頁面同源時才使用 `router.back()`；直連、外站 referrer、SSR fallback 皆導向首頁 `/`。
+- 新增／更新 regression tests：`tests/static-generate-workflow.test.ts` 覆蓋 Wrangler `--branch=master`，`tests/product-detail-back-navigation.test.ts` 覆蓋安全返回 fallback source contract。
+- 驗證：`pnpm test tests/static-generate-workflow.test.ts tests/product-detail-back-navigation.test.ts` 2 files / 4 tests passed、`pnpm lint` passed、`pnpm test` 31 files / 236 tests passed、`pnpm typecheck` passed、`pnpm test:e2e --project=desktop tests/e2e/compact-app.spec.ts -g "renders direct product detail routes"` 1 passed。
+- Agent browser 驗證：透過 `https://dwselect.toybox.local/` 開啟直連商品詳情頁，點擊「返回」會 fallback 到首頁；再由首頁站內進入同一商品詳情頁，`history.state.back` 為 `/`，點擊「返回」會回首頁，頁面無 Vite error overlay。

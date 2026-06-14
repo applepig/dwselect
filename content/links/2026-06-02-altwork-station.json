@@ -1,0 +1,20 @@
+{
+  "id": "2026-06-02-altwork-station",
+  "status": "published",
+  "title": "Altwork Station",
+  "summary": "相信每個人都有「躺著用電腦」的夢想，這個看起來很棒，對吧？  （對不起我不知道怎麼買、也不知道買回來要放哪裡",
+  "url": "https://altwork.com/",
+  "icon": "i-lucide-link",
+  "category_ids": [
+    "computer-3c"
+  ],
+  "tag_ids": [
+    "ergonomic"
+  ],
+  "sort_order": 30,
+  "created_at": "2026-06-02T00:00:00+08:00",
+  "updated_at": "2026-06-02T00:00:00+08:00",
+  "published_at": "2026-06-02T00:00:00+08:00",
+  "unpublished_at": null,
+  "archived_at": null
+}
