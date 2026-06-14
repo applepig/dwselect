@@ -14,14 +14,11 @@
       </div>
     </div>
 
-    <div
+    <UEmpty
       v-if="compact_view.links.length === 0"
-      class="compact-empty-state"
-    >
-      <p class="empty-title">
-        目前沒有已發布連結
-      </p>
-    </div>
+      icon="i-lucide-link"
+      title="目前沒有已發布連結"
+    />
 
     <LinkPanel
       v-else

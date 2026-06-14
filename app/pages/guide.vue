@@ -14,14 +14,11 @@
       </div>
     </div>
 
-    <div
+    <UEmpty
       v-if="compact_view.guide.empty_reason"
-      class="compact-empty-state"
-    >
-      <p class="empty-title">
-        目前沒有已發布指南
-      </p>
-    </div>
+      icon="i-lucide-book-open"
+      title="目前沒有已發布指南"
+    />
 
     <ResourceList
       v-else

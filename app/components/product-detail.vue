@@ -4,17 +4,14 @@
     class="product-detail-page"
     :data-product-id="detail.id"
   >
-    <button
-      type="button"
-      class="detail-back-button"
+    <UButton
+      class="detail-back"
+      icon="i-lucide-arrow-left"
+      color="neutral"
+      variant="ghost"
       aria-label="返回"
       @click="onBackClicked"
-    >
-      <UIcon
-        name="i-lucide-arrow-left"
-        aria-hidden="true"
-      />
-    </button>
+    />
 
     <div
       class="detail-hero-tile"
@@ -59,14 +56,13 @@
         {{ detail.price_label }}
       </p>
 
-      <section class="detail-callout" aria-label="DW 怎麼說">
-        <p class="detail-callout-label">
-          DW 怎麼說
-        </p>
-        <p class="detail-callout-text">
-          {{ detail.dw_says }}
-        </p>
-      </section>
+      <UAlert
+        class="detail-dw-says"
+        color="primary"
+        variant="subtle"
+        title="DW 怎麼說"
+        :description="detail.dw_says"
+      />
 
       <p
         v-if="detail.description"

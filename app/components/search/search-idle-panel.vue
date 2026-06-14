@@ -8,15 +8,17 @@
         搜尋紀錄
       </p>
       <div class="tag-chip-list">
-        <button
+        <UButton
           v-for="history_item in history_items"
           :key="`search-history-${history_item}`"
           type="button"
           class="tag-chip"
+          color="neutral"
+          variant="subtle"
           @click="$emit('history-clicked', history_item)"
         >
           {{ history_item }}
-        </button>
+        </UButton>
       </div>
     </div>
 
@@ -31,16 +33,20 @@
           {{ section.title }}
         </p>
         <div class="tag-chip-list">
-          <NuxtLink
+          <UButton
             v-for="tag in section.tags"
             :key="`search-${section.id}-${tag.label}`"
             :to="{ path: '/search', query: { q: tag.label } }"
             class="tag-chip"
+            color="neutral"
+            variant="subtle"
             @click="$emit('tag-clicked', tag.label)"
           >
             <span>{{ tag.label }}</span>
-            <span class="tag-count">{{ tag.count }}</span>
-          </NuxtLink>
+            <template #trailing>
+              <span class="tag-count">{{ tag.count }}</span>
+            </template>
+          </UButton>
         </div>
       </div>
     </template>

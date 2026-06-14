@@ -18,28 +18,28 @@
       class="category-chip-list"
       aria-label="商品分類"
     >
-      <button
+      <UButton
         v-for="chip in compact_view.home.category_chips"
         :key="chip.id"
         type="button"
         class="category-chip"
-        :class="{ 'is-active': chip.active }"
+        :color="chip.active ? 'primary' : 'neutral'"
+        :variant="chip.active ? 'solid' : 'subtle'"
         :aria-pressed="chip.active"
         @click="onCategoryChipClicked(chip.id)"
       >
         <span>{{ chip.label }}</span>
-        <span class="chip-count">{{ chip.count }}</span>
-      </button>
+        <template #trailing>
+          <span class="chip-count">{{ chip.count }}</span>
+        </template>
+      </UButton>
     </div>
 
-    <div
+    <UEmpty
       v-if="compact_view.home.empty_reason"
-      class="compact-empty-state"
-    >
-      <p class="empty-title">
-        目前沒有已上架商品
-      </p>
-    </div>
+      icon="i-lucide-package-open"
+      title="目前沒有已上架商品"
+    />
 
     <div
       v-else

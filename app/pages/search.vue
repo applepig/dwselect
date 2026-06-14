@@ -41,23 +41,17 @@
       @suggestion-clicked="onSuggestionClicked"
     />
 
-    <div
+    <UEmpty
       v-else-if="search_empty_reason === 'no-results'"
-      class="compact-empty-state"
-    >
-      <p class="empty-title">
-        沒這個坑，去許願吧
-      </p>
-    </div>
+      icon="i-lucide-search-x"
+      title="沒這個坑，去許願吧"
+    />
 
-    <div
+    <UEmpty
       v-else-if="search_mode === 'searching' && is_search_loading"
-      class="compact-empty-state"
-    >
-      <p class="empty-title">
-        搜尋中
-      </p>
-    </div>
+      icon="i-lucide-loader-circle"
+      title="搜尋中"
+    />
 
     <div
       v-else-if="search_mode === 'searching'"

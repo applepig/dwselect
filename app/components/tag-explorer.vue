@@ -5,28 +5,33 @@
   >
     <div class="tag-toolbar">
       <div class="tag-chip-list">
-        <button
+        <UButton
           v-for="tag in tags"
           :key="tag.label"
           type="button"
           class="tag-chip"
-          :class="{ 'is-active': tag.active }"
+          :color="tag.active ? 'primary' : 'neutral'"
+          :variant="tag.active ? 'solid' : 'subtle'"
           :aria-pressed="tag.active"
           @click="emit('toggleTag', tag.label)"
         >
           <span>{{ tag.label }}</span>
-          <span class="tag-count">{{ tag.count }}</span>
-        </button>
+          <template #trailing>
+            <span class="tag-count">{{ tag.count }}</span>
+          </template>
+        </UButton>
       </div>
 
-      <button
+      <UButton
         v-if="can_clear"
         type="button"
         class="clear-tags-button"
+        color="neutral"
+        variant="ghost"
         @click="emit('clearTags')"
       >
         清除
-      </button>
+      </UButton>
     </div>
 
     <p

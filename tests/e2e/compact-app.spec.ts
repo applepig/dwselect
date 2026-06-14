@@ -206,7 +206,7 @@ test('renders direct product detail routes and unknown product not-found states'
 test('restores category and search state from query strings', async ({ page }) => {
   await page.goto('/?category=av-theater', { waitUntil: 'domcontentloaded' })
   await expect(page.locator('vite-error-overlay')).toHaveCount(0)
-  await expect(page.locator('.category-chip.is-active')).toContainText('影音劇院')
+  await expect(page.getByRole('button', { name: /影音劇院/ })).toHaveAttribute('aria-pressed', 'true')
 
   await page.goto('/guide?tags=影音劇院', { waitUntil: 'domcontentloaded' })
   await expect(page.locator('vite-error-overlay')).toHaveCount(0)
@@ -246,8 +246,8 @@ test('separates search typing, autocomplete and submitted query state', async ({
   await expect(page.locator('vite-error-overlay')).toHaveCount(0)
   await expect(page).toHaveURL('/search')
   await expect(page.locator('.search-result-section')).toHaveCount(0)
-  const popular_tag_section = page.locator('.search-popular-section[data-section-id="tags"]')
-  const popular_brand_section = page.locator('.search-popular-section[data-section-id="brands"]')
+  const popular_tag_section = page.locator('.search-popular-panel[data-section-id="tags"]')
+  const popular_brand_section = page.locator('.search-popular-panel[data-section-id="brands"]')
   await expect(popular_tag_section.getByText('熱門標籤')).toBeVisible()
   await expect(popular_brand_section.getByText('熱門品牌')).toBeVisible()
   const popular_tag_count = await popular_tag_section.locator('.tag-chip').count()
@@ -256,7 +256,7 @@ test('separates search typing, autocomplete and submitted query state', async ({
   expect(popular_brand_count).toBeGreaterThan(0)
   expect(popular_tag_count).toBeLessThanOrEqual(10)
   expect(popular_brand_count).toBeLessThanOrEqual(10)
-  const popular_counts = await page.locator('.search-popular-section .tag-count').allTextContents()
+  const popular_counts = await page.locator('.search-popular-panel .tag-count').allTextContents()
   expect(popular_counts.every((count) => Number(count) > 3)).toBe(true)
   await expect(popular_brand_section.getByRole('link', { name: /Panasonic 6/ })).toBeVisible()
 
@@ -320,14 +320,14 @@ test('defers search input query updates until IME composition ends', async ({ pa
 
   const search_input = page.getByPlaceholder('在找什麼嗎？™')
   await expect(search_input).toBeEnabled()
-  await expect(page.locator('.search-popular-panel')).toBeVisible()
+  await expect(page.locator('.search-popular-panel[data-section-id="tags"]')).toBeVisible()
 
   await search_input.dispatchEvent('compositionstart')
   await search_input.fill('鍵')
 
   await page.waitForTimeout(100)
   await expect(page.locator('.search-suggestion-panel')).toHaveCount(0)
-  await expect(page.locator('.search-popular-panel')).toBeVisible()
+  await expect(page.locator('.search-popular-panel[data-section-id="tags"]')).toBeVisible()
 
   await search_input.fill('鍵盤')
   await search_input.dispatchEvent('compositionend')
@@ -345,7 +345,7 @@ test('keeps search usable when search history storage contains corrupted JSON', 
   await expect(page.locator('vite-error-overlay')).toHaveCount(0)
   await expect(page).toHaveURL('/search')
 
-  await expect(page.locator('.search-popular-panel')).toBeVisible()
+  await expect(page.locator('.search-popular-panel[data-section-id="tags"]')).toBeVisible()
 
   const search_input = page.getByPlaceholder('在找什麼嗎？™')
   await expect(search_input).toBeEnabled()

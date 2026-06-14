@@ -1,48 +1,52 @@
 <template>
-  <div class="search-input-shell">
-    <UIcon
-      name="i-lucide-search"
-      class="search-input-icon"
-      aria-hidden="true"
-    />
-    <input
-      ref="search_input"
-      :value="query"
-      class="search-input"
-      type="text"
-      placeholder="在找什麼嗎？™"
-      autocomplete="off"
-      :disabled="!is_search_input_ready"
-      @input="syncPendingSearchInputValue"
-      @compositionstart="startPendingSearchComposition"
-      @compositionend="endPendingSearchComposition"
-      @keydown.enter="submitPendingSearchFromEvent"
-    >
-    <div class="search-input-actions">
-      <UButton
-        v-if="has_query"
-        type="button"
-        icon="i-lucide-x"
-        color="neutral"
-        variant="ghost"
-        size="sm"
-        aria-label="清除搜尋"
-        @click="clearPendingSearch"
-      />
-      <UButton
-        type="button"
-        icon="i-lucide-arrow-right"
-        color="primary"
-        variant="solid"
-        size="sm"
-        aria-label="送出搜尋"
-        @click="submitPendingSearch()"
-      />
-    </div>
-  </div>
+  <UInput
+    ref="search_input"
+    :model-value="query"
+    type="text"
+    icon="i-lucide-search"
+    placeholder="在找什麼嗎？™"
+    size="lg"
+    autocomplete="off"
+    autocapitalize="off"
+    autocorrect="off"
+    spellcheck="false"
+    enterkeyhint="search"
+    :disabled="!is_search_input_ready"
+    class="search-input"
+    @update:model-value="syncPendingSearchInputValue"
+    @compositionstart="startPendingSearchComposition"
+    @compositionend="endPendingSearchComposition"
+    @keydown.enter="submitPendingSearchFromEvent"
+  >
+    <template #trailing>
+      <div class="search-input-actions">
+        <UButton
+          v-if="has_query"
+          type="button"
+          icon="i-lucide-x"
+          color="neutral"
+          variant="ghost"
+          size="sm"
+          aria-label="清除搜尋"
+          @click="clearPendingSearch"
+        />
+        <UButton
+          type="button"
+          icon="i-lucide-arrow-right"
+          color="primary"
+          variant="solid"
+          size="sm"
+          aria-label="送出搜尋"
+          @click="submitPendingSearch()"
+        />
+      </div>
+    </template>
+  </UInput>
 </template>
 
 <script setup lang="ts">
+import { computed, onMounted, ref } from 'vue'
+
 import {
   createSearchInputCompositionState,
   endSearchInputComposition,
@@ -58,13 +62,11 @@ const emit = defineEmits<{
   submit: [query: string]
   clear: []
 }>()
-const search_input = ref<HTMLInputElement | null>(null)
 const is_search_input_ready = ref(false)
 const composition_state = createSearchInputCompositionState()
 const has_query = computed(() => props.query.trim() !== '')
 
 onMounted(() => {
-  syncPendingSearchInputValue()
   is_search_input_ready.value = true
 })
 
@@ -98,11 +100,7 @@ function endPendingSearchComposition(event: CompositionEvent) {
   ))
 }
 
-function syncPendingSearchInputValue(event?: Event) {
-  const input_value = event === undefined
-    ? search_input.value?.value ?? ''
-    : getInputEventValue(event)
-
+function syncPendingSearchInputValue(input_value: string) {
   emitSearchInputQueryUpdate(getSearchInputQueryUpdate(composition_state, input_value, props.query))
 }
 

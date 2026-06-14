@@ -83,7 +83,7 @@ describe('Nuxt SSG baseline', () => {
     expect(page_source).toContain('client_search_results')
     expect(page_source).toContain('search_result_sections')
     expect(page_source).toContain('router.push')
-    expect(input_source).toContain('<input')
+    expect(input_source).toContain('<UInput')
     expect(input_source).toContain('@keydown.enter="submitPendingSearchFromEvent"')
     expect(input_source).toContain('event.isComposing')
     expect(input_source).toContain('event.preventDefault()')
