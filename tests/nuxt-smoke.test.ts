@@ -200,6 +200,23 @@ describe('Nuxt SSG baseline', () => {
     expect(app_source).toContain('<NuxtPage />')
   })
 
+  it('should set the production document title from the app shell', () => {
+    const app_source = readFileSync(new URL('../app/app.vue', import.meta.url), 'utf8')
+
+    expect(app_source).toContain('useHead(')
+    expect(app_source).toContain("title: '在找什麼嗎？ DW Select'")
+  })
+
+  it('should prevent horizontal rubber-band overflow on tablet viewports', () => {
+    const reset_css = readFileSync(new URL('../app/assets/styles/reset.css', import.meta.url), 'utf8')
+    const catalog_css = readFileSync(new URL('../app/assets/styles/catalog.css', import.meta.url), 'utf8')
+
+    expect(reset_css).toContain('overflow-x: clip')
+    expect(catalog_css).toContain('.compact-app-shell')
+    expect(catalog_css).toContain('max-width: 100%')
+    expect(catalog_css).toContain('overflow-x: clip')
+  })
+
   it('should split compact app shell into navigation, theme, card, tag and link components', () => {
     const layout_source = readFileSync(new URL('../app/layouts/default.vue', import.meta.url), 'utf8')
     const page_sources = [

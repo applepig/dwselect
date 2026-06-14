@@ -18,6 +18,7 @@ test('renders the compact app shell and responsive navigation', async ({ page },
   await page.goto('/', { waitUntil: 'domcontentloaded' })
   await expect(page.locator('vite-error-overlay')).toHaveCount(0)
 
+  await expect(page).toHaveTitle('在找什麼嗎？ DW Select')
   await expect(page.getByRole('heading', { name: 'DW嚴選' })).toBeVisible()
 
   if (test_info.project.name === 'phone') {
@@ -37,6 +38,26 @@ test('renders the compact app shell and responsive navigation', async ({ page },
     await expect(page.locator('.compact-app-bottom-tabs')).toBeHidden()
     await expect(page.locator('.compact-app-rail')).toBeHidden()
   }
+})
+
+test('does not expose horizontal document overflow across responsive viewports', async ({ page }) => {
+  await page.goto('/', { waitUntil: 'domcontentloaded' })
+  await expect(page.locator('vite-error-overlay')).toHaveCount(0)
+
+  const overflow_metrics = await page.evaluate(() => {
+    const document_element = document.documentElement
+    const body = document.body
+
+    return {
+      document_client_width: document_element.clientWidth,
+      document_scroll_width: document_element.scrollWidth,
+      body_client_width: body.clientWidth,
+      body_scroll_width: body.scrollWidth,
+    }
+  })
+
+  expect(overflow_metrics.document_scroll_width).toBeLessThanOrEqual(overflow_metrics.document_client_width)
+  expect(overflow_metrics.body_scroll_width).toBeLessThanOrEqual(overflow_metrics.body_client_width)
 })
 
 test('switches tabs without navigation reload and exposes search and link contracts', async ({ page }, test_info) => {

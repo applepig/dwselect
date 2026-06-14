@@ -61,3 +61,16 @@ pnpm generate
 ```bash
 node scripts/assert-runtime-google-sheet-clean.ts
 ```
+
+## Production deploy / Cloudflare Pages
+
+正式站部署由 GitHub Actions direct upload 到 Cloudflare Pages。push 到 `master` 會先執行 `pnpm test`、`pnpm lint`、`pnpm typecheck`、`pnpm generate` 與 runtime Google Sheets 檢查，全部通過後才部署；pull request 只跑驗證，不會部署。
+
+- Cloudflare Pages project：`dwselect`
+- Build output：`.output/public`
+- 正式網址：`https://dwselect.applepig.net/`
+- Required GitHub secrets：`CLOUDFLARE_ACCOUNT_ID`、`CLOUDFLARE_API_TOKEN`
+
+首次外部設定時，需要在 Cloudflare Pages 設定 custom domain `dwselect.applepig.net`。若 `applepig.net` 不在同一個 Cloudflare 帳號的 DNS，請在該 DNS zone 新增 CNAME，指向 `dwselect.pages.dev`。
+
+不要把 Cloudflare Account ID、API token 或其他 token value 寫進 repo；token 只應存放在 GitHub Actions secrets 或本機未提交的環境設定中。

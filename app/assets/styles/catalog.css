@@ -1,7 +1,10 @@
 .compact-app-shell {
   --nav-rail-width: 96px;
   --nav-sidebar-width: 232px;
+  width: 100%;
+  max-width: 100%;
   min-height: 100vh;
+  overflow-x: clip;
   background:
     linear-gradient(135deg, color-mix(in srgb, var(--dw-amber) 18%, transparent), transparent 34%),
     var(--dw-bg);
