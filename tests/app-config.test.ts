@@ -29,3 +29,22 @@ describe('Nuxt UI app.config theme baseline', () => {
     expect(variables_css).toContain('--dw-accent: #ff8a3d')
   })
 })
+
+describe('Nuxt app head tracking baseline', () => {
+  const nuxt_config_source = readFileSync(
+    new URL('../nuxt.config.ts', import.meta.url),
+    'utf8',
+  )
+
+  it('should install the Google Tag Manager head script with the approved container ID', () => {
+    expect(nuxt_config_source).toContain('googletagmanager.com/gtm.js')
+    expect(nuxt_config_source).toContain('GTM-KTZKC8CH')
+    expect(nuxt_config_source).toMatch(/w\[l\]\.push\(\{\s*'gtm.start':\s*new Date\(\)\.getTime\(\),\s*event:\s*'gtm.js'/)
+  })
+
+  it('should install the Google Tag Manager noscript fallback at the start of body', () => {
+    expect(nuxt_config_source).toContain('noscript:')
+    expect(nuxt_config_source).toContain('googletagmanager.com/ns.html?id=GTM-KTZKC8CH')
+    expect(nuxt_config_source).toContain("tagPosition: 'bodyOpen'")
+  })
+})
