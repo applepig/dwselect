@@ -84,7 +84,34 @@ import { useSearchPage } from '../composables/use-search-page'
 import { getCompactAppStateFromRoute } from '../utils/published-products/compact-app'
 import { getSearchResultSections } from '../utils/published-products/resource-rows'
 import { getPopularSearchTagGroups } from '../utils/published-products/tags'
+import { getCanonicalUrl, SITE_NAME, SITE_OG_IMAGE } from '../utils/seo-metadata'
 import type { SearchSuggestion } from '../utils/search/search-index'
+
+const SEARCH_DESCRIPTION = '搜尋 DW嚴選的商品、指南與連結，快速找到值得買、值得看、值得收藏的內容。'
+const search_canonical_url = getCanonicalUrl('/search')
+
+useHead({
+  link: [
+    {
+      key: 'canonical',
+      rel: 'canonical',
+      href: search_canonical_url,
+    },
+  ],
+})
+
+useSeoMeta({
+  title: `搜尋｜${SITE_NAME}`,
+  description: SEARCH_DESCRIPTION,
+  ogTitle: `搜尋｜${SITE_NAME}`,
+  ogDescription: SEARCH_DESCRIPTION,
+  ogUrl: search_canonical_url,
+  ogImage: SITE_OG_IMAGE,
+  twitterCard: 'summary_large_image',
+  twitterTitle: `搜尋｜${SITE_NAME}`,
+  twitterDescription: SEARCH_DESCRIPTION,
+  twitterImage: SITE_OG_IMAGE,
+})
 
 const route = useRoute()
 const router = useRouter()
