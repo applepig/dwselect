@@ -2,7 +2,9 @@
 
 ## 目標
 
-降低 DW嚴選的 `pnpm generate` build 成本與公開站 client 端負載，重點是**收斂成單一 content 存取層**並移除「靜態站不該有」的 runtime 重量（in-browser SQLite、build 時外部字型 fetch、未優化圖片），並讓 CI build 可重用 cache。目前同一份 `content/*.json` 存在兩種讀法（build 端輕量 fs+zod 的 `content-reader.ts`、runtime 端重量 Nuxt Content SQLite），本 sprint 讓 runtime 也走輕量靜態路徑、收掉重複引擎。內容 SSOT 仍是 `content/` 下的 JSON 與 taxonomy；本 sprint 不改內容資料 schema 與資料內容。
+降低 DW嚴選的 `pnpm generate` build 成本與公開站 client 端負載，重點是**收斂成單一輕量 content 存取層並移除 Nuxt Content**。經產品方向確認：DW嚴選內容固定由維護者／agent 直接編輯 `content/*.json`，不需要視覺化 CMS（Nuxt Studio），且優先 runtime 最輕。因此本 sprint 移除 `@nuxt/content` 與 `better-sqlite3`，讓既有的 `scripts/content-reader.ts`（純 fs + zod）成為唯一 content 來源，runtime 改讀其 build-time 產出的靜態 catalog。這同時消除「靜態站不該有」的 in-browser SQLite、build 時外部字型 fetch 與未優化圖片，並讓 CI build 可重用 cache。內容 SSOT 仍是 `content/` 下的 JSON 與 taxonomy；本 sprint 不改內容資料 schema 與資料內容。
+
+> 已記錄取捨：移除 Content 後，sitemap / rss / llms.txt 等 discovery plumbing 需自行維護（016 的 `build-public-discovery.ts` 已實作），且失去 Nuxt Studio 視覺化 Git 編輯與 Content 的 query 語法糖、HMR。此為換取最輕 runtime（去除 ~1.7MB client SQLite WASM）與單一 content 路徑的明確決定；若未來需要視覺化 CMS 或 markdown 長文，再評估重新導入 Content。
 
 ## 非目標
 
@@ -41,6 +43,7 @@
 
 - [ ] 公開站 client bundle 不再包含 SQLite WASM / worker，`.output/public/_nuxt/` 無 `sqlite3*.wasm`；`.output/public/__nuxt_content/` 不再作為 client runtime 查詢來源。
 - [ ] List / detail 頁面的 runtime 資料來源改為既有靜態 `public/api/content.json`（或等價 build-time 靜態 JSON），不在 client-reachable 程式碼呼叫 Nuxt Content 的 `queryCollection`。
+- [ ] 完全移除 `@nuxt/content` module、`better-sqlite3` 依賴與 `content.config.ts`；`scripts/content-reader.ts` 為唯一 content 存取層；repo 內無殘留 `queryCollection` import 與 `__nuxt_content` 產物。
 - [ ] 商品 detail 頁的 prerender payload 不再內嵌全部 catalog；單頁 `_payload.json` 顯著小於現況 83KB，且不隨商品總數線性增長。
 - [ ] 字型改為 deterministic、build 時零外部 fetch：採系統 CJK stack（不 self-host CJK webfont），拉丁顯示字（Inter）若保留則以 self-host 子集提供；generate log 不再出現 font provider 連線重試。
 - [ ] `.github/workflows/static-generate.yml` 新增 Nuxt build cache（`node_modules/.cache/nuxt` 等）的 `actions/cache` 步驟，cache key 對應 lockfile 與相關 source。
@@ -57,7 +60,8 @@
 - `app/assets/styles/variables.css` — `font-family` 宣告；字型策略調整點。
 - `.github/workflows/static-generate.yml` — 新增 build cache 步驟。
 - `scripts/localize-content-images.ts`、`content/products/images/`、`nuxt.config.ts`（`nitro.publicAssets`）— 圖片優化管線與輸出。
-- `package.json` — 可能新增 image 優化 / 字型相關 scripts 或依賴。
+- `package.json` — 移除 `@nuxt/content`、`better-sqlite3`；可能新增 image 優化 / 字型相關 scripts 或依賴。
+- `content/AGENTS.md`、`docs/CONTENT.md` — authoring flow 與 generated artifact 關係文件；移除 Content 後需同步更新（不再有 `__nuxt_content` / SQLite，驗證改以 zod test 為準），保持 codex/claude code 協作 authoring 的指引正確。
 
 ## 介面／資料結構
 
@@ -75,6 +79,7 @@
 - Case 4：CJK 改系統字後，未安裝對應字型的環境 fallback。處理：font stack 提供多層 fallback（`PingFang TC` / `Microsoft JhengHei` / `Noto Sans TC` / `sans-serif`）；視覺以常見繁中裝置為準人工確認。
 - Case 5：圖片優化改變檔名 / 路徑造成既有引用 404。處理：保持輸出 URL 契約或同步更新引用；以 generate 後人工開頁與測試覆蓋。
 - Case 6：離線 build。處理：字型與圖片全部 build-time 本地處理，不得依賴外部 provider，offline 仍能產出完整輸出。
+- Case 7：移除 Content 後 authoring 驗證被削弱。處理：`content/AGENTS.md` 的 authoring flow 以 `pnpm test` 作為內容驗證關卡，移除 `content.config.ts` 的 collection 驗證後，test suite 必須保留「逐一 zod 驗證所有 `content/*.json`」的覆蓋（可由 `content-reader` 載入 + parse 斷言），確保非法內容仍在 PR 前被擋下。
 
 ## ADR（Architecture Decision Record）
 
@@ -84,11 +89,12 @@
 - 原因：公開站是 62 筆量級的靜態目錄，client 端不需要 SQL 查詢引擎；改讀靜態 JSON 可同時移除 ~1.7MB SQLite WASM + worker + sql_dump，並切斷每頁 payload 內嵌全 catalog 的 O(N²)。016 已產出該靜態檔，重用成本低。
 - 替代方案：(a) 維持 Nuxt Content 但設法只在 build 用——client `queryCollection` 的 import 仍會把 WASM 拉進 bundle，無乾淨開關，排除；(b) 直接做 byte 層 dedup 兩份 wasm——只治標、仍送查詢引擎，排除。
 
-### ADR 2：Nuxt Content 降為 build-time only 或移除（分階段評估）
+### ADR 2：完全移除 Nuxt Content 與 better-sqlite3，content-reader 為唯一 content 層
 
-- 決策：先以 ADR 1 切斷 client 依賴；site content 既為 100% JSON、markdown 管線未用，後續評估完全移除 `@nuxt/content`（連帶 `better-sqlite3`）。
-- 原因：移除可省 client bundle、build 中的 content DB 處理與一個 native 依賴；驗證已由 `product-schema.ts`（zod）與 `content-reader.ts` 覆蓋。
-- 替代方案：保留 Nuxt Content 以備未來 markdown 內容。排除原因是目前無 markdown 站台內容，保留即持續付出 SQLite 成本；若未來需要可再導入。先做 ADR 1 的安全切斷，移除與否在 works.md 記錄決議。
+- 決策：移除 `@nuxt/content` module、`better-sqlite3` 依賴與 `content.config.ts`；`scripts/content-reader.ts` 成為唯一 content 存取層，build 端（search-index、discovery）與 runtime（透過靜態 catalog）皆走它。
+- 原因：產品方向確認內容固定為 code-edited JSON、無 markdown、不需 Studio，故 Content 的 markdown/SQLite/查詢引擎對本專案是純成本；驗證已由 `product-schema.ts`（zod）+ `content-reader.ts` 覆蓋。移除可去掉 ~1.7MB client WASM、build 的 content DB 處理與一個 native 依賴，並終結雙 content 路徑。
+- 替代方案：(a) 保留 Content + 上 Nuxt Studio（視覺化 CMS）——已評估並由使用者排除，因內容由 code 編輯且優先 runtime 最輕；(b) 保留 Content 僅 build-time 查詢——仍需處理 client 端取資料且與既有 `content-reader` 功能重疊，排除。
+- 已知取捨：sitemap/rss/llms 等 discovery plumbing 改由自有 `build-public-discovery.ts` 維護（已存在），失去 Studio、Content query builder 與 content HMR；接受為換取最輕 runtime 的代價，未來如需可再導入。
 
 ### ADR 3：字型 deterministic 化，CJK 走系統字、拉丁字 self-host 子集
 
@@ -118,11 +124,11 @@
 
 - [ ] Red → Green → Refactor
 
-### Milestone 2：Nuxt Content 移除與否決議
+### Milestone 2：移除 Nuxt Content，content-reader 為唯一來源
 
-> 範圍：評估並（視決議）移除 `@nuxt/content` / `better-sqlite3`、`content.config.ts`、相關 import 與測試。
-> 驗證：移除後品質閘門全綠，prerender routes 仍由 `buildProductRoutes` 正常產生。
-> 預期結果：build 不再做未使用的 content DB 處理，或明確記錄保留理由。
+> 範圍：移除 `@nuxt/content`（`nuxt.config.ts` modules）、`better-sqlite3` 依賴、`content.config.ts`；清掉殘留 `queryCollection` import 與 `__nuxt_content` 產物。
+> 驗證：移除後品質閘門全綠，prerender routes 仍由 `buildProductRoutes` 正常產生；test suite 仍涵蓋「所有 content 檔以 zod 驗證」，確保 `content/AGENTS.md` authoring flow 的 `pnpm test` 驗證關卡不被削弱。
+> 預期結果：build 不再做未使用的 content DB 處理，single content 層落地。
 
 - [ ] Red → Green → Refactor
 
