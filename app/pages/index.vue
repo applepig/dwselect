@@ -57,6 +57,32 @@
 <script setup lang="ts">
 import type { CompactCategoryChip } from '../utils/published-products/types'
 import { getCompactAppStateFromRoute, getCompactAppView } from '../utils/published-products/compact-app'
+import { getCanonicalUrl, SITE_DESCRIPTION, SITE_NAME, SITE_OG_IMAGE, SITE_TITLE } from '../utils/seo-metadata'
+
+const home_canonical_url = getCanonicalUrl('/')
+
+useHead({
+  link: [
+    {
+      key: 'canonical',
+      rel: 'canonical',
+      href: home_canonical_url,
+    },
+  ],
+})
+
+useSeoMeta({
+  title: SITE_TITLE,
+  description: SITE_DESCRIPTION,
+  ogTitle: SITE_NAME,
+  ogDescription: SITE_DESCRIPTION,
+  ogUrl: home_canonical_url,
+  ogImage: SITE_OG_IMAGE,
+  twitterCard: 'summary_large_image',
+  twitterTitle: SITE_NAME,
+  twitterDescription: SITE_DESCRIPTION,
+  twitterImage: SITE_OG_IMAGE,
+})
 
 const route = useRoute()
 const router = useRouter()

@@ -18,7 +18,7 @@ test('renders the compact app shell and responsive navigation', async ({ page },
   await page.goto('/', { waitUntil: 'domcontentloaded' })
   await expect(page.locator('vite-error-overlay')).toHaveCount(0)
 
-  await expect(page).toHaveTitle('在找什麼嗎？ DW Select')
+  await expect(page).toHaveTitle('DW嚴選｜值得買、值得看、值得收藏的選物清單')
   await expect(page.getByRole('heading', { name: 'DW嚴選' })).toBeVisible()
 
   if (test_info.project.name === 'phone') {
@@ -221,7 +221,8 @@ test('renders direct product detail routes and unknown product not-found states'
 
   await page.goto('/products/not-a-real-product', { waitUntil: 'domcontentloaded' })
   await expect(page.locator('vite-error-overlay')).toHaveCount(0)
-  await expect(page.getByRole('heading', { name: '404' })).toBeVisible()
+  await expect(page.getByRole('heading', { name: '找不到頁面' })).toBeVisible()
+  await expect(page.getByRole('link', { name: '回首頁' })).toBeVisible()
 })
 
 test('restores category and search state from query strings', async ({ page }) => {
@@ -263,7 +264,7 @@ test('hydrates direct search query routes without mismatch warnings', async ({ p
 })
 
 test('separates search typing, autocomplete and submitted query state', async ({ page }) => {
-  await page.goto('/search', { waitUntil: 'networkidle' })
+  await page.goto('/search', { waitUntil: 'domcontentloaded' })
   await expect(page.locator('vite-error-overlay')).toHaveCount(0)
   await expect(page).toHaveURL('/search')
   await expect(page.locator('.search-result-section')).toHaveCount(0)

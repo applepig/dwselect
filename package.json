@@ -10,15 +10,16 @@
   "scripts": {
     "prepare": "nuxt prepare",
     "dev": "nuxt dev",
-    "build": "pnpm build:search-index && nuxt build",
+    "build": "pnpm build:search-index && pnpm build:public-discovery && nuxt build",
     "build:search-index": "node scripts/build-search-index.ts",
+    "build:public-discovery": "node scripts/build-public-discovery.ts",
     "test:e2e": "playwright test",
     "test": "vitest run --exclude 'tests/e2e/**'",
     "lint": "eslint . --max-warnings=0",
     "lint:file": "eslint --fix --max-warnings=0",
     "format": "eslint . --fix",
     "typecheck": "nuxt typecheck",
-    "generate": "pnpm build:search-index && nuxt generate",
+    "generate": "pnpm build:search-index && pnpm build:public-discovery && nuxt generate",
     "preview": "nuxt preview"
   },
   "dependencies": {

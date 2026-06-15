@@ -1,0 +1,3395 @@
+{
+  "version": 1,
+  "site": {
+    "name": "DW嚴選",
+    "url": "https://dwselect.applepig.net/"
+  },
+  "products": [
+    {
+      "id": "2026-06-02-adata-power-bank",
+      "status": "published",
+      "name": "ADATA 行動電源",
+      "english_name": "ADATA Power Bank",
+      "summary": "體積相當小，而且還很便宜",
+      "long_description": "體積相當小，而且還很便宜",
+      "llm_description": "",
+      "search_aliases": [],
+      "model_numbers": [],
+      "offers": [
+        {
+          "channel_id": "pchome",
+          "url": "https://24h.pchome.com.tw/prod/DYAO44-A900HC1WQ",
+          "price_text": "500",
+          "price": {
+            "amount": 500,
+            "currency": "TWD",
+            "unit": "each",
+            "label": null
+          },
+          "checked_at": "2026-06-02T00:00:00+08:00"
+        }
+      ],
+      "image_file": "2026-06-02-adata-power-bank.jpg",
+      "image_url": null,
+      "category_id": "computer-3c",
+      "tag_ids": [
+        "adata",
+        "power-charging"
+      ],
+      "reference_url": null,
+      "created_at": "2026-06-02T00:00:00+08:00",
+      "updated_at": "2026-06-02T00:00:00+08:00",
+      "published_at": "2026-06-02T00:00:00+08:00",
+      "unpublished_at": null,
+      "archived_at": null
+    },
+    {
+      "id": "2026-06-02-aibo-qi-power-bank",
+      "status": "published",
+      "name": "aibo Qi行動電源",
+      "english_name": "aibo Qi Power Bank",
+      "summary": "我手邊的是之前捕蚊達人那一批的，看起來應該是一樣的",
+      "long_description": "我手邊的是之前捕蚊達人那一批的，看起來應該是一樣的",
+      "llm_description": "",
+      "search_aliases": [],
+      "model_numbers": [],
+      "offers": [
+        {
+          "channel_id": "pchome",
+          "url": "https://24h.pchome.com.tw/prod/DYAOE1-A900HDHBH?fq=/S/DYAOAU",
+          "price_text": "899",
+          "price": {
+            "amount": 899,
+            "currency": "TWD",
+            "unit": "each",
+            "label": null
+          },
+          "checked_at": "2026-06-02T00:00:00+08:00"
+        }
+      ],
+      "image_file": "2026-06-02-aibo-qi-power-bank.jpg",
+      "image_url": null,
+      "category_id": "computer-3c",
+      "tag_ids": [
+        "aibo",
+        "power-charging"
+      ],
+      "reference_url": null,
+      "created_at": "2026-06-02T00:00:00+08:00",
+      "updated_at": "2026-06-02T00:00:00+08:00",
+      "published_at": "2026-06-02T00:00:00+08:00",
+      "unpublished_at": null,
+      "archived_at": null
+    },
+    {
+      "id": "2026-06-02-aplus-ups",
+      "status": "published",
+      "name": "APlus UPS",
+      "english_name": "APlus UPS",
+      "summary": "便宜、MIT、而且面板還有螢幕跟USB充電，但是我有些電腦的監控軟體抓不到他",
+      "long_description": "便宜、MIT、而且面板還有螢幕跟USB充電，但是我有些電腦的監控軟體抓不到他",
+      "llm_description": "",
+      "search_aliases": [],
+      "model_numbers": [],
+      "offers": [
+        {
+          "channel_id": "pchome",
+          "url": "https://24h.pchome.com.tw/prod/DCAR15-A900AU2RL",
+          "price_text": "1450",
+          "price": {
+            "amount": 1450,
+            "currency": "TWD",
+            "unit": "each",
+            "label": null
+          },
+          "checked_at": "2026-06-02T00:00:00+08:00"
+        }
+      ],
+      "image_file": "2026-06-02-aplus-ups.jpg",
+      "image_url": null,
+      "category_id": "computer-3c",
+      "tag_ids": [
+        "aplus",
+        "power-charging"
+      ],
+      "reference_url": null,
+      "created_at": "2026-06-02T00:00:00+08:00",
+      "updated_at": "2026-06-02T00:00:00+08:00",
+      "published_at": "2026-06-02T00:00:00+08:00",
+      "unpublished_at": null,
+      "archived_at": null
+    },
+    {
+      "id": "2026-06-02-apple-homepod-large",
+      "status": "published",
+      "name": "Homepod（大）",
+      "english_name": "Apple HomePod Large",
+      "summary": "新的Apple TV可以把Homepod拿來當電視喇叭，兩萬多塊範圍我覺得很難有對手",
+      "long_description": "新的Apple TV可以把Homepod拿來當電視喇叭，兩萬多塊範圍我覺得很難有對手",
+      "llm_description": "",
+      "search_aliases": [],
+      "model_numbers": [],
+      "offers": [
+        {
+          "channel_id": "pchome",
+          "url": "https://24h.pchome.com.tw/prod/DYAJKI-1900GB142",
+          "price_text": "22000",
+          "price": {
+            "amount": 22000,
+            "currency": "TWD",
+            "unit": "each",
+            "label": null
+          },
+          "checked_at": "2026-06-02T00:00:00+08:00"
+        }
+      ],
+      "image_file": "2026-06-02-apple-homepod-large.jpg",
+      "image_url": null,
+      "category_id": "av-theater",
+      "tag_ids": [
+        "apple",
+        "speaker"
+      ],
+      "reference_url": "https://www.facebook.com/applepig/posts/pfbid0Nrstr8AQMc2kBqbJLvqXNZ1LJzQxEMRrjrC13RRukbHTsBNSg8YoEpvVRJXBHD8il",
+      "created_at": "2026-06-02T00:00:00+08:00",
+      "updated_at": "2026-06-02T00:00:00+08:00",
+      "published_at": "2026-06-02T00:00:00+08:00",
+      "unpublished_at": null,
+      "archived_at": null
+    },
+    {
+      "id": "2026-06-02-apple-tv-4k",
+      "status": "published",
+      "name": "Apple TV 4K",
+      "english_name": "Apple TV 4K",
+      "summary": "我有一個朋友他一直覺得「機上盒為什麼只能買Apple TV或FireTV呢，一定有更便宜的選項」  然後他就前後買個至少十隻便宜的機上盒，也多了十隻電子垃圾",
+      "long_description": "我有一個朋友他一直覺得「機上盒為什麼只能買Apple TV或FireTV呢，一定有更便宜的選項」  然後他就前後買個至少十隻便宜的機上盒，也多了十隻電子垃圾",
+      "llm_description": "",
+      "search_aliases": [],
+      "model_numbers": [],
+      "offers": [
+        {
+          "channel_id": "pchome",
+          "url": "https://24h.pchome.com.tw/prod/DYAJFN-1900H1P8W",
+          "price_text": "4490",
+          "price": {
+            "amount": 4490,
+            "currency": "TWD",
+            "unit": "each",
+            "label": null
+          },
+          "checked_at": "2026-06-02T00:00:00+08:00"
+        }
+      ],
+      "image_file": "2026-06-02-apple-tv-4k.jpg",
+      "image_url": null,
+      "category_id": "av-theater",
+      "tag_ids": [
+        "apple",
+        "av-source"
+      ],
+      "reference_url": "https://www.facebook.com/applepig/posts/pfbid0Q9T73KVmaZKBnZtEVMfMkWw2FKz6UqVaCUmcdh47bpBvnnx7WwRYKNoZDLKPzJVrl",
+      "created_at": "2026-06-02T00:00:00+08:00",
+      "updated_at": "2026-06-02T00:00:00+08:00",
+      "published_at": "2026-06-02T00:00:00+08:00",
+      "unpublished_at": null,
+      "archived_at": null
+    },
+    {
+      "id": "2026-06-02-arnest-nagikire-ou",
+      "status": "published",
+      "name": "Arnest 永切れ王",
+      "english_name": "Arnest Nagikire Ou",
+      "summary": "刀刃開鋸齒型的三德，我覺得切起來超級順手的",
+      "long_description": "刀刃開鋸齒型的三德，我覺得切起來超級順手的",
+      "llm_description": "",
+      "search_aliases": [],
+      "model_numbers": [],
+      "offers": [
+        {
+          "channel_id": "amazonjp",
+          "url": "https://amzn.asia/d/isJwOlO",
+          "price_text": "￥3800",
+          "price": {
+            "amount": 3800,
+            "currency": "JPY",
+            "unit": "each",
+            "label": null
+          },
+          "checked_at": "2026-06-02T00:00:00+08:00"
+        }
+      ],
+      "image_file": "2026-06-02-arnest-nagikire-ou.jpg",
+      "image_url": null,
+      "category_id": "household",
+      "tag_ids": [
+        "arnest",
+        "kitchen"
+      ],
+      "reference_url": null,
+      "created_at": "2026-06-02T00:00:00+08:00",
+      "updated_at": "2026-06-02T00:00:00+08:00",
+      "published_at": "2026-06-02T00:00:00+08:00",
+      "unpublished_at": null,
+      "archived_at": null
+    },
+    {
+      "id": "2026-06-02-asahi-ponzu",
+      "status": "published",
+      "name": "旭ポンズ",
+      "english_name": "Asahi Ponzu",
+      "summary": "在黑門市場的時候被店員大姊推銷，從此一試成主顧的橘醋  大阪附近的話很好買，東京附近的話要找百貨公司超市或成城石井之類的",
+      "long_description": "在黑門市場的時候被店員大姊推銷，從此一試成主顧的橘醋  大阪附近的話很好買，東京附近的話要找百貨公司超市或成城石井之類的",
+      "llm_description": "",
+      "search_aliases": [],
+      "model_numbers": [],
+      "offers": [
+        {
+          "channel_id": "other",
+          "url": "https://www.asahi-syokuhin.co.jp/product/ponzu",
+          "price_text": "￥840",
+          "price": {
+            "amount": 840,
+            "currency": "JPY",
+            "unit": "each",
+            "label": null
+          },
+          "checked_at": "2026-06-02T00:00:00+08:00"
+        }
+      ],
+      "image_file": "2026-06-02-asahi-ponzu.jpg",
+      "image_url": null,
+      "category_id": "household",
+      "tag_ids": [
+        "asahi-ponzu",
+        "food",
+        "kitchen"
+      ],
+      "reference_url": null,
+      "created_at": "2026-06-02T00:00:00+08:00",
+      "updated_at": "2026-06-02T00:00:00+08:00",
+      "published_at": "2026-06-02T00:00:00+08:00",
+      "unpublished_at": null,
+      "archived_at": null
+    },
+    {
+      "id": "2026-06-02-avier-power-bank",
+      "status": "published",
+      "name": "Avier行動電源",
+      "english_name": "Avier Power Bank",
+      "summary": "便宜、有雙向PD、但是顏色非常微妙",
+      "long_description": "便宜、有雙向PD、但是顏色非常微妙",
+      "llm_description": "",
+      "search_aliases": [],
+      "model_numbers": [],
+      "offers": [
+        {
+          "channel_id": "pchome",
+          "url": "https://24h.pchome.com.tw/prod/DYAO44-A900GLJQ6",
+          "price_text": "479",
+          "price": {
+            "amount": 479,
+            "currency": "TWD",
+            "unit": "each",
+            "label": null
+          },
+          "checked_at": "2026-06-02T00:00:00+08:00"
+        }
+      ],
+      "image_file": "2026-06-02-avier-power-bank.jpg",
+      "image_url": null,
+      "category_id": "computer-3c",
+      "tag_ids": [
+        "avier",
+        "power-charging"
+      ],
+      "reference_url": null,
+      "created_at": "2026-06-02T00:00:00+08:00",
+      "updated_at": "2026-06-02T00:00:00+08:00",
+      "published_at": "2026-06-02T00:00:00+08:00",
+      "unpublished_at": null,
+      "archived_at": null
+    },
+    {
+      "id": "2026-06-02-battery-charger",
+      "status": "published",
+      "name": "電池充電器",
+      "english_name": "Battery Charger",
+      "summary": "這個倒是可以不用找IKEA，這顆用豆腐頭輸入的，反而比插牆上好用",
+      "long_description": "這個倒是可以不用找IKEA，這顆用豆腐頭輸入的，反而比插牆上好用",
+      "llm_description": "",
+      "search_aliases": [],
+      "model_numbers": [],
+      "offers": [
+        {
+          "channel_id": "pchome",
+          "url": "https://24h.pchome.com.tw/prod/DCABC4-A900BOW1X",
+          "price_text": "249",
+          "price": {
+            "amount": 249,
+            "currency": "TWD",
+            "unit": "each",
+            "label": null
+          },
+          "checked_at": "2026-06-02T00:00:00+08:00"
+        }
+      ],
+      "image_file": "2026-06-02-battery-charger.jpg",
+      "image_url": null,
+      "category_id": "computer-3c",
+      "tag_ids": [
+        "power-charging"
+      ],
+      "reference_url": null,
+      "created_at": "2026-06-02T00:00:00+08:00",
+      "updated_at": "2026-06-02T00:00:00+08:00",
+      "published_at": "2026-06-02T00:00:00+08:00",
+      "unpublished_at": null,
+      "archived_at": null
+    },
+    {
+      "id": "2026-06-02-belkin-three-port-type-c-charger",
+      "status": "published",
+      "name": "Belkin 三孔Type C充電器",
+      "english_name": "Belkin Three Port Type C Charger",
+      "summary": "這顆三孔都是Type C，出力是25/20/20、或45/20、或65，旅行包換成這顆剛好可以減少線的種類",
+      "long_description": "這顆三孔都是Type C，出力是25/20/20、或45/20、或65，旅行包換成這顆剛好可以減少線的種類",
+      "llm_description": "",
+      "search_aliases": [],
+      "model_numbers": [],
+      "offers": [
+        {
+          "channel_id": "other",
+          "url": "https://pxbox.es.pxmart.com.tw/product/155053",
+          "price_text": "790",
+          "price": {
+            "amount": 790,
+            "currency": null,
+            "unit": "each",
+            "label": null
+          },
+          "checked_at": "2026-06-02T00:00:00+08:00"
+        }
+      ],
+      "image_file": "2026-06-02-belkin-three-port-type-c-charger.jpg",
+      "image_url": null,
+      "category_id": "computer-3c",
+      "tag_ids": [
+        "belkin",
+        "power-charging"
+      ],
+      "reference_url": "https://www.facebook.com/applepig/posts/pfbid02STBwzCTw3BAjNH876HQTcJafVJk3bkGGW23y4we9ikEdhFDSR7GZaCAVKhGA9agLl",
+      "created_at": "2026-06-02T00:00:00+08:00",
+      "updated_at": "2026-06-02T00:00:00+08:00",
+      "published_at": "2026-06-02T00:00:00+08:00",
+      "unpublished_at": null,
+      "archived_at": null
+    },
+    {
+      "id": "2026-06-02-benq-e43-735",
+      "status": "published",
+      "name": "BenQ E43-735",
+      "english_name": "BenQ E43 735",
+      "summary": "當然43\"的也是可以看BenQ，現在也只賣11k",
+      "long_description": "當然43\"的也是可以看BenQ，現在也只賣11k",
+      "llm_description": "",
+      "search_aliases": [],
+      "model_numbers": [],
+      "offers": [
+        {
+          "channel_id": "pchome",
+          "url": "https://24h.pchome.com.tw/prod/DPAD0O-1900GHE37?fq=/S/DPADTK",
+          "price_text": "10999",
+          "price": {
+            "amount": 10999,
+            "currency": "TWD",
+            "unit": "each",
+            "label": null
+          },
+          "checked_at": "2026-06-02T00:00:00+08:00"
+        }
+      ],
+      "image_file": "2026-06-02-benq-e43-735.jpg",
+      "image_url": null,
+      "category_id": "av-theater",
+      "tag_ids": [
+        "benq",
+        "display"
+      ],
+      "reference_url": null,
+      "created_at": "2026-06-02T00:00:00+08:00",
+      "updated_at": "2026-06-02T00:00:00+08:00",
+      "published_at": "2026-06-02T00:00:00+08:00",
+      "unpublished_at": null,
+      "archived_at": null
+    },
+    {
+      "id": "2026-06-02-benq-e55-735",
+      "status": "published",
+      "name": "BenQ E55-735",
+      "english_name": "BenQ E55 735",
+      "summary": "BenQ 55\"也低於15k了，而且還有Android TV",
+      "long_description": "BenQ 55\"也低於15k了，而且還有Android TV",
+      "llm_description": "",
+      "search_aliases": [],
+      "model_numbers": [],
+      "offers": [
+        {
+          "channel_id": "pchome",
+          "url": "https://24h.pchome.com.tw/prod/DPAD0O-1900GHE46?fq=/S/DPAD0O",
+          "price_text": "13999",
+          "price": {
+            "amount": 13999,
+            "currency": "TWD",
+            "unit": "each",
+            "label": null
+          },
+          "checked_at": "2026-06-02T00:00:00+08:00"
+        }
+      ],
+      "image_file": "2026-06-02-benq-e55-735.jpg",
+      "image_url": null,
+      "category_id": "av-theater",
+      "tag_ids": [
+        "benq",
+        "display"
+      ],
+      "reference_url": null,
+      "created_at": "2026-06-02T00:00:00+08:00",
+      "updated_at": "2026-06-02T00:00:00+08:00",
+      "published_at": "2026-06-02T00:00:00+08:00",
+      "unpublished_at": null,
+      "archived_at": null
+    },
+    {
+      "id": "2026-06-02-benq-rd280u",
+      "status": "published",
+      "name": "BenQ RD280U",
+      "english_name": "BenQ RD280U",
+      "summary": "28\" 3840*2560的螢幕，比一般的4K多了一些高度，160ppi設200%的話字也不算太大，不過價錢還沒降可以再等等",
+      "long_description": "28\" 3840*2560的螢幕，比一般的4K多了一些高度，160ppi設200%的話字也不算太大，不過價錢還沒降可以再等等",
+      "llm_description": "",
+      "search_aliases": [],
+      "model_numbers": [],
+      "offers": [
+        {
+          "channel_id": "pchome",
+          "url": "https://24h.pchome.com.tw/prod/DSABSO-A900HJAH0?fq=/S/DSABSO",
+          "price_text": "16888",
+          "price": {
+            "amount": 16888,
+            "currency": "TWD",
+            "unit": "each",
+            "label": null
+          },
+          "checked_at": "2026-06-02T00:00:00+08:00"
+        }
+      ],
+      "image_file": "2026-06-02-benq-rd280u.jpg",
+      "image_url": null,
+      "category_id": "computer-3c",
+      "tag_ids": [
+        "benq",
+        "display"
+      ],
+      "reference_url": null,
+      "created_at": "2026-06-02T00:00:00+08:00",
+      "updated_at": "2026-06-02T00:00:00+08:00",
+      "published_at": "2026-06-02T00:00:00+08:00",
+      "unpublished_at": null,
+      "archived_at": null
+    },
+    {
+      "id": "2026-06-02-blueair-3250-air-purifier",
+      "status": "published",
+      "name": "Blueair 3250空氣清淨機",
+      "english_name": "Blueair 3250 Air Purifier",
+      "summary": "這台最近不知道為什麼賣到一台4400左右，有想要的話可以看看",
+      "long_description": "這台最近不知道為什麼賣到一台4400左右，有想要的話可以看看",
+      "llm_description": "",
+      "search_aliases": [],
+      "model_numbers": [],
+      "offers": [
+        {
+          "channel_id": "pchome",
+          "url": "https://24h.pchome.com.tw/prod/DMAUE4-1900HSSKV",
+          "price_text": "一台4400",
+          "price": {
+            "amount": null,
+            "currency": null,
+            "unit": null,
+            "label": "一台4400"
+          },
+          "checked_at": "2026-06-02T00:00:00+08:00"
+        }
+      ],
+      "image_file": "2026-06-02-blueair-3250-air-purifier.jpg",
+      "image_url": null,
+      "category_id": "small-appliance",
+      "tag_ids": [
+        "air-care",
+        "blueair"
+      ],
+      "reference_url": null,
+      "created_at": "2026-06-02T00:00:00+08:00",
+      "updated_at": "2026-06-02T00:00:00+08:00",
+      "published_at": "2026-06-02T00:00:00+08:00",
+      "unpublished_at": null,
+      "archived_at": null
+    },
+    {
+      "id": "2026-06-02-bose-qc45",
+      "status": "published",
+      "name": "Bose QC45",
+      "english_name": "Bose QC45",
+      "summary": "後來出了新的Ultra跟QC（沒有數字），我還沒去試聽",
+      "long_description": "後來出了新的Ultra跟QC（沒有數字），我還沒去試聽",
+      "llm_description": "",
+      "search_aliases": [],
+      "model_numbers": [],
+      "offers": [
+        {
+          "channel_id": "pchome",
+          "url": "https://24h.pchome.com.tw/prod/DGCT18-A900GN5LD",
+          "price_text": "8000",
+          "price": {
+            "amount": 8000,
+            "currency": "TWD",
+            "unit": "each",
+            "label": null
+          },
+          "checked_at": "2026-06-02T00:00:00+08:00"
+        }
+      ],
+      "image_file": "2026-06-02-bose-qc45.jpg",
+      "image_url": null,
+      "category_id": "av-theater",
+      "tag_ids": [
+        "bose",
+        "headphone"
+      ],
+      "reference_url": "https://www.facebook.com/applepig/posts/pfbid02jp4JQkZR4CZhF6vubULYG1TY19B6sCbcP1FoqShhBDtjdH6wZ4xYXtywNAqQhVEFl",
+      "created_at": "2026-06-02T00:00:00+08:00",
+      "updated_at": "2026-06-02T00:00:00+08:00",
+      "published_at": "2026-06-02T00:00:00+08:00",
+      "unpublished_at": null,
+      "archived_at": null
+    },
+    {
+      "id": "2026-06-02-brita-water-filter-pitcher",
+      "status": "published",
+      "name": "Brita",
+      "english_name": "BRITA Water Filter Pitcher",
+      "summary": "Brita濾芯要注意一下特價，大概單價$166以下就可以買",
+      "long_description": "Brita濾芯要注意一下特價，大概單價$166以下就可以買",
+      "llm_description": "",
+      "search_aliases": [],
+      "model_numbers": [],
+      "offers": [
+        {
+          "channel_id": "pchome",
+          "url": "https://24h.pchome.com.tw/prod/DEAY3A-A900GLY25",
+          "price_text": "2200",
+          "price": {
+            "amount": 2200,
+            "currency": "TWD",
+            "unit": "each",
+            "label": null
+          },
+          "checked_at": "2026-06-02T00:00:00+08:00"
+        }
+      ],
+      "image_file": "2026-06-02-brita-water-filter-pitcher.jpg",
+      "image_url": null,
+      "category_id": "household",
+      "tag_ids": [
+        "brita",
+        "kitchen"
+      ],
+      "reference_url": "https://www.facebook.com/applepig/posts/pfbid0XuCGpfNBnFb4TZN4QcTH2Zyh9U2rWqV2HonAm4DjS8YXtYoTQDqKBVL3QV3pesmBl",
+      "created_at": "2026-06-02T00:00:00+08:00",
+      "updated_at": "2026-06-02T00:00:00+08:00",
+      "published_at": "2026-06-02T00:00:00+08:00",
+      "unpublished_at": null,
+      "archived_at": null
+    },
+    {
+      "id": "2026-06-02-ducky-one-2",
+      "status": "published",
+      "name": "Ducky One 2",
+      "english_name": "Ducky One 2",
+      "summary": "我覺得Ducky One 2可以買，但是3不行，所以趁他們還有生產的時候多庫存個兩把",
+      "long_description": "我覺得Ducky One 2可以買，但是3不行，所以趁他們還有生產的時候多庫存個兩把",
+      "llm_description": "",
+      "search_aliases": [],
+      "model_numbers": [],
+      "offers": [
+        {
+          "channel_id": "pchome",
+          "url": "https://24h.pchome.com.tw/prod/DCAHVA-A900GAGDQ",
+          "price_text": "2300",
+          "price": {
+            "amount": 2300,
+            "currency": "TWD",
+            "unit": "each",
+            "label": null
+          },
+          "checked_at": "2026-06-02T00:00:00+08:00"
+        }
+      ],
+      "image_file": "2026-06-02-ducky-one-2.jpg",
+      "image_url": null,
+      "category_id": "computer-3c",
+      "tag_ids": [
+        "desk-setup",
+        "ducky"
+      ],
+      "reference_url": null,
+      "created_at": "2026-06-02T00:00:00+08:00",
+      "updated_at": "2026-06-02T00:00:00+08:00",
+      "published_at": "2026-06-02T00:00:00+08:00",
+      "unpublished_at": null,
+      "archived_at": null
+    },
+    {
+      "id": "2026-06-02-elac-connex-dcb41",
+      "status": "published",
+      "name": "ELAC ConneX DCB41",
+      "english_name": "ELAC ConneX DCB41",
+      "summary": "這是有HDMI ARC的主動式喇叭，最適合拿來當電視喇叭",
+      "long_description": "這是有HDMI ARC的主動式喇叭，最適合拿來當電視喇叭",
+      "llm_description": "",
+      "search_aliases": [],
+      "model_numbers": [],
+      "offers": [
+        {
+          "channel_id": "pchome",
+          "url": "https://24h.pchome.com.tw/prod/DMAAH8-A900HVR8U",
+          "price_text": "大概16000",
+          "price": {
+            "amount": null,
+            "currency": null,
+            "unit": null,
+            "label": "大概16000"
+          },
+          "checked_at": "2026-06-02T00:00:00+08:00"
+        }
+      ],
+      "image_file": "2026-06-02-elac-connex-dcb41.jpg",
+      "image_url": null,
+      "category_id": "av-theater",
+      "tag_ids": [
+        "cable-adapter",
+        "elac",
+        "speaker"
+      ],
+      "reference_url": null,
+      "created_at": "2026-06-02T00:00:00+08:00",
+      "updated_at": "2026-06-02T00:00:00+08:00",
+      "published_at": "2026-06-02T00:00:00+08:00",
+      "unpublished_at": null,
+      "archived_at": null
+    },
+    {
+      "id": "2026-06-02-electrolux-vacuum-cleaner",
+      "status": "published",
+      "name": "Electrolux吸塵器",
+      "english_name": "Electrolux Vacuum Cleaner",
+      "summary": "這支的本體跟Q9是一樣的，還多了拖把吸頭，另一組有拖把水桶的也可以考慮  特價的時候會賣到9999，有看到的話請把握機會",
+      "long_description": "這支的本體跟Q9是一樣的，還多了拖把吸頭，另一組有拖把水桶的也可以考慮  特價的時候會賣到9999，有看到的話請把握機會",
+      "llm_description": "",
+      "search_aliases": [],
+      "model_numbers": [],
+      "offers": [
+        {
+          "channel_id": "costco",
+          "url": "https://www.costco.com.tw/Appliances/Vacuums-Floor-Care/Vacuums/Electrolux-Cordless-Wet-Dry-Vacuum-Cleaner-EFS71423/p/141934",
+          "price_text": "11999",
+          "price": {
+            "amount": 11999,
+            "currency": "TWD",
+            "unit": "each",
+            "label": null
+          },
+          "checked_at": "2026-06-02T00:00:00+08:00"
+        }
+      ],
+      "image_file": "2026-06-02-electrolux-vacuum-cleaner.jpg",
+      "image_url": null,
+      "category_id": "small-appliance",
+      "tag_ids": [
+        "cleaning",
+        "electrolux"
+      ],
+      "reference_url": "https://www.facebook.com/applepig/posts/pfbid02D83NeEVfii9EabqoN2S2yCLtaqpb2dBYNw3k5Fx9K2PzkUBBCZpoQw3k4KPKAFMPl",
+      "created_at": "2026-06-02T00:00:00+08:00",
+      "updated_at": "2026-06-02T00:00:00+08:00",
+      "published_at": "2026-06-02T00:00:00+08:00",
+      "unpublished_at": null,
+      "archived_at": null
+    },
+    {
+      "id": "2026-06-02-fibbr-fiber-hdmi-cable",
+      "status": "published",
+      "name": "FIBBR光纖HDMI線",
+      "english_name": "FIBBR Fiber HDMI Cable",
+      "summary": "光纖HDMI線可以減少很多要壞不壞的靈異現象，而且他現在入門款賣的也很便宜，三條就免運了",
+      "long_description": "光纖HDMI線可以減少很多要壞不壞的靈異現象，而且他現在入門款賣的也很便宜，三條就免運了",
+      "llm_description": "",
+      "search_aliases": [],
+      "model_numbers": [],
+      "offers": [
+        {
+          "channel_id": "amazonus",
+          "url": "https://www.amazon.com/Cable-FIBBR-48Gbps-Compatible-Blu-ray/dp/B09KZ435N6",
+          "price_text": "20~30鎂",
+          "price": {
+            "amount": null,
+            "currency": "USD",
+            "unit": "each",
+            "label": "20~30鎂"
+          },
+          "checked_at": "2026-06-02T00:00:00+08:00"
+        }
+      ],
+      "image_file": "2026-06-02-fibbr-fiber-hdmi-cable.jpg",
+      "image_url": null,
+      "category_id": "av-theater",
+      "tag_ids": [
+        "cable-adapter",
+        "fibbr"
+      ],
+      "reference_url": null,
+      "created_at": "2026-06-02T00:00:00+08:00",
+      "updated_at": "2026-06-02T00:00:00+08:00",
+      "published_at": "2026-06-02T00:00:00+08:00",
+      "unpublished_at": null,
+      "archived_at": null
+    },
+    {
+      "id": "2026-06-02-fisher-paykel-dishdrawer",
+      "status": "published",
+      "name": "Fisher&Paykel 抽屜式洗碗機",
+      "english_name": "Fisher Paykel DishDrawer",
+      "summary": "其實Panasonic也有抽屜式，但是台灣沒有進，日規的又太深比較麻煩，所以可以優先考慮這台",
+      "long_description": "其實Panasonic也有抽屜式，但是台灣沒有進，日規的又太深比較麻煩，所以可以優先考慮這台",
+      "llm_description": "",
+      "search_aliases": [],
+      "model_numbers": [],
+      "offers": [
+        {
+          "channel_id": "pchome",
+          "url": "https://24h.pchome.com.tw/prod/DMBR24-A900GK0BS",
+          "price_text": "45000",
+          "price": {
+            "amount": 45000,
+            "currency": "TWD",
+            "unit": "each",
+            "label": null
+          },
+          "checked_at": "2026-06-02T00:00:00+08:00"
+        }
+      ],
+      "image_file": "2026-06-02-fisher-paykel-dishdrawer.jpg",
+      "image_url": null,
+      "category_id": "major-appliance",
+      "tag_ids": [
+        "fisher-paykel",
+        "kitchen"
+      ],
+      "reference_url": "https://www.facebook.com/applepig/posts/pfbid02SjcyKSNfiwr9rFQheqiiqgyrpyu5Qi1DsP7sLFoXdGQ8b6CtxfMBVq2MwYuE81Jhl",
+      "created_at": "2026-06-02T00:00:00+08:00",
+      "updated_at": "2026-06-02T00:00:00+08:00",
+      "published_at": "2026-06-02T00:00:00+08:00",
+      "unpublished_at": null,
+      "archived_at": null
+    },
+    {
+      "id": "2026-06-02-fuli-milk-queen-rice",
+      "status": "published",
+      "name": "富里牛奶皇后",
+      "english_name": "Fuli Milk Queen Rice",
+      "summary": "牛奶皇后是最好吃的台灣米，不服來辯",
+      "long_description": "牛奶皇后是最好吃的台灣米，不服來辯",
+      "llm_description": "",
+      "search_aliases": [],
+      "model_numbers": [],
+      "offers": [
+        {
+          "channel_id": "pchome",
+          "url": "https://24h.pchome.com.tw/prod/DBBY0J-A900F81AW",
+          "price_text": "200/kg",
+          "price": {
+            "amount": 200,
+            "currency": "TWD",
+            "unit": "kilogram",
+            "label": null
+          },
+          "checked_at": "2026-06-02T00:00:00+08:00"
+        }
+      ],
+      "image_file": "2026-06-02-fuli-milk-queen-rice.jpg",
+      "image_url": null,
+      "category_id": "household",
+      "tag_ids": [
+        "food",
+        "fuli",
+        "rice"
+      ],
+      "reference_url": "https://www.facebook.com/applepig/posts/pfbid037AcHMyNMrZPFBvDg7GgQbquN8j2UNmPb1mvkM7YV9rJKuv8Us5BvASrcG8zzxRqjl",
+      "created_at": "2026-06-02T00:00:00+08:00",
+      "updated_at": "2026-06-02T00:00:00+08:00",
+      "published_at": "2026-06-02T00:00:00+08:00",
+      "unpublished_at": null,
+      "archived_at": null
+    },
+    {
+      "id": "2026-06-02-hitachi-rd-14fr",
+      "status": "published",
+      "name": "Hitachi RD-14FR",
+      "english_name": "Hitachi RD 14FR",
+      "summary": "日立這系列最近大概降了20%，現在應該不需要考慮其他牌子",
+      "long_description": "日立這系列最近大概降了20%，現在應該不需要考慮其他牌子",
+      "llm_description": "",
+      "search_aliases": [],
+      "model_numbers": [],
+      "offers": [
+        {
+          "channel_id": "pchome",
+          "url": "https://24h.pchome.com.tw/prod/DMBQ01-A900GSFE3",
+          "price_text": "5999",
+          "price": {
+            "amount": 5999,
+            "currency": "TWD",
+            "unit": "each",
+            "label": null
+          },
+          "checked_at": "2026-06-02T00:00:00+08:00"
+        }
+      ],
+      "image_file": "2026-06-02-hitachi-rd-14fr.jpg",
+      "image_url": null,
+      "category_id": "small-appliance",
+      "tag_ids": [
+        "air-care",
+        "hitachi"
+      ],
+      "reference_url": "https://www.facebook.com/applepig/posts/pfbid02NJssM3r5EVu8ekue21HnszURe3KdzudkyFDY1t6sfrF1hL6PkWueXR5Gvg1kEQE9l",
+      "created_at": "2026-06-02T00:00:00+08:00",
+      "updated_at": "2026-06-02T00:00:00+08:00",
+      "published_at": "2026-06-02T00:00:00+08:00",
+      "unpublished_at": null,
+      "archived_at": null
+    },
+    {
+      "id": "2026-06-02-ikea-charging-cable",
+      "status": "published",
+      "name": "IKEA充電線",
+      "english_name": "IKEA Charging Cable",
+      "summary": "手機的充電線也是都找他們家買就對了",
+      "long_description": "手機的充電線也是都找他們家買就對了",
+      "llm_description": "",
+      "search_aliases": [],
+      "model_numbers": [],
+      "offers": [
+        {
+          "channel_id": "other",
+          "url": "https://www.ikea.com.tw/zh/products/electronics/power-supply-and-charging?tags[]=415",
+          "price_text": "199",
+          "price": {
+            "amount": 199,
+            "currency": null,
+            "unit": "each",
+            "label": null
+          },
+          "checked_at": "2026-06-02T00:00:00+08:00"
+        }
+      ],
+      "image_file": "2026-06-02-ikea-charging-cable.webp",
+      "image_url": null,
+      "category_id": "computer-3c",
+      "tag_ids": [
+        "cable-adapter",
+        "ikea"
+      ],
+      "reference_url": null,
+      "created_at": "2026-06-02T00:00:00+08:00",
+      "updated_at": "2026-06-02T00:00:00+08:00",
+      "published_at": "2026-06-02T00:00:00+08:00",
+      "unpublished_at": null,
+      "archived_at": null
+    },
+    {
+      "id": "2026-06-02-ikea-rechargeable-battery",
+      "status": "published",
+      "name": "IKEA充電電池",
+      "english_name": "IKEA Rechargeable Battery",
+      "summary": "三號、四號電池都找他們家買就對了",
+      "long_description": "三號、四號電池都找他們家買就對了",
+      "llm_description": "",
+      "search_aliases": [],
+      "model_numbers": [],
+      "offers": [
+        {
+          "channel_id": "other",
+          "url": "https://www.ikea.com.tw/zh/products/electronics/power-supply-and-charging/ladda-art-90506528",
+          "price_text": "249~349",
+          "price": {
+            "amount": null,
+            "currency": null,
+            "unit": null,
+            "label": "249~349"
+          },
+          "checked_at": "2026-06-02T00:00:00+08:00"
+        }
+      ],
+      "image_file": "2026-06-02-ikea-rechargeable-battery.webp",
+      "image_url": null,
+      "category_id": "computer-3c",
+      "tag_ids": [
+        "ikea",
+        "power-charging"
+      ],
+      "reference_url": null,
+      "created_at": "2026-06-02T00:00:00+08:00",
+      "updated_at": "2026-06-02T00:00:00+08:00",
+      "published_at": "2026-06-02T00:00:00+08:00",
+      "unpublished_at": null,
+      "archived_at": null
+    },
+    {
+      "id": "2026-06-02-iris-ohyama-ceiling-light-standard",
+      "status": "published",
+      "name": "Iris吸頂燈（並）",
+      "english_name": "IRIS OHYAMA Ceiling Light Standard",
+      "summary": "日規吸頂燈真的很棒，可以用遙控調光調色而且還快拆，睡前都不需要爬起來關燈",
+      "long_description": "日規吸頂燈真的很棒，可以用遙控調光調色而且還快拆，睡前都不需要爬起來關燈",
+      "llm_description": "",
+      "search_aliases": [],
+      "model_numbers": [],
+      "offers": [
+        {
+          "channel_id": "costco",
+          "url": "https://www.costco.com.tw/Home-Improvement/Lighting/Lighting-Light-Bulbs/IRIS-OHYAMA-LED-Ceiling-Light-CL12DL-MFUCT/p/121629",
+          "price_text": "2699",
+          "price": {
+            "amount": 2699,
+            "currency": "TWD",
+            "unit": "each",
+            "label": null
+          },
+          "checked_at": "2026-06-02T00:00:00+08:00"
+        }
+      ],
+      "image_file": "2026-06-02-iris-ohyama-ceiling-light-standard.webp",
+      "image_url": null,
+      "category_id": "small-appliance",
+      "tag_ids": [
+        "iris-ohyama",
+        "lighting"
+      ],
+      "reference_url": "https://www.facebook.com/applepig/posts/pfbid02Ptwb3u65rJMSUAhhiHEXcFmNa2M84TFWtNLaWzEU5AhWHYWcbNweaB23HCxioSmdl",
+      "created_at": "2026-06-02T00:00:00+08:00",
+      "updated_at": "2026-06-02T00:00:00+08:00",
+      "published_at": "2026-06-02T00:00:00+08:00",
+      "unpublished_at": null,
+      "archived_at": null
+    },
+    {
+      "id": "2026-06-02-iris-ohyama-premium-ceiling-light",
+      "status": "published",
+      "name": "Iris高階吸頂燈",
+      "english_name": "IRIS OHYAMA Premium Ceiling Light",
+      "summary": "這顆是導光板的高階款，水平方向的擴散比較強，可以減少房間角落太暗的問題",
+      "long_description": "這顆是導光板的高階款，水平方向的擴散比較強，可以減少房間角落太暗的問題",
+      "llm_description": "",
+      "search_aliases": [],
+      "model_numbers": [],
+      "offers": [
+        {
+          "channel_id": "amazonjp",
+          "url": "https://www.amazon.co.jp/dp/B09923R2X3",
+          "price_text": "￥20000",
+          "price": {
+            "amount": 20000,
+            "currency": "JPY",
+            "unit": "each",
+            "label": null
+          },
+          "checked_at": "2026-06-02T00:00:00+08:00"
+        }
+      ],
+      "image_file": "2026-06-02-iris-ohyama-premium-ceiling-light.jpg",
+      "image_url": null,
+      "category_id": "small-appliance",
+      "tag_ids": [
+        "iris-ohyama",
+        "lighting"
+      ],
+      "reference_url": "https://www.facebook.com/applepig/posts/pfbid0qLvB8BELCJiUZrbXYL11uhKJWWUrEqtRK4zxx3JTjX2xjJwj4zK9rWhNvqLMesR3l",
+      "created_at": "2026-06-02T00:00:00+08:00",
+      "updated_at": "2026-06-02T00:00:00+08:00",
+      "published_at": "2026-06-02T00:00:00+08:00",
+      "unpublished_at": null,
+      "archived_at": null
+    },
+    {
+      "id": "2026-06-02-irobot-roomba-j7",
+      "status": "published",
+      "name": "Roomba j7+",
+      "english_name": "iRobot Roomba j7",
+      "summary": "應該是Roomba現行款式中最強的機種，現在跟我之前從amazon買的價格差不多了",
+      "long_description": "應該是Roomba現行款式中最強的機種，現在跟我之前從amazon買的價格差不多了",
+      "llm_description": "",
+      "search_aliases": [],
+      "model_numbers": [],
+      "offers": [
+        {
+          "channel_id": "pchome",
+          "url": "https://24h.pchome.com.tw/prod/DMBL0J-A900DZHJ9",
+          "price_text": "26000",
+          "price": {
+            "amount": 26000,
+            "currency": "TWD",
+            "unit": "each",
+            "label": null
+          },
+          "checked_at": "2026-06-02T00:00:00+08:00"
+        }
+      ],
+      "image_file": "2026-06-02-irobot-roomba-j7.jpg",
+      "image_url": null,
+      "category_id": "small-appliance",
+      "tag_ids": [
+        "cleaning",
+        "irobot"
+      ],
+      "reference_url": "https://www.facebook.com/applepig/posts/pfbid02CRwmCLGyfhoMAKLLoj5tpPhSLanYirfQxF6Fv8BeJGi7NY5j8hBF9dJ4UfQYeu7pl",
+      "created_at": "2026-06-02T00:00:00+08:00",
+      "updated_at": "2026-06-02T00:00:00+08:00",
+      "published_at": "2026-06-02T00:00:00+08:00",
+      "unpublished_at": null,
+      "archived_at": null
+    },
+    {
+      "id": "2026-06-02-j5create-usb-c-charger",
+      "status": "published",
+      "name": "j5create豆腐頭",
+      "english_name": "j5create USB C Charger",
+      "summary": "30W 1C1A，這顆特價會亂賣到199",
+      "long_description": "30W 1C1A，這顆特價會亂賣到199",
+      "llm_description": "",
+      "search_aliases": [],
+      "model_numbers": [],
+      "offers": [
+        {
+          "channel_id": "pchome",
+          "url": "https://24h.pchome.com.tw/prod/DCAX3N-A900AD07K",
+          "price_text": "199",
+          "price": {
+            "amount": 199,
+            "currency": "TWD",
+            "unit": "each",
+            "label": null
+          },
+          "checked_at": "2026-06-02T00:00:00+08:00"
+        }
+      ],
+      "image_file": "2026-06-02-j5create-usb-c-charger.jpg",
+      "image_url": null,
+      "category_id": "computer-3c",
+      "tag_ids": [
+        "j5create",
+        "power-charging"
+      ],
+      "reference_url": "https://www.facebook.com/applepig/posts/pfbid02GiR12vXf3qXtJAhrEGCXbrMXGkTbKBNLTBPisMyN7QK133jcXHHGMxpbMk2EpzFul",
+      "created_at": "2026-06-02T00:00:00+08:00",
+      "updated_at": "2026-06-02T00:00:00+08:00",
+      "published_at": "2026-06-02T00:00:00+08:00",
+      "unpublished_at": null,
+      "archived_at": null
+    },
+    {
+      "id": "2026-06-02-kao-attack-zero",
+      "status": "published",
+      "name": "花王 Attack Zero",
+      "english_name": "Kao Attack Zero",
+      "summary": "Attack Zero的噴罐超級好用",
+      "long_description": "Attack Zero的噴罐超級好用",
+      "llm_description": "",
+      "search_aliases": [],
+      "model_numbers": [],
+      "offers": [
+        {
+          "channel_id": "costco",
+          "url": "https://www.costco.com.tw/Household-Baby-Toys/Household-Essentials/Laundry-Care/Attack-ZERO-Laundry-Detergent-Drum-Type-400-g-Refill-2100-g/p/339031",
+          "price_text": "579",
+          "price": {
+            "amount": 579,
+            "currency": "TWD",
+            "unit": "each",
+            "label": null
+          },
+          "checked_at": "2026-06-02T00:00:00+08:00"
+        }
+      ],
+      "image_file": "2026-06-02-kao-attack-zero.webp",
+      "image_url": null,
+      "category_id": "household",
+      "tag_ids": [
+        "cleaning",
+        "daily-goods",
+        "kao"
+      ],
+      "reference_url": "https://www.facebook.com/applepig/posts/pfbid02yPa7pBxFXc2igdCXHNDjU89jarHuG7Fhj6cFQfqsADJAtfxbxxW5E2NvH7fJjCoLl",
+      "created_at": "2026-06-02T00:00:00+08:00",
+      "updated_at": "2026-06-02T00:00:00+08:00",
+      "published_at": "2026-06-02T00:00:00+08:00",
+      "unpublished_at": null,
+      "archived_at": null
+    },
+    {
+      "id": "2026-06-02-kioxia-1tb-usb-flash-drive",
+      "status": "published",
+      "name": "Kioxia 1TB隨身碟",
+      "english_name": "Kioxia 1TB USB Flash Drive",
+      "summary": "故Toshiba，這顆沒搜尋到什麼災情，價格也便宜，大概可以買吧",
+      "long_description": "故Toshiba，這顆沒搜尋到什麼災情，價格也便宜，大概可以買吧",
+      "llm_description": "",
+      "search_aliases": [],
+      "model_numbers": [],
+      "offers": [
+        {
+          "channel_id": "pchome",
+          "url": "https://24h.pchome.com.tw/prod/DRAA5D-A900FDQCR",
+          "price_text": "2490",
+          "price": {
+            "amount": 2490,
+            "currency": "TWD",
+            "unit": "each",
+            "label": null
+          },
+          "checked_at": "2026-06-02T00:00:00+08:00"
+        }
+      ],
+      "image_file": "2026-06-02-kioxia-1tb-usb-flash-drive.jpg",
+      "image_url": null,
+      "category_id": "computer-3c",
+      "tag_ids": [
+        "kioxia",
+        "storage-backup"
+      ],
+      "reference_url": null,
+      "created_at": "2026-06-02T00:00:00+08:00",
+      "updated_at": "2026-06-02T00:00:00+08:00",
+      "published_at": "2026-06-02T00:00:00+08:00",
+      "unpublished_at": null,
+      "archived_at": null
+    },
+    {
+      "id": "2026-06-02-kohler-bathroom-heater",
+      "status": "published",
+      "name": "Kohler暖風機",
+      "english_name": "Kohler Bathroom Heater",
+      "summary": "他們家的暖風機面板非常好看，而且無線遙控款才賣一萬出頭，你浴室有拉220V的話可以考慮",
+      "long_description": "他們家的暖風機面板非常好看，而且無線遙控款才賣一萬出頭，你浴室有拉220V的話可以考慮",
+      "llm_description": "",
+      "search_aliases": [],
+      "model_numbers": [],
+      "offers": [
+        {
+          "channel_id": "other",
+          "url": "https://shop.kohler.com.tw/30x30cm-1/",
+          "price_text": "10900",
+          "price": {
+            "amount": 10900,
+            "currency": null,
+            "unit": "each",
+            "label": null
+          },
+          "checked_at": "2026-06-02T00:00:00+08:00"
+        }
+      ],
+      "image_file": "2026-06-02-kohler-bathroom-heater.jpg",
+      "image_url": null,
+      "category_id": "small-appliance",
+      "tag_ids": [
+        "air-care",
+        "bathroom",
+        "fixed-install",
+        "kohler"
+      ],
+      "reference_url": null,
+      "created_at": "2026-06-02T00:00:00+08:00",
+      "updated_at": "2026-06-02T00:00:00+08:00",
+      "published_at": "2026-06-02T00:00:00+08:00",
+      "unpublished_at": null,
+      "archived_at": null
+    },
+    {
+      "id": "2026-06-02-kohler-familycare-bathroom-vanity",
+      "status": "published",
+      "name": "Kohler FamilyCare浴櫃",
+      "english_name": "Kohler FamilyCare Bathroom Vanity",
+      "summary": "他們家的浴櫃組非常有趣，他的落水孔是在靠牆的地方，所以櫃子的抽屜可以做到2/3深度，中間也不會有奇怪的凹洞  不過水龍頭不要買他們家的，美規水管跟台灣習慣不同，出水量會比較小，還會害我被師傅罵（？",
+      "long_description": "他們家的浴櫃組非常有趣，他的落水孔是在靠牆的地方，所以櫃子的抽屜可以做到2/3深度，中間也不會有奇怪的凹洞  不過水龍頭不要買他們家的，美規水管跟台灣習慣不同，出水量會比較小，還會害我被師傅罵（？",
+      "llm_description": "",
+      "search_aliases": [],
+      "model_numbers": [],
+      "offers": [
+        {
+          "channel_id": "other",
+          "url": "https://shop.kohler.com.tw/family-care-60cm/",
+          "price_text": "20000",
+          "price": {
+            "amount": 20000,
+            "currency": null,
+            "unit": "each",
+            "label": null
+          },
+          "checked_at": "2026-06-02T00:00:00+08:00"
+        }
+      ],
+      "image_file": "2026-06-02-kohler-familycare-bathroom-vanity.jpg",
+      "image_url": null,
+      "category_id": "household",
+      "tag_ids": [
+        "bathroom",
+        "fixed-install",
+        "kohler"
+      ],
+      "reference_url": "https://www.youtube.com/watch?v=tJb53rtGS-Y",
+      "created_at": "2026-06-02T00:00:00+08:00",
+      "updated_at": "2026-06-02T00:00:00+08:00",
+      "published_at": "2026-06-02T00:00:00+08:00",
+      "unpublished_at": null,
+      "archived_at": null
+    },
+    {
+      "id": "2026-06-02-kolin-ceramic-heater",
+      "status": "published",
+      "name": "Kolin 電暖器",
+      "english_name": "Kolin Ceramic Heater",
+      "summary": "暖氣我是比較推陶瓷式的啦，體積小、比較便宜、不會亮、而且還有風扇強制對流，暖房效果比看起來的更好",
+      "long_description": "暖氣我是比較推陶瓷式的啦，體積小、比較便宜、不會亮、而且還有風扇強制對流，暖房效果比看起來的更好",
+      "llm_description": "",
+      "search_aliases": [],
+      "model_numbers": [],
+      "offers": [
+        {
+          "channel_id": "pchome",
+          "url": "https://24h.pchome.com.tw/prod/DMAZ0F-A900H16LY",
+          "price_text": "1180",
+          "price": {
+            "amount": 1180,
+            "currency": "TWD",
+            "unit": "each",
+            "label": null
+          },
+          "checked_at": "2026-06-02T00:00:00+08:00"
+        }
+      ],
+      "image_file": "2026-06-02-kolin-ceramic-heater.jpg",
+      "image_url": null,
+      "category_id": "small-appliance",
+      "tag_ids": [
+        "air-care",
+        "kolin"
+      ],
+      "reference_url": null,
+      "created_at": "2026-06-02T00:00:00+08:00",
+      "updated_at": "2026-06-02T00:00:00+08:00",
+      "published_at": "2026-06-02T00:00:00+08:00",
+      "unpublished_at": null,
+      "archived_at": null
+    },
+    {
+      "id": "2026-06-02-lg-c4-65-inch-oled",
+      "status": "published",
+      "name": "LG C4 65吋 OLED",
+      "english_name": "LG C4 65 Inch OLED",
+      "summary": "OLED面板的話還是LG比較便宜，不然就是要賭人品買台牌或匪牌",
+      "long_description": "OLED面板的話還是LG比較便宜，不然就是要賭人品買台牌或匪牌",
+      "llm_description": "",
+      "search_aliases": [],
+      "model_numbers": [],
+      "offers": [
+        {
+          "channel_id": "other",
+          "url": "https://www.3c3c.com.tw/Shop/itemDetail.aspx?mNo1=OLED65C4PTA&m=6&p=60",
+          "price_text": "低於60000",
+          "price": {
+            "amount": null,
+            "currency": null,
+            "unit": null,
+            "label": "低於60000"
+          },
+          "checked_at": "2026-06-02T00:00:00+08:00"
+        }
+      ],
+      "image_file": "2026-06-02-lg-c4-65-inch-oled.jpg",
+      "image_url": null,
+      "category_id": "av-theater",
+      "tag_ids": [
+        "display",
+        "lg"
+      ],
+      "reference_url": null,
+      "created_at": "2026-06-02T00:00:00+08:00",
+      "updated_at": "2026-06-02T00:00:00+08:00",
+      "published_at": "2026-06-02T00:00:00+08:00",
+      "unpublished_at": null,
+      "archived_at": null
+    },
+    {
+      "id": "2026-06-02-lion-nanox-detergent",
+      "status": "published",
+      "name": "Lion Nanox洗衣精",
+      "english_name": "Lion Nanox Detergent",
+      "summary": "今年Nanox One新版上市了，橘色的是標準款、紫色的強化殺菌、藍綠色的PRO全面強化，但是價錢都顯著的比去年貴",
+      "long_description": "今年Nanox One新版上市了，橘色的是標準款、紫色的強化殺菌、藍綠色的PRO全面強化，但是價錢都顯著的比去年貴",
+      "llm_description": "",
+      "search_aliases": [],
+      "model_numbers": [],
+      "offers": [
+        {
+          "channel_id": "pchome",
+          "url": "https://24h.pchome.com.tw/prod/DAAK2J-1900H333K?fq=/S/DAAK2J",
+          "price_text": "1099",
+          "price": {
+            "amount": 1099,
+            "currency": "TWD",
+            "unit": "each",
+            "label": null
+          },
+          "checked_at": "2026-06-02T00:00:00+08:00"
+        }
+      ],
+      "image_file": "2026-06-02-lion-nanox-detergent.jpg",
+      "image_url": null,
+      "category_id": "household",
+      "tag_ids": [
+        "cleaning",
+        "daily-goods",
+        "lion"
+      ],
+      "reference_url": "https://www.facebook.com/applepig/posts/pfbid0FhDw2JMyJfPJ8pGNG5U8ujWYGevTxEnRNobThWiBFzp24riVpstAuTLP8An66rc9l",
+      "created_at": "2026-06-02T00:00:00+08:00",
+      "updated_at": "2026-06-02T00:00:00+08:00",
+      "published_at": "2026-06-02T00:00:00+08:00",
+      "unpublished_at": null,
+      "archived_at": null
+    },
+    {
+      "id": "2026-06-02-lixil-bidet-seat",
+      "status": "published",
+      "name": "Lixil免治馬桶座",
+      "english_name": "LIXIL Bidet Seat",
+      "summary": "TOTO的最近在amazon上價錢很亂，相較之下Lixil的比較合理",
+      "long_description": "TOTO的最近在amazon上價錢很亂，相較之下Lixil的比較合理",
+      "llm_description": "",
+      "search_aliases": [],
+      "model_numbers": [],
+      "offers": [
+        {
+          "channel_id": "amazonjp",
+          "url": "https://amzn.asia/d/2Bgf6KR",
+          "price_text": "￥42000",
+          "price": {
+            "amount": 42000,
+            "currency": "JPY",
+            "unit": "each",
+            "label": null
+          },
+          "checked_at": "2026-06-02T00:00:00+08:00"
+        }
+      ],
+      "image_file": "2026-06-02-lixil-bidet-seat.jpg",
+      "image_url": null,
+      "category_id": "small-appliance",
+      "tag_ids": [
+        "bathroom",
+        "lixil"
+      ],
+      "reference_url": "https://www.facebook.com/photo/?fbid=10225665699022514&set=a.4011662783214",
+      "created_at": "2026-06-02T00:00:00+08:00",
+      "updated_at": "2026-06-02T00:00:00+08:00",
+      "published_at": "2026-06-02T00:00:00+08:00",
+      "unpublished_at": null,
+      "archived_at": null
+    },
+    {
+      "id": "2026-06-02-mitsubishi-electric-freezer",
+      "status": "published",
+      "name": "Mitsubishi 冷凍櫃",
+      "english_name": "Mitsubishi Electric Freezer",
+      "summary": "只是需要稍微擴充冷凍庫的話可以買這台，他身高比較低，上面還可以擺電鍋或水波爐",
+      "long_description": "只是需要稍微擴充冷凍庫的話可以買這台，他身高比較低，上面還可以擺電鍋或水波爐",
+      "llm_description": "",
+      "search_aliases": [],
+      "model_numbers": [],
+      "offers": [
+        {
+          "channel_id": "pchome",
+          "url": "https://24h.pchome.com.tw/prod/DPAC34-A900H86CY",
+          "price_text": "12000",
+          "price": {
+            "amount": 12000,
+            "currency": "TWD",
+            "unit": "each",
+            "label": null
+          },
+          "checked_at": "2026-06-02T00:00:00+08:00"
+        }
+      ],
+      "image_file": "2026-06-02-mitsubishi-electric-freezer.jpg",
+      "image_url": null,
+      "category_id": "major-appliance",
+      "tag_ids": [
+        "kitchen",
+        "mitsubishi-electric",
+        "refrigeration"
+      ],
+      "reference_url": "https://www.facebook.com/1630614087/posts/pfbid02oKqtivtsPk5GdtoUW5WZciD43s3NJQRAsn8QG3j3CU8YpV8awbyMUrLXZ52yPiCQl/",
+      "created_at": "2026-06-02T00:00:00+08:00",
+      "updated_at": "2026-06-02T00:00:00+08:00",
+      "published_at": "2026-06-02T00:00:00+08:00",
+      "unpublished_at": null,
+      "archived_at": null
+    },
+    {
+      "id": "2026-06-02-mitsubishi-heavy-industries-air-conditioner",
+      "status": "published",
+      "name": "三菱重工冷氣",
+      "english_name": "Mitsubishi Heavy Industries Air Conditioner",
+      "summary": "其實Panasonic、日立也都可以買，但是我要稱讚一下三菱重工的遙控器排程功能超級優秀",
+      "long_description": "其實Panasonic、日立也都可以買，但是我要稱讚一下三菱重工的遙控器排程功能超級優秀",
+      "llm_description": "",
+      "search_aliases": [],
+      "model_numbers": [],
+      "offers": [
+        {
+          "channel_id": "pchome",
+          "url": "https://24h.pchome.com.tw/store/DPAF4H",
+          "price_text": "比較貴一點",
+          "price": {
+            "amount": null,
+            "currency": null,
+            "unit": null,
+            "label": "比較貴一點"
+          },
+          "checked_at": "2026-06-02T00:00:00+08:00"
+        }
+      ],
+      "image_file": "2026-06-02-mitsubishi-heavy-industries-air-conditioner.jpg",
+      "image_url": null,
+      "category_id": "major-appliance",
+      "tag_ids": [
+        "aircon",
+        "fixed-install",
+        "mitsubishi-heavy-industries"
+      ],
+      "reference_url": "https://www.facebook.com/applepig/posts/pfbid0JE19pPeNYreLhhjToDt3qCFVGgVuu6h51HVxiHgwNL2rtZ8zBYs9DFzU1dDKhHXKl",
+      "created_at": "2026-06-02T00:00:00+08:00",
+      "updated_at": "2026-06-02T00:00:00+08:00",
+      "published_at": "2026-06-02T00:00:00+08:00",
+      "unpublished_at": null,
+      "archived_at": null
+    },
+    {
+      "id": "2026-06-02-msi-desktop-pc",
+      "status": "published",
+      "name": "MSI桌上型",
+      "english_name": "MSI Desktop PC",
+      "summary": "i5 / 32G / 1TB / 4060，還三年保固",
+      "long_description": "i5 / 32G / 1TB / 4060，還三年保固",
+      "llm_description": "",
+      "search_aliases": [],
+      "model_numbers": [],
+      "offers": [
+        {
+          "channel_id": "pchome",
+          "url": "https://24h.pchome.com.tw/prod/DSAANL-1900I1LVY",
+          "price_text": "29990",
+          "price": {
+            "amount": 29990,
+            "currency": "TWD",
+            "unit": "each",
+            "label": null
+          },
+          "checked_at": "2026-06-02T00:00:00+08:00"
+        }
+      ],
+      "image_file": "2026-06-02-msi-desktop-pc.jpg",
+      "image_url": null,
+      "category_id": "computer-3c",
+      "tag_ids": [
+        "desk-setup",
+        "msi"
+      ],
+      "reference_url": null,
+      "created_at": "2026-06-02T00:00:00+08:00",
+      "updated_at": "2026-06-02T00:00:00+08:00",
+      "published_at": "2026-06-02T00:00:00+08:00",
+      "unpublished_at": null,
+      "archived_at": null
+    },
+    {
+      "id": "2026-06-02-ohashi-koshihikari-rice",
+      "status": "published",
+      "name": "大橋牌越光米",
+      "english_name": "Ohashi Koshihikari Rice",
+      "summary": "他們每年新米都會有這種8包1kg的禮盒，小包裝就比較不用怕米潮掉",
+      "long_description": "他們每年新米都會有這種8包1kg的禮盒，小包裝就比較不用怕米潮掉",
+      "llm_description": "",
+      "search_aliases": [],
+      "model_numbers": [],
+      "offers": [
+        {
+          "channel_id": "pchome",
+          "url": "https://24h.pchome.com.tw/prod/DBBY0M-A900GMBY7",
+          "price_text": "125/kg",
+          "price": {
+            "amount": 125,
+            "currency": "TWD",
+            "unit": "kilogram",
+            "label": null
+          },
+          "checked_at": "2026-06-02T00:00:00+08:00"
+        }
+      ],
+      "image_file": "2026-06-02-ohashi-koshihikari-rice.jpg",
+      "image_url": null,
+      "category_id": "household",
+      "tag_ids": [
+        "food",
+        "ohashi",
+        "rice"
+      ],
+      "reference_url": "https://www.facebook.com/applepig/posts/pfbid037AcHMyNMrZPFBvDg7GgQbquN8j2UNmPb1mvkM7YV9rJKuv8Us5BvASrcG8zzxRqjl",
+      "created_at": "2026-06-02T00:00:00+08:00",
+      "updated_at": "2026-06-02T00:00:00+08:00",
+      "published_at": "2026-06-02T00:00:00+08:00",
+      "unpublished_at": null,
+      "archived_at": null
+    },
+    {
+      "id": "2026-06-02-panasonic-freezer",
+      "status": "published",
+      "name": "Panasonic 冷凍櫃",
+      "english_name": "Panasonic Freezer",
+      "summary": "這台跟普通的冰箱差不多大，買的時候要注意一下要放哪",
+      "long_description": "這台跟普通的冰箱差不多大，買的時候要注意一下要放哪",
+      "llm_description": "",
+      "search_aliases": [],
+      "model_numbers": [],
+      "offers": [
+        {
+          "channel_id": "pchome",
+          "url": "https://24h.pchome.com.tw/prod/DPAC1T-A900ALMUG",
+          "price_text": "19000",
+          "price": {
+            "amount": 19000,
+            "currency": "TWD",
+            "unit": "each",
+            "label": null
+          },
+          "checked_at": "2026-06-02T00:00:00+08:00"
+        }
+      ],
+      "image_file": "2026-06-02-panasonic-freezer.jpg",
+      "image_url": null,
+      "category_id": "major-appliance",
+      "tag_ids": [
+        "kitchen",
+        "panasonic",
+        "refrigeration"
+      ],
+      "reference_url": "https://www.facebook.com/1630614087/posts/pfbid02oKqtivtsPk5GdtoUW5WZciD43s3NJQRAsn8QG3j3CU8YpV8awbyMUrLXZ52yPiCQl/",
+      "created_at": "2026-06-02T00:00:00+08:00",
+      "updated_at": "2026-06-02T00:00:00+08:00",
+      "published_at": "2026-06-02T00:00:00+08:00",
+      "unpublished_at": null,
+      "archived_at": null
+    },
+    {
+      "id": "2026-06-02-panasonic-japan-refrigerator",
+      "status": "published",
+      "name": "Panasonic 日規冰箱",
+      "english_name": "Panasonic Japan Refrigerator",
+      "summary": "日規六門冰箱比較好買的是Pana、Hitachi、三菱，規格其實很像，我覺得都可以買",
+      "long_description": "日規六門冰箱比較好買的是Pana、Hitachi、三菱，規格其實很像，我覺得都可以買",
+      "llm_description": "",
+      "search_aliases": [],
+      "model_numbers": [],
+      "offers": [
+        {
+          "channel_id": "pchome",
+          "url": "https://24h.pchome.com.tw/prod/DPAC74-A900BNXAJ",
+          "price_text": "67000",
+          "price": {
+            "amount": 67000,
+            "currency": "TWD",
+            "unit": "each",
+            "label": null
+          },
+          "checked_at": "2026-06-02T00:00:00+08:00"
+        }
+      ],
+      "image_file": "2026-06-02-panasonic-japan-refrigerator.jpg",
+      "image_url": null,
+      "category_id": "major-appliance",
+      "tag_ids": [
+        "kitchen",
+        "panasonic",
+        "refrigeration"
+      ],
+      "reference_url": "https://www.facebook.com/applepig/posts/pfbid02tsU6X2EFHExDnZrPXiyYkcu8WRHRDt1YuoPfY8pisDhG51FRWLsfFA9CwyQvRUUtl",
+      "created_at": "2026-06-02T00:00:00+08:00",
+      "updated_at": "2026-06-02T00:00:00+08:00",
+      "published_at": "2026-06-02T00:00:00+08:00",
+      "unpublished_at": null,
+      "archived_at": null
+    },
+    {
+      "id": "2026-06-02-panasonic-nn-bs607",
+      "status": "published",
+      "name": "Panasonic NN-BS607",
+      "english_name": "Panasonic NN BS607",
+      "summary": "別管什麼小烤箱了，直上水波爐吧",
+      "long_description": "別管什麼小烤箱了，直上水波爐吧",
+      "llm_description": "",
+      "search_aliases": [],
+      "model_numbers": [],
+      "offers": [
+        {
+          "channel_id": "pchome",
+          "url": "https://24h.pchome.com.tw/prod/DMBJ02-A900HB5FS",
+          "price_text": "12900",
+          "price": {
+            "amount": 12900,
+            "currency": "TWD",
+            "unit": "each",
+            "label": null
+          },
+          "checked_at": "2026-06-02T00:00:00+08:00"
+        }
+      ],
+      "image_file": "2026-06-02-panasonic-nn-bs607.jpg",
+      "image_url": null,
+      "category_id": "small-appliance",
+      "tag_ids": [
+        "countertop",
+        "kitchen",
+        "panasonic"
+      ],
+      "reference_url": null,
+      "created_at": "2026-06-02T00:00:00+08:00",
+      "updated_at": "2026-06-02T00:00:00+08:00",
+      "published_at": "2026-06-02T00:00:00+08:00",
+      "unpublished_at": null,
+      "archived_at": null
+    },
+    {
+      "id": "2026-06-02-panasonic-np-th4",
+      "status": "published",
+      "name": "Panasonic NP-TH4",
+      "english_name": "Panasonic NP TH4",
+      "summary": "桌面型洗碗機只有這台可以買了（認真",
+      "long_description": "桌面型洗碗機只有這台可以買了（認真",
+      "llm_description": "",
+      "search_aliases": [],
+      "model_numbers": [],
+      "offers": [
+        {
+          "channel_id": "pchome",
+          "url": "https://24h.pchome.com.tw/prod/DMBR1P-A900GT5EO",
+          "price_text": "21000",
+          "price": {
+            "amount": 21000,
+            "currency": "TWD",
+            "unit": "each",
+            "label": null
+          },
+          "checked_at": "2026-06-02T00:00:00+08:00"
+        }
+      ],
+      "image_file": "2026-06-02-panasonic-np-th4.jpg",
+      "image_url": null,
+      "category_id": "small-appliance",
+      "tag_ids": [
+        "countertop",
+        "kitchen",
+        "panasonic"
+      ],
+      "reference_url": "https://www.facebook.com/applepig/posts/pfbid02SjcyKSNfiwr9rFQheqiiqgyrpyu5Qi1DsP7sLFoXdGQ8b6CtxfMBVq2MwYuE81Jhl",
+      "created_at": "2026-06-02T00:00:00+08:00",
+      "updated_at": "2026-06-02T00:00:00+08:00",
+      "published_at": "2026-06-02T00:00:00+08:00",
+      "unpublished_at": null,
+      "archived_at": null
+    },
+    {
+      "id": "2026-06-02-panasonic-sr-kt069",
+      "status": "published",
+      "name": "Panasonic SR-KT069",
+      "english_name": "Panasonic SR KT069",
+      "summary": "四人份小電鍋唯一推薦",
+      "long_description": "四人份小電鍋唯一推薦",
+      "llm_description": "",
+      "search_aliases": [],
+      "model_numbers": [],
+      "offers": [
+        {
+          "channel_id": "pchome",
+          "url": "https://24h.pchome.com.tw/prod/DMBI0H-A900AOX6V",
+          "price_text": "5000",
+          "price": {
+            "amount": 5000,
+            "currency": "TWD",
+            "unit": "each",
+            "label": null
+          },
+          "checked_at": "2026-06-02T00:00:00+08:00"
+        }
+      ],
+      "image_file": "2026-06-02-panasonic-sr-kt069.jpg",
+      "image_url": null,
+      "category_id": "small-appliance",
+      "tag_ids": [
+        "countertop",
+        "kitchen",
+        "panasonic"
+      ],
+      "reference_url": "https://www.facebook.com/applepig/posts/pfbid0qpSR2V4dzA2a1ciNswbcp3DcDTT43Aok39FL1yDxG4RcyoJceQr9G28WxMu95PNcl",
+      "created_at": "2026-06-02T00:00:00+08:00",
+      "updated_at": "2026-06-02T00:00:00+08:00",
+      "published_at": "2026-06-02T00:00:00+08:00",
+      "unpublished_at": null,
+      "archived_at": null
+    },
+    {
+      "id": "2026-06-02-panasonic-v150mdh",
+      "status": "published",
+      "name": "Panasonic V150MDH",
+      "english_name": "Panasonic V150MDH",
+      "summary": "總之洗衣機都現看Panasonic，這是自動加洗衣精的洗脫烘中最便宜的",
+      "long_description": "總之洗衣機都現看Panasonic，這是自動加洗衣精的洗脫烘中最便宜的",
+      "llm_description": "",
+      "search_aliases": [],
+      "model_numbers": [],
+      "offers": [
+        {
+          "channel_id": "pchome",
+          "url": "https://24h.pchome.com.tw/prod/DPAI1H-A900FQ5GC",
+          "price_text": "41000",
+          "price": {
+            "amount": 41000,
+            "currency": "TWD",
+            "unit": "each",
+            "label": null
+          },
+          "checked_at": "2026-06-02T00:00:00+08:00"
+        }
+      ],
+      "image_file": "2026-06-02-panasonic-v150mdh.jpg",
+      "image_url": null,
+      "category_id": "major-appliance",
+      "tag_ids": [
+        "laundry",
+        "panasonic"
+      ],
+      "reference_url": null,
+      "created_at": "2026-06-02T00:00:00+08:00",
+      "updated_at": "2026-06-02T00:00:00+08:00",
+      "published_at": "2026-06-02T00:00:00+08:00",
+      "unpublished_at": null,
+      "archived_at": null
+    },
+    {
+      "id": "2026-06-02-philips-40b1u5600",
+      "status": "published",
+      "name": "Philips 40B1U5600",
+      "english_name": "Philips 40B1U5600",
+      "summary": "40\" 3440*1440的螢幕，等於是32\" 2K的加寬版本，94ppi可以直接設100%來用",
+      "long_description": "40\" 3440*1440的螢幕，等於是32\" 2K的加寬版本，94ppi可以直接設100%來用",
+      "llm_description": "",
+      "search_aliases": [],
+      "model_numbers": [],
+      "offers": [
+        {
+          "channel_id": "pchome",
+          "url": "https://24h.pchome.com.tw/prod/DSABQK-A900HLMQG?fq=/S/DSABQI",
+          "price_text": "15000",
+          "price": {
+            "amount": 15000,
+            "currency": "TWD",
+            "unit": "each",
+            "label": null
+          },
+          "checked_at": "2026-06-02T00:00:00+08:00"
+        }
+      ],
+      "image_file": "2026-06-02-philips-40b1u5600.jpg",
+      "image_url": null,
+      "category_id": "computer-3c",
+      "tag_ids": [
+        "display",
+        "philips"
+      ],
+      "reference_url": null,
+      "created_at": "2026-06-02T00:00:00+08:00",
+      "updated_at": "2026-06-02T00:00:00+08:00",
+      "published_at": "2026-06-02T00:00:00+08:00",
+      "unpublished_at": null,
+      "archived_at": null
+    },
+    {
+      "id": "2026-06-02-samsung-m7-32-inch",
+      "status": "published",
+      "name": "Samsung M7 32吋",
+      "english_name": "Samsung M7 32 Inch",
+      "summary": "想要4K、想要USB C接筆電、或是用mac沒有dpi問題的話可以考慮這台",
+      "long_description": "想要4K、想要USB C接筆電、或是用mac沒有dpi問題的話可以考慮這台",
+      "llm_description": "",
+      "search_aliases": [],
+      "model_numbers": [],
+      "offers": [
+        {
+          "channel_id": "pchome",
+          "url": "https://24h.pchome.com.tw/prod/DPADEW-A900HXG0E",
+          "price_text": "9900",
+          "price": {
+            "amount": 9900,
+            "currency": "TWD",
+            "unit": "each",
+            "label": null
+          },
+          "checked_at": "2026-06-02T00:00:00+08:00"
+        }
+      ],
+      "image_file": "2026-06-02-samsung-m7-32-inch.jpg",
+      "image_url": null,
+      "category_id": "computer-3c",
+      "tag_ids": [
+        "display",
+        "samsung"
+      ],
+      "reference_url": "https://www.facebook.com/applepig/posts/pfbid0JCoQJTRYpcGmQqrV4ryTVfj1NsHhEQADq6nipBzBgbJNpkX6WDgJj3LyLew5DQajl",
+      "created_at": "2026-06-02T00:00:00+08:00",
+      "updated_at": "2026-06-02T00:00:00+08:00",
+      "published_at": "2026-06-02T00:00:00+08:00",
+      "unpublished_at": null,
+      "archived_at": null
+    },
+    {
+      "id": "2026-06-02-sennheiser-ambeo-max",
+      "status": "published",
+      "name": "Sennheiser Ambeo Max",
+      "english_name": "Sennheiser Ambeo Max",
+      "summary": "Soundbar唯一推薦，看片聽音樂都可以，就是價錢不夠可愛，如果有飛美國的話可以考慮帶一組",
+      "long_description": "Soundbar唯一推薦，看片聽音樂都可以，就是價錢不夠可愛，如果有飛美國的話可以考慮帶一組",
+      "llm_description": "",
+      "search_aliases": [],
+      "model_numbers": [],
+      "offers": [
+        {
+          "channel_id": "pchome",
+          "url": "https://24h.pchome.com.tw/prod/DMAAEE-A900GPR35",
+          "price_text": "84900",
+          "price": {
+            "amount": 84900,
+            "currency": "TWD",
+            "unit": "each",
+            "label": null
+          },
+          "checked_at": "2026-06-02T00:00:00+08:00"
+        }
+      ],
+      "image_file": "2026-06-02-sennheiser-ambeo-max.jpg",
+      "image_url": null,
+      "category_id": "av-theater",
+      "tag_ids": [
+        "sennheiser",
+        "speaker"
+      ],
+      "reference_url": "https://www.facebook.com/applepig/posts/pfbid02Z4MneYucySzuwXGTurgjTvu7hTUGz8VNPxYWmCsKcNoMGQtoCyLurJDf2qFkRSnXl",
+      "created_at": "2026-06-02T00:00:00+08:00",
+      "updated_at": "2026-06-02T00:00:00+08:00",
+      "published_at": "2026-06-02T00:00:00+08:00",
+      "unpublished_at": null,
+      "archived_at": null
+    },
+    {
+      "id": "2026-06-02-sharp-65-inch-xled",
+      "status": "published",
+      "name": "Sharp 65吋 XLED",
+      "english_name": "Sharp 65 Inch XLED",
+      "summary": "如果不想買OLED的話，現在Sharp XLED應該是最好的選擇",
+      "long_description": "如果不想買OLED的話，現在Sharp XLED應該是最好的選擇",
+      "llm_description": "",
+      "search_aliases": [],
+      "model_numbers": [],
+      "offers": [
+        {
+          "channel_id": "pchome",
+          "url": "https://24h.pchome.com.tw/prod/DPADN9-A900HQHS6?fq=/S/DPADN9",
+          "price_text": "43000",
+          "price": {
+            "amount": 43000,
+            "currency": "TWD",
+            "unit": "each",
+            "label": null
+          },
+          "checked_at": "2026-06-02T00:00:00+08:00"
+        }
+      ],
+      "image_file": "2026-06-02-sharp-65-inch-xled.jpg",
+      "image_url": null,
+      "category_id": "av-theater",
+      "tag_ids": [
+        "display",
+        "sharp"
+      ],
+      "reference_url": null,
+      "created_at": "2026-06-02T00:00:00+08:00",
+      "updated_at": "2026-06-02T00:00:00+08:00",
+      "published_at": "2026-06-02T00:00:00+08:00",
+      "unpublished_at": null,
+      "archived_at": null
+    },
+    {
+      "id": "2026-06-02-sharp-xp10t",
+      "status": "published",
+      "name": "Sharp XP10T",
+      "english_name": "Sharp XP10T",
+      "summary": "家裡如果有長輩怕微波爐的話，就直上XP10T，這台才有強調無微波調理功能（然後你還是可以自己拿他的微波功能來用",
+      "long_description": "家裡如果有長輩怕微波爐的話，就直上XP10T，這台才有強調無微波調理功能（然後你還是可以自己拿他的微波功能來用",
+      "llm_description": "",
+      "search_aliases": [],
+      "model_numbers": [],
+      "offers": [
+        {
+          "channel_id": "pchome",
+          "url": "https://24h.pchome.com.tw/prod/DMBJ02-1900I5KFC",
+          "price_text": "29900",
+          "price": {
+            "amount": 29900,
+            "currency": "TWD",
+            "unit": "each",
+            "label": null
+          },
+          "checked_at": "2026-06-02T00:00:00+08:00"
+        }
+      ],
+      "image_file": "2026-06-02-sharp-xp10t.jpg",
+      "image_url": null,
+      "category_id": "small-appliance",
+      "tag_ids": [
+        "countertop",
+        "kitchen",
+        "sharp"
+      ],
+      "reference_url": "https://www.facebook.com/applepig/posts/pfbid02voWvQVJp7FoCmJx3WbbENaNpKFf35jp6H4Ram3UqNxmTcCEYLUvZ23BgRnEdAAw7l",
+      "created_at": "2026-06-02T00:00:00+08:00",
+      "updated_at": "2026-06-02T00:00:00+08:00",
+      "published_at": "2026-06-02T00:00:00+08:00",
+      "unpublished_at": null,
+      "archived_at": null
+    },
+    {
+      "id": "2026-06-02-synology-ds723-plus",
+      "status": "published",
+      "name": "Synology DS723+",
+      "english_name": "Synology DS723 Plus",
+      "summary": "最近硬碟單顆有16TB，小小一台2bay即使裝RAID 1也還是有16TB可用，應該遠超過大部分人的需求",
+      "long_description": "最近硬碟單顆有16TB，小小一台2bay即使裝RAID 1也還是有16TB可用，應該遠超過大部分人的需求",
+      "llm_description": "",
+      "search_aliases": [],
+      "model_numbers": [],
+      "offers": [
+        {
+          "channel_id": "pchome",
+          "url": "https://24h.pchome.com.tw/prod/DRAG08-A900FWNSJ",
+          "price_text": "15000",
+          "price": {
+            "amount": 15000,
+            "currency": "TWD",
+            "unit": "each",
+            "label": null
+          },
+          "checked_at": "2026-06-02T00:00:00+08:00"
+        }
+      ],
+      "image_file": "2026-06-02-synology-ds723-plus.jpg",
+      "image_url": null,
+      "category_id": "computer-3c",
+      "tag_ids": [
+        "storage-backup",
+        "synology"
+      ],
+      "reference_url": "https://www.facebook.com/applepig/posts/pfbid0yWM3dPV3ZJMNFVrzBwkSZgkgFhHakf79DAhhFQwd3A1kUgnY23D4Exb5PZS2r9Hvl",
+      "created_at": "2026-06-02T00:00:00+08:00",
+      "updated_at": "2026-06-02T00:00:00+08:00",
+      "published_at": "2026-06-02T00:00:00+08:00",
+      "unpublished_at": null,
+      "archived_at": null
+    },
+    {
+      "id": "2026-06-02-toshiba-premium-ceiling-light",
+      "status": "published",
+      "name": "Toshiba高階吸頂燈",
+      "english_name": "Toshiba Premium Ceiling Light",
+      "summary": "這顆是演色力比較強的高階款，可惜不是以前那個羅浮宮級的了",
+      "long_description": "這顆是演色力比較強的高階款，可惜不是以前那個羅浮宮級的了",
+      "llm_description": "",
+      "search_aliases": [],
+      "model_numbers": [],
+      "offers": [
+        {
+          "channel_id": "amazonjp",
+          "url": "https://www.amazon.co.jp/dp/B0C9LYBKD3",
+          "price_text": "￥30000",
+          "price": {
+            "amount": 30000,
+            "currency": "JPY",
+            "unit": "each",
+            "label": null
+          },
+          "checked_at": "2026-06-02T00:00:00+08:00"
+        }
+      ],
+      "image_file": "2026-06-02-toshiba-premium-ceiling-light.jpg",
+      "image_url": null,
+      "category_id": "small-appliance",
+      "tag_ids": [
+        "lighting",
+        "toshiba"
+      ],
+      "reference_url": "https://www.facebook.com/applepig/posts/pfbid0qLvB8BELCJiUZrbXYL11uhKJWWUrEqtRK4zxx3JTjX2xjJwj4zK9rWhNvqLMesR3l",
+      "created_at": "2026-06-02T00:00:00+08:00",
+      "updated_at": "2026-06-02T00:00:00+08:00",
+      "published_at": "2026-06-02T00:00:00+08:00",
+      "unpublished_at": null,
+      "archived_at": null
+    },
+    {
+      "id": "2026-06-02-toshiba-yd5000",
+      "status": "published",
+      "name": "Toshiba YD5000",
+      "english_name": "Toshiba YD5000",
+      "summary": "看得懂日文的話買水貨還是比較便宜，這台是次旗艦，而且amazon還免運費直接到你家",
+      "long_description": "看得懂日文的話買水貨還是比較便宜，這台是次旗艦，而且amazon還免運費直接到你家",
+      "llm_description": "",
+      "search_aliases": [],
+      "model_numbers": [],
+      "offers": [
+        {
+          "channel_id": "amazonjp",
+          "url": "https://amzn.asia/d/45791oT",
+          "price_text": "￥100000",
+          "price": {
+            "amount": 100000,
+            "currency": "JPY",
+            "unit": "each",
+            "label": null
+          },
+          "checked_at": "2026-06-02T00:00:00+08:00"
+        }
+      ],
+      "image_file": "2026-06-02-toshiba-yd5000.jpg",
+      "image_url": null,
+      "category_id": "major-appliance",
+      "tag_ids": [
+        "kitchen",
+        "toshiba"
+      ],
+      "reference_url": null,
+      "created_at": "2026-06-02T00:00:00+08:00",
+      "updated_at": "2026-06-02T00:00:00+08:00",
+      "published_at": "2026-06-02T00:00:00+08:00",
+      "unpublished_at": null,
+      "archived_at": null
+    },
+    {
+      "id": "2026-06-02-toto-thermostatic-faucet",
+      "status": "published",
+      "name": "TOTO恆溫水龍頭",
+      "english_name": "TOTO Thermostatic Faucet",
+      "summary": "如果你家熱水器夠熱、但是洗澡的水溫不穩的話，通常裝上恆溫水龍頭就能得到有效的改善  而且他的把手一邊調溫度、另一邊調淋浴/龍頭，可以徹底杜絕調了水量溫度就變了的問題",
+      "long_description": "如果你家熱水器夠熱、但是洗澡的水溫不穩的話，通常裝上恆溫水龍頭就能得到有效的改善  而且他的把手一邊調溫度、另一邊調淋浴/龍頭，可以徹底杜絕調了水量溫度就變了的問題",
+      "llm_description": "",
+      "search_aliases": [],
+      "model_numbers": [],
+      "offers": [
+        {
+          "channel_id": "amazonjp",
+          "url": "https://www.amazon.co.jp/dp/B0BNHWCWB4",
+          "price_text": "￥18000",
+          "price": {
+            "amount": 18000,
+            "currency": "JPY",
+            "unit": "each",
+            "label": null
+          },
+          "checked_at": "2026-06-02T00:00:00+08:00"
+        }
+      ],
+      "image_file": "2026-06-02-toto-thermostatic-faucet.jpg",
+      "image_url": null,
+      "category_id": "household",
+      "tag_ids": [
+        "bathroom",
+        "fixed-install",
+        "toto"
+      ],
+      "reference_url": null,
+      "created_at": "2026-06-02T00:00:00+08:00",
+      "updated_at": "2026-06-02T00:00:00+08:00",
+      "published_at": "2026-06-02T00:00:00+08:00",
+      "unpublished_at": null,
+      "archived_at": null
+    },
+    {
+      "id": "2026-06-02-trusco-trunk-cargo",
+      "status": "published",
+      "name": "Trusco 物流箱",
+      "english_name": "TRUSCO Trunk Cargo",
+      "summary": "從日本搬東西回來的好幫手，詳情請看下面參考資料",
+      "long_description": "從日本搬東西回來的好幫手，詳情請看下面參考資料",
+      "llm_description": "",
+      "search_aliases": [],
+      "model_numbers": [],
+      "offers": [
+        {
+          "channel_id": "amazonjp",
+          "url": "https://www.amazon.co.jp/dp/B002A5VPSO",
+          "price_text": "￥1790",
+          "price": {
+            "amount": 1790,
+            "currency": "JPY",
+            "unit": "each",
+            "label": null
+          },
+          "checked_at": "2026-06-02T00:00:00+08:00"
+        }
+      ],
+      "image_file": "2026-06-02-trusco-trunk-cargo.jpg",
+      "image_url": null,
+      "category_id": "household",
+      "tag_ids": [
+        "organizing",
+        "trusco"
+      ],
+      "reference_url": "https://www.facebook.com/applepig/posts/pfbid0mPFP5y2HqLf9Ew39QFyMv6onqBUevdjA4wKsRUSz6NttNTxDEh2xNKGvUoJqoGrfl",
+      "created_at": "2026-06-02T00:00:00+08:00",
+      "updated_at": "2026-06-02T00:00:00+08:00",
+      "published_at": "2026-06-02T00:00:00+08:00",
+      "unpublished_at": null,
+      "archived_at": null
+    },
+    {
+      "id": "2026-06-02-unifi-express",
+      "status": "published",
+      "name": "Unifi Express",
+      "english_name": "UniFi Express",
+      "summary": "你遲早是要裝Unifi全家桶的，為什麼不一開始就裝呢",
+      "long_description": "你遲早是要裝Unifi全家桶的，為什麼不一開始就裝呢",
+      "llm_description": "",
+      "search_aliases": [],
+      "model_numbers": [],
+      "offers": [
+        {
+          "channel_id": "other",
+          "url": "https://tw.store.ui.com/tw/zh-tw/category/cloud-gateways-wifi-integrated/products/ux",
+          "price_text": "5799",
+          "price": {
+            "amount": 5799,
+            "currency": null,
+            "unit": "each",
+            "label": null
+          },
+          "checked_at": "2026-06-02T00:00:00+08:00"
+        }
+      ],
+      "image_file": "2026-06-02-unifi-express.png",
+      "image_url": null,
+      "category_id": "network",
+      "tag_ids": [
+        "network-gear",
+        "ubiquiti"
+      ],
+      "reference_url": null,
+      "created_at": "2026-06-02T00:00:00+08:00",
+      "updated_at": "2026-06-02T00:00:00+08:00",
+      "published_at": "2026-06-02T00:00:00+08:00",
+      "unpublished_at": null,
+      "archived_at": null
+    },
+    {
+      "id": "2026-06-02-vibo-40l-oven",
+      "status": "published",
+      "name": "威寶40L烤箱",
+      "english_name": "Vibo 40L Oven",
+      "summary": "這是要認真烤麵包用的烤箱，價格不是走親民路線的",
+      "long_description": "這是要認真烤麵包用的烤箱，價格不是走親民路線的",
+      "llm_description": "",
+      "search_aliases": [],
+      "model_numbers": [],
+      "offers": [
+        {
+          "channel_id": "momo",
+          "url": "https://www.momoshop.com.tw/goods/GoodsDetail.jsp?i_code=11521511&fbclid=IwAR16a9uh8O9XNFHzk5BDybSfMkVZccfXvu-54vWPl8ZbC4aYLj9bkMI-NTQ",
+          "price_text": "9000",
+          "price": {
+            "amount": 9000,
+            "currency": "TWD",
+            "unit": "each",
+            "label": null
+          },
+          "checked_at": "2026-06-02T00:00:00+08:00"
+        }
+      ],
+      "image_file": "2026-06-02-vibo-40l-oven.webp",
+      "image_url": null,
+      "category_id": "small-appliance",
+      "tag_ids": [
+        "countertop",
+        "kitchen",
+        "vibo"
+      ],
+      "reference_url": "https://www.facebook.com/applepig/posts/pfbid0rU7gfAonS3fuEhbnHWh31XhoPaGAK1xF2HbwEeYFtFmDsuKm1Bw63znYUccsHve6l",
+      "created_at": "2026-06-02T00:00:00+08:00",
+      "updated_at": "2026-06-02T00:00:00+08:00",
+      "published_at": "2026-06-02T00:00:00+08:00",
+      "unpublished_at": null,
+      "archived_at": null
+    },
+    {
+      "id": "2026-06-02-yamada-seiyu-sesame-chili-oil",
+      "status": "published",
+      "name": "山田製油 胡麻辣油",
+      "english_name": "Yamada Seiyu Sesame Chili Oil",
+      "summary": "雖然叫辣油但是其實不辣，而是超級香的香油  我都是回日本的時候在百貨公司超市補貨，會比第一名店便宜很多",
+      "long_description": "雖然叫辣油但是其實不辣，而是超級香的香油  我都是回日本的時候在百貨公司超市補貨，會比第一名店便宜很多",
+      "llm_description": "",
+      "search_aliases": [],
+      "model_numbers": [],
+      "offers": [
+        {
+          "channel_id": "other",
+          "url": "https://shop.firstsuper.com.tw/products/%E5%B1%B1%E7%94%B0%E8%83%A1%E9%BA%BB%E8%BE%A3%E6%B2%B9",
+          "price_text": "￥972",
+          "price": {
+            "amount": 972,
+            "currency": "JPY",
+            "unit": "each",
+            "label": null
+          },
+          "checked_at": "2026-06-02T00:00:00+08:00"
+        }
+      ],
+      "image_file": "2026-06-02-yamada-seiyu-sesame-chili-oil.webp",
+      "image_url": null,
+      "category_id": "household",
+      "tag_ids": [
+        "food",
+        "kitchen",
+        "yamada-seiyu"
+      ],
+      "reference_url": null,
+      "created_at": "2026-06-02T00:00:00+08:00",
+      "updated_at": "2026-06-02T00:00:00+08:00",
+      "published_at": "2026-06-02T00:00:00+08:00",
+      "unpublished_at": null,
+      "archived_at": null
+    },
+    {
+      "id": "2026-06-02-zojirushi-nw-jw10",
+      "status": "published",
+      "name": "象印NW-JW10",
+      "english_name": "Zojirushi NW JW10",
+      "summary": "這台的賣點是煮飯快、要清洗的零件少，不過煮起來還是略輸本炭釜",
+      "long_description": "這台的賣點是煮飯快、要清洗的零件少，不過煮起來還是略輸本炭釜",
+      "llm_description": "",
+      "search_aliases": [],
+      "model_numbers": [],
+      "offers": [
+        {
+          "channel_id": "amazonjp",
+          "url": "https://www.amazon.co.jp/dp/B089M6CRXJ",
+          "price_text": "￥45000",
+          "price": {
+            "amount": 45000,
+            "currency": "JPY",
+            "unit": "each",
+            "label": null
+          },
+          "checked_at": "2026-06-02T00:00:00+08:00"
+        }
+      ],
+      "image_file": "2026-06-02-zojirushi-nw-jw10.jpg",
+      "image_url": null,
+      "category_id": "small-appliance",
+      "tag_ids": [
+        "countertop",
+        "kitchen",
+        "zojirushi"
+      ],
+      "reference_url": null,
+      "created_at": "2026-06-02T00:00:00+08:00",
+      "updated_at": "2026-06-02T00:00:00+08:00",
+      "published_at": "2026-06-02T00:00:00+08:00",
+      "unpublished_at": null,
+      "archived_at": null
+    },
+    {
+      "id": "2026-06-02-zyxel-xgs1250-12",
+      "status": "published",
+      "name": "Zyxel XGS1250-12",
+      "english_name": "Zyxel XGS1250 12",
+      "summary": "應該是目前最好買的10G switch，一孔SFP+、三孔Multigig、八孔gbe，應該這台就可以把全家的網路線都插在上面了",
+      "long_description": "應該是目前最好買的10G switch，一孔SFP+、三孔Multigig、八孔gbe，應該這台就可以把全家的網路線都插在上面了",
+      "llm_description": "",
+      "search_aliases": [],
+      "model_numbers": [],
+      "offers": [
+        {
+          "channel_id": "pchome",
+          "url": "https://24h.pchome.com.tw/prod/DRAF0I-A900B7QHW",
+          "price_text": "9000",
+          "price": {
+            "amount": 9000,
+            "currency": "TWD",
+            "unit": "each",
+            "label": null
+          },
+          "checked_at": "2026-06-02T00:00:00+08:00"
+        }
+      ],
+      "image_file": "2026-06-02-zyxel-xgs1250-12.jpg",
+      "image_url": null,
+      "category_id": "network",
+      "tag_ids": [
+        "network-gear",
+        "zyxel"
+      ],
+      "reference_url": "https://www.facebook.com/applepig/posts/pfbid0h5V9UwDvLD96ZTSEvoHctNK8sEqvfHaPKqMz5DWf1MrMZfuPyw9GoQj8k6C6RsCbl",
+      "created_at": "2026-06-02T00:00:00+08:00",
+      "updated_at": "2026-06-02T00:00:00+08:00",
+      "published_at": "2026-06-02T00:00:00+08:00",
+      "unpublished_at": null,
+      "archived_at": null
+    }
+  ],
+  "guides": [
+    {
+      "id": "2026-06-02-aeron-chair",
+      "status": "published",
+      "title": "Aeron Chair",
+      "summary": "我上次椅子壞掉備料三個月，我只好先再買一張等雅浩叫料。下次如果再壞掉的話，我就自己把椅子拖到他們辦公室去砸",
+      "source_url": "https://www.facebook.com/share/p/165wXVWFFW/",
+      "image_file": "2026-06-02-aeron-chair.jpg",
+      "image_url": null,
+      "category_ids": [
+        "computer-3c"
+      ],
+      "tag_ids": [
+        "ergonomic"
+      ],
+      "related_product_ids": [],
+      "created_at": "2026-06-02T00:00:00+08:00",
+      "updated_at": "2026-06-02T00:00:00+08:00",
+      "published_at": "2026-06-02T00:00:00+08:00",
+      "unpublished_at": null,
+      "archived_at": null
+    },
+    {
+      "id": "2026-06-02-日本米入門篇",
+      "status": "published",
+      "title": "日本米入門篇",
+      "summary": "參考資料那篇也要看，主要是台灣米",
+      "source_url": "https://www.facebook.com/applepig/posts/pfbid0SxJNCFgExHegTJb9A6jPZNNUTSgNP1FW29oAnmHJheXQhi2NFWd34esgSkcAK64Dl",
+      "image_url": "https://scontent.ftpe8-2.fna.fbcdn.net/v/t39.30808-6/285454481_10225222919953314_2760340429445359591_n.jpg",
+      "category_ids": [
+        "household"
+      ],
+      "tag_ids": [
+        "rice"
+      ],
+      "related_product_ids": [],
+      "created_at": "2026-06-02T00:00:00+08:00",
+      "updated_at": "2026-06-02T00:00:00+08:00",
+      "published_at": "2026-06-02T00:00:00+08:00",
+      "unpublished_at": null,
+      "archived_at": null
+    }
+  ],
+  "links": [
+    {
+      "id": "2026-06-02-altwork-station",
+      "status": "published",
+      "title": "Altwork Station",
+      "summary": "相信每個人都有「躺著用電腦」的夢想，這個看起來很棒，對吧？  （對不起我不知道怎麼買、也不知道買回來要放哪裡",
+      "url": "https://altwork.com/",
+      "icon": "i-lucide-link",
+      "category_ids": [
+        "computer-3c"
+      ],
+      "tag_ids": [
+        "ergonomic"
+      ],
+      "sort_order": 30,
+      "created_at": "2026-06-02T00:00:00+08:00",
+      "updated_at": "2026-06-02T00:00:00+08:00",
+      "published_at": "2026-06-02T00:00:00+08:00",
+      "unpublished_at": null,
+      "archived_at": null
+    },
+    {
+      "id": "2026-06-02-b18",
+      "status": "published",
+      "title": "B18",
+      "summary": "光華萬事屋，店面現在擺非常多鍵盤，店內沒有擺的東西也可以問",
+      "url": "https://www.facebook.com/B18TW",
+      "icon": "i-lucide-link",
+      "category_ids": [
+        "computer-3c"
+      ],
+      "tag_ids": [],
+      "sort_order": 20,
+      "created_at": "2026-06-02T00:00:00+08:00",
+      "updated_at": "2026-06-02T00:00:00+08:00",
+      "published_at": "2026-06-02T00:00:00+08:00",
+      "unpublished_at": null,
+      "archived_at": null
+    },
+    {
+      "id": "applepig-home",
+      "status": "published",
+      "title": "applepig.idv.tw",
+      "summary": "DW 的主站",
+      "url": "https://applepig.idv.tw",
+      "icon": "i-lucide-link",
+      "category_ids": [
+        "other"
+      ],
+      "tag_ids": [],
+      "sort_order": 10,
+      "created_at": "2026-06-02T00:00:00+08:00",
+      "updated_at": "2026-06-02T00:00:00+08:00",
+      "published_at": "2026-06-02T00:00:00+08:00",
+      "unpublished_at": null,
+      "archived_at": null
+    }
+  ],
+  "taxonomies": {
+    "categories": [
+      {
+        "id": "computer-3c",
+        "label": "電腦3C",
+        "short_label": "電腦3C",
+        "nav_visible": true,
+        "sort_order": 10
+      },
+      {
+        "id": "network",
+        "label": "網路通訊",
+        "short_label": "網路通訊",
+        "nav_visible": true,
+        "sort_order": 20
+      },
+      {
+        "id": "av-theater",
+        "label": "影音劇院",
+        "short_label": "影音劇院",
+        "nav_visible": true,
+        "sort_order": 30
+      },
+      {
+        "id": "small-appliance",
+        "label": "小家電",
+        "short_label": "小家電",
+        "nav_visible": true,
+        "sort_order": 40
+      },
+      {
+        "id": "major-appliance",
+        "label": "大家電",
+        "short_label": "大家電",
+        "nav_visible": true,
+        "sort_order": 50
+      },
+      {
+        "id": "household",
+        "label": "生活百貨",
+        "short_label": "生活百貨",
+        "nav_visible": true,
+        "sort_order": 60
+      },
+      {
+        "id": "other",
+        "label": "其他",
+        "short_label": "其他",
+        "nav_visible": true,
+        "sort_order": 999
+      }
+    ],
+    "channels": [
+      {
+        "id": "pchome",
+        "label": "PChome",
+        "tint": "blue",
+        "host_patterns": [
+          "24h.pchome.com.tw"
+        ],
+        "sort_order": 10
+      },
+      {
+        "id": "momo",
+        "label": "momo",
+        "tint": "pink",
+        "host_patterns": [
+          "www.momoshop.com.tw"
+        ],
+        "sort_order": 20
+      },
+      {
+        "id": "amazonjp",
+        "label": "Amazon JP",
+        "tint": "amber",
+        "host_patterns": [
+          "www.amazon.co.jp",
+          "amzn.asia"
+        ],
+        "sort_order": 30
+      },
+      {
+        "id": "amazonus",
+        "label": "Amazon US",
+        "tint": "amber",
+        "host_patterns": [
+          "www.amazon.com"
+        ],
+        "sort_order": 40
+      },
+      {
+        "id": "costco",
+        "label": "Costco",
+        "tint": "indigo",
+        "host_patterns": [
+          "www.costco.com.tw"
+        ],
+        "sort_order": 50
+      },
+      {
+        "id": "other",
+        "label": "其他通路",
+        "tint": "neutral",
+        "host_patterns": [],
+        "sort_order": 999
+      }
+    ],
+    "tags": [
+      {
+        "id": "display",
+        "label": "顯示器",
+        "description": "螢幕、電視與影像顯示相關商品。",
+        "aliases": [
+          "電視",
+          "螢幕",
+          "顯示器"
+        ],
+        "nav_visible": true,
+        "sort_order": 10
+      },
+      {
+        "id": "power-charging",
+        "label": "電源充電",
+        "description": "充電器、行動電源、電池與備援電力。",
+        "aliases": [
+          "充電",
+          "行動電源",
+          "充電器",
+          "電池",
+          "UPS"
+        ],
+        "nav_visible": true,
+        "sort_order": 20
+      },
+      {
+        "id": "cable-adapter",
+        "label": "線材轉接",
+        "description": "線材、轉接器與影音傳輸線。",
+        "aliases": [
+          "線材",
+          "轉接",
+          "HDMI"
+        ],
+        "nav_visible": true,
+        "sort_order": 30
+      },
+      {
+        "id": "storage-backup",
+        "label": "儲存備份",
+        "description": "NAS、隨身碟與備份儲存設備。",
+        "aliases": [
+          "儲存",
+          "NAS",
+          "隨身碟"
+        ],
+        "nav_visible": true,
+        "sort_order": 40
+      },
+      {
+        "id": "desk-setup",
+        "label": "桌面周邊",
+        "description": "鍵盤、滑鼠、桌機與桌面工作周邊。",
+        "aliases": [
+          "鍵盤",
+          "滑鼠",
+          "周邊"
+        ],
+        "nav_visible": true,
+        "sort_order": 50
+      },
+      {
+        "id": "network-gear",
+        "label": "網路設備",
+        "description": "路由器、交換器與家庭網路設備。",
+        "aliases": [
+          "路由器",
+          "交換器",
+          "網通"
+        ],
+        "nav_visible": true,
+        "sort_order": 60
+      },
+      {
+        "id": "phone",
+        "label": "手機",
+        "description": "手機與行動裝置。",
+        "aliases": [
+          "手機"
+        ],
+        "nav_visible": true,
+        "sort_order": 70
+      },
+      {
+        "id": "tablet",
+        "label": "平板",
+        "description": "平板與平板相關裝置。",
+        "aliases": [
+          "平板"
+        ],
+        "nav_visible": true,
+        "sort_order": 80
+      },
+      {
+        "id": "comm-accessory",
+        "label": "通訊配件",
+        "description": "通訊與行動裝置配件。",
+        "aliases": [
+          "配件"
+        ],
+        "nav_visible": true,
+        "sort_order": 90
+      },
+      {
+        "id": "av-source",
+        "label": "訊源",
+        "description": "串流盒與影音播放器。",
+        "aliases": [
+          "串流",
+          "播放器"
+        ],
+        "nav_visible": true,
+        "sort_order": 100
+      },
+      {
+        "id": "amplifier",
+        "label": "擴大機",
+        "description": "擴大機與影音放大設備。",
+        "aliases": [
+          "擴大機"
+        ],
+        "nav_visible": true,
+        "sort_order": 110
+      },
+      {
+        "id": "speaker",
+        "label": "喇叭",
+        "description": "喇叭、Soundbar 與音響設備。",
+        "aliases": [
+          "喇叭",
+          "音響",
+          "Soundbar"
+        ],
+        "nav_visible": true,
+        "sort_order": 120
+      },
+      {
+        "id": "headphone",
+        "label": "耳機",
+        "description": "耳機與個人聆聽設備。",
+        "aliases": [
+          "耳機"
+        ],
+        "nav_visible": true,
+        "sort_order": 130
+      },
+      {
+        "id": "kitchen",
+        "label": "廚房",
+        "description": "廚房用品、廚電與料理相關商品。",
+        "aliases": [
+          "廚房",
+          "廚電"
+        ],
+        "nav_visible": true,
+        "sort_order": 140
+      },
+      {
+        "id": "cleaning",
+        "label": "清潔",
+        "description": "清潔家電、洗劑與掃除用品。",
+        "aliases": [
+          "清潔",
+          "掃除"
+        ],
+        "nav_visible": true,
+        "sort_order": 150
+      },
+      {
+        "id": "air-care",
+        "label": "空氣調節",
+        "description": "空氣清淨、除濕、暖房與空氣相關小家電。",
+        "aliases": [
+          "空氣清淨",
+          "除濕",
+          "電暖"
+        ],
+        "nav_visible": true,
+        "sort_order": 160
+      },
+      {
+        "id": "bathroom",
+        "label": "衛浴",
+        "description": "衛浴設備、浴室家電與浴室用品。",
+        "aliases": [
+          "衛浴",
+          "浴室"
+        ],
+        "nav_visible": true,
+        "sort_order": 170
+      },
+      {
+        "id": "countertop",
+        "label": "桌上型",
+        "description": "桌上型與可移動式設備。",
+        "aliases": [
+          "桌上型"
+        ],
+        "nav_visible": true,
+        "sort_order": 180
+      },
+      {
+        "id": "lighting",
+        "label": "照明",
+        "description": "燈具、吸頂燈與居家照明。",
+        "aliases": [
+          "燈",
+          "吸頂燈",
+          "照明"
+        ],
+        "nav_visible": true,
+        "sort_order": 190
+      },
+      {
+        "id": "refrigeration",
+        "label": "冷藏冷凍",
+        "description": "冰箱與冷凍櫃。",
+        "aliases": [
+          "冰箱",
+          "冷凍櫃"
+        ],
+        "nav_visible": true,
+        "sort_order": 200
+      },
+      {
+        "id": "laundry",
+        "label": "洗衣烘衣",
+        "description": "洗衣機、乾衣機與洗烘衣設備。",
+        "aliases": [
+          "洗衣機",
+          "烘衣機"
+        ],
+        "nav_visible": true,
+        "sort_order": 210
+      },
+      {
+        "id": "aircon",
+        "label": "空調",
+        "description": "冷氣與空調設備。",
+        "aliases": [
+          "冷氣",
+          "空調"
+        ],
+        "nav_visible": true,
+        "sort_order": 220
+      },
+      {
+        "id": "fixed-install",
+        "label": "固定安裝",
+        "description": "需固定安裝或施工的設備。",
+        "aliases": [
+          "安裝"
+        ],
+        "nav_visible": true,
+        "sort_order": 230
+      },
+      {
+        "id": "food",
+        "label": "食材",
+        "description": "食材、食品與調味品。",
+        "aliases": [
+          "食材",
+          "食品"
+        ],
+        "nav_visible": true,
+        "sort_order": 240
+      },
+      {
+        "id": "daily-goods",
+        "label": "日用品",
+        "description": "日用品、補充包與消耗品。",
+        "aliases": [
+          "日用品",
+          "消耗品"
+        ],
+        "nav_visible": true,
+        "sort_order": 250
+      },
+      {
+        "id": "organizing",
+        "label": "收納整理",
+        "description": "收納箱與整理用品。",
+        "aliases": [
+          "收納",
+          "整理箱"
+        ],
+        "nav_visible": true,
+        "sort_order": 260
+      },
+      {
+        "id": "hardware-tools",
+        "label": "五金工具",
+        "description": "五金、工具與維修用品。",
+        "aliases": [
+          "五金",
+          "工具"
+        ],
+        "nav_visible": true,
+        "sort_order": 270
+      },
+      {
+        "id": "furniture-decor",
+        "label": "家具家飾",
+        "description": "家具、家飾與居家擺設。",
+        "aliases": [
+          "家具",
+          "家飾"
+        ],
+        "nav_visible": true,
+        "sort_order": 280
+      },
+      {
+        "id": "ergonomic",
+        "label": "人體工學",
+        "description": "人體工學、坐姿、工作站與長時間使用舒適度相關屬性。",
+        "aliases": [
+          "人體工學",
+          "電腦椅"
+        ],
+        "nav_visible": true,
+        "sort_order": 290
+      },
+      {
+        "id": "rice",
+        "label": "米食",
+        "description": "白米、糙米、米飯料理與米類研究相關屬性。",
+        "aliases": [
+          "米"
+        ],
+        "nav_visible": true,
+        "sort_order": 300
+      }
+    ],
+    "brands": [
+      {
+        "id": "adata",
+        "label": "ADATA",
+        "description": "ADATA 品牌商品",
+        "aliases": [
+          "威剛"
+        ],
+        "nav_visible": true,
+        "sort_order": 10
+      },
+      {
+        "id": "aibo",
+        "label": "aibo",
+        "description": "aibo 品牌商品",
+        "aliases": [],
+        "nav_visible": true,
+        "sort_order": 20
+      },
+      {
+        "id": "aplus",
+        "label": "APlus",
+        "description": "APlus 品牌商品",
+        "aliases": [],
+        "nav_visible": true,
+        "sort_order": 30
+      },
+      {
+        "id": "apple",
+        "label": "Apple",
+        "description": "Apple 品牌商品",
+        "aliases": [
+          "蘋果",
+          "HomePod"
+        ],
+        "nav_visible": true,
+        "sort_order": 40
+      },
+      {
+        "id": "arnest",
+        "label": "Arnest",
+        "description": "Arnest 品牌商品",
+        "aliases": [
+          "アーネスト"
+        ],
+        "nav_visible": true,
+        "sort_order": 50
+      },
+      {
+        "id": "avier",
+        "label": "Avier",
+        "description": "Avier 品牌商品",
+        "aliases": [],
+        "nav_visible": true,
+        "sort_order": 60
+      },
+      {
+        "id": "belkin",
+        "label": "Belkin",
+        "description": "Belkin 品牌商品",
+        "aliases": [],
+        "nav_visible": true,
+        "sort_order": 70
+      },
+      {
+        "id": "benq",
+        "label": "BenQ",
+        "description": "BenQ 品牌商品",
+        "aliases": [
+          "明基"
+        ],
+        "nav_visible": true,
+        "sort_order": 80
+      },
+      {
+        "id": "blueair",
+        "label": "Blueair",
+        "description": "Blueair 品牌商品",
+        "aliases": [],
+        "nav_visible": true,
+        "sort_order": 90
+      },
+      {
+        "id": "bose",
+        "label": "Bose",
+        "description": "Bose 品牌商品",
+        "aliases": [],
+        "nav_visible": true,
+        "sort_order": 100
+      },
+      {
+        "id": "brita",
+        "label": "BRITA",
+        "description": "BRITA 品牌商品",
+        "aliases": [
+          "Brita"
+        ],
+        "nav_visible": true,
+        "sort_order": 110
+      },
+      {
+        "id": "ducky",
+        "label": "Ducky",
+        "description": "Ducky 品牌商品",
+        "aliases": [
+          "創傑"
+        ],
+        "nav_visible": true,
+        "sort_order": 120
+      },
+      {
+        "id": "elac",
+        "label": "ELAC",
+        "description": "ELAC 品牌商品",
+        "aliases": [],
+        "nav_visible": true,
+        "sort_order": 130
+      },
+      {
+        "id": "electrolux",
+        "label": "Electrolux",
+        "description": "Electrolux 品牌商品",
+        "aliases": [
+          "伊萊克斯"
+        ],
+        "nav_visible": true,
+        "sort_order": 140
+      },
+      {
+        "id": "fibbr",
+        "label": "FIBBR",
+        "description": "FIBBR 品牌商品",
+        "aliases": [],
+        "nav_visible": true,
+        "sort_order": 150
+      },
+      {
+        "id": "fisher-paykel",
+        "label": "Fisher & Paykel",
+        "description": "Fisher & Paykel 品牌商品",
+        "aliases": [
+          "Fisher&Paykel"
+        ],
+        "nav_visible": true,
+        "sort_order": 160
+      },
+      {
+        "id": "fuli",
+        "label": "富里",
+        "description": "富里 品牌商品",
+        "aliases": [
+          "富里鄉農會"
+        ],
+        "nav_visible": true,
+        "sort_order": 170
+      },
+      {
+        "id": "hitachi",
+        "label": "Hitachi",
+        "description": "Hitachi 品牌商品",
+        "aliases": [
+          "日立"
+        ],
+        "nav_visible": true,
+        "sort_order": 180
+      },
+      {
+        "id": "ikea",
+        "label": "IKEA",
+        "description": "IKEA 品牌商品",
+        "aliases": [
+          "宜家"
+        ],
+        "nav_visible": true,
+        "sort_order": 190
+      },
+      {
+        "id": "irobot",
+        "label": "iRobot",
+        "description": "iRobot 品牌商品",
+        "aliases": [
+          "Roomba"
+        ],
+        "nav_visible": true,
+        "sort_order": 200
+      },
+      {
+        "id": "iris-ohyama",
+        "label": "IRIS OHYAMA",
+        "description": "IRIS OHYAMA 品牌商品",
+        "aliases": [
+          "Iris",
+          "アイリスオーヤマ"
+        ],
+        "nav_visible": true,
+        "sort_order": 210
+      },
+      {
+        "id": "j5create",
+        "label": "j5create",
+        "description": "j5create 品牌商品",
+        "aliases": [
+          "凱捷"
+        ],
+        "nav_visible": true,
+        "sort_order": 220
+      },
+      {
+        "id": "kao",
+        "label": "Kao",
+        "description": "Kao 品牌商品",
+        "aliases": [
+          "花王"
+        ],
+        "nav_visible": true,
+        "sort_order": 230
+      },
+      {
+        "id": "kioxia",
+        "label": "Kioxia",
+        "description": "Kioxia 品牌商品",
+        "aliases": [
+          "鎧俠"
+        ],
+        "nav_visible": true,
+        "sort_order": 240
+      },
+      {
+        "id": "kohler",
+        "label": "Kohler",
+        "description": "Kohler 品牌商品",
+        "aliases": [
+          "科勒"
+        ],
+        "nav_visible": true,
+        "sort_order": 250
+      },
+      {
+        "id": "kolin",
+        "label": "Kolin",
+        "description": "Kolin 品牌商品",
+        "aliases": [
+          "歌林"
+        ],
+        "nav_visible": true,
+        "sort_order": 260
+      },
+      {
+        "id": "lg",
+        "label": "LG",
+        "description": "LG 品牌商品",
+        "aliases": [],
+        "nav_visible": true,
+        "sort_order": 270
+      },
+      {
+        "id": "lion",
+        "label": "Lion",
+        "description": "Lion 品牌商品",
+        "aliases": [
+          "獅王"
+        ],
+        "nav_visible": true,
+        "sort_order": 280
+      },
+      {
+        "id": "lixil",
+        "label": "LIXIL",
+        "description": "LIXIL 品牌商品",
+        "aliases": [
+          "Lixil"
+        ],
+        "nav_visible": true,
+        "sort_order": 290
+      },
+      {
+        "id": "mitsubishi-electric",
+        "label": "Mitsubishi Electric",
+        "description": "Mitsubishi Electric 品牌商品",
+        "aliases": [
+          "三菱電機",
+          "Mitsubishi"
+        ],
+        "nav_visible": true,
+        "sort_order": 300
+      },
+      {
+        "id": "mitsubishi-heavy-industries",
+        "label": "Mitsubishi Heavy Industries",
+        "description": "Mitsubishi Heavy Industries 品牌商品",
+        "aliases": [
+          "三菱重工"
+        ],
+        "nav_visible": true,
+        "sort_order": 310
+      },
+      {
+        "id": "msi",
+        "label": "MSI",
+        "description": "MSI 品牌商品",
+        "aliases": [
+          "微星"
+        ],
+        "nav_visible": true,
+        "sort_order": 320
+      },
+      {
+        "id": "ohashi",
+        "label": "大橋牌",
+        "description": "大橋牌 品牌商品",
+        "aliases": [
+          "Ohashi"
+        ],
+        "nav_visible": true,
+        "sort_order": 330
+      },
+      {
+        "id": "panasonic",
+        "label": "Panasonic",
+        "description": "Panasonic 品牌商品",
+        "aliases": [
+          "國際牌"
+        ],
+        "nav_visible": true,
+        "sort_order": 340
+      },
+      {
+        "id": "philips",
+        "label": "Philips",
+        "description": "Philips 品牌商品",
+        "aliases": [
+          "飛利浦"
+        ],
+        "nav_visible": true,
+        "sort_order": 350
+      },
+      {
+        "id": "samsung",
+        "label": "Samsung",
+        "description": "Samsung 品牌商品",
+        "aliases": [
+          "三星"
+        ],
+        "nav_visible": true,
+        "sort_order": 360
+      },
+      {
+        "id": "sennheiser",
+        "label": "Sennheiser",
+        "description": "Sennheiser 品牌商品",
+        "aliases": [
+          "森海塞爾"
+        ],
+        "nav_visible": true,
+        "sort_order": 370
+      },
+      {
+        "id": "sharp",
+        "label": "Sharp",
+        "description": "Sharp 品牌商品",
+        "aliases": [
+          "夏普"
+        ],
+        "nav_visible": true,
+        "sort_order": 380
+      },
+      {
+        "id": "synology",
+        "label": "Synology",
+        "description": "Synology 品牌商品",
+        "aliases": [
+          "群暉"
+        ],
+        "nav_visible": true,
+        "sort_order": 390
+      },
+      {
+        "id": "toshiba",
+        "label": "Toshiba",
+        "description": "Toshiba 品牌商品",
+        "aliases": [
+          "東芝"
+        ],
+        "nav_visible": true,
+        "sort_order": 400
+      },
+      {
+        "id": "toto",
+        "label": "TOTO",
+        "description": "TOTO 品牌商品",
+        "aliases": [],
+        "nav_visible": true,
+        "sort_order": 410
+      },
+      {
+        "id": "trusco",
+        "label": "TRUSCO",
+        "description": "TRUSCO 品牌商品",
+        "aliases": [
+          "Trusco"
+        ],
+        "nav_visible": true,
+        "sort_order": 420
+      },
+      {
+        "id": "ubiquiti",
+        "label": "Ubiquiti",
+        "description": "Ubiquiti 品牌商品",
+        "aliases": [
+          "UniFi",
+          "Unifi"
+        ],
+        "nav_visible": true,
+        "sort_order": 430
+      },
+      {
+        "id": "vibo",
+        "label": "Vibo",
+        "description": "Vibo 品牌商品",
+        "aliases": [
+          "威寶"
+        ],
+        "nav_visible": true,
+        "sort_order": 440
+      },
+      {
+        "id": "yamada-seiyu",
+        "label": "山田製油",
+        "description": "山田製油 品牌商品",
+        "aliases": [
+          "Yamada Seiyu"
+        ],
+        "nav_visible": true,
+        "sort_order": 450
+      },
+      {
+        "id": "asahi-ponzu",
+        "label": "旭ポンズ",
+        "description": "旭ポンズ 品牌商品",
+        "aliases": [
+          "Asahi Ponzu"
+        ],
+        "nav_visible": true,
+        "sort_order": 460
+      },
+      {
+        "id": "zojirushi",
+        "label": "Zojirushi",
+        "description": "Zojirushi 品牌商品",
+        "aliases": [
+          "象印"
+        ],
+        "nav_visible": true,
+        "sort_order": 470
+      },
+      {
+        "id": "zyxel",
+        "label": "Zyxel",
+        "description": "Zyxel 品牌商品",
+        "aliases": [
+          "合勤"
+        ],
+        "nav_visible": true,
+        "sort_order": 480
+      }
+    ]
+  }
+}

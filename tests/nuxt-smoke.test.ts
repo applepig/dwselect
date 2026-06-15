@@ -204,7 +204,7 @@ describe('Nuxt SSG baseline', () => {
     const app_source = readFileSync(new URL('../app/app.vue', import.meta.url), 'utf8')
 
     expect(app_source).toContain('useHead(')
-    expect(app_source).toContain("title: '在找什麼嗎？ DW Select'")
+    expect(app_source).toContain('title: SITE_TITLE')
   })
 
   it('should prevent horizontal rubber-band overflow on tablet viewports', () => {
