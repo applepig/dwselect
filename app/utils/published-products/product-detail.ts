@@ -1,7 +1,11 @@
 import type { Product } from '../product-schema'
 import type { ProductDetailView, PublishedProductCard, TaxonomyDefinitions } from './types'
+import { compareNullableTimestampDesc } from '../content/compare-nullable-timestamp-desc'
+import { compareText } from '../content/compare-text'
+import { extractContentId } from '../content/extract-content-id'
+import { getPrimaryOffer } from '../content/primary-offer'
 import { resolveProductImageUrl } from '../content-images/resolve-product-image-url'
-import { compareText, getCategoryDefinition, getChannelDefinition, getPrimaryOffer, getProductTagLabels, mapProductToCard } from './shared'
+import { getCategoryDefinition, getChannelDefinition, getProductTagLabels, mapProductToCard } from './shared'
 
 export function getProductDetail(
   product: Product,
@@ -13,7 +17,7 @@ export function getProductDetail(
   const price_label = primary_offer.price.label ?? primary_offer.price_text
 
   return {
-    id: getCatalogProductId(product),
+    id: extractContentId(product.id),
     title: product.name,
     hero_image: resolveProductImageUrl(product),
     hero_alt: product.name,
@@ -40,20 +44,13 @@ export function getRelatedProductCards(
   products: Product[],
   taxonomies: TaxonomyDefinitions,
 ): PublishedProductCard[] {
-  const current_product_id = getCatalogProductId(current_product)
+  const current_product_id = extractContentId(current_product.id)
 
   return products
     .filter((product) => product.status === 'published')
-    .filter((product) => getCatalogProductId(product) !== current_product_id)
+    .filter((product) => extractContentId(product.id) !== current_product_id)
     .toSorted((left_product, right_product) => compareRelatedProducts(current_product, left_product, right_product))
     .map((product) => mapProductToCard(product, taxonomies))
-}
-
-export function getCatalogProductId(product: Pick<Product, 'id'>): string {
-  return product.id
-    .split('/')
-    .at(-1)
-    ?.replace(/\.json$/, '') ?? product.id
 }
 
 function compareRelatedProducts(current_product: Product, left_product: Product, right_product: Product) {
@@ -92,20 +89,4 @@ function getRelatedProductScore(current_product: Product, candidate_product: Pro
     shared_tag_count,
     same_channel: getPrimaryOffer(candidate_product).channel_id === getPrimaryOffer(current_product).channel_id,
   }
-}
-
-function compareNullableTimestampDesc(left_value: string | null, right_value: string | null) {
-  if (left_value === right_value) {
-    return 0
-  }
-
-  if (left_value === null) {
-    return 1
-  }
-
-  if (right_value === null) {
-    return -1
-  }
-
-  return right_value.localeCompare(left_value)
 }

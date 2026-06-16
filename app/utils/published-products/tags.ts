@@ -1,6 +1,7 @@
 import type { Guide, LinkDefinition, Product } from '../product-schema'
 import type { CompactSearchTagGroups, CompactTagChip, TaxonomyDefinitions } from './types'
-import { compareText, getContentTagLabel, getProductTagLabel } from './shared'
+import { compareText } from '../content/compare-text'
+import { getContentTagLabel, getProductTagLabel } from './shared'
 
 export function getTagChips(
   content: {

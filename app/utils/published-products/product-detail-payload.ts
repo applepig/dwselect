@@ -1,6 +1,7 @@
 import type { PublicContentPayload } from '../public-content-payload'
 import type { ProductDetailView } from './types'
-import { getCatalogProductId, getProductDetail, getRelatedProductCards } from './product-detail'
+import { extractContentId } from '../content/extract-content-id'
+import { getProductDetail, getRelatedProductCards } from './product-detail'
 
 export type ProductDetailPayload = {
   product_detail: ProductDetailView
@@ -10,7 +11,7 @@ export function getProductDetailPayload(
   content_payload: Pick<PublicContentPayload, 'products' | 'taxonomies'>,
   product_id: string,
 ): ProductDetailPayload | null {
-  const matched_product = content_payload.products.find((product) => getCatalogProductId(product) === product_id) ?? null
+  const matched_product = content_payload.products.find((product) => extractContentId(product.id) === product_id) ?? null
 
   if (matched_product === null) {
     return null

@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 
 import { getPublishedProducts } from '../../app/utils/published-products/shared'
-import { getCatalogProductId } from '../../app/utils/published-products/product-detail'
+import { extractContentId } from '../../app/utils/content/extract-content-id'
 import { makeProduct, test_taxonomies } from './fixtures'
 
 describe('published products mapping', () => {
@@ -125,7 +125,7 @@ describe('published products mapping', () => {
       name: '範例商品',
     })
 
-    expect(getCatalogProductId(product)).toBe('2026-06-02-sample-product')
+    expect(extractContentId(product.id)).toBe('2026-06-02-sample-product')
     expect(getPublishedProducts([product], test_taxonomies)).toEqual([
       expect.objectContaining({ id: '2026-06-02-sample-product' }),
     ])

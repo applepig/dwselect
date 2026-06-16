@@ -1,8 +1,9 @@
 import type { SearchSuggestion } from '../search/search-index'
 import type { Guide, LinkDefinition } from '../product-schema'
 import type { CompactResourceRow, ResourceRowLinkAttributes, SearchResultSection, TaxonomyDefinitions } from './types'
+import { compareGuides } from '../content/compare-guides'
 import { resolveGuideImageUrl } from '../content-images/resolve-guide-image-url'
-import { compareText, getCategoryDefinition } from './shared'
+import { getCategoryDefinition } from './shared'
 
 export function getPublishedGuides(
   guides: Guide[],
@@ -124,30 +125,4 @@ function getSearchSuggestionIcon(type: SearchSuggestion['type']): string | null 
   }
 
   return null
-}
-
-function compareGuides(left_guide: Guide, right_guide: Guide) {
-  const published_at_order = compareNullableTimestampDesc(left_guide.published_at, right_guide.published_at)
-
-  if (published_at_order !== 0) {
-    return published_at_order
-  }
-
-  return compareText(left_guide.title, right_guide.title)
-}
-
-function compareNullableTimestampDesc(left_value: string | null, right_value: string | null) {
-  if (left_value === right_value) {
-    return 0
-  }
-
-  if (left_value === null) {
-    return 1
-  }
-
-  if (right_value === null) {
-    return -1
-  }
-
-  return right_value.localeCompare(left_value)
 }

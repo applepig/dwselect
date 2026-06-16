@@ -1,7 +1,12 @@
 import MiniSearch, { type SearchResult } from 'minisearch'
 
+import { compareGuides } from '../content/compare-guides.ts'
+import { compareProducts } from '../content/compare-products.ts'
+import { extractContentId } from '../content/extract-content-id.ts'
+import { getPrimaryOffer } from '../content/primary-offer.ts'
 import { resolveImageFileUrl } from '../content-images/resolve-image-file-url.ts'
 import type { CategoryDefinition, ChannelDefinition, Guide, LinkDefinition, Product, TagDefinition } from '../product-schema.ts'
+import type { TaxonomyDefinitions } from '../published-products/types.ts'
 import { tokenizeSearchText } from './search-tokenizer.ts'
 
 export const SEARCH_INDEX_VERSION = 1
@@ -116,6 +121,12 @@ export function getSearchDocuments(
   options: Pick<BuildSearchIndexOptions, 'categories' | 'channels' | 'tags' | 'brands'>,
 ): SearchDocument[] {
   const content = normalizeSearchContentInput(input)
+  const taxonomies: TaxonomyDefinitions = {
+    categories: options.categories,
+    channels: options.channels,
+    tags: options.tags,
+    brands: options.brands,
+  }
   const category_labels = getCategoryLabelMap(options.categories)
   const channel_labels = getChannelLabelMap(options.channels)
   const tag_labels = getTagLabelMap(options.tags)
@@ -126,7 +137,7 @@ export function getSearchDocuments(
   return [
     ...content.products
       .filter((product) => product.status === 'published')
-      .toSorted(compareProducts)
+      .toSorted((left_product, right_product) => compareProducts(left_product, right_product, taxonomies))
       .map((product) => mapProductToSearchDocument(product, category_labels, channel_labels, product_tag_labels, product_tag_aliases)),
     ...content.guides
       .filter((guide) => guide.status === 'published')
@@ -206,8 +217,8 @@ function mapProductToSearchDocument(
   tag_labels: ReadonlyMap<string, string>,
   tag_aliases: ReadonlyMap<string, string[]>,
 ): SearchDocument {
-  const content_id = getContentId(product.id)
-  const primary_offer = product.offers[0]!
+  const content_id = extractContentId(product.id)
+  const primary_offer = getPrimaryOffer(product)
   const document = {
     document_id: `product:${content_id}`,
     content_id,
@@ -362,13 +373,6 @@ function normalizeSearchContentInput(input: Product[] | SearchContentInput): Sea
   return input
 }
 
-function getContentId(content_id: string) {
-  return content_id
-    .split('/')
-    .at(-1)
-    ?.replace(/\.json$/, '') ?? content_id
-}
-
 function resolveProductSearchImageUrl(product: Pick<Product, 'image_file'>): string {
   const image_url = resolveImageFileUrl(product.image_file, 'products')
 
@@ -417,40 +421,4 @@ function getTagLabelMap(tags: TagDefinition[]) {
 
 function getTagAliasMap(tags: TagDefinition[]) {
   return new Map(tags.map((tag) => [tag.id, tag.aliases]))
-}
-
-function compareProducts(left_product: Product, right_product: Product) {
-  const published_at_order = compareNullableTimestampDesc(left_product.published_at, right_product.published_at)
-
-  if (published_at_order !== 0) {
-    return published_at_order
-  }
-
-  return left_product.name.localeCompare(right_product.name)
-}
-
-function compareGuides(left_guide: Guide, right_guide: Guide) {
-  const published_at_order = compareNullableTimestampDesc(left_guide.published_at, right_guide.published_at)
-
-  if (published_at_order !== 0) {
-    return published_at_order
-  }
-
-  return left_guide.title.localeCompare(right_guide.title)
-}
-
-function compareNullableTimestampDesc(left_value: string | null, right_value: string | null) {
-  if (left_value === right_value) {
-    return 0
-  }
-
-  if (left_value === null) {
-    return 1
-  }
-
-  if (right_value === null) {
-    return -1
-  }
-
-  return right_value.localeCompare(left_value)
 }

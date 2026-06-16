@@ -1,5 +1,8 @@
 import type { Product, ProductOffer } from '../product-schema'
 import type { PublishedProductCard, TaxonomyDefinitions } from './types'
+import { compareProducts } from '../content/compare-products'
+import { extractContentId } from '../content/extract-content-id'
+import { getPrimaryOffer } from '../content/primary-offer'
 import { resolveProductImageUrl } from '../content-images/resolve-product-image-url'
 
 export function getPublishedProducts(
@@ -18,7 +21,7 @@ export function mapProductToCard(product: Product, taxonomies: TaxonomyDefinitio
   const channel_definition = getChannelDefinition(primary_offer.channel_id, taxonomies)
 
   return {
-    id: getProductCardId(product),
+    id: extractContentId(product.id),
     category: category_definition.label,
     category_id: product.category_id,
     channel: channel_definition.label,
@@ -54,66 +57,8 @@ export function getChannelDefinition(channel_id: ProductOffer['channel_id'], tax
   }
 }
 
-export function getPrimaryOffer(product: Product): ProductOffer {
-  return product.offers[0]!
-}
-
 export function getCategorySortOrder(category_id: Product['category_id'], taxonomies: TaxonomyDefinitions) {
   return getCategoryDefinition(category_id, taxonomies).sort_order
-}
-
-export function compareText(left_value: string, right_value: string) {
-  const left_chars = Array.from(left_value.normalize('NFKC'))
-  const right_chars = Array.from(right_value.normalize('NFKC'))
-  const length = Math.min(left_chars.length, right_chars.length)
-
-  for (let i = 0; i < length; i += 1) {
-    const left_code_point = left_chars[i]?.codePointAt(0) ?? 0
-    const right_code_point = right_chars[i]?.codePointAt(0) ?? 0
-
-    if (left_code_point !== right_code_point) {
-      return left_code_point - right_code_point
-    }
-  }
-
-  return left_chars.length - right_chars.length
-}
-
-function compareProducts(left_product: Product, right_product: Product, taxonomies: TaxonomyDefinitions) {
-  const category_order = getCategorySortOrder(left_product.category_id, taxonomies)
-    - getCategorySortOrder(right_product.category_id, taxonomies)
-
-  if (category_order !== 0) {
-    return category_order
-  }
-
-  return compareProductsByLatest(left_product, right_product)
-}
-
-function compareProductsByLatest(left_product: Product, right_product: Product) {
-  const published_at_order = compareNullableTimestampDesc(left_product.published_at, right_product.published_at)
-
-  if (published_at_order !== 0) {
-    return published_at_order
-  }
-
-  return compareText(left_product.name, right_product.name)
-}
-
-function compareNullableTimestampDesc(left_value: string | null, right_value: string | null) {
-  if (left_value === right_value) {
-    return 0
-  }
-
-  if (left_value === null) {
-    return 1
-  }
-
-  if (right_value === null) {
-    return -1
-  }
-
-  return right_value.localeCompare(left_value)
 }
 
 export function getProductTagLabels(tag_ids: string[], taxonomies: TaxonomyDefinitions) {
@@ -128,11 +73,4 @@ export function getProductTagLabel(tag_id: string, taxonomies: TaxonomyDefinitio
 
 export function getContentTagLabel(tag_id: string, taxonomies: TaxonomyDefinitions) {
   return taxonomies.tags.find((tag) => tag.id === tag_id)?.label ?? tag_id
-}
-
-function getProductCardId(product: Pick<Product, 'id'>): string {
-  return product.id
-    .split('/')
-    .at(-1)
-    ?.replace(/\.json$/, '') ?? product.id
 }
