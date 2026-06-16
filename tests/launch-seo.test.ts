@@ -70,8 +70,8 @@ describe('launch SEO metadata contract', () => {
   })
 
   it('should set product-specific metadata with summary fallback and default OG image', () => {
-    expect(product_source).toContain('getSeoDescription(product_detail.value?.dw_says)')
-    expect(product_source).toContain('`${product_detail.value.title}｜${SITE_NAME}`')
+    expect(product_source).toContain('getSeoDescription(product_detail.value?.summary)')
+    expect(product_source).toContain('`${product_detail.value.name}｜${SITE_NAME}`')
     expect(product_source).toContain('getCanonicalUrl(`/products/${product_detail.value.id}`)')
     expect(product_source).toContain('useProductDetailData(product_id)')
     expect(product_source).toContain('ogImage: SITE_OG_IMAGE')

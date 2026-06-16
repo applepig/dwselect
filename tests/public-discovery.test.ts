@@ -140,7 +140,8 @@ describe('public content payload', () => {
         url: 'https://dwselect.applepig.net/',
       },
     })
-    expect(payload.products.map((product) => product.id)).toEqual(['a-product', 'z-product'])
+    expect(payload.products.cards.map((card) => card.id)).toEqual(['a-product', 'z-product'])
+    expect(Object.keys(payload.products.details_by_id)).toEqual(['a-product', 'z-product'])
     expect(payload.guides.map((guide) => guide.id)).toEqual(['2026-06-03-guide'])
     expect(payload.links.map((link) => link.id)).toEqual(['applepig-home'])
     expect(JSON.stringify(payload)).not.toContain('草稿')
@@ -149,8 +150,135 @@ describe('public content payload', () => {
     expect(payload.taxonomies.channels.map((channel) => channel.id)).toEqual(['pchome', 'other'])
     expect(payload.taxonomies.tags.map((tag) => tag.id)).toEqual(['keyboard', 'food'])
     expect(payload.taxonomies.brands.map((brand) => brand.id)).toEqual(['fixture-brand'])
-    expect(payload.products[0]).not.toHaveProperty('category')
-    expect(payload.products[0]).not.toHaveProperty('tags')
+    expect(payload.products.cards[0]).not.toHaveProperty('category')
+    expect(payload.products.cards[0]).not.toHaveProperty('description')
+    expect(payload.products.cards[0]).not.toHaveProperty('tags')
+    expect(payload.products.cards[0]).not.toHaveProperty('purchase_link')
+  })
+})
+
+describe('frontend-ready public content payload shape', () => {
+  function buildSamplePayload() {
+    return buildPublicContentPayload({
+      products: [
+        base_product,
+        {
+          ...base_product,
+          id: 'related-product',
+          name: '相關商品',
+          summary: '相關短評',
+          long_description: '相關長描述',
+          llm_description: '',
+          image_file: 'related-product.jpg',
+          tag_ids: ['keyboard'],
+        },
+      ],
+      guides: [base_guide],
+      links: [base_link],
+      taxonomies: {
+        categories: test_categories,
+        channels: test_channels,
+        tags: test_tags,
+        brands: test_brands,
+      },
+    })
+  }
+
+  it('should map product cards to semantic fields without buy url or long description', () => {
+    const payload = buildSamplePayload()
+    const card = payload.products.cards.find((item) => item.id === '2026-06-02-sample-product')!
+
+    expect(card).toEqual({
+      id: '2026-06-02-sample-product',
+      name: '機械鍵盤 & <滑鼠>',
+      summary: '熱插拔 & 小尺寸鍵盤',
+      image_url: '/images/products/2026-06-02-sample-product.webp',
+      category_id: 'computer-3c',
+      category_label: '電腦3C',
+      channel_id: 'pchome',
+      channel_label: 'PChome',
+      price_label: 'NT$ 1,990',
+      tag_labels: ['鍵盤', 'Fixture Brand'],
+      published_at: '2026-06-02T00:00:00+08:00',
+    })
+    expect(card).not.toHaveProperty('long_description')
+    expect(card).not.toHaveProperty('llm_description')
+    expect(card).not.toHaveProperty('buy_url')
+    expect(card).not.toHaveProperty('dw_says')
+  })
+
+  it('should map product detail to content semantics without dw_says or generic description', () => {
+    const payload = buildSamplePayload()
+    const detail = payload.products.details_by_id['2026-06-02-sample-product']!
+
+    expect(detail).toMatchObject({
+      id: '2026-06-02-sample-product',
+      name: '機械鍵盤 & <滑鼠>',
+      summary: '熱插拔 & 小尺寸鍵盤',
+      long_description: '適合長時間寫程式的繁中鍵盤',
+      llm_description: 'Alice layout with gasket mount',
+      hero_image_url: '/images/products/2026-06-02-sample-product.webp',
+      hero_alt: '機械鍵盤 & <滑鼠>',
+      category_id: 'computer-3c',
+      category_label: '電腦3C',
+      channel_id: 'pchome',
+      channel_label: 'PChome',
+      tag_labels: ['鍵盤', 'Fixture Brand'],
+      price_label: 'NT$ 1,990',
+      buy_url: 'https://example.com/product?a=1&b=2',
+      fine_print: '價格與庫存以通路頁面為準。',
+    })
+    expect(detail).not.toHaveProperty('dw_says')
+    expect(detail).not.toHaveProperty('description')
+    expect(detail).not.toHaveProperty('title')
+    expect(detail).not.toHaveProperty('hero_image')
+    expect(detail).not.toHaveProperty('buy_cta')
+  })
+
+  it('should expose related product cards with only related semantic keys and no placeholders', () => {
+    const payload = buildSamplePayload()
+    const detail = payload.products.details_by_id['2026-06-02-sample-product']!
+
+    expect(detail.related_products).toEqual([
+      {
+        id: 'related-product',
+        name: '相關商品',
+        image_url: '/images/products/related-product.webp',
+        category_label: '電腦3C',
+        channel_label: 'PChome',
+      },
+    ])
+
+    for (const related of detail.related_products) {
+      expect(Object.keys(related).toSorted()).toEqual(['category_label', 'channel_label', 'id', 'image_url', 'name'])
+      expect(related).not.toHaveProperty('description')
+      expect(related).not.toHaveProperty('purchase_link')
+    }
+  })
+
+  it('should expose navigation counts, category chips and downstreamed popular search tags', () => {
+    const payload = buildSamplePayload()
+
+    expect(payload.navigation.counts.products).toBe(2)
+    expect(payload.navigation.category_chips).toEqual([
+      { id: 'all', label: '全部', count: 2 },
+      { id: 'computer-3c', label: '電腦3C', count: 2 },
+    ])
+    expect(payload.navigation.desktop_category_items).toEqual(payload.navigation.category_chips)
+    expect(payload.navigation).toHaveProperty('popular_search_tags')
+    expect(payload.navigation.popular_search_tags).toHaveProperty('tags')
+    expect(payload.navigation.popular_search_tags).toHaveProperty('brands')
+  })
+
+  it('should not serialize dw_says or generic product description in the products payload', () => {
+    const serialized = JSON.stringify(buildSamplePayload().products)
+
+    expect(serialized).not.toContain('dw_says')
+    expect(serialized).not.toContain('"description"')
+    expect(serialized).not.toContain('buy_cta')
+    expect(serialized).not.toContain('hero_image"')
+    expect(serialized).not.toContain('"title"')
+    expect(serialized).not.toContain('purchase_link')
   })
 })
 
@@ -206,7 +334,7 @@ describe('public discovery files', () => {
     expect(rss).toContain('<link>https://applepig.idv.tw/?a=1&amp;b=2</link>')
     expect(rss).toContain('<pubDate>Tue, 02 Jun 2026 00:00:00 +0800</pubDate>')
     expect(rss).not.toContain('draft-product')
-    expect(api.products.map((product) => product.id)).toEqual(['2026-06-02-sample-product', 'no-published-at-product'])
+    expect(api.products.cards.map((card) => card.id)).toEqual(['2026-06-02-sample-product', 'no-published-at-product'])
     expect(api.guides.map((guide) => guide.id)).toEqual(['2026-06-03-guide'])
     expect(api.links.map((link) => link.id)).toEqual(['applepig-home'])
   })
@@ -232,7 +360,8 @@ describe('public discovery files', () => {
     expect(summary.product_count).toBe(0)
     expect(summary.guide_count).toBe(0)
     expect(summary.link_count).toBe(0)
-    expect(api.products).toEqual([])
+    expect(api.products.cards).toEqual([])
+    expect(api.products.details_by_id).toEqual({})
     expect(api.guides).toEqual([])
     expect(api.links).toEqual([])
     expect(api.taxonomies.categories).toHaveLength(test_categories.length)

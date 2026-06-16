@@ -1,26 +1,5 @@
 import type { SearchSuggestion } from '../search/search-index'
-import type { Guide, LinkDefinition } from '../product-schema'
-import type { CompactResourceRow, ResourceRowLinkAttributes, SearchResultSection, TaxonomyDefinitions } from './types'
-import { compareGuides } from '../content/compare-guides'
-import { resolveGuideImageUrl } from '../content-images/resolve-guide-image-url'
-import { getCategoryDefinition } from './shared'
-
-export function getPublishedGuides(
-  guides: Guide[],
-  taxonomies: TaxonomyDefinitions,
-): CompactResourceRow[] {
-  return guides
-    .filter((guide) => guide.status === 'published')
-    .toSorted(compareGuides)
-    .map((guide) => mapGuideToRow(guide, taxonomies))
-}
-
-export function getPublishedLinks(links: LinkDefinition[]): CompactResourceRow[] {
-  return links
-    .filter((link) => link.status === 'published')
-    .toSorted((left_link, right_link) => left_link.sort_order - right_link.sort_order)
-    .map(mapLinkToRow)
-}
+import type { CompactResourceRow, ResourceRowLinkAttributes, SearchResultSection } from './types'
 
 export function getResourceRowLinkAttributes(row: CompactResourceRow): ResourceRowLinkAttributes {
   if (!row.external) {
@@ -53,40 +32,6 @@ export function getSearchResultSections(results: SearchSuggestion[]): SearchResu
   }
 
   return sections.filter((section) => section.rows.length > 0)
-}
-
-function mapGuideToRow(guide: Guide, taxonomies: TaxonomyDefinitions): CompactResourceRow {
-  const category_labels = guide.category_ids.map((category_id) => getCategoryDefinition(category_id, taxonomies).label)
-
-  return {
-    id: guide.id,
-    type: 'guide',
-    title: guide.title,
-    subtitle: guide.summary,
-    meta: category_labels.length === 0 ? null : category_labels.join('、'),
-    href: guide.source_url,
-    image_url: resolveGuideImageUrl(guide),
-    icon: 'i-lucide-book-open',
-    external: true,
-    target: '_blank',
-    rel: 'noopener noreferrer',
-  }
-}
-
-function mapLinkToRow(link: LinkDefinition): CompactResourceRow {
-  return {
-    id: link.id,
-    type: 'link',
-    title: link.title,
-    subtitle: link.summary,
-    meta: link.url,
-    href: link.url,
-    image_url: link.image_url ?? null,
-    icon: link.icon,
-    external: true,
-    target: '_blank',
-    rel: 'noopener noreferrer',
-  }
 }
 
 function mapSearchSuggestionToRow(result: SearchSuggestion): CompactResourceRow {

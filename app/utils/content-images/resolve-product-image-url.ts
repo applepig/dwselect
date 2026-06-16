@@ -1,4 +1,4 @@
-import { resolveImageFileUrl } from './resolve-image-file-url'
+import { resolveImageFileUrl } from './resolve-image-file-url.ts'
 
 type ProductImageSource = {
   image_file?: string | null

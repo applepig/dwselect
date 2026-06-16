@@ -1,15 +1,8 @@
-import type { PublicContentPayload } from '../utils/public-content-payload'
+import type { ProductDetailView } from '../utils/public-content-view-types'
 import { fetchPublicContentPayload } from '../utils/fetch-public-content-payload'
-import { getProductDetailPayload } from '../utils/published-products/product-detail-payload'
 
 export async function useProductDetailData(product_id: string) {
-  const { data: product_detail_data } = await useAsyncData(
-    `product-detail-${product_id}`,
-    fetchPublicContentPayload,
-    {
-      transform: (content_payload) => getProductDetailPayload(content_payload as PublicContentPayload, product_id),
-    },
-  )
+  const { data: content_payload } = await useAsyncData('public-content', fetchPublicContentPayload)
 
-  return product_detail_data
+  return computed<ProductDetailView | null>(() => content_payload.value?.products.details_by_id[product_id] ?? null)
 }

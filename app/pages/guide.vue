@@ -59,19 +59,13 @@ useSeoMeta({
 })
 
 const route = useRoute()
-const { all_products, runtime_taxonomies, runtime_guides, runtime_links } = await useCatalogData()
+const { content_payload } = await useCatalogData()
 const route_state = computed(() => getCompactAppStateFromRoute({ path: route.path, query: route.query }))
 const compact_view = computed(() => {
-  if (runtime_taxonomies.value === undefined || runtime_links.value === undefined || runtime_guides.value === undefined) {
+  if (content_payload.value === null || content_payload.value === undefined) {
     throw new Error('Catalog runtime data is not available')
   }
 
-  return getCompactAppView(
-    all_products.value,
-    route_state.value,
-    runtime_taxonomies.value,
-    runtime_links.value,
-    runtime_guides.value,
-  )
+  return getCompactAppView(content_payload.value, route_state.value)
 })
 </script>

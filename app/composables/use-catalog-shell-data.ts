@@ -1,15 +1,19 @@
-import type { PublicContentPayload } from '../utils/public-content-payload'
 import { fetchPublicContentPayload } from '../utils/fetch-public-content-payload'
-import { getCatalogShellSummary } from '../utils/published-products/catalog-shell-summary'
 
 export async function useCatalogShellData() {
-  const { data: catalog_shell_data } = await useAsyncData(
-    'catalog-shell-summary',
-    fetchPublicContentPayload,
-    {
-      transform: (content_payload) => getCatalogShellSummary(content_payload as PublicContentPayload),
-    },
-  )
+  const { data: content_payload } = await useAsyncData('public-content', fetchPublicContentPayload)
 
-  return catalog_shell_data
+  return computed(() => {
+    if (content_payload.value === null || content_payload.value === undefined) {
+      return null
+    }
+
+    return {
+      counts: {
+        published: content_payload.value.navigation.counts.products,
+      },
+      desktop_category_items: content_payload.value.navigation.desktop_category_items,
+      category_ids: content_payload.value.taxonomies.categories.map((category) => category.id),
+    }
+  })
 }

@@ -19,7 +19,7 @@
     >
       <img
         v-if="!has_detail_image_failed"
-        :src="detail.hero_image"
+        :src="detail.hero_image_url"
         :alt="detail.hero_alt"
         class="detail-hero-image"
         @error="onDetailImageError"
@@ -49,7 +49,7 @@
       </div>
 
       <h2 class="detail-title">
-        {{ detail.title }}
+        {{ detail.name }}
       </h2>
 
       <p class="detail-price">
@@ -61,22 +61,24 @@
         color="primary"
         variant="subtle"
         title="DW 怎麼說"
-        :description="detail.dw_says"
+        :description="detail.long_description || detail.summary"
       />
 
-      <p
-        v-if="detail.description"
-        class="detail-description"
-      >
-        {{ detail.description }}
-      </p>
+      <UAlert
+        v-if="detail.llm_description"
+        class="detail-llm-says"
+        color="neutral"
+        variant="subtle"
+        title="AI 怎麼說"
+        :description="detail.llm_description"
+      />
 
       <div
         class="detail-tag-list"
         aria-label="商品 tags"
       >
         <NuxtLink
-          v-for="tag in detail.tags"
+          v-for="tag in detail.tag_labels"
           :key="tag"
           class="detail-tag"
           :to="{ path: '/search', query: { q: tag } }"
@@ -87,7 +89,7 @@
 
       <UButton
         class="detail-buy-cta"
-        :to="detail.buy_cta.href"
+        :to="detail.buy_url"
         target="_blank"
         rel="noopener noreferrer"
         block
@@ -121,7 +123,7 @@
           <span class="related-product-image-tile">
             <img
               v-if="!failed_related_image_ids.has(product.id)"
-              :src="product.image"
+              :src="product.image_url"
               :alt="product.name"
               class="related-product-image"
               :data-product-id="product.id"
@@ -137,7 +139,7 @@
 
           <span class="related-product-body">
             <span class="related-product-name">{{ product.name }}</span>
-            <span class="related-product-meta">{{ product.category }} · {{ product.channel }}</span>
+            <span class="related-product-meta">{{ product.category_label }} · {{ product.channel_label }}</span>
           </span>
         </NuxtLink>
       </div>
@@ -146,7 +148,7 @@
 </template>
 
 <script setup lang="ts">
-import type { ProductDetailView } from '../utils/published-products/types'
+import type { ProductDetailView } from '../utils/public-content-view-types'
 
 const router = useRouter()
 

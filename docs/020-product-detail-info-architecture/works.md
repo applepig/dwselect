@@ -21,4 +21,13 @@
 - 驗收：Coordinator 實跑 `APP_URL=… pnpm test` → 40 files / 302 tests passed；`pnpm typecheck`、`pnpm lint` 皆 exit 0。未 commit。
 - 環境註記：不帶 `APP_URL` 時 `nuxt-smoke`／`view-transition` 等 3 file 會於 import `nuxt.config.ts` 時 throw（commit `2a6db5d` 移除 localhost fallback 的既有行為），與本次無關；測試須帶 `APP_URL` 執行。
 
+### M2+M3 完成（atomic payload migration）
+
+- 規劃：派 Plan agent 完整盤 consume 側，產出 `tasks.md` 施工藍圖。期間發現 spec payload shape 未含 `popular_search_tags`、且 `CompactAppView.search`／`top_tags`／`getSearchProducts` 經查證為 dead code（無 page 消費）。據此補 ADR 決策：popular_search_tags 下沉 payload、刪 dead search 路徑、card/detail `price_label` 統一 `price.label ?? price_text`、RSS/sitemap 改吃 raw source、composable 統一 key + computed 切片。
+- 執行：單一 ddd-developer 一次完成，內部 build-side→runtime-side。新建 `app/utils/public-content-view-types.ts`（三 view model）、`app/utils/content/taxonomy-labels.ts`（單一 Map-based label resolver，build mapper 與 search-index 共用）、`scripts/public-payload/`（6 個 mapper）。刪除 `published-products/{shared,product-detail,product-detail-payload,catalog-shell-summary,tags}.ts` 與對應測試（覆蓋轉移至 `tests/public-payload/*`）。
+- 偏離 tasks：`taxonomy-labels.ts` 放 `app/utils/content/` 而非 `scripts/public-payload/`，因 app 層 search-index 不應 import scripts——合理。
+- Coordinator 驗收（自跑）：`pnpm test` 41 files / 306 passed、`typecheck` 0、`lint` 0、`pnpm generate` 成功。`jq` 檢查 `content.json`：card 欄位為 `*_label`/`image_url`/`tag_labels`（無 `category`/`description`/`purchase_link`）、detail 有 `summary`/`long_description`/`llm_description`/`buy_url`、related 恰 5 欄無 placeholder、navigation 含 `popular_search_tags`、counts.products=62。production code grep 無 `dw_says`/`buy_cta`/`purchase_link`/`PublishedProductCard` 殘留。spec bad smell 清單結構上已清除。
+- 新 mapper reuse 檢查：全面複用 M1 `content/` helper，無顯著新重複，simplify 步驟通過。
+- Commit hygiene 註記：M3 改的 `product-card.vue`、`nuxt-smoke.test.ts` 與 sprint 019 未提交的視覺變更在同檔交錯 hunk，無法乾淨分離。
+
 ### M1 範圍校正（使用者指正）：同名不同行為的 `compareProducts`／`compareGuides` 也是 bad smell，不該放著。查證：search-index 的 `compareProducts` 排 date→name 並進 `documents` summary，等於搜尋 baseline 顯示順序；catalog 端是 category→date→name。使用者裁定「統一成單一 canonical comparator」而非改名保留差異——product 統一 category→date→name、guide date→name、tie-break 統一 `compareText`。**後果：搜尋 baseline 商品順序會改變（user-visible）**；search-index 既有測試需在 Red 階段更新為新順序，屬刻意行為變更，非 Green 階段作弊。

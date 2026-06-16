@@ -1,42 +1,5 @@
-import type { CategoryDefinition, ChannelDefinition, Product, ProductOffer, TagDefinition } from '../product-schema'
-
-export type PublishedProductCard = {
-  id: string
-  category: string
-  category_id: Product['category_id']
-  channel: string
-  channel_id: ProductOffer['channel_id']
-  description: string | null
-  image: string
-  name: string
-  price: string
-  purchase_link: string
-  published_at: string | null
-  summary: string
-  tags: string[]
-}
-
-export type ProductDetailView = {
-  id: string
-  title: string
-  hero_image: string
-  hero_alt: string
-  channel_label: string
-  channel_id: ProductOffer['channel_id']
-  category_label: string
-  price_label: string
-  dw_says: string
-  description: string | null
-  tags: string[]
-  buy_cta: {
-    label: string
-    href: string
-    target: '_blank'
-    rel: 'noopener noreferrer'
-  }
-  fine_print: string
-  related_products: PublishedProductCard[]
-}
+import type { CategoryDefinition, ChannelDefinition, Product, TagDefinition } from '../product-schema'
+import type { ProductCardView } from '../public-content-view-types'
 
 export type TaxonomyDefinitions = {
   categories: CategoryDefinition[]
@@ -51,8 +14,6 @@ export type CompactAppState = {
   active_tab?: CompactAppTabId
   home_category_id?: Product['category_id'] | 'all'
   search_query?: string
-  search_result_ids?: string[] | null
-  selected_tags?: string[]
 }
 
 export type CompactRouteQueryValue = string | Array<string | null> | null | undefined
@@ -128,21 +89,14 @@ export type ResourceRowLinkAttributes
 export type CompactAppView = {
   tabs: CompactAppTab[]
   active_tab: CompactAppTabId
-  top_tags: CompactTagChip[]
-  popular_search_tags: CompactSearchTagGroups
   home: {
     category_chips: CompactCategoryChip[]
-    products: PublishedProductCard[]
+    products: ProductCardView[]
     empty_reason: 'no-products' | 'no-results' | null
   }
   guide: {
     guides: CompactResourceRow[]
     empty_reason: 'no-products' | 'no-results' | null
-  }
-  search: {
-    query: string
-    products: PublishedProductCard[]
-    empty_reason: 'empty-query' | 'no-results' | null
   }
   links: CompactResourceRow[]
   counts: {

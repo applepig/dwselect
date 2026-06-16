@@ -77,7 +77,7 @@
 </template>
 
 <script setup lang="ts">
-import type { CompactCategoryChip } from '../utils/published-products/types'
+import type { CategoryChipView } from '../utils/public-content-view-types'
 
 const route = useRoute()
 const catalog_shell_data = await useCatalogShellData()
@@ -95,7 +95,7 @@ function isRouteActive(path: string) {
   return route.path === path
 }
 
-function isCategoryActive(category_id: CompactCategoryChip['id']) {
+function isCategoryActive(category_id: CategoryChipView['id']) {
   if (route.path !== '/') {
     return false
   }
@@ -103,14 +103,14 @@ function isCategoryActive(category_id: CompactCategoryChip['id']) {
   return getActiveCategoryId() === category_id
 }
 
-function getActiveCategoryId(): CompactCategoryChip['id'] {
+function getActiveCategoryId(): CategoryChipView['id'] {
   const active_category = typeof route.query.category === 'string' ? route.query.category : 'all'
 
   if (active_category === '' || active_category === 'all') {
     return 'all'
   }
 
-  const category_id = active_category as Exclude<CompactCategoryChip['id'], 'all'>
+  const category_id = active_category as Exclude<CategoryChipView['id'], 'all'>
 
   if (!category_ids.value.has(category_id)) {
     return 'all'

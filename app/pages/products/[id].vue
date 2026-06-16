@@ -11,16 +11,15 @@
 </template>
 
 <script setup lang="ts">
-import type { ProductDetailPayload } from '../../utils/published-products/product-detail-payload'
+import type { ProductDetailView } from '../../utils/public-content-view-types'
 import { getCanonicalUrl, getSeoDescription, SITE_NAME, SITE_OG_IMAGE } from '../../utils/seo-metadata'
 
 const route = useRoute()
 const raw_id = route.params.id
 const product_id = (Array.isArray(raw_id) ? raw_id[0] : raw_id) ?? ''
-const product_detail_payload = shallowRef<ProductDetailPayload | null>(null)
-const product_detail = computed(() => product_detail_payload.value?.product_detail ?? null)
-const product_meta_title = computed(() => product_detail.value === null ? SITE_NAME : `${product_detail.value.title}｜${SITE_NAME}`)
-const product_meta_description = computed(() => getSeoDescription(product_detail.value?.dw_says))
+const product_detail = shallowRef<ProductDetailView | null>(null)
+const product_meta_title = computed(() => product_detail.value === null ? SITE_NAME : `${product_detail.value.name}｜${SITE_NAME}`)
+const product_meta_description = computed(() => getSeoDescription(product_detail.value?.summary))
 const product_canonical_url = computed(() => {
   if (product_detail.value === null) {
     return getCanonicalUrl('/')
@@ -63,5 +62,5 @@ if (product_detail_data.value === null || product_detail_data.value === undefine
   })
 }
 
-product_detail_payload.value = product_detail_data.value
+product_detail.value = product_detail_data.value
 </script>
