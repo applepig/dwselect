@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generated_at": "2026-06-15T12:36:22.748Z",
+  "generated_at": "2026-06-16T12:17:15.647Z",
   "documents": [
     {
       "document_id": "product:2026-06-02-adata-power-bank",
@@ -22,7 +22,7 @@
         "ADATA",
         "電源充電"
       ],
-      "image_url": "/images/products/2026-06-02-adata-power-bank.jpg",
+      "image_url": "/images/products/2026-06-02-adata-power-bank.webp",
       "href": "/products/2026-06-02-adata-power-bank",
       "external": false,
       "price_text": "500",
@@ -50,7 +50,7 @@
         "aibo",
         "電源充電"
       ],
-      "image_url": "/images/products/2026-06-02-aibo-qi-power-bank.jpg",
+      "image_url": "/images/products/2026-06-02-aibo-qi-power-bank.webp",
       "href": "/products/2026-06-02-aibo-qi-power-bank",
       "external": false,
       "price_text": "899",
@@ -78,7 +78,7 @@
         "APlus",
         "電源充電"
       ],
-      "image_url": "/images/products/2026-06-02-aplus-ups.jpg",
+      "image_url": "/images/products/2026-06-02-aplus-ups.webp",
       "href": "/products/2026-06-02-aplus-ups",
       "external": false,
       "price_text": "1450",
@@ -106,7 +106,7 @@
         "Apple",
         "訊源"
       ],
-      "image_url": "/images/products/2026-06-02-apple-tv-4k.jpg",
+      "image_url": "/images/products/2026-06-02-apple-tv-4k.webp",
       "href": "/products/2026-06-02-apple-tv-4k",
       "external": false,
       "price_text": "4490",
@@ -134,7 +134,7 @@
         "Arnest",
         "廚房"
       ],
-      "image_url": "/images/products/2026-06-02-arnest-nagikire-ou.jpg",
+      "image_url": "/images/products/2026-06-02-arnest-nagikire-ou.webp",
       "href": "/products/2026-06-02-arnest-nagikire-ou",
       "external": false,
       "price_text": "￥3800",
@@ -162,7 +162,7 @@
         "Avier",
         "電源充電"
       ],
-      "image_url": "/images/products/2026-06-02-avier-power-bank.jpg",
+      "image_url": "/images/products/2026-06-02-avier-power-bank.webp",
       "href": "/products/2026-06-02-avier-power-bank",
       "external": false,
       "price_text": "479",
@@ -190,7 +190,7 @@
         "Belkin",
         "電源充電"
       ],
-      "image_url": "/images/products/2026-06-02-belkin-three-port-type-c-charger.jpg",
+      "image_url": "/images/products/2026-06-02-belkin-three-port-type-c-charger.webp",
       "href": "/products/2026-06-02-belkin-three-port-type-c-charger",
       "external": false,
       "price_text": "790",
@@ -218,7 +218,7 @@
         "BenQ",
         "顯示器"
       ],
-      "image_url": "/images/products/2026-06-02-benq-e43-735.jpg",
+      "image_url": "/images/products/2026-06-02-benq-e43-735.webp",
       "href": "/products/2026-06-02-benq-e43-735",
       "external": false,
       "price_text": "10999",
@@ -246,7 +246,7 @@
         "BenQ",
         "顯示器"
       ],
-      "image_url": "/images/products/2026-06-02-benq-e55-735.jpg",
+      "image_url": "/images/products/2026-06-02-benq-e55-735.webp",
       "href": "/products/2026-06-02-benq-e55-735",
       "external": false,
       "price_text": "13999",
@@ -274,7 +274,7 @@
         "BenQ",
         "顯示器"
       ],
-      "image_url": "/images/products/2026-06-02-benq-rd280u.jpg",
+      "image_url": "/images/products/2026-06-02-benq-rd280u.webp",
       "href": "/products/2026-06-02-benq-rd280u",
       "external": false,
       "price_text": "16888",
@@ -302,7 +302,7 @@
         "空氣調節",
         "Blueair"
       ],
-      "image_url": "/images/products/2026-06-02-blueair-3250-air-purifier.jpg",
+      "image_url": "/images/products/2026-06-02-blueair-3250-air-purifier.webp",
       "href": "/products/2026-06-02-blueair-3250-air-purifier",
       "external": false,
       "price_text": "一台4400",
@@ -330,7 +330,7 @@
         "Bose",
         "耳機"
       ],
-      "image_url": "/images/products/2026-06-02-bose-qc45.jpg",
+      "image_url": "/images/products/2026-06-02-bose-qc45.webp",
       "href": "/products/2026-06-02-bose-qc45",
       "external": false,
       "price_text": "8000",
@@ -358,7 +358,7 @@
         "BRITA",
         "廚房"
       ],
-      "image_url": "/images/products/2026-06-02-brita-water-filter-pitcher.jpg",
+      "image_url": "/images/products/2026-06-02-brita-water-filter-pitcher.webp",
       "href": "/products/2026-06-02-brita-water-filter-pitcher",
       "external": false,
       "price_text": "2200",
@@ -386,7 +386,7 @@
         "桌面周邊",
         "Ducky"
       ],
-      "image_url": "/images/products/2026-06-02-ducky-one-2.jpg",
+      "image_url": "/images/products/2026-06-02-ducky-one-2.webp",
       "href": "/products/2026-06-02-ducky-one-2",
       "external": false,
       "price_text": "2300",
@@ -416,7 +416,7 @@
         "ELAC",
         "喇叭"
       ],
-      "image_url": "/images/products/2026-06-02-elac-connex-dcb41.jpg",
+      "image_url": "/images/products/2026-06-02-elac-connex-dcb41.webp",
       "href": "/products/2026-06-02-elac-connex-dcb41",
       "external": false,
       "price_text": "大概16000",
@@ -444,7 +444,7 @@
         "清潔",
         "Electrolux"
       ],
-      "image_url": "/images/products/2026-06-02-electrolux-vacuum-cleaner.jpg",
+      "image_url": "/images/products/2026-06-02-electrolux-vacuum-cleaner.webp",
       "href": "/products/2026-06-02-electrolux-vacuum-cleaner",
       "external": false,
       "price_text": "11999",
@@ -472,7 +472,7 @@
         "線材轉接",
         "FIBBR"
       ],
-      "image_url": "/images/products/2026-06-02-fibbr-fiber-hdmi-cable.jpg",
+      "image_url": "/images/products/2026-06-02-fibbr-fiber-hdmi-cable.webp",
       "href": "/products/2026-06-02-fibbr-fiber-hdmi-cable",
       "external": false,
       "price_text": "20~30鎂",
@@ -500,7 +500,7 @@
         "Fisher & Paykel",
         "廚房"
       ],
-      "image_url": "/images/products/2026-06-02-fisher-paykel-dishdrawer.jpg",
+      "image_url": "/images/products/2026-06-02-fisher-paykel-dishdrawer.webp",
       "href": "/products/2026-06-02-fisher-paykel-dishdrawer",
       "external": false,
       "price_text": "45000",
@@ -528,7 +528,7 @@
         "空氣調節",
         "Hitachi"
       ],
-      "image_url": "/images/products/2026-06-02-hitachi-rd-14fr.jpg",
+      "image_url": "/images/products/2026-06-02-hitachi-rd-14fr.webp",
       "href": "/products/2026-06-02-hitachi-rd-14fr",
       "external": false,
       "price_text": "5999",
@@ -556,7 +556,7 @@
         "Apple",
         "喇叭"
       ],
-      "image_url": "/images/products/2026-06-02-apple-homepod-large.jpg",
+      "image_url": "/images/products/2026-06-02-apple-homepod-large.webp",
       "href": "/products/2026-06-02-apple-homepod-large",
       "external": false,
       "price_text": "22000",
@@ -668,7 +668,7 @@
         "IRIS OHYAMA",
         "照明"
       ],
-      "image_url": "/images/products/2026-06-02-iris-ohyama-premium-ceiling-light.jpg",
+      "image_url": "/images/products/2026-06-02-iris-ohyama-premium-ceiling-light.webp",
       "href": "/products/2026-06-02-iris-ohyama-premium-ceiling-light",
       "external": false,
       "price_text": "￥20000",
@@ -696,7 +696,7 @@
         "j5create",
         "電源充電"
       ],
-      "image_url": "/images/products/2026-06-02-j5create-usb-c-charger.jpg",
+      "image_url": "/images/products/2026-06-02-j5create-usb-c-charger.webp",
       "href": "/products/2026-06-02-j5create-usb-c-charger",
       "external": false,
       "price_text": "199",
@@ -724,7 +724,7 @@
         "Kioxia",
         "儲存備份"
       ],
-      "image_url": "/images/products/2026-06-02-kioxia-1tb-usb-flash-drive.jpg",
+      "image_url": "/images/products/2026-06-02-kioxia-1tb-usb-flash-drive.webp",
       "href": "/products/2026-06-02-kioxia-1tb-usb-flash-drive",
       "external": false,
       "price_text": "2490",
@@ -754,7 +754,7 @@
         "固定安裝",
         "Kohler"
       ],
-      "image_url": "/images/products/2026-06-02-kohler-familycare-bathroom-vanity.jpg",
+      "image_url": "/images/products/2026-06-02-kohler-familycare-bathroom-vanity.webp",
       "href": "/products/2026-06-02-kohler-familycare-bathroom-vanity",
       "external": false,
       "price_text": "20000",
@@ -786,7 +786,7 @@
         "固定安裝",
         "Kohler"
       ],
-      "image_url": "/images/products/2026-06-02-kohler-bathroom-heater.jpg",
+      "image_url": "/images/products/2026-06-02-kohler-bathroom-heater.webp",
       "href": "/products/2026-06-02-kohler-bathroom-heater",
       "external": false,
       "price_text": "10900",
@@ -814,7 +814,7 @@
         "空氣調節",
         "Kolin"
       ],
-      "image_url": "/images/products/2026-06-02-kolin-ceramic-heater.jpg",
+      "image_url": "/images/products/2026-06-02-kolin-ceramic-heater.webp",
       "href": "/products/2026-06-02-kolin-ceramic-heater",
       "external": false,
       "price_text": "1180",
@@ -842,7 +842,7 @@
         "顯示器",
         "LG"
       ],
-      "image_url": "/images/products/2026-06-02-lg-c4-65-inch-oled.jpg",
+      "image_url": "/images/products/2026-06-02-lg-c4-65-inch-oled.webp",
       "href": "/products/2026-06-02-lg-c4-65-inch-oled",
       "external": false,
       "price_text": "低於60000",
@@ -872,7 +872,7 @@
         "日用品",
         "Lion"
       ],
-      "image_url": "/images/products/2026-06-02-lion-nanox-detergent.jpg",
+      "image_url": "/images/products/2026-06-02-lion-nanox-detergent.webp",
       "href": "/products/2026-06-02-lion-nanox-detergent",
       "external": false,
       "price_text": "1099",
@@ -900,7 +900,7 @@
         "衛浴",
         "LIXIL"
       ],
-      "image_url": "/images/products/2026-06-02-lixil-bidet-seat.jpg",
+      "image_url": "/images/products/2026-06-02-lixil-bidet-seat.webp",
       "href": "/products/2026-06-02-lixil-bidet-seat",
       "external": false,
       "price_text": "￥42000",
@@ -930,7 +930,7 @@
         "Mitsubishi Electric",
         "冷藏冷凍"
       ],
-      "image_url": "/images/products/2026-06-02-mitsubishi-electric-freezer.jpg",
+      "image_url": "/images/products/2026-06-02-mitsubishi-electric-freezer.webp",
       "href": "/products/2026-06-02-mitsubishi-electric-freezer",
       "external": false,
       "price_text": "12000",
@@ -958,7 +958,7 @@
         "桌面周邊",
         "MSI"
       ],
-      "image_url": "/images/products/2026-06-02-msi-desktop-pc.jpg",
+      "image_url": "/images/products/2026-06-02-msi-desktop-pc.webp",
       "href": "/products/2026-06-02-msi-desktop-pc",
       "external": false,
       "price_text": "29990",
@@ -988,7 +988,7 @@
         "廚房",
         "Panasonic"
       ],
-      "image_url": "/images/products/2026-06-02-panasonic-nn-bs607.jpg",
+      "image_url": "/images/products/2026-06-02-panasonic-nn-bs607.webp",
       "href": "/products/2026-06-02-panasonic-nn-bs607",
       "external": false,
       "price_text": "12900",
@@ -1018,7 +1018,7 @@
         "廚房",
         "Panasonic"
       ],
-      "image_url": "/images/products/2026-06-02-panasonic-np-th4.jpg",
+      "image_url": "/images/products/2026-06-02-panasonic-np-th4.webp",
       "href": "/products/2026-06-02-panasonic-np-th4",
       "external": false,
       "price_text": "21000",
@@ -1048,7 +1048,7 @@
         "廚房",
         "Panasonic"
       ],
-      "image_url": "/images/products/2026-06-02-panasonic-sr-kt069.jpg",
+      "image_url": "/images/products/2026-06-02-panasonic-sr-kt069.webp",
       "href": "/products/2026-06-02-panasonic-sr-kt069",
       "external": false,
       "price_text": "5000",
@@ -1076,7 +1076,7 @@
         "洗衣烘衣",
         "Panasonic"
       ],
-      "image_url": "/images/products/2026-06-02-panasonic-v150mdh.jpg",
+      "image_url": "/images/products/2026-06-02-panasonic-v150mdh.webp",
       "href": "/products/2026-06-02-panasonic-v150mdh",
       "external": false,
       "price_text": "41000",
@@ -1106,7 +1106,7 @@
         "Panasonic",
         "冷藏冷凍"
       ],
-      "image_url": "/images/products/2026-06-02-panasonic-freezer.jpg",
+      "image_url": "/images/products/2026-06-02-panasonic-freezer.webp",
       "href": "/products/2026-06-02-panasonic-freezer",
       "external": false,
       "price_text": "19000",
@@ -1136,7 +1136,7 @@
         "Panasonic",
         "冷藏冷凍"
       ],
-      "image_url": "/images/products/2026-06-02-panasonic-japan-refrigerator.jpg",
+      "image_url": "/images/products/2026-06-02-panasonic-japan-refrigerator.webp",
       "href": "/products/2026-06-02-panasonic-japan-refrigerator",
       "external": false,
       "price_text": "67000",
@@ -1164,7 +1164,7 @@
         "顯示器",
         "Philips"
       ],
-      "image_url": "/images/products/2026-06-02-philips-40b1u5600.jpg",
+      "image_url": "/images/products/2026-06-02-philips-40b1u5600.webp",
       "href": "/products/2026-06-02-philips-40b1u5600",
       "external": false,
       "price_text": "15000",
@@ -1192,7 +1192,7 @@
         "清潔",
         "iRobot"
       ],
-      "image_url": "/images/products/2026-06-02-irobot-roomba-j7.jpg",
+      "image_url": "/images/products/2026-06-02-irobot-roomba-j7.webp",
       "href": "/products/2026-06-02-irobot-roomba-j7",
       "external": false,
       "price_text": "26000",
@@ -1220,7 +1220,7 @@
         "顯示器",
         "Samsung"
       ],
-      "image_url": "/images/products/2026-06-02-samsung-m7-32-inch.jpg",
+      "image_url": "/images/products/2026-06-02-samsung-m7-32-inch.webp",
       "href": "/products/2026-06-02-samsung-m7-32-inch",
       "external": false,
       "price_text": "9900",
@@ -1248,7 +1248,7 @@
         "Sennheiser",
         "喇叭"
       ],
-      "image_url": "/images/products/2026-06-02-sennheiser-ambeo-max.jpg",
+      "image_url": "/images/products/2026-06-02-sennheiser-ambeo-max.webp",
       "href": "/products/2026-06-02-sennheiser-ambeo-max",
       "external": false,
       "price_text": "84900",
@@ -1276,7 +1276,7 @@
         "顯示器",
         "Sharp"
       ],
-      "image_url": "/images/products/2026-06-02-sharp-65-inch-xled.jpg",
+      "image_url": "/images/products/2026-06-02-sharp-65-inch-xled.webp",
       "href": "/products/2026-06-02-sharp-65-inch-xled",
       "external": false,
       "price_text": "43000",
@@ -1306,7 +1306,7 @@
         "廚房",
         "Sharp"
       ],
-      "image_url": "/images/products/2026-06-02-sharp-xp10t.jpg",
+      "image_url": "/images/products/2026-06-02-sharp-xp10t.webp",
       "href": "/products/2026-06-02-sharp-xp10t",
       "external": false,
       "price_text": "29900",
@@ -1334,7 +1334,7 @@
         "儲存備份",
         "Synology"
       ],
-      "image_url": "/images/products/2026-06-02-synology-ds723-plus.jpg",
+      "image_url": "/images/products/2026-06-02-synology-ds723-plus.webp",
       "href": "/products/2026-06-02-synology-ds723-plus",
       "external": false,
       "price_text": "15000",
@@ -1362,7 +1362,7 @@
         "廚房",
         "Toshiba"
       ],
-      "image_url": "/images/products/2026-06-02-toshiba-yd5000.jpg",
+      "image_url": "/images/products/2026-06-02-toshiba-yd5000.webp",
       "href": "/products/2026-06-02-toshiba-yd5000",
       "external": false,
       "price_text": "￥100000",
@@ -1390,7 +1390,7 @@
         "照明",
         "Toshiba"
       ],
-      "image_url": "/images/products/2026-06-02-toshiba-premium-ceiling-light.jpg",
+      "image_url": "/images/products/2026-06-02-toshiba-premium-ceiling-light.webp",
       "href": "/products/2026-06-02-toshiba-premium-ceiling-light",
       "external": false,
       "price_text": "￥30000",
@@ -1420,7 +1420,7 @@
         "固定安裝",
         "TOTO"
       ],
-      "image_url": "/images/products/2026-06-02-toto-thermostatic-faucet.jpg",
+      "image_url": "/images/products/2026-06-02-toto-thermostatic-faucet.webp",
       "href": "/products/2026-06-02-toto-thermostatic-faucet",
       "external": false,
       "price_text": "￥18000",
@@ -1448,7 +1448,7 @@
         "收納整理",
         "TRUSCO"
       ],
-      "image_url": "/images/products/2026-06-02-trusco-trunk-cargo.jpg",
+      "image_url": "/images/products/2026-06-02-trusco-trunk-cargo.webp",
       "href": "/products/2026-06-02-trusco-trunk-cargo",
       "external": false,
       "price_text": "￥1790",
@@ -1476,7 +1476,7 @@
         "網路設備",
         "Ubiquiti"
       ],
-      "image_url": "/images/products/2026-06-02-unifi-express.png",
+      "image_url": "/images/products/2026-06-02-unifi-express.webp",
       "href": "/products/2026-06-02-unifi-express",
       "external": false,
       "price_text": "5799",
@@ -1504,7 +1504,7 @@
         "網路設備",
         "Zyxel"
       ],
-      "image_url": "/images/products/2026-06-02-zyxel-xgs1250-12.jpg",
+      "image_url": "/images/products/2026-06-02-zyxel-xgs1250-12.webp",
       "href": "/products/2026-06-02-zyxel-xgs1250-12",
       "external": false,
       "price_text": "9000",
@@ -1534,7 +1534,7 @@
         "固定安裝",
         "Mitsubishi Heavy Industries"
       ],
-      "image_url": "/images/products/2026-06-02-mitsubishi-heavy-industries-air-conditioner.jpg",
+      "image_url": "/images/products/2026-06-02-mitsubishi-heavy-industries-air-conditioner.webp",
       "href": "/products/2026-06-02-mitsubishi-heavy-industries-air-conditioner",
       "external": false,
       "price_text": "比較貴一點",
@@ -1564,7 +1564,7 @@
         "大橋牌",
         "米食"
       ],
-      "image_url": "/images/products/2026-06-02-ohashi-koshihikari-rice.jpg",
+      "image_url": "/images/products/2026-06-02-ohashi-koshihikari-rice.webp",
       "href": "/products/2026-06-02-ohashi-koshihikari-rice",
       "external": false,
       "price_text": "125/kg",
@@ -1624,7 +1624,7 @@
         "富里",
         "米食"
       ],
-      "image_url": "/images/products/2026-06-02-fuli-milk-queen-rice.jpg",
+      "image_url": "/images/products/2026-06-02-fuli-milk-queen-rice.webp",
       "href": "/products/2026-06-02-fuli-milk-queen-rice",
       "external": false,
       "price_text": "200/kg",
@@ -1684,7 +1684,7 @@
         "食材",
         "廚房"
       ],
-      "image_url": "/images/products/2026-06-02-asahi-ponzu.jpg",
+      "image_url": "/images/products/2026-06-02-asahi-ponzu.webp",
       "href": "/products/2026-06-02-asahi-ponzu",
       "external": false,
       "price_text": "￥840",
@@ -1744,7 +1744,7 @@
         "廚房",
         "Zojirushi"
       ],
-      "image_url": "/images/products/2026-06-02-zojirushi-nw-jw10.jpg",
+      "image_url": "/images/products/2026-06-02-zojirushi-nw-jw10.webp",
       "href": "/products/2026-06-02-zojirushi-nw-jw10",
       "external": false,
       "price_text": "￥45000",
@@ -1770,7 +1770,7 @@
       "tag_labels": [
         "電源充電"
       ],
-      "image_url": "/images/products/2026-06-02-battery-charger.jpg",
+      "image_url": "/images/products/2026-06-02-battery-charger.webp",
       "href": "/products/2026-06-02-battery-charger",
       "external": false,
       "price_text": "249",
@@ -1796,7 +1796,7 @@
       "tag_labels": [
         "人體工學"
       ],
-      "image_url": "/images/guides/2026-06-02-aeron-chair.jpg",
+      "image_url": "/images/guides/2026-06-02-aeron-chair.webp",
       "href": "https://www.facebook.com/share/p/165wXVWFFW/",
       "external": true,
       "published_at": "2026-06-02T00:00:00+08:00"
@@ -1819,7 +1819,7 @@
       "tag_labels": [
         "米食"
       ],
-      "image_url": "https://scontent.ftpe8-2.fna.fbcdn.net/v/t39.30808-6/285454481_10225222919953314_2760340429445359591_n.jpg",
+      "image_url": null,
       "href": "https://www.facebook.com/applepig/posts/pfbid0SxJNCFgExHegTJb9A6jPZNNUTSgNP1FW29oAnmHJheXQhi2NFWd34esgSkcAK64Dl",
       "external": true,
       "published_at": "2026-06-02T00:00:00+08:00"
@@ -2590,7 +2590,7 @@
           "ADATA",
           "電源充電"
         ],
-        "image_url": "/images/products/2026-06-02-adata-power-bank.jpg",
+        "image_url": "/images/products/2026-06-02-adata-power-bank.webp",
         "href": "/products/2026-06-02-adata-power-bank",
         "external": false,
         "price_text": "500",
@@ -2610,7 +2610,7 @@
           "aibo",
           "電源充電"
         ],
-        "image_url": "/images/products/2026-06-02-aibo-qi-power-bank.jpg",
+        "image_url": "/images/products/2026-06-02-aibo-qi-power-bank.webp",
         "href": "/products/2026-06-02-aibo-qi-power-bank",
         "external": false,
         "price_text": "899",
@@ -2630,7 +2630,7 @@
           "APlus",
           "電源充電"
         ],
-        "image_url": "/images/products/2026-06-02-aplus-ups.jpg",
+        "image_url": "/images/products/2026-06-02-aplus-ups.webp",
         "href": "/products/2026-06-02-aplus-ups",
         "external": false,
         "price_text": "1450",
@@ -2650,7 +2650,7 @@
           "Apple",
           "訊源"
         ],
-        "image_url": "/images/products/2026-06-02-apple-tv-4k.jpg",
+        "image_url": "/images/products/2026-06-02-apple-tv-4k.webp",
         "href": "/products/2026-06-02-apple-tv-4k",
         "external": false,
         "price_text": "4490",
@@ -2670,7 +2670,7 @@
           "Arnest",
           "廚房"
         ],
-        "image_url": "/images/products/2026-06-02-arnest-nagikire-ou.jpg",
+        "image_url": "/images/products/2026-06-02-arnest-nagikire-ou.webp",
         "href": "/products/2026-06-02-arnest-nagikire-ou",
         "external": false,
         "price_text": "￥3800",
@@ -2690,7 +2690,7 @@
           "Avier",
           "電源充電"
         ],
-        "image_url": "/images/products/2026-06-02-avier-power-bank.jpg",
+        "image_url": "/images/products/2026-06-02-avier-power-bank.webp",
         "href": "/products/2026-06-02-avier-power-bank",
         "external": false,
         "price_text": "479",
@@ -2710,7 +2710,7 @@
           "Belkin",
           "電源充電"
         ],
-        "image_url": "/images/products/2026-06-02-belkin-three-port-type-c-charger.jpg",
+        "image_url": "/images/products/2026-06-02-belkin-three-port-type-c-charger.webp",
         "href": "/products/2026-06-02-belkin-three-port-type-c-charger",
         "external": false,
         "price_text": "790",
@@ -2730,7 +2730,7 @@
           "BenQ",
           "顯示器"
         ],
-        "image_url": "/images/products/2026-06-02-benq-e43-735.jpg",
+        "image_url": "/images/products/2026-06-02-benq-e43-735.webp",
         "href": "/products/2026-06-02-benq-e43-735",
         "external": false,
         "price_text": "10999",
@@ -2750,7 +2750,7 @@
           "BenQ",
           "顯示器"
         ],
-        "image_url": "/images/products/2026-06-02-benq-e55-735.jpg",
+        "image_url": "/images/products/2026-06-02-benq-e55-735.webp",
         "href": "/products/2026-06-02-benq-e55-735",
         "external": false,
         "price_text": "13999",
@@ -2770,7 +2770,7 @@
           "BenQ",
           "顯示器"
         ],
-        "image_url": "/images/products/2026-06-02-benq-rd280u.jpg",
+        "image_url": "/images/products/2026-06-02-benq-rd280u.webp",
         "href": "/products/2026-06-02-benq-rd280u",
         "external": false,
         "price_text": "16888",
@@ -2790,7 +2790,7 @@
           "空氣調節",
           "Blueair"
         ],
-        "image_url": "/images/products/2026-06-02-blueair-3250-air-purifier.jpg",
+        "image_url": "/images/products/2026-06-02-blueair-3250-air-purifier.webp",
         "href": "/products/2026-06-02-blueair-3250-air-purifier",
         "external": false,
         "price_text": "一台4400",
@@ -2810,7 +2810,7 @@
           "Bose",
           "耳機"
         ],
-        "image_url": "/images/products/2026-06-02-bose-qc45.jpg",
+        "image_url": "/images/products/2026-06-02-bose-qc45.webp",
         "href": "/products/2026-06-02-bose-qc45",
         "external": false,
         "price_text": "8000",
@@ -2830,7 +2830,7 @@
           "BRITA",
           "廚房"
         ],
-        "image_url": "/images/products/2026-06-02-brita-water-filter-pitcher.jpg",
+        "image_url": "/images/products/2026-06-02-brita-water-filter-pitcher.webp",
         "href": "/products/2026-06-02-brita-water-filter-pitcher",
         "external": false,
         "price_text": "2200",
@@ -2850,7 +2850,7 @@
           "桌面周邊",
           "Ducky"
         ],
-        "image_url": "/images/products/2026-06-02-ducky-one-2.jpg",
+        "image_url": "/images/products/2026-06-02-ducky-one-2.webp",
         "href": "/products/2026-06-02-ducky-one-2",
         "external": false,
         "price_text": "2300",
@@ -2871,7 +2871,7 @@
           "ELAC",
           "喇叭"
         ],
-        "image_url": "/images/products/2026-06-02-elac-connex-dcb41.jpg",
+        "image_url": "/images/products/2026-06-02-elac-connex-dcb41.webp",
         "href": "/products/2026-06-02-elac-connex-dcb41",
         "external": false,
         "price_text": "大概16000",
@@ -2891,7 +2891,7 @@
           "清潔",
           "Electrolux"
         ],
-        "image_url": "/images/products/2026-06-02-electrolux-vacuum-cleaner.jpg",
+        "image_url": "/images/products/2026-06-02-electrolux-vacuum-cleaner.webp",
         "href": "/products/2026-06-02-electrolux-vacuum-cleaner",
         "external": false,
         "price_text": "11999",
@@ -2911,7 +2911,7 @@
           "線材轉接",
           "FIBBR"
         ],
-        "image_url": "/images/products/2026-06-02-fibbr-fiber-hdmi-cable.jpg",
+        "image_url": "/images/products/2026-06-02-fibbr-fiber-hdmi-cable.webp",
         "href": "/products/2026-06-02-fibbr-fiber-hdmi-cable",
         "external": false,
         "price_text": "20~30鎂",
@@ -2931,7 +2931,7 @@
           "Fisher & Paykel",
           "廚房"
         ],
-        "image_url": "/images/products/2026-06-02-fisher-paykel-dishdrawer.jpg",
+        "image_url": "/images/products/2026-06-02-fisher-paykel-dishdrawer.webp",
         "href": "/products/2026-06-02-fisher-paykel-dishdrawer",
         "external": false,
         "price_text": "45000",
@@ -2951,7 +2951,7 @@
           "空氣調節",
           "Hitachi"
         ],
-        "image_url": "/images/products/2026-06-02-hitachi-rd-14fr.jpg",
+        "image_url": "/images/products/2026-06-02-hitachi-rd-14fr.webp",
         "href": "/products/2026-06-02-hitachi-rd-14fr",
         "external": false,
         "price_text": "5999",
@@ -2971,7 +2971,7 @@
           "Apple",
           "喇叭"
         ],
-        "image_url": "/images/products/2026-06-02-apple-homepod-large.jpg",
+        "image_url": "/images/products/2026-06-02-apple-homepod-large.webp",
         "href": "/products/2026-06-02-apple-homepod-large",
         "external": false,
         "price_text": "22000",
@@ -3051,7 +3051,7 @@
           "IRIS OHYAMA",
           "照明"
         ],
-        "image_url": "/images/products/2026-06-02-iris-ohyama-premium-ceiling-light.jpg",
+        "image_url": "/images/products/2026-06-02-iris-ohyama-premium-ceiling-light.webp",
         "href": "/products/2026-06-02-iris-ohyama-premium-ceiling-light",
         "external": false,
         "price_text": "￥20000",
@@ -3071,7 +3071,7 @@
           "j5create",
           "電源充電"
         ],
-        "image_url": "/images/products/2026-06-02-j5create-usb-c-charger.jpg",
+        "image_url": "/images/products/2026-06-02-j5create-usb-c-charger.webp",
         "href": "/products/2026-06-02-j5create-usb-c-charger",
         "external": false,
         "price_text": "199",
@@ -3091,7 +3091,7 @@
           "Kioxia",
           "儲存備份"
         ],
-        "image_url": "/images/products/2026-06-02-kioxia-1tb-usb-flash-drive.jpg",
+        "image_url": "/images/products/2026-06-02-kioxia-1tb-usb-flash-drive.webp",
         "href": "/products/2026-06-02-kioxia-1tb-usb-flash-drive",
         "external": false,
         "price_text": "2490",
@@ -3112,7 +3112,7 @@
           "固定安裝",
           "Kohler"
         ],
-        "image_url": "/images/products/2026-06-02-kohler-familycare-bathroom-vanity.jpg",
+        "image_url": "/images/products/2026-06-02-kohler-familycare-bathroom-vanity.webp",
         "href": "/products/2026-06-02-kohler-familycare-bathroom-vanity",
         "external": false,
         "price_text": "20000",
@@ -3134,7 +3134,7 @@
           "固定安裝",
           "Kohler"
         ],
-        "image_url": "/images/products/2026-06-02-kohler-bathroom-heater.jpg",
+        "image_url": "/images/products/2026-06-02-kohler-bathroom-heater.webp",
         "href": "/products/2026-06-02-kohler-bathroom-heater",
         "external": false,
         "price_text": "10900",
@@ -3154,7 +3154,7 @@
           "空氣調節",
           "Kolin"
         ],
-        "image_url": "/images/products/2026-06-02-kolin-ceramic-heater.jpg",
+        "image_url": "/images/products/2026-06-02-kolin-ceramic-heater.webp",
         "href": "/products/2026-06-02-kolin-ceramic-heater",
         "external": false,
         "price_text": "1180",
@@ -3174,7 +3174,7 @@
           "顯示器",
           "LG"
         ],
-        "image_url": "/images/products/2026-06-02-lg-c4-65-inch-oled.jpg",
+        "image_url": "/images/products/2026-06-02-lg-c4-65-inch-oled.webp",
         "href": "/products/2026-06-02-lg-c4-65-inch-oled",
         "external": false,
         "price_text": "低於60000",
@@ -3195,7 +3195,7 @@
           "日用品",
           "Lion"
         ],
-        "image_url": "/images/products/2026-06-02-lion-nanox-detergent.jpg",
+        "image_url": "/images/products/2026-06-02-lion-nanox-detergent.webp",
         "href": "/products/2026-06-02-lion-nanox-detergent",
         "external": false,
         "price_text": "1099",
@@ -3215,7 +3215,7 @@
           "衛浴",
           "LIXIL"
         ],
-        "image_url": "/images/products/2026-06-02-lixil-bidet-seat.jpg",
+        "image_url": "/images/products/2026-06-02-lixil-bidet-seat.webp",
         "href": "/products/2026-06-02-lixil-bidet-seat",
         "external": false,
         "price_text": "￥42000",
@@ -3236,7 +3236,7 @@
           "Mitsubishi Electric",
           "冷藏冷凍"
         ],
-        "image_url": "/images/products/2026-06-02-mitsubishi-electric-freezer.jpg",
+        "image_url": "/images/products/2026-06-02-mitsubishi-electric-freezer.webp",
         "href": "/products/2026-06-02-mitsubishi-electric-freezer",
         "external": false,
         "price_text": "12000",
@@ -3256,7 +3256,7 @@
           "桌面周邊",
           "MSI"
         ],
-        "image_url": "/images/products/2026-06-02-msi-desktop-pc.jpg",
+        "image_url": "/images/products/2026-06-02-msi-desktop-pc.webp",
         "href": "/products/2026-06-02-msi-desktop-pc",
         "external": false,
         "price_text": "29990",
@@ -3277,7 +3277,7 @@
           "廚房",
           "Panasonic"
         ],
-        "image_url": "/images/products/2026-06-02-panasonic-nn-bs607.jpg",
+        "image_url": "/images/products/2026-06-02-panasonic-nn-bs607.webp",
         "href": "/products/2026-06-02-panasonic-nn-bs607",
         "external": false,
         "price_text": "12900",
@@ -3298,7 +3298,7 @@
           "廚房",
           "Panasonic"
         ],
-        "image_url": "/images/products/2026-06-02-panasonic-np-th4.jpg",
+        "image_url": "/images/products/2026-06-02-panasonic-np-th4.webp",
         "href": "/products/2026-06-02-panasonic-np-th4",
         "external": false,
         "price_text": "21000",
@@ -3319,7 +3319,7 @@
           "廚房",
           "Panasonic"
         ],
-        "image_url": "/images/products/2026-06-02-panasonic-sr-kt069.jpg",
+        "image_url": "/images/products/2026-06-02-panasonic-sr-kt069.webp",
         "href": "/products/2026-06-02-panasonic-sr-kt069",
         "external": false,
         "price_text": "5000",
@@ -3339,7 +3339,7 @@
           "洗衣烘衣",
           "Panasonic"
         ],
-        "image_url": "/images/products/2026-06-02-panasonic-v150mdh.jpg",
+        "image_url": "/images/products/2026-06-02-panasonic-v150mdh.webp",
         "href": "/products/2026-06-02-panasonic-v150mdh",
         "external": false,
         "price_text": "41000",
@@ -3360,7 +3360,7 @@
           "Panasonic",
           "冷藏冷凍"
         ],
-        "image_url": "/images/products/2026-06-02-panasonic-freezer.jpg",
+        "image_url": "/images/products/2026-06-02-panasonic-freezer.webp",
         "href": "/products/2026-06-02-panasonic-freezer",
         "external": false,
         "price_text": "19000",
@@ -3381,7 +3381,7 @@
           "Panasonic",
           "冷藏冷凍"
         ],
-        "image_url": "/images/products/2026-06-02-panasonic-japan-refrigerator.jpg",
+        "image_url": "/images/products/2026-06-02-panasonic-japan-refrigerator.webp",
         "href": "/products/2026-06-02-panasonic-japan-refrigerator",
         "external": false,
         "price_text": "67000",
@@ -3401,7 +3401,7 @@
           "顯示器",
           "Philips"
         ],
-        "image_url": "/images/products/2026-06-02-philips-40b1u5600.jpg",
+        "image_url": "/images/products/2026-06-02-philips-40b1u5600.webp",
         "href": "/products/2026-06-02-philips-40b1u5600",
         "external": false,
         "price_text": "15000",
@@ -3421,7 +3421,7 @@
           "清潔",
           "iRobot"
         ],
-        "image_url": "/images/products/2026-06-02-irobot-roomba-j7.jpg",
+        "image_url": "/images/products/2026-06-02-irobot-roomba-j7.webp",
         "href": "/products/2026-06-02-irobot-roomba-j7",
         "external": false,
         "price_text": "26000",
@@ -3441,7 +3441,7 @@
           "顯示器",
           "Samsung"
         ],
-        "image_url": "/images/products/2026-06-02-samsung-m7-32-inch.jpg",
+        "image_url": "/images/products/2026-06-02-samsung-m7-32-inch.webp",
         "href": "/products/2026-06-02-samsung-m7-32-inch",
         "external": false,
         "price_text": "9900",
@@ -3461,7 +3461,7 @@
           "Sennheiser",
           "喇叭"
         ],
-        "image_url": "/images/products/2026-06-02-sennheiser-ambeo-max.jpg",
+        "image_url": "/images/products/2026-06-02-sennheiser-ambeo-max.webp",
         "href": "/products/2026-06-02-sennheiser-ambeo-max",
         "external": false,
         "price_text": "84900",
@@ -3481,7 +3481,7 @@
           "顯示器",
           "Sharp"
         ],
-        "image_url": "/images/products/2026-06-02-sharp-65-inch-xled.jpg",
+        "image_url": "/images/products/2026-06-02-sharp-65-inch-xled.webp",
         "href": "/products/2026-06-02-sharp-65-inch-xled",
         "external": false,
         "price_text": "43000",
@@ -3502,7 +3502,7 @@
           "廚房",
           "Sharp"
         ],
-        "image_url": "/images/products/2026-06-02-sharp-xp10t.jpg",
+        "image_url": "/images/products/2026-06-02-sharp-xp10t.webp",
         "href": "/products/2026-06-02-sharp-xp10t",
         "external": false,
         "price_text": "29900",
@@ -3522,7 +3522,7 @@
           "儲存備份",
           "Synology"
         ],
-        "image_url": "/images/products/2026-06-02-synology-ds723-plus.jpg",
+        "image_url": "/images/products/2026-06-02-synology-ds723-plus.webp",
         "href": "/products/2026-06-02-synology-ds723-plus",
         "external": false,
         "price_text": "15000",
@@ -3542,7 +3542,7 @@
           "廚房",
           "Toshiba"
         ],
-        "image_url": "/images/products/2026-06-02-toshiba-yd5000.jpg",
+        "image_url": "/images/products/2026-06-02-toshiba-yd5000.webp",
         "href": "/products/2026-06-02-toshiba-yd5000",
         "external": false,
         "price_text": "￥100000",
@@ -3562,7 +3562,7 @@
           "照明",
           "Toshiba"
         ],
-        "image_url": "/images/products/2026-06-02-toshiba-premium-ceiling-light.jpg",
+        "image_url": "/images/products/2026-06-02-toshiba-premium-ceiling-light.webp",
         "href": "/products/2026-06-02-toshiba-premium-ceiling-light",
         "external": false,
         "price_text": "￥30000",
@@ -3583,7 +3583,7 @@
           "固定安裝",
           "TOTO"
         ],
-        "image_url": "/images/products/2026-06-02-toto-thermostatic-faucet.jpg",
+        "image_url": "/images/products/2026-06-02-toto-thermostatic-faucet.webp",
         "href": "/products/2026-06-02-toto-thermostatic-faucet",
         "external": false,
         "price_text": "￥18000",
@@ -3603,7 +3603,7 @@
           "收納整理",
           "TRUSCO"
         ],
-        "image_url": "/images/products/2026-06-02-trusco-trunk-cargo.jpg",
+        "image_url": "/images/products/2026-06-02-trusco-trunk-cargo.webp",
         "href": "/products/2026-06-02-trusco-trunk-cargo",
         "external": false,
         "price_text": "￥1790",
@@ -3623,7 +3623,7 @@
           "網路設備",
           "Ubiquiti"
         ],
-        "image_url": "/images/products/2026-06-02-unifi-express.png",
+        "image_url": "/images/products/2026-06-02-unifi-express.webp",
         "href": "/products/2026-06-02-unifi-express",
         "external": false,
         "price_text": "5799",
@@ -3643,7 +3643,7 @@
           "網路設備",
           "Zyxel"
         ],
-        "image_url": "/images/products/2026-06-02-zyxel-xgs1250-12.jpg",
+        "image_url": "/images/products/2026-06-02-zyxel-xgs1250-12.webp",
         "href": "/products/2026-06-02-zyxel-xgs1250-12",
         "external": false,
         "price_text": "9000",
@@ -3664,7 +3664,7 @@
           "固定安裝",
           "Mitsubishi Heavy Industries"
         ],
-        "image_url": "/images/products/2026-06-02-mitsubishi-heavy-industries-air-conditioner.jpg",
+        "image_url": "/images/products/2026-06-02-mitsubishi-heavy-industries-air-conditioner.webp",
         "href": "/products/2026-06-02-mitsubishi-heavy-industries-air-conditioner",
         "external": false,
         "price_text": "比較貴一點",
@@ -3685,7 +3685,7 @@
           "大橋牌",
           "米食"
         ],
-        "image_url": "/images/products/2026-06-02-ohashi-koshihikari-rice.jpg",
+        "image_url": "/images/products/2026-06-02-ohashi-koshihikari-rice.webp",
         "href": "/products/2026-06-02-ohashi-koshihikari-rice",
         "external": false,
         "price_text": "125/kg",
@@ -3727,7 +3727,7 @@
           "富里",
           "米食"
         ],
-        "image_url": "/images/products/2026-06-02-fuli-milk-queen-rice.jpg",
+        "image_url": "/images/products/2026-06-02-fuli-milk-queen-rice.webp",
         "href": "/products/2026-06-02-fuli-milk-queen-rice",
         "external": false,
         "price_text": "200/kg",
@@ -3769,7 +3769,7 @@
           "食材",
           "廚房"
         ],
-        "image_url": "/images/products/2026-06-02-asahi-ponzu.jpg",
+        "image_url": "/images/products/2026-06-02-asahi-ponzu.webp",
         "href": "/products/2026-06-02-asahi-ponzu",
         "external": false,
         "price_text": "￥840",
@@ -3811,7 +3811,7 @@
           "廚房",
           "Zojirushi"
         ],
-        "image_url": "/images/products/2026-06-02-zojirushi-nw-jw10.jpg",
+        "image_url": "/images/products/2026-06-02-zojirushi-nw-jw10.webp",
         "href": "/products/2026-06-02-zojirushi-nw-jw10",
         "external": false,
         "price_text": "￥45000",
@@ -3830,7 +3830,7 @@
         "tag_labels": [
           "電源充電"
         ],
-        "image_url": "/images/products/2026-06-02-battery-charger.jpg",
+        "image_url": "/images/products/2026-06-02-battery-charger.webp",
         "href": "/products/2026-06-02-battery-charger",
         "external": false,
         "price_text": "249",
@@ -3849,7 +3849,7 @@
         "tag_labels": [
           "人體工學"
         ],
-        "image_url": "/images/guides/2026-06-02-aeron-chair.jpg",
+        "image_url": "/images/guides/2026-06-02-aeron-chair.webp",
         "href": "https://www.facebook.com/share/p/165wXVWFFW/",
         "external": true
       },
@@ -3865,7 +3865,7 @@
         "tag_labels": [
           "米食"
         ],
-        "image_url": "https://scontent.ftpe8-2.fna.fbcdn.net/v/t39.30808-6/285454481_10225222919953314_2760340429445359591_n.jpg",
+        "image_url": null,
         "href": "https://www.facebook.com/applepig/posts/pfbid0SxJNCFgExHegTJb9A6jPZNNUTSgNP1FW29oAnmHJheXQhi2NFWd34esgSkcAK64Dl",
         "external": true
       },

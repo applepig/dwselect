@@ -1,14 +1,15 @@
 import { describe, expect, it } from 'vitest'
-import { readFileSync, readdirSync } from 'node:fs'
+import { existsSync, readFileSync, readdirSync } from 'node:fs'
 
 import nuxt_config from '../nuxt.config'
 import package_json from '../package.json'
-import { getPublishedProductsQuery } from '../app/utils/get-published-products-query'
+import { resolveImageFileUrl } from '../app/utils/content-images/resolve-image-file-url'
 
 describe('Nuxt SSG baseline', () => {
-  it('should enable Nuxt Content, Nuxt UI and static generation baseline', () => {
-    expect(nuxt_config.modules).toContain('@nuxt/content')
+  it('should enable Nuxt UI and static generation without Nuxt Content', () => {
+    expect(nuxt_config.modules).not.toContain('@nuxt/content')
     expect(nuxt_config.modules).toContain('@nuxt/ui')
+    expect(nuxt_config.ui?.fonts).toBe(false)
     expect(nuxt_config.nitro?.preset).toBe('static')
     expect(nuxt_config.experimental?.viewTransition).toBe(false)
     expect(nuxt_config.app?.pageTransition).toMatchObject({
@@ -22,7 +23,32 @@ describe('Nuxt SSG baseline', () => {
     expect(package_json.scripts.generate).toContain('pnpm build:search-index')
   })
 
-  it('should expose taxonomy JSON data collections and content domain collections', () => {
+  it('should build optimized content images before public discovery and static generation', () => {
+    expect(package_json.scripts).toHaveProperty('build:content-images')
+    expect(package_json.scripts.build).toContain('pnpm build:content-images')
+    expect(package_json.scripts.generate).toContain('pnpm build:content-images')
+    expect(package_json.scripts.build.indexOf('pnpm build:content-images')).toBeLessThan(package_json.scripts.build.indexOf('pnpm build:public-discovery'))
+    expect(package_json.scripts.generate.indexOf('pnpm build:content-images')).toBeLessThan(package_json.scripts.generate.indexOf('pnpm build:public-discovery'))
+  })
+
+  it('should avoid publishing raw content image directories through Nitro publicAssets', () => {
+    const config_source = readFileSync(new URL('../nuxt.config.ts', import.meta.url), 'utf8')
+    const public_assets = nuxt_config.nitro?.publicAssets ?? []
+
+    expect(config_source).not.toContain('content/products/images')
+    expect(config_source).not.toContain('content/guides/images')
+    expect(JSON.stringify(public_assets)).not.toContain('content/products/images')
+    expect(JSON.stringify(public_assets)).not.toContain('content/guides/images')
+  })
+
+  it('should resolve local content image files to optimized WebP static asset URLs', () => {
+    expect(resolveImageFileUrl('sample-product.jpg', 'products')).toBe('/images/products/sample-product.webp')
+    expect(resolveImageFileUrl('sample-guide.png', 'guides')).toBe('/images/guides/sample-guide.webp')
+    expect(resolveImageFileUrl('already-optimized.webp', 'products')).toBe('/images/products/already-optimized.webp')
+    expect(() => resolveImageFileUrl('../unsafe.jpg', 'products')).toThrow('Invalid image_file')
+  })
+
+  it('should keep taxonomy JSON data and content domain files under zod validation', () => {
     const category_taxonomy = JSON.parse(readFileSync(
       new URL('../content/taxonomies/categories.json', import.meta.url),
       'utf8',
@@ -44,34 +70,54 @@ describe('Nuxt SSG baseline', () => {
     expect(link_files).toEqual(expect.arrayContaining(['applepig-home.json', '2026-06-02-b18.json']))
     expect(guide_files).toEqual(expect.arrayContaining(['2026-06-02-日本米入門篇.json', '2026-06-02-aeron-chair.json']))
 
-    const content_config_source = readFileSync(new URL('../content.config.ts', import.meta.url), 'utf8')
-    expect(content_config_source).toContain('guides: defineCollection')
-    expect(content_config_source).toContain("source: 'guides/*.json'")
-    expect(content_config_source).toContain('links: defineCollection')
-    expect(content_config_source).toContain("source: 'links/*.json'")
-    expect(content_config_source).toContain('categories: defineCollection')
-    expect(content_config_source).toContain("source: 'taxonomies/categories.json'")
-    expect(content_config_source).toContain('channels: defineCollection')
-    expect(content_config_source).toContain("source: 'taxonomies/channels.json'")
-    expect(content_config_source).toContain('tags: defineCollection')
-    expect(content_config_source).toContain("source: 'taxonomies/tags.json'")
-    expect(content_config_source).toContain('brands: defineCollection')
-    expect(content_config_source).toContain("source: 'taxonomies/brands.json'")
-    expect(content_config_source).not.toContain("source: 'taxonomies/links.json'")
+    const content_config_path = new URL('../content.config.ts', import.meta.url)
+    const product_schema_test_source = readFileSync(new URL('../tests/product-schema.test.ts', import.meta.url), 'utf8')
+
+    expect(existsSync(content_config_path)).toBe(false)
+    expect(product_schema_test_source).toContain('should validate all migrated content domains against schemas and taxonomy references')
+    expect(product_schema_test_source).toContain("'../content/products/'")
+    expect(product_schema_test_source).toContain("'../content/guides/'")
+    expect(product_schema_test_source).toContain("'../content/links/'")
   })
 
-  it('should expose a published products query helper skeleton', () => {
-    expect(getPublishedProductsQuery()).toEqual({
-      collection: 'products',
-      where: {
-        status: 'published',
-      },
-      sort: [
-        { category_id: 'ASC' },
-        { published_at: 'DESC' },
-        { name: 'ASC' },
-      ],
-    })
+  it('should remove direct Nuxt Content and SQLite package dependencies', () => {
+    expect(package_json.dependencies).not.toHaveProperty('@nuxt/content')
+    expect(package_json.dependencies).not.toHaveProperty('better-sqlite3')
+    expect(package_json.pnpm.onlyBuiltDependencies).not.toContain('better-sqlite3')
+  })
+
+  it('should keep runtime and authoring sources free of Nuxt Content query leftovers', () => {
+    const source_files = [
+      '../nuxt.config.ts',
+      '../package.json',
+      '../content/AGENTS.md',
+      '../docs/CONTENT.md',
+      '../AGENTS.md',
+      ...readdirSync(new URL('../app/composables/', import.meta.url))
+        .filter((file_name) => file_name.endsWith('.ts'))
+        .map((file_name) => `../app/composables/${file_name}`),
+      ...readdirSync(new URL('../app/pages/', import.meta.url))
+        .filter((file_name) => file_name.endsWith('.vue'))
+        .map((file_name) => `../app/pages/${file_name}`),
+    ]
+
+    const source_text = source_files
+      .map((file_path) => readFileSync(new URL(file_path, import.meta.url), 'utf8'))
+      .join('\n')
+
+    expect(source_text).not.toContain('queryCollection(')
+    expect(source_text).not.toContain('@nuxt/content')
+    expect(source_text).not.toContain('content.config.ts')
+    expect(source_text).not.toContain('__nuxt_content')
+  })
+
+  it('should keep the Git-backed content reader as the content source guard', () => {
+    const query_helper_path = new URL('../app/utils/get-published-products-query.ts', import.meta.url)
+    const content_reader_path = new URL('../scripts/content-reader.ts', import.meta.url)
+
+    expect(existsSync(query_helper_path)).toBe(false)
+    expect(existsSync(content_reader_path)).toBe(true)
+    expect(readFileSync(content_reader_path, 'utf8')).toContain('export async function readPublicContentSource')
   })
 
   it('should wire the public search input with submitted query search state', () => {
@@ -93,16 +139,18 @@ describe('Nuxt SSG baseline', () => {
     expect(page_source).not.toContain('<UInputMenu')
   })
 
-  it('should load runtime taxonomies, guides and links from Nuxt Content in the compact app source', () => {
+  it('should load runtime catalog from the static public content payload without client-only fetching', () => {
     const composable_source = readFileSync(new URL('../app/composables/use-catalog-data.ts', import.meta.url), 'utf8')
+    const fetch_helper_source = readFileSync(new URL('../app/utils/fetch-public-content-payload.ts', import.meta.url), 'utf8')
     const home_source = readFileSync(new URL('../app/pages/index.vue', import.meta.url), 'utf8')
 
-    expect(composable_source).toContain("queryCollection('products')")
-    expect(composable_source).toContain("queryCollection('guides')")
-    expect(composable_source).toContain("queryCollection('categories')")
-    expect(composable_source).toContain("queryCollection('channels')")
-    expect(composable_source).toContain("queryCollection('tags')")
-    expect(composable_source).toContain("queryCollection('links')")
+    expect(composable_source).toContain("useAsyncData('public-content'")
+    expect(composable_source).toContain('fetchPublicContentPayload')
+    expect(fetch_helper_source).toContain("$fetch<PublicContentPayload>('/api/content.json')")
+    expect(fetch_helper_source).toContain("'public/api/content.json'")
+    expect(composable_source).not.toContain('queryCollection(')
+    expect(composable_source).not.toContain('server: false')
+    expect(fetch_helper_source).not.toContain('server: false')
     expect(composable_source).toContain('runtime_taxonomies')
     expect(composable_source).toContain('runtime_guides')
     expect(composable_source).toContain('runtime_links')
@@ -112,6 +160,32 @@ describe('Nuxt SSG baseline', () => {
     expect(home_source).toContain('runtime_taxonomies.value')
     expect(home_source).toContain('runtime_guides.value')
     expect(home_source).toContain('runtime_links.value')
+  })
+
+  it('should keep product detail and app shell from serializing the full catalog payload', () => {
+    const detail_page_source = readFileSync(new URL('../app/pages/products/[id].vue', import.meta.url), 'utf8')
+    const detail_composable_source = readFileSync(new URL('../app/composables/use-product-detail-data.ts', import.meta.url), 'utf8')
+    const shell_composable_source = readFileSync(new URL('../app/composables/use-catalog-shell-data.ts', import.meta.url), 'utf8')
+    const layout_source = readFileSync(new URL('../app/layouts/default.vue', import.meta.url), 'utf8')
+    const nav_source = readFileSync(new URL('../app/components/app-navigation.vue', import.meta.url), 'utf8')
+
+    expect(detail_page_source).toContain('await useProductDetailData(product_id)')
+    expect(detail_page_source).not.toContain('await useCatalogData()')
+    expect(detail_page_source).not.toContain('all_products')
+    expect(detail_composable_source).toContain('useAsyncData(')
+    expect(detail_composable_source).toContain('transform:')
+    expect(detail_composable_source).toContain('getProductDetailPayload')
+    expect(detail_composable_source).toContain('fetchPublicContentPayload')
+    expect(detail_composable_source).not.toContain('server: false')
+    expect(shell_composable_source).toContain('useAsyncData(')
+    expect(shell_composable_source).toContain('transform:')
+    expect(shell_composable_source).toContain('getCatalogShellSummary')
+    expect(shell_composable_source).toContain('fetchPublicContentPayload')
+    expect(shell_composable_source).not.toContain('server: false')
+    expect(layout_source).toContain('await useCatalogShellData()')
+    expect(layout_source).not.toContain('await useCatalogData()')
+    expect(nav_source).toContain('await useCatalogShellData()')
+    expect(nav_source).not.toContain('await useCatalogData()')
   })
 
   it('should lazy fetch the static search index from a client helper', () => {
@@ -284,7 +358,7 @@ describe('Nuxt SSG baseline', () => {
     expect(nav_source).toContain('desktop-category-items')
     expect(nav_source).toContain('desktop-category-link')
     expect(nav_source).toContain('category.id === \'all\' ? \'/\' : `/?category=${category.id}`')
-    expect(nav_source).toContain('runtime_taxonomies')
+    expect(nav_source).toContain('desktop_category_items')
     expect(catalog_css).toContain('.desktop-category-items')
     expect(catalog_css).toContain('.desktop-category-link')
     expect(catalog_css).toContain('.compact-app-bottom-tabs .app-nav-button')
@@ -320,7 +394,7 @@ describe('Nuxt SSG baseline', () => {
     const detail_source = readFileSync(new URL('../app/components/product-detail.vue', import.meta.url), 'utf8')
     const catalog_css = readFileSync(new URL('../app/assets/styles/catalog.css', import.meta.url), 'utf8')
 
-    expect(detail_page_source).toContain('getProductDetail')
+    expect(detail_page_source).toContain('useProductDetailData')
     expect(detail_page_source).toContain('createError')
     expect(detail_page_source).toContain('statusCode: 404')
     expect(detail_page_source).toContain('<ProductDetail')
@@ -348,7 +422,7 @@ describe('Nuxt SSG baseline', () => {
   it('should register product detail head metadata before async catalog loading', () => {
     const detail_page_source = readFileSync(new URL('../app/pages/products/[id].vue', import.meta.url), 'utf8')
     const use_head_index = detail_page_source.indexOf('useHead(')
-    const catalog_await_index = detail_page_source.indexOf('await useCatalogData()')
+    const catalog_await_index = detail_page_source.indexOf('await useProductDetailData(product_id)')
 
     expect(use_head_index).toBeGreaterThanOrEqual(0)
     expect(catalog_await_index).toBeGreaterThanOrEqual(0)
@@ -403,6 +477,16 @@ describe('Nuxt SSG baseline', () => {
     expect(variable_css).toContain('.dark')
     expect(variable_css).toContain('--ui-bg')
     expect(variable_css).toContain('--ui-text')
+  })
+
+  it('should use deterministic system CJK fonts without provider font families', () => {
+    const variable_css = readFileSync(new URL('../app/assets/styles/variables.css', import.meta.url), 'utf8')
+
+    expect(variable_css).toContain("font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang TC', 'Microsoft JhengHei', sans-serif;")
+    expect(variable_css).not.toContain('Inter')
+    expect(variable_css).not.toContain('Noto Sans TC')
+    expect(variable_css).toContain("'PingFang TC'")
+    expect(variable_css).toContain("'Microsoft JhengHei'")
   })
 
   it('should document static search-index generation commands', () => {

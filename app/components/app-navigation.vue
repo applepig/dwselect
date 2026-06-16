@@ -78,11 +78,10 @@
 
 <script setup lang="ts">
 import type { CompactCategoryChip } from '../utils/published-products/types'
-import { getCompactCategoryOptions } from '../utils/published-products/compact-app'
 
 const route = useRoute()
-const { all_products, runtime_taxonomies } = await useCatalogData()
-const category_ids = computed(() => new Set(runtime_taxonomies.value?.categories.map((category) => category.id) ?? []))
+const catalog_shell_data = await useCatalogShellData()
+const category_ids = computed(() => new Set(catalog_shell_data.value?.category_ids ?? []))
 const nav_items = [
   { id: 'home', label: '首頁', icon: 'i-lucide-house', to: '/' },
   { id: 'guide', label: '指南', icon: 'i-lucide-tags', to: '/guide' },
@@ -90,17 +89,7 @@ const nav_items = [
   { id: 'search', label: '搜尋', icon: 'i-lucide-search', to: '/search' },
 ]
 const desktop_route_items = nav_items.filter((item) => item.id !== 'home')
-const desktop_category_items = computed(() => {
-  if (runtime_taxonomies.value === undefined) {
-    return []
-  }
-
-  return getCompactCategoryOptions(
-    all_products.value,
-    getActiveCategoryId(),
-    runtime_taxonomies.value,
-  )
-})
+const desktop_category_items = computed(() => catalog_shell_data.value?.desktop_category_items ?? [])
 
 function isRouteActive(path: string) {
   return route.path === path

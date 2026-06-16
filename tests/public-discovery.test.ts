@@ -37,7 +37,8 @@ const base_product: Product = {
       checked_at: '2026-06-02T00:00:00+08:00',
     },
   ],
-  image_url: 'https://example.com/product.jpg',
+  image_file: '2026-06-02-sample-product.jpg',
+  image_url: null,
   category_id: 'computer-3c',
   tag_ids: ['keyboard', 'fixture-brand'],
   reference_url: 'https://example.com/reference',
@@ -265,13 +266,13 @@ describe('public discovery files', () => {
     expect(existsSync(join(output_dir, 'api', 'content.json'))).toBe(true)
   })
 
-  it('should wire build and generate scripts to build search index before discovery artifacts', async () => {
+  it('should wire build and generate scripts to build content images and search index before discovery artifacts', async () => {
     const package_source = await readFile(new URL('../package.json', import.meta.url), 'utf8')
     const package_json = JSON.parse(package_source) as { scripts: Record<string, string> }
 
     expect(package_json.scripts['build:public-discovery']).toBe('node scripts/build-public-discovery.ts')
-    expect(package_json.scripts.build).toBe('pnpm build:search-index && pnpm build:public-discovery && nuxt build')
-    expect(package_json.scripts.generate).toBe('pnpm build:search-index && pnpm build:public-discovery && nuxt generate')
+    expect(package_json.scripts.build).toBe('pnpm build:content-images && pnpm build:search-index && pnpm build:public-discovery && nuxt build')
+    expect(package_json.scripts.generate).toBe('pnpm build:content-images && pnpm build:search-index && pnpm build:public-discovery && nuxt generate')
   })
 })
 
@@ -279,10 +280,11 @@ async function makeFixtureProject() {
   const temp_dir = await mkdtemp(join(tmpdir(), 'dwselect-public-discovery-'))
   temp_paths.push(temp_dir)
   const products_dir = join(temp_dir, 'content', 'products')
+  const product_images_dir = join(products_dir, 'images')
   const guides_dir = join(temp_dir, 'content', 'guides')
   const links_dir = join(temp_dir, 'content', 'links')
   const taxonomies_dir = join(temp_dir, 'content', 'taxonomies')
-  await mkdir(products_dir, { recursive: true })
+  await mkdir(product_images_dir, { recursive: true })
   await mkdir(guides_dir, { recursive: true })
   await mkdir(links_dir, { recursive: true })
   await mkdir(taxonomies_dir, { recursive: true })
@@ -292,14 +294,21 @@ async function makeFixtureProject() {
     ...base_product,
     id: 'no-published-at-product',
     name: 'No Published At',
+    image_file: 'no-published-at-product.jpg',
     published_at: null,
     updated_at: '2026-06-04T00:00:00+08:00',
   }))
+  await writeFile(join(product_images_dir, '2026-06-02-sample-product.jpg'), createTinySvg())
+  await writeFile(join(product_images_dir, 'no-published-at-product.jpg'), createTinySvg())
   await writeFile(join(guides_dir, '2026-06-03-guide.json'), JSON.stringify(base_guide))
   await writeFile(join(links_dir, 'applepig-home.json'), JSON.stringify(base_link))
   await writeTaxonomies(taxonomies_dir)
 
   return temp_dir
+}
+
+function createTinySvg() {
+  return '<svg xmlns="http://www.w3.org/2000/svg" width="1" height="1"><rect width="1" height="1" fill="#fff"/></svg>'
 }
 
 async function writeTaxonomies(taxonomies_dir: string) {

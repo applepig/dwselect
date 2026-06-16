@@ -2,7 +2,7 @@
 
 ## 目標
 
-降低 DW嚴選的 `pnpm generate` build 成本與公開站 client 端負載，重點是**收斂成單一輕量 content 存取層並移除 Nuxt Content**。經產品方向確認：DW嚴選內容固定由維護者／agent 直接編輯 `content/*.json`，不需要視覺化 CMS（Nuxt Studio），且優先 runtime 最輕。因此本 sprint 移除 `@nuxt/content` 與 `better-sqlite3`，讓既有的 `scripts/content-reader.ts`（純 fs + zod）成為唯一 content 來源，runtime 改讀其 build-time 產出的靜態 catalog。這同時消除「靜態站不該有」的 in-browser SQLite、build 時外部字型 fetch 與未優化圖片，並讓 CI build 可重用 cache。內容 SSOT 仍是 `content/` 下的 JSON 與 taxonomy；本 sprint 不改內容資料 schema 與資料內容。
+降低 DW嚴選的 `pnpm generate` build 成本與公開站 client 端負載，重點是**收斂成單一輕量 content 存取層並移除 Nuxt Content**。經產品方向確認：DW嚴選內容固定由維護者／agent 直接編輯 `content/*.json`，不需要視覺化 CMS（Nuxt Studio），且優先 runtime 最輕。因此本 sprint 移除 `@nuxt/content` 與 `better-sqlite3`，讓既有的 `scripts/content-reader.ts`（純 fs + zod）成為唯一 content 來源，app 透過 SSG 階段讀取其 build-time 產出的靜態 `/api/content.json`，並依頁面只把必要 view-model 序列化進 hydration payload。這同時消除「靜態站不該有」的 in-browser SQLite、build 時外部字型 fetch 與未優化圖片，並讓 CI build 可重用 cache。內容 SSOT 仍是 `content/` 下的 JSON 與 taxonomy；本 sprint 不改內容資料 schema 與資料內容。
 
 > 已記錄取捨：移除 Content 後，sitemap / rss / llms.txt 等 discovery plumbing 需自行維護（016 的 `build-public-discovery.ts` 已實作），且失去 Nuxt Studio 視覺化 Git 編輯與 Content 的 query 語法糖、HMR。此為換取最輕 runtime（去除 ~1.7MB client SQLite WASM）與單一 content 路徑的明確決定；若未來需要視覺化 CMS 或 markdown 長文，再評估重新導入 Content。
 
@@ -42,9 +42,9 @@
 ### 驗收條件
 
 - [ ] 公開站 client bundle 不再包含 SQLite WASM / worker，`.output/public/_nuxt/` 無 `sqlite3*.wasm`；`.output/public/__nuxt_content/` 不再作為 client runtime 查詢來源。
-- [ ] List / detail 頁面的 runtime 資料來源改為既有靜態 `public/api/content.json`（或等價 build-time 靜態 JSON），不在 client-reachable 程式碼呼叫 Nuxt Content 的 `queryCollection`。
+- [ ] List / detail 頁面的 runtime 資料來源改為既有靜態 `public/api/content.json`（或等價 build-time 靜態 JSON），透過 Nuxt SSG data fetching 保留首屏 HTML 與 hydration，不在 client-reachable 程式碼呼叫 Nuxt Content 的 `queryCollection`。
 - [ ] 完全移除 `@nuxt/content` module、`better-sqlite3` 依賴與 `content.config.ts`；`scripts/content-reader.ts` 為唯一 content 存取層；repo 內無殘留 `queryCollection` import 與 `__nuxt_content` 產物。
-- [ ] 商品 detail 頁的 prerender payload 不再內嵌全部 catalog；單頁 `_payload.json` 顯著小於現況 83KB，且不隨商品總數線性增長。
+- [ ] 商品 detail 頁的 prerender payload 不再內嵌全部 catalog；單頁 `_payload.json` 只包含當頁商品、related product cards、必要 taxonomy／shell summary，顯著小於現況 83KB，且不隨商品總數線性增長。
 - [ ] 字型改為 deterministic、build 時零外部 fetch：採系統 CJK stack（不 self-host CJK webfont），拉丁顯示字（Inter）若保留則以 self-host 子集提供；generate log 不再出現 font provider 連線重試。
 - [ ] `.github/workflows/static-generate.yml` 新增 Nuxt build cache（`node_modules/.cache/nuxt` 等）的 `actions/cache` 步驟，cache key 對應 lockfile 與相關 source。
 - [ ] 商品圖片改為 build-time 優化（resize + next-gen 格式），公開站圖片仍為 same-origin 靜態資產、無 runtime 外部 transform；現有頁面圖片顯示不破。
@@ -68,12 +68,13 @@
 本 sprint 不新增 runtime API。runtime data source 介面：
 
 - 來源：build-time 產出的靜態 `GET /api/content.json`（schema 沿用 016 的 `PublicContentPayload`：`version` / `site` / `products` / `guides` / `links` / `taxonomies`）。
-- 消費：`useCatalogData()` 改以同源 fetch / build-time import 取得 payload，回傳既有 `all_products` / `runtime_taxonomies` / `runtime_guides` / `runtime_links` view-model 介面不變，下游元件不需改 API。
-- payload 策略：detail 頁只需「該商品 + 其 related products + taxonomy」，避免把整包 catalog 序列化進每頁 `_payload.json`。
+- SSG 契約：app 使用 `await useFetch('/api/content.json')` 或等價 `useAsyncData` 在 generate / prerender 階段讀取靜態 JSON，保留首屏 HTML 與 hydration；不得改成全面 `server: false` 的 client-only fetch。
+- 消費：list 類頁面可沿用完整 catalog view（首頁進站可接受完整 `/api/content.json` payload）；商品 detail 頁需使用 detail 專用 transform / composable，從完整 catalog 建出「當頁商品 + related product cards + 必要 taxonomy／shell summary」後才進 Nuxt payload。
+- payload 策略：detail 頁可在 build/prerender 時讀完整 catalog 以找商品與計算 related，但 hydration payload 不得序列化整包 catalog；layout / navigation 在 detail route 也不得因共用 `useCatalogData()` 把全 catalog 帶進頁面。
 
 ## 邊界案例
 
-- Case 1：detail 頁 related products 需跨商品查找。處理：related 計算在 build/prerender 時完成並只序列化結果，不把全 catalog 帶進 client payload。
+- Case 1：detail 頁 related products 需跨商品查找。處理：prerender 時可讀完整 `/api/content.json` 計算 related，但以 `transform` / detail 專用 composable 只序列化結果，不把全 catalog 帶進 client payload。
 - Case 2：移除 Nuxt Content 後 `queryCollection` auto-import 消失導致殘留呼叫編譯失敗。處理：全面改用新 data source；以測試斷言 client-reachable 程式碼不再 import client `queryCollection`。
 - Case 3：CI build cache stale 造成輸出不一致。處理：cache key 納入 `pnpm-lock.yaml` 與 `content/**`、`app/**`、`nuxt.config.ts` 的 hash；cache 僅作加速，未命中時行為與現況一致。
 - Case 4：CJK 改系統字後，未安裝對應字型的環境 fallback。處理：font stack 提供多層 fallback（`PingFang TC` / `Microsoft JhengHei` / `Noto Sans TC` / `sans-serif`）；視覺以常見繁中裝置為準人工確認。
@@ -85,8 +86,8 @@
 
 ### ADR 1：runtime 改讀靜態 `content.json`，移除 client 端 Nuxt Content 查詢
 
-- 決策：list / detail 頁 runtime 資料來源由 Nuxt Content client `queryCollection` 改為既有 build-time 靜態 `public/api/content.json`。
-- 原因：公開站是 62 筆量級的靜態目錄，client 端不需要 SQL 查詢引擎；改讀靜態 JSON 可同時移除 ~1.7MB SQLite WASM + worker + sql_dump，並切斷每頁 payload 內嵌全 catalog 的 O(N²)。016 已產出該靜態檔，重用成本低。
+- 決策：list / detail 頁 runtime 資料來源由 Nuxt Content client `queryCollection` 改為既有 build-time 靜態 `public/api/content.json`；讀取仍走 Nuxt SSG data fetching，detail 頁以 transform / 專用 composable 瘦身 hydration payload。
+- 原因：公開站是 62 筆量級的靜態目錄，client 端不需要 SQL 查詢引擎；改讀靜態 JSON 可同時移除 ~1.7MB SQLite WASM + worker + sql_dump。首頁可接受完整 catalog payload，但商品 detail 頁必須只序列化當頁 view-model，避免每頁 payload 內嵌全 catalog 的 O(N²)。016 已產出該靜態檔，重用成本低。
 - 替代方案：(a) 維持 Nuxt Content 但設法只在 build 用——client `queryCollection` 的 import 仍會把 WASM 拉進 bundle，無乾淨開關，排除；(b) 直接做 byte 層 dedup 兩份 wasm——只治標、仍送查詢引擎，排除。
 
 ### ADR 2：完全移除 Nuxt Content 與 better-sqlite3，content-reader 為唯一 content 層
@@ -104,7 +105,7 @@
 
 ### ADR 4：圖片 build-time 優化，不採 runtime CDN transform
 
-- 決策：商品圖片以 build-time resize + next-gen（webp/avif）優化（`@nuxt/image` `ipxStatic` 或 sharp build step），輸出 same-origin 靜態資產，交由 Cloudflare Pages 免費 CDN 快取。
+- 決策：商品圖片以 build-time resize + next-gen（webp/avif）優化（`@nuxt/image` `ipxStatic` 或 sharp build step），輸出 same-origin 靜態資產，交由 Cloudflare Pages 免費 CDN 快取。Published Product 必須有本地 `image_file`，Product `image_url` 不再作為外部圖片 fallback；尚未取得本地圖片的 legacy / draft Product 可維持 `image_file: null`，但不得使用 `image_url`。
 - 原因：維持 SSG 與「無 runtime 外部 fetch」；Cloudflare Image Resizing（`/cdn-cgi/image/`）為需付費啟用的 runtime transform，不符非目標。
 - 替代方案：Cloudflare Image Resizing / Images——付費且為 runtime 依賴，排除；純 CF CDN 不轉檔不 resize，無法解決原檔過大，排除為單獨方案。
 
@@ -118,11 +119,11 @@
 
 ### Milestone 1：runtime 改讀靜態 catalog，移除 client SQLite
 
-> 範圍：`use-catalog-data.ts` 改讀 `content.json`；detail 頁 related 計算與 payload 瘦身；移除 client `queryCollection` 依賴。
-> 驗證：`.output/public/_nuxt` 無 `sqlite3*.wasm`；單頁 `_payload.json` 明顯變小且不隨商品數線性成長；各頁人工開啟正常。
+> 範圍：`use-catalog-data.ts` 改讀 `content.json` 並保留 SSG data fetching；商品 detail 頁改用 detail 專用資料載入／transform，related 計算在 prerender 時完成但 payload 只含本頁 view-model；layout / navigation 在 detail route 不得載入全 catalog；移除 client `queryCollection` 依賴。
+> 驗證：`.output/public/_nuxt` 無 `sqlite3*.wasm`；單頁 `_payload.json` 明顯變小且不隨商品數線性成長，且不包含其他商品 raw records；首頁、商品列表、商品詳情、搜尋、指南、連結頁人工開啟正常。
 > 預期結果：公開站 client 不再下載查詢引擎，payload 去除全 catalog 重複。
 
-- [ ] Red → Green → Refactor
+- [x] Red → Green → Refactor
 
 ### Milestone 2：移除 Nuxt Content，content-reader 為唯一來源
 
@@ -130,7 +131,7 @@
 > 驗證：移除後品質閘門全綠，prerender routes 仍由 `buildProductRoutes` 正常產生；test suite 仍涵蓋「所有 content 檔以 zod 驗證」，確保 `content/AGENTS.md` authoring flow 的 `pnpm test` 驗證關卡不被削弱。
 > 預期結果：build 不再做未使用的 content DB 處理，single content 層落地。
 
-- [ ] Red → Green → Refactor
+- [x] Red → Green → Refactor
 
 ### Milestone 3：字型 deterministic 化
 
@@ -138,15 +139,15 @@
 > 驗證：generate log 無 font provider 重試；offline build 仍可產出；繁中與拉丁文字人工確認顯示正常。
 > 預期結果：字型結果可重現、零外部 fetch。
 
-- [ ] Red → Green → Refactor
+- [x] Red → Green → Refactor
 
 ### Milestone 4：圖片 build-time 優化
 
-> 範圍：圖片 resize + next-gen 轉檔管線；頁面圖片引用與 `publicAssets` / `@nuxt/image` 接線。
+> 範圍：圖片 resize + next-gen 轉檔管線；頁面圖片引用與 `publicAssets` / `@nuxt/image` 接線；Product schema 收斂為 published local `image_file` only，legacy 無本地圖資料需停留 draft。
 > 驗證：輸出圖片總量與單張大小下降；頁面圖片不破；無 runtime 外部 transform。
 > 預期結果：公開站圖片負載顯著下降，仍為靜態 same-origin。
 
-- [ ] Red → Green → Refactor
+- [x] Red → Green → Refactor
 
 ### Milestone 5：CI build cache
 
@@ -154,7 +155,7 @@
 > 驗證：workflow 第二次以上執行能命中 cache 並縮短 generate；未命中時行為與現況一致。
 > 預期結果：CI build 由 cold 轉 warm，省約 10–12s/run。
 
-- [ ] Red → Green → Refactor
+- [x] Red → Green → Refactor
 
 ## Spec Self-Review
 

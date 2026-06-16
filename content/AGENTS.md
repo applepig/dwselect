@@ -99,8 +99,8 @@
 | `search_aliases` | string[] | Agent | 替代搜尋詞（中文別名、縮寫等） |
 | `model_numbers` | string[] | Agent | 產品型號 |
 | `offers` | array | Agent | 至少一筆賣場資訊（見下方） |
-| `image_file` | string \| null | Agent | 本地圖片檔名 `{id}.{ext}`。Product 必須填 `image_file` 或 HTTP(S) `image_url`，且只能擇一 |
-| `image_url` | string \| null | Agent | 只有外部圖片 fallback 才填 HTTP(S) URL；本地圖片不要填 `/images/...` |
+| `image_file` | string \| null | Agent | 本地圖片 source 檔名 `{id}.{ext}`。Published Product 必須填 `image_file`；尚未取得本地圖片時維持 draft 且填 `null` |
+| `image_url` | string \| null | Agent | Product 不接受外部圖片 fallback；必須填 `null` 或省略，本地圖片不要填 `/images/...` |
 | `category_id` | string | Agent | **單一** category ID（見 Taxonomy） |
 | `tag_ids` | string[] | Agent | tag ID 與 brand ID 混合陣列 |
 | `reference_url` | string \| null | Agent | 產品官網、評測文章等參考連結 |
@@ -320,10 +320,17 @@ Taxonomy item 結構：
 
 #### 步驟 5：驗證
 
+內容驗證由 `scripts/content-reader.ts` 與 `tests/product-schema.test.ts` 的 zod schema / taxonomy reference 測試負責；公開 runtime 讀取 build-time 產出的靜態 content payload，不走額外的 content module 或 client 查詢資料庫。
+
 ```bash
 pnpm install
 pnpm test
+pnpm build:content-images
+pnpm build:search-index
+pnpm build:public-discovery
 ```
+
+若變更會影響公開內容、taxonomy、圖片或路由，交付前再執行 `pnpm generate`，確認 `public/api/content.json`、search index 與 static output 都已由最新 `content/` JSON 重建。
 
 修正所有錯誤直到測試通過。常見問題：
 - `tag_ids` 引用了不存在的 taxonomy ID → 檢查 tags.json 和 brands.json

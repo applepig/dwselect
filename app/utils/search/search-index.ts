@@ -1,5 +1,6 @@
 import MiniSearch, { type SearchResult } from 'minisearch'
 
+import { resolveImageFileUrl } from '../content-images/resolve-image-file-url.ts'
 import type { CategoryDefinition, ChannelDefinition, Guide, LinkDefinition, Product, TagDefinition } from '../product-schema.ts'
 import { tokenizeSearchText } from './search-tokenizer.ts'
 
@@ -368,24 +369,18 @@ function getContentId(content_id: string) {
     ?.replace(/\.json$/, '') ?? content_id
 }
 
-function resolveProductSearchImageUrl(product: Pick<Product, 'image_file' | 'image_url'>): string {
-  const image_url = product.image_file === null || product.image_file === undefined
-    ? product.image_url
-    : `/images/products/${product.image_file}`
+function resolveProductSearchImageUrl(product: Pick<Product, 'image_file'>): string {
+  const image_url = resolveImageFileUrl(product.image_file, 'products')
 
-  if (image_url === null || image_url === undefined) {
-    throw new Error('Product image source is required')
+  if (image_url === null) {
+    throw new Error('Published product image_file is required')
   }
 
   return image_url
 }
 
 function resolveGuideSearchImageUrl(guide: Pick<Guide, 'image_file' | 'image_url'>): string | null {
-  if (guide.image_file === null || guide.image_file === undefined) {
-    return guide.image_url ?? null
-  }
-
-  return `/images/guides/${guide.image_file}`
+  return resolveImageFileUrl(guide.image_file, 'guides')
 }
 
 function getTagLabels(tag_ids: string[], tag_labels: ReadonlyMap<string, string>) {

@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 
 import { getProductDetail, getRelatedProductCards } from '../../app/utils/published-products/product-detail'
+import { getProductDetailPayload } from '../../app/utils/published-products/product-detail-payload'
 import { makeProduct, test_taxonomies } from './fixtures'
 
 function makeOffer(channel_id: string) {
@@ -40,7 +41,8 @@ describe('product detail mapping', () => {
           checked_at: '2026-06-02T00:00:00+08:00',
         },
       ],
-      image_url: 'https://example.com/detail.jpg',
+      image_file: 'detail.jpg',
+      image_url: null,
       category_id: 'av',
       tag_ids: ['超長 tag 名稱'.repeat(6), '影音'],
     })
@@ -50,7 +52,7 @@ describe('product detail mapping', () => {
     expect(detail).toEqual({
       id: 'detail-product',
       title: product.name,
-      hero_image: 'https://example.com/detail.jpg',
+      hero_image: '/images/products/detail.webp',
       hero_alt: product.name,
       channel_label: 'PChome',
       channel_id: 'pchome',
@@ -97,7 +99,19 @@ describe('product detail mapping', () => {
 
     const detail = getProductDetail(product, test_taxonomies)
 
-    expect(detail.hero_image).toBe('/images/products/local-detail-product.avif')
+    expect(detail.hero_image).toBe('/images/products/local-detail-product.webp')
+  })
+
+  it('should reject external-only product images for detail hero image', () => {
+    const product = makeProduct({
+      id: 'external-detail-product',
+      status: 'published',
+      name: '外部圖片詳情商品',
+      image_file: null,
+      image_url: 'https://example.com/detail.jpg',
+    })
+
+    expect(() => getProductDetail(product, test_taxonomies)).toThrow('Published product image_file is required')
   })
 
   it('should sort related products deterministically and exclude the current product', () => {
@@ -205,5 +219,118 @@ describe('product detail mapping', () => {
     const detail = getProductDetail(product, taxonomies)
 
     expect(detail.tags).toEqual(['輸入', 'Fixture Brand'])
+  })
+
+  it('should build a product detail payload without serializing raw catalog records for other products', () => {
+    const current_product = makeProduct({
+      id: 'current-product',
+      status: 'published',
+      name: '目前商品',
+      category_id: 'computer',
+      tag_ids: ['typing'],
+      long_description: '目前商品完整描述',
+    })
+    const related_product = makeProduct({
+      id: 'related-product',
+      status: 'published',
+      name: '相關商品',
+      category_id: 'computer',
+      tag_ids: ['typing'],
+      long_description: '不應出現在 payload 的相關商品 raw long_description',
+      offers: [makeOffer('momo')],
+    })
+    const unrelated_product = makeProduct({
+      id: 'unrelated-product',
+      status: 'published',
+      name: '其他商品',
+      category_id: 'home',
+      tag_ids: ['tag-a'],
+      long_description: '不應出現在 payload 的其他商品 raw long_description',
+      offers: [
+        {
+          ...makeOffer('pchome'),
+          url: 'https://example.com/unrelated-raw-offer',
+        },
+      ],
+    })
+    const content_payload = {
+      version: 1,
+      site: {
+        name: 'DW嚴選',
+        url: 'https://dwselect.applepig.net/',
+      },
+      products: [current_product, related_product, unrelated_product],
+      guides: [],
+      links: [],
+      taxonomies: test_taxonomies,
+    } as const
+
+    const detail_payload = getProductDetailPayload(content_payload, 'current-product')
+    const serialized_payload = JSON.stringify(detail_payload)
+
+    expect(detail_payload?.product_detail.id).toBe('current-product')
+    expect(detail_payload?.product_detail.related_products.map((product) => product.id)).toEqual([
+      'related-product',
+      'unrelated-product',
+    ])
+    expect(serialized_payload).toContain('目前商品完整描述')
+    expect(serialized_payload).not.toContain('不應出現在 payload 的相關商品 raw long_description')
+    expect(serialized_payload).not.toContain('不應出現在 payload 的其他商品 raw long_description')
+    expect(serialized_payload).not.toContain('unrelated-raw-offer')
+    expect(serialized_payload).not.toContain('"offers"')
+    expect(serialized_payload).not.toContain('"products"')
+  })
+
+  it('should limit related product cards in the product detail payload', () => {
+    const current_product = makeProduct({
+      id: 'current-product',
+      status: 'published',
+      name: '目前商品',
+      category_id: 'computer',
+      tag_ids: ['typing'],
+    })
+    const related_products = Array.from({ length: 5 }, (_, index) => makeProduct({
+      id: `related-product-${index + 1}`,
+      status: 'published',
+      name: `相關商品 ${index + 1}`,
+      category_id: 'computer',
+      tag_ids: ['typing'],
+      published_at: `2026-06-0${index + 1}T00:00:00+08:00`,
+    }))
+    const content_payload = {
+      version: 1,
+      site: {
+        name: 'DW嚴選',
+        url: 'https://dwselect.applepig.net/',
+      },
+      products: [current_product, ...related_products],
+      guides: [],
+      links: [],
+      taxonomies: test_taxonomies,
+    } as const
+
+    const detail_payload = getProductDetailPayload(content_payload, 'current-product')
+
+    expect(detail_payload?.product_detail.related_products.map((product) => product.id)).toEqual([
+      'related-product-5',
+      'related-product-4',
+      'related-product-3',
+    ])
+  })
+
+  it('should return null when the product id is not in the public content payload', () => {
+    const content_payload = {
+      version: 1,
+      site: {
+        name: 'DW嚴選',
+        url: 'https://dwselect.applepig.net/',
+      },
+      products: [makeProduct({ id: 'current-product', status: 'published', name: '目前商品' })],
+      guides: [],
+      links: [],
+      taxonomies: test_taxonomies,
+    } as const
+
+    expect(getProductDetailPayload(content_payload, 'missing-product')).toBeNull()
   })
 })

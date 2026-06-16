@@ -7,6 +7,7 @@ const app_url = process.env.APP_URL
 if (!app_url && !process.argv.some((a) => a === 'generate' || a === 'build')) {
   throw new Error('APP_URL 環境變數未設定——請在 .env 設定，例如 APP_URL=dwselect.toybox.local')
 }
+const vite_host = app_url ?? 'dwselect.toybox.local'
 
 const product_routes = buildProductRoutes(fileURLToPath(new URL('./content/products/', import.meta.url)))
 const google_tag_manager_script = `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -63,10 +64,10 @@ export default defineNuxtConfig({
   },
   vite: {
     server: {
-      allowedHosts: [app_url],
+      allowedHosts: [vite_host],
       hmr: {
         protocol: 'wss',
-        host: app_url,
+        host: vite_host,
         clientPort: 443,
       },
     },

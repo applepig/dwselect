@@ -101,12 +101,12 @@ describe('compact product migration helpers', () => {
     }
   })
 
-  it('should migrate a product to compact schema and remove the legacy category field', () => {
+  it('should migrate an external-image legacy product as draft without product image_url', () => {
     const migrated_product = getCompactProductMigration(legacy_product)
 
     expect(migrated_product).toEqual({
       id: 'sample-product',
-      status: 'published',
+      status: 'draft',
       name: '範例商品',
       english_name: '範例商品',
       summary: '推薦短評',
@@ -128,13 +128,14 @@ describe('compact product migration helpers', () => {
           checked_at: '2026-06-02T00:00:00+08:00',
         },
       ],
-      image_url: 'https://example.com/product.jpg',
+      image_file: null,
+      image_url: null,
       category_id: 'food',
       tag_ids: [],
       reference_url: null,
       created_at: '2026-06-02T00:00:00+08:00',
       updated_at: '2026-06-02T00:00:00+08:00',
-      published_at: '2026-06-02T00:00:00+08:00',
+      published_at: null,
       unpublished_at: null,
       archived_at: null,
     })

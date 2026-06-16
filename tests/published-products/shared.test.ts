@@ -39,7 +39,8 @@ describe('published products mapping', () => {
             checked_at: '2026-06-02T00:00:00+08:00',
           },
         ],
-        image_url: 'https://example.com/image.jpg',
+        image_file: 'published-product.jpg',
+        image_url: null,
         category_id: 'computer',
         summary: '卡片短評',
       }),
@@ -55,7 +56,7 @@ describe('published products mapping', () => {
         channel: 'PChome',
         channel_id: 'pchome',
         description: '推薦文',
-        image: 'https://example.com/image.jpg',
+        image: '/images/products/published-product.webp',
         name: '已上架商品',
         price: 'NT$ 2,490',
         published_at: '2026-06-02T00:00:00+08:00',
@@ -87,6 +88,20 @@ describe('published products mapping', () => {
     expect(published_products[0]?.image).toBe('/images/products/local-image-product.webp')
   })
 
+  it('should reject external-only product images for cards', () => {
+    const products = [
+      makeProduct({
+        id: 'external-image-product',
+        status: 'published',
+        name: '外部圖片商品',
+        image_file: null,
+        image_url: 'https://example.com/image.jpg',
+      }),
+    ]
+
+    expect(() => getPublishedProducts(products, test_taxonomies)).toThrow('Published product image_file is required')
+  })
+
   it('should normalize quote-wrapped local product image files for cards', () => {
     const products = [
       makeProduct({
@@ -100,7 +115,7 @@ describe('published products mapping', () => {
 
     const published_products = getPublishedProducts(products, test_taxonomies)
 
-    expect(published_products[0]?.image).toBe('/images/products/quote-wrapped-image-product.jpg')
+    expect(published_products[0]?.image).toBe('/images/products/quote-wrapped-image-product.webp')
   })
 
   it('should normalize Nuxt Content runtime ids to canonical product ids', () => {

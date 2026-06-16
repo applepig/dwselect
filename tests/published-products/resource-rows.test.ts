@@ -55,7 +55,26 @@ describe('published guide and link mapping', () => {
     expect(getPublishedGuides(guides, test_taxonomies)).toEqual([
       expect.objectContaining({
         id: 'local-guide',
-        image_url: '/images/guides/local-guide.png',
+        image_url: '/images/guides/local-guide.webp',
+      }),
+    ])
+  })
+
+  it('should ignore external guide image urls for resource rows', () => {
+    const guides: Guide[] = [
+      {
+        ...base_guide,
+        id: 'external-image-guide',
+        title: '外部圖片指南',
+        image_file: null,
+        image_url: 'https://scontent.ftpe8-2.fna.fbcdn.net/example.jpg',
+      },
+    ]
+
+    expect(getPublishedGuides(guides, test_taxonomies)).toEqual([
+      expect.objectContaining({
+        id: 'external-image-guide',
+        image_url: null,
       }),
     ])
   })

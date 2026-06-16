@@ -33,6 +33,22 @@ describe('static generate workflow', () => {
     expect(command_positions).toEqual([...command_positions].sort((a, b) => a - b))
   })
 
+  it('should restore Nuxt build cache before quality gates', () => {
+    const workflow_source = readWorkflow()
+    const install_position = workflow_source.indexOf('run: pnpm install --frozen-lockfile')
+    const cache_position = workflow_source.indexOf('uses: actions/cache@v4')
+    const test_position = workflow_source.indexOf('run: pnpm test')
+
+    expect(cache_position).toBeGreaterThan(install_position)
+    expect(cache_position).toBeLessThan(test_position)
+    expect(workflow_source).toContain('node_modules/.cache/nuxt')
+    expect(workflow_source).toContain('.nuxt')
+    expect(workflow_source).toContain('nuxt-build-${{ runner.os }}-node-24-')
+    expect(workflow_source).toContain("${{ hashFiles('pnpm-lock.yaml', 'nuxt.config.ts', 'app/**', 'scripts/**', 'content/**') }}")
+    expect(workflow_source).toContain('restore-keys:')
+    expect(workflow_source).toContain('nuxt-build-${{ runner.os }}-')
+  })
+
   it('should deploy generated output to Cloudflare Pages only for master pushes', () => {
     const workflow_source = readWorkflow()
 

@@ -71,7 +71,7 @@ export const product_schema = z.object({
   unpublished_at: timestamp_schema.nullable(),
   archived_at: timestamp_schema.nullable(),
 }).strict().superRefine((product, context) => {
-  addExclusiveImageSourceIssue(product, context, true)
+  addProductImageSourceIssue(product, context)
 })
 
 export const guide_schema = z.object({
@@ -133,6 +133,30 @@ function addExclusiveImageSourceIssue(
       code: 'custom',
       path: ['image_file'],
       message: 'must provide exactly one image source',
+    })
+  }
+}
+
+function addProductImageSourceIssue(
+  product: { status: z.infer<typeof content_status_schema>, image_file?: string | null, image_url?: string | null },
+  context: z.RefinementCtx,
+) {
+  const has_image_file = product.image_file !== null && product.image_file !== undefined
+  const has_image_url = product.image_url !== null && product.image_url !== undefined
+
+  if (product.status === 'published' && !has_image_file) {
+    context.addIssue({
+      code: 'custom',
+      path: ['image_file'],
+      message: 'Published product image_file is required',
+    })
+  }
+
+  if (has_image_url) {
+    context.addIssue({
+      code: 'custom',
+      path: ['image_url'],
+      message: 'must not be provided for product images; use image_file',
     })
   }
 }
