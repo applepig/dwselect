@@ -2,18 +2,18 @@ import { mkdir, writeFile } from 'node:fs/promises'
 import { dirname, join } from 'node:path'
 
 import { buildSearchIndexPayload } from '../app/utils/search/search-index.ts'
-import { DEFAULT_PRODUCTS_DIR, DEFAULT_TAXONOMIES_DIR, readPublicContentSource } from './content-reader.ts'
+import { DEFAULT_PRODUCTS_DIR, DEFAULT_TAXONOMIES_DIR, readPublicContentSource, type PublicContentSource } from './content-reader.ts'
 
 type BuildSearchIndexSummary = {
   output_path: string
   document_count: number
 }
 
-const DEFAULT_OUTPUT_PATH = 'public/search-index.json'
+export const DEFAULT_SEARCH_INDEX_OUTPUT_PATH = 'public/search-index.json'
 
 export async function buildSearchIndexFile(
   products_dir = DEFAULT_PRODUCTS_DIR,
-  output_path = DEFAULT_OUTPUT_PATH,
+  output_path = DEFAULT_SEARCH_INDEX_OUTPUT_PATH,
   taxonomies_dir = DEFAULT_TAXONOMIES_DIR,
   guides_dir = join(dirname(products_dir), 'guides'),
   links_dir = join(dirname(products_dir), 'links'),
@@ -24,6 +24,13 @@ export async function buildSearchIndexFile(
     links_dir,
     taxonomies_dir,
   })
+  return buildSearchIndexFileFromSource(source, output_path)
+}
+
+export async function buildSearchIndexFileFromSource(
+  source: PublicContentSource,
+  output_path = DEFAULT_SEARCH_INDEX_OUTPUT_PATH,
+): Promise<BuildSearchIndexSummary> {
   const payload = buildSearchIndexPayload({ products: source.products, guides: source.guides, links: source.links }, {
     categories: source.taxonomies.categories,
     channels: source.taxonomies.channels,
@@ -52,7 +59,7 @@ function getDirectoryName(path: string) {
 async function runCli() {
   const args = process.argv.slice(2)
   const products_dir = getOptionValue(args, '--products-dir') ?? DEFAULT_PRODUCTS_DIR
-  const output_path = getOptionValue(args, '--out') ?? DEFAULT_OUTPUT_PATH
+  const output_path = getOptionValue(args, '--out') ?? DEFAULT_SEARCH_INDEX_OUTPUT_PATH
   const taxonomies_dir = getOptionValue(args, '--taxonomies-dir') ?? DEFAULT_TAXONOMIES_DIR
   const summary = await buildSearchIndexFile(products_dir, output_path, taxonomies_dir)
 

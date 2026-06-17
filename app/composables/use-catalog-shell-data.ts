@@ -1,4 +1,5 @@
 import { fetchPublicContentPayload } from '../utils/fetch-public-content-payload'
+import { getSelectableCategoryIds } from '../utils/published-products/selectable-category-ids'
 
 export async function useCatalogShellData() {
   const { data: content_payload } = await useAsyncData('public-content', fetchPublicContentPayload)
@@ -13,7 +14,7 @@ export async function useCatalogShellData() {
         published: content_payload.value.navigation.counts.products,
       },
       desktop_category_items: content_payload.value.navigation.desktop_category_items,
-      category_ids: content_payload.value.taxonomies.categories.map((category) => category.id),
+      category_ids: getSelectableCategoryIds(content_payload.value.navigation.category_chips),
     }
   })
 }

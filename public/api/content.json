@@ -9,540 +9,538 @@
       {
         "id": "2026-06-02-adata-power-bank",
         "name": "ADATA 行動電源",
-        "summary": "體積相當小，而且還很便宜",
         "image_url": "/images/products/2026-06-02-adata-power-bank.webp",
-        "category_id": "computer-3c",
         "category_label": "電腦3C",
-        "channel_id": "pchome",
         "channel_label": "PChome",
+        "channel_id": "pchome",
         "price_label": "500",
         "tag_labels": [
           "ADATA",
           "電源充電"
         ],
+        "summary": "體積相當小，而且還很便宜",
+        "category_id": "computer-3c",
         "published_at": "2026-06-02T00:00:00+08:00"
       },
       {
         "id": "2026-06-02-aplus-ups",
         "name": "APlus UPS",
-        "summary": "便宜、MIT、而且面板還有螢幕跟USB充電，但是我有些電腦的監控軟體抓不到他",
         "image_url": "/images/products/2026-06-02-aplus-ups.webp",
-        "category_id": "computer-3c",
         "category_label": "電腦3C",
-        "channel_id": "pchome",
         "channel_label": "PChome",
+        "channel_id": "pchome",
         "price_label": "1450",
         "tag_labels": [
           "APlus",
           "電源充電"
         ],
+        "summary": "便宜、MIT、而且面板還有螢幕跟USB充電，但是我有些電腦的監控軟體抓不到他",
+        "category_id": "computer-3c",
         "published_at": "2026-06-02T00:00:00+08:00"
       },
       {
         "id": "2026-06-02-avier-power-bank",
         "name": "Avier行動電源",
-        "summary": "便宜、有雙向PD、但是顏色非常微妙",
         "image_url": "/images/products/2026-06-02-avier-power-bank.webp",
-        "category_id": "computer-3c",
         "category_label": "電腦3C",
-        "channel_id": "pchome",
         "channel_label": "PChome",
+        "channel_id": "pchome",
         "price_label": "479",
         "tag_labels": [
           "Avier",
           "電源充電"
         ],
+        "summary": "便宜、有雙向PD、但是顏色非常微妙",
+        "category_id": "computer-3c",
         "published_at": "2026-06-02T00:00:00+08:00"
       },
       {
         "id": "2026-06-02-belkin-three-port-type-c-charger",
         "name": "Belkin 三孔Type C充電器",
-        "summary": "這顆三孔都是Type C，出力是25/20/20、或45/20、或65，旅行包換成這顆剛好可以減少線的種類",
         "image_url": "/images/products/2026-06-02-belkin-three-port-type-c-charger.webp",
-        "category_id": "computer-3c",
         "category_label": "電腦3C",
-        "channel_id": "other",
         "channel_label": "其他通路",
+        "channel_id": "other",
         "price_label": "790",
         "tag_labels": [
           "Belkin",
           "電源充電"
         ],
+        "summary": "這顆三孔都是Type C，出力是25/20/20、或45/20、或65，旅行包換成這顆剛好可以減少線的種類",
+        "category_id": "computer-3c",
         "published_at": "2026-06-02T00:00:00+08:00"
       },
       {
         "id": "2026-06-02-benq-rd280u",
         "name": "BenQ RD280U",
-        "summary": "28\" 3840*2560的螢幕，比一般的4K多了一些高度，160ppi設200%的話字也不算太大，不過價錢還沒降可以再等等",
         "image_url": "/images/products/2026-06-02-benq-rd280u.webp",
-        "category_id": "computer-3c",
         "category_label": "電腦3C",
-        "channel_id": "pchome",
         "channel_label": "PChome",
+        "channel_id": "pchome",
         "price_label": "16888",
         "tag_labels": [
           "BenQ",
           "顯示器"
         ],
+        "summary": "28\" 3840*2560的螢幕，比一般的4K多了一些高度，160ppi設200%的話字也不算太大，不過價錢還沒降可以再等等",
+        "category_id": "computer-3c",
         "published_at": "2026-06-02T00:00:00+08:00"
       },
       {
         "id": "2026-06-02-ducky-one-2",
         "name": "Ducky One 2",
-        "summary": "我覺得Ducky One 2可以買，但是3不行，所以趁他們還有生產的時候多庫存個兩把",
         "image_url": "/images/products/2026-06-02-ducky-one-2.webp",
-        "category_id": "computer-3c",
         "category_label": "電腦3C",
-        "channel_id": "pchome",
         "channel_label": "PChome",
+        "channel_id": "pchome",
         "price_label": "2300",
         "tag_labels": [
           "桌面周邊",
           "Ducky"
         ],
+        "summary": "我覺得Ducky One 2可以買，但是3不行，所以趁他們還有生產的時候多庫存個兩把",
+        "category_id": "computer-3c",
         "published_at": "2026-06-02T00:00:00+08:00"
       },
       {
         "id": "2026-06-02-ikea-charging-cable",
         "name": "IKEA充電線",
-        "summary": "手機的充電線也是都找他們家買就對了",
         "image_url": "/images/products/2026-06-02-ikea-charging-cable.webp",
-        "category_id": "computer-3c",
         "category_label": "電腦3C",
-        "channel_id": "other",
         "channel_label": "其他通路",
+        "channel_id": "other",
         "price_label": "199",
         "tag_labels": [
           "線材轉接",
           "IKEA"
         ],
+        "summary": "手機的充電線也是都找他們家買就對了",
+        "category_id": "computer-3c",
         "published_at": "2026-06-02T00:00:00+08:00"
       },
       {
         "id": "2026-06-02-ikea-rechargeable-battery",
         "name": "IKEA充電電池",
-        "summary": "三號、四號電池都找他們家買就對了",
         "image_url": "/images/products/2026-06-02-ikea-rechargeable-battery.webp",
-        "category_id": "computer-3c",
         "category_label": "電腦3C",
-        "channel_id": "other",
         "channel_label": "其他通路",
+        "channel_id": "other",
         "price_label": "249~349",
         "tag_labels": [
           "IKEA",
           "電源充電"
         ],
+        "summary": "三號、四號電池都找他們家買就對了",
+        "category_id": "computer-3c",
         "published_at": "2026-06-02T00:00:00+08:00"
       },
       {
         "id": "2026-06-02-kioxia-1tb-usb-flash-drive",
         "name": "Kioxia 1TB隨身碟",
-        "summary": "故Toshiba，這顆沒搜尋到什麼災情，價格也便宜，大概可以買吧",
         "image_url": "/images/products/2026-06-02-kioxia-1tb-usb-flash-drive.webp",
-        "category_id": "computer-3c",
         "category_label": "電腦3C",
-        "channel_id": "pchome",
         "channel_label": "PChome",
+        "channel_id": "pchome",
         "price_label": "2490",
         "tag_labels": [
           "Kioxia",
           "儲存備份"
         ],
+        "summary": "故Toshiba，這顆沒搜尋到什麼災情，價格也便宜，大概可以買吧",
+        "category_id": "computer-3c",
         "published_at": "2026-06-02T00:00:00+08:00"
       },
       {
         "id": "2026-06-02-msi-desktop-pc",
         "name": "MSI桌上型",
-        "summary": "i5 / 32G / 1TB / 4060，還三年保固",
         "image_url": "/images/products/2026-06-02-msi-desktop-pc.webp",
-        "category_id": "computer-3c",
         "category_label": "電腦3C",
-        "channel_id": "pchome",
         "channel_label": "PChome",
+        "channel_id": "pchome",
         "price_label": "29990",
         "tag_labels": [
           "桌面周邊",
           "MSI"
         ],
+        "summary": "i5 / 32G / 1TB / 4060，還三年保固",
+        "category_id": "computer-3c",
         "published_at": "2026-06-02T00:00:00+08:00"
       },
       {
         "id": "2026-06-02-philips-40b1u5600",
         "name": "Philips 40B1U5600",
-        "summary": "40\" 3440*1440的螢幕，等於是32\" 2K的加寬版本，94ppi可以直接設100%來用",
         "image_url": "/images/products/2026-06-02-philips-40b1u5600.webp",
-        "category_id": "computer-3c",
         "category_label": "電腦3C",
-        "channel_id": "pchome",
         "channel_label": "PChome",
+        "channel_id": "pchome",
         "price_label": "15000",
         "tag_labels": [
           "顯示器",
           "Philips"
         ],
+        "summary": "40\" 3440*1440的螢幕，等於是32\" 2K的加寬版本，94ppi可以直接設100%來用",
+        "category_id": "computer-3c",
         "published_at": "2026-06-02T00:00:00+08:00"
       },
       {
         "id": "2026-06-02-samsung-m7-32-inch",
         "name": "Samsung M7 32吋",
-        "summary": "想要4K、想要USB C接筆電、或是用mac沒有dpi問題的話可以考慮這台",
         "image_url": "/images/products/2026-06-02-samsung-m7-32-inch.webp",
-        "category_id": "computer-3c",
         "category_label": "電腦3C",
-        "channel_id": "pchome",
         "channel_label": "PChome",
+        "channel_id": "pchome",
         "price_label": "9900",
         "tag_labels": [
           "顯示器",
           "Samsung"
         ],
+        "summary": "想要4K、想要USB C接筆電、或是用mac沒有dpi問題的話可以考慮這台",
+        "category_id": "computer-3c",
         "published_at": "2026-06-02T00:00:00+08:00"
       },
       {
         "id": "2026-06-02-synology-ds723-plus",
         "name": "Synology DS723+",
-        "summary": "最近硬碟單顆有16TB，小小一台2bay即使裝RAID 1也還是有16TB可用，應該遠超過大部分人的需求",
         "image_url": "/images/products/2026-06-02-synology-ds723-plus.webp",
-        "category_id": "computer-3c",
         "category_label": "電腦3C",
-        "channel_id": "pchome",
         "channel_label": "PChome",
+        "channel_id": "pchome",
         "price_label": "15000",
         "tag_labels": [
           "儲存備份",
           "Synology"
         ],
+        "summary": "最近硬碟單顆有16TB，小小一台2bay即使裝RAID 1也還是有16TB可用，應該遠超過大部分人的需求",
+        "category_id": "computer-3c",
         "published_at": "2026-06-02T00:00:00+08:00"
       },
       {
         "id": "2026-06-02-aibo-qi-power-bank",
         "name": "aibo Qi行動電源",
-        "summary": "我手邊的是之前捕蚊達人那一批的，看起來應該是一樣的",
         "image_url": "/images/products/2026-06-02-aibo-qi-power-bank.webp",
-        "category_id": "computer-3c",
         "category_label": "電腦3C",
-        "channel_id": "pchome",
         "channel_label": "PChome",
+        "channel_id": "pchome",
         "price_label": "899",
         "tag_labels": [
           "aibo",
           "電源充電"
         ],
+        "summary": "我手邊的是之前捕蚊達人那一批的，看起來應該是一樣的",
+        "category_id": "computer-3c",
         "published_at": "2026-06-02T00:00:00+08:00"
       },
       {
         "id": "2026-06-02-j5create-usb-c-charger",
         "name": "j5create豆腐頭",
-        "summary": "30W 1C1A，這顆特價會亂賣到199",
         "image_url": "/images/products/2026-06-02-j5create-usb-c-charger.webp",
-        "category_id": "computer-3c",
         "category_label": "電腦3C",
-        "channel_id": "pchome",
         "channel_label": "PChome",
+        "channel_id": "pchome",
         "price_label": "199",
         "tag_labels": [
           "j5create",
           "電源充電"
         ],
+        "summary": "30W 1C1A，這顆特價會亂賣到199",
+        "category_id": "computer-3c",
         "published_at": "2026-06-02T00:00:00+08:00"
       },
       {
         "id": "2026-06-02-battery-charger",
         "name": "電池充電器",
-        "summary": "這個倒是可以不用找IKEA，這顆用豆腐頭輸入的，反而比插牆上好用",
         "image_url": "/images/products/2026-06-02-battery-charger.webp",
-        "category_id": "computer-3c",
         "category_label": "電腦3C",
-        "channel_id": "pchome",
         "channel_label": "PChome",
+        "channel_id": "pchome",
         "price_label": "249",
         "tag_labels": [
           "電源充電"
         ],
+        "summary": "這個倒是可以不用找IKEA，這顆用豆腐頭輸入的，反而比插牆上好用",
+        "category_id": "computer-3c",
         "published_at": "2026-06-02T00:00:00+08:00"
       },
       {
         "id": "2026-06-02-unifi-express",
         "name": "Unifi Express",
-        "summary": "你遲早是要裝Unifi全家桶的，為什麼不一開始就裝呢",
         "image_url": "/images/products/2026-06-02-unifi-express.webp",
-        "category_id": "network",
         "category_label": "網路通訊",
-        "channel_id": "other",
         "channel_label": "其他通路",
+        "channel_id": "other",
         "price_label": "5799",
         "tag_labels": [
           "網路設備",
           "Ubiquiti"
         ],
+        "summary": "你遲早是要裝Unifi全家桶的，為什麼不一開始就裝呢",
+        "category_id": "network",
         "published_at": "2026-06-02T00:00:00+08:00"
       },
       {
         "id": "2026-06-02-zyxel-xgs1250-12",
         "name": "Zyxel XGS1250-12",
-        "summary": "應該是目前最好買的10G switch，一孔SFP+、三孔Multigig、八孔gbe，應該這台就可以把全家的網路線都插在上面了",
         "image_url": "/images/products/2026-06-02-zyxel-xgs1250-12.webp",
-        "category_id": "network",
         "category_label": "網路通訊",
-        "channel_id": "pchome",
         "channel_label": "PChome",
+        "channel_id": "pchome",
         "price_label": "9000",
         "tag_labels": [
           "網路設備",
           "Zyxel"
         ],
+        "summary": "應該是目前最好買的10G switch，一孔SFP+、三孔Multigig、八孔gbe，應該這台就可以把全家的網路線都插在上面了",
+        "category_id": "network",
         "published_at": "2026-06-02T00:00:00+08:00"
       },
       {
         "id": "2026-06-02-apple-tv-4k",
         "name": "Apple TV 4K",
-        "summary": "我有一個朋友他一直覺得「機上盒為什麼只能買Apple TV或FireTV呢，一定有更便宜的選項」  然後他就前後買個至少十隻便宜的機上盒，也多了十隻電子垃圾",
         "image_url": "/images/products/2026-06-02-apple-tv-4k.webp",
-        "category_id": "av-theater",
         "category_label": "影音劇院",
-        "channel_id": "pchome",
         "channel_label": "PChome",
+        "channel_id": "pchome",
         "price_label": "4490",
         "tag_labels": [
           "Apple",
           "訊源"
         ],
+        "summary": "我有一個朋友他一直覺得「機上盒為什麼只能買Apple TV或FireTV呢，一定有更便宜的選項」  然後他就前後買個至少十隻便宜的機上盒，也多了十隻電子垃圾",
+        "category_id": "av-theater",
         "published_at": "2026-06-02T00:00:00+08:00"
       },
       {
         "id": "2026-06-02-benq-e43-735",
         "name": "BenQ E43-735",
-        "summary": "當然43\"的也是可以看BenQ，現在也只賣11k",
         "image_url": "/images/products/2026-06-02-benq-e43-735.webp",
-        "category_id": "av-theater",
         "category_label": "影音劇院",
-        "channel_id": "pchome",
         "channel_label": "PChome",
+        "channel_id": "pchome",
         "price_label": "10999",
         "tag_labels": [
           "BenQ",
           "顯示器"
         ],
+        "summary": "當然43\"的也是可以看BenQ，現在也只賣11k",
+        "category_id": "av-theater",
         "published_at": "2026-06-02T00:00:00+08:00"
       },
       {
         "id": "2026-06-02-benq-e55-735",
         "name": "BenQ E55-735",
-        "summary": "BenQ 55\"也低於15k了，而且還有Android TV",
         "image_url": "/images/products/2026-06-02-benq-e55-735.webp",
-        "category_id": "av-theater",
         "category_label": "影音劇院",
-        "channel_id": "pchome",
         "channel_label": "PChome",
+        "channel_id": "pchome",
         "price_label": "13999",
         "tag_labels": [
           "BenQ",
           "顯示器"
         ],
+        "summary": "BenQ 55\"也低於15k了，而且還有Android TV",
+        "category_id": "av-theater",
         "published_at": "2026-06-02T00:00:00+08:00"
       },
       {
         "id": "2026-06-02-bose-qc45",
         "name": "Bose QC45",
-        "summary": "後來出了新的Ultra跟QC（沒有數字），我還沒去試聽",
         "image_url": "/images/products/2026-06-02-bose-qc45.webp",
-        "category_id": "av-theater",
         "category_label": "影音劇院",
-        "channel_id": "pchome",
         "channel_label": "PChome",
+        "channel_id": "pchome",
         "price_label": "8000",
         "tag_labels": [
           "Bose",
           "耳機"
         ],
+        "summary": "後來出了新的Ultra跟QC（沒有數字），我還沒去試聽",
+        "category_id": "av-theater",
         "published_at": "2026-06-02T00:00:00+08:00"
       },
       {
         "id": "2026-06-02-elac-connex-dcb41",
         "name": "ELAC ConneX DCB41",
-        "summary": "這是有HDMI ARC的主動式喇叭，最適合拿來當電視喇叭",
         "image_url": "/images/products/2026-06-02-elac-connex-dcb41.webp",
-        "category_id": "av-theater",
         "category_label": "影音劇院",
-        "channel_id": "pchome",
         "channel_label": "PChome",
+        "channel_id": "pchome",
         "price_label": "大概16000",
         "tag_labels": [
           "線材轉接",
           "ELAC",
           "喇叭"
         ],
+        "summary": "這是有HDMI ARC的主動式喇叭，最適合拿來當電視喇叭",
+        "category_id": "av-theater",
         "published_at": "2026-06-02T00:00:00+08:00"
       },
       {
         "id": "2026-06-02-fibbr-fiber-hdmi-cable",
         "name": "FIBBR光纖HDMI線",
-        "summary": "光纖HDMI線可以減少很多要壞不壞的靈異現象，而且他現在入門款賣的也很便宜，三條就免運了",
         "image_url": "/images/products/2026-06-02-fibbr-fiber-hdmi-cable.webp",
-        "category_id": "av-theater",
         "category_label": "影音劇院",
-        "channel_id": "amazonus",
         "channel_label": "Amazon US",
+        "channel_id": "amazonus",
         "price_label": "20~30鎂",
         "tag_labels": [
           "線材轉接",
           "FIBBR"
         ],
+        "summary": "光纖HDMI線可以減少很多要壞不壞的靈異現象，而且他現在入門款賣的也很便宜，三條就免運了",
+        "category_id": "av-theater",
         "published_at": "2026-06-02T00:00:00+08:00"
       },
       {
         "id": "2026-06-02-apple-homepod-large",
         "name": "Homepod（大）",
-        "summary": "新的Apple TV可以把Homepod拿來當電視喇叭，兩萬多塊範圍我覺得很難有對手",
         "image_url": "/images/products/2026-06-02-apple-homepod-large.webp",
-        "category_id": "av-theater",
         "category_label": "影音劇院",
-        "channel_id": "pchome",
         "channel_label": "PChome",
+        "channel_id": "pchome",
         "price_label": "22000",
         "tag_labels": [
           "Apple",
           "喇叭"
         ],
+        "summary": "新的Apple TV可以把Homepod拿來當電視喇叭，兩萬多塊範圍我覺得很難有對手",
+        "category_id": "av-theater",
         "published_at": "2026-06-02T00:00:00+08:00"
       },
       {
         "id": "2026-06-02-lg-c4-65-inch-oled",
         "name": "LG C4 65吋 OLED",
-        "summary": "OLED面板的話還是LG比較便宜，不然就是要賭人品買台牌或匪牌",
         "image_url": "/images/products/2026-06-02-lg-c4-65-inch-oled.webp",
-        "category_id": "av-theater",
         "category_label": "影音劇院",
-        "channel_id": "other",
         "channel_label": "其他通路",
+        "channel_id": "other",
         "price_label": "低於60000",
         "tag_labels": [
           "顯示器",
           "LG"
         ],
+        "summary": "OLED面板的話還是LG比較便宜，不然就是要賭人品買台牌或匪牌",
+        "category_id": "av-theater",
         "published_at": "2026-06-02T00:00:00+08:00"
       },
       {
         "id": "2026-06-02-sennheiser-ambeo-max",
         "name": "Sennheiser Ambeo Max",
-        "summary": "Soundbar唯一推薦，看片聽音樂都可以，就是價錢不夠可愛，如果有飛美國的話可以考慮帶一組",
         "image_url": "/images/products/2026-06-02-sennheiser-ambeo-max.webp",
-        "category_id": "av-theater",
         "category_label": "影音劇院",
-        "channel_id": "pchome",
         "channel_label": "PChome",
+        "channel_id": "pchome",
         "price_label": "84900",
         "tag_labels": [
           "Sennheiser",
           "喇叭"
         ],
+        "summary": "Soundbar唯一推薦，看片聽音樂都可以，就是價錢不夠可愛，如果有飛美國的話可以考慮帶一組",
+        "category_id": "av-theater",
         "published_at": "2026-06-02T00:00:00+08:00"
       },
       {
         "id": "2026-06-02-sharp-65-inch-xled",
         "name": "Sharp 65吋 XLED",
-        "summary": "如果不想買OLED的話，現在Sharp XLED應該是最好的選擇",
         "image_url": "/images/products/2026-06-02-sharp-65-inch-xled.webp",
-        "category_id": "av-theater",
         "category_label": "影音劇院",
-        "channel_id": "pchome",
         "channel_label": "PChome",
+        "channel_id": "pchome",
         "price_label": "43000",
         "tag_labels": [
           "顯示器",
           "Sharp"
         ],
+        "summary": "如果不想買OLED的話，現在Sharp XLED應該是最好的選擇",
+        "category_id": "av-theater",
         "published_at": "2026-06-02T00:00:00+08:00"
       },
       {
         "id": "2026-06-02-blueair-3250-air-purifier",
         "name": "Blueair 3250空氣清淨機",
-        "summary": "這台最近不知道為什麼賣到一台4400左右，有想要的話可以看看",
         "image_url": "/images/products/2026-06-02-blueair-3250-air-purifier.webp",
-        "category_id": "small-appliance",
         "category_label": "小家電",
-        "channel_id": "pchome",
         "channel_label": "PChome",
+        "channel_id": "pchome",
         "price_label": "一台4400",
         "tag_labels": [
           "空氣調節",
           "Blueair"
         ],
+        "summary": "這台最近不知道為什麼賣到一台4400左右，有想要的話可以看看",
+        "category_id": "small-appliance",
         "published_at": "2026-06-02T00:00:00+08:00"
       },
       {
         "id": "2026-06-02-electrolux-vacuum-cleaner",
         "name": "Electrolux吸塵器",
-        "summary": "這支的本體跟Q9是一樣的，還多了拖把吸頭，另一組有拖把水桶的也可以考慮  特價的時候會賣到9999，有看到的話請把握機會",
         "image_url": "/images/products/2026-06-02-electrolux-vacuum-cleaner.webp",
-        "category_id": "small-appliance",
         "category_label": "小家電",
-        "channel_id": "costco",
         "channel_label": "Costco",
+        "channel_id": "costco",
         "price_label": "11999",
         "tag_labels": [
           "清潔",
           "Electrolux"
         ],
+        "summary": "這支的本體跟Q9是一樣的，還多了拖把吸頭，另一組有拖把水桶的也可以考慮  特價的時候會賣到9999，有看到的話請把握機會",
+        "category_id": "small-appliance",
         "published_at": "2026-06-02T00:00:00+08:00"
       },
       {
         "id": "2026-06-02-hitachi-rd-14fr",
         "name": "Hitachi RD-14FR",
-        "summary": "日立這系列最近大概降了20%，現在應該不需要考慮其他牌子",
         "image_url": "/images/products/2026-06-02-hitachi-rd-14fr.webp",
-        "category_id": "small-appliance",
         "category_label": "小家電",
-        "channel_id": "pchome",
         "channel_label": "PChome",
+        "channel_id": "pchome",
         "price_label": "5999",
         "tag_labels": [
           "空氣調節",
           "Hitachi"
         ],
+        "summary": "日立這系列最近大概降了20%，現在應該不需要考慮其他牌子",
+        "category_id": "small-appliance",
         "published_at": "2026-06-02T00:00:00+08:00"
       },
       {
         "id": "2026-06-02-iris-ohyama-ceiling-light-standard",
         "name": "Iris吸頂燈（並）",
-        "summary": "日規吸頂燈真的很棒，可以用遙控調光調色而且還快拆，睡前都不需要爬起來關燈",
         "image_url": "/images/products/2026-06-02-iris-ohyama-ceiling-light-standard.webp",
-        "category_id": "small-appliance",
         "category_label": "小家電",
-        "channel_id": "costco",
         "channel_label": "Costco",
+        "channel_id": "costco",
         "price_label": "2699",
         "tag_labels": [
           "IRIS OHYAMA",
           "照明"
         ],
+        "summary": "日規吸頂燈真的很棒，可以用遙控調光調色而且還快拆，睡前都不需要爬起來關燈",
+        "category_id": "small-appliance",
         "published_at": "2026-06-02T00:00:00+08:00"
       },
       {
         "id": "2026-06-02-iris-ohyama-premium-ceiling-light",
         "name": "Iris高階吸頂燈",
-        "summary": "這顆是導光板的高階款，水平方向的擴散比較強，可以減少房間角落太暗的問題",
         "image_url": "/images/products/2026-06-02-iris-ohyama-premium-ceiling-light.webp",
-        "category_id": "small-appliance",
         "category_label": "小家電",
-        "channel_id": "amazonjp",
         "channel_label": "Amazon JP",
+        "channel_id": "amazonjp",
         "price_label": "￥20000",
         "tag_labels": [
           "IRIS OHYAMA",
           "照明"
         ],
+        "summary": "這顆是導光板的高階款，水平方向的擴散比較強，可以減少房間角落太暗的問題",
+        "category_id": "small-appliance",
         "published_at": "2026-06-02T00:00:00+08:00"
       },
       {
         "id": "2026-06-02-kohler-bathroom-heater",
         "name": "Kohler暖風機",
-        "summary": "他們家的暖風機面板非常好看，而且無線遙控款才賣一萬出頭，你浴室有拉220V的話可以考慮",
         "image_url": "/images/products/2026-06-02-kohler-bathroom-heater.webp",
-        "category_id": "small-appliance",
         "category_label": "小家電",
-        "channel_id": "other",
         "channel_label": "其他通路",
+        "channel_id": "other",
         "price_label": "10900",
         "tag_labels": [
           "空氣調節",
@@ -550,472 +548,474 @@
           "固定安裝",
           "Kohler"
         ],
+        "summary": "他們家的暖風機面板非常好看，而且無線遙控款才賣一萬出頭，你浴室有拉220V的話可以考慮",
+        "category_id": "small-appliance",
         "published_at": "2026-06-02T00:00:00+08:00"
       },
       {
         "id": "2026-06-02-kolin-ceramic-heater",
         "name": "Kolin 電暖器",
-        "summary": "暖氣我是比較推陶瓷式的啦，體積小、比較便宜、不會亮、而且還有風扇強制對流，暖房效果比看起來的更好",
         "image_url": "/images/products/2026-06-02-kolin-ceramic-heater.webp",
-        "category_id": "small-appliance",
         "category_label": "小家電",
-        "channel_id": "pchome",
         "channel_label": "PChome",
+        "channel_id": "pchome",
         "price_label": "1180",
         "tag_labels": [
           "空氣調節",
           "Kolin"
         ],
+        "summary": "暖氣我是比較推陶瓷式的啦，體積小、比較便宜、不會亮、而且還有風扇強制對流，暖房效果比看起來的更好",
+        "category_id": "small-appliance",
         "published_at": "2026-06-02T00:00:00+08:00"
       },
       {
         "id": "2026-06-02-lixil-bidet-seat",
         "name": "Lixil免治馬桶座",
-        "summary": "TOTO的最近在amazon上價錢很亂，相較之下Lixil的比較合理",
         "image_url": "/images/products/2026-06-02-lixil-bidet-seat.webp",
-        "category_id": "small-appliance",
         "category_label": "小家電",
-        "channel_id": "amazonjp",
         "channel_label": "Amazon JP",
+        "channel_id": "amazonjp",
         "price_label": "￥42000",
         "tag_labels": [
           "衛浴",
           "LIXIL"
         ],
+        "summary": "TOTO的最近在amazon上價錢很亂，相較之下Lixil的比較合理",
+        "category_id": "small-appliance",
         "published_at": "2026-06-02T00:00:00+08:00"
       },
       {
         "id": "2026-06-02-panasonic-nn-bs607",
         "name": "Panasonic NN-BS607",
-        "summary": "別管什麼小烤箱了，直上水波爐吧",
         "image_url": "/images/products/2026-06-02-panasonic-nn-bs607.webp",
-        "category_id": "small-appliance",
         "category_label": "小家電",
-        "channel_id": "pchome",
         "channel_label": "PChome",
+        "channel_id": "pchome",
         "price_label": "12900",
         "tag_labels": [
           "桌上型",
           "廚房",
           "Panasonic"
         ],
+        "summary": "別管什麼小烤箱了，直上水波爐吧",
+        "category_id": "small-appliance",
         "published_at": "2026-06-02T00:00:00+08:00"
       },
       {
         "id": "2026-06-02-panasonic-np-th4",
         "name": "Panasonic NP-TH4",
-        "summary": "桌面型洗碗機只有這台可以買了（認真",
         "image_url": "/images/products/2026-06-02-panasonic-np-th4.webp",
-        "category_id": "small-appliance",
         "category_label": "小家電",
-        "channel_id": "pchome",
         "channel_label": "PChome",
+        "channel_id": "pchome",
         "price_label": "21000",
         "tag_labels": [
           "桌上型",
           "廚房",
           "Panasonic"
         ],
+        "summary": "桌面型洗碗機只有這台可以買了（認真",
+        "category_id": "small-appliance",
         "published_at": "2026-06-02T00:00:00+08:00"
       },
       {
         "id": "2026-06-02-panasonic-sr-kt069",
         "name": "Panasonic SR-KT069",
-        "summary": "四人份小電鍋唯一推薦",
         "image_url": "/images/products/2026-06-02-panasonic-sr-kt069.webp",
-        "category_id": "small-appliance",
         "category_label": "小家電",
-        "channel_id": "pchome",
         "channel_label": "PChome",
+        "channel_id": "pchome",
         "price_label": "5000",
         "tag_labels": [
           "桌上型",
           "廚房",
           "Panasonic"
         ],
+        "summary": "四人份小電鍋唯一推薦",
+        "category_id": "small-appliance",
         "published_at": "2026-06-02T00:00:00+08:00"
       },
       {
         "id": "2026-06-02-irobot-roomba-j7",
         "name": "Roomba j7+",
-        "summary": "應該是Roomba現行款式中最強的機種，現在跟我之前從amazon買的價格差不多了",
         "image_url": "/images/products/2026-06-02-irobot-roomba-j7.webp",
-        "category_id": "small-appliance",
         "category_label": "小家電",
-        "channel_id": "pchome",
         "channel_label": "PChome",
+        "channel_id": "pchome",
         "price_label": "26000",
         "tag_labels": [
           "清潔",
           "iRobot"
         ],
+        "summary": "應該是Roomba現行款式中最強的機種，現在跟我之前從amazon買的價格差不多了",
+        "category_id": "small-appliance",
         "published_at": "2026-06-02T00:00:00+08:00"
       },
       {
         "id": "2026-06-02-sharp-xp10t",
         "name": "Sharp XP10T",
-        "summary": "家裡如果有長輩怕微波爐的話，就直上XP10T，這台才有強調無微波調理功能（然後你還是可以自己拿他的微波功能來用",
         "image_url": "/images/products/2026-06-02-sharp-xp10t.webp",
-        "category_id": "small-appliance",
         "category_label": "小家電",
-        "channel_id": "pchome",
         "channel_label": "PChome",
+        "channel_id": "pchome",
         "price_label": "29900",
         "tag_labels": [
           "桌上型",
           "廚房",
           "Sharp"
         ],
+        "summary": "家裡如果有長輩怕微波爐的話，就直上XP10T，這台才有強調無微波調理功能（然後你還是可以自己拿他的微波功能來用",
+        "category_id": "small-appliance",
         "published_at": "2026-06-02T00:00:00+08:00"
       },
       {
         "id": "2026-06-02-toshiba-premium-ceiling-light",
         "name": "Toshiba高階吸頂燈",
-        "summary": "這顆是演色力比較強的高階款，可惜不是以前那個羅浮宮級的了",
         "image_url": "/images/products/2026-06-02-toshiba-premium-ceiling-light.webp",
-        "category_id": "small-appliance",
         "category_label": "小家電",
-        "channel_id": "amazonjp",
         "channel_label": "Amazon JP",
+        "channel_id": "amazonjp",
         "price_label": "￥30000",
         "tag_labels": [
           "照明",
           "Toshiba"
         ],
+        "summary": "這顆是演色力比較強的高階款，可惜不是以前那個羅浮宮級的了",
+        "category_id": "small-appliance",
         "published_at": "2026-06-02T00:00:00+08:00"
       },
       {
         "id": "2026-06-02-vibo-40l-oven",
         "name": "威寶40L烤箱",
-        "summary": "這是要認真烤麵包用的烤箱，價格不是走親民路線的",
         "image_url": "/images/products/2026-06-02-vibo-40l-oven.webp",
-        "category_id": "small-appliance",
         "category_label": "小家電",
-        "channel_id": "momo",
         "channel_label": "momo",
+        "channel_id": "momo",
         "price_label": "9000",
         "tag_labels": [
           "桌上型",
           "廚房",
           "Vibo"
         ],
+        "summary": "這是要認真烤麵包用的烤箱，價格不是走親民路線的",
+        "category_id": "small-appliance",
         "published_at": "2026-06-02T00:00:00+08:00"
       },
       {
         "id": "2026-06-02-zojirushi-nw-jw10",
         "name": "象印NW-JW10",
-        "summary": "這台的賣點是煮飯快、要清洗的零件少，不過煮起來還是略輸本炭釜",
         "image_url": "/images/products/2026-06-02-zojirushi-nw-jw10.webp",
-        "category_id": "small-appliance",
         "category_label": "小家電",
-        "channel_id": "amazonjp",
         "channel_label": "Amazon JP",
+        "channel_id": "amazonjp",
         "price_label": "￥45000",
         "tag_labels": [
           "桌上型",
           "廚房",
           "Zojirushi"
         ],
+        "summary": "這台的賣點是煮飯快、要清洗的零件少，不過煮起來還是略輸本炭釜",
+        "category_id": "small-appliance",
         "published_at": "2026-06-02T00:00:00+08:00"
       },
       {
         "id": "2026-06-02-fisher-paykel-dishdrawer",
         "name": "Fisher&Paykel 抽屜式洗碗機",
-        "summary": "其實Panasonic也有抽屜式，但是台灣沒有進，日規的又太深比較麻煩，所以可以優先考慮這台",
         "image_url": "/images/products/2026-06-02-fisher-paykel-dishdrawer.webp",
-        "category_id": "major-appliance",
         "category_label": "大家電",
-        "channel_id": "pchome",
         "channel_label": "PChome",
+        "channel_id": "pchome",
         "price_label": "45000",
         "tag_labels": [
           "Fisher & Paykel",
           "廚房"
         ],
+        "summary": "其實Panasonic也有抽屜式，但是台灣沒有進，日規的又太深比較麻煩，所以可以優先考慮這台",
+        "category_id": "major-appliance",
         "published_at": "2026-06-02T00:00:00+08:00"
       },
       {
         "id": "2026-06-02-mitsubishi-electric-freezer",
         "name": "Mitsubishi 冷凍櫃",
-        "summary": "只是需要稍微擴充冷凍庫的話可以買這台，他身高比較低，上面還可以擺電鍋或水波爐",
         "image_url": "/images/products/2026-06-02-mitsubishi-electric-freezer.webp",
-        "category_id": "major-appliance",
         "category_label": "大家電",
-        "channel_id": "pchome",
         "channel_label": "PChome",
+        "channel_id": "pchome",
         "price_label": "12000",
         "tag_labels": [
           "廚房",
           "Mitsubishi Electric",
           "冷藏冷凍"
         ],
+        "summary": "只是需要稍微擴充冷凍庫的話可以買這台，他身高比較低，上面還可以擺電鍋或水波爐",
+        "category_id": "major-appliance",
         "published_at": "2026-06-02T00:00:00+08:00"
       },
       {
         "id": "2026-06-02-panasonic-v150mdh",
         "name": "Panasonic V150MDH",
-        "summary": "總之洗衣機都現看Panasonic，這是自動加洗衣精的洗脫烘中最便宜的",
         "image_url": "/images/products/2026-06-02-panasonic-v150mdh.webp",
-        "category_id": "major-appliance",
         "category_label": "大家電",
-        "channel_id": "pchome",
         "channel_label": "PChome",
+        "channel_id": "pchome",
         "price_label": "41000",
         "tag_labels": [
           "洗衣烘衣",
           "Panasonic"
         ],
+        "summary": "總之洗衣機都現看Panasonic，這是自動加洗衣精的洗脫烘中最便宜的",
+        "category_id": "major-appliance",
         "published_at": "2026-06-02T00:00:00+08:00"
       },
       {
         "id": "2026-06-02-panasonic-freezer",
         "name": "Panasonic 冷凍櫃",
-        "summary": "這台跟普通的冰箱差不多大，買的時候要注意一下要放哪",
         "image_url": "/images/products/2026-06-02-panasonic-freezer.webp",
-        "category_id": "major-appliance",
         "category_label": "大家電",
-        "channel_id": "pchome",
         "channel_label": "PChome",
+        "channel_id": "pchome",
         "price_label": "19000",
         "tag_labels": [
           "廚房",
           "Panasonic",
           "冷藏冷凍"
         ],
+        "summary": "這台跟普通的冰箱差不多大，買的時候要注意一下要放哪",
+        "category_id": "major-appliance",
         "published_at": "2026-06-02T00:00:00+08:00"
       },
       {
         "id": "2026-06-02-panasonic-japan-refrigerator",
         "name": "Panasonic 日規冰箱",
-        "summary": "日規六門冰箱比較好買的是Pana、Hitachi、三菱，規格其實很像，我覺得都可以買",
         "image_url": "/images/products/2026-06-02-panasonic-japan-refrigerator.webp",
-        "category_id": "major-appliance",
         "category_label": "大家電",
-        "channel_id": "pchome",
         "channel_label": "PChome",
+        "channel_id": "pchome",
         "price_label": "67000",
         "tag_labels": [
           "廚房",
           "Panasonic",
           "冷藏冷凍"
         ],
+        "summary": "日規六門冰箱比較好買的是Pana、Hitachi、三菱，規格其實很像，我覺得都可以買",
+        "category_id": "major-appliance",
         "published_at": "2026-06-02T00:00:00+08:00"
       },
       {
         "id": "2026-06-02-toshiba-yd5000",
         "name": "Toshiba YD5000",
-        "summary": "看得懂日文的話買水貨還是比較便宜，這台是次旗艦，而且amazon還免運費直接到你家",
         "image_url": "/images/products/2026-06-02-toshiba-yd5000.webp",
-        "category_id": "major-appliance",
         "category_label": "大家電",
-        "channel_id": "amazonjp",
         "channel_label": "Amazon JP",
+        "channel_id": "amazonjp",
         "price_label": "￥100000",
         "tag_labels": [
           "廚房",
           "Toshiba"
         ],
+        "summary": "看得懂日文的話買水貨還是比較便宜，這台是次旗艦，而且amazon還免運費直接到你家",
+        "category_id": "major-appliance",
         "published_at": "2026-06-02T00:00:00+08:00"
       },
       {
         "id": "2026-06-02-mitsubishi-heavy-industries-air-conditioner",
         "name": "三菱重工冷氣",
-        "summary": "其實Panasonic、日立也都可以買，但是我要稱讚一下三菱重工的遙控器排程功能超級優秀",
         "image_url": "/images/products/2026-06-02-mitsubishi-heavy-industries-air-conditioner.webp",
-        "category_id": "major-appliance",
         "category_label": "大家電",
-        "channel_id": "pchome",
         "channel_label": "PChome",
+        "channel_id": "pchome",
         "price_label": "比較貴一點",
         "tag_labels": [
           "空調",
           "固定安裝",
           "Mitsubishi Heavy Industries"
         ],
+        "summary": "其實Panasonic、日立也都可以買，但是我要稱讚一下三菱重工的遙控器排程功能超級優秀",
+        "category_id": "major-appliance",
         "published_at": "2026-06-02T00:00:00+08:00"
       },
       {
         "id": "2026-06-02-arnest-nagikire-ou",
         "name": "Arnest 永切れ王",
-        "summary": "刀刃開鋸齒型的三德，我覺得切起來超級順手的",
         "image_url": "/images/products/2026-06-02-arnest-nagikire-ou.webp",
-        "category_id": "household",
         "category_label": "生活百貨",
-        "channel_id": "amazonjp",
         "channel_label": "Amazon JP",
+        "channel_id": "amazonjp",
         "price_label": "￥3800",
         "tag_labels": [
           "Arnest",
           "廚房"
         ],
+        "summary": "刀刃開鋸齒型的三德，我覺得切起來超級順手的",
+        "category_id": "household",
         "published_at": "2026-06-02T00:00:00+08:00"
       },
       {
         "id": "2026-06-02-brita-water-filter-pitcher",
         "name": "Brita",
-        "summary": "Brita濾芯要注意一下特價，大概單價$166以下就可以買",
         "image_url": "/images/products/2026-06-02-brita-water-filter-pitcher.webp",
-        "category_id": "household",
         "category_label": "生活百貨",
-        "channel_id": "pchome",
         "channel_label": "PChome",
+        "channel_id": "pchome",
         "price_label": "2200",
         "tag_labels": [
           "BRITA",
           "廚房"
         ],
+        "summary": "Brita濾芯要注意一下特價，大概單價$166以下就可以買",
+        "category_id": "household",
         "published_at": "2026-06-02T00:00:00+08:00"
       },
       {
         "id": "2026-06-02-kohler-familycare-bathroom-vanity",
         "name": "Kohler FamilyCare浴櫃",
-        "summary": "他們家的浴櫃組非常有趣，他的落水孔是在靠牆的地方，所以櫃子的抽屜可以做到2/3深度，中間也不會有奇怪的凹洞  不過水龍頭不要買他們家的，美規水管跟台灣習慣不同，出水量會比較小，還會害我被師傅罵（？",
         "image_url": "/images/products/2026-06-02-kohler-familycare-bathroom-vanity.webp",
-        "category_id": "household",
         "category_label": "生活百貨",
-        "channel_id": "other",
         "channel_label": "其他通路",
+        "channel_id": "other",
         "price_label": "20000",
         "tag_labels": [
           "衛浴",
           "固定安裝",
           "Kohler"
         ],
+        "summary": "他們家的浴櫃組非常有趣，他的落水孔是在靠牆的地方，所以櫃子的抽屜可以做到2/3深度，中間也不會有奇怪的凹洞  不過水龍頭不要買他們家的，美規水管跟台灣習慣不同，出水量會比較小，還會害我被師傅罵（？",
+        "category_id": "household",
         "published_at": "2026-06-02T00:00:00+08:00"
       },
       {
         "id": "2026-06-02-lion-nanox-detergent",
         "name": "Lion Nanox洗衣精",
-        "summary": "今年Nanox One新版上市了，橘色的是標準款、紫色的強化殺菌、藍綠色的PRO全面強化，但是價錢都顯著的比去年貴",
         "image_url": "/images/products/2026-06-02-lion-nanox-detergent.webp",
-        "category_id": "household",
         "category_label": "生活百貨",
-        "channel_id": "pchome",
         "channel_label": "PChome",
+        "channel_id": "pchome",
         "price_label": "1099",
         "tag_labels": [
           "清潔",
           "日用品",
           "Lion"
         ],
+        "summary": "今年Nanox One新版上市了，橘色的是標準款、紫色的強化殺菌、藍綠色的PRO全面強化，但是價錢都顯著的比去年貴",
+        "category_id": "household",
         "published_at": "2026-06-02T00:00:00+08:00"
       },
       {
         "id": "2026-06-02-toto-thermostatic-faucet",
         "name": "TOTO恆溫水龍頭",
-        "summary": "如果你家熱水器夠熱、但是洗澡的水溫不穩的話，通常裝上恆溫水龍頭就能得到有效的改善  而且他的把手一邊調溫度、另一邊調淋浴/龍頭，可以徹底杜絕調了水量溫度就變了的問題",
         "image_url": "/images/products/2026-06-02-toto-thermostatic-faucet.webp",
-        "category_id": "household",
         "category_label": "生活百貨",
-        "channel_id": "amazonjp",
         "channel_label": "Amazon JP",
+        "channel_id": "amazonjp",
         "price_label": "￥18000",
         "tag_labels": [
           "衛浴",
           "固定安裝",
           "TOTO"
         ],
+        "summary": "如果你家熱水器夠熱、但是洗澡的水溫不穩的話，通常裝上恆溫水龍頭就能得到有效的改善  而且他的把手一邊調溫度、另一邊調淋浴/龍頭，可以徹底杜絕調了水量溫度就變了的問題",
+        "category_id": "household",
         "published_at": "2026-06-02T00:00:00+08:00"
       },
       {
         "id": "2026-06-02-trusco-trunk-cargo",
         "name": "Trusco 物流箱",
-        "summary": "從日本搬東西回來的好幫手，詳情請看下面參考資料",
         "image_url": "/images/products/2026-06-02-trusco-trunk-cargo.webp",
-        "category_id": "household",
         "category_label": "生活百貨",
-        "channel_id": "amazonjp",
         "channel_label": "Amazon JP",
+        "channel_id": "amazonjp",
         "price_label": "￥1790",
         "tag_labels": [
           "收納整理",
           "TRUSCO"
         ],
+        "summary": "從日本搬東西回來的好幫手，詳情請看下面參考資料",
+        "category_id": "household",
         "published_at": "2026-06-02T00:00:00+08:00"
       },
       {
         "id": "2026-06-02-ohashi-koshihikari-rice",
         "name": "大橋牌越光米",
-        "summary": "他們每年新米都會有這種8包1kg的禮盒，小包裝就比較不用怕米潮掉",
         "image_url": "/images/products/2026-06-02-ohashi-koshihikari-rice.webp",
-        "category_id": "household",
         "category_label": "生活百貨",
-        "channel_id": "pchome",
         "channel_label": "PChome",
+        "channel_id": "pchome",
         "price_label": "125/kg",
         "tag_labels": [
           "食材",
           "大橋牌",
           "米食"
         ],
+        "summary": "他們每年新米都會有這種8包1kg的禮盒，小包裝就比較不用怕米潮掉",
+        "category_id": "household",
         "published_at": "2026-06-02T00:00:00+08:00"
       },
       {
         "id": "2026-06-02-fuli-milk-queen-rice",
         "name": "富里牛奶皇后",
-        "summary": "牛奶皇后是最好吃的台灣米，不服來辯",
         "image_url": "/images/products/2026-06-02-fuli-milk-queen-rice.webp",
-        "category_id": "household",
         "category_label": "生活百貨",
-        "channel_id": "pchome",
         "channel_label": "PChome",
+        "channel_id": "pchome",
         "price_label": "200/kg",
         "tag_labels": [
           "食材",
           "富里",
           "米食"
         ],
+        "summary": "牛奶皇后是最好吃的台灣米，不服來辯",
+        "category_id": "household",
         "published_at": "2026-06-02T00:00:00+08:00"
       },
       {
         "id": "2026-06-02-yamada-seiyu-sesame-chili-oil",
         "name": "山田製油 胡麻辣油",
-        "summary": "雖然叫辣油但是其實不辣，而是超級香的香油  我都是回日本的時候在百貨公司超市補貨，會比第一名店便宜很多",
         "image_url": "/images/products/2026-06-02-yamada-seiyu-sesame-chili-oil.webp",
-        "category_id": "household",
         "category_label": "生活百貨",
-        "channel_id": "other",
         "channel_label": "其他通路",
+        "channel_id": "other",
         "price_label": "￥972",
         "tag_labels": [
           "食材",
           "廚房",
           "山田製油"
         ],
+        "summary": "雖然叫辣油但是其實不辣，而是超級香的香油  我都是回日本的時候在百貨公司超市補貨，會比第一名店便宜很多",
+        "category_id": "household",
         "published_at": "2026-06-02T00:00:00+08:00"
       },
       {
         "id": "2026-06-02-asahi-ponzu",
         "name": "旭ポンズ",
-        "summary": "在黑門市場的時候被店員大姊推銷，從此一試成主顧的橘醋  大阪附近的話很好買，東京附近的話要找百貨公司超市或成城石井之類的",
         "image_url": "/images/products/2026-06-02-asahi-ponzu.webp",
-        "category_id": "household",
         "category_label": "生活百貨",
-        "channel_id": "other",
         "channel_label": "其他通路",
+        "channel_id": "other",
         "price_label": "￥840",
         "tag_labels": [
           "旭ポンズ",
           "食材",
           "廚房"
         ],
+        "summary": "在黑門市場的時候被店員大姊推銷，從此一試成主顧的橘醋  大阪附近的話很好買，東京附近的話要找百貨公司超市或成城石井之類的",
+        "category_id": "household",
         "published_at": "2026-06-02T00:00:00+08:00"
       },
       {
         "id": "2026-06-02-kao-attack-zero",
         "name": "花王 Attack Zero",
-        "summary": "Attack Zero的噴罐超級好用",
         "image_url": "/images/products/2026-06-02-kao-attack-zero.webp",
-        "category_id": "household",
         "category_label": "生活百貨",
-        "channel_id": "costco",
         "channel_label": "Costco",
+        "channel_id": "costco",
         "price_label": "579",
         "tag_labels": [
           "清潔",
           "日用品",
           "Kao"
         ],
+        "summary": "Attack Zero的噴罐超級好用",
+        "category_id": "household",
         "published_at": "2026-06-02T00:00:00+08:00"
       }
     ],
@@ -1023,20 +1023,20 @@
       "2026-06-02-adata-power-bank": {
         "id": "2026-06-02-adata-power-bank",
         "name": "ADATA 行動電源",
+        "category_label": "電腦3C",
+        "channel_label": "PChome",
+        "channel_id": "pchome",
+        "price_label": "500",
+        "tag_labels": [
+          "ADATA",
+          "電源充電"
+        ],
         "summary": "體積相當小，而且還很便宜",
         "long_description": "體積相當小，而且還很便宜",
         "llm_description": "",
         "hero_image_url": "/images/products/2026-06-02-adata-power-bank.webp",
         "hero_alt": "ADATA 行動電源",
         "category_id": "computer-3c",
-        "category_label": "電腦3C",
-        "channel_id": "pchome",
-        "channel_label": "PChome",
-        "tag_labels": [
-          "ADATA",
-          "電源充電"
-        ],
-        "price_label": "500",
         "buy_url": "https://24h.pchome.com.tw/prod/DYAO44-A900HC1WQ",
         "fine_print": "價格與庫存以通路頁面為準。",
         "related_products": [
@@ -1066,20 +1066,20 @@
       "2026-06-02-aplus-ups": {
         "id": "2026-06-02-aplus-ups",
         "name": "APlus UPS",
+        "category_label": "電腦3C",
+        "channel_label": "PChome",
+        "channel_id": "pchome",
+        "price_label": "1450",
+        "tag_labels": [
+          "APlus",
+          "電源充電"
+        ],
         "summary": "便宜、MIT、而且面板還有螢幕跟USB充電，但是我有些電腦的監控軟體抓不到他",
         "long_description": "便宜、MIT、而且面板還有螢幕跟USB充電，但是我有些電腦的監控軟體抓不到他",
         "llm_description": "",
         "hero_image_url": "/images/products/2026-06-02-aplus-ups.webp",
         "hero_alt": "APlus UPS",
         "category_id": "computer-3c",
-        "category_label": "電腦3C",
-        "channel_id": "pchome",
-        "channel_label": "PChome",
-        "tag_labels": [
-          "APlus",
-          "電源充電"
-        ],
-        "price_label": "1450",
         "buy_url": "https://24h.pchome.com.tw/prod/DCAR15-A900AU2RL",
         "fine_print": "價格與庫存以通路頁面為準。",
         "related_products": [
@@ -1109,20 +1109,20 @@
       "2026-06-02-avier-power-bank": {
         "id": "2026-06-02-avier-power-bank",
         "name": "Avier行動電源",
+        "category_label": "電腦3C",
+        "channel_label": "PChome",
+        "channel_id": "pchome",
+        "price_label": "479",
+        "tag_labels": [
+          "Avier",
+          "電源充電"
+        ],
         "summary": "便宜、有雙向PD、但是顏色非常微妙",
         "long_description": "便宜、有雙向PD、但是顏色非常微妙",
         "llm_description": "",
         "hero_image_url": "/images/products/2026-06-02-avier-power-bank.webp",
         "hero_alt": "Avier行動電源",
         "category_id": "computer-3c",
-        "category_label": "電腦3C",
-        "channel_id": "pchome",
-        "channel_label": "PChome",
-        "tag_labels": [
-          "Avier",
-          "電源充電"
-        ],
-        "price_label": "479",
         "buy_url": "https://24h.pchome.com.tw/prod/DYAO44-A900GLJQ6",
         "fine_print": "價格與庫存以通路頁面為準。",
         "related_products": [
@@ -1152,20 +1152,20 @@
       "2026-06-02-belkin-three-port-type-c-charger": {
         "id": "2026-06-02-belkin-three-port-type-c-charger",
         "name": "Belkin 三孔Type C充電器",
+        "category_label": "電腦3C",
+        "channel_label": "其他通路",
+        "channel_id": "other",
+        "price_label": "790",
+        "tag_labels": [
+          "Belkin",
+          "電源充電"
+        ],
         "summary": "這顆三孔都是Type C，出力是25/20/20、或45/20、或65，旅行包換成這顆剛好可以減少線的種類",
         "long_description": "這顆三孔都是Type C，出力是25/20/20、或45/20、或65，旅行包換成這顆剛好可以減少線的種類",
         "llm_description": "",
         "hero_image_url": "/images/products/2026-06-02-belkin-three-port-type-c-charger.webp",
         "hero_alt": "Belkin 三孔Type C充電器",
         "category_id": "computer-3c",
-        "category_label": "電腦3C",
-        "channel_id": "other",
-        "channel_label": "其他通路",
-        "tag_labels": [
-          "Belkin",
-          "電源充電"
-        ],
-        "price_label": "790",
         "buy_url": "https://pxbox.es.pxmart.com.tw/product/155053",
         "fine_print": "價格與庫存以通路頁面為準。",
         "related_products": [
@@ -1195,20 +1195,20 @@
       "2026-06-02-benq-rd280u": {
         "id": "2026-06-02-benq-rd280u",
         "name": "BenQ RD280U",
+        "category_label": "電腦3C",
+        "channel_label": "PChome",
+        "channel_id": "pchome",
+        "price_label": "16888",
+        "tag_labels": [
+          "BenQ",
+          "顯示器"
+        ],
         "summary": "28\" 3840*2560的螢幕，比一般的4K多了一些高度，160ppi設200%的話字也不算太大，不過價錢還沒降可以再等等",
         "long_description": "28\" 3840*2560的螢幕，比一般的4K多了一些高度，160ppi設200%的話字也不算太大，不過價錢還沒降可以再等等",
         "llm_description": "",
         "hero_image_url": "/images/products/2026-06-02-benq-rd280u.webp",
         "hero_alt": "BenQ RD280U",
         "category_id": "computer-3c",
-        "category_label": "電腦3C",
-        "channel_id": "pchome",
-        "channel_label": "PChome",
-        "tag_labels": [
-          "BenQ",
-          "顯示器"
-        ],
-        "price_label": "16888",
         "buy_url": "https://24h.pchome.com.tw/prod/DSABSO-A900HJAH0?fq=/S/DSABSO",
         "fine_print": "價格與庫存以通路頁面為準。",
         "related_products": [
@@ -1238,20 +1238,20 @@
       "2026-06-02-ducky-one-2": {
         "id": "2026-06-02-ducky-one-2",
         "name": "Ducky One 2",
+        "category_label": "電腦3C",
+        "channel_label": "PChome",
+        "channel_id": "pchome",
+        "price_label": "2300",
+        "tag_labels": [
+          "桌面周邊",
+          "Ducky"
+        ],
         "summary": "我覺得Ducky One 2可以買，但是3不行，所以趁他們還有生產的時候多庫存個兩把",
         "long_description": "我覺得Ducky One 2可以買，但是3不行，所以趁他們還有生產的時候多庫存個兩把",
         "llm_description": "",
         "hero_image_url": "/images/products/2026-06-02-ducky-one-2.webp",
         "hero_alt": "Ducky One 2",
         "category_id": "computer-3c",
-        "category_label": "電腦3C",
-        "channel_id": "pchome",
-        "channel_label": "PChome",
-        "tag_labels": [
-          "桌面周邊",
-          "Ducky"
-        ],
-        "price_label": "2300",
         "buy_url": "https://24h.pchome.com.tw/prod/DCAHVA-A900GAGDQ",
         "fine_print": "價格與庫存以通路頁面為準。",
         "related_products": [
@@ -1281,20 +1281,20 @@
       "2026-06-02-ikea-charging-cable": {
         "id": "2026-06-02-ikea-charging-cable",
         "name": "IKEA充電線",
+        "category_label": "電腦3C",
+        "channel_label": "其他通路",
+        "channel_id": "other",
+        "price_label": "199",
+        "tag_labels": [
+          "線材轉接",
+          "IKEA"
+        ],
         "summary": "手機的充電線也是都找他們家買就對了",
         "long_description": "手機的充電線也是都找他們家買就對了",
         "llm_description": "",
         "hero_image_url": "/images/products/2026-06-02-ikea-charging-cable.webp",
         "hero_alt": "IKEA充電線",
         "category_id": "computer-3c",
-        "category_label": "電腦3C",
-        "channel_id": "other",
-        "channel_label": "其他通路",
-        "tag_labels": [
-          "線材轉接",
-          "IKEA"
-        ],
-        "price_label": "199",
         "buy_url": "https://www.ikea.com.tw/zh/products/electronics/power-supply-and-charging?tags[]=415",
         "fine_print": "價格與庫存以通路頁面為準。",
         "related_products": [
@@ -1324,20 +1324,20 @@
       "2026-06-02-ikea-rechargeable-battery": {
         "id": "2026-06-02-ikea-rechargeable-battery",
         "name": "IKEA充電電池",
+        "category_label": "電腦3C",
+        "channel_label": "其他通路",
+        "channel_id": "other",
+        "price_label": "249~349",
+        "tag_labels": [
+          "IKEA",
+          "電源充電"
+        ],
         "summary": "三號、四號電池都找他們家買就對了",
         "long_description": "三號、四號電池都找他們家買就對了",
         "llm_description": "",
         "hero_image_url": "/images/products/2026-06-02-ikea-rechargeable-battery.webp",
         "hero_alt": "IKEA充電電池",
         "category_id": "computer-3c",
-        "category_label": "電腦3C",
-        "channel_id": "other",
-        "channel_label": "其他通路",
-        "tag_labels": [
-          "IKEA",
-          "電源充電"
-        ],
-        "price_label": "249~349",
         "buy_url": "https://www.ikea.com.tw/zh/products/electronics/power-supply-and-charging/ladda-art-90506528",
         "fine_print": "價格與庫存以通路頁面為準。",
         "related_products": [
@@ -1367,20 +1367,20 @@
       "2026-06-02-kioxia-1tb-usb-flash-drive": {
         "id": "2026-06-02-kioxia-1tb-usb-flash-drive",
         "name": "Kioxia 1TB隨身碟",
+        "category_label": "電腦3C",
+        "channel_label": "PChome",
+        "channel_id": "pchome",
+        "price_label": "2490",
+        "tag_labels": [
+          "Kioxia",
+          "儲存備份"
+        ],
         "summary": "故Toshiba，這顆沒搜尋到什麼災情，價格也便宜，大概可以買吧",
         "long_description": "故Toshiba，這顆沒搜尋到什麼災情，價格也便宜，大概可以買吧",
         "llm_description": "",
         "hero_image_url": "/images/products/2026-06-02-kioxia-1tb-usb-flash-drive.webp",
         "hero_alt": "Kioxia 1TB隨身碟",
         "category_id": "computer-3c",
-        "category_label": "電腦3C",
-        "channel_id": "pchome",
-        "channel_label": "PChome",
-        "tag_labels": [
-          "Kioxia",
-          "儲存備份"
-        ],
-        "price_label": "2490",
         "buy_url": "https://24h.pchome.com.tw/prod/DRAA5D-A900FDQCR",
         "fine_print": "價格與庫存以通路頁面為準。",
         "related_products": [
@@ -1410,20 +1410,20 @@
       "2026-06-02-msi-desktop-pc": {
         "id": "2026-06-02-msi-desktop-pc",
         "name": "MSI桌上型",
+        "category_label": "電腦3C",
+        "channel_label": "PChome",
+        "channel_id": "pchome",
+        "price_label": "29990",
+        "tag_labels": [
+          "桌面周邊",
+          "MSI"
+        ],
         "summary": "i5 / 32G / 1TB / 4060，還三年保固",
         "long_description": "i5 / 32G / 1TB / 4060，還三年保固",
         "llm_description": "",
         "hero_image_url": "/images/products/2026-06-02-msi-desktop-pc.webp",
         "hero_alt": "MSI桌上型",
         "category_id": "computer-3c",
-        "category_label": "電腦3C",
-        "channel_id": "pchome",
-        "channel_label": "PChome",
-        "tag_labels": [
-          "桌面周邊",
-          "MSI"
-        ],
-        "price_label": "29990",
         "buy_url": "https://24h.pchome.com.tw/prod/DSAANL-1900I1LVY",
         "fine_print": "價格與庫存以通路頁面為準。",
         "related_products": [
@@ -1453,20 +1453,20 @@
       "2026-06-02-philips-40b1u5600": {
         "id": "2026-06-02-philips-40b1u5600",
         "name": "Philips 40B1U5600",
+        "category_label": "電腦3C",
+        "channel_label": "PChome",
+        "channel_id": "pchome",
+        "price_label": "15000",
+        "tag_labels": [
+          "顯示器",
+          "Philips"
+        ],
         "summary": "40\" 3440*1440的螢幕，等於是32\" 2K的加寬版本，94ppi可以直接設100%來用",
         "long_description": "40\" 3440*1440的螢幕，等於是32\" 2K的加寬版本，94ppi可以直接設100%來用",
         "llm_description": "",
         "hero_image_url": "/images/products/2026-06-02-philips-40b1u5600.webp",
         "hero_alt": "Philips 40B1U5600",
         "category_id": "computer-3c",
-        "category_label": "電腦3C",
-        "channel_id": "pchome",
-        "channel_label": "PChome",
-        "tag_labels": [
-          "顯示器",
-          "Philips"
-        ],
-        "price_label": "15000",
         "buy_url": "https://24h.pchome.com.tw/prod/DSABQK-A900HLMQG?fq=/S/DSABQI",
         "fine_print": "價格與庫存以通路頁面為準。",
         "related_products": [
@@ -1496,20 +1496,20 @@
       "2026-06-02-samsung-m7-32-inch": {
         "id": "2026-06-02-samsung-m7-32-inch",
         "name": "Samsung M7 32吋",
+        "category_label": "電腦3C",
+        "channel_label": "PChome",
+        "channel_id": "pchome",
+        "price_label": "9900",
+        "tag_labels": [
+          "顯示器",
+          "Samsung"
+        ],
         "summary": "想要4K、想要USB C接筆電、或是用mac沒有dpi問題的話可以考慮這台",
         "long_description": "想要4K、想要USB C接筆電、或是用mac沒有dpi問題的話可以考慮這台",
         "llm_description": "",
         "hero_image_url": "/images/products/2026-06-02-samsung-m7-32-inch.webp",
         "hero_alt": "Samsung M7 32吋",
         "category_id": "computer-3c",
-        "category_label": "電腦3C",
-        "channel_id": "pchome",
-        "channel_label": "PChome",
-        "tag_labels": [
-          "顯示器",
-          "Samsung"
-        ],
-        "price_label": "9900",
         "buy_url": "https://24h.pchome.com.tw/prod/DPADEW-A900HXG0E",
         "fine_print": "價格與庫存以通路頁面為準。",
         "related_products": [
@@ -1539,20 +1539,20 @@
       "2026-06-02-synology-ds723-plus": {
         "id": "2026-06-02-synology-ds723-plus",
         "name": "Synology DS723+",
+        "category_label": "電腦3C",
+        "channel_label": "PChome",
+        "channel_id": "pchome",
+        "price_label": "15000",
+        "tag_labels": [
+          "儲存備份",
+          "Synology"
+        ],
         "summary": "最近硬碟單顆有16TB，小小一台2bay即使裝RAID 1也還是有16TB可用，應該遠超過大部分人的需求",
         "long_description": "最近硬碟單顆有16TB，小小一台2bay即使裝RAID 1也還是有16TB可用，應該遠超過大部分人的需求",
         "llm_description": "",
         "hero_image_url": "/images/products/2026-06-02-synology-ds723-plus.webp",
         "hero_alt": "Synology DS723+",
         "category_id": "computer-3c",
-        "category_label": "電腦3C",
-        "channel_id": "pchome",
-        "channel_label": "PChome",
-        "tag_labels": [
-          "儲存備份",
-          "Synology"
-        ],
-        "price_label": "15000",
         "buy_url": "https://24h.pchome.com.tw/prod/DRAG08-A900FWNSJ",
         "fine_print": "價格與庫存以通路頁面為準。",
         "related_products": [
@@ -1582,20 +1582,20 @@
       "2026-06-02-aibo-qi-power-bank": {
         "id": "2026-06-02-aibo-qi-power-bank",
         "name": "aibo Qi行動電源",
+        "category_label": "電腦3C",
+        "channel_label": "PChome",
+        "channel_id": "pchome",
+        "price_label": "899",
+        "tag_labels": [
+          "aibo",
+          "電源充電"
+        ],
         "summary": "我手邊的是之前捕蚊達人那一批的，看起來應該是一樣的",
         "long_description": "我手邊的是之前捕蚊達人那一批的，看起來應該是一樣的",
         "llm_description": "",
         "hero_image_url": "/images/products/2026-06-02-aibo-qi-power-bank.webp",
         "hero_alt": "aibo Qi行動電源",
         "category_id": "computer-3c",
-        "category_label": "電腦3C",
-        "channel_id": "pchome",
-        "channel_label": "PChome",
-        "tag_labels": [
-          "aibo",
-          "電源充電"
-        ],
-        "price_label": "899",
         "buy_url": "https://24h.pchome.com.tw/prod/DYAOE1-A900HDHBH?fq=/S/DYAOAU",
         "fine_print": "價格與庫存以通路頁面為準。",
         "related_products": [
@@ -1625,20 +1625,20 @@
       "2026-06-02-j5create-usb-c-charger": {
         "id": "2026-06-02-j5create-usb-c-charger",
         "name": "j5create豆腐頭",
+        "category_label": "電腦3C",
+        "channel_label": "PChome",
+        "channel_id": "pchome",
+        "price_label": "199",
+        "tag_labels": [
+          "j5create",
+          "電源充電"
+        ],
         "summary": "30W 1C1A，這顆特價會亂賣到199",
         "long_description": "30W 1C1A，這顆特價會亂賣到199",
         "llm_description": "",
         "hero_image_url": "/images/products/2026-06-02-j5create-usb-c-charger.webp",
         "hero_alt": "j5create豆腐頭",
         "category_id": "computer-3c",
-        "category_label": "電腦3C",
-        "channel_id": "pchome",
-        "channel_label": "PChome",
-        "tag_labels": [
-          "j5create",
-          "電源充電"
-        ],
-        "price_label": "199",
         "buy_url": "https://24h.pchome.com.tw/prod/DCAX3N-A900AD07K",
         "fine_print": "價格與庫存以通路頁面為準。",
         "related_products": [
@@ -1668,19 +1668,19 @@
       "2026-06-02-battery-charger": {
         "id": "2026-06-02-battery-charger",
         "name": "電池充電器",
+        "category_label": "電腦3C",
+        "channel_label": "PChome",
+        "channel_id": "pchome",
+        "price_label": "249",
+        "tag_labels": [
+          "電源充電"
+        ],
         "summary": "這個倒是可以不用找IKEA，這顆用豆腐頭輸入的，反而比插牆上好用",
         "long_description": "這個倒是可以不用找IKEA，這顆用豆腐頭輸入的，反而比插牆上好用",
         "llm_description": "",
         "hero_image_url": "/images/products/2026-06-02-battery-charger.webp",
         "hero_alt": "電池充電器",
         "category_id": "computer-3c",
-        "category_label": "電腦3C",
-        "channel_id": "pchome",
-        "channel_label": "PChome",
-        "tag_labels": [
-          "電源充電"
-        ],
-        "price_label": "249",
         "buy_url": "https://24h.pchome.com.tw/prod/DCABC4-A900BOW1X",
         "fine_print": "價格與庫存以通路頁面為準。",
         "related_products": [
@@ -1710,20 +1710,20 @@
       "2026-06-02-unifi-express": {
         "id": "2026-06-02-unifi-express",
         "name": "Unifi Express",
+        "category_label": "網路通訊",
+        "channel_label": "其他通路",
+        "channel_id": "other",
+        "price_label": "5799",
+        "tag_labels": [
+          "網路設備",
+          "Ubiquiti"
+        ],
         "summary": "你遲早是要裝Unifi全家桶的，為什麼不一開始就裝呢",
         "long_description": "你遲早是要裝Unifi全家桶的，為什麼不一開始就裝呢",
         "llm_description": "",
         "hero_image_url": "/images/products/2026-06-02-unifi-express.webp",
         "hero_alt": "Unifi Express",
         "category_id": "network",
-        "category_label": "網路通訊",
-        "channel_id": "other",
-        "channel_label": "其他通路",
-        "tag_labels": [
-          "網路設備",
-          "Ubiquiti"
-        ],
-        "price_label": "5799",
         "buy_url": "https://tw.store.ui.com/tw/zh-tw/category/cloud-gateways-wifi-integrated/products/ux",
         "fine_print": "價格與庫存以通路頁面為準。",
         "related_products": [
@@ -1753,20 +1753,20 @@
       "2026-06-02-zyxel-xgs1250-12": {
         "id": "2026-06-02-zyxel-xgs1250-12",
         "name": "Zyxel XGS1250-12",
+        "category_label": "網路通訊",
+        "channel_label": "PChome",
+        "channel_id": "pchome",
+        "price_label": "9000",
+        "tag_labels": [
+          "網路設備",
+          "Zyxel"
+        ],
         "summary": "應該是目前最好買的10G switch，一孔SFP+、三孔Multigig、八孔gbe，應該這台就可以把全家的網路線都插在上面了",
         "long_description": "應該是目前最好買的10G switch，一孔SFP+、三孔Multigig、八孔gbe，應該這台就可以把全家的網路線都插在上面了",
         "llm_description": "",
         "hero_image_url": "/images/products/2026-06-02-zyxel-xgs1250-12.webp",
         "hero_alt": "Zyxel XGS1250-12",
         "category_id": "network",
-        "category_label": "網路通訊",
-        "channel_id": "pchome",
-        "channel_label": "PChome",
-        "tag_labels": [
-          "網路設備",
-          "Zyxel"
-        ],
-        "price_label": "9000",
         "buy_url": "https://24h.pchome.com.tw/prod/DRAF0I-A900B7QHW",
         "fine_print": "價格與庫存以通路頁面為準。",
         "related_products": [
@@ -1796,20 +1796,20 @@
       "2026-06-02-apple-tv-4k": {
         "id": "2026-06-02-apple-tv-4k",
         "name": "Apple TV 4K",
+        "category_label": "影音劇院",
+        "channel_label": "PChome",
+        "channel_id": "pchome",
+        "price_label": "4490",
+        "tag_labels": [
+          "Apple",
+          "訊源"
+        ],
         "summary": "我有一個朋友他一直覺得「機上盒為什麼只能買Apple TV或FireTV呢，一定有更便宜的選項」  然後他就前後買個至少十隻便宜的機上盒，也多了十隻電子垃圾",
         "long_description": "我有一個朋友他一直覺得「機上盒為什麼只能買Apple TV或FireTV呢，一定有更便宜的選項」  然後他就前後買個至少十隻便宜的機上盒，也多了十隻電子垃圾",
         "llm_description": "",
         "hero_image_url": "/images/products/2026-06-02-apple-tv-4k.webp",
         "hero_alt": "Apple TV 4K",
         "category_id": "av-theater",
-        "category_label": "影音劇院",
-        "channel_id": "pchome",
-        "channel_label": "PChome",
-        "tag_labels": [
-          "Apple",
-          "訊源"
-        ],
-        "price_label": "4490",
         "buy_url": "https://24h.pchome.com.tw/prod/DYAJFN-1900H1P8W",
         "fine_print": "價格與庫存以通路頁面為準。",
         "related_products": [
@@ -1839,20 +1839,20 @@
       "2026-06-02-benq-e43-735": {
         "id": "2026-06-02-benq-e43-735",
         "name": "BenQ E43-735",
+        "category_label": "影音劇院",
+        "channel_label": "PChome",
+        "channel_id": "pchome",
+        "price_label": "10999",
+        "tag_labels": [
+          "BenQ",
+          "顯示器"
+        ],
         "summary": "當然43\"的也是可以看BenQ，現在也只賣11k",
         "long_description": "當然43\"的也是可以看BenQ，現在也只賣11k",
         "llm_description": "",
         "hero_image_url": "/images/products/2026-06-02-benq-e43-735.webp",
         "hero_alt": "BenQ E43-735",
         "category_id": "av-theater",
-        "category_label": "影音劇院",
-        "channel_id": "pchome",
-        "channel_label": "PChome",
-        "tag_labels": [
-          "BenQ",
-          "顯示器"
-        ],
-        "price_label": "10999",
         "buy_url": "https://24h.pchome.com.tw/prod/DPAD0O-1900GHE37?fq=/S/DPADTK",
         "fine_print": "價格與庫存以通路頁面為準。",
         "related_products": [
@@ -1882,20 +1882,20 @@
       "2026-06-02-benq-e55-735": {
         "id": "2026-06-02-benq-e55-735",
         "name": "BenQ E55-735",
+        "category_label": "影音劇院",
+        "channel_label": "PChome",
+        "channel_id": "pchome",
+        "price_label": "13999",
+        "tag_labels": [
+          "BenQ",
+          "顯示器"
+        ],
         "summary": "BenQ 55\"也低於15k了，而且還有Android TV",
         "long_description": "BenQ 55\"也低於15k了，而且還有Android TV",
         "llm_description": "",
         "hero_image_url": "/images/products/2026-06-02-benq-e55-735.webp",
         "hero_alt": "BenQ E55-735",
         "category_id": "av-theater",
-        "category_label": "影音劇院",
-        "channel_id": "pchome",
-        "channel_label": "PChome",
-        "tag_labels": [
-          "BenQ",
-          "顯示器"
-        ],
-        "price_label": "13999",
         "buy_url": "https://24h.pchome.com.tw/prod/DPAD0O-1900GHE46?fq=/S/DPAD0O",
         "fine_print": "價格與庫存以通路頁面為準。",
         "related_products": [
@@ -1925,20 +1925,20 @@
       "2026-06-02-bose-qc45": {
         "id": "2026-06-02-bose-qc45",
         "name": "Bose QC45",
+        "category_label": "影音劇院",
+        "channel_label": "PChome",
+        "channel_id": "pchome",
+        "price_label": "8000",
+        "tag_labels": [
+          "Bose",
+          "耳機"
+        ],
         "summary": "後來出了新的Ultra跟QC（沒有數字），我還沒去試聽",
         "long_description": "後來出了新的Ultra跟QC（沒有數字），我還沒去試聽",
         "llm_description": "",
         "hero_image_url": "/images/products/2026-06-02-bose-qc45.webp",
         "hero_alt": "Bose QC45",
         "category_id": "av-theater",
-        "category_label": "影音劇院",
-        "channel_id": "pchome",
-        "channel_label": "PChome",
-        "tag_labels": [
-          "Bose",
-          "耳機"
-        ],
-        "price_label": "8000",
         "buy_url": "https://24h.pchome.com.tw/prod/DGCT18-A900GN5LD",
         "fine_print": "價格與庫存以通路頁面為準。",
         "related_products": [
@@ -1968,21 +1968,21 @@
       "2026-06-02-elac-connex-dcb41": {
         "id": "2026-06-02-elac-connex-dcb41",
         "name": "ELAC ConneX DCB41",
+        "category_label": "影音劇院",
+        "channel_label": "PChome",
+        "channel_id": "pchome",
+        "price_label": "大概16000",
+        "tag_labels": [
+          "線材轉接",
+          "ELAC",
+          "喇叭"
+        ],
         "summary": "這是有HDMI ARC的主動式喇叭，最適合拿來當電視喇叭",
         "long_description": "這是有HDMI ARC的主動式喇叭，最適合拿來當電視喇叭",
         "llm_description": "",
         "hero_image_url": "/images/products/2026-06-02-elac-connex-dcb41.webp",
         "hero_alt": "ELAC ConneX DCB41",
         "category_id": "av-theater",
-        "category_label": "影音劇院",
-        "channel_id": "pchome",
-        "channel_label": "PChome",
-        "tag_labels": [
-          "線材轉接",
-          "ELAC",
-          "喇叭"
-        ],
-        "price_label": "大概16000",
         "buy_url": "https://24h.pchome.com.tw/prod/DMAAH8-A900HVR8U",
         "fine_print": "價格與庫存以通路頁面為準。",
         "related_products": [
@@ -2012,20 +2012,20 @@
       "2026-06-02-fibbr-fiber-hdmi-cable": {
         "id": "2026-06-02-fibbr-fiber-hdmi-cable",
         "name": "FIBBR光纖HDMI線",
+        "category_label": "影音劇院",
+        "channel_label": "Amazon US",
+        "channel_id": "amazonus",
+        "price_label": "20~30鎂",
+        "tag_labels": [
+          "線材轉接",
+          "FIBBR"
+        ],
         "summary": "光纖HDMI線可以減少很多要壞不壞的靈異現象，而且他現在入門款賣的也很便宜，三條就免運了",
         "long_description": "光纖HDMI線可以減少很多要壞不壞的靈異現象，而且他現在入門款賣的也很便宜，三條就免運了",
         "llm_description": "",
         "hero_image_url": "/images/products/2026-06-02-fibbr-fiber-hdmi-cable.webp",
         "hero_alt": "FIBBR光纖HDMI線",
         "category_id": "av-theater",
-        "category_label": "影音劇院",
-        "channel_id": "amazonus",
-        "channel_label": "Amazon US",
-        "tag_labels": [
-          "線材轉接",
-          "FIBBR"
-        ],
-        "price_label": "20~30鎂",
         "buy_url": "https://www.amazon.com/Cable-FIBBR-48Gbps-Compatible-Blu-ray/dp/B09KZ435N6",
         "fine_print": "價格與庫存以通路頁面為準。",
         "related_products": [
@@ -2055,20 +2055,20 @@
       "2026-06-02-apple-homepod-large": {
         "id": "2026-06-02-apple-homepod-large",
         "name": "Homepod（大）",
+        "category_label": "影音劇院",
+        "channel_label": "PChome",
+        "channel_id": "pchome",
+        "price_label": "22000",
+        "tag_labels": [
+          "Apple",
+          "喇叭"
+        ],
         "summary": "新的Apple TV可以把Homepod拿來當電視喇叭，兩萬多塊範圍我覺得很難有對手",
         "long_description": "新的Apple TV可以把Homepod拿來當電視喇叭，兩萬多塊範圍我覺得很難有對手",
         "llm_description": "",
         "hero_image_url": "/images/products/2026-06-02-apple-homepod-large.webp",
         "hero_alt": "Homepod（大）",
         "category_id": "av-theater",
-        "category_label": "影音劇院",
-        "channel_id": "pchome",
-        "channel_label": "PChome",
-        "tag_labels": [
-          "Apple",
-          "喇叭"
-        ],
-        "price_label": "22000",
         "buy_url": "https://24h.pchome.com.tw/prod/DYAJKI-1900GB142",
         "fine_print": "價格與庫存以通路頁面為準。",
         "related_products": [
@@ -2098,20 +2098,20 @@
       "2026-06-02-lg-c4-65-inch-oled": {
         "id": "2026-06-02-lg-c4-65-inch-oled",
         "name": "LG C4 65吋 OLED",
+        "category_label": "影音劇院",
+        "channel_label": "其他通路",
+        "channel_id": "other",
+        "price_label": "低於60000",
+        "tag_labels": [
+          "顯示器",
+          "LG"
+        ],
         "summary": "OLED面板的話還是LG比較便宜，不然就是要賭人品買台牌或匪牌",
         "long_description": "OLED面板的話還是LG比較便宜，不然就是要賭人品買台牌或匪牌",
         "llm_description": "",
         "hero_image_url": "/images/products/2026-06-02-lg-c4-65-inch-oled.webp",
         "hero_alt": "LG C4 65吋 OLED",
         "category_id": "av-theater",
-        "category_label": "影音劇院",
-        "channel_id": "other",
-        "channel_label": "其他通路",
-        "tag_labels": [
-          "顯示器",
-          "LG"
-        ],
-        "price_label": "低於60000",
         "buy_url": "https://www.3c3c.com.tw/Shop/itemDetail.aspx?mNo1=OLED65C4PTA&m=6&p=60",
         "fine_print": "價格與庫存以通路頁面為準。",
         "related_products": [
@@ -2141,20 +2141,20 @@
       "2026-06-02-sennheiser-ambeo-max": {
         "id": "2026-06-02-sennheiser-ambeo-max",
         "name": "Sennheiser Ambeo Max",
+        "category_label": "影音劇院",
+        "channel_label": "PChome",
+        "channel_id": "pchome",
+        "price_label": "84900",
+        "tag_labels": [
+          "Sennheiser",
+          "喇叭"
+        ],
         "summary": "Soundbar唯一推薦，看片聽音樂都可以，就是價錢不夠可愛，如果有飛美國的話可以考慮帶一組",
         "long_description": "Soundbar唯一推薦，看片聽音樂都可以，就是價錢不夠可愛，如果有飛美國的話可以考慮帶一組",
         "llm_description": "",
         "hero_image_url": "/images/products/2026-06-02-sennheiser-ambeo-max.webp",
         "hero_alt": "Sennheiser Ambeo Max",
         "category_id": "av-theater",
-        "category_label": "影音劇院",
-        "channel_id": "pchome",
-        "channel_label": "PChome",
-        "tag_labels": [
-          "Sennheiser",
-          "喇叭"
-        ],
-        "price_label": "84900",
         "buy_url": "https://24h.pchome.com.tw/prod/DMAAEE-A900GPR35",
         "fine_print": "價格與庫存以通路頁面為準。",
         "related_products": [
@@ -2184,20 +2184,20 @@
       "2026-06-02-sharp-65-inch-xled": {
         "id": "2026-06-02-sharp-65-inch-xled",
         "name": "Sharp 65吋 XLED",
+        "category_label": "影音劇院",
+        "channel_label": "PChome",
+        "channel_id": "pchome",
+        "price_label": "43000",
+        "tag_labels": [
+          "顯示器",
+          "Sharp"
+        ],
         "summary": "如果不想買OLED的話，現在Sharp XLED應該是最好的選擇",
         "long_description": "如果不想買OLED的話，現在Sharp XLED應該是最好的選擇",
         "llm_description": "",
         "hero_image_url": "/images/products/2026-06-02-sharp-65-inch-xled.webp",
         "hero_alt": "Sharp 65吋 XLED",
         "category_id": "av-theater",
-        "category_label": "影音劇院",
-        "channel_id": "pchome",
-        "channel_label": "PChome",
-        "tag_labels": [
-          "顯示器",
-          "Sharp"
-        ],
-        "price_label": "43000",
         "buy_url": "https://24h.pchome.com.tw/prod/DPADN9-A900HQHS6?fq=/S/DPADN9",
         "fine_print": "價格與庫存以通路頁面為準。",
         "related_products": [
@@ -2227,20 +2227,20 @@
       "2026-06-02-blueair-3250-air-purifier": {
         "id": "2026-06-02-blueair-3250-air-purifier",
         "name": "Blueair 3250空氣清淨機",
+        "category_label": "小家電",
+        "channel_label": "PChome",
+        "channel_id": "pchome",
+        "price_label": "一台4400",
+        "tag_labels": [
+          "空氣調節",
+          "Blueair"
+        ],
         "summary": "這台最近不知道為什麼賣到一台4400左右，有想要的話可以看看",
         "long_description": "這台最近不知道為什麼賣到一台4400左右，有想要的話可以看看",
         "llm_description": "",
         "hero_image_url": "/images/products/2026-06-02-blueair-3250-air-purifier.webp",
         "hero_alt": "Blueair 3250空氣清淨機",
         "category_id": "small-appliance",
-        "category_label": "小家電",
-        "channel_id": "pchome",
-        "channel_label": "PChome",
-        "tag_labels": [
-          "空氣調節",
-          "Blueair"
-        ],
-        "price_label": "一台4400",
         "buy_url": "https://24h.pchome.com.tw/prod/DMAUE4-1900HSSKV",
         "fine_print": "價格與庫存以通路頁面為準。",
         "related_products": [
@@ -2270,20 +2270,20 @@
       "2026-06-02-electrolux-vacuum-cleaner": {
         "id": "2026-06-02-electrolux-vacuum-cleaner",
         "name": "Electrolux吸塵器",
+        "category_label": "小家電",
+        "channel_label": "Costco",
+        "channel_id": "costco",
+        "price_label": "11999",
+        "tag_labels": [
+          "清潔",
+          "Electrolux"
+        ],
         "summary": "這支的本體跟Q9是一樣的，還多了拖把吸頭，另一組有拖把水桶的也可以考慮  特價的時候會賣到9999，有看到的話請把握機會",
         "long_description": "這支的本體跟Q9是一樣的，還多了拖把吸頭，另一組有拖把水桶的也可以考慮  特價的時候會賣到9999，有看到的話請把握機會",
         "llm_description": "",
         "hero_image_url": "/images/products/2026-06-02-electrolux-vacuum-cleaner.webp",
         "hero_alt": "Electrolux吸塵器",
         "category_id": "small-appliance",
-        "category_label": "小家電",
-        "channel_id": "costco",
-        "channel_label": "Costco",
-        "tag_labels": [
-          "清潔",
-          "Electrolux"
-        ],
-        "price_label": "11999",
         "buy_url": "https://www.costco.com.tw/Appliances/Vacuums-Floor-Care/Vacuums/Electrolux-Cordless-Wet-Dry-Vacuum-Cleaner-EFS71423/p/141934",
         "fine_print": "價格與庫存以通路頁面為準。",
         "related_products": [
@@ -2313,20 +2313,20 @@
       "2026-06-02-hitachi-rd-14fr": {
         "id": "2026-06-02-hitachi-rd-14fr",
         "name": "Hitachi RD-14FR",
+        "category_label": "小家電",
+        "channel_label": "PChome",
+        "channel_id": "pchome",
+        "price_label": "5999",
+        "tag_labels": [
+          "空氣調節",
+          "Hitachi"
+        ],
         "summary": "日立這系列最近大概降了20%，現在應該不需要考慮其他牌子",
         "long_description": "日立這系列最近大概降了20%，現在應該不需要考慮其他牌子",
         "llm_description": "",
         "hero_image_url": "/images/products/2026-06-02-hitachi-rd-14fr.webp",
         "hero_alt": "Hitachi RD-14FR",
         "category_id": "small-appliance",
-        "category_label": "小家電",
-        "channel_id": "pchome",
-        "channel_label": "PChome",
-        "tag_labels": [
-          "空氣調節",
-          "Hitachi"
-        ],
-        "price_label": "5999",
         "buy_url": "https://24h.pchome.com.tw/prod/DMBQ01-A900GSFE3",
         "fine_print": "價格與庫存以通路頁面為準。",
         "related_products": [
@@ -2356,20 +2356,20 @@
       "2026-06-02-iris-ohyama-ceiling-light-standard": {
         "id": "2026-06-02-iris-ohyama-ceiling-light-standard",
         "name": "Iris吸頂燈（並）",
+        "category_label": "小家電",
+        "channel_label": "Costco",
+        "channel_id": "costco",
+        "price_label": "2699",
+        "tag_labels": [
+          "IRIS OHYAMA",
+          "照明"
+        ],
         "summary": "日規吸頂燈真的很棒，可以用遙控調光調色而且還快拆，睡前都不需要爬起來關燈",
         "long_description": "日規吸頂燈真的很棒，可以用遙控調光調色而且還快拆，睡前都不需要爬起來關燈",
         "llm_description": "",
         "hero_image_url": "/images/products/2026-06-02-iris-ohyama-ceiling-light-standard.webp",
         "hero_alt": "Iris吸頂燈（並）",
         "category_id": "small-appliance",
-        "category_label": "小家電",
-        "channel_id": "costco",
-        "channel_label": "Costco",
-        "tag_labels": [
-          "IRIS OHYAMA",
-          "照明"
-        ],
-        "price_label": "2699",
         "buy_url": "https://www.costco.com.tw/Home-Improvement/Lighting/Lighting-Light-Bulbs/IRIS-OHYAMA-LED-Ceiling-Light-CL12DL-MFUCT/p/121629",
         "fine_print": "價格與庫存以通路頁面為準。",
         "related_products": [
@@ -2399,20 +2399,20 @@
       "2026-06-02-iris-ohyama-premium-ceiling-light": {
         "id": "2026-06-02-iris-ohyama-premium-ceiling-light",
         "name": "Iris高階吸頂燈",
+        "category_label": "小家電",
+        "channel_label": "Amazon JP",
+        "channel_id": "amazonjp",
+        "price_label": "￥20000",
+        "tag_labels": [
+          "IRIS OHYAMA",
+          "照明"
+        ],
         "summary": "這顆是導光板的高階款，水平方向的擴散比較強，可以減少房間角落太暗的問題",
         "long_description": "這顆是導光板的高階款，水平方向的擴散比較強，可以減少房間角落太暗的問題",
         "llm_description": "",
         "hero_image_url": "/images/products/2026-06-02-iris-ohyama-premium-ceiling-light.webp",
         "hero_alt": "Iris高階吸頂燈",
         "category_id": "small-appliance",
-        "category_label": "小家電",
-        "channel_id": "amazonjp",
-        "channel_label": "Amazon JP",
-        "tag_labels": [
-          "IRIS OHYAMA",
-          "照明"
-        ],
-        "price_label": "￥20000",
         "buy_url": "https://www.amazon.co.jp/dp/B09923R2X3",
         "fine_print": "價格與庫存以通路頁面為準。",
         "related_products": [
@@ -2442,22 +2442,22 @@
       "2026-06-02-kohler-bathroom-heater": {
         "id": "2026-06-02-kohler-bathroom-heater",
         "name": "Kohler暖風機",
-        "summary": "他們家的暖風機面板非常好看，而且無線遙控款才賣一萬出頭，你浴室有拉220V的話可以考慮",
-        "long_description": "他們家的暖風機面板非常好看，而且無線遙控款才賣一萬出頭，你浴室有拉220V的話可以考慮",
-        "llm_description": "",
-        "hero_image_url": "/images/products/2026-06-02-kohler-bathroom-heater.webp",
-        "hero_alt": "Kohler暖風機",
-        "category_id": "small-appliance",
         "category_label": "小家電",
-        "channel_id": "other",
         "channel_label": "其他通路",
+        "channel_id": "other",
+        "price_label": "10900",
         "tag_labels": [
           "空氣調節",
           "衛浴",
           "固定安裝",
           "Kohler"
         ],
-        "price_label": "10900",
+        "summary": "他們家的暖風機面板非常好看，而且無線遙控款才賣一萬出頭，你浴室有拉220V的話可以考慮",
+        "long_description": "他們家的暖風機面板非常好看，而且無線遙控款才賣一萬出頭，你浴室有拉220V的話可以考慮",
+        "llm_description": "",
+        "hero_image_url": "/images/products/2026-06-02-kohler-bathroom-heater.webp",
+        "hero_alt": "Kohler暖風機",
+        "category_id": "small-appliance",
         "buy_url": "https://shop.kohler.com.tw/30x30cm-1/",
         "fine_print": "價格與庫存以通路頁面為準。",
         "related_products": [
@@ -2487,20 +2487,20 @@
       "2026-06-02-kolin-ceramic-heater": {
         "id": "2026-06-02-kolin-ceramic-heater",
         "name": "Kolin 電暖器",
+        "category_label": "小家電",
+        "channel_label": "PChome",
+        "channel_id": "pchome",
+        "price_label": "1180",
+        "tag_labels": [
+          "空氣調節",
+          "Kolin"
+        ],
         "summary": "暖氣我是比較推陶瓷式的啦，體積小、比較便宜、不會亮、而且還有風扇強制對流，暖房效果比看起來的更好",
         "long_description": "暖氣我是比較推陶瓷式的啦，體積小、比較便宜、不會亮、而且還有風扇強制對流，暖房效果比看起來的更好",
         "llm_description": "",
         "hero_image_url": "/images/products/2026-06-02-kolin-ceramic-heater.webp",
         "hero_alt": "Kolin 電暖器",
         "category_id": "small-appliance",
-        "category_label": "小家電",
-        "channel_id": "pchome",
-        "channel_label": "PChome",
-        "tag_labels": [
-          "空氣調節",
-          "Kolin"
-        ],
-        "price_label": "1180",
         "buy_url": "https://24h.pchome.com.tw/prod/DMAZ0F-A900H16LY",
         "fine_print": "價格與庫存以通路頁面為準。",
         "related_products": [
@@ -2530,20 +2530,20 @@
       "2026-06-02-lixil-bidet-seat": {
         "id": "2026-06-02-lixil-bidet-seat",
         "name": "Lixil免治馬桶座",
+        "category_label": "小家電",
+        "channel_label": "Amazon JP",
+        "channel_id": "amazonjp",
+        "price_label": "￥42000",
+        "tag_labels": [
+          "衛浴",
+          "LIXIL"
+        ],
         "summary": "TOTO的最近在amazon上價錢很亂，相較之下Lixil的比較合理",
         "long_description": "TOTO的最近在amazon上價錢很亂，相較之下Lixil的比較合理",
         "llm_description": "",
         "hero_image_url": "/images/products/2026-06-02-lixil-bidet-seat.webp",
         "hero_alt": "Lixil免治馬桶座",
         "category_id": "small-appliance",
-        "category_label": "小家電",
-        "channel_id": "amazonjp",
-        "channel_label": "Amazon JP",
-        "tag_labels": [
-          "衛浴",
-          "LIXIL"
-        ],
-        "price_label": "￥42000",
         "buy_url": "https://amzn.asia/d/2Bgf6KR",
         "fine_print": "價格與庫存以通路頁面為準。",
         "related_products": [
@@ -2573,21 +2573,21 @@
       "2026-06-02-panasonic-nn-bs607": {
         "id": "2026-06-02-panasonic-nn-bs607",
         "name": "Panasonic NN-BS607",
+        "category_label": "小家電",
+        "channel_label": "PChome",
+        "channel_id": "pchome",
+        "price_label": "12900",
+        "tag_labels": [
+          "桌上型",
+          "廚房",
+          "Panasonic"
+        ],
         "summary": "別管什麼小烤箱了，直上水波爐吧",
         "long_description": "別管什麼小烤箱了，直上水波爐吧",
         "llm_description": "",
         "hero_image_url": "/images/products/2026-06-02-panasonic-nn-bs607.webp",
         "hero_alt": "Panasonic NN-BS607",
         "category_id": "small-appliance",
-        "category_label": "小家電",
-        "channel_id": "pchome",
-        "channel_label": "PChome",
-        "tag_labels": [
-          "桌上型",
-          "廚房",
-          "Panasonic"
-        ],
-        "price_label": "12900",
         "buy_url": "https://24h.pchome.com.tw/prod/DMBJ02-A900HB5FS",
         "fine_print": "價格與庫存以通路頁面為準。",
         "related_products": [
@@ -2617,21 +2617,21 @@
       "2026-06-02-panasonic-np-th4": {
         "id": "2026-06-02-panasonic-np-th4",
         "name": "Panasonic NP-TH4",
+        "category_label": "小家電",
+        "channel_label": "PChome",
+        "channel_id": "pchome",
+        "price_label": "21000",
+        "tag_labels": [
+          "桌上型",
+          "廚房",
+          "Panasonic"
+        ],
         "summary": "桌面型洗碗機只有這台可以買了（認真",
         "long_description": "桌面型洗碗機只有這台可以買了（認真",
         "llm_description": "",
         "hero_image_url": "/images/products/2026-06-02-panasonic-np-th4.webp",
         "hero_alt": "Panasonic NP-TH4",
         "category_id": "small-appliance",
-        "category_label": "小家電",
-        "channel_id": "pchome",
-        "channel_label": "PChome",
-        "tag_labels": [
-          "桌上型",
-          "廚房",
-          "Panasonic"
-        ],
-        "price_label": "21000",
         "buy_url": "https://24h.pchome.com.tw/prod/DMBR1P-A900GT5EO",
         "fine_print": "價格與庫存以通路頁面為準。",
         "related_products": [
@@ -2661,21 +2661,21 @@
       "2026-06-02-panasonic-sr-kt069": {
         "id": "2026-06-02-panasonic-sr-kt069",
         "name": "Panasonic SR-KT069",
+        "category_label": "小家電",
+        "channel_label": "PChome",
+        "channel_id": "pchome",
+        "price_label": "5000",
+        "tag_labels": [
+          "桌上型",
+          "廚房",
+          "Panasonic"
+        ],
         "summary": "四人份小電鍋唯一推薦",
         "long_description": "四人份小電鍋唯一推薦",
         "llm_description": "",
         "hero_image_url": "/images/products/2026-06-02-panasonic-sr-kt069.webp",
         "hero_alt": "Panasonic SR-KT069",
         "category_id": "small-appliance",
-        "category_label": "小家電",
-        "channel_id": "pchome",
-        "channel_label": "PChome",
-        "tag_labels": [
-          "桌上型",
-          "廚房",
-          "Panasonic"
-        ],
-        "price_label": "5000",
         "buy_url": "https://24h.pchome.com.tw/prod/DMBI0H-A900AOX6V",
         "fine_print": "價格與庫存以通路頁面為準。",
         "related_products": [
@@ -2705,20 +2705,20 @@
       "2026-06-02-irobot-roomba-j7": {
         "id": "2026-06-02-irobot-roomba-j7",
         "name": "Roomba j7+",
+        "category_label": "小家電",
+        "channel_label": "PChome",
+        "channel_id": "pchome",
+        "price_label": "26000",
+        "tag_labels": [
+          "清潔",
+          "iRobot"
+        ],
         "summary": "應該是Roomba現行款式中最強的機種，現在跟我之前從amazon買的價格差不多了",
         "long_description": "應該是Roomba現行款式中最強的機種，現在跟我之前從amazon買的價格差不多了",
         "llm_description": "",
         "hero_image_url": "/images/products/2026-06-02-irobot-roomba-j7.webp",
         "hero_alt": "Roomba j7+",
         "category_id": "small-appliance",
-        "category_label": "小家電",
-        "channel_id": "pchome",
-        "channel_label": "PChome",
-        "tag_labels": [
-          "清潔",
-          "iRobot"
-        ],
-        "price_label": "26000",
         "buy_url": "https://24h.pchome.com.tw/prod/DMBL0J-A900DZHJ9",
         "fine_print": "價格與庫存以通路頁面為準。",
         "related_products": [
@@ -2748,21 +2748,21 @@
       "2026-06-02-sharp-xp10t": {
         "id": "2026-06-02-sharp-xp10t",
         "name": "Sharp XP10T",
+        "category_label": "小家電",
+        "channel_label": "PChome",
+        "channel_id": "pchome",
+        "price_label": "29900",
+        "tag_labels": [
+          "桌上型",
+          "廚房",
+          "Sharp"
+        ],
         "summary": "家裡如果有長輩怕微波爐的話，就直上XP10T，這台才有強調無微波調理功能（然後你還是可以自己拿他的微波功能來用",
         "long_description": "家裡如果有長輩怕微波爐的話，就直上XP10T，這台才有強調無微波調理功能（然後你還是可以自己拿他的微波功能來用",
         "llm_description": "",
         "hero_image_url": "/images/products/2026-06-02-sharp-xp10t.webp",
         "hero_alt": "Sharp XP10T",
         "category_id": "small-appliance",
-        "category_label": "小家電",
-        "channel_id": "pchome",
-        "channel_label": "PChome",
-        "tag_labels": [
-          "桌上型",
-          "廚房",
-          "Sharp"
-        ],
-        "price_label": "29900",
         "buy_url": "https://24h.pchome.com.tw/prod/DMBJ02-1900I5KFC",
         "fine_print": "價格與庫存以通路頁面為準。",
         "related_products": [
@@ -2792,20 +2792,20 @@
       "2026-06-02-toshiba-premium-ceiling-light": {
         "id": "2026-06-02-toshiba-premium-ceiling-light",
         "name": "Toshiba高階吸頂燈",
+        "category_label": "小家電",
+        "channel_label": "Amazon JP",
+        "channel_id": "amazonjp",
+        "price_label": "￥30000",
+        "tag_labels": [
+          "照明",
+          "Toshiba"
+        ],
         "summary": "這顆是演色力比較強的高階款，可惜不是以前那個羅浮宮級的了",
         "long_description": "這顆是演色力比較強的高階款，可惜不是以前那個羅浮宮級的了",
         "llm_description": "",
         "hero_image_url": "/images/products/2026-06-02-toshiba-premium-ceiling-light.webp",
         "hero_alt": "Toshiba高階吸頂燈",
         "category_id": "small-appliance",
-        "category_label": "小家電",
-        "channel_id": "amazonjp",
-        "channel_label": "Amazon JP",
-        "tag_labels": [
-          "照明",
-          "Toshiba"
-        ],
-        "price_label": "￥30000",
         "buy_url": "https://www.amazon.co.jp/dp/B0C9LYBKD3",
         "fine_print": "價格與庫存以通路頁面為準。",
         "related_products": [
@@ -2835,21 +2835,21 @@
       "2026-06-02-vibo-40l-oven": {
         "id": "2026-06-02-vibo-40l-oven",
         "name": "威寶40L烤箱",
+        "category_label": "小家電",
+        "channel_label": "momo",
+        "channel_id": "momo",
+        "price_label": "9000",
+        "tag_labels": [
+          "桌上型",
+          "廚房",
+          "Vibo"
+        ],
         "summary": "這是要認真烤麵包用的烤箱，價格不是走親民路線的",
         "long_description": "這是要認真烤麵包用的烤箱，價格不是走親民路線的",
         "llm_description": "",
         "hero_image_url": "/images/products/2026-06-02-vibo-40l-oven.webp",
         "hero_alt": "威寶40L烤箱",
         "category_id": "small-appliance",
-        "category_label": "小家電",
-        "channel_id": "momo",
-        "channel_label": "momo",
-        "tag_labels": [
-          "桌上型",
-          "廚房",
-          "Vibo"
-        ],
-        "price_label": "9000",
         "buy_url": "https://www.momoshop.com.tw/goods/GoodsDetail.jsp?i_code=11521511&fbclid=IwAR16a9uh8O9XNFHzk5BDybSfMkVZccfXvu-54vWPl8ZbC4aYLj9bkMI-NTQ",
         "fine_print": "價格與庫存以通路頁面為準。",
         "related_products": [
@@ -2879,21 +2879,21 @@
       "2026-06-02-zojirushi-nw-jw10": {
         "id": "2026-06-02-zojirushi-nw-jw10",
         "name": "象印NW-JW10",
+        "category_label": "小家電",
+        "channel_label": "Amazon JP",
+        "channel_id": "amazonjp",
+        "price_label": "￥45000",
+        "tag_labels": [
+          "桌上型",
+          "廚房",
+          "Zojirushi"
+        ],
         "summary": "這台的賣點是煮飯快、要清洗的零件少，不過煮起來還是略輸本炭釜",
         "long_description": "這台的賣點是煮飯快、要清洗的零件少，不過煮起來還是略輸本炭釜",
         "llm_description": "",
         "hero_image_url": "/images/products/2026-06-02-zojirushi-nw-jw10.webp",
         "hero_alt": "象印NW-JW10",
         "category_id": "small-appliance",
-        "category_label": "小家電",
-        "channel_id": "amazonjp",
-        "channel_label": "Amazon JP",
-        "tag_labels": [
-          "桌上型",
-          "廚房",
-          "Zojirushi"
-        ],
-        "price_label": "￥45000",
         "buy_url": "https://www.amazon.co.jp/dp/B089M6CRXJ",
         "fine_print": "價格與庫存以通路頁面為準。",
         "related_products": [
@@ -2923,20 +2923,20 @@
       "2026-06-02-fisher-paykel-dishdrawer": {
         "id": "2026-06-02-fisher-paykel-dishdrawer",
         "name": "Fisher&Paykel 抽屜式洗碗機",
+        "category_label": "大家電",
+        "channel_label": "PChome",
+        "channel_id": "pchome",
+        "price_label": "45000",
+        "tag_labels": [
+          "Fisher & Paykel",
+          "廚房"
+        ],
         "summary": "其實Panasonic也有抽屜式，但是台灣沒有進，日規的又太深比較麻煩，所以可以優先考慮這台",
         "long_description": "其實Panasonic也有抽屜式，但是台灣沒有進，日規的又太深比較麻煩，所以可以優先考慮這台",
         "llm_description": "",
         "hero_image_url": "/images/products/2026-06-02-fisher-paykel-dishdrawer.webp",
         "hero_alt": "Fisher&Paykel 抽屜式洗碗機",
         "category_id": "major-appliance",
-        "category_label": "大家電",
-        "channel_id": "pchome",
-        "channel_label": "PChome",
-        "tag_labels": [
-          "Fisher & Paykel",
-          "廚房"
-        ],
-        "price_label": "45000",
         "buy_url": "https://24h.pchome.com.tw/prod/DMBR24-A900GK0BS",
         "fine_print": "價格與庫存以通路頁面為準。",
         "related_products": [
@@ -2966,21 +2966,21 @@
       "2026-06-02-mitsubishi-electric-freezer": {
         "id": "2026-06-02-mitsubishi-electric-freezer",
         "name": "Mitsubishi 冷凍櫃",
+        "category_label": "大家電",
+        "channel_label": "PChome",
+        "channel_id": "pchome",
+        "price_label": "12000",
+        "tag_labels": [
+          "廚房",
+          "Mitsubishi Electric",
+          "冷藏冷凍"
+        ],
         "summary": "只是需要稍微擴充冷凍庫的話可以買這台，他身高比較低，上面還可以擺電鍋或水波爐",
         "long_description": "只是需要稍微擴充冷凍庫的話可以買這台，他身高比較低，上面還可以擺電鍋或水波爐",
         "llm_description": "",
         "hero_image_url": "/images/products/2026-06-02-mitsubishi-electric-freezer.webp",
         "hero_alt": "Mitsubishi 冷凍櫃",
         "category_id": "major-appliance",
-        "category_label": "大家電",
-        "channel_id": "pchome",
-        "channel_label": "PChome",
-        "tag_labels": [
-          "廚房",
-          "Mitsubishi Electric",
-          "冷藏冷凍"
-        ],
-        "price_label": "12000",
         "buy_url": "https://24h.pchome.com.tw/prod/DPAC34-A900H86CY",
         "fine_print": "價格與庫存以通路頁面為準。",
         "related_products": [
@@ -3010,20 +3010,20 @@
       "2026-06-02-panasonic-v150mdh": {
         "id": "2026-06-02-panasonic-v150mdh",
         "name": "Panasonic V150MDH",
+        "category_label": "大家電",
+        "channel_label": "PChome",
+        "channel_id": "pchome",
+        "price_label": "41000",
+        "tag_labels": [
+          "洗衣烘衣",
+          "Panasonic"
+        ],
         "summary": "總之洗衣機都現看Panasonic，這是自動加洗衣精的洗脫烘中最便宜的",
         "long_description": "總之洗衣機都現看Panasonic，這是自動加洗衣精的洗脫烘中最便宜的",
         "llm_description": "",
         "hero_image_url": "/images/products/2026-06-02-panasonic-v150mdh.webp",
         "hero_alt": "Panasonic V150MDH",
         "category_id": "major-appliance",
-        "category_label": "大家電",
-        "channel_id": "pchome",
-        "channel_label": "PChome",
-        "tag_labels": [
-          "洗衣烘衣",
-          "Panasonic"
-        ],
-        "price_label": "41000",
         "buy_url": "https://24h.pchome.com.tw/prod/DPAI1H-A900FQ5GC",
         "fine_print": "價格與庫存以通路頁面為準。",
         "related_products": [
@@ -3053,21 +3053,21 @@
       "2026-06-02-panasonic-freezer": {
         "id": "2026-06-02-panasonic-freezer",
         "name": "Panasonic 冷凍櫃",
+        "category_label": "大家電",
+        "channel_label": "PChome",
+        "channel_id": "pchome",
+        "price_label": "19000",
+        "tag_labels": [
+          "廚房",
+          "Panasonic",
+          "冷藏冷凍"
+        ],
         "summary": "這台跟普通的冰箱差不多大，買的時候要注意一下要放哪",
         "long_description": "這台跟普通的冰箱差不多大，買的時候要注意一下要放哪",
         "llm_description": "",
         "hero_image_url": "/images/products/2026-06-02-panasonic-freezer.webp",
         "hero_alt": "Panasonic 冷凍櫃",
         "category_id": "major-appliance",
-        "category_label": "大家電",
-        "channel_id": "pchome",
-        "channel_label": "PChome",
-        "tag_labels": [
-          "廚房",
-          "Panasonic",
-          "冷藏冷凍"
-        ],
-        "price_label": "19000",
         "buy_url": "https://24h.pchome.com.tw/prod/DPAC1T-A900ALMUG",
         "fine_print": "價格與庫存以通路頁面為準。",
         "related_products": [
@@ -3097,21 +3097,21 @@
       "2026-06-02-panasonic-japan-refrigerator": {
         "id": "2026-06-02-panasonic-japan-refrigerator",
         "name": "Panasonic 日規冰箱",
+        "category_label": "大家電",
+        "channel_label": "PChome",
+        "channel_id": "pchome",
+        "price_label": "67000",
+        "tag_labels": [
+          "廚房",
+          "Panasonic",
+          "冷藏冷凍"
+        ],
         "summary": "日規六門冰箱比較好買的是Pana、Hitachi、三菱，規格其實很像，我覺得都可以買",
         "long_description": "日規六門冰箱比較好買的是Pana、Hitachi、三菱，規格其實很像，我覺得都可以買",
         "llm_description": "",
         "hero_image_url": "/images/products/2026-06-02-panasonic-japan-refrigerator.webp",
         "hero_alt": "Panasonic 日規冰箱",
         "category_id": "major-appliance",
-        "category_label": "大家電",
-        "channel_id": "pchome",
-        "channel_label": "PChome",
-        "tag_labels": [
-          "廚房",
-          "Panasonic",
-          "冷藏冷凍"
-        ],
-        "price_label": "67000",
         "buy_url": "https://24h.pchome.com.tw/prod/DPAC74-A900BNXAJ",
         "fine_print": "價格與庫存以通路頁面為準。",
         "related_products": [
@@ -3141,20 +3141,20 @@
       "2026-06-02-toshiba-yd5000": {
         "id": "2026-06-02-toshiba-yd5000",
         "name": "Toshiba YD5000",
+        "category_label": "大家電",
+        "channel_label": "Amazon JP",
+        "channel_id": "amazonjp",
+        "price_label": "￥100000",
+        "tag_labels": [
+          "廚房",
+          "Toshiba"
+        ],
         "summary": "看得懂日文的話買水貨還是比較便宜，這台是次旗艦，而且amazon還免運費直接到你家",
         "long_description": "看得懂日文的話買水貨還是比較便宜，這台是次旗艦，而且amazon還免運費直接到你家",
         "llm_description": "",
         "hero_image_url": "/images/products/2026-06-02-toshiba-yd5000.webp",
         "hero_alt": "Toshiba YD5000",
         "category_id": "major-appliance",
-        "category_label": "大家電",
-        "channel_id": "amazonjp",
-        "channel_label": "Amazon JP",
-        "tag_labels": [
-          "廚房",
-          "Toshiba"
-        ],
-        "price_label": "￥100000",
         "buy_url": "https://amzn.asia/d/45791oT",
         "fine_print": "價格與庫存以通路頁面為準。",
         "related_products": [
@@ -3184,21 +3184,21 @@
       "2026-06-02-mitsubishi-heavy-industries-air-conditioner": {
         "id": "2026-06-02-mitsubishi-heavy-industries-air-conditioner",
         "name": "三菱重工冷氣",
+        "category_label": "大家電",
+        "channel_label": "PChome",
+        "channel_id": "pchome",
+        "price_label": "比較貴一點",
+        "tag_labels": [
+          "空調",
+          "固定安裝",
+          "Mitsubishi Heavy Industries"
+        ],
         "summary": "其實Panasonic、日立也都可以買，但是我要稱讚一下三菱重工的遙控器排程功能超級優秀",
         "long_description": "其實Panasonic、日立也都可以買，但是我要稱讚一下三菱重工的遙控器排程功能超級優秀",
         "llm_description": "",
         "hero_image_url": "/images/products/2026-06-02-mitsubishi-heavy-industries-air-conditioner.webp",
         "hero_alt": "三菱重工冷氣",
         "category_id": "major-appliance",
-        "category_label": "大家電",
-        "channel_id": "pchome",
-        "channel_label": "PChome",
-        "tag_labels": [
-          "空調",
-          "固定安裝",
-          "Mitsubishi Heavy Industries"
-        ],
-        "price_label": "比較貴一點",
         "buy_url": "https://24h.pchome.com.tw/store/DPAF4H",
         "fine_print": "價格與庫存以通路頁面為準。",
         "related_products": [
@@ -3228,20 +3228,20 @@
       "2026-06-02-arnest-nagikire-ou": {
         "id": "2026-06-02-arnest-nagikire-ou",
         "name": "Arnest 永切れ王",
+        "category_label": "生活百貨",
+        "channel_label": "Amazon JP",
+        "channel_id": "amazonjp",
+        "price_label": "￥3800",
+        "tag_labels": [
+          "Arnest",
+          "廚房"
+        ],
         "summary": "刀刃開鋸齒型的三德，我覺得切起來超級順手的",
         "long_description": "刀刃開鋸齒型的三德，我覺得切起來超級順手的",
         "llm_description": "",
         "hero_image_url": "/images/products/2026-06-02-arnest-nagikire-ou.webp",
         "hero_alt": "Arnest 永切れ王",
         "category_id": "household",
-        "category_label": "生活百貨",
-        "channel_id": "amazonjp",
-        "channel_label": "Amazon JP",
-        "tag_labels": [
-          "Arnest",
-          "廚房"
-        ],
-        "price_label": "￥3800",
         "buy_url": "https://amzn.asia/d/isJwOlO",
         "fine_print": "價格與庫存以通路頁面為準。",
         "related_products": [
@@ -3271,20 +3271,20 @@
       "2026-06-02-brita-water-filter-pitcher": {
         "id": "2026-06-02-brita-water-filter-pitcher",
         "name": "Brita",
+        "category_label": "生活百貨",
+        "channel_label": "PChome",
+        "channel_id": "pchome",
+        "price_label": "2200",
+        "tag_labels": [
+          "BRITA",
+          "廚房"
+        ],
         "summary": "Brita濾芯要注意一下特價，大概單價$166以下就可以買",
         "long_description": "Brita濾芯要注意一下特價，大概單價$166以下就可以買",
         "llm_description": "",
         "hero_image_url": "/images/products/2026-06-02-brita-water-filter-pitcher.webp",
         "hero_alt": "Brita",
         "category_id": "household",
-        "category_label": "生活百貨",
-        "channel_id": "pchome",
-        "channel_label": "PChome",
-        "tag_labels": [
-          "BRITA",
-          "廚房"
-        ],
-        "price_label": "2200",
         "buy_url": "https://24h.pchome.com.tw/prod/DEAY3A-A900GLY25",
         "fine_print": "價格與庫存以通路頁面為準。",
         "related_products": [
@@ -3314,21 +3314,21 @@
       "2026-06-02-kohler-familycare-bathroom-vanity": {
         "id": "2026-06-02-kohler-familycare-bathroom-vanity",
         "name": "Kohler FamilyCare浴櫃",
+        "category_label": "生活百貨",
+        "channel_label": "其他通路",
+        "channel_id": "other",
+        "price_label": "20000",
+        "tag_labels": [
+          "衛浴",
+          "固定安裝",
+          "Kohler"
+        ],
         "summary": "他們家的浴櫃組非常有趣，他的落水孔是在靠牆的地方，所以櫃子的抽屜可以做到2/3深度，中間也不會有奇怪的凹洞  不過水龍頭不要買他們家的，美規水管跟台灣習慣不同，出水量會比較小，還會害我被師傅罵（？",
         "long_description": "他們家的浴櫃組非常有趣，他的落水孔是在靠牆的地方，所以櫃子的抽屜可以做到2/3深度，中間也不會有奇怪的凹洞  不過水龍頭不要買他們家的，美規水管跟台灣習慣不同，出水量會比較小，還會害我被師傅罵（？",
         "llm_description": "",
         "hero_image_url": "/images/products/2026-06-02-kohler-familycare-bathroom-vanity.webp",
         "hero_alt": "Kohler FamilyCare浴櫃",
         "category_id": "household",
-        "category_label": "生活百貨",
-        "channel_id": "other",
-        "channel_label": "其他通路",
-        "tag_labels": [
-          "衛浴",
-          "固定安裝",
-          "Kohler"
-        ],
-        "price_label": "20000",
         "buy_url": "https://shop.kohler.com.tw/family-care-60cm/",
         "fine_print": "價格與庫存以通路頁面為準。",
         "related_products": [
@@ -3358,21 +3358,21 @@
       "2026-06-02-lion-nanox-detergent": {
         "id": "2026-06-02-lion-nanox-detergent",
         "name": "Lion Nanox洗衣精",
+        "category_label": "生活百貨",
+        "channel_label": "PChome",
+        "channel_id": "pchome",
+        "price_label": "1099",
+        "tag_labels": [
+          "清潔",
+          "日用品",
+          "Lion"
+        ],
         "summary": "今年Nanox One新版上市了，橘色的是標準款、紫色的強化殺菌、藍綠色的PRO全面強化，但是價錢都顯著的比去年貴",
         "long_description": "今年Nanox One新版上市了，橘色的是標準款、紫色的強化殺菌、藍綠色的PRO全面強化，但是價錢都顯著的比去年貴",
         "llm_description": "",
         "hero_image_url": "/images/products/2026-06-02-lion-nanox-detergent.webp",
         "hero_alt": "Lion Nanox洗衣精",
         "category_id": "household",
-        "category_label": "生活百貨",
-        "channel_id": "pchome",
-        "channel_label": "PChome",
-        "tag_labels": [
-          "清潔",
-          "日用品",
-          "Lion"
-        ],
-        "price_label": "1099",
         "buy_url": "https://24h.pchome.com.tw/prod/DAAK2J-1900H333K?fq=/S/DAAK2J",
         "fine_print": "價格與庫存以通路頁面為準。",
         "related_products": [
@@ -3402,21 +3402,21 @@
       "2026-06-02-toto-thermostatic-faucet": {
         "id": "2026-06-02-toto-thermostatic-faucet",
         "name": "TOTO恆溫水龍頭",
+        "category_label": "生活百貨",
+        "channel_label": "Amazon JP",
+        "channel_id": "amazonjp",
+        "price_label": "￥18000",
+        "tag_labels": [
+          "衛浴",
+          "固定安裝",
+          "TOTO"
+        ],
         "summary": "如果你家熱水器夠熱、但是洗澡的水溫不穩的話，通常裝上恆溫水龍頭就能得到有效的改善  而且他的把手一邊調溫度、另一邊調淋浴/龍頭，可以徹底杜絕調了水量溫度就變了的問題",
         "long_description": "如果你家熱水器夠熱、但是洗澡的水溫不穩的話，通常裝上恆溫水龍頭就能得到有效的改善  而且他的把手一邊調溫度、另一邊調淋浴/龍頭，可以徹底杜絕調了水量溫度就變了的問題",
         "llm_description": "",
         "hero_image_url": "/images/products/2026-06-02-toto-thermostatic-faucet.webp",
         "hero_alt": "TOTO恆溫水龍頭",
         "category_id": "household",
-        "category_label": "生活百貨",
-        "channel_id": "amazonjp",
-        "channel_label": "Amazon JP",
-        "tag_labels": [
-          "衛浴",
-          "固定安裝",
-          "TOTO"
-        ],
-        "price_label": "￥18000",
         "buy_url": "https://www.amazon.co.jp/dp/B0BNHWCWB4",
         "fine_print": "價格與庫存以通路頁面為準。",
         "related_products": [
@@ -3446,20 +3446,20 @@
       "2026-06-02-trusco-trunk-cargo": {
         "id": "2026-06-02-trusco-trunk-cargo",
         "name": "Trusco 物流箱",
+        "category_label": "生活百貨",
+        "channel_label": "Amazon JP",
+        "channel_id": "amazonjp",
+        "price_label": "￥1790",
+        "tag_labels": [
+          "收納整理",
+          "TRUSCO"
+        ],
         "summary": "從日本搬東西回來的好幫手，詳情請看下面參考資料",
         "long_description": "從日本搬東西回來的好幫手，詳情請看下面參考資料",
         "llm_description": "",
         "hero_image_url": "/images/products/2026-06-02-trusco-trunk-cargo.webp",
         "hero_alt": "Trusco 物流箱",
         "category_id": "household",
-        "category_label": "生活百貨",
-        "channel_id": "amazonjp",
-        "channel_label": "Amazon JP",
-        "tag_labels": [
-          "收納整理",
-          "TRUSCO"
-        ],
-        "price_label": "￥1790",
         "buy_url": "https://www.amazon.co.jp/dp/B002A5VPSO",
         "fine_print": "價格與庫存以通路頁面為準。",
         "related_products": [
@@ -3489,21 +3489,21 @@
       "2026-06-02-ohashi-koshihikari-rice": {
         "id": "2026-06-02-ohashi-koshihikari-rice",
         "name": "大橋牌越光米",
+        "category_label": "生活百貨",
+        "channel_label": "PChome",
+        "channel_id": "pchome",
+        "price_label": "125/kg",
+        "tag_labels": [
+          "食材",
+          "大橋牌",
+          "米食"
+        ],
         "summary": "他們每年新米都會有這種8包1kg的禮盒，小包裝就比較不用怕米潮掉",
         "long_description": "他們每年新米都會有這種8包1kg的禮盒，小包裝就比較不用怕米潮掉",
         "llm_description": "",
         "hero_image_url": "/images/products/2026-06-02-ohashi-koshihikari-rice.webp",
         "hero_alt": "大橋牌越光米",
         "category_id": "household",
-        "category_label": "生活百貨",
-        "channel_id": "pchome",
-        "channel_label": "PChome",
-        "tag_labels": [
-          "食材",
-          "大橋牌",
-          "米食"
-        ],
-        "price_label": "125/kg",
         "buy_url": "https://24h.pchome.com.tw/prod/DBBY0M-A900GMBY7",
         "fine_print": "價格與庫存以通路頁面為準。",
         "related_products": [
@@ -3533,21 +3533,21 @@
       "2026-06-02-fuli-milk-queen-rice": {
         "id": "2026-06-02-fuli-milk-queen-rice",
         "name": "富里牛奶皇后",
+        "category_label": "生活百貨",
+        "channel_label": "PChome",
+        "channel_id": "pchome",
+        "price_label": "200/kg",
+        "tag_labels": [
+          "食材",
+          "富里",
+          "米食"
+        ],
         "summary": "牛奶皇后是最好吃的台灣米，不服來辯",
         "long_description": "牛奶皇后是最好吃的台灣米，不服來辯",
         "llm_description": "",
         "hero_image_url": "/images/products/2026-06-02-fuli-milk-queen-rice.webp",
         "hero_alt": "富里牛奶皇后",
         "category_id": "household",
-        "category_label": "生活百貨",
-        "channel_id": "pchome",
-        "channel_label": "PChome",
-        "tag_labels": [
-          "食材",
-          "富里",
-          "米食"
-        ],
-        "price_label": "200/kg",
         "buy_url": "https://24h.pchome.com.tw/prod/DBBY0J-A900F81AW",
         "fine_print": "價格與庫存以通路頁面為準。",
         "related_products": [
@@ -3577,21 +3577,21 @@
       "2026-06-02-yamada-seiyu-sesame-chili-oil": {
         "id": "2026-06-02-yamada-seiyu-sesame-chili-oil",
         "name": "山田製油 胡麻辣油",
+        "category_label": "生活百貨",
+        "channel_label": "其他通路",
+        "channel_id": "other",
+        "price_label": "￥972",
+        "tag_labels": [
+          "食材",
+          "廚房",
+          "山田製油"
+        ],
         "summary": "雖然叫辣油但是其實不辣，而是超級香的香油  我都是回日本的時候在百貨公司超市補貨，會比第一名店便宜很多",
         "long_description": "雖然叫辣油但是其實不辣，而是超級香的香油  我都是回日本的時候在百貨公司超市補貨，會比第一名店便宜很多",
         "llm_description": "",
         "hero_image_url": "/images/products/2026-06-02-yamada-seiyu-sesame-chili-oil.webp",
         "hero_alt": "山田製油 胡麻辣油",
         "category_id": "household",
-        "category_label": "生活百貨",
-        "channel_id": "other",
-        "channel_label": "其他通路",
-        "tag_labels": [
-          "食材",
-          "廚房",
-          "山田製油"
-        ],
-        "price_label": "￥972",
         "buy_url": "https://shop.firstsuper.com.tw/products/%E5%B1%B1%E7%94%B0%E8%83%A1%E9%BA%BB%E8%BE%A3%E6%B2%B9",
         "fine_print": "價格與庫存以通路頁面為準。",
         "related_products": [
@@ -3621,21 +3621,21 @@
       "2026-06-02-asahi-ponzu": {
         "id": "2026-06-02-asahi-ponzu",
         "name": "旭ポンズ",
+        "category_label": "生活百貨",
+        "channel_label": "其他通路",
+        "channel_id": "other",
+        "price_label": "￥840",
+        "tag_labels": [
+          "旭ポンズ",
+          "食材",
+          "廚房"
+        ],
         "summary": "在黑門市場的時候被店員大姊推銷，從此一試成主顧的橘醋  大阪附近的話很好買，東京附近的話要找百貨公司超市或成城石井之類的",
         "long_description": "在黑門市場的時候被店員大姊推銷，從此一試成主顧的橘醋  大阪附近的話很好買，東京附近的話要找百貨公司超市或成城石井之類的",
         "llm_description": "",
         "hero_image_url": "/images/products/2026-06-02-asahi-ponzu.webp",
         "hero_alt": "旭ポンズ",
         "category_id": "household",
-        "category_label": "生活百貨",
-        "channel_id": "other",
-        "channel_label": "其他通路",
-        "tag_labels": [
-          "旭ポンズ",
-          "食材",
-          "廚房"
-        ],
-        "price_label": "￥840",
         "buy_url": "https://www.asahi-syokuhin.co.jp/product/ponzu",
         "fine_print": "價格與庫存以通路頁面為準。",
         "related_products": [
@@ -3665,21 +3665,21 @@
       "2026-06-02-kao-attack-zero": {
         "id": "2026-06-02-kao-attack-zero",
         "name": "花王 Attack Zero",
+        "category_label": "生活百貨",
+        "channel_label": "Costco",
+        "channel_id": "costco",
+        "price_label": "579",
+        "tag_labels": [
+          "清潔",
+          "日用品",
+          "Kao"
+        ],
         "summary": "Attack Zero的噴罐超級好用",
         "long_description": "Attack Zero的噴罐超級好用",
         "llm_description": "",
         "hero_image_url": "/images/products/2026-06-02-kao-attack-zero.webp",
         "hero_alt": "花王 Attack Zero",
         "category_id": "household",
-        "category_label": "生活百貨",
-        "channel_id": "costco",
-        "channel_label": "Costco",
-        "tag_labels": [
-          "清潔",
-          "日用品",
-          "Kao"
-        ],
-        "price_label": "579",
         "buy_url": "https://www.costco.com.tw/Household-Baby-Toys/Household-Essentials/Laundry-Care/Attack-ZERO-Laundry-Detergent-Drum-Type-400-g-Refill-2100-g/p/339031",
         "fine_print": "價格與庫存以通路頁面為準。",
         "related_products": [

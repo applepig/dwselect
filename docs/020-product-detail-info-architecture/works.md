@@ -31,3 +31,26 @@
 - Commit hygiene 註記：M3 改的 `product-card.vue`、`nuxt-smoke.test.ts` 與 sprint 019 未提交的視覺變更在同檔交錯 hunk，無法乾淨分離。
 
 ### M1 範圍校正（使用者指正）：同名不同行為的 `compareProducts`／`compareGuides` 也是 bad smell，不該放著。查證：search-index 的 `compareProducts` 排 date→name 並進 `documents` summary，等於搜尋 baseline 顯示順序；catalog 端是 category→date→name。使用者裁定「統一成單一 canonical comparator」而非改名保留差異——product 統一 category→date→name、guide date→name、tie-break 統一 `compareText`。**後果：搜尋 baseline 商品順序會改變（user-visible）**；search-index 既有測試需在 Red 階段更新為新順序，屬刻意行為變更，非 Green 階段作弊。
+
+## 2026-06-17
+
+### M4～M6 完成
+
+- M4：新增 `scripts/build-public-artifacts.ts` 作為正常 `build`／`generate` workflow 的 public artifact 入口；它只呼叫一次 `readPublicContentSource()`，再把同一份 source 交給 `buildSearchIndexFileFromSource()` 與 `buildPublicDiscoveryFilesFromSource()`。保留 `build:search-index` 與 `build:public-discovery` 作為單獨 CLI。
+- M5：重排 `app/components/product-detail.vue` 資訊架構為產品名稱 → 分類／通路 → 標籤 → 價格 → DW 怎麼說 → AI 怎麼說 → CTA → fine print；back button 移入 hero tile overlay，CSS 使用同一個 `--detail-back-inset` 控制上下與左右 inset。
+- M6：擴充 `public-discovery`／`nuxt-smoke`／`product-detail-back-navigation` 測試，鎖定 combined artifact wiring、單次 source read 結構、detail 欄位語意與 UI source order，避免 `dw_says`／`detail.description` 回歸。
+- Red 階段：先跑 `APP_URL=dwselect.toybox.local pnpm test tests/public-discovery.test.ts tests/search-index.test.ts tests/nuxt-smoke.test.ts tests/product-detail-back-navigation.test.ts`，如預期 6 個測試失敗（缺少 combined script、package wiring 未改、detail order/back button 未符合）。
+- 驗證結果：相關測試 4 files / 66 tests passed；完整 `pnpm test` 41 files / 309 tests passed；`pnpm lint` exit 0；`pnpm typecheck` exit 0；`pnpm generate` 成功產生 `.output/public`（僅 Vite／Rollup 既有 sourcemap／PURE annotation warnings）。
+- M7 驗收（coordinator）：實跑 `APP_URL=dwselect.toybox.local pnpm test` → 41 files / 309 tests passed；`pnpm lint`、`pnpm typecheck` 皆 exit 0；`pnpm generate` 成功，workflow 已走 `build:public-artifacts` 並產生 67 documents、62 products、2 guides、3 links；`node scripts/assert-runtime-google-sheet-clean.ts` exit 0。
+- agent-browser 驗收：使用既有瀏覽器 tab，透過 `https://dwselect.toybox.local/products/2026-06-02-adata-power-bank` 驗收 mobile 390x844 與 desktop 1440x1000。兩者皆可載入；detail DOM 順序為 title → meta → tags → price → DW → CTA → fine print；`llm_description` 為空時 AI 區塊不顯示；back button 相對 hero tile 皆為 top 12px／left 12px／44px。截圖：`/home/applepig/.agent-browser/tmp/screenshots/screenshot-1781632319236.png`、`/home/applepig/.agent-browser/tmp/screenshots/screenshot-1781632361995.png`。
+- 注意事項：agent-browser console 含先前 dev server HMR 歷史錯誤紀錄；本次重新開頁後 DOM、互動快照與座標檢查皆正常，未阻塞 M7 驗收。
+
+### UI hotfix：card 三行、taxonomy chips、DW 對比
+
+- 問題：iPad 首頁卡片原本 `product-name` 固定 2 行、`product-summary` 只顯示 1 行，短 title 會留下空白行且摘要內容不足；detail taxonomy 被拆成 channel badge、category badge、tag link 三套外觀；`DW 怎麼說` 使用 Nuxt UI primary subtle，在 light theme 橘字低可讀性。
+- 根因：卡片 line clamp 與 block-size 配置不符合「固定三行文字」預期；detail taxonomy 沒有共用 chip component；DW 區塊未以本站 token 明確指定 readable foreground/background。
+- 修復：新增 `TaxonomyChip` 共用外觀且由 caller 傳 `to`，避免硬寫路由；detail 以單一 row 排 category → channel → tags，其中 category 連 `/?category=...`、channel/tag 連 `/search?q=...`；卡片改為 title 1 行 + summary 2 行；DW 區塊改用 `--dw-panel-strong` + `--dw-text`。
+- 測試：先跑 `APP_URL=dwselect.toybox.local pnpm test tests/nuxt-smoke.test.ts` 看到 3 個預期失敗（缺 `TaxonomyChip`、detail row 未合併、卡片行數不符），修復後同檔 34 tests passed；完整 `pnpm test` 41 files / 310 tests passed；`pnpm lint`、`pnpm typecheck` 皆 exit 0。
+- agent-browser 驗收：iPad 834x1194 首頁第一張 card 實測 name 1 行（21.59px）、summary 2 行（44.63px）；detail taxonomy row 同列顯示 `電腦3C`、`PChome`、`ADATA`、`電源充電`，連結分別為 `/?category=computer-3c`、`/search?q=PChome`、`/search?q=ADATA`、`/search?q=電源充電`；light theme DW 區塊實測對比 15.51:1，通過 WCAG AA。截圖：`/home/applepig/.agent-browser/tmp/screenshots/screenshot-1781633410581.png`、`/home/applepig/.agent-browser/tmp/screenshots/screenshot-1781633448181.png`。
+- 校正：使用者指出首頁仍只有兩行，原因是前一版把「三行」誤解為 title + summary 合計三行；已改為 title 1 行、summary 本身 3 行。iPad 834x1194 重新實測前 5 張 card：summary height 66.95px、line-height 22.32px、`-webkit-line-clamp: 3`。驗證：`tests/nuxt-smoke.test.ts` 34 passed；完整 `pnpm test` 41 files / 310 tests passed；`pnpm lint`、`pnpm typecheck` 皆 exit 0。
+- 校正：使用者指出 detail back icon 沒有對齊在圓圈中央。agent-browser 量測確認 Nuxt UI `UButton` 預設 `padding: 6px` 且 `justify-content: normal`，造成 icon 水平中心偏左 5px；已在 `.detail-back` 明確設定 `display: inline-flex`、`align-items: center`、`justify-content: center`、`padding: 0`。修復後實測 button 44x44、icon 20x20、offset 12/12、center offset 0/0。驗證：`tests/nuxt-smoke.test.ts` + `tests/product-detail-back-navigation.test.ts` 36 passed；`pnpm lint`、`pnpm typecheck` 皆 exit 0。

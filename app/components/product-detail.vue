@@ -4,19 +4,19 @@
     class="product-detail-page"
     :data-product-id="detail.id"
   >
-    <UButton
-      class="detail-back"
-      icon="i-lucide-arrow-left"
-      color="neutral"
-      variant="ghost"
-      aria-label="返回"
-      @click="onBackClicked"
-    />
-
     <div
       class="detail-hero-tile"
       :style="{ 'view-transition-name': `product-image-${detail.id}` }"
     >
+      <UButton
+        class="detail-back"
+        icon="i-lucide-arrow-left"
+        color="neutral"
+        variant="ghost"
+        aria-label="返回"
+        @click="onBackClicked"
+      />
+
       <img
         v-if="!has_detail_image_failed"
         :src="detail.hero_image_url"
@@ -32,25 +32,29 @@
     </div>
 
     <section class="detail-content">
-      <div class="detail-meta-row">
-        <UBadge
-          class="channel-badge"
-          size="xs"
-        >
-          <span class="channel-dot" />
-          {{ detail.channel_label }}
-        </UBadge>
-        <UBadge
-          class="detail-category"
-          size="xs"
-        >
-          {{ detail.category_label }}
-        </UBadge>
-      </div>
-
       <h2 class="detail-title">
         {{ detail.name }}
       </h2>
+
+      <div
+        class="detail-taxonomy-row"
+        aria-label="商品分類、通路與 tags"
+      >
+        <TaxonomyChip
+          :label="detail.category_label"
+          :to="{ path: '/', query: { category: detail.category_id } }"
+        />
+        <TaxonomyChip
+          :label="detail.channel_label"
+          :to="{ path: '/search', query: { q: detail.channel_label } }"
+        />
+        <TaxonomyChip
+          v-for="tag in detail.tag_labels"
+          :key="tag"
+          :label="tag"
+          :to="{ path: '/search', query: { q: tag } }"
+        />
+      </div>
 
       <p class="detail-price">
         {{ detail.price_label }}
@@ -72,20 +76,6 @@
         title="AI 怎麼說"
         :description="detail.llm_description"
       />
-
-      <div
-        class="detail-tag-list"
-        aria-label="商品 tags"
-      >
-        <NuxtLink
-          v-for="tag in detail.tag_labels"
-          :key="tag"
-          class="detail-tag"
-          :to="{ path: '/search', query: { q: tag } }"
-        >
-          {{ tag }}
-        </NuxtLink>
-      </div>
 
       <UButton
         class="detail-buy-cta"
@@ -159,12 +149,10 @@ const props = defineProps<{
 const has_detail_image_failed = ref(false)
 const failed_related_image_ids = ref<Set<string>>(new Set())
 const detail_root = ref<HTMLElement | null>(null)
-const displayed_related_products = computed(() => props.detail.related_products.slice(0, 3))
+const displayed_related_products = computed(() => props.detail.related_products)
 
 onMounted(() => {
   const hero_image = detail_root.value?.querySelector<HTMLImageElement>('.detail-hero-image') ?? null
-
-  hero_image?.addEventListener('error', onDetailImageError)
 
   if (isBrokenImage(hero_image)) {
     onDetailImageError()
@@ -175,12 +163,8 @@ onMounted(() => {
   for (const image of related_images) {
     const product_id = image.dataset.productId
 
-    if (product_id) {
-      image.addEventListener('error', () => onRelatedImageError(product_id))
-    }
-
-    if (image.dataset.productId && isBrokenImage(image)) {
-      onRelatedImageError(image.dataset.productId)
+    if (product_id && isBrokenImage(image)) {
+      onRelatedImageError(product_id)
     }
   }
 })

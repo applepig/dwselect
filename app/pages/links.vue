@@ -3,17 +3,6 @@
     class="compact-panel"
     aria-label="連結"
   >
-    <div class="section-heading-row">
-      <div>
-        <p class="section-kicker">
-          Links
-        </p>
-        <h2 class="section-title">
-          相關入口
-        </h2>
-      </div>
-    </div>
-
     <UEmpty
       v-if="compact_view.links.length === 0"
       icon="i-lucide-link"

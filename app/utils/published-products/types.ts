@@ -72,7 +72,7 @@ export type CompactGuideRow = CompactResourceRow
 
 export type SearchResultSection = {
   id: 'products' | 'guides' | 'links'
-  label: '商品' | '指南' | '連結'
+  label: '產品' | '指南' | '連結'
   rows: CompactResourceRow[]
 }
 

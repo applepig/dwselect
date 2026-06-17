@@ -3,19 +3,8 @@
     class="compact-panel"
     aria-label="首頁"
   >
-    <div class="section-heading-row">
-      <div>
-        <p class="section-kicker">
-          Home
-        </p>
-        <h2 class="section-title">
-          最近值得看
-        </h2>
-      </div>
-    </div>
-
     <div
-      class="category-chip-list"
+      class="category-chip-list home-category-chip-list"
       aria-label="商品分類"
     >
       <UButton
@@ -35,22 +24,32 @@
       </UButton>
     </div>
 
-    <UEmpty
-      v-if="compact_view.home.empty_reason"
-      icon="i-lucide-package-open"
-      title="目前沒有已上架商品"
-    />
-
-    <div
-      v-else
-      class="product-grid"
+    <Transition
+      name="home-results"
+      mode="out-in"
     >
-      <ProductCard
-        v-for="product in compact_view.home.products"
-        :key="product.id"
-        :product="product"
-      />
-    </div>
+      <div
+        :key="active_home_category_key"
+        class="home-results"
+      >
+        <UEmpty
+          v-if="compact_view.home.empty_reason"
+          icon="i-lucide-package-open"
+          title="目前沒有已上架商品"
+        />
+
+        <div
+          v-else
+          class="product-grid"
+        >
+          <ProductCard
+            v-for="product in compact_view.home.products"
+            :key="product.id"
+            :product="product"
+          />
+        </div>
+      </div>
+    </Transition>
   </section>
 </template>
 
@@ -98,6 +97,7 @@ const compact_view = computed(() => {
 
   return getCompactAppView(content_payload.value, route_state.value)
 })
+const active_home_category_key = computed(() => route_state.value.home_category_id ?? 'all')
 
 function onCategoryChipClicked(category_id: CompactCategoryChip['id']) {
   router.push({

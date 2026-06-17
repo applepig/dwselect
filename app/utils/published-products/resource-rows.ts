@@ -17,7 +17,7 @@ export function getResourceRowLinkAttributes(row: CompactResourceRow): ResourceR
 
 export function getSearchResultSections(results: SearchSuggestion[]): SearchResultSection[] {
   const sections: SearchResultSection[] = [
-    { id: 'products', label: '商品', rows: [] },
+    { id: 'products', label: '產品', rows: [] },
     { id: 'guides', label: '指南', rows: [] },
     { id: 'links', label: '連結', rows: [] },
   ]

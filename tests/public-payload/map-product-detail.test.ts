@@ -204,6 +204,35 @@ describe('related product build mapper', () => {
     ])
   })
 
+  it('should break ties by name when category, tags, channel and published_at are all equal', () => {
+    const current_product = makeProduct({
+      id: 'current-product',
+      status: 'published',
+      name: '目前商品',
+      category_id: 'computer',
+      offers: [makeOffer('pchome')],
+      tag_ids: ['typing'],
+      published_at: '2026-06-05T00:00:00+08:00',
+    })
+    const shared_attrs = {
+      status: 'published' as const,
+      category_id: 'computer',
+      offers: [makeOffer('pchome')],
+      tag_ids: ['typing'],
+      published_at: '2026-06-05T00:00:00+08:00',
+    }
+    const products = [
+      current_product,
+      makeProduct({ id: 'tie-jia', name: '甲', ...shared_attrs }),
+      makeProduct({ id: 'tie-yi', name: '乙', ...shared_attrs }),
+      makeProduct({ id: 'tie-bing', name: '丙', ...shared_attrs }),
+    ]
+
+    const related = getRelatedProductCards(current_product, products, createTaxonomyLabelResolver(test_taxonomies))
+
+    expect(related.map((product) => product.name)).toEqual(['丙', '乙', '甲'])
+  })
+
   it('should expose related product cards with only the related semantic keys', () => {
     const current_product = makeProduct({
       id: 'current-product',

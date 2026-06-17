@@ -3,7 +3,7 @@ import { join } from 'node:path'
 
 import type { Guide, LinkDefinition, Product } from '../app/utils/product-schema.ts'
 import { compareProducts } from '../app/utils/content/compare-products.ts'
-import { readPublicContentSource, type ContentReaderOptions } from './content-reader.ts'
+import { readPublicContentSource, type ContentReaderOptions, type PublicContentSource } from './content-reader.ts'
 import { SITE_NAME, SITE_URL, buildPublicContentPayload, isPublished } from './public-content.ts'
 
 type BuildPublicDiscoveryOptions = ContentReaderOptions & {
@@ -26,14 +26,22 @@ type RssItem = {
   updated_at: string
 }
 
-const DEFAULT_PUBLIC_DIR = 'public'
+export const DEFAULT_PUBLIC_DIR = 'public'
 const ROOT_ROUTES = ['/', '/guide', '/search', '/links']
 const RSS_WEEKDAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
 const RSS_MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 
 export async function buildPublicDiscoveryFiles(options: BuildPublicDiscoveryOptions = {}): Promise<BuildPublicDiscoverySummary> {
-  const public_dir = options.public_dir ?? DEFAULT_PUBLIC_DIR
   const source = await readPublicContentSource(options)
+
+  return buildPublicDiscoveryFilesFromSource(source, options)
+}
+
+export async function buildPublicDiscoveryFilesFromSource(
+  source: PublicContentSource,
+  options: Pick<BuildPublicDiscoveryOptions, 'public_dir'> = {},
+): Promise<BuildPublicDiscoverySummary> {
+  const public_dir = options.public_dir ?? DEFAULT_PUBLIC_DIR
   const payload = buildPublicContentPayload(source)
   const published_products = source.products
     .filter(isPublished)

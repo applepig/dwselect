@@ -3,17 +3,6 @@
     class="compact-panel"
     aria-label="搜尋"
   >
-    <div class="section-heading-row">
-      <div>
-        <p class="section-kicker">
-          Search
-        </p>
-        <h2 class="section-title">
-          搜看看
-        </h2>
-      </div>
-    </div>
-
     <SearchInput
       v-model:query="pending_search_query"
       @submit="submitSearch"

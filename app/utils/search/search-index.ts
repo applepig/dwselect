@@ -209,6 +209,25 @@ function createSearchIndex() {
   return new MiniSearch<SearchDocument>(getSearchOptions())
 }
 
+type SearchDocumentBase = Omit<SearchDocument, 'description' | 'search_text'>
+
+// description/search_text 必須維持 non-enumerable：供 MiniSearch 索引，但不被序列化進 document summary。
+function attachSearchFields(
+  document: SearchDocumentBase,
+  fields: { description: string, search_text: string },
+): SearchDocument {
+  Object.defineProperty(document, 'description', {
+    value: fields.description,
+    enumerable: false,
+  })
+  Object.defineProperty(document, 'search_text', {
+    value: fields.search_text,
+    enumerable: false,
+  })
+
+  return document as SearchDocument
+}
+
 function mapProductToSearchDocument(
   product: Product,
   labels: TaxonomyLabelResolver,
@@ -216,10 +235,10 @@ function mapProductToSearchDocument(
 ): SearchDocument {
   const content_id = extractContentId(product.id)
   const primary_offer = getPrimaryOffer(product)
-  const document = {
+  const document: SearchDocumentBase = {
     document_id: `product:${content_id}`,
     content_id,
-    type: 'product' as const,
+    type: 'product',
     title: product.name,
     summary: product.summary,
     category_ids: [product.category_id],
@@ -235,22 +254,16 @@ function mapProductToSearchDocument(
     published_at: product.published_at,
   }
 
-  Object.defineProperty(document, 'description', {
-    value: product.long_description,
-    enumerable: false,
-  })
-  Object.defineProperty(document, 'search_text', {
-    value: [
+  return attachSearchFields(document, {
+    description: product.long_description,
+    search_text: [
       product.english_name,
       product.llm_description,
       ...product.search_aliases,
       ...product.model_numbers,
       ...getTagAliases(product.tag_ids, tag_aliases),
     ].join(' '),
-    enumerable: false,
   })
-
-  return document
 }
 
 function mapGuideToSearchDocument(
@@ -258,10 +271,10 @@ function mapGuideToSearchDocument(
   labels: TaxonomyLabelResolver,
   tag_aliases: ReadonlyMap<string, string[]>,
 ): SearchDocument {
-  const document = {
+  const document: SearchDocumentBase = {
     document_id: `guide:${guide.id}`,
     content_id: guide.id,
-    type: 'guide' as const,
+    type: 'guide',
     title: guide.title,
     summary: guide.summary,
     category_ids: [...guide.category_ids],
@@ -274,16 +287,10 @@ function mapGuideToSearchDocument(
     published_at: guide.published_at,
   }
 
-  Object.defineProperty(document, 'description', {
-    value: guide.summary,
-    enumerable: false,
+  return attachSearchFields(document, {
+    description: guide.summary,
+    search_text: getTagAliases(guide.tag_ids, tag_aliases).join(' '),
   })
-  Object.defineProperty(document, 'search_text', {
-    value: getTagAliases(guide.tag_ids, tag_aliases).join(' '),
-    enumerable: false,
-  })
-
-  return document
 }
 
 function mapLinkToSearchDocument(
@@ -291,10 +298,10 @@ function mapLinkToSearchDocument(
   labels: TaxonomyLabelResolver,
   tag_aliases: ReadonlyMap<string, string[]>,
 ): SearchDocument {
-  const document = {
+  const document: SearchDocumentBase = {
     document_id: `link:${link.id}`,
     content_id: link.id,
-    type: 'link' as const,
+    type: 'link',
     title: link.title,
     summary: link.summary,
     category_ids: [...link.category_ids],
@@ -307,16 +314,10 @@ function mapLinkToSearchDocument(
     published_at: link.published_at,
   }
 
-  Object.defineProperty(document, 'description', {
-    value: link.summary,
-    enumerable: false,
+  return attachSearchFields(document, {
+    description: link.summary,
+    search_text: getTagAliases(link.tag_ids, tag_aliases).join(' '),
   })
-  Object.defineProperty(document, 'search_text', {
-    value: getTagAliases(link.tag_ids, tag_aliases).join(' '),
-    enumerable: false,
-  })
-
-  return document
 }
 
 function mapDocumentToSummary(document: SearchDocument): SearchIndexDocumentSummary {

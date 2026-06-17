@@ -4,10 +4,16 @@ import { compareNullableTimestampDesc } from '../../app/utils/content/compare-nu
 import { compareText } from '../../app/utils/content/compare-text.ts'
 import { extractContentId } from '../../app/utils/content/extract-content-id.ts'
 import { getPrimaryOffer } from '../../app/utils/content/primary-offer.ts'
-import { resolveProductImageUrl } from '../../app/utils/content-images/resolve-product-image-url.ts'
+import { mapProductCardBase } from './map-product-card-fields.ts'
 import type { TaxonomyLabelResolver } from '../../app/utils/content/taxonomy-labels.ts'
 
 const RELATED_PRODUCT_LIMIT = 3
+
+interface CurrentProductInvariants {
+  tag_ids: Set<string>
+  category_id: string
+  channel_id: string
+}
 
 export function getRelatedProductCards(
   current_product: Product,
@@ -15,30 +21,27 @@ export function getRelatedProductCards(
   labels: TaxonomyLabelResolver,
 ): RelatedProductCardView[] {
   const current_product_id = extractContentId(current_product.id)
+  const current_invariants = getCurrentProductInvariants(current_product)
 
   return products
     .filter((product) => product.status === 'published')
     .filter((product) => extractContentId(product.id) !== current_product_id)
-    .toSorted((left_product, right_product) => compareRelatedProducts(current_product, left_product, right_product))
+    .toSorted((left_product, right_product) => compareRelatedProducts(current_invariants, left_product, right_product))
     .slice(0, RELATED_PRODUCT_LIMIT)
-    .map((product) => mapRelatedProductCard(product, labels))
+    .map((product) => mapProductCardBase(product, labels))
 }
 
-function mapRelatedProductCard(product: Product, labels: TaxonomyLabelResolver): RelatedProductCardView {
-  const primary_offer = getPrimaryOffer(product)
-
+function getCurrentProductInvariants(current_product: Product): CurrentProductInvariants {
   return {
-    id: extractContentId(product.id),
-    name: product.name,
-    image_url: resolveProductImageUrl(product),
-    category_label: labels.getCategoryLabel(product.category_id),
-    channel_label: labels.getChannelLabel(primary_offer.channel_id),
+    tag_ids: new Set(current_product.tag_ids),
+    category_id: current_product.category_id,
+    channel_id: getPrimaryOffer(current_product).channel_id,
   }
 }
 
-function compareRelatedProducts(current_product: Product, left_product: Product, right_product: Product) {
-  const left_score = getRelatedProductScore(current_product, left_product)
-  const right_score = getRelatedProductScore(current_product, right_product)
+function compareRelatedProducts(current_invariants: CurrentProductInvariants, left_product: Product, right_product: Product) {
+  const left_score = getRelatedProductScore(current_invariants, left_product)
+  const right_score = getRelatedProductScore(current_invariants, right_product)
 
   if (left_score.same_category !== right_score.same_category) {
     return Number(right_score.same_category) - Number(left_score.same_category)
@@ -61,15 +64,14 @@ function compareRelatedProducts(current_product: Product, left_product: Product,
   return compareText(left_product.name, right_product.name)
 }
 
-function getRelatedProductScore(current_product: Product, candidate_product: Product) {
-  const current_tag_ids = new Set(current_product.tag_ids)
+function getRelatedProductScore(current_invariants: CurrentProductInvariants, candidate_product: Product) {
   const shared_tag_count = candidate_product.tag_ids
-    .filter((tag_id) => current_tag_ids.has(tag_id))
+    .filter((tag_id) => current_invariants.tag_ids.has(tag_id))
     .length
 
   return {
-    same_category: candidate_product.category_id === current_product.category_id,
+    same_category: candidate_product.category_id === current_invariants.category_id,
     shared_tag_count,
-    same_channel: getPrimaryOffer(candidate_product).channel_id === getPrimaryOffer(current_product).channel_id,
+    same_channel: getPrimaryOffer(candidate_product).channel_id === current_invariants.channel_id,
   }
 }

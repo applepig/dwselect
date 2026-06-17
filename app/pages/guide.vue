@@ -3,17 +3,6 @@
     class="compact-panel"
     aria-label="指南"
   >
-    <div class="section-heading-row">
-      <div>
-        <p class="section-kicker">
-          Guide
-        </p>
-        <h2 class="section-title">
-          指南列表
-        </h2>
-      </div>
-    </div>
-
     <UEmpty
       v-if="compact_view.guide.empty_reason"
       icon="i-lucide-book-open"

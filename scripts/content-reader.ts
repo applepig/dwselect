@@ -112,17 +112,13 @@ async function readContentFiles<T>(content_dir: string, parseContent: (raw_conte
     throw error
   }
 
-  const content_items: T[] = []
+  const json_entries = entries
+    .filter((entry) => entry.isFile() && entry.name.endsWith('.json'))
+    .toSorted((left_entry, right_entry) => left_entry.name.localeCompare(right_entry.name))
 
-  for (const entry of entries.toSorted((left_entry, right_entry) => left_entry.name.localeCompare(right_entry.name))) {
-    if (!entry.isFile() || !entry.name.endsWith('.json')) {
-      continue
-    }
-
-    content_items.push(parseContent(await readFile(join(content_dir, entry.name), 'utf8'), entry.name))
-  }
-
-  return content_items
+  return Promise.all(json_entries.map(async (entry) =>
+    parseContent(await readFile(join(content_dir, entry.name), 'utf8'), entry.name),
+  ))
 }
 
 function isMissingFileError(error: unknown) {

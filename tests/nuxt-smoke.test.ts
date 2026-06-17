@@ -20,15 +20,16 @@ describe('Nuxt SSG baseline', () => {
   })
 
   it('should build the search index before static generation', () => {
-    expect(package_json.scripts.generate).toContain('pnpm build:search-index')
+    expect(package_json.scripts.generate).toContain('pnpm build:public-artifacts')
+    expect(package_json.scripts.generate).not.toContain('pnpm build:search-index && pnpm build:public-discovery')
   })
 
   it('should build optimized content images before public discovery and static generation', () => {
     expect(package_json.scripts).toHaveProperty('build:content-images')
     expect(package_json.scripts.build).toContain('pnpm build:content-images')
     expect(package_json.scripts.generate).toContain('pnpm build:content-images')
-    expect(package_json.scripts.build.indexOf('pnpm build:content-images')).toBeLessThan(package_json.scripts.build.indexOf('pnpm build:public-discovery'))
-    expect(package_json.scripts.generate.indexOf('pnpm build:content-images')).toBeLessThan(package_json.scripts.generate.indexOf('pnpm build:public-discovery'))
+    expect(package_json.scripts.build.indexOf('pnpm build:content-images')).toBeLessThan(package_json.scripts.build.indexOf('pnpm build:public-artifacts'))
+    expect(package_json.scripts.generate.indexOf('pnpm build:content-images')).toBeLessThan(package_json.scripts.generate.indexOf('pnpm build:public-artifacts'))
   })
 
   it('should avoid publishing raw content image directories through Nitro publicAssets', () => {
@@ -180,7 +181,9 @@ describe('Nuxt SSG baseline', () => {
     expect(shell_composable_source).toContain('fetchPublicContentPayload')
     expect(shell_composable_source).not.toContain('transform:')
     expect(shell_composable_source).not.toContain('server: false')
+    expect(layout_source).toContain('<ThemeToggle')
     expect(layout_source).toContain('await useCatalogShellData()')
+    expect(layout_source).not.toContain('product-count')
     expect(layout_source).not.toContain('await useCatalogData()')
     expect(nav_source).toContain('await useCatalogShellData()')
     expect(nav_source).not.toContain('await useCatalogData()')
@@ -247,10 +250,12 @@ describe('Nuxt SSG baseline', () => {
     expect(catalog_css).toContain('.tag-chip:focus-visible')
   })
 
-  it('should use Nuxt UI surfaces for compact cards and keep desktop content full width', () => {
+  it('should use Nuxt UI surfaces for compact cards and keep desktop cards reasonably sized', () => {
     const card_source = readFileSync(new URL('../app/components/product-card.vue', import.meta.url), 'utf8')
     const detail_source = readFileSync(new URL('../app/components/product-detail.vue', import.meta.url), 'utf8')
     const catalog_css = readFileSync(new URL('../app/assets/styles/catalog.css', import.meta.url), 'utf8')
+    const layout_source = readFileSync(new URL('../app/layouts/default.vue', import.meta.url), 'utf8')
+    const home_source = readFileSync(new URL('../app/pages/index.vue', import.meta.url), 'utf8')
 
     expect(card_source).toContain('<UCard')
     expect(card_source).toContain('<UBadge')
@@ -261,18 +266,77 @@ describe('Nuxt SSG baseline', () => {
     expect(card_source).toContain('product-card-price')
     expect(card_source.indexOf('product-card-price')).toBeGreaterThan(card_source.indexOf('product-card-body'))
     expect(card_source.indexOf('channel-badge')).toBeGreaterThan(card_source.indexOf('product-card-body'))
-    expect(detail_source).toContain('<UBadge')
+    expect(detail_source).toContain('<TaxonomyChip')
     expect(detail_source).toContain('<UButton')
     expect(catalog_css).toContain('background: var(--dw-bg);')
     expect(catalog_css).not.toContain('linear-gradient(135deg, color-mix(in srgb, var(--dw-amber)')
-    expect(catalog_css).toContain('block-size: 2.7em;')
-    expect(catalog_css).toContain('block-size: 1.55em;')
-    expect(catalog_css).toContain('.product-summary {\n  -webkit-line-clamp: 1;')
+    expect(catalog_css).toContain('.product-name {\n  -webkit-line-clamp: 1;')
+    expect(catalog_css).toContain('.product-summary {\n  -webkit-line-clamp: 3;')
+    expect(catalog_css).toContain('block-size: 4.65em;')
+    expect(catalog_css).not.toContain('block-size: 3.1em;')
+    expect(catalog_css).not.toContain('block-size: 2.7em;')
     expect(catalog_css).toContain('.compact-main {\n  width: 100%;\n  min-width: 0;\n  padding: 0 0 92px;')
-    expect(catalog_css).toContain('.compact-top-bar {\n  position: sticky;')
-    expect(catalog_css).toContain('padding: 18px 16px 14px;')
-    expect(catalog_css).toContain('grid-template-columns: repeat(auto-fit, minmax(clamp(280px, 10vw, 400px), 1fr));')
+    expect(catalog_css).toContain('.compact-top-bar {\n  display: flex;')
+    expect(catalog_css).not.toContain('.compact-top-bar {\n  position: sticky;')
+    expect(catalog_css).toContain('border: 1px solid var(--dw-border);')
+    expect(catalog_css).toContain('box-shadow: var(--dw-shadow);')
+    expect(catalog_css).toContain('padding: 12px 16px 8px;')
+    expect(catalog_css).toContain('border: 0;')
+    expect(catalog_css).toContain('box-shadow: none;')
+    expect(catalog_css).toContain('padding: 16px 40px 14px;')
+    expect(catalog_css).toContain('padding: 20px 81px 0;')
+    expect(catalog_css).toContain('grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));')
+    expect(catalog_css).not.toContain('grid-template-columns: repeat(auto-fill, minmax(240px, 320px));')
+    expect(catalog_css).not.toContain('justify-content: start;')
     expect(catalog_css).not.toContain('width: min(100%, 1180px);')
+    expect(layout_source).not.toContain('product-count')
+    expect(layout_source).not.toContain('compact_view.counts.published')
+    expect(layout_source).toContain('active_home_category_label')
+    expect(layout_source).toContain('DW嚴選')
+    expect(layout_source).toContain('breadcrumb-separator')
+    expect(home_source).not.toContain('section-heading-row')
+    expect(home_source).not.toContain('section-title')
+    expect(home_source).not.toContain('<h2')
+    expect(home_source).not.toContain('最近值得看')
+  })
+
+  it('should expose breadcrumb header links and home category result transition in source', () => {
+    const layout_source = readFileSync(new URL('../app/layouts/default.vue', import.meta.url), 'utf8')
+    const home_source = readFileSync(new URL('../app/pages/index.vue', import.meta.url), 'utf8')
+    const guide_source = readFileSync(new URL('../app/pages/guide.vue', import.meta.url), 'utf8')
+    const links_source = readFileSync(new URL('../app/pages/links.vue', import.meta.url), 'utf8')
+    const search_source = readFileSync(new URL('../app/pages/search.vue', import.meta.url), 'utf8')
+    const catalog_css = readFileSync(new URL('../app/assets/styles/catalog.css', import.meta.url), 'utf8')
+
+    expect(nuxt_config.experimental?.viewTransition).toBe(false)
+    expect(layout_source).toContain('<NuxtLink')
+    expect(layout_source).toContain('to="/"')
+    expect(layout_source).toContain('class="breadcrumb-link"')
+    expect(layout_source).toContain('current_breadcrumb_label')
+    expect(layout_source).toContain("route.path === '/guide'")
+    expect(layout_source).toContain("route.path === '/links'")
+    expect(layout_source).toContain("route.path === '/search'")
+
+    expect(guide_source).toContain('aria-label="指南"')
+    expect(guide_source).not.toContain('class="section-heading-row"')
+    expect(guide_source).not.toMatch(/<h2 class="section-title">[\s\S]*指南列表/)
+    expect(links_source).toContain('aria-label="連結"')
+    expect(links_source).not.toContain('class="section-heading-row"')
+    expect(links_source).not.toMatch(/<h2 class="section-title">[\s\S]*相關入口/)
+    expect(search_source).toContain('aria-label="搜尋"')
+    expect(search_source).not.toContain('class="section-heading-row"')
+    expect(search_source).not.toMatch(/<h2 class="section-title">[\s\S]*搜看看/)
+
+    expect(home_source).toContain('<Transition')
+    expect(home_source).toContain('name="home-results"')
+    expect(home_source).toContain(':key="active_home_category_key"')
+    expect(catalog_css).toMatch(/\.breadcrumb-separator\s*\{[\s\S]*margin-inline:\s*[^;]+;/)
+    expect(catalog_css).toContain('.breadcrumb-link')
+    expect(catalog_css).toContain('.breadcrumb-link:focus-visible')
+    expect(catalog_css).toContain('.home-results-enter-active')
+    expect(catalog_css).toContain('.home-results-leave-active')
+    expect(catalog_css).toContain('.home-results-enter-from')
+    expect(catalog_css).toMatch(/@media \(prefers-reduced-motion: reduce\)[\s\S]*\.home-results-enter-active/)
   })
 
   it('should wrap Nuxt with UApp for Nuxt UI providers', () => {
@@ -359,9 +423,11 @@ describe('Nuxt SSG baseline', () => {
   })
 
   it('should expose desktop product category navigation without adding it to mobile or tablet nav', () => {
+    const home_source = readFileSync(new URL('../app/pages/index.vue', import.meta.url), 'utf8')
     const nav_source = readFileSync(new URL('../app/components/app-navigation.vue', import.meta.url), 'utf8')
     const catalog_css = readFileSync(new URL('../app/assets/styles/catalog.css', import.meta.url), 'utf8')
 
+    expect(home_source).toContain('home-category-chip-list')
     expect(nav_source).toContain('desktop-category-items')
     expect(nav_source).toContain('desktop-category-link')
     expect(nav_source).toContain('category.id === \'all\' ? \'/\' : `/?category=${category.id}`')
@@ -370,6 +436,7 @@ describe('Nuxt SSG baseline', () => {
     expect(catalog_css).toContain('.desktop-category-link')
     expect(catalog_css).toContain('.compact-app-bottom-tabs .app-nav-button')
     expect(catalog_css).toContain('.compact-app-rail .app-nav-button')
+    expect(catalog_css).toContain('.home-category-chip-list {\n    display: none;\n  }')
   })
 
   it('should render guide, link and mixed search results with external safety attributes in source', () => {
@@ -426,6 +493,62 @@ describe('Nuxt SSG baseline', () => {
     expect(catalog_css).toContain('@media (prefers-reduced-motion: reduce)')
     expect(catalog_css).toContain('.product-detail-page')
     expect(catalog_css).toContain('.detail-buy-cta')
+  })
+
+  it('should render product detail information in the documented semantic order', () => {
+    const detail_source = readFileSync(new URL('../app/components/product-detail.vue', import.meta.url), 'utf8')
+    const ordered_tokens = [
+      'detail-title',
+      'detail-taxonomy-row',
+      'detail-price',
+      'detail-dw-says',
+      'detail-llm-says',
+      'detail-buy-cta',
+      'detail-fine-print',
+    ]
+    const token_positions = ordered_tokens.map((token) => detail_source.indexOf(token))
+
+    expect(token_positions.every((position) => position >= 0)).toBe(true)
+
+    for (let i = 1; i < token_positions.length; i += 1) {
+      expect(token_positions[i]).toBeGreaterThan(token_positions[i - 1])
+    }
+
+    expect(detail_source).toContain(':description="detail.long_description || detail.summary"')
+    expect(detail_source).toContain(':description="detail.llm_description"')
+    expect(detail_source).toContain('label="detail.category_label"')
+    expect(detail_source.indexOf('label="detail.category_label"')).toBeLessThan(detail_source.indexOf('label="detail.channel_label"'))
+    expect(detail_source.indexOf('label="detail.channel_label"')).toBeLessThan(detail_source.indexOf('v-for="tag in detail.tag_labels"'))
+    expect(detail_source).not.toContain('dw_says')
+    expect(detail_source).not.toContain('detail.description')
+    expect(detail_source).not.toContain(':description="detail.summary"')
+  })
+
+  it('should keep detail taxonomy chips visually consistent and DW copy WCAG readable', () => {
+    const detail_source = readFileSync(new URL('../app/components/product-detail.vue', import.meta.url), 'utf8')
+    const chip_source = readFileSync(new URL('../app/components/taxonomy-chip.vue', import.meta.url), 'utf8')
+    const catalog_css = readFileSync(new URL('../app/assets/styles/catalog.css', import.meta.url), 'utf8')
+
+    expect(detail_source).toContain('class="detail-taxonomy-row"')
+    expect(detail_source).not.toContain('detail-meta-row')
+    expect(detail_source).not.toContain('detail-tag-list')
+    expect(detail_source).not.toContain('detail-category')
+    expect(detail_source).not.toContain('detail-tag')
+    expect(chip_source.match(/class="taxonomy-chip"/g)).toHaveLength(2)
+    expect(chip_source).toContain('to?:')
+    expect(chip_source).toContain('<NuxtLink')
+    expect(chip_source).toContain(':to="to"')
+    expect(chip_source).not.toContain("path: '/search'")
+    expect(chip_source).not.toContain("path: '/'")
+    expect(detail_source).toContain(':to="{ path: \'/\', query: { category: detail.category_id } }"')
+    expect(detail_source).toContain(':to="{ path: \'/search\', query: { q: detail.channel_label } }"')
+    expect(detail_source).toContain(':to="{ path: \'/search\', query: { q: tag } }"')
+    expect(catalog_css).toContain('.detail-taxonomy-row')
+    expect(catalog_css).toContain('.taxonomy-chip')
+    expect(catalog_css).toContain('.detail-dw-says {')
+    expect(catalog_css).toContain('background: var(--dw-panel-strong);')
+    expect(catalog_css).toContain('color: var(--dw-text);')
+    expect(getContrastRatio('#201c17', '#fff4dd')).toBeGreaterThanOrEqual(4.5)
   })
 
   it('should register product detail head metadata before async catalog loading', () => {
@@ -548,3 +671,34 @@ describe('Nuxt SSG baseline', () => {
     expect(search_index_source).not.toContain('2026-06-02-sample-product')
   })
 })
+
+function getContrastRatio(foreground_hex: string, background_hex: string) {
+  const foreground = getRelativeLuminance(getRgb(foreground_hex))
+  const background = getRelativeLuminance(getRgb(background_hex))
+
+  return (Math.max(foreground, background) + 0.05) / (Math.min(foreground, background) + 0.05)
+}
+
+function getRgb(hex: string): [number, number, number] {
+  const match = /^#([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})$/i.exec(hex)
+
+  if (!match) {
+    throw new Error(`Invalid hex color: ${hex}`)
+  }
+
+  return [Number.parseInt(match[1]!, 16), Number.parseInt(match[2]!, 16), Number.parseInt(match[3]!, 16)]
+}
+
+function getRelativeLuminance([red, green, blue]: [number, number, number]) {
+  const [linear_red, linear_green, linear_blue] = [red, green, blue].map((channel) => {
+    const normalized_channel = channel / 255
+
+    if (normalized_channel <= 0.03928) {
+      return normalized_channel / 12.92
+    }
+
+    return ((normalized_channel + 0.055) / 1.055) ** 2.4
+  })
+
+  return 0.2126 * linear_red! + 0.7152 * linear_green! + 0.0722 * linear_blue!
+}

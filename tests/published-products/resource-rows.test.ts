@@ -103,7 +103,7 @@ describe('resource row link attributes and search sections', () => {
     expect(sections).toEqual([
       {
         id: 'products',
-        label: '商品',
+        label: '產品',
         rows: [
           {
             id: 'product:keyboard',
