@@ -55,7 +55,7 @@ describe('migrate Google Sheet products', () => {
         file_name: '2026-06-02-shang-pin-ming-cheng.json',
         content: {
           id: '2026-06-02-shang-pin-ming-cheng',
-          status: 'published',
+          status: 'draft',
           name: '商品名稱',
           english_name: '商品名稱',
           summary: '推薦文字',
@@ -77,13 +77,14 @@ describe('migrate Google Sheet products', () => {
               checked_at: '2026-06-02T00:00:00+08:00',
             },
           ],
-          image_url: 'https://example.com/image.jpg',
+          image_file: null,
+          image_url: null,
           category_id: 'other',
           tag_ids: [],
           reference_url: 'https://example.com/ref',
           created_at: '2026-06-02T00:00:00+08:00',
           updated_at: '2026-06-02T00:00:00+08:00',
-          published_at: '2026-06-02T00:00:00+08:00',
+          published_at: null,
           unpublished_at: null,
           archived_at: null,
         },
@@ -122,7 +123,9 @@ describe('migrate Google Sheet products', () => {
     expect(result.products[0]?.content).toEqual(expect.objectContaining({
       name: '多行商品',
       long_description: '第一行\n第二行',
-      image_url: 'https://example.com/image.jpg',
+      image_file: null,
+      image_url: null,
+      status: 'draft',
     }))
     expect(result.summary.warnings).toEqual([])
   })

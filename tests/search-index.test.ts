@@ -42,7 +42,8 @@ const base_product: Product = {
       checked_at: '2026-06-02T00:00:00+08:00',
     },
   ],
-  image_url: 'https://example.com/product.jpg',
+  image_file: '2026-06-02-sample-product.jpg',
+  image_url: null,
   category_id: 'computer',
   tag_ids: ['keyboard', 'usb-c', 'fixture-brand'],
   reference_url: 'https://example.com/reference',
@@ -176,7 +177,7 @@ describe('search index', () => {
         category_labels: ['電腦'],
         tag_ids: ['keyboard', 'usb-c', 'fixture-brand'],
         tag_labels: ['鍵盤', 'USB-C', 'Fixture Brand'],
-        image_url: 'https://example.com/product.jpg',
+        image_url: '/images/products/2026-06-02-sample-product.webp',
         href: '/products/2026-06-02-sample-product',
         external: false,
         price_text: 'NT$ 1,990',
@@ -199,9 +200,21 @@ describe('search index', () => {
     }, test_taxonomies)).toEqual([
       expect.objectContaining({
         document_id: 'product:2026-06-02-sample-product',
-        image_url: '/images/products/2026-06-02-sample-product.jpg',
+        image_url: '/images/products/2026-06-02-sample-product.webp',
       }),
     ])
+  })
+
+  it('should reject published products without a local image file in search documents', () => {
+    expect(() => getSearchDocuments({
+      products: [{
+        ...base_product,
+        image_file: null,
+        image_url: 'https://example.com/product.jpg',
+      }],
+      guides: [],
+      links: [],
+    }, test_taxonomies)).toThrow('Published product image_file is required')
   })
 
   it('should map published guides and links to external search documents', () => {
@@ -244,7 +257,7 @@ describe('search index', () => {
       products: [],
       guides: [{
         ...base_guide,
-        image_file: '2026-06-02-guide.webp',
+        image_file: '2026-06-02-guide.jpg',
         image_url: null,
       }],
       links: [],
@@ -252,6 +265,44 @@ describe('search index', () => {
       expect.objectContaining({
         document_id: 'guide:2026-06-02-guide',
         image_url: '/images/guides/2026-06-02-guide.webp',
+      }),
+    ])
+  })
+
+  it('should ignore external guide image urls in search documents, payload summaries and query results', () => {
+    const payload = buildSearchIndexPayload({
+      products: [],
+      guides: [{
+        ...base_guide,
+        title: '外部圖片指南',
+        image_file: null,
+        image_url: 'https://scontent.ftpe8-2.fna.fbcdn.net/example.jpg',
+      }],
+      links: [],
+    }, { ...test_taxonomies, generated_at: '2026-06-06T00:00:00+08:00' })
+    const mini_search = loadSearchIndex(payload)
+
+    expect(getSearchDocuments({ products: [], guides: [{
+      ...base_guide,
+      title: '外部圖片指南',
+      image_file: null,
+      image_url: 'https://scontent.ftpe8-2.fna.fbcdn.net/example.jpg',
+    }], links: [] }, test_taxonomies)).toEqual([
+      expect.objectContaining({
+        document_id: 'guide:2026-06-02-guide',
+        image_url: null,
+      }),
+    ])
+    expect(payload.documents).toEqual([
+      expect.objectContaining({
+        document_id: 'guide:2026-06-02-guide',
+        image_url: null,
+      }),
+    ])
+    expect(querySearchIndex(mini_search, '外部圖片指南')).toEqual([
+      expect.objectContaining({
+        document_id: 'guide:2026-06-02-guide',
+        image_url: null,
       }),
     ])
   })
@@ -361,7 +412,7 @@ describe('search index', () => {
           external: false,
           channel_label: 'PChome',
           price_text: 'NT$ 1,990',
-          image_url: 'https://example.com/product.jpg',
+          image_url: '/images/products/2026-06-02-sample-product.webp',
         },
       ],
     })
@@ -387,6 +438,23 @@ describe('search index', () => {
     expect(querySearchIndex(mini_search, '測試牌')).toContainEqual(expect.objectContaining({ document_id: 'product:2026-06-02-sample-product' }))
   })
 
+  it('should order product documents by canonical category then published_at then name (catalog-aligned baseline)', () => {
+    // ADR 2026-06-16: search documents now share the catalog canonical comparator
+    // (category sort_order -> published_at desc -> compareText name) instead of the
+    // former date-desc -> localeCompare ordering. This is a deliberate behaviour change.
+    const home_old = { ...base_product, id: 'home-old', name: 'home old', category_id: 'home', published_at: '2026-06-01T00:00:00+08:00' }
+    const home_new = { ...base_product, id: 'home-new', name: 'home new', category_id: 'home', published_at: '2026-06-05T00:00:00+08:00' }
+    const computer_new = { ...base_product, id: 'computer-new', name: 'computer new', category_id: 'computer', published_at: '2026-06-09T00:00:00+08:00' }
+
+    const documents = getSearchDocuments({ products: [computer_new, home_old, home_new], guides: [], links: [] }, test_taxonomies)
+
+    expect(documents.map((document) => document.document_id)).toEqual([
+      'product:home-new',
+      'product:home-old',
+      'product:computer-new',
+    ])
+  })
+
   it('should query restored index and return UI suggestions', () => {
     const second_product = {
       ...base_product,
@@ -400,7 +468,8 @@ describe('search index', () => {
       model_numbers: [],
       tag_ids: ['mouse'],
       offers: [{ ...base_product.offers[0], price_text: 'NT$ 990' }],
-      image_url: 'https://example.com/mouse.jpg',
+      image_file: '2026-06-03-mouse.jpg',
+      image_url: null,
       published_at: '2026-06-03T00:00:00+08:00',
     }
     const payload = buildSearchIndexPayload({ products: [base_product, second_product], guides: [], links: [] }, {
@@ -419,7 +488,7 @@ describe('search index', () => {
         summary: '熱插拔小尺寸鍵盤',
         category_labels: ['電腦'],
         tag_labels: ['鍵盤', 'USB-C', 'Fixture Brand'],
-        image_url: 'https://example.com/product.jpg',
+        image_url: '/images/products/2026-06-02-sample-product.webp',
         href: '/products/2026-06-02-sample-product',
         external: false,
         price_text: 'NT$ 1,990',
@@ -484,7 +553,8 @@ describe('search index', () => {
           checked_at: '2026-06-02T00:00:00+08:00',
         },
       ],
-      image_url: 'https://example.com/product.jpg',
+      image_file: '2026-06-07-filename-stem.jpg',
+      image_url: null,
       category_id: 'computer-3c',
       tag_ids: ['keyboard', 'usb-c'],
       reference_url: 'https://example.com/reference',
@@ -515,6 +585,27 @@ describe('search index', () => {
         channel_label: '其他通路',
       }),
     ])
+  })
+
+  it('should reject the search index build when a published product only has an external image url', async () => {
+    const temp_dir = await mkdtemp(join(tmpdir(), 'dwselect-search-index-external-image-'))
+    temp_paths.push(temp_dir)
+    const products_dir = join(temp_dir, 'products')
+    const taxonomies_dir = join(temp_dir, 'taxonomies')
+    const output_path = join(temp_dir, 'public', 'search-index.json')
+    await mkdir(products_dir)
+    await mkdir(taxonomies_dir)
+    await writeFile(join(products_dir, '2026-06-09-external-image.json'), JSON.stringify({
+      ...base_product,
+      image_file: null,
+      image_url: 'https://example.com/product.jpg',
+    }))
+    await writeFile(join(taxonomies_dir, 'categories.json'), JSON.stringify({ items: test_categories }))
+    await writeFile(join(taxonomies_dir, 'channels.json'), JSON.stringify({ items: test_channels }))
+    await writeFile(join(taxonomies_dir, 'tags.json'), JSON.stringify({ items: test_tags }))
+    await writeFile(join(taxonomies_dir, 'brands.json'), JSON.stringify({ items: test_brands }))
+
+    await expect(buildSearchIndexFile(products_dir, output_path, taxonomies_dir)).rejects.toThrow('Published product image_file is required')
   })
 
   it('should run the search index build script directly with Node ESM', async () => {

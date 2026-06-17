@@ -56,7 +56,7 @@ describe('product detail callout adopts UAlert and back button adopts UButton', 
   it('should render the DW callout as a static UAlert keeping the title and text', () => {
     expect(detail_source).toContain('<UAlert')
     expect(detail_source).toContain('title="DW 怎麼說"')
-    expect(detail_source).toContain('detail.dw_says')
+    expect(detail_source).toContain('detail.long_description || detail.summary')
     expect(detail_source).not.toContain('class="detail-callout"')
     expect(detail_source).not.toContain('class="detail-callout-label"')
     expect(detail_source).not.toContain('class="detail-callout-text"')

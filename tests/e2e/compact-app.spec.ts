@@ -14,12 +14,18 @@ function getNavRoot(page, project_name) {
   return page.locator('.compact-app-sidebar')
 }
 
+function getBreadcrumbTextPattern(label) {
+  return new RegExp(`^DW嚴選\\s*>\\s*${label}$`)
+}
+
 test('renders the compact app shell and responsive navigation', async ({ page }, test_info) => {
   await page.goto('/', { waitUntil: 'domcontentloaded' })
   await expect(page.locator('vite-error-overlay')).toHaveCount(0)
 
   await expect(page).toHaveTitle('DW嚴選｜值得買、值得看、值得收藏的選物清單')
   await expect(page.getByRole('heading', { name: 'DW嚴選' })).toBeVisible()
+  await expect(page.locator('.compact-top-bar .breadcrumb-link')).toHaveAttribute('href', '/')
+  await expect(page.getByRole('heading', { name: '首頁' })).toHaveCount(0)
 
   if (test_info.project.name === 'phone') {
     await expect(page.locator('.compact-app-bottom-tabs')).toBeVisible()
@@ -38,6 +44,85 @@ test('renders the compact app shell and responsive navigation', async ({ page },
     await expect(page.locator('.compact-app-bottom-tabs')).toBeHidden()
     await expect(page.locator('.compact-app-rail')).toBeHidden()
   }
+})
+
+test('renders category breadcrumb and aligns the desktop product grid with header copy', async ({ page }, test_info) => {
+  test.skip(test_info.project.name !== 'desktop', 'desktop breadcrumb and alignment check only runs on desktop')
+
+  await page.goto('/?category=computer-3c', { waitUntil: 'domcontentloaded' })
+  await expect(page.locator('vite-error-overlay')).toHaveCount(0)
+
+  await expect(page.locator('.compact-top-bar .top-bar-title')).toHaveText(getBreadcrumbTextPattern('電腦3C'))
+
+  const alignment = await page.evaluate(() => {
+    const header_title = document.querySelector('.compact-top-bar .top-bar-title')?.getBoundingClientRect()
+    const product_grid = document.querySelector('.product-grid')?.getBoundingClientRect()
+
+    return {
+      left_delta: Math.abs((header_title?.left ?? 0) - (product_grid?.left ?? 0)),
+      grid_width: product_grid?.width ?? 0,
+    }
+  })
+
+  expect(alignment.left_delta).toBeLessThanOrEqual(1)
+  expect(alignment.grid_width).toBeGreaterThan(0)
+
+  await page.goto('/?category=not-a-real-category', { waitUntil: 'domcontentloaded' })
+  await expect(page.locator('vite-error-overlay')).toHaveCount(0)
+  await expect(page.locator('.compact-top-bar .top-bar-title')).toHaveText('DW嚴選')
+})
+
+test('switches home categories with a category-keyed result transition contract', async ({ page }, test_info) => {
+  test.skip(test_info.project.name !== 'desktop', 'desktop category transition check only runs on desktop')
+
+  await page.goto('/', { waitUntil: 'domcontentloaded' })
+  await expect(page.locator('vite-error-overlay')).toHaveCount(0)
+  await expect(page.locator('.compact-top-bar .top-bar-title')).toHaveText('DW嚴選')
+
+  const transition_contract = await page.evaluate(() => {
+    const element = document.createElement('div')
+    element.className = 'home-results-enter-active'
+    document.body.append(element)
+    const style = window.getComputedStyle(element)
+    const contract = {
+      transition_duration: style.transitionDuration,
+      transition_property: style.transitionProperty,
+    }
+
+    element.remove()
+
+    return contract
+  })
+  expect(transition_contract.transition_duration).not.toBe('0s')
+  expect(transition_contract.transition_property).toContain('opacity')
+
+  await page.locator('.compact-app-sidebar').getByRole('link', { name: /電腦3C/ }).click()
+  await expect(page).toHaveURL('/?category=computer-3c')
+  await expect(page.locator('.compact-top-bar .top-bar-title')).toHaveText(getBreadcrumbTextPattern('電腦3C'))
+})
+
+test('keeps the mobile header lightweight without card chrome', async ({ page }, test_info) => {
+  test.skip(test_info.project.name !== 'phone', 'mobile header chrome check only runs on phone')
+
+  await page.goto('/?category=network', { waitUntil: 'domcontentloaded' })
+  await expect(page.locator('vite-error-overlay')).toHaveCount(0)
+  await expect(page.locator('.compact-top-bar .top-bar-title')).toHaveText(getBreadcrumbTextPattern('網路通訊'))
+
+  const header_chrome = await page.locator('.compact-top-bar').evaluate((header) => {
+    const style = window.getComputedStyle(header)
+
+    return {
+      border_top_width: style.borderTopWidth,
+      box_shadow: style.boxShadow,
+      margin_left: style.marginLeft,
+      margin_right: style.marginRight,
+    }
+  })
+
+  expect(header_chrome.border_top_width).toBe('0px')
+  expect(header_chrome.box_shadow).toBe('none')
+  expect(header_chrome.margin_left).toBe('0px')
+  expect(header_chrome.margin_right).toBe('0px')
 })
 
 test('does not expose horizontal document overflow across responsive viewports', async ({ page }) => {
@@ -66,18 +151,25 @@ test('switches tabs without navigation reload and exposes search and link contra
   await page.goto('/', { waitUntil: 'domcontentloaded' })
   await expect(page.locator('vite-error-overlay')).toHaveCount(0)
 
-  await expect(page.getByRole('heading', { name: '最近值得看' })).toBeVisible()
+  await expect(page.getByRole('heading', { name: '首頁' })).toHaveCount(0)
+  await expect(page.locator('.compact-top-bar .top-bar-title')).toHaveText('DW嚴選')
+  await expect(page.locator('.compact-top-bar .breadcrumb-link')).toHaveAttribute('href', '/')
 
   await nav_root.getByRole('link', { name: '指南' }).click()
   await expect(page).toHaveURL('/guide')
-  await expect(page.getByRole('heading', { name: '指南列表' })).toBeVisible()
+  await expect(page.locator('.compact-top-bar .top-bar-title')).toHaveText(getBreadcrumbTextPattern('指南'))
+  await expect(page.getByRole('heading', { name: '指南列表' })).toHaveCount(0)
 
   await nav_root.getByRole('link', { name: '搜尋' }).click()
   await expect(page).toHaveURL('/search')
+  await expect(page.locator('.compact-top-bar .top-bar-title')).toHaveText(getBreadcrumbTextPattern('搜尋'))
+  await expect(page.getByRole('heading', { name: '搜看看' })).toHaveCount(0)
   await expect(page.getByPlaceholder('在找什麼嗎？™')).toBeVisible()
 
   await nav_root.getByRole('link', { name: '連結' }).click()
   await expect(page).toHaveURL('/links')
+  await expect(page.locator('.compact-top-bar .top-bar-title')).toHaveText(getBreadcrumbTextPattern('連結'))
+  await expect(page.getByRole('heading', { name: '相關入口' })).toHaveCount(0)
   await expect(page.getByRole('link', { name: /applepig\.idv\.tw/ })).toBeVisible()
   await expect(page.getByRole('link', { name: /applepig\.idv\.tw/ })).toHaveAttribute('href', 'https://applepig.idv.tw')
 
@@ -153,6 +245,10 @@ test('navigates to product detail route with a safe buy CTA', async ({ page }) =
 
   const detail = page.locator('.product-detail-page')
   await expect(detail).toBeVisible()
+  await expect(page.locator('.compact-top-bar .top-bar-title')).toContainText('DW嚴選')
+  await expect(page.locator('.compact-top-bar .top-bar-title')).toContainText('電腦3C')
+  await expect(page.locator('.compact-top-bar .top-bar-title')).toContainText(await detail.locator('.detail-title').textContent() ?? '')
+  await expect(page.locator('.compact-top-bar .breadcrumb-link').nth(1)).toHaveAttribute('href', /\?category=computer-3c/)
   await expect(detail.getByText('DW 怎麼說')).toBeVisible()
   await expect(detail.locator('.detail-buy-cta')).toHaveAttribute('target', '_blank')
   await expect(detail.locator('.detail-buy-cta')).toHaveAttribute('rel', 'noopener noreferrer')
@@ -203,7 +299,7 @@ test('navigates to search by tag from product detail', async ({ page }) => {
   await page.goto('/products/2026-06-02-sharp-65-inch-xled', { waitUntil: 'domcontentloaded' })
   await expect(page.locator('vite-error-overlay')).toHaveCount(0)
 
-  const first_tag = page.locator('.detail-tag').first()
+  const first_tag = page.locator('.detail-taxonomy-row .catalog-pill[href^="/search?q="]').nth(1)
   const tag_label = (await first_tag.textContent())?.trim() ?? ''
 
   await expect(first_tag).toHaveAttribute('href', /\/search\?q=/)
@@ -213,11 +309,26 @@ test('navigates to search by tag from product detail', async ({ page }) => {
   await expect(page.getByPlaceholder('在找什麼嗎？™')).toHaveValue(tag_label)
 })
 
+test('navigates to search by channel from product card channel pill', async ({ page }) => {
+  await page.goto('/', { waitUntil: 'domcontentloaded' })
+  await expect(page.locator('vite-error-overlay')).toHaveCount(0)
+
+  const first_channel = page.locator('.product-card .channel-badge[href^="/search?q="]').first()
+  const channel_label = (await first_channel.textContent())?.trim() ?? ''
+
+  await expect(first_channel).toHaveAttribute('href', /\/search\?q=/)
+  await first_channel.click()
+
+  await expect(page).toHaveURL(new RegExp(`\\/search\\?q=${encodeURIComponent(channel_label)}`))
+  await expect(page.getByPlaceholder('在找什麼嗎？™')).toHaveValue(channel_label)
+})
+
 test('renders direct product detail routes and unknown product not-found states', async ({ page }) => {
   await page.goto('/products/2026-06-02-sharp-65-inch-xled', { waitUntil: 'domcontentloaded' })
   await expect(page.locator('vite-error-overlay')).toHaveCount(0)
-  await expect(page.locator('.product-detail-page')).toBeVisible()
-  await expect(page.getByRole('heading', { name: /Sharp 65吋 XLED/ })).toBeVisible()
+  const detail = page.locator('.product-detail-page')
+  await expect(detail).toBeVisible()
+  await expect(detail.getByRole('heading', { name: /Sharp 65吋 XLED/ })).toBeVisible()
 
   await page.goto('/products/not-a-real-product', { waitUntil: 'domcontentloaded' })
   await expect(page.locator('vite-error-overlay')).toHaveCount(0)
@@ -225,14 +336,22 @@ test('renders direct product detail routes and unknown product not-found states'
   await expect(page.getByRole('link', { name: '回首頁' })).toBeVisible()
 })
 
-test('restores category and search state from query strings', async ({ page }) => {
+test('restores category and search state from query strings', async ({ page }, test_info) => {
   await page.goto('/?category=av-theater', { waitUntil: 'domcontentloaded' })
   await expect(page.locator('vite-error-overlay')).toHaveCount(0)
-  await expect(page.getByRole('button', { name: /影音劇院/ })).toHaveAttribute('aria-pressed', 'true')
+
+  if (test_info.project.name === 'desktop') {
+    await expect(page.locator('.home-category-chip-list')).toBeHidden()
+    await expect(page.locator('.compact-app-sidebar').getByRole('link', { name: /影音劇院/ })).toHaveAttribute('aria-current', 'page')
+  }
+  else {
+    await expect(page.getByRole('button', { name: /影音劇院/ })).toHaveAttribute('aria-pressed', 'true')
+  }
 
   await page.goto('/guide?tags=影音劇院', { waitUntil: 'domcontentloaded' })
   await expect(page.locator('vite-error-overlay')).toHaveCount(0)
-  await expect(page.getByRole('heading', { name: '指南列表' })).toBeVisible()
+  await expect(page.locator('.compact-top-bar .top-bar-title')).toHaveText(getBreadcrumbTextPattern('指南'))
+  await expect(page.getByRole('heading', { name: '指南列表' })).toHaveCount(0)
   await expect(page.locator('.tag-chip.is-active')).toHaveCount(0)
 
   await page.goto('/search?q=Sharp', { waitUntil: 'domcontentloaded' })
@@ -436,7 +555,7 @@ test('renders submitted search as ordered resource sections with counts and non-
   await expect(sections.nth(0)).toHaveAttribute('data-section-id', 'products')
   await expect(sections.nth(1)).toHaveAttribute('data-section-id', 'guides')
   await expect(sections.nth(2)).toHaveAttribute('data-section-id', 'links')
-  await expect(sections.nth(0).getByRole('heading', { name: /^商品 \d+$/ })).toBeVisible()
+  await expect(sections.nth(0).getByRole('heading', { name: /^產品 \d+$/ })).toBeVisible()
   await expect(sections.nth(1).getByRole('heading', { name: /^指南 \d+$/ })).toBeVisible()
   await expect(sections.nth(2).getByRole('heading', { name: /^連結 \d+$/ })).toBeVisible()
 
@@ -492,15 +611,16 @@ test('hides empty general categories from home chips and desktop sidebar', async
   await page.goto('/', { waitUntil: 'domcontentloaded' })
   await expect(page.locator('vite-error-overlay')).toHaveCount(0)
 
-  await expect(page.locator('.category-chip-list').getByRole('button', { name: /全部/ })).toBeVisible()
+  await expect(page.locator('.home-category-chip-list')).toBeHidden()
+  await expect(page.locator('.home-category-chip-list').getByRole('button', { name: /全部/ })).toHaveCount(0)
   await expect(page.locator('.category-chip-list').getByRole('button', { name: /其他/ })).toHaveCount(0)
   await expect(page.locator('.compact-app-sidebar .desktop-category-items').getByRole('link', { name: /其他/ })).toHaveCount(0)
 })
 
-test('uses the wide desktop canvas without leaving a large blank gutter', async ({ page }, test_info) => {
-  test.skip(test_info.project.name !== 'desktop', 'wide layout check only runs on the desktop project')
+test('keeps desktop product grid columns fluid without stretching sparse categories', async ({ page }, test_info) => {
+  test.skip(test_info.project.name !== 'desktop', 'desktop product grid sizing check only runs on the desktop project')
 
-  await page.setViewportSize({ width: 3440, height: 1440 })
+  await page.setViewportSize({ width: 1920, height: 1080 })
   await page.goto('/', { waitUntil: 'domcontentloaded' })
   await expect(page.locator('vite-error-overlay')).toHaveCount(0)
 
@@ -512,10 +632,37 @@ test('uses the wide desktop canvas without leaving a large blank gutter', async 
 
     return {
       first_row_card_count: cards.filter((card) => Math.abs(card.top - cards[0].top) < 2).length,
-      right_gap: grid ? window.innerWidth - grid.right : Number.POSITIVE_INFINITY,
+      first_row_right_gap: grid === undefined
+        ? 0
+        : grid.right - Math.max(...cards
+          .filter((card) => Math.abs(card.top - cards[0].top) < 2)
+          .map((card) => card.right)),
+      max_card_width: Math.max(...cards.map((card) => card.width)),
+      grid_width: grid?.width ?? 0,
     }
   })
 
-  expect(layout.first_row_card_count).toBeGreaterThanOrEqual(8)
-  expect(layout.right_gap).toBeLessThanOrEqual(48)
+  expect(layout.first_row_card_count).toBeGreaterThanOrEqual(6)
+  expect(layout.first_row_right_gap).toBeLessThanOrEqual(1)
+  expect(layout.max_card_width).toBeGreaterThan(240)
+  expect(layout.grid_width).toBeGreaterThan(0)
+
+  await page.goto('/?category=network', { waitUntil: 'domcontentloaded' })
+  await expect(page.locator('vite-error-overlay')).toHaveCount(0)
+
+  const sparse_category_layout = await page.evaluate(() => {
+    const grid = document.querySelector('.product-grid')?.getBoundingClientRect()
+    const cards = Array.from(document.querySelectorAll('.product-card'))
+      .map((card) => card.getBoundingClientRect())
+
+    return {
+      card_count: cards.length,
+      grid_width: grid?.width ?? 0,
+      max_card_width: Math.max(...cards.map((card) => card.width)),
+    }
+  })
+
+  expect(sparse_category_layout.card_count).toBe(2)
+  expect(sparse_category_layout.grid_width).toBeGreaterThan(0)
+  expect(sparse_category_layout.max_card_width).toBeLessThan(360)
 })

@@ -64,11 +64,14 @@ cmd_start() {
         fi
     fi
 
-    # Read APP_URL from .env if it exists
-    APP_URL="localhost"
+    # Read APP_URL from .env
     if [ -f ".env" ]; then
         # shellcheck source=/dev/null
         source ".env"
+    fi
+    if [ -z "${APP_URL:-}" ]; then
+        log_error "APP_URL 未設定——請在 .env 設定，例如 APP_URL=dwselect.toybox.local"
+        exit 1
     fi
 
     log_info "Starting development container..."

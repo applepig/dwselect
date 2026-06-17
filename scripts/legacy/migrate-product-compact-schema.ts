@@ -159,6 +159,10 @@ export function getCompactProductMigration(legacy_product: LegacyProduct): Produ
     category,
     tags: _legacy_tags,
     tag_ids,
+    status,
+    image_file,
+    image_url: _legacy_image_url,
+    published_at,
     price_text: _price_text,
     description: _description,
     purchase_url: _purchase_url,
@@ -166,8 +170,12 @@ export function getCompactProductMigration(legacy_product: LegacyProduct): Produ
   } = legacy_product
   const channel_id = inferChannelId(legacy_product.purchase_url)
   const price = parseProductPrice(legacy_product.price_text, channel_id)
+  const migrated_image_file = image_file ?? null
+  const has_local_image_file = migrated_image_file !== null
+  const migrated_status = status === 'published' && !has_local_image_file ? 'draft' : status
   const migrated_product = {
     ...product_without_legacy_fields,
+    status: migrated_status,
     english_name: legacy_product.name,
     summary: legacy_product.description,
     long_description: legacy_product.description,
@@ -181,8 +189,11 @@ export function getCompactProductMigration(legacy_product: LegacyProduct): Produ
       price,
       checked_at: legacy_product.updated_at,
     }],
+    image_file: migrated_image_file,
+    image_url: null,
     category_id: getMigratedCategoryId(category),
     tag_ids: tag_ids ?? [],
+    published_at: migrated_status === 'published' ? published_at : null,
   }
 
   return product_schema.parse(migrated_product)

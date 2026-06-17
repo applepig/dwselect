@@ -1,6 +1,6 @@
 :root {
   color-scheme: light;
-  font-family: Inter, 'Noto Sans TC', system-ui, sans-serif;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang TC', 'Microsoft JhengHei', sans-serif;
   --dw-bg: #f6f1e7;
   --dw-panel: #fffaf1;
   --dw-panel-strong: #fff4dd;

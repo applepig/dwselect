@@ -29,6 +29,8 @@
 - [ ] `scripts/localize-content-images.ts` 下載圖片後寫入 `image_file`，不再把本地公開 URL 寫回 JSON
 - [ ] Content 測試驗證每個 `image_file` 對應的實體檔存在於 `content/products/images/` 或 `content/guides/images/`
 - [ ] `content/AGENTS.md` 更新為 `image_file` authoring 流程，並連到 `docs/CONTENT.md`
+
+> 2026-06-16 註：018 static generate performance sprint 已 supersede Product 圖片 fallback 契約。Product 不再接受 external `image_url` 作為圖片來源；published Product 必須使用本地 `image_file`，沒有本地圖片的 legacy / draft Product 必須維持 draft 且 `image_file: null`、`image_url: null`。Guide / Link 的 external `image_url` 規則不受此註記影響。
 - [ ] CI 等級驗證通過：`pnpm test`、`pnpm lint`、`pnpm typecheck`、`pnpm generate`、`node scripts/assert-runtime-google-sheet-clean.ts`
 
 ## 相關檔案

@@ -19,7 +19,7 @@ services:
       - /app/.output
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.dwselect.rule=Host(`${APP_URL:-localhost}`)"
+      - "traefik.http.routers.dwselect.rule=Host(`${APP_URL:?APP_URL 未設定，請在 .env 設定}`)"
       - "traefik.http.routers.dwselect.entrypoints=websecure"
       - "traefik.http.routers.dwselect.tls=true"
       - "traefik.http.services.dwselect.loadbalancer.server.port=3000"

@@ -71,7 +71,7 @@ export const product_schema = z.object({
   unpublished_at: timestamp_schema.nullable(),
   archived_at: timestamp_schema.nullable(),
 }).strict().superRefine((product, context) => {
-  addExclusiveImageSourceIssue(product, context, true)
+  addProductImageSourceIssue(product, context)
 })
 
 export const guide_schema = z.object({
@@ -133,6 +133,30 @@ function addExclusiveImageSourceIssue(
       code: 'custom',
       path: ['image_file'],
       message: 'must provide exactly one image source',
+    })
+  }
+}
+
+function addProductImageSourceIssue(
+  product: { status: z.infer<typeof content_status_schema>, image_file?: string | null, image_url?: string | null },
+  context: z.RefinementCtx,
+) {
+  const has_image_file = product.image_file !== null && product.image_file !== undefined
+  const has_image_url = product.image_url !== null && product.image_url !== undefined
+
+  if (product.status === 'published' && !has_image_file) {
+    context.addIssue({
+      code: 'custom',
+      path: ['image_file'],
+      message: 'Published product image_file is required',
+    })
+  }
+
+  if (has_image_url) {
+    context.addIssue({
+      code: 'custom',
+      path: ['image_url'],
+      message: 'must not be provided for product images; use image_file',
     })
   }
 }
@@ -225,60 +249,40 @@ export function validateContentTaxonomyReferences(input: ContentTaxonomyReferenc
       })
     }
 
-    addMissingTagViolations(violations, 'product', product.id, product.tag_ids, product_tag_ids)
+    addMissingTaxonomyViolations(violations, 'product', product.id, product.tag_ids, product_tag_ids, 'tag_ids')
   }
 
   for (const guide of input.guides ?? []) {
-    addMissingCategoryViolations(violations, 'guide', guide.id, guide.category_ids, category_ids)
-    addMissingTagViolations(violations, 'guide', guide.id, guide.tag_ids, tag_ids)
+    addMissingTaxonomyViolations(violations, 'guide', guide.id, guide.category_ids, category_ids, 'category_ids')
+    addMissingTaxonomyViolations(violations, 'guide', guide.id, guide.tag_ids, tag_ids, 'tag_ids')
   }
 
   for (const link of input.links ?? []) {
-    addMissingCategoryViolations(violations, 'link', link.id, link.category_ids, category_ids)
-    addMissingTagViolations(violations, 'link', link.id, link.tag_ids, tag_ids)
+    addMissingTaxonomyViolations(violations, 'link', link.id, link.category_ids, category_ids, 'category_ids')
+    addMissingTaxonomyViolations(violations, 'link', link.id, link.tag_ids, tag_ids, 'tag_ids')
   }
 
   return violations
 }
 
-function addMissingCategoryViolations(
+function addMissingTaxonomyViolations(
   violations: ContentTaxonomyReferenceViolation[],
   content_type: ContentTypeWithTaxonomyReferences,
   content_id: string,
-  referenced_category_ids: string[],
-  valid_category_ids: ReadonlySet<string>,
+  referenced_ids: string[],
+  valid_ids: ReadonlySet<string>,
+  field: Extract<ContentTaxonomyReferenceViolation['field'], 'category_ids' | 'tag_ids'>,
 ) {
-  for (const category_id of referenced_category_ids) {
-    if (valid_category_ids.has(category_id)) {
+  for (const referenced_id of referenced_ids) {
+    if (valid_ids.has(referenced_id)) {
       continue
     }
 
     violations.push({
       content_type,
       content_id,
-      field: 'category_ids',
-      value: category_id,
-    })
-  }
-}
-
-function addMissingTagViolations(
-  violations: ContentTaxonomyReferenceViolation[],
-  content_type: ContentTypeWithTaxonomyReferences,
-  content_id: string,
-  referenced_tag_ids: string[],
-  valid_tag_ids: ReadonlySet<string>,
-) {
-  for (const tag_id of referenced_tag_ids) {
-    if (valid_tag_ids.has(tag_id)) {
-      continue
-    }
-
-    violations.push({
-      content_type,
-      content_id,
-      field: 'tag_ids',
-      value: tag_id,
+      field,
+      value: referenced_id,
     })
   }
 }

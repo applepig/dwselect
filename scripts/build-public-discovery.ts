@@ -2,8 +2,9 @@ import { mkdir, writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
 
 import type { Guide, LinkDefinition, Product } from '../app/utils/product-schema.ts'
-import { readPublicContentSource, type ContentReaderOptions } from './content-reader.ts'
-import { SITE_NAME, SITE_URL, buildPublicContentPayload } from './public-content.ts'
+import { compareProducts } from '../app/utils/content/compare-products.ts'
+import { readPublicContentSource, type ContentReaderOptions, type PublicContentSource } from './content-reader.ts'
+import { SITE_NAME, SITE_URL, buildPublicContentPayload, isPublished } from './public-content.ts'
 
 type BuildPublicDiscoveryOptions = ContentReaderOptions & {
   public_dir?: string
@@ -25,15 +26,28 @@ type RssItem = {
   updated_at: string
 }
 
-const DEFAULT_PUBLIC_DIR = 'public'
+export const DEFAULT_PUBLIC_DIR = 'public'
 const ROOT_ROUTES = ['/', '/guide', '/search', '/links']
 const RSS_WEEKDAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
 const RSS_MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 
 export async function buildPublicDiscoveryFiles(options: BuildPublicDiscoveryOptions = {}): Promise<BuildPublicDiscoverySummary> {
-  const public_dir = options.public_dir ?? DEFAULT_PUBLIC_DIR
   const source = await readPublicContentSource(options)
+
+  return buildPublicDiscoveryFilesFromSource(source, options)
+}
+
+export async function buildPublicDiscoveryFilesFromSource(
+  source: PublicContentSource,
+  options: Pick<BuildPublicDiscoveryOptions, 'public_dir'> = {},
+): Promise<BuildPublicDiscoverySummary> {
+  const public_dir = options.public_dir ?? DEFAULT_PUBLIC_DIR
   const payload = buildPublicContentPayload(source)
+  const published_products = source.products
+    .filter(isPublished)
+    .toSorted((left_product, right_product) => compareProducts(left_product, right_product, source.taxonomies))
+  const published_guides = source.guides.filter(isPublished)
+  const published_links = source.links.filter(isPublished)
   const output_paths = [
     join(public_dir, 'robots.txt'),
     join(public_dir, 'llms.txt'),
@@ -46,14 +60,14 @@ export async function buildPublicDiscoveryFiles(options: BuildPublicDiscoveryOpt
   await Promise.all([
     writeFile(output_paths[0], buildRobotsTxt()),
     writeFile(output_paths[1], buildLlmsTxt()),
-    writeFile(output_paths[2], buildSitemapXml(payload.products)),
-    writeFile(output_paths[3], buildRssXml(payload.products, payload.guides, payload.links)),
+    writeFile(output_paths[2], buildSitemapXml(published_products)),
+    writeFile(output_paths[3], buildRssXml(published_products, published_guides, published_links)),
     writeFile(output_paths[4], `${JSON.stringify(payload, null, 2)}\n`),
   ])
 
   return {
     output_paths,
-    product_count: payload.products.length,
+    product_count: payload.products.cards.length,
     guide_count: payload.guides.length,
     link_count: payload.links.length,
   }

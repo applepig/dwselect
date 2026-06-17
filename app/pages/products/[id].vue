@@ -11,37 +11,21 @@
 </template>
 
 <script setup lang="ts">
-import type { Product } from '../../utils/product-schema'
-import type { TaxonomyDefinitions } from '../../utils/published-products/types'
-import { getCatalogProductId, getProductDetail, getRelatedProductCards } from '../../utils/published-products/product-detail'
+import type { ProductDetailView } from '../../utils/public-content-view-types'
 import { getCanonicalUrl, getSeoDescription, SITE_NAME, SITE_OG_IMAGE } from '../../utils/seo-metadata'
 
 const route = useRoute()
-const product = shallowRef<Product | null>(null)
-const all_products = shallowRef<Product[]>([])
-const runtime_taxonomies = shallowRef<TaxonomyDefinitions | undefined>()
-const product_detail = computed(() => {
-  if (product.value === null) {
-    return null
-  }
-
-  if (runtime_taxonomies.value === undefined) {
-    throw new Error('Catalog runtime taxonomies are not available')
-  }
-
-  return {
-    ...getProductDetail(product.value, runtime_taxonomies.value),
-    related_products: getRelatedProductCards(product.value, all_products.value, runtime_taxonomies.value),
-  }
-})
-const product_meta_title = computed(() => product_detail.value === null ? SITE_NAME : `${product_detail.value.title}｜${SITE_NAME}`)
-const product_meta_description = computed(() => getSeoDescription(product.value?.summary))
+const raw_id = route.params.id
+const product_id = (Array.isArray(raw_id) ? raw_id[0] : raw_id) ?? ''
+const product_detail = shallowRef<ProductDetailView | null>(null)
+const product_meta_title = computed(() => product_detail.value === null ? SITE_NAME : `${product_detail.value.name}｜${SITE_NAME}`)
+const product_meta_description = computed(() => getSeoDescription(product_detail.value?.summary))
 const product_canonical_url = computed(() => {
-  if (product.value === null) {
+  if (product_detail.value === null) {
     return getCanonicalUrl('/')
   }
 
-  return getCanonicalUrl(`/products/${getCatalogProductId(product.value)}`)
+  return getCanonicalUrl(`/products/${product_detail.value.id}`)
 })
 
 useHead(() => ({
@@ -68,12 +52,9 @@ useSeoMeta({
   twitterImage: SITE_OG_IMAGE,
 })
 
-const catalog_data = await useCatalogData()
-const raw_id = route.params.id
-const product_id = Array.isArray(raw_id) ? raw_id[0] : raw_id
-const matched_product = catalog_data.all_products.value.find((item) => getCatalogProductId(item) === product_id) ?? null
+const product_detail_data = await useProductDetailData(product_id)
 
-if (matched_product === null) {
+if (product_detail_data.value === null || product_detail_data.value === undefined) {
   throw createError({
     statusCode: 404,
     message: '找不到商品',
@@ -81,7 +62,5 @@ if (matched_product === null) {
   })
 }
 
-runtime_taxonomies.value = catalog_data.runtime_taxonomies.value
-all_products.value = catalog_data.all_products.value
-product.value = matched_product
+product_detail.value = product_detail_data.value
 </script>

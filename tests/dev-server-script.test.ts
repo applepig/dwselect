@@ -9,11 +9,14 @@ describe('dev server script', () => {
     expect(package_json.scripts.dev).not.toContain('--host')
   })
 
-  it('should read APP_URL for Vite allowed hosts with localhost fallback', () => {
+  it('should read APP_URL for Vite allowed hosts without localhost fallback', () => {
     const allowed_hosts = nuxt_config.vite?.server?.allowedHosts
     expect(allowed_hosts).toBeDefined()
     expect(Array.isArray(allowed_hosts)).toBe(true)
-    // Without APP_URL env var set, falls back to 'localhost'
-    expect(allowed_hosts).toContain(process.env.APP_URL ?? 'localhost')
+    if (process.env.APP_URL) {
+      expect(allowed_hosts).toContain(process.env.APP_URL)
+    }
+    expect(allowed_hosts).not.toContain('localhost')
+    expect(allowed_hosts).not.toContain('127.0.0.1')
   })
 })

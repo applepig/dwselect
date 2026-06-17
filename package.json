@@ -10,23 +10,23 @@
   "scripts": {
     "prepare": "nuxt prepare",
     "dev": "nuxt dev",
-    "build": "pnpm build:search-index && pnpm build:public-discovery && nuxt build",
+    "build": "pnpm build:content-images && pnpm build:public-artifacts && nuxt build",
+    "build:content-images": "node scripts/build-content-images.ts",
     "build:search-index": "node scripts/build-search-index.ts",
     "build:public-discovery": "node scripts/build-public-discovery.ts",
+    "build:public-artifacts": "node scripts/build-public-artifacts.ts",
     "test:e2e": "playwright test",
     "test": "vitest run --exclude 'tests/e2e/**'",
     "lint": "eslint . --max-warnings=0",
     "lint:file": "eslint --fix --max-warnings=0",
     "format": "eslint . --fix",
     "typecheck": "nuxt typecheck",
-    "generate": "pnpm build:search-index && pnpm build:public-discovery && nuxt generate",
+    "generate": "pnpm build:content-images && pnpm build:public-artifacts && nuxt generate",
     "preview": "nuxt preview"
   },
   "dependencies": {
-    "@nuxt/content": "^3.7.1",
     "@nuxt/ui": "^4.8.2",
     "@vueuse/core": "^14.3.0",
-    "better-sqlite3": "^12.5.0",
     "minisearch": "^7.2.0",
     "nuxt": "^4.4.8",
     "vue": "^3.5.24",
@@ -41,6 +41,7 @@
     "eslint": "^9.39.4",
     "happy-dom": "^20.10.3",
     "postcss-nesting": "^13.0.2",
+    "sharp": "^0.35.1",
     "typescript": "^6.0.3",
     "vitest": "^4.0.14",
     "vue-tsc": "^3.3.4"
@@ -48,8 +49,8 @@
   "pnpm": {
     "onlyBuiltDependencies": [
       "@parcel/watcher",
-      "better-sqlite3",
       "esbuild",
+      "sharp",
       "unrs-resolver",
       "vue-demi"
     ]

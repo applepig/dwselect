@@ -12,6 +12,8 @@ permissions:
 jobs:
   quality-gate:
     runs-on: ubuntu-latest
+    env:
+      APP_URL: dwselect.applepig.net
 
     steps:
       - name: Checkout repository
@@ -30,6 +32,17 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
+
+      - name: Restore Nuxt build cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            node_modules/.cache/nuxt
+            .nuxt
+          key: nuxt-build-${{ runner.os }}-node-24-${{ hashFiles('pnpm-lock.yaml', 'nuxt.config.ts', 'app/**', 'scripts/**', 'content/**') }}
+          restore-keys: |
+            nuxt-build-${{ runner.os }}-node-24-
+            nuxt-build-${{ runner.os }}-
 
       - name: Run tests
         run: pnpm test

@@ -97,4 +97,12 @@ describe('clickable chips adopt UButton with variant-based active state', () => 
     expect(catalog_css).toContain('.category-chip:focus-visible')
     expect(catalog_css).toContain('.tag-chip:focus-visible')
   })
+
+  it('should keep shared chips compact without shrinking the touch target too far', () => {
+    expect(catalog_css).toContain('min-height: 38px')
+    expect(catalog_css).toContain('padding-block: 0')
+    expect(catalog_css).toContain('padding-inline: 20px')
+    expect(catalog_css).toContain('white-space: nowrap')
+    expect(catalog_css).toContain('word-break: keep-all')
+  })
 })

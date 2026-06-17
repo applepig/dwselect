@@ -3,17 +3,6 @@
     class="compact-panel"
     aria-label="搜尋"
   >
-    <div class="section-heading-row">
-      <div>
-        <p class="section-kicker">
-          Search
-        </p>
-        <h2 class="section-title">
-          搜看看
-        </h2>
-      </div>
-    </div>
-
     <SearchInput
       v-model:query="pending_search_query"
       @submit="submitSearch"
@@ -83,7 +72,6 @@ import SearchSuggestionList from '../components/search/search-suggestion-list.vu
 import { useSearchPage } from '../composables/use-search-page'
 import { getCompactAppStateFromRoute } from '../utils/published-products/compact-app'
 import { getSearchResultSections } from '../utils/published-products/resource-rows'
-import { getPopularSearchTagGroups } from '../utils/published-products/tags'
 import { getCanonicalUrl, SITE_NAME, SITE_OG_IMAGE } from '../utils/seo-metadata'
 import type { SearchSuggestion } from '../utils/search/search-index'
 
@@ -115,7 +103,7 @@ useSeoMeta({
 
 const route = useRoute()
 const router = useRouter()
-const { all_products, runtime_taxonomies, runtime_guides, runtime_links } = await useCatalogData()
+const { content_payload } = await useCatalogData()
 const route_state = computed(() => ({
   ...getCompactAppStateFromRoute({ path: route.path, query: route.query }),
 }))
@@ -138,20 +126,7 @@ const {
   submitted_search_query,
   navigateToSearch,
 })
-const popular_search_tags = computed(() => {
-  if (runtime_taxonomies.value === undefined) {
-    return { tags: [], brands: [] }
-  }
-
-  return getPopularSearchTagGroups(
-    {
-      products: all_products.value,
-      guides: runtime_guides.value ?? [],
-      links: runtime_links.value ?? [],
-    },
-    runtime_taxonomies.value,
-  )
-})
+const popular_search_tags = computed(() => content_payload.value?.navigation.popular_search_tags ?? { tags: [], brands: [] })
 const search_results = computed(() => client_search_results.value)
 const search_result_sections = computed(() => getSearchResultSections(search_results.value))
 const search_empty_reason = computed(() => {

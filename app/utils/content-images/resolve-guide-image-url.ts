@@ -1,4 +1,4 @@
-import { resolveImageFileUrl } from './resolve-image-file-url'
+import { resolveImageFileUrl } from './resolve-image-file-url.ts'
 
 type GuideImageSource = {
   image_file?: string | null
@@ -6,5 +6,5 @@ type GuideImageSource = {
 }
 
 export function resolveGuideImageUrl(guide: GuideImageSource): string | null {
-  return resolveImageFileUrl(guide.image_file, 'guides') ?? guide.image_url ?? null
+  return resolveImageFileUrl(guide.image_file, 'guides')
 }

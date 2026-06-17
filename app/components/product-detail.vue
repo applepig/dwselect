@@ -4,22 +4,22 @@
     class="product-detail-page"
     :data-product-id="detail.id"
   >
-    <UButton
-      class="detail-back"
-      icon="i-lucide-arrow-left"
-      color="neutral"
-      variant="ghost"
-      aria-label="返回"
-      @click="onBackClicked"
-    />
-
     <div
       class="detail-hero-tile"
       :style="{ 'view-transition-name': `product-image-${detail.id}` }"
     >
+      <UButton
+        class="detail-back"
+        icon="i-lucide-arrow-left"
+        color="neutral"
+        variant="ghost"
+        aria-label="返回"
+        @click="onBackClicked"
+      />
+
       <img
         v-if="!has_detail_image_failed"
-        :src="detail.hero_image"
+        :src="detail.hero_image_url"
         :alt="detail.hero_alt"
         class="detail-hero-image"
         @error="onDetailImageError"
@@ -32,25 +32,32 @@
     </div>
 
     <section class="detail-content">
-      <div class="detail-meta-row">
-        <UBadge
-          class="channel-badge"
-          size="xs"
-        >
-          <span class="channel-dot" />
-          {{ detail.channel_label }}
-        </UBadge>
-        <UBadge
-          class="detail-category"
-          size="xs"
+      <h2 class="detail-title">
+        {{ detail.name }}
+      </h2>
+
+      <div
+        class="detail-taxonomy-row"
+        aria-label="商品分類、通路與 tags"
+      >
+        <CatalogPill
+          :to="{ path: '/', query: { category: detail.category_id } }"
         >
           {{ detail.category_label }}
-        </UBadge>
+        </CatalogPill>
+        <CatalogPill
+          :to="{ path: '/search', query: { q: detail.channel_label } }"
+        >
+          {{ detail.channel_label }}
+        </CatalogPill>
+        <CatalogPill
+          v-for="tag in detail.tag_labels"
+          :key="tag"
+          :to="{ path: '/search', query: { q: tag } }"
+        >
+          {{ tag }}
+        </CatalogPill>
       </div>
-
-      <h2 class="detail-title">
-        {{ detail.title }}
-      </h2>
 
       <p class="detail-price">
         {{ detail.price_label }}
@@ -61,33 +68,21 @@
         color="primary"
         variant="subtle"
         title="DW 怎麼說"
-        :description="detail.dw_says"
+        :description="detail.long_description || detail.summary"
       />
 
-      <p
-        v-if="detail.description"
-        class="detail-description"
-      >
-        {{ detail.description }}
-      </p>
-
-      <div
-        class="detail-tag-list"
-        aria-label="商品 tags"
-      >
-        <NuxtLink
-          v-for="tag in detail.tags"
-          :key="tag"
-          class="detail-tag"
-          :to="{ path: '/search', query: { q: tag } }"
-        >
-          {{ tag }}
-        </NuxtLink>
-      </div>
+      <UAlert
+        v-if="detail.llm_description"
+        class="detail-llm-says"
+        color="neutral"
+        variant="subtle"
+        title="AI 怎麼說"
+        :description="detail.llm_description"
+      />
 
       <UButton
         class="detail-buy-cta"
-        :to="detail.buy_cta.href"
+        :to="detail.buy_url"
         target="_blank"
         rel="noopener noreferrer"
         block
@@ -121,7 +116,7 @@
           <span class="related-product-image-tile">
             <img
               v-if="!failed_related_image_ids.has(product.id)"
-              :src="product.image"
+              :src="product.image_url"
               :alt="product.name"
               class="related-product-image"
               :data-product-id="product.id"
@@ -137,7 +132,7 @@
 
           <span class="related-product-body">
             <span class="related-product-name">{{ product.name }}</span>
-            <span class="related-product-meta">{{ product.category }} · {{ product.channel }}</span>
+            <span class="related-product-meta">{{ product.category_label }} · {{ product.channel_label }}</span>
           </span>
         </NuxtLink>
       </div>
@@ -146,7 +141,7 @@
 </template>
 
 <script setup lang="ts">
-import type { ProductDetailView } from '../utils/published-products/types'
+import type { ProductDetailView } from '../utils/public-content-view-types'
 
 const router = useRouter()
 
@@ -157,12 +152,10 @@ const props = defineProps<{
 const has_detail_image_failed = ref(false)
 const failed_related_image_ids = ref<Set<string>>(new Set())
 const detail_root = ref<HTMLElement | null>(null)
-const displayed_related_products = computed(() => props.detail.related_products.slice(0, 3))
+const displayed_related_products = computed(() => props.detail.related_products)
 
 onMounted(() => {
   const hero_image = detail_root.value?.querySelector<HTMLImageElement>('.detail-hero-image') ?? null
-
-  hero_image?.addEventListener('error', onDetailImageError)
 
   if (isBrokenImage(hero_image)) {
     onDetailImageError()
@@ -173,12 +166,8 @@ onMounted(() => {
   for (const image of related_images) {
     const product_id = image.dataset.productId
 
-    if (product_id) {
-      image.addEventListener('error', () => onRelatedImageError(product_id))
-    }
-
-    if (image.dataset.productId && isBrokenImage(image)) {
-      onRelatedImageError(image.dataset.productId)
+    if (product_id && isBrokenImage(image)) {
+      onRelatedImageError(product_id)
     }
   }
 })

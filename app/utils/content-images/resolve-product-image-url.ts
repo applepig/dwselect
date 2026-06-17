@@ -1,15 +1,14 @@
-import { resolveImageFileUrl } from './resolve-image-file-url'
+import { resolveImageFileUrl } from './resolve-image-file-url.ts'
 
 type ProductImageSource = {
   image_file?: string | null
-  image_url?: string | null
 }
 
 export function resolveProductImageUrl(product: ProductImageSource): string {
-  const image_url = resolveImageFileUrl(product.image_file, 'products') ?? product.image_url ?? null
+  const image_url = resolveImageFileUrl(product.image_file, 'products')
 
   if (image_url === null) {
-    throw new Error('Product image source is required')
+    throw new Error('Published product image_file is required')
   }
 
   return image_url

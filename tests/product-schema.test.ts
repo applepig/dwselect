@@ -37,7 +37,8 @@ const valid_product = {
       checked_at: '2026-06-02T00:00:00+08:00',
     },
   ],
-  image_url: 'https://example.com/product.jpg',
+  image_file: '2026-06-02-sample-product.jpg',
+  image_url: null,
   category_id: 'home',
   tag_ids: ['tag-a', 'tag-b'],
   reference_url: 'https://example.com/reference',
@@ -218,9 +219,43 @@ describe('product schema', () => {
     }
   })
 
+  it('should reject external-only product image URLs', () => {
+    const result = product_schema.safeParse({
+      ...valid_product,
+      image_file: null,
+      image_url: 'https://example.com/product.jpg',
+    })
+
+    expect(result.success).toBe(false)
+    expect(result.error?.issues).toEqual(expect.arrayContaining([
+      expect.objectContaining({
+        path: ['image_file'],
+      }),
+    ]))
+  })
+
+  it('should keep rejecting draft product image URLs while allowing missing draft image files', () => {
+    expect(() => product_schema.parse({
+      ...valid_product,
+      status: 'draft',
+      image_file: null,
+      image_url: null,
+      published_at: null,
+    })).not.toThrow()
+
+    expect(() => product_schema.parse({
+      ...valid_product,
+      status: 'draft',
+      image_file: null,
+      image_url: 'https://example.com/product.jpg',
+      published_at: null,
+    })).toThrow()
+  })
+
   it('should reject non HTTP(S) product image URLs', () => {
     expect(() => product_schema.parse({
       ...valid_product,
+      image_file: null,
       image_url: 'ftp://example.com/product.jpg',
     })).toThrow()
   })
@@ -277,7 +312,7 @@ describe('product schema', () => {
     })).toThrow()
   })
 
-  it('should require products to have exactly one image source', () => {
+  it('should require products to have a local image file only', () => {
     expect(() => product_schema.parse({
       ...valid_product,
       image_file: '2026-06-02-sample-product.jpg',
@@ -285,10 +320,12 @@ describe('product schema', () => {
     })).toThrow()
     expect(() => product_schema.parse({
       ...valid_product,
+      image_file: null,
       image_url: null,
     })).toThrow()
     expect(() => product_schema.parse({
       ...valid_product,
+      image_file: undefined,
       image_url: undefined,
     })).toThrow()
   })

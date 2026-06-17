@@ -3,6 +3,12 @@ import { fileURLToPath } from 'node:url'
 
 import { buildProductRoutes } from './scripts/build-product-routes'
 
+const app_url = process.env.APP_URL
+if (!app_url && !process.argv.some((a) => a === 'generate' || a === 'build')) {
+  throw new Error('APP_URL 環境變數未設定——請在 .env 設定，例如 APP_URL=dwselect.toybox.local')
+}
+const vite_host = app_url ?? 'dwselect.toybox.local'
+
 const product_routes = buildProductRoutes(fileURLToPath(new URL('./content/products/', import.meta.url)))
 const google_tag_manager_script = `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
 new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
@@ -12,7 +18,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 const google_tag_manager_noscript = '<iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KTZKC8CH" height="0" width="0" style="display:none;visibility:hidden"></iframe>'
 
 export default defineNuxtConfig({
-  modules: ['@nuxt/eslint', '@nuxt/content', '@nuxt/ui'],
+  modules: ['@nuxt/eslint', '@nuxt/ui'],
   app: {
     pageTransition: {
       name: 'compact-page-fade',
@@ -37,22 +43,15 @@ export default defineNuxtConfig({
   colorMode: {
     storage: 'cookie',
   },
+  ui: {
+    fonts: false,
+  },
   experimental: {
     viewTransition: false,
   },
   compatibilityDate: '2026-06-05',
   nitro: {
     preset: 'static',
-    publicAssets: [
-      {
-        dir: fileURLToPath(new URL('./content/products/images/', import.meta.url)),
-        baseURL: '/images/products',
-      },
-      {
-        dir: fileURLToPath(new URL('./content/guides/images/', import.meta.url)),
-        baseURL: '/images/guides',
-      },
-    ],
     prerender: {
       routes: [
         '/',
@@ -65,10 +64,10 @@ export default defineNuxtConfig({
   },
   vite: {
     server: {
-      allowedHosts: [process.env.APP_URL ?? 'localhost'],
+      allowedHosts: [vite_host],
       hmr: {
         protocol: 'wss',
-        host: process.env.APP_URL,
+        host: vite_host,
         clientPort: 443,
       },
     },

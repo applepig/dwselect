@@ -13,7 +13,11 @@ export function resolveImageFileUrl(image_file: string | null | undefined, image
     throw new Error(`Invalid image_file: ${image_file}`)
   }
 
-  return `/images/${image_directory}/${normalized_image_file}`
+  return `/images/${image_directory}/${getOptimizedImageFileName(normalized_image_file)}`
+}
+
+function getOptimizedImageFileName(image_file: string): string {
+  return `${image_file.replace(/\.[^.]+$/, '')}.webp`
 }
 
 function normalizeImageFile(image_file: string): string {
