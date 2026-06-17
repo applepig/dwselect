@@ -489,6 +489,10 @@ describe('Nuxt SSG baseline', () => {
     expect(detail_source).toContain('detail.long_description || detail.summary')
     expect(detail_source).toContain('AI 怎麼說')
     expect(detail_source).toContain('v-if="detail.llm_description"')
+    expect(detail_source).toContain('parseContentMarkdown')
+    expect(detail_source).toContain('detail-llm-title')
+    expect(detail_source).toContain('detail-llm-copy')
+    expect(detail_source).toContain('detail-llm-link')
     expect(detail_source).toContain('到 {{ detail.channel_label }} 購買')
     expect(detail_source).toContain('target="_blank"')
     expect(detail_source).toContain('rel="noopener noreferrer"')
@@ -520,7 +524,8 @@ describe('Nuxt SSG baseline', () => {
     }
 
     expect(detail_source).toContain(':description="detail.long_description || detail.summary"')
-    expect(detail_source).toContain(':description="detail.llm_description"')
+    expect(detail_source).toContain('parsed_llm_blocks')
+    expect(detail_source).not.toContain(':description="detail.llm_description"')
     expect(detail_source).toContain('detail.category_label')
     expect(detail_source.indexOf('detail.category_label')).toBeLessThan(detail_source.indexOf('detail.channel_label'))
     expect(detail_source.indexOf('detail.channel_label')).toBeLessThan(detail_source.indexOf('v-for="tag in detail.tag_labels"'))

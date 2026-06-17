@@ -1,5 +1,8 @@
 {
   "$schema": "https://opencode.ai/config.json",
+  "skills": {
+    "paths": [".opencode/skills"]
+  },
   "formatter": {
     "dwselect_lint_file": {
       "command": ["bash", "scripts/post-edit-hook.sh", "$FILE"],

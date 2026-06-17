@@ -1,0 +1,170 @@
+---
+name: dwselect-content-authoring
+description: Use ONLY when working on DW嚴選 content CMS files under content/，including product、guide、link JSON、taxonomy、content images、llm_description、price research、archive/update/add content tasks。
+---
+
+# DW嚴選 Content Authoring
+
+Use this skill for DW嚴選 CMS content work。This project is a public static content site backed by Git JSON files。Content work means researching product data、creating or updating structured JSON、maintaining taxonomy、localizing images、and rebuilding public artifacts。
+
+## Role
+
+You are a researcher and structured data filler，not a personal-opinion writer。
+
+- `summary` and `long_description` are user-authored personal opinions。Do not write or rewrite them unless the user explicitly provides exact text。
+- Agent-owned fields include product name、English name、model numbers、reference URL、taxonomy IDs、local image file、search aliases、and `llm_description`。Offers and prices are agent-maintained only when the user has not supplied explicit offer or price text。
+- `llm_description` must be objective、research-backed、and useful for search or LLM understanding。Do not paraphrase the user’s subjective recommendation text。
+
+## Files And Sources
+
+- Products：`content/products/*.json`
+- Product images：`content/products/images/*`
+- Guides：`content/guides/*.json`
+- Guide images：`content/guides/images/*`
+- Links：`content/links/*.json`
+- Taxonomy：`content/taxonomies/{categories,channels,tags,brands}.json`
+- Runtime artifacts：`public/api/content.json`、`public/search-index.json`、`public/rss.xml`、`public/sitemap.xml`、`public/images/**`
+
+Public runtime must not fetch Google Sheets、CMS、or external sources。The source of truth is Git-backed content JSON。
+
+## Product Rules
+
+- `id` must match the JSON file stem exactly。
+- File names use `YYYY-MM-DD-{slug}.json`，but the slug is a stable content identifier。Do not force it to track `english_name` after creation。
+- Timestamp format is ISO 8601 with timezone，for example `2026-06-18T00:00:00+08:00`。
+- Products use a single `category_id`。
+- Products use `tag_ids` containing both functional tags and brand IDs。
+- Published products must use local `image_file` and `image_url: null`。
+- Do not add new categories or channels。If needed，ask the user。
+- Taxonomy additions require user confirmation before editing taxonomy files。
+
+## llm_description Quality
+
+`llm_description` is an objective blog-style Markdown product decision brief for search、LLM understanding、and product detail rendering。Do not optimize for a fixed length。Write enough for a reader to correctly understand the product’s distinctive characteristics、tradeoffs、important specs、review findings、common user feedback、and reference links，similar in spirit to Kakaku、CNET、Wirecutter、or a concise buying-guide note。
+
+Markdown format guideline：
+
+- Write in blog-style Markdown，not as one giant paragraph。
+- Use `##` headings to separate sections such as「快速判斷」、「重要規格」、「優點與限制」、「評測與使用者回饋」、「適合誰／不適合誰」、「參考來源」。Choose sections that fit the product；do not force every section when research is weak。
+- Prefer bullet points for specs、pros/cons、use cases、review findings、and source lists。If something can be a bullet point，do not bury it in a long paragraph。
+- Put official pages、review pages、store pages、user review pages、and discussion pages directly in Markdown links when verified，for example `- [官方產品頁](https://example.com)`。
+- Keep source links inside `llm_description` so research artifacts are preserved when content JSON is written。
+- Use plain Markdown only：headings、paragraphs、bullet lists、and links。Do not write raw HTML。
+
+Length guideline：
+
+- Simple commodity or low-information product：a short Markdown brief with 1-2 sections may be enough。
+- Technical、high-price、or comparison-heavy product：use multiple Markdown sections and bullet lists。
+- Do not truncate useful verified information just to fit a character count。
+- Do not pad with generic filler when reliable information is limited。
+
+Cover these decision dimensions when available：
+
+- Product identity：type、brand、exact model／series、variant、capacity／size／color if relevant。
+- Key differentiators：what makes this product different from adjacent products in the same category。
+- Specs that matter for the category：not just electronics specs。Examples include ingredients、materials、dimensions、weight、power、capacity、coverage area、noise、installation constraints、compatibility、standards、included accessories、maintenance、consumables、origin、shelf life、warranty or lifecycle ratings。
+- Pros and cons：objective strengths and limitations from specs、reviews、store listing、or user feedback。
+- Use cases and fit：who／what scenario it fits，and what scenario it does not fit。
+- Review and user feedback：summarize recurring review points when available，without pretending anecdotal feedback is universal。
+- Search-useful factual aliases、model numbers、Japanese／English names、common abbreviations。
+
+Quality bar：
+
+- Prefer concrete nouns、numbers、comparison points、and verified caveats。
+- Mention the evidence source category implicitly through facts，for example official specs、store listing、Amazon product facts。
+- If the proposed text could still fit a different product in the same category，it is too generic。
+- If the text mainly repeats the user’s `summary` / `long_description`，it is invalid。
+- If no reviews or user feedback are found，explicitly omit that angle in the research notes；do not invent it。
+
+Avoid：
+
+- Repeating `summary` or `long_description`。
+- Subjective recommendation words such as「便宜」、「剛好」、「很足」、「可以考慮」、「好用」。
+- Unverified claims。
+- Marketing-only phrasing without specs。
+- Category-specific tunnel vision。For example，do not force every product into ports／wattage／protocols；choose the dimensions that matter for that product category。
+
+If research is weak，write a narrower description and report low confidence instead of guessing。
+
+## Research Requirements
+
+For product add/update work，research and return or fill：
+
+- Store URL and price。If the user provided an offer URL or price text，treat it as primary editorial input and preserve it unless explicitly told to update it。
+- Product title and model number。
+- Official product page or reliable reference URL。
+- Key specs。
+- Product image source。
+- `llm_description` with confidence level。
+
+Offer and price precedence：
+
+- User-provided URL and price text wins over researched prices。
+- User-provided purchase links belong in `offers[].url`。Do not move or replace them with official store、official spec page、or another marketplace URL。
+- Official product pages、review pages、manufacturer spec pages、or alternate source pages belong in `reference_url` or the research report，not in `offers[].url`，unless the user explicitly says to change the purchase link。
+- If a researched page shows a different price，return it as `observed_price` or `price_discrepancy`，not as a replacement offer。
+- Do not switch channels，for example from Amazon to official store，unless the user asked to replace the offer URL or the original URL is invalid。
+- If the original store page has no current offer but the user provided an approximate price，keep the approximate price and report the uncertainty。
+
+PChome fallback：
+
+- PChome product pages may return 429。When that happens，use the PChome API first：`https://ecapi.pchome.com.tw/ecshop/prodapi/v2/prod/{PRODUCT_ID}&fields=Id,Name,Nick,Price,Pic,Slogan,Describe,Spec&_callback=jsonp`
+- If API data is insufficient or the page requires interaction，use agent-browser to inspect the page。
+- Do not infer specs from product category alone。
+
+Amazon fallback：
+
+- Expand short URLs when possible。
+- Confirm title、ASIN、model number、brand、price、main image、and product facts。
+- If Amazon shows multiple variants，record the selected variant and confidence。
+
+## Image Quality
+
+Images must be downloaded into the local content image folder。Do not use remote `image_url` for published products。
+
+Preferred image sources：
+
+- Official product page media。
+- Store main product image at the highest available resolution。
+- Manufacturer press or support image。
+
+Quality requirements：
+
+- Prefer at least 800px on the longest edge when available。
+- Avoid thumbnails such as `US40`、`SS64`、`SX300`、`SY300`、or obvious 300px preview URLs if a larger version exists。
+- Avoid watermarked、collage、text-heavy、or tiny images unless no better source exists。
+- Keep the product visible with enough padding and no severe crop。
+- If only low-quality images are available，report that limitation in the work summary。
+
+Image inspection workflow：
+
+- Prefer agent-browser to inspect image `naturalWidth` / `naturalHeight` or visible page media。
+- Use store API fields、HTTP metadata、or URL pattern inspection when browser inspection is enough。
+- Do not require ImageMagick (`magick` / `identify`) for content research。If dimensions cannot be verified without extra local tooling，mark dimensions as unverified and continue。
+
+## Verification For Content-Only Tasks
+
+Content-only tasks validate format、schema-readable content、taxonomy references、images、and generated artifacts。Do not validate the current CMS dataset by hard-coded counts or specific product IDs。
+
+Run：
+
+```bash
+jq empty content/products/*.json content/taxonomies/*.json
+pnpm build:content-images
+pnpm build:public-artifacts
+```
+
+Only run Vitest when modifying schema、runtime logic、build scripts、or test logic。If an existing test fails because it hard-codes content count、specific content ID、or generated search document count，remove or refactor the bad test。Do not update expected counts to match new CMS data。
+
+## Subagent Dispatch Contract
+
+When delegating content research to a subagent，the prompt must explicitly tell it to use this skill and must restate the core constraints：
+
+- Read and follow `dwselect-content-authoring`。
+- Do not write or rewrite `summary` and `long_description`。
+- Do not modify files unless explicitly assigned implementation work。
+- Provide sources、confidence、and unresolved assumptions。
+- For `llm_description`，write a blog-style Markdown brief with headings、bullet points、review/user feedback when available、and verified reference links；research specs instead of paraphrasing user text。
+- For images，prefer high-resolution official or store main images and report quality concerns。
+- Preserve user-provided offer URL and price text unless explicitly asked to replace them。
+- Add official product/spec pages to `reference_url`，not by replacing the user-provided offer link。

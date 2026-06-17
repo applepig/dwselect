@@ -71,14 +71,92 @@
         :description="detail.long_description || detail.summary"
       />
 
-      <UAlert
+      <section
         v-if="detail.llm_description"
         class="detail-llm-says"
-        color="neutral"
-        variant="subtle"
-        title="AI 怎麼說"
-        :description="detail.llm_description"
-      />
+        aria-labelledby="detail-llm-says-title"
+      >
+        <h3
+          id="detail-llm-says-title"
+          class="detail-llm-title"
+        >
+          AI 怎麼說
+        </h3>
+        <div class="detail-llm-copy">
+          <template
+            v-for="(block, block_index) in parsed_llm_blocks"
+            :key="block_index"
+          >
+            <h4
+              v-if="block.type === 'heading'"
+              class="detail-llm-heading"
+            >
+              <template
+                v-for="(segment, segment_index) in block.segments"
+                :key="segment_index"
+              >
+                <a
+                  v-if="segment.type === 'link'"
+                  class="detail-llm-link"
+                  :href="segment.href"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >{{ segment.text }}</a>
+                <template v-else>
+                  {{ segment.text }}
+                </template>
+              </template>
+            </h4>
+
+            <ul
+              v-else-if="block.type === 'list'"
+              class="detail-llm-list"
+            >
+              <li
+                v-for="(item, item_index) in block.items"
+                :key="item_index"
+              >
+                <template
+                  v-for="(segment, segment_index) in item"
+                  :key="segment_index"
+                >
+                  <a
+                    v-if="segment.type === 'link'"
+                    class="detail-llm-link"
+                    :href="segment.href"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >{{ segment.text }}</a>
+                  <template v-else>
+                    {{ segment.text }}
+                  </template>
+                </template>
+              </li>
+            </ul>
+
+            <p
+              v-else
+              class="detail-llm-paragraph"
+            >
+              <template
+                v-for="(segment, segment_index) in block.segments"
+                :key="segment_index"
+              >
+                <a
+                  v-if="segment.type === 'link'"
+                  class="detail-llm-link"
+                  :href="segment.href"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >{{ segment.text }}</a>
+                <template v-else>
+                  {{ segment.text }}
+                </template>
+              </template>
+            </p>
+          </template>
+        </div>
+      </section>
 
       <UButton
         class="detail-buy-cta"
@@ -142,6 +220,7 @@
 
 <script setup lang="ts">
 import type { ProductDetailView } from '../utils/public-content-view-types'
+import { parseContentMarkdown } from '../utils/markdown/parse-content-markdown'
 
 const router = useRouter()
 
@@ -153,6 +232,7 @@ const has_detail_image_failed = ref(false)
 const failed_related_image_ids = ref<Set<string>>(new Set())
 const detail_root = ref<HTMLElement | null>(null)
 const displayed_related_products = computed(() => props.detail.related_products)
+const parsed_llm_blocks = computed(() => parseContentMarkdown(props.detail.llm_description))
 
 onMounted(() => {
   const hero_image = detail_root.value?.querySelector<HTMLImageElement>('.detail-hero-image') ?? null
