@@ -69,4 +69,4 @@ pnpm build:search-index
 pnpm build:public-discovery
 ```
 
-`pnpm generate` 會先執行 `pnpm build:content-images`、`pnpm build:search-index` 與 `pnpm build:public-discovery`，再產生 static output 到 `.output/public`。交付前若有內容、圖片、taxonomy、routing 或 public output 相關變更，應執行 `pnpm test`、`pnpm generate`，並用 `node scripts/assert-runtime-google-sheet-clean.ts` 確認公開 runtime 沒有 Google Sheets 指標。
+`pnpm generate` 會先執行 `pnpm build:content-images` 與 `pnpm build:public-artifacts`（後者單次讀取 content source 後同時產生 search index 與 public discovery payload），再產生 static output 到 `.output/public`。交付前若有內容、圖片、taxonomy、routing 或 public output 相關變更，應執行 `pnpm test`、`pnpm generate`，並用 `node scripts/assert-runtime-google-sheet-clean.ts` 確認公開 runtime 沒有 Google Sheets 指標。

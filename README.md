@@ -4,31 +4,41 @@ DW嚴選公開站使用 Nuxt SSG 與 Nuxt Content。商品資料放在 `content/
 
 ## Local development
 
-安裝 dependencies：
+分工：**測試與檢查跑在 host，dev server 跑在 Docker 容器**。
+
+安裝 host 依賴（跑測試、lint、typecheck、build artifacts 用）：
 
 ```bash
 pnpm install
 ```
 
-啟動本機開發伺服器：
+啟動與管理 dev server（Docker 容器透過 Traefik 自動路由到 `https://${APP_URL}/`，預設 `dwselect.toybox.local`；環境設定放在未提交的 `.env`，參考 `.env.example`，`APP_URL` 為必填）：
 
 ```bash
-pnpm dev
+./dev.sh start      # 啟動容器（NUXT_MODE=dev 跑含 HMR 的 dev server）
+./dev.sh install    # package.json 變更後同步容器內依賴
+./dev.sh logs       # 看 Nuxt log
+./dev.sh status     # 看容器狀態
 ```
 
-執行測試：
+不要直接在 host 上跑 `pnpm dev`——會與容器共用 Vite cache 造成 chunk hash 衝突。指令細節見 `CLAUDE.md`。
+
+執行測試與檢查（host，`vitest.config.ts` 已載入 `.env`，不需手動帶 `APP_URL=` 前綴）：
 
 ```bash
 pnpm test
+pnpm lint
+pnpm typecheck
 ```
 
-產生 public search index：
+產生公開站 build artifacts：
 
 ```bash
-pnpm build:search-index
+pnpm build:public-artifacts   # search index → public/search-index.json、discovery payload → public/api/content.json
+pnpm build:content-images     # 本地化 content 圖片
 ```
 
-搜尋 index 會輸出到 `public/search-index.json`。`pnpm generate` 會先執行這個步驟，確保靜態輸出使用最新 Git-backed content。
+`pnpm generate` 與 `pnpm build` 會先跑 `build:content-images` 與 `build:public-artifacts`，確保靜態輸出使用最新 Git-backed content；單獨的 `build:search-index`、`build:public-discovery` 仍保留為個別 CLI。
 
 ## Migration
 

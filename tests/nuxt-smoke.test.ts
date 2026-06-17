@@ -640,7 +640,7 @@ describe('Nuxt SSG baseline', () => {
   it('should document static search-index generation commands', () => {
     const readme_source = readFileSync(new URL('../README.md', import.meta.url), 'utf8')
 
-    expect(readme_source).toContain('pnpm build:search-index')
+    expect(readme_source).toContain('pnpm build:public-artifacts')
     expect(readme_source).toContain('public/search-index.json')
     expect(readme_source).toContain('pnpm generate')
   })
