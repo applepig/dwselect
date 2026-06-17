@@ -4,20 +4,26 @@ DW嚴選公開站使用 Nuxt SSG 與 Nuxt Content。商品資料放在 `content/
 
 ## Local development
 
-開發環境跑在 Docker 容器，透過 Traefik 自動路由到 `https://${APP_URL}/`（預設 `dwselect.toybox.local`）。環境設定放在未提交的 `.env`（參考 `.env.example`），`APP_URL` 為必填。
+分工：**測試與檢查跑在 host，dev server 跑在 Docker 容器**。
 
-啟動與管理開發站：
+安裝 host 依賴（跑測試、lint、typecheck、build artifacts 用）：
+
+```bash
+pnpm install
+```
+
+啟動與管理 dev server（Docker 容器透過 Traefik 自動路由到 `https://${APP_URL}/`，預設 `dwselect.toybox.local`；環境設定放在未提交的 `.env`，參考 `.env.example`，`APP_URL` 為必填）：
 
 ```bash
 ./dev.sh start      # 啟動容器（NUXT_MODE=dev 跑含 HMR 的 dev server）
-./dev.sh install    # 容器內 pnpm install，同步 package.json 變更
+./dev.sh install    # package.json 變更後同步容器內依賴
 ./dev.sh logs       # 看 Nuxt log
 ./dev.sh status     # 看容器狀態
 ```
 
 不要直接在 host 上跑 `pnpm dev`——會與容器共用 Vite cache 造成 chunk hash 衝突。指令細節見 `CLAUDE.md`。
 
-執行測試與檢查（`vitest.config.ts` 已載入 `.env`，不需手動帶 `APP_URL=` 前綴）：
+執行測試與檢查（host，`vitest.config.ts` 已載入 `.env`，不需手動帶 `APP_URL=` 前綴）：
 
 ```bash
 pnpm test
