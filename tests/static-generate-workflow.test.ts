@@ -33,6 +33,15 @@ describe('static generate workflow', () => {
     expect(command_positions).toEqual([...command_positions].sort((a, b) => a - b))
   })
 
+  it('should provide APP_URL before pnpm install runs Nuxt prepare', () => {
+    const workflow_source = readWorkflow()
+    const app_url_position = workflow_source.indexOf('APP_URL: dwselect.applepig.net')
+    const install_position = workflow_source.indexOf('run: pnpm install --frozen-lockfile')
+
+    expect(app_url_position).toBeGreaterThan(-1)
+    expect(app_url_position).toBeLessThan(install_position)
+  })
+
   it('should restore Nuxt build cache before quality gates', () => {
     const workflow_source = readWorkflow()
     const install_position = workflow_source.indexOf('run: pnpm install --frozen-lockfile')

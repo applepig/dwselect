@@ -12,6 +12,8 @@ permissions:
 jobs:
   quality-gate:
     runs-on: ubuntu-latest
+    env:
+      APP_URL: dwselect.applepig.net
 
     steps:
       - name: Checkout repository

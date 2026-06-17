@@ -28,25 +28,26 @@
       <span class="product-card-body">
         <span class="product-name">{{ product.name }}</span>
         <span class="product-summary">{{ product.summary }}</span>
-
-        <span class="product-card-meta">
-          <UBadge
-            class="product-card-price"
-            size="sm"
-          >
-            {{ product.price_label }}
-          </UBadge>
-
-          <UBadge
-            class="channel-badge"
-            size="xs"
-          >
-            <span class="channel-dot" />
-            {{ product.channel_label }}
-          </UBadge>
-        </span>
       </span>
     </NuxtLink>
+
+    <span class="product-card-meta">
+      <CatalogPill
+        class="product-card-price"
+        variant="accent"
+      >
+        {{ product.price_label }}
+      </CatalogPill>
+
+      <CatalogPill
+        class="channel-badge"
+        variant="dark"
+        :to="{ path: '/search', query: { q: product.channel_label } }"
+      >
+        <span class="channel-dot" />
+        {{ product.channel_label }}
+      </CatalogPill>
+    </span>
   </UCard>
 </template>
 

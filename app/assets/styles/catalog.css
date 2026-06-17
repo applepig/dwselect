@@ -128,14 +128,15 @@
 .clear-tags-button {
   width: fit-content;
   max-width: 100%;
-  min-height: 44px;
-  padding-block: 4px;
-  padding-inline: 14px;
+  min-height: 38px;
+  padding-block: 0;
+  padding-inline: 20px;
   border-radius: 999px;
   font-weight: 800;
   line-height: 1.2;
-  overflow-wrap: anywhere;
-  word-break: break-word;
+  overflow-wrap: normal;
+  white-space: nowrap;
+  word-break: keep-all;
 }
 
 .chip-count,
@@ -242,28 +243,51 @@
   justify-content: space-between;
   min-width: 0;
   margin-top: auto;
+  padding: 0 10px 10px;
 }
 
-.channel-badge,
-.product-card-price {
+.catalog-pill {
   display: inline-flex;
   align-items: center;
   gap: 5px;
   max-width: 100%;
   min-height: 28px;
-  padding: 0 8px;
+  padding: 0 10px;
   border-radius: 999px;
   font-size: 0.75rem;
   font-weight: 900;
   line-height: 1.2;
   overflow: hidden;
+  text-decoration: none;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.channel-badge {
-  background: color-mix(in srgb, #2b2b29 82%, transparent);
-  color: #fffaf1;
+.catalog-pill--default {
+  background: color-mix(in srgb, var(--dw-amber) 16%, var(--dw-panel));
+  color: var(--dw-text);
+}
+
+.catalog-pill--default:hover {
+  background: color-mix(in srgb, var(--dw-amber) 24%, var(--dw-panel));
+}
+
+.catalog-pill--dark {
+  background: color-mix(in srgb, var(--dw-text) 82%, var(--dw-panel));
+  color: var(--dw-bg);
+}
+
+.catalog-pill--dark:hover {
+  background: color-mix(in srgb, var(--dw-text) 88%, var(--dw-panel));
+}
+
+.catalog-pill--accent {
+  background: var(--ui-primary);
+  color: var(--ui-text-inverted);
+}
+
+.catalog-pill--accent:hover {
+  background: var(--ui-primary);
 }
 
 .channel-dot {
@@ -277,8 +301,6 @@
 .product-card-price {
   flex: 0 1 auto;
   min-width: 0;
-  background: var(--dw-accent);
-  color: #231405;
 }
 
 .product-card-meta .channel-badge {
@@ -644,27 +666,6 @@
   min-width: 0;
 }
 
-.taxonomy-chip {
-  display: inline-flex;
-  align-items: center;
-  max-width: 100%;
-  min-height: 30px;
-  padding: 0 9px;
-  border-radius: 999px;
-  background: color-mix(in srgb, var(--dw-amber) 16%, var(--dw-panel));
-  color: var(--dw-text);
-  font-size: 0.78rem;
-  font-weight: 900;
-  line-height: 1.2;
-  overflow-wrap: anywhere;
-  text-decoration: none;
-  word-break: break-word;
-}
-
-.taxonomy-chip:hover {
-  background: color-mix(in srgb, var(--dw-amber) 24%, var(--dw-panel));
-}
-
 .detail-dw-says {
   border: 1px solid var(--dw-border);
   background: var(--dw-panel-strong);
@@ -830,6 +831,7 @@
 
 .app-nav-button:focus-visible,
 .breadcrumb-link:focus-visible,
+.catalog-pill:focus-visible,
 .category-chip:focus-visible,
 .tag-chip:focus-visible,
 .clear-tags-button:focus-visible,
@@ -1058,6 +1060,12 @@
     padding: 18px 57px 0;
   }
 
+  .catalog-pill {
+    min-height: 30px;
+    padding: 0 14px;
+    font-size: 0.78rem;
+  }
+
   .compact-app-bottom-tabs,
   .compact-app-sidebar {
     display: none;
@@ -1107,6 +1115,12 @@
 
   .compact-panel {
     padding: 20px 81px 0;
+  }
+
+  .catalog-pill {
+    min-height: 30px;
+    padding: 0 14px;
+    font-size: 0.78rem;
   }
 
   .compact-app-bottom-tabs,

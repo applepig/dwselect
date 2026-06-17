@@ -54,3 +54,26 @@
 - agent-browser 驗收：iPad 834x1194 首頁第一張 card 實測 name 1 行（21.59px）、summary 2 行（44.63px）；detail taxonomy row 同列顯示 `電腦3C`、`PChome`、`ADATA`、`電源充電`，連結分別為 `/?category=computer-3c`、`/search?q=PChome`、`/search?q=ADATA`、`/search?q=電源充電`；light theme DW 區塊實測對比 15.51:1，通過 WCAG AA。截圖：`/home/applepig/.agent-browser/tmp/screenshots/screenshot-1781633410581.png`、`/home/applepig/.agent-browser/tmp/screenshots/screenshot-1781633448181.png`。
 - 校正：使用者指出首頁仍只有兩行，原因是前一版把「三行」誤解為 title + summary 合計三行；已改為 title 1 行、summary 本身 3 行。iPad 834x1194 重新實測前 5 張 card：summary height 66.95px、line-height 22.32px、`-webkit-line-clamp: 3`。驗證：`tests/nuxt-smoke.test.ts` 34 passed；完整 `pnpm test` 41 files / 310 tests passed；`pnpm lint`、`pnpm typecheck` 皆 exit 0。
 - 校正：使用者指出 detail back icon 沒有對齊在圓圈中央。agent-browser 量測確認 Nuxt UI `UButton` 預設 `padding: 6px` 且 `justify-content: normal`，造成 icon 水平中心偏左 5px；已在 `.detail-back` 明確設定 `display: inline-flex`、`align-items: center`、`justify-content: center`、`padding: 0`。修復後實測 button 44x44、icon 20x20、offset 12/12、center offset 0/0。驗證：`tests/nuxt-smoke.test.ts` + `tests/product-detail-back-navigation.test.ts` 36 passed；`pnpm lint`、`pnpm typecheck` 皆 exit 0。
+
+### PR CI 修正
+
+- 問題：PR #5 的 GitHub Actions `Static Generate / quality-gate` 在 `pnpm install --frozen-lockfile` 階段失敗，因 `prepare: nuxt prepare` 會載入 `nuxt.config.ts`，但 workflow 未提供 `APP_URL`。
+- 根因：`APP_URL` 缺失發生在 install/prepare 階段，不是 tests、lint、typecheck 或 generate 本身失敗。初步修正時誤用開發站 `dwselect.toybox.local`，使用者校正正式站應為 `dwselect.applepig.net`。
+- 修復：在 `.github/workflows/static-generate.yml` 的 `quality-gate` job 設定 `APP_URL: dwselect.applepig.net`，並於 `tests/static-generate-workflow.test.ts` 鎖定 workflow 必須在 install 前提供正式站 APP_URL。
+- 文件：更新 `CLAUDE.md` 記錄 host 分工：`dwselect.toybox.local` 是本機／開發站，`dwselect.applepig.net` 是正式站；CI、production build、deploy、SEO canonical 或公開正式環境設定不可使用開發站 host。
+- 驗證：`APP_URL=dwselect.toybox.local pnpm test tests/static-generate-workflow.test.ts` 通過，`APP_URL=dwselect.toybox.local pnpm lint` 通過。
+
+### UI hotfix：pill 元件收斂與 product card 通路搜尋
+
+- 問題：使用者指出 product card 上的 price/channel pill 仍顯得左右 padding 很窄，且 DOM class 仍出現 Nuxt UI `UBadge` 注入的 Tailwind utility（如 `text-[10px]/3 px-1.5 py-1`）。同時通路 pill 應可連到 search by 通路，但先前未實作。
+- 根因：外觀相似的 pill 分散在不同元件與樣式來源：category/tag filter 用 `UButton`，detail taxonomy 用 `TaxonomyChip`，product card price/channel 用 `UBadge` 再靠一般 CSS 覆蓋，導致 padding／link 行為漏改。
+- 修復：新增 `CatalogPill` 作為 link/span 共用 pill 元件，detail taxonomy 與 product card price/channel 改用同一元件；移除舊 `TaxonomyChip` 與 `.taxonomy-chip` CSS；product card channel pill 改為 `/search?q={channel_label}` link，price pill 維持非 link span；product card meta 不再被整張商品詳情 link 包住，避免 nested links。
+- 驗證：`APP_URL=dwselect.toybox.local pnpm test tests/nuxt-smoke.test.ts`、`tests/nuxt-ui-component-adoption.test.ts` 通過；`APP_URL=dwselect.toybox.local pnpm test:e2e --project=desktop tests/e2e/compact-app.spec.ts` 通過（新增 product card channel pill 搜尋導覽測試）；`APP_URL=dwselect.toybox.local pnpm lint` 通過。agent-browser 實測 product card price 為 `SPAN.catalog-pill`、channel 為 `A.catalog-pill[href="/search?q=PChome"]`，無 Nuxt UI badge utility class；`CatalogPill` 改為 responsive：手機左右 padding 10px，tablet/desktop 14px。
+
+### UI hotfix：filter chip 尺寸、theme-aware channel pill、detail breadcrumb
+
+- 問題：iPad mini 首頁分類 chip 曾在初次載入時斷字換行，且即使正常顯示也顯得上下太多、左右不夠；product card 通路 pill 使用固定深色，未隨 light/dark theme 反相；product detail route 的 header breadcrumb 只顯示 fallback `商品詳情`。
+- 根因：filter chip 繼承 `UButton` 後又套用 `overflow-wrap:anywhere`／`word-break:break-word`，CJK label 在字型／hydration 時序下容易被拆字；chip 視覺高度仍是 44px，不符合常見 UI framework chip/button 約 32–38px 高、水平 padding 大於垂直 padding的比例。`catalog-pill--dark` 使用固定黑白色，不吃 theme token。Detail breadcrumb 依賴 page state，direct route／SSR 時 layout 先渲染 fallback，沒有穩定取得產品資料。
+- 修復：filter chip 改為 38px 高、左右 20px、`white-space: nowrap`、`word-break: keep-all`，讓整顆 chip 換行而非文字斷行；`catalog-pill--dark` 改用 `var(--dw-text)`／`var(--dw-bg)` 反相色，隨 theme 切換；`useCatalogShellData()` 提供小型 `product_breadcrumb_items_by_id` map，layout 直接由 route product id 產生 `DW嚴選 > 分類 > 商品名`，分類 breadcrumb 可連回 category filter。
+- 驗證：`APP_URL=dwselect.toybox.local pnpm test tests/nuxt-smoke.test.ts tests/nuxt-ui-component-adoption.test.ts` 通過；`APP_URL=dwselect.toybox.local pnpm test:e2e --project=desktop tests/e2e/compact-app.spec.ts --grep "product detail route"` 通過；`APP_URL=dwselect.toybox.local pnpm lint` 通過。agent-browser 以 iPad mini 768×1024 實測分類 chip 高 38px、左右 padding 20px、不換行；直開 detail 顯示 `DW嚴選 > 電腦3C > ADATA 行動電源`；dark theme channel pill 背景／文字隨 theme token 反相。
+- 校正：使用者指出 product card 價格 pill 也應跟分類 primary chip 一樣 theme-aware，不能只修通路 pill。`catalog-pill--accent` 改為 `background: var(--ui-primary)`、`color: var(--ui-text-inverted)`，移除固定 `#231405`；這讓 price pill 與 Nuxt UI primary/category chip 使用同一組 primary / inverted theme token。

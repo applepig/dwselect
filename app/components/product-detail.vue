@@ -40,20 +40,23 @@
         class="detail-taxonomy-row"
         aria-label="商品分類、通路與 tags"
       >
-        <TaxonomyChip
-          :label="detail.category_label"
+        <CatalogPill
           :to="{ path: '/', query: { category: detail.category_id } }"
-        />
-        <TaxonomyChip
-          :label="detail.channel_label"
+        >
+          {{ detail.category_label }}
+        </CatalogPill>
+        <CatalogPill
           :to="{ path: '/search', query: { q: detail.channel_label } }"
-        />
-        <TaxonomyChip
+        >
+          {{ detail.channel_label }}
+        </CatalogPill>
+        <CatalogPill
           v-for="tag in detail.tag_labels"
           :key="tag"
-          :label="tag"
           :to="{ path: '/search', query: { q: tag } }"
-        />
+        >
+          {{ tag }}
+        </CatalogPill>
       </div>
 
       <p class="detail-price">

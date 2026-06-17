@@ -245,6 +245,10 @@ test('navigates to product detail route with a safe buy CTA', async ({ page }) =
 
   const detail = page.locator('.product-detail-page')
   await expect(detail).toBeVisible()
+  await expect(page.locator('.compact-top-bar .top-bar-title')).toContainText('DW嚴選')
+  await expect(page.locator('.compact-top-bar .top-bar-title')).toContainText('電腦3C')
+  await expect(page.locator('.compact-top-bar .top-bar-title')).toContainText(await detail.locator('.detail-title').textContent() ?? '')
+  await expect(page.locator('.compact-top-bar .breadcrumb-link').nth(1)).toHaveAttribute('href', /\?category=computer-3c/)
   await expect(detail.getByText('DW 怎麼說')).toBeVisible()
   await expect(detail.locator('.detail-buy-cta')).toHaveAttribute('target', '_blank')
   await expect(detail.locator('.detail-buy-cta')).toHaveAttribute('rel', 'noopener noreferrer')
@@ -295,7 +299,7 @@ test('navigates to search by tag from product detail', async ({ page }) => {
   await page.goto('/products/2026-06-02-sharp-65-inch-xled', { waitUntil: 'domcontentloaded' })
   await expect(page.locator('vite-error-overlay')).toHaveCount(0)
 
-  const first_tag = page.locator('.detail-taxonomy-row .taxonomy-chip[href^="/search?q="]').nth(1)
+  const first_tag = page.locator('.detail-taxonomy-row .catalog-pill[href^="/search?q="]').nth(1)
   const tag_label = (await first_tag.textContent())?.trim() ?? ''
 
   await expect(first_tag).toHaveAttribute('href', /\/search\?q=/)
@@ -305,11 +309,26 @@ test('navigates to search by tag from product detail', async ({ page }) => {
   await expect(page.getByPlaceholder('在找什麼嗎？™')).toHaveValue(tag_label)
 })
 
+test('navigates to search by channel from product card channel pill', async ({ page }) => {
+  await page.goto('/', { waitUntil: 'domcontentloaded' })
+  await expect(page.locator('vite-error-overlay')).toHaveCount(0)
+
+  const first_channel = page.locator('.product-card .channel-badge[href^="/search?q="]').first()
+  const channel_label = (await first_channel.textContent())?.trim() ?? ''
+
+  await expect(first_channel).toHaveAttribute('href', /\/search\?q=/)
+  await first_channel.click()
+
+  await expect(page).toHaveURL(new RegExp(`\\/search\\?q=${encodeURIComponent(channel_label)}`))
+  await expect(page.getByPlaceholder('在找什麼嗎？™')).toHaveValue(channel_label)
+})
+
 test('renders direct product detail routes and unknown product not-found states', async ({ page }) => {
   await page.goto('/products/2026-06-02-sharp-65-inch-xled', { waitUntil: 'domcontentloaded' })
   await expect(page.locator('vite-error-overlay')).toHaveCount(0)
-  await expect(page.locator('.product-detail-page')).toBeVisible()
-  await expect(page.getByRole('heading', { name: /Sharp 65吋 XLED/ })).toBeVisible()
+  const detail = page.locator('.product-detail-page')
+  await expect(detail).toBeVisible()
+  await expect(detail.getByRole('heading', { name: /Sharp 65吋 XLED/ })).toBeVisible()
 
   await page.goto('/products/not-a-real-product', { waitUntil: 'domcontentloaded' })
   await expect(page.locator('vite-error-overlay')).toHaveCount(0)

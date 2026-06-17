@@ -12,11 +12,18 @@
             <NuxtLink
               to="/"
               class="breadcrumb-link"
-            >DW嚴選</NuxtLink><template v-if="current_breadcrumb_label">
+            >DW嚴選</NuxtLink><template
+              v-for="item in current_breadcrumb_items"
+              :key="`${item.label}-${item.to === undefined ? 'current' : 'link'}`"
+            >
               <span
                 class="breadcrumb-separator"
                 aria-hidden="true"
-              >&gt;</span><span>{{ current_breadcrumb_label }}</span>
+              >&gt;</span><NuxtLink
+                v-if="item.to"
+                :to="item.to"
+                class="breadcrumb-link"
+              >{{ item.label }}</NuxtLink><span v-else>{{ item.label }}</span>
             </template>
           </h1>
         </div>
@@ -34,6 +41,11 @@
 <script setup lang="ts">
 import type { CategoryChipView } from '../utils/public-content-view-types'
 
+type BreadcrumbItem = {
+  label: string
+  to?: string | { path: string, query?: Record<string, string> }
+}
+
 const route = useRoute()
 const catalog_shell_data = await useCatalogShellData()
 
@@ -49,24 +61,43 @@ const active_home_category_label = computed(() => {
   return category_item?.label ?? null
 })
 
-const current_breadcrumb_label = computed(() => {
+const current_breadcrumb_items = computed<BreadcrumbItem[]>(() => {
   if (route.path === '/') {
-    return active_home_category_label.value
+    return active_home_category_label.value === null ? [] : [{ label: active_home_category_label.value }]
   }
 
   if (route.path === '/guide') {
-    return '指南'
+    return [{ label: '指南' }]
   }
 
   if (route.path === '/links') {
-    return '連結'
+    return [{ label: '連結' }]
   }
 
   if (route.path === '/search') {
-    return '搜尋'
+    return [{ label: '搜尋' }]
   }
 
-  return null
+  if (route.path.startsWith('/products/')) {
+    const product_id = getRouteProductId()
+    const product_item = product_id === null
+      ? undefined
+      : catalog_shell_data.value?.product_breadcrumb_items_by_id[product_id]
+
+    if (product_item === undefined) {
+      return [{ label: '商品詳情' }]
+    }
+
+    return [
+      {
+        label: product_item.category_label,
+        to: { path: '/', query: { category: product_item.category_id } },
+      },
+      { label: product_item.name },
+    ]
+  }
+
+  return []
 })
 
 function getActiveHomeCategoryId(): Exclude<CategoryChipView['id'], 'all'> | null {
@@ -87,5 +118,15 @@ function getActiveHomeCategoryId(): Exclude<CategoryChipView['id'], 'all'> | nul
   }
 
   return category_item.id
+}
+
+function getRouteProductId() {
+  const route_product_id = route.params.id
+
+  if (Array.isArray(route_product_id)) {
+    return route_product_id[0] ?? null
+  }
+
+  return typeof route_product_id === 'string' ? route_product_id : null
 }
 </script>
