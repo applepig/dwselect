@@ -87,4 +87,23 @@ describe('product card fields mapper', () => {
 
     expect(mapProductCardFields(product, makeResolver()).price_label).toBe('NT$ 1,990 起')
   })
+
+  it('should keep the full price text when the price label is only a prefix qualifier', () => {
+    const product = makeProduct({
+      id: 'qualified-price',
+      status: 'published',
+      name: '含價格修飾詞商品',
+      offers: [
+        {
+          channel_id: 'amazonjp',
+          url: 'https://example.com/buy',
+          price_text: '約¥5000',
+          price: { amount: 5000, currency: 'JPY', unit: 'each', label: '約' },
+          checked_at: '2026-06-18T00:00:00+08:00',
+        },
+      ],
+    })
+
+    expect(mapProductCardFields(product, makeResolver()).price_label).toBe('約¥5000')
+  })
 })

@@ -4,72 +4,83 @@
     class="product-detail-page"
     :data-product-id="detail.id"
   >
-    <div
-      class="detail-hero-tile"
-      :style="{ 'view-transition-name': `product-image-${detail.id}` }"
-    >
-      <UButton
-        class="detail-back"
-        icon="i-lucide-arrow-left"
-        color="neutral"
-        variant="ghost"
-        aria-label="返回"
-        @click="onBackClicked"
-      />
-
-      <img
-        v-if="!has_detail_image_failed"
-        :src="detail.hero_image_url"
-        :alt="detail.hero_alt"
-        class="detail-hero-image"
-        @error="onDetailImageError"
-      >
-      <UIcon
-        name="i-lucide-image-off"
-        class="detail-image-fallback-icon"
-        aria-hidden="true"
-      />
-    </div>
-
     <section class="detail-content">
-      <h2 class="detail-title">
-        {{ detail.name }}
-      </h2>
+      <div class="detail-hero-layout">
+        <div
+          class="detail-hero-tile"
+          :style="{ 'view-transition-name': `product-image-${detail.id}` }"
+        >
+          <UButton
+            class="detail-back"
+            icon="i-lucide-arrow-left"
+            color="neutral"
+            variant="ghost"
+            aria-label="返回"
+            @click="onBackClicked"
+          />
 
-      <div
-        class="detail-taxonomy-row"
-        aria-label="商品分類、通路與 tags"
-      >
-        <CatalogPill
-          :to="{ path: '/', query: { category: detail.category_id } }"
-        >
-          {{ detail.category_label }}
-        </CatalogPill>
-        <CatalogPill
-          :to="{ path: '/search', query: { q: detail.channel_label } }"
-        >
-          {{ detail.channel_label }}
-        </CatalogPill>
-        <CatalogPill
-          v-for="tag in detail.tag_labels"
-          :key="tag"
-          :to="{ path: '/search', query: { q: tag } }"
-        >
-          {{ tag }}
-        </CatalogPill>
+          <img
+            v-if="!has_detail_image_failed"
+            :src="detail.hero_image_url"
+            :alt="detail.hero_alt"
+            class="detail-hero-image"
+            @error="onDetailImageError"
+          >
+          <UIcon
+            name="i-lucide-image-off"
+            class="detail-image-fallback-icon"
+            aria-hidden="true"
+          />
+        </div>
+
+        <div class="detail-summary-column">
+          <h2 class="detail-title">
+            {{ detail.name }}
+          </h2>
+
+          <div
+            class="detail-taxonomy-row"
+            aria-label="商品分類、通路與 tags"
+          >
+            <CatalogPill
+              :to="{ path: '/', query: { category: detail.category_id } }"
+            >
+              {{ detail.category_label }}
+            </CatalogPill>
+            <CatalogPill
+              :to="{ path: '/search', query: { q: detail.channel_label } }"
+            >
+              {{ detail.channel_label }}
+            </CatalogPill>
+            <CatalogPill
+              v-for="tag in detail.tag_labels"
+              :key="tag"
+              :to="{ path: '/search', query: { q: tag } }"
+            >
+              {{ tag }}
+            </CatalogPill>
+          </div>
+
+          <p class="detail-price">
+            {{ detail.price_label }}
+          </p>
+
+          <UAlert
+            class="detail-dw-says"
+            color="primary"
+            variant="subtle"
+            title="DW 怎麼說"
+            :description="detail.long_description || detail.summary"
+          />
+
+          <a
+            class="detail-summary-buy-link"
+            :href="detail.buy_url"
+            target="_blank"
+            rel="noopener noreferrer"
+          >去 {{ detail.channel_label }} 逛逛</a>
+        </div>
       </div>
-
-      <p class="detail-price">
-        {{ detail.price_label }}
-      </p>
-
-      <UAlert
-        class="detail-dw-says"
-        color="primary"
-        variant="subtle"
-        title="DW 怎麼說"
-        :description="detail.long_description || detail.summary"
-      />
 
       <section
         v-if="detail.llm_description"
@@ -166,7 +177,7 @@
         block
         size="xl"
       >
-        到 {{ detail.channel_label }} 購買
+        去 {{ detail.channel_label }} 逛逛
       </UButton>
 
       <p class="detail-fine-print">

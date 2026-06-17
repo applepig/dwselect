@@ -28,7 +28,22 @@ export function mapProductCardFields(product: Product, labels: TaxonomyLabelReso
   return {
     ...mapProductCardBase(product, labels),
     channel_id: primary_offer.channel_id,
-    price_label: primary_offer.price.label ?? primary_offer.price_text,
+    price_label: getDisplayPriceLabel(primary_offer.price_text, primary_offer.price.label),
     tag_labels: product.tag_ids.map((tag_id) => labels.getProductTagLabel(tag_id)),
   }
+}
+
+function getDisplayPriceLabel(price_text: string, price_label: string | null): string {
+  if (price_label === null) {
+    return price_text
+  }
+
+  const normalized_price_text = price_text.trim()
+  const normalized_price_label = price_label.trim()
+
+  if (normalized_price_label !== '' && normalized_price_text.startsWith(normalized_price_label) && normalized_price_text.length > normalized_price_label.length) {
+    return price_text
+  }
+
+  return price_label
 }

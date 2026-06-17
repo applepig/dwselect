@@ -77,3 +77,21 @@
 - 修復：filter chip 改為 38px 高、左右 20px、`white-space: nowrap`、`word-break: keep-all`，讓整顆 chip 換行而非文字斷行；`catalog-pill--dark` 改用 `var(--dw-text)`／`var(--dw-bg)` 反相色，隨 theme 切換；`useCatalogShellData()` 提供小型 `product_breadcrumb_items_by_id` map，layout 直接由 route product id 產生 `DW嚴選 > 分類 > 商品名`，分類 breadcrumb 可連回 category filter。
 - 驗證：`APP_URL=dwselect.toybox.local pnpm test tests/nuxt-smoke.test.ts tests/nuxt-ui-component-adoption.test.ts` 通過；`APP_URL=dwselect.toybox.local pnpm test:e2e --project=desktop tests/e2e/compact-app.spec.ts --grep "product detail route"` 通過；`APP_URL=dwselect.toybox.local pnpm lint` 通過。agent-browser 以 iPad mini 768×1024 實測分類 chip 高 38px、左右 padding 20px、不換行；直開 detail 顯示 `DW嚴選 > 電腦3C > ADATA 行動電源`；dark theme channel pill 背景／文字隨 theme token 反相。
 - 校正：使用者指出 product card 價格 pill 也應跟分類 primary chip 一樣 theme-aware，不能只修通路 pill。`catalog-pill--accent` 改為 `background: var(--ui-primary)`、`color: var(--ui-text-inverted)`，移除固定 `#231405`；這讓 price pill 與 Nuxt UI primary/category chip 使用同一組 primary / inverted theme token。
+
+## 2026-06-18
+
+### UI hotfix：product detail desktop two-column hero
+
+- 問題：商品 detail 頁在寬螢幕仍維持單欄，導致上半部商品圖與標題／taxonomy／價格／DW copy 沒有形成 desktop-friendly 的左右資訊架構。
+- 修復：`product-detail.vue` 新增 `.detail-hero-layout` 與 `.detail-summary-column`，將 hero image 留左欄，標題、taxonomy、價格、`DW 怎麼說` 放右欄；`AI 怎麼說`、購買 CTA、fine print 保持在 hero layout 後方的全寬內容流，related products 不變。
+- CSS：預設 `.detail-hero-layout` 是單欄，維持 mobile／窄螢幕順序；在既有 tablet 與 desktop breakpoint 改為 `0.95fr / 1.05fr` 兩欄，並保留 back button overlay、hero image aspect ratio 與 object-fit。
+- TDD／驗證：先新增 `tests/product-detail-back-navigation.test.ts` source inspection 測試，Red 階段確認缺 `.detail-hero-layout`、`.detail-summary-column` 與寬螢幕兩欄 CSS 時 2 個測試失敗；修復後 `APP_URL=dwselect.toybox.local pnpm test tests/product-detail-back-navigation.test.ts` 4 tests passed，`APP_URL=dwselect.toybox.local pnpm test tests/nuxt-smoke.test.ts` 34 tests passed，`APP_URL=dwselect.toybox.local pnpm exec eslint app/components/product-detail.vue tests/product-detail-back-navigation.test.ts --max-warnings=0` 通過。完整 `pnpm lint` 有既有 `tests/search-index.test.ts` 未使用 import 錯誤，非本次 hotfix 修改檔。
+- 校正：使用者指出兩欄版右側被 grid stretch 撐滿，已把 tablet／desktop `.detail-hero-layout` 改為 `align-items: start`，並讓 `.detail-summary-column` `align-content: start`；右欄補一個只在 tablet／desktop 顯示的輕量通路連結，AI、底部 CTA、fine print 仍留在 hero layout 後方。驗證：`APP_URL=dwselect.toybox.local pnpm test tests/product-detail-back-navigation.test.ts` 5 passed，`APP_URL=dwselect.toybox.local pnpm exec eslint app/components/product-detail.vue tests/product-detail-back-navigation.test.ts --max-warnings=0` 通過，`APP_URL=dwselect.toybox.local pnpm test:e2e --project=desktop tests/e2e/compact-app.spec.ts --grep "product detail route"` 2 passed。
+- 校正：使用者指出右欄通路連結與底部主要 CTA 在 desktop 不需要全寬，且兩邊文案需對齊。兩個 CTA 文案統一為 `去 {{ detail.channel_label }} 逛逛`；mobile 維持底部主要 CTA 可全寬，tablet／desktop 下兩個 CTA 皆限制為 `240px`、置中文字並靠左對齊內容流。驗證：`APP_URL=dwselect.toybox.local pnpm test tests/product-detail-back-navigation.test.ts` 6 passed；`APP_URL=dwselect.toybox.local pnpm exec eslint app/components/product-detail.vue tests/product-detail-back-navigation.test.ts --max-warnings=0` 通過。
+
+### Hotfix：price label prefix qualifier
+
+- 問題：`2026-06-18-elecom-de-c39-power-bank` 的 offer 同時有 `price_text: "約¥5000"` 與 `price.label: "約"`，detail UI 只顯示「約」，缺少金額。
+- 根因：build-time `mapProductCardFields()` 一律用 `primary_offer.price.label ?? primary_offer.price_text` 產生 `price_label`；但 `price.label` 有兩種歷史用法，可能是完整顯示字串（如 `NT$ 1,990 起`），也可能只是 `price_text` 的前綴修飾詞（如 `約`）。
+- 修復：新增 `getDisplayPriceLabel()`，當 `price.label` 是 `price_text` 的短前綴時回退顯示完整 `price_text`；完整 label 仍優先，例如 `NT$ 1,990 起` 不變。重建 `public/api/content.json` 後確認 card/detail 的 `price_label` 皆為 `約¥5000`。
+- 驗證：Red 階段 `APP_URL=dwselect.toybox.local pnpm test tests/public-payload/map-product-card-fields.test.ts` 失敗，實際為 `約`；修復後 `APP_URL=dwselect.toybox.local pnpm test tests/public-payload/map-product-card-fields.test.ts tests/public-payload/map-product-card.test.ts tests/public-payload/map-product-detail.test.ts` 23 passed，`APP_URL=dwselect.toybox.local pnpm exec eslint scripts/public-payload/map-product-card-fields.ts tests/public-payload/map-product-card-fields.test.ts --max-warnings=0` 通過，`APP_URL=dwselect.toybox.local pnpm build:public-artifacts` 成功。

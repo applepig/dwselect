@@ -43,6 +43,104 @@ describe('product detail back navigation fallback', () => {
     expect(detail_back_css).not.toContain('top: 12px;')
     expect(detail_back_css).not.toContain('left: 12px;')
   })
+
+  it('should keep AI copy and purchase actions below the desktop hero layout', () => {
+    const product_detail_source = readProductDetailSource()
+    const hero_layout_index = product_detail_source.indexOf('class="detail-hero-layout"')
+    const hero_tile_index = product_detail_source.indexOf('class="detail-hero-tile"')
+    const summary_column_index = product_detail_source.indexOf('class="detail-summary-column"')
+    const title_index = product_detail_source.indexOf('class="detail-title"')
+    const taxonomy_index = product_detail_source.indexOf('class="detail-taxonomy-row"')
+    const price_index = product_detail_source.indexOf('class="detail-price"')
+    const dw_says_index = product_detail_source.indexOf('class="detail-dw-says"')
+    const summary_buy_link_index = product_detail_source.indexOf('class="detail-summary-buy-link"')
+    const llm_says_index = product_detail_source.indexOf('class="detail-llm-says"')
+    const buy_cta_index = product_detail_source.indexOf('class="detail-buy-cta"')
+    const fine_print_index = product_detail_source.indexOf('class="detail-fine-print"')
+    const first_full_width_section_index = product_detail_source.indexOf('\n      <section\n        v-if="detail.llm_description"', dw_says_index)
+    const top_layout_source = product_detail_source.slice(hero_layout_index, first_full_width_section_index)
+
+    expect(hero_layout_index).toBeGreaterThanOrEqual(0)
+    expect(hero_tile_index).toBeGreaterThan(hero_layout_index)
+    expect(summary_column_index).toBeGreaterThan(hero_tile_index)
+    expect(title_index).toBeGreaterThan(summary_column_index)
+    expect(taxonomy_index).toBeGreaterThan(title_index)
+    expect(price_index).toBeGreaterThan(taxonomy_index)
+    expect(dw_says_index).toBeGreaterThan(price_index)
+    expect(summary_buy_link_index).toBeGreaterThan(dw_says_index)
+    expect(first_full_width_section_index).toBeGreaterThan(summary_buy_link_index)
+    expect(top_layout_source).toContain('class="detail-summary-column"')
+    expect(top_layout_source).toContain('class="detail-summary-buy-link"')
+    expect(top_layout_source).toContain(':href="detail.buy_url"')
+    expect(top_layout_source).toContain('去 {{ detail.channel_label }} 逛逛')
+    expect(top_layout_source).not.toContain('class="detail-llm-says"')
+    expect(top_layout_source).not.toContain('class="detail-buy-cta"')
+    expect(top_layout_source).not.toContain('class="detail-fine-print"')
+    expect(llm_says_index).toBeGreaterThan(first_full_width_section_index)
+    expect(buy_cta_index).toBeGreaterThan(first_full_width_section_index)
+    expect(fine_print_index).toBeGreaterThan(first_full_width_section_index)
+  })
+
+  it('should switch only the top detail layout to two columns on wider screens', () => {
+    const catalog_css = readFileSync(catalog_css_url, 'utf8')
+    const default_hero_layout_css = getCssBlock(catalog_css, '.detail-hero-layout')
+    const tablet_media_start = catalog_css.indexOf('@media (min-width: 768px) and (max-width: 1199px)')
+    const desktop_media_start = catalog_css.indexOf('@media (min-width: 1200px)')
+    const tablet_hero_layout_css = getCssBlockAfter(catalog_css, '.detail-hero-layout', tablet_media_start)
+    const desktop_hero_layout_css = getCssBlockAfter(catalog_css, '.detail-hero-layout', desktop_media_start)
+
+    expect(default_hero_layout_css).toContain('display: grid;')
+    expect(default_hero_layout_css).toContain('grid-template-columns: minmax(0, 1fr);')
+    expect(default_hero_layout_css).not.toContain('minmax(0, 0.95fr) minmax(0, 1.05fr)')
+    expect(tablet_media_start).toBeGreaterThanOrEqual(0)
+    expect(desktop_media_start).toBeGreaterThanOrEqual(0)
+    expect(tablet_hero_layout_css).toContain('grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);')
+    expect(tablet_hero_layout_css).toContain('align-items: start;')
+    expect(desktop_hero_layout_css).toContain('grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);')
+    expect(desktop_hero_layout_css).toContain('align-items: start;')
+  })
+
+  it('should show the summary purchase link only on wider screens', () => {
+    const catalog_css = readFileSync(catalog_css_url, 'utf8')
+    const default_summary_buy_link_css = getCssBlock(catalog_css, '.detail-summary-buy-link')
+    const tablet_media_start = catalog_css.indexOf('@media (min-width: 768px) and (max-width: 1199px)')
+    const desktop_media_start = catalog_css.indexOf('@media (min-width: 1200px)')
+    const tablet_summary_buy_link_css = getCssBlockAfter(catalog_css, '.detail-summary-buy-link', tablet_media_start)
+    const desktop_summary_buy_link_css = getCssBlockAfter(catalog_css, '.detail-summary-buy-link', desktop_media_start)
+
+    expect(default_summary_buy_link_css).toContain('display: none;')
+    expect(default_summary_buy_link_css).toContain('border: 1px solid var(--dw-border);')
+    expect(default_summary_buy_link_css).toContain('color: var(--dw-accent);')
+    expect(tablet_summary_buy_link_css).toContain('display: inline-flex;')
+    expect(desktop_summary_buy_link_css).toContain('display: inline-flex;')
+  })
+
+  it('should keep both detail CTAs compact and text-aligned on wider screens', () => {
+    const product_detail_source = readProductDetailSource()
+    const catalog_css = readFileSync(catalog_css_url, 'utf8')
+    const default_buy_cta_css = getCssBlock(catalog_css, '.detail-buy-cta')
+    const tablet_media_start = catalog_css.indexOf('@media (min-width: 768px) and (max-width: 1199px)')
+    const desktop_media_start = catalog_css.indexOf('@media (min-width: 1200px)')
+    const tablet_summary_buy_link_css = getCssBlockAfter(catalog_css, '.detail-summary-buy-link', tablet_media_start)
+    const tablet_buy_cta_css = getCssBlockAfter(catalog_css, '.detail-buy-cta', tablet_media_start)
+    const desktop_summary_buy_link_css = getCssBlockAfter(catalog_css, '.detail-summary-buy-link', desktop_media_start)
+    const desktop_buy_cta_css = getCssBlockAfter(catalog_css, '.detail-buy-cta', desktop_media_start)
+
+    expect(product_detail_source.match(/去 \{\{ detail\.channel_label \}\} 逛逛/g)).toHaveLength(2)
+    expect(default_buy_cta_css).toContain('max-width: 100%;')
+    expect(tablet_summary_buy_link_css).toContain('width: min(100%, 240px);')
+    expect(tablet_summary_buy_link_css).toContain('max-width: 240px;')
+    expect(tablet_buy_cta_css).toContain('justify-self: start;')
+    expect(tablet_buy_cta_css).toContain('width: min(100%, 240px);')
+    expect(tablet_buy_cta_css).toContain('max-width: 240px;')
+    expect(tablet_buy_cta_css).toContain('justify-content: center;')
+    expect(desktop_summary_buy_link_css).toContain('width: min(100%, 240px);')
+    expect(desktop_summary_buy_link_css).toContain('max-width: 240px;')
+    expect(desktop_buy_cta_css).toContain('justify-self: start;')
+    expect(desktop_buy_cta_css).toContain('width: min(100%, 240px);')
+    expect(desktop_buy_cta_css).toContain('max-width: 240px;')
+    expect(desktop_buy_cta_css).toContain('justify-content: center;')
+  })
 })
 
 function getCssBlock(source: string, selector: string) {
@@ -53,6 +151,22 @@ function getCssBlock(source: string, selector: string) {
   }
 
   const block_end = source.indexOf('\n}', block_start)
+
+  return source.slice(block_start, block_end)
+}
+
+function getCssBlockAfter(source: string, selector: string, offset: number) {
+  if (offset < 0) {
+    return ''
+  }
+
+  const block_start = source.indexOf(`${selector} {`, offset)
+
+  if (block_start === -1) {
+    return ''
+  }
+
+  const block_end = source.indexOf('\n  }', block_start)
 
   return source.slice(block_start, block_end)
 }
