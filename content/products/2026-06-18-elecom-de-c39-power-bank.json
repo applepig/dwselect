@@ -1,0 +1,49 @@
+{
+  "id": "2026-06-18-elecom-de-c39-power-bank",
+  "status": "published",
+  "name": "ELECOM DE-C39 磷酸鋰鐵行動電源",
+  "english_name": "ELECOM DE-C39 Power Bank",
+  "summary": "少見的磷酸鋰鐵行動電源，很重，但是電力真的很足",
+  "long_description": "少見的磷酸鋰鐵行動電源，很重，但是電力真的很足",
+  "llm_description": "## 快速判斷\n\nELECOM DE-C39-12000WH 是 DE-C39-12000 系列白色款行動電源，特色是採用磷酸鐵鋰電池、官方標示約 1000 次循環壽命，定位比較接近重視安全性、壽命與防災備用的行動電源，而不是追求最輕或最高輸出的快充款。\n\n## 重要規格\n\n- 電池規格：3.2V／12000mAh、38.4Wh，容量低於 100Wh，官方標示通過 PSE、UN38.3。\n- 輸出入：USB-C 輸入／輸出 1 組、USB-A 輸出 1 組。\n- USB-C：5V/2.4A、9V/2.22A、12V/1.67A，最高約 20W。\n- USB-A：5V/2.4A；雙埠同時輸出合計 20W，且 USB-C 會優先分配輸出。\n- 尺寸與重量：約 78×17×159mm、約 310g，附 0.1m USB-C to USB-C 線。\n- 充電時間：使用 USB PD 20W 以上充電器時，本體約 3 小時可充滿。\n- 功能：低電流模式、強制輸出模式、まとめて充電、4 段 LED 電量顯示，以及過充電、過放電、過電壓、過電流、短路與溫度偵測保護。\n\n## 優點與限制\n\n- 優點：磷酸鐵鋰電池與約 1000 次循環壽命，是它和一般鋰離子／鋰聚合物行動電源最大的差異。\n- 優點：38.4Wh 與 12000mAh 等級適合手機多次補電，也適合作為包包或防災備用電源。\n- 限制：約 310g 的重量不算輕，若只是日常短時間外出，可能比薄型 10000mAh 行動電源更有負擔。\n- 限制：最高約 20W，適合手機與小型裝置，不適合作為筆電或高功率 USB-C 裝置的主要電源。\n- 限制：雙裝置同時充電時總輸出仍是 20W，速度會被分攤。\n\n## 評測與使用者回饋\n\n- 第三方評測 Purudo.net 曾測得有效容量約 32.53Wh，約為標示容量 84.71%，並指出 USB-C 5V/2.4A 與 USB PD power rule 不完全相符；完整評測連結待補。\n- Amazon JP 商品資訊曾顯示白色款 ASIN B0B7J5B78B、315 則評價平均 4.2 星。\n- Yahoo! Shopping 少量評論常提到安全感、防災用途與重量感；完整評論來源連結待補，不能把少量評論解讀成普遍結論。\n\n## 適合誰／不適合誰\n\n- 適合：重視電池壽命、安全感、防災備用，並且可以接受 310g 左右重量的人。\n- 適合：主要替手機、耳機、平板或低功率 USB 裝置補電的人。\n- 不適合：想要最輕薄、最高瓦數、或需要替筆電長時間供電的人。\n\n## 參考來源\n\n- [ELECOM 官方產品頁](https://www.elecom.co.jp/products/DE-C39-12000WH.html)\n- [ELECOM 官方商店頁](https://shop.elecom.co.jp/item/4549550254373.html)\n- [Amazon JP 購買連結](https://amzn.asia/d/016upOlk)",
+  "search_aliases": [
+    "エレコム DE-C39",
+    "DE-C39-12000WH",
+    "DE-C39-12000",
+    "B0B7J5B78B",
+    "4549550254373",
+    "ELECOM 磷酸鋰鐵行動電源",
+    "ELECOM 磷酸鐵鋰行動電源",
+    "磷酸鐵鋰行動電源"
+  ],
+  "model_numbers": [
+    "DE-C39-12000WH"
+  ],
+  "offers": [
+    {
+      "channel_id": "amazonjp",
+      "url": "https://amzn.asia/d/016upOlk",
+      "price_text": "約¥5000",
+      "price": {
+        "amount": 5000,
+        "currency": "JPY",
+        "unit": "each",
+        "label": "約"
+      },
+      "checked_at": "2026-06-18T00:00:00+08:00"
+    }
+  ],
+  "image_url": null,
+  "category_id": "computer-3c",
+  "tag_ids": [
+    "elecom",
+    "power-charging"
+  ],
+  "reference_url": "https://www.elecom.co.jp/products/DE-C39-12000WH.html",
+  "created_at": "2026-06-18T00:00:00+08:00",
+  "updated_at": "2026-06-18T00:00:00+08:00",
+  "published_at": "2026-06-18T00:00:00+08:00",
+  "unpublished_at": null,
+  "archived_at": null,
+  "image_file": "2026-06-18-elecom-de-c39-power-bank.jpg"
+}

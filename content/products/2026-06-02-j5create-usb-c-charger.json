@@ -1,6 +1,6 @@
 {
   "id": "2026-06-02-j5create-usb-c-charger",
-  "status": "published",
+  "status": "archived",
   "name": "j5create豆腐頭",
   "english_name": "j5create USB C Charger",
   "summary": "30W 1C1A，這顆特價會亂賣到199",
@@ -19,7 +19,7 @@
         "unit": "each",
         "label": null
       },
-      "checked_at": "2026-06-02T00:00:00+08:00"
+      "checked_at": "2026-06-18T00:00:00+08:00"
     }
   ],
   "image_url": null,
@@ -30,9 +30,9 @@
   ],
   "reference_url": "https://www.facebook.com/applepig/posts/pfbid02GiR12vXf3qXtJAhrEGCXbrMXGkTbKBNLTBPisMyN7QK133jcXHHGMxpbMk2EpzFul",
   "created_at": "2026-06-02T00:00:00+08:00",
-  "updated_at": "2026-06-02T00:00:00+08:00",
+  "updated_at": "2026-06-18T00:00:00+08:00",
   "published_at": "2026-06-02T00:00:00+08:00",
   "unpublished_at": null,
-  "archived_at": null,
+  "archived_at": "2026-06-18T00:00:00+08:00",
   "image_file": "2026-06-02-j5create-usb-c-charger.jpg"
 }

@@ -1,13 +1,23 @@
 {
   "id": "2026-06-02-aplus-ups",
   "status": "published",
-  "name": "APlus UPS",
-  "english_name": "APlus UPS",
+  "name": "Aplus Plus1L-US600N 在線互動式 UPS 600VA／360W",
+  "english_name": "Aplus Plus1L-US600N Line Interactive UPS",
   "summary": "便宜、MIT、而且面板還有螢幕跟USB充電，但是我有些電腦的監控軟體抓不到他",
   "long_description": "便宜、MIT、而且面板還有螢幕跟USB充電，但是我有些電腦的監控軟體抓不到他",
-  "llm_description": "",
-  "search_aliases": [],
-  "model_numbers": [],
+  "llm_description": "## 快速判斷\n\nAplus Plus1L-US600N 是 600VA／360W 的在線互動式 UPS，定位在桌上型電腦、螢幕、網通與小型辦公設備的短時間備援。它的重點是 LCD 狀態顯示、AVR 自動穩壓、USB 通訊監控，以及 4 個可供電池備援的美式插座；另外 4 個插座只提供防突波，停電時不會供電。\n\n## 重要規格\n\n- UPS 類型：在線互動式，微電腦控制，內建二段升壓、一段降壓 AVR。\n- 額定容量：600VA／360W。\n- 輸入：官方系列規格列 110Vac 或 220Vac 版本，電壓範圍 -30%、+25%，50／60Hz 自動偵測；購買時仍應確認賣場 SKU 與機身銘牌電壓版本。\n- 輸出：電池模式電壓穩壓範圍 ±10%，50／60Hz ±1Hz，模擬正弦波，典型轉換時間小於 6ms。\n- 插座：標準美式插座，4 個「電池電力／穩壓／防突波」+ 4 個「僅防突波」。重要設備需接在電池備援插座。\n- 電池：12V／7Ah 免維護鉛酸電池 1 顆，5 小時可回充 90% 以上；官方標示一套文書電腦與螢幕約 20 分鐘，實際時間依負載而定。\n- 通訊與充電：USB 通訊埠支援 UPSilon 2000；另有 5VDC 最大 2.4A USB 充電。\n- 保護機制：雷擊／突波 175J、過載、短路、過高壓／過低壓、溫度過高，以及電池過充／過放保護。\n- 尺寸重量：305 × 98 × 170 mm，約 5kg；1 公尺噪音小於 40dB。\n\n## 適合誰／不適合誰\n\n- 適合需要在停電時保存資料、讓桌機或小型網通設備短時間維持運作的情境。\n- 不適合高啟動電流或含馬達／壓縮機的負載，例如雷射印表機、影印機、碎紙機、吸塵器、抽水幫浦等；官方 FAQ 也不建議把延長線接到 UPS 上造成過載風險。\n- 這是模擬正弦波、在線互動式架構，不是純正弦波在線式 UPS；若設備對供電波形或零中斷要求很高，需另選對應等級產品。\n\n## 軟體與使用注意\n\n- 官方支援頁提供在線互動式 UPS 使用的 UPSilon 2000 V6.0／V5.5／V5.4 下載。\n- 官方 FAQ 指出，UPSilon 2000 需設定 UPS 通訊類型為 MegaTec(USB)；若仍顯示與 UPS 斷開，需檢查作業系統支援、USB 插孔，以及是否有其他 UPS 監控軟體或服務衝突。\n- Plus1L LCD 系列的螢幕在工作或關機狀態皆為恆亮，官方 FAQ 表示無法調暗或關閉。\n- 鉛酸電池屬耗材，官方 FAQ 表示一般平均壽命約 2–3 年，定期充放維護有助延長壽命。\n\n## 參考來源\n\n- [Aplus Plus1L 系列官方產品頁](https://www.aplusups.com.tw/tw/product/0/44/14)\n- [Aplus 在線互動式 UPS 資源下載](https://www.aplusups.com.tw/tw/resource/8)\n- [Aplus UPSilon 2000 資源下載](https://www.aplusups.com.tw/tw/resource/52)\n- [Aplus UPS FAQ](https://www.aplusups.com.tw/tw/faq)\n- [PChome 商品頁](https://24h.pchome.com.tw/prod/DCAR15-A900AU2RL)",
+  "search_aliases": [
+    "Aplus UPS",
+    "Aplus Plus1L-US600N",
+    "Plus1L-US600N",
+    "特優 Aplus UPS",
+    "在線互動式 UPS",
+    "不斷電系統 600VA",
+    "UPSilon 2000"
+  ],
+  "model_numbers": [
+    "Plus1L-US600N"
+  ],
   "offers": [
     {
       "channel_id": "pchome",
@@ -19,7 +29,7 @@
         "unit": "each",
         "label": null
       },
-      "checked_at": "2026-06-02T00:00:00+08:00"
+      "checked_at": "2026-06-18T00:00:00+08:00"
     }
   ],
   "image_url": null,
@@ -28,9 +38,9 @@
     "aplus",
     "power-charging"
   ],
-  "reference_url": null,
+  "reference_url": "https://www.aplusups.com.tw/tw/product/0/44/14",
   "created_at": "2026-06-02T00:00:00+08:00",
-  "updated_at": "2026-06-02T00:00:00+08:00",
+  "updated_at": "2026-06-18T00:00:00+08:00",
   "published_at": "2026-06-02T00:00:00+08:00",
   "unpublished_at": null,
   "archived_at": null,

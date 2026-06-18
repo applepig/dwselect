@@ -463,6 +463,17 @@
       ],
       "nav_visible": true,
       "sort_order": 480
+    },
+    {
+      "id": "elecom",
+      "label": "ELECOM",
+      "description": "ELECOM 品牌商品",
+      "aliases": [
+        "エレコム",
+        "宜麗客"
+      ],
+      "nav_visible": true,
+      "sort_order": 490
     }
   ]
 }

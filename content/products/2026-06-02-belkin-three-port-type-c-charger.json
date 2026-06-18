@@ -1,13 +1,23 @@
 {
   "id": "2026-06-02-belkin-three-port-type-c-charger",
   "status": "published",
-  "name": "Belkin 三孔Type C充電器",
-  "english_name": "Belkin Three Port Type C Charger",
+  "name": "Belkin BoostCharge 67W 三孔 USB-C PPS 充電器",
+  "english_name": "Belkin BoostCharge 3 Port USB-C Charger with PPS 67W",
   "summary": "這顆三孔都是Type C，出力是25/20/20、或45/20、或65，旅行包換成這顆剛好可以減少線的種類",
   "long_description": "這顆三孔都是Type C，出力是25/20/20、或45/20、或65，旅行包換成這顆剛好可以減少線的種類",
-  "llm_description": "",
-  "search_aliases": [],
-  "model_numbers": [],
+  "llm_description": "## 快速判斷\n\nBelkin BoostCharge 3 Port USB-C Charger with PPS 67W 是三個連接埠皆為 USB-C 的牆插式充電器，官方型號族群為 WCC002，白色版本 SKU 為 WCC002dqWH。它與 Belkin WCH013 雙 USB-C 65W、WCH018 70W 但含 USB-A 的 3-Port GaN 充電器不同；若需求是三條線都使用 USB-C，WCC002 才是較符合的官方規格頁。\n\n## 重要規格\n\n- 總輸出：官方標示 67W，單孔最高可替筆電提供 67W。\n- 連接埠：3 個 USB-C。\n- 三孔輸出：官方頁說明為 dedicated 25W 與兩個 20W 連接埠，可視為三孔同時使用時 25W／20W／20W。\n- 協定：支援多數 PD 3.1、PD 3.0 與 PPS-enabled devices。\n- 插頭：flat-to-wall 牆插設計，官方說明折疊插腳適用 US／China／Japan plugs only。\n- 尺寸：1.7in／43mm × 1.2in／30mm × 2.8in／71mm。\n- 保護與保固：官方標示 overcharge、overvoltage protection，並提供 2 年保固與 $2,500 Connected Equipment Warranty。\n\n## 規格限制與注意事項\n\n- 官方 WCC002 頁未明確列出雙孔 45W／20W 的輸出表；此分配可作為賣場或既有資料觀察，但不建議寫成官方已驗證規格。\n- 官方頁未查到輸入電壓、overcurrent、short-circuit 等更完整電氣保護細節。\n- 若需要 65W GaN 雙孔，官方 WCH013 是另一個產品；若需要 70W 3-port GaN，WCH018 只有 2C1A，不是三孔全 USB-C。\n\n## 評測與使用者回饋\n\n- Belkin 官方頁顯示 Bazaarvoice 評分約 4.7／5、99 則評論；本次未能穩定擷取評論全文，因此不推論具體常見抱怨或優點。\n\n## 參考來源\n\n- [Belkin 官方 WCC002dqWH 產品頁](https://www.belkin.com/p/3-port-usb-c-charger-with-pps-67w/WCC002dqWH.html)\n- [Belkin 官方 WCC002-WG-TL White Star Mickey 版本](https://www.belkin.com/p/3-port-usb-c-charger-with-pps-67w/WCC002-WG-TL.html)\n- [Belkin WCH018 70W 2C1A 產品頁](https://www.belkin.com/p/3-port-gan-wall-charger-70w/WCH018dqWH.html)",
+  "search_aliases": [
+    "Belkin WCC002",
+    "Belkin 67W 三孔 USB-C",
+    "Belkin 3 Port USB-C Charger with PPS 67W",
+    "BoostCharge 67W USB-C PPS",
+    "貝爾金 三孔 Type-C 充電器"
+  ],
+  "model_numbers": [
+    "WCC002",
+    "WCC002dqWH",
+    "WCC002-WG-TL"
+  ],
   "offers": [
     {
       "channel_id": "other",
@@ -15,11 +25,11 @@
       "price_text": "790",
       "price": {
         "amount": 790,
-        "currency": null,
+          "currency": "TWD",
         "unit": "each",
         "label": null
       },
-      "checked_at": "2026-06-02T00:00:00+08:00"
+      "checked_at": "2026-06-18T00:00:00+08:00"
     }
   ],
   "image_url": null,
@@ -28,9 +38,9 @@
     "belkin",
     "power-charging"
   ],
-  "reference_url": "https://www.facebook.com/applepig/posts/pfbid02STBwzCTw3BAjNH876HQTcJafVJk3bkGGW23y4we9ikEdhFDSR7GZaCAVKhGA9agLl",
+  "reference_url": "https://www.belkin.com/p/3-port-usb-c-charger-with-pps-67w/WCC002dqWH.html",
   "created_at": "2026-06-02T00:00:00+08:00",
-  "updated_at": "2026-06-02T00:00:00+08:00",
+  "updated_at": "2026-06-18T00:00:00+08:00",
   "published_at": "2026-06-02T00:00:00+08:00",
   "unpublished_at": null,
   "archived_at": null,

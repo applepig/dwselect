@@ -1,13 +1,25 @@
 {
   "id": "2026-06-02-ducky-one-2",
   "status": "published",
-  "name": "Ducky One 2",
+  "name": "Ducky One 2 100% 機械式鍵盤",
   "english_name": "Ducky One 2",
   "summary": "我覺得Ducky One 2可以買，但是3不行，所以趁他們還有生產的時候多庫存個兩把",
   "long_description": "我覺得Ducky One 2可以買，但是3不行，所以趁他們還有生產的時候多庫存個兩把",
-  "llm_description": "",
-  "search_aliases": [],
-  "model_numbers": [],
+  "llm_description": "## 快速判斷\n\nDucky One 2 是 Ducky One 系列的有線機械式鍵盤，台灣通路目前可見的 One 2 促銷款以 100% 全尺寸、中文鍵帽、無背光版本為主，常見配色包含「天際線」與「馬卡龍」。它的重點不是無線或熱插拔，而是傳統全尺寸配列、Cherry MX 軸、PBT 二色成形鍵帽、USB Type-C 可拆線，以及鍵盤端完成的巨集與功能設定。\n\n## 重要規格\n\n- 配列：100% full-size，全尺寸含數字鍵區；TechPowerUp 評測的 Skyline 版本為 104+4 key US ANSI，台灣通路標示為中文版本。\n- 軸體：台灣原價屋活動列出 Cherry MX 茶軸、青軸、紅軸、銀軸、靜音紅軸。\n- 鍵帽：PBT 二色成形鍵帽；TechPowerUp 實測配件鍵帽平均壁厚約 1.41mm。\n- 連接方式：有線 USB，鍵盤端 USB-C、電腦端 USB-A；無藍牙、無 2.4GHz、無內建鋰電池。\n- 防衝突與輪詢率：Full N-Key rollover over USB；Mechanical Keyboards 規格列 Max Polling Rate 1000Hz。\n- 背光：台灣 PChome／原價屋可見的 One 2 100% 馬卡龍／天際線促銷款標示「無光」；One 2 系列另有背光版本，但不是本次可驗證通路 variant。\n- 可自訂功能：無專用常駐軟體；評測確認以硬體端完成設定，包含多組 onboard profiles、鍵位重派、巨集錄製、預設多媒體／程式功能。DIP switch 可在 NKRO 與 6KRO 等模式之間切換，變更後建議重新插拔鍵盤。\n- 限制：非熱插拔；沒有腕托；通路頁未能確認原 PChome offer ID 的當前可售狀態。\n\n## 評測與使用者回饋\n\n- TechPowerUp 評測 One 2 Skyline full-size，正面重點是厚 PBT 二色鍵帽、USB-C 可拆線、完整 NKRO、豐富鍵盤端功能，以及整體做工；限制是 onboard 操作第一次使用可能複雜、沒有軟體介面、一年保固偏短。\n- RTINGS 的 One 2 評測指出，Ducky One 2 有多尺寸與多 Cherry MX 軸版本，PBT 鍵帽手感評價佳；但其測試的無背光版本因缺少背光與延遲表現不如部分電競鍵盤，且沒有專用軟體。\n- 對需要全尺寸數字鍵區、偏好有線穩定連線、可接受鍵盤端設定的人，One 2 的定位較明確；如果需求是三模無線、熱插拔、QMK/VIA 或軟體圖形化設定，這一代 One 2 不是主打方向。\n\n## 通路與庫存注意\n\n- 原 offer `DCAHVA-A900GAGDQ` 目前 PChome API 回空陣列，PChome 搜尋也找不到該 ID；保留原連結與 `price_text: 2300`，但應在後續人工確認是否仍能購買。\n- PChome 搜尋找到同系列 `DCAHVA-A900GHBB3`，標題為「Ducky One2 100% 機械式鍵盤 馬卡龍 中文 無光」，價格 2290，但產品 API 顯示 `Qty: 0`。\n- 原價屋活動頁列出天際線與馬卡龍多軸版本，價格 2190，活動數量標示售完為止，非即時庫存承諾。\n\n## 參考來源\n\n- [原價屋 CoolPC：Ducky One2 天際線／馬卡龍活動頁](https://www.coolpc.com.tw/tw/shop/keyboard/ducky-one2-20250513ad/)\n- [PChome 24h：原 offer URL](https://24h.pchome.com.tw/prod/DCAHVA-A900GAGDQ)\n- [TechPowerUp：Ducky One 2 Skyline Keyboard Review](https://www.techpowerup.com/review/ducky-one-2-skyline/)\n- [Mechanical Keyboards：Ducky One 2 Skyline Double Shot PBT Keyboard](https://mechanicalkeyboards.com/products/ducky-one-2-skyline-double-shot-pbt-keyboard)\n- [RTINGS：Ducky One 2 Review](https://www.rtings.com/keyboard/reviews/ducky/one-2)",
+  "search_aliases": [
+    "Ducky One2",
+    "Ducky One 2 100%",
+    "Ducky One2 100% 機械式鍵盤",
+    "Ducky One2 馬卡龍",
+    "Ducky One2 天際線",
+    "Ducky One 2 Skyline",
+    "Ducky One 2 Macaron",
+    "Ducky One 2 中文 無光",
+    "Ducky One 2 PBT Cherry MX"
+  ],
+  "model_numbers": [
+    "DKON1808"
+  ],
   "offers": [
     {
       "channel_id": "pchome",
@@ -19,7 +31,7 @@
         "unit": "each",
         "label": null
       },
-      "checked_at": "2026-06-02T00:00:00+08:00"
+      "checked_at": "2026-06-18T00:00:00+08:00"
     }
   ],
   "image_url": null,
@@ -28,9 +40,9 @@
     "desk-setup",
     "ducky"
   ],
-  "reference_url": null,
+  "reference_url": "https://www.coolpc.com.tw/tw/shop/keyboard/ducky-one2-20250513ad/",
   "created_at": "2026-06-02T00:00:00+08:00",
-  "updated_at": "2026-06-02T00:00:00+08:00",
+  "updated_at": "2026-06-18T00:00:00+08:00",
   "published_at": "2026-06-02T00:00:00+08:00",
   "unpublished_at": null,
   "archived_at": null,

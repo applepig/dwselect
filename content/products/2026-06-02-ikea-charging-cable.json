@@ -1,13 +1,34 @@
 {
   "id": "2026-06-02-ikea-charging-cable",
   "status": "published",
-  "name": "IKEA充電線",
-  "english_name": "IKEA Charging Cable",
+  "name": "IKEA 充電線",
+  "english_name": "IKEA Charging Cables",
   "summary": "手機的充電線也是都找他們家買就對了",
   "long_description": "手機的充電線也是都找他們家買就對了",
-  "llm_description": "",
-  "search_aliases": [],
-  "model_numbers": [],
+  "llm_description": "## 快速判斷\n\nIKEA 台灣目前的充電線不是單一型號，而是一組 USB 線材系列，常見系列包含 SITTBRUNN、LILLHULT、RUNDHULT。原 offer 價格文字「199」對應到 IKEA 官方頁面上 LILLHULT USB-C 轉 USB-C 1.5 公尺款；若要選筆電或平板較高功率充電，官方標示 100W／5A 的 RUNDHULT 才是較明確的高功率選項。\n\n## 重要規格\n\n- SITTBRUNN：1.0 公尺，常見 USB-A 轉 USB-C 或 USB-C 轉 USB-C，官方標示 3A、480 Mbps，TPE 材質，不含 PVC，通過 25,000 次彎折測試。\n- LILLHULT：1.5 或 3.0 公尺，織物表面、橡膠線頭、附彈力收線帶；多數 USB-C 款官方標示 3A、480 Mbps，通過 25,000 次彎折測試。\n- RUNDHULT：USB-C 轉 USB-C，1.5 公尺，官方標示 100W、5A、480 Mbps，定位更接近筆電／平板充電線。\n- Lightning 款：LILLHULT USB-C 轉 Lightning 與 USB-A 轉 Lightning 官方頁面標示 MFi 認證；USB-C 轉 Lightning 為 3A，USB-A 轉 Lightning 為 2.4A。\n- 資料傳輸：多數頁面標示 480 Mbps，屬 USB 2.0 等級；官方頁面未標示 Thunderbolt、USB4、DisplayPort Alt Mode 或高速外接 SSD 用途。\n- 安規：多數商品頁標示 CE 記號；USB-C 接頭款標示有過熱保護，部分 SITTBRUNN USB-A 轉 USB-C 另列過電流、短路與過熱保護。\n\n## 選購取捨\n\n- 只需要短線、手機日常充電：SITTBRUNN 1 公尺系列規格較單純，價格觀察落在 $89–$129。\n- 想要較長線與織物外層：LILLHULT 1.5 公尺或 3 公尺款較符合；原價文字 $199 對應 LILLHULT USB-C 轉 USB-C 1.5 公尺。\n- 需要高功率 USB-C 筆電／平板充電：優先看 RUNDHULT 100W／5A，不要把一般 3A LILLHULT 或 SITTBRUNN 視為 100W 線。\n- 需要 iPhone／iPad Lightning：確認選 USB-C 轉 Lightning 或 USB-A 轉 Lightning，並以 IKEA 商品頁標示的 MFi 認證為準。\n\n## 評測與使用者回饋\n\n- IKEA 商品頁可見部分款式有 1 則 5 分評價，但多數款式顯示 0 則或樣本很少，無法形成可靠的使用者口碑結論。\n- 官方規格較明確的限制是 480 Mbps 資料傳輸；這類線材較適合作為充電線，不適合期待高速資料傳輸或影像輸出的情境。\n\n## 參考來源\n\n- [IKEA 台灣充電線分類頁](https://www.ikea.com.tw/zh/products/electronics/power-supply-and-charging?tags[]=415)\n- [LILLHULT USB-C 轉 USB-C 1.5 公尺](https://www.ikea.com.tw/zh/products/electronics/power-supply-and-charging/lillhult-art-70619296)\n- [SITTBRUNN USB-C 轉 USB-C 1.0 公尺](https://www.ikea.com.tw/zh/products/electronics/power-supply-and-charging/sittbrunn-art-50619320)\n- [RUNDHULT USB-C 轉 USB-C 1.5 公尺／100W](https://www.ikea.com.tw/zh/products/electronics/power-supply-and-charging/rundhult-art-30619302)\n- [LILLHULT USB-C 轉 Lightning 1.5 公尺](https://www.ikea.com.tw/zh/products/electronics/power-supply-and-charging/lillhult-art-40625213)",
+  "search_aliases": [
+    "IKEA USB 充電線",
+    "IKEA LILLHULT",
+    "IKEA SITTBRUNN",
+    "IKEA RUNDHULT",
+    "USB-C 轉 USB-C",
+    "USB-A 轉 USB-C",
+    "USB-C 轉 Lightning",
+    "USB-A 轉 Lightning",
+    "IKEA 充電線 199"
+  ],
+  "model_numbers": [
+    "LILLHULT 706.252.16",
+    "LILLHULT 706.192.96",
+    "LILLHULT 106.252.19",
+    "LILLHULT 206.252.33",
+    "LILLHULT 406.252.13",
+    "LILLHULT 506.247.98",
+    "SITTBRUNN 006.193.08",
+    "SITTBRUNN 506.193.20",
+    "RUNDHULT 306.193.02",
+    "RUNDHULT 005.959.82"
+  ],
   "offers": [
     {
       "channel_id": "other",
@@ -15,11 +36,11 @@
       "price_text": "199",
       "price": {
         "amount": 199,
-        "currency": null,
+        "currency": "TWD",
         "unit": "each",
         "label": null
       },
-      "checked_at": "2026-06-02T00:00:00+08:00"
+      "checked_at": "2026-06-18T00:00:00+08:00"
     }
   ],
   "image_url": null,
@@ -28,9 +49,9 @@
     "cable-adapter",
     "ikea"
   ],
-  "reference_url": null,
+  "reference_url": "https://www.ikea.com.tw/zh/products/electronics/power-supply-and-charging?tags[]=415",
   "created_at": "2026-06-02T00:00:00+08:00",
-  "updated_at": "2026-06-02T00:00:00+08:00",
+  "updated_at": "2026-06-18T00:00:00+08:00",
   "published_at": "2026-06-02T00:00:00+08:00",
   "unpublished_at": null,
   "archived_at": null,

@@ -1,0 +1,50 @@
+{
+  "id": "2026-06-18-adata-c100-power-bank",
+  "status": "published",
+  "name": "ADATA 威剛 C100 10000mAh 20W PD/QC 行動電源",
+  "english_name": "ADATA C100 10000mAh 20W PD/QC Power Bank",
+  "summary": "便宜、有20w輸出、可以用USB-C或micro充電",
+  "long_description": "便宜、有20w輸出、可以用USB-C或micro充電",
+  "llm_description": "## 快速判斷\n\nADATA 威剛 C100 是 10000mAh／37Wh 的鋰聚合物行動電源，定位在薄型 20W 快充款；機身約 140 × 67.5 × 16 mm、210g，容量與重量適合日常通勤、短途外出或登機隨身攜帶。\n\n## 重要規格\n\n- 電池容量：10000mAh、37Wh，官方與通路資料標示為鋰聚合物電池。\n- 輸入：USB-C 與 Micro USB，最高約 18W。\n- 輸出：1 個 USB-C 最高 20W PD，2 個 USB-A 單孔最高 18W QC。\n- 同時充電：最多可接 3 台裝置，但多孔同時輸出時總輸出會下降，規格頁列為約 15W。\n- 尺寸重量：約 140 × 67.5 × 16 mm、210g。\n- 配件與保固：包裝含 USB Type-C 線材，通路與資料表標示 1 年保固。\n- 保護機制：資料表列出過充、過放、過溫、短路、過壓與過電流等保護。\n\n## 優點與限制\n\n- 優點：USB-C 單孔最高 20W 並支援 USB PD，USB-A 也標示支援 QC，比僅有 10W／12W 的入門行動電源更適合替手機快充。\n- 優點：同時具備 USB-C 與 Micro USB 輸入，對仍保留舊線材的人較有彈性。\n- 限制：多孔同時使用不等於每台都能快充，若要維持最快充電速度應優先單孔使用。\n- 限制：沒有內建線、無線充電或 30W 以上高功率輸出，不適合作為筆電或高功率 USB-C 裝置的主要電源。\n\n## 參考來源\n\n- [ADATA 官方產品頁](https://www.adata.com/tw/consumer/category/power-banks/power-bank-c100/)\n- [PChome 24h 購買連結](https://24h.pchome.com.tw/prod/DYAO44-A900HHMMF)",
+  "search_aliases": [
+    "威剛 C100",
+    "ADATA C100",
+    "ADATA C100 10000mAh",
+    "ADATA C100 20W",
+    "10000mAh 行動電源",
+    "C100 行動電源",
+    "PC100-14BK",
+    "PC100-14WH"
+  ],
+  "model_numbers": [
+    "PC100-14BK",
+    "PC100-14WH"
+  ],
+  "offers": [
+    {
+      "channel_id": "pchome",
+      "url": "https://24h.pchome.com.tw/prod/DYAO44-A900HHMMF",
+      "price_text": "429",
+      "price": {
+        "amount": 429,
+        "currency": "TWD",
+        "unit": "each",
+        "label": null
+      },
+      "checked_at": "2026-06-18T00:00:00+08:00"
+    }
+  ],
+  "image_url": null,
+  "category_id": "computer-3c",
+  "tag_ids": [
+    "adata",
+    "power-charging"
+  ],
+  "reference_url": "https://www.adata.com/tw/consumer/category/power-banks/power-bank-c100/",
+  "created_at": "2026-06-18T00:00:00+08:00",
+  "updated_at": "2026-06-18T00:00:00+08:00",
+  "published_at": "2026-06-18T00:00:00+08:00",
+  "unpublished_at": null,
+  "archived_at": null,
+  "image_file": "2026-06-18-adata-c100-power-bank.jpg"
+}
