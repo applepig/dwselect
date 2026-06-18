@@ -1,13 +1,21 @@
 {
   "id": "2026-06-02-sennheiser-ambeo-max",
   "status": "published",
-  "name": "Sennheiser Ambeo Max",
-  "english_name": "Sennheiser Ambeo Max",
+  "name": "Sennheiser AMBEO Max",
+  "english_name": "Sennheiser AMBEO Soundbar Max",
   "summary": "Soundbar唯一推薦，看片聽音樂都可以，就是價錢不夠可愛，如果有飛美國的話可以考慮帶一組",
   "long_description": "Soundbar唯一推薦，看片聽音樂都可以，就是價錢不夠可愛，如果有飛美國的話可以考慮帶一組",
-  "llm_description": "",
-  "search_aliases": [],
-  "model_numbers": [],
+  "llm_description": "## 快速判斷\n\nSennheiser AMBEO Soundbar Max 是一體式高階 Dolby Atmos / DTS:X soundbar，官方定位為 5.1.4 虛擬環繞系統。它以 13 顆單體、內建 500W peak 擴大與房間校正，嘗試在不擺放後環繞與獨立重低音的情境下提供大型劇院聲場；代價是機身非常大、重約 18.5 kg，安裝位置與牆面／天花反射條件會明顯影響效果。\n\n## 重要規格\n\n- 官方 SKU：508684；PChome 商品名為「Sennheiser 森海塞爾 5.1.4聲道 AMBEO MAX Soundbar 家庭劇院」。\n- 聲道／單體：5.1.4 虛擬環繞、13 顆單體，包含 6 顆 4 吋 woofer、5 顆 1 吋鋁質 tweeter、2 顆 3.5 吋上方發聲 full-range driver。\n- 低頻與功率：官方標示 30 Hz–20 kHz（-3 dB），13 組 Class D amplifier，總音訊功率 500 W peak。\n- 連接：HDMI eARC（HDMI 2.1 TV out）、HDMI 輸入、光纖 S/PDIF、RCA AUX、RCA subwoofer pre-out、Ethernet、Wi-Fi、Bluetooth 4.2。\n- 串流與格式：支援 Dolby Atmos、DTS:X、MPEG-H、Sony 360 Reality Audio；串流包含 Chromecast built-in、AirPlay 2、Spotify Connect、TIDAL Connect、UPnP。\n- 尺寸重量：約 126 × 13.5 × 17.1 cm、18.5 kg；盒內含遙控器、校正麥克風、HDMI 線、電源線與說明文件。\n\n## 優點與限制\n\n- 主要優點是不用後環繞喇叭也能建立寬大、具高度感的沉浸式聲場，並以較大的 woofer 單體提供不依賴外接 subwoofer 的低頻延伸。\n- 主要限制是尺寸、重量與擺位要求：若電視底座太低可能遮住畫面或 IR 接收器；放在櫃內會阻擋上方發聲單體；牆面與天花反射條件不佳時，虛擬環繞效果會下降。\n- HDMI 規格偏向家庭劇院音訊與 4K passthrough；評測指出它不是為 VRR、ALLM 等新世代遊戲 passthrough 功能設計的 soundbar。\n\n## 評測與使用者回饋\n\n- [What Hi-Fi? 評測](https://www.whathifi.com/reviews/sennheiser-ambeo-soundbar)給予 5 星，摘要為聲音自然、動態與細節表現強、環繞效果有說服力；同時列出體積大、價格高、對擺位較挑剔。\n- What Hi-Fi? 也提到新版 AMBEO OS 更新後，AirPlay 2、Spotify Connect、TIDAL Connect 等串流支援更完整，但 app 設定與連線流程仍可能需要耐心。\n- [RTINGS 的 AMBEO Soundbar MAX 評測頁](https://www.rtings.com/soundbar/reviews/sennheiser/ambeo-soundbar-max)可作為量測與項目化測試資料參考，適合用來交叉比較對白、音樂、電影與 Atmos 表現。\n\n## 適合誰／不適合誰\n\n- 適合想要 Dolby Atmos / DTS:X 劇院感、但不想在客廳布置多支喇叭與線材的人。\n- 不適合電視櫃空間低、需要輕量化安裝、或希望用同一條 soundbar 直接滿足高階遊戲 HDMI 2.1 passthrough 需求的人。\n\n## 參考來源\n\n- [Sennheiser 官方產品頁](https://www.sennheiser-hearing.com/en-US/p/ambeo-soundbar/)\n- [PChome 商品頁](https://24h.pchome.com.tw/prod/DMAAEE-A900GPR35)\n- [What Hi-Fi? 評測](https://www.whathifi.com/reviews/sennheiser-ambeo-soundbar)\n- [RTINGS 評測](https://www.rtings.com/soundbar/reviews/sennheiser/ambeo-soundbar-max)",
+  "search_aliases": [
+    "Sennheiser AMBEO Soundbar Max",
+    "Sennheiser AMBEO Soundbar | Max",
+    "森海塞爾 AMBEO MAX",
+    "森海塞爾 5.1.4 Soundbar",
+    "Ambeo Soundbar Max"
+  ],
+  "model_numbers": [
+    "508684"
+  ],
   "offers": [
     {
       "channel_id": "pchome",
@@ -28,9 +36,9 @@
     "sennheiser",
     "speaker"
   ],
-  "reference_url": "https://www.facebook.com/applepig/posts/pfbid02Z4MneYucySzuwXGTurgjTvu7hTUGz8VNPxYWmCsKcNoMGQtoCyLurJDf2qFkRSnXl",
+  "reference_url": "https://www.sennheiser-hearing.com/en-US/p/ambeo-soundbar/",
   "created_at": "2026-06-02T00:00:00+08:00",
-  "updated_at": "2026-06-02T00:00:00+08:00",
+  "updated_at": "2026-06-19T00:00:00+08:00",
   "published_at": "2026-06-02T00:00:00+08:00",
   "unpublished_at": null,
   "archived_at": null,

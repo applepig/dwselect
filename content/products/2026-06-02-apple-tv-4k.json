@@ -1,13 +1,23 @@
 {
   "id": "2026-06-02-apple-tv-4k",
   "status": "published",
-  "name": "Apple TV 4K",
-  "english_name": "Apple TV 4K",
+  "name": "Apple TV 4K 64GB",
+  "english_name": "Apple TV 4K Wi-Fi with 64GB storage (3rd generation)",
   "summary": "我有一個朋友他一直覺得「機上盒為什麼只能買Apple TV或FireTV呢，一定有更便宜的選項」  然後他就前後買個至少十隻便宜的機上盒，也多了十隻電子垃圾",
   "long_description": "我有一個朋友他一直覺得「機上盒為什麼只能買Apple TV或FireTV呢，一定有更便宜的選項」  然後他就前後買個至少十隻便宜的機上盒，也多了十隻電子垃圾",
-  "llm_description": "",
-  "search_aliases": [],
-  "model_numbers": [],
+  "llm_description": "## 快速判斷\n\nApple TV 4K 64GB 是 Apple 2022 年推出的第 3 代 4K 串流播放盒 Wi‑Fi 版本，PChome offer 標示為 `MN873TA/A`。它適合需要 tvOS、AirPlay、Apple TV app、Apple Music、Apple Arcade、iPhone 快速設定與 Siri Remote 的客廳影音環境；若需要有線網路、128GB 儲存空間或 Thread 智慧家庭網路，應確認是否改選 Wi‑Fi + 乙太網路版本。\n\n## 重要規格\n\n- 機型：Apple TV 4K（第 3 代，Wi‑Fi），Apple 型號 `A2737`，賣場型號 `MN873TA/A`。\n- 儲存與網路：64GB；Wi‑Fi 6（802.11ax，2x2 MIMO）、Bluetooth 5.0、IR 接收器；此 Wi‑Fi 版不含 Gigabit Ethernet 與 Thread。\n- 影音輸出：HDMI 2.1，支援最高 4K 60fps 的 HDR 輸出；Apple 規格列出 Dolby Vision、HDR10+、HDR10、HLG、QMS，以及 Dolby Atmos、Dolby Digital 5.1 / 7.1 等音訊格式。\n- 處理器與遙控器：A15 Bionic；隨附 Siri Remote（第 3 代），使用 USB‑C 充電，支援 IR / CEC 控制電視或接收器。\n- 機身：93 × 93 × 31 mm，Wi‑Fi 版約 208 g；包裝內有 Apple TV 4K、Siri Remote、電源線與文件，HDMI 線需另購。\n\n## 優點與限制\n\n- 優點：tvOS 介面與 Apple 生態整合度高，可搭配 iPhone 設定／控制、AirPlay、AirPods 音訊共享、HomePod 音訊輸出與 Apple 服務。\n- 優點：相較前代，A15 Bionic 與無風扇小機身是第 3 代的主要硬體更新；HDR10+ 與 USB‑C Siri Remote 也是辨識重點。\n- 限制：Wi‑Fi 64GB 版沒有 Ethernet 與 Thread；若串流環境依賴有線網路、或要把 Apple TV 當 Thread 邊界路由器，需看 128GB Wi‑Fi + 乙太網路版。\n- 限制：多數加值功能集中在 Apple 裝置與服務使用者；非 Apple 生態使用者仍可使用主流串流 app，但整體差異化會少一些。\n\n## 評測與使用者回饋\n\n- TechRadar 評測指出，2022 年 Apple TV 4K 並非大幅改款，但更小、加入 HDR10+、Siri Remote 改 USB‑C，A15 讓選單與 Apple Arcade 遊戲反應更快；主要缺點是作為串流盒仍偏高價，且不少功能面向 Apple 使用者。\n- 本次可查證來源包含官方規格、Apple 支援型號辨識與 PChome 商品資料；未取得 PChome 商品頁的公開使用者評論摘要，因此未將賣場評論當作決策依據。\n\n## 參考來源\n\n- [Apple 官方技術規格](https://www.apple.com/tw/apple-tv-4k/specs/)\n- [Apple 支援：Apple TV 4K（第 3 代）技術規格](https://support.apple.com/zh-tw/111839)\n- [Apple 支援：辨識你的 Apple TV 機型](https://support.apple.com/zh-tw/101605)\n- [PChome 商品頁](https://24h.pchome.com.tw/prod/DYAJFN-1900H1P8W)\n- [TechRadar：Apple TV 4K (2022) review](https://www.techradar.com/reviews/apple-tv-4k-2022)",
+  "search_aliases": [
+    "Apple TV 4K 第 3 代",
+    "Apple TV 4K Wi-Fi",
+    "Apple TV 4K 2022",
+    "蘋果電視 4K",
+    "MN873TA/A",
+    "A2737"
+  ],
+  "model_numbers": [
+    "A2737",
+    "MN873TA/A"
+  ],
   "offers": [
     {
       "channel_id": "pchome",
@@ -28,9 +38,9 @@
     "apple",
     "av-source"
   ],
-  "reference_url": "https://www.facebook.com/applepig/posts/pfbid0Q9T73KVmaZKBnZtEVMfMkWw2FKz6UqVaCUmcdh47bpBvnnx7WwRYKNoZDLKPzJVrl",
+  "reference_url": "https://www.apple.com/tw/apple-tv-4k/specs/",
   "created_at": "2026-06-02T00:00:00+08:00",
-  "updated_at": "2026-06-02T00:00:00+08:00",
+  "updated_at": "2026-06-19T00:00:00+08:00",
   "published_at": "2026-06-02T00:00:00+08:00",
   "unpublished_at": null,
   "archived_at": null,

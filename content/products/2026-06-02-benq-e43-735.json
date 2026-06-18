@@ -1,6 +1,6 @@
 {
   "id": "2026-06-02-benq-e43-735",
-  "status": "published",
+  "status": "archived",
   "name": "BenQ E43-735",
   "english_name": "BenQ E43 735",
   "summary": "當然43\"的也是可以看BenQ，現在也只賣11k",
@@ -30,9 +30,9 @@
   ],
   "reference_url": null,
   "created_at": "2026-06-02T00:00:00+08:00",
-  "updated_at": "2026-06-02T00:00:00+08:00",
+  "updated_at": "2026-06-19T00:00:00+08:00",
   "published_at": "2026-06-02T00:00:00+08:00",
   "unpublished_at": null,
-  "archived_at": null,
+  "archived_at": "2026-06-19T00:00:00+08:00",
   "image_file": "2026-06-02-benq-e43-735.jpg"
 }
