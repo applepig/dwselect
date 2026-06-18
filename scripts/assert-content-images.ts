@@ -1,8 +1,13 @@
 import { existsSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 
+import sharp from 'sharp'
+
 import { DEFAULT_PRODUCTS_DIR, readPublicContentSource, type ContentReaderOptions } from './content-reader.ts'
 import { isPublished } from './public-content.ts'
+
+const MIN_CONTENT_IMAGE_SIDE_PX = 480
+const MAX_CONTENT_IMAGE_ASPECT_RATIO = 2
 
 export type AssertContentImagesMissing = {
   domain: 'products' | 'guides'
@@ -11,9 +16,15 @@ export type AssertContentImagesMissing = {
   source_path: string
 }
 
+export type AssertContentImagesInvalidDimensions = AssertContentImagesMissing & {
+  width: number | null
+  height: number | null
+}
+
 export type AssertContentImagesSummary = {
   checked: number
   missing: AssertContentImagesMissing[]
+  invalid_dimensions: AssertContentImagesInvalidDimensions[]
 }
 
 export class AssertContentImagesError extends Error {
@@ -23,6 +34,8 @@ export class AssertContentImagesError extends Error {
     super([
       `Missing ${summary.missing.length} published content image source file(s):`,
       ...summary.missing.map((entry) => `- ${entry.domain}/${entry.content_id} (${entry.image_file}): ${entry.source_path}`),
+      `Invalid dimensions ${summary.invalid_dimensions.length} published content image source file(s):`,
+      ...summary.invalid_dimensions.map((entry) => `- ${entry.domain}/${entry.content_id} (${entry.image_file}): ${entry.width ?? 'unknown'}x${entry.height ?? 'unknown'} at ${entry.source_path}`),
     ].join('\n'))
     this.name = 'AssertContentImagesError'
     this.summary = summary
@@ -37,6 +50,7 @@ export async function assertContentImages(options: ContentReaderOptions = {}): P
   const guides_dir = options.guides_dir ?? join(dirname(products_dir), 'guides')
   const source = await readPublicContentSource(options)
   const missing: AssertContentImagesMissing[] = []
+  const invalid_dimensions: AssertContentImagesInvalidDimensions[] = []
   let checked = 0
 
   const references = [
@@ -69,14 +83,34 @@ export async function assertContentImages(options: ContentReaderOptions = {}): P
         image_file: reference.image_file,
         source_path,
       })
+
+      continue
+    }
+
+    const metadata = await sharp(source_path).metadata()
+    const width = metadata.width ?? null
+    const height = metadata.height ?? null
+
+    const aspect_ratio = width === null || height === null ? null : Math.max(width, height) / Math.min(width, height)
+    const is_bad_aspect_ratio = aspect_ratio !== null && aspect_ratio > MAX_CONTENT_IMAGE_ASPECT_RATIO
+
+    if (width === null || height === null || width < MIN_CONTENT_IMAGE_SIDE_PX || height < MIN_CONTENT_IMAGE_SIDE_PX || is_bad_aspect_ratio) {
+      invalid_dimensions.push({
+        domain: reference.domain,
+        content_id: reference.content_id,
+        image_file: reference.image_file,
+        source_path,
+        width,
+        height,
+      })
     }
   }
 
-  if (missing.length > 0) {
-    throw new AssertContentImagesError({ checked, missing })
+  if (missing.length > 0 || invalid_dimensions.length > 0) {
+    throw new AssertContentImagesError({ checked, missing, invalid_dimensions })
   }
 
-  return { checked, missing }
+  return { checked, missing, invalid_dimensions }
 }
 
 async function runCli() {
@@ -88,7 +122,7 @@ async function runCli() {
     taxonomies_dir: getOptionValue(args, '--taxonomies-dir'),
   })
 
-  process.stdout.write(`Content image source files OK: ${summary.checked} checked, 0 missing\n`)
+  process.stdout.write(`Content image source files OK: ${summary.checked} checked, 0 missing, 0 invalid dimensions\n`)
 }
 
 function getOptionValue(args: string[], option: string) {

@@ -3,6 +3,7 @@ import { mkdir } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 
+import sharp from 'sharp'
 import { afterEach, describe, expect, it } from 'vitest'
 
 import { assertContentImages } from '../scripts/assert-content-images'
@@ -86,12 +87,20 @@ describe('assert-content-images', () => {
   it('should pass when every published product/guide image file exists', async () => {
     const fixture = await makeFixtureProject()
     writeFileSync(join(fixture.products_dir, 'sample-product.json'), JSON.stringify(makeProductJson()))
-    writeFileSync(join(fixture.products_dir, 'images', 'sample-product.jpg'), 'binary')
+    await sharp({
+      create: {
+        width: 800,
+        height: 800,
+        channels: 3,
+        background: '#ffffff',
+      },
+    }).jpeg().toFile(join(fixture.products_dir, 'images', 'sample-product.jpg'))
 
     const summary = await assertContentImages(dirsFor(fixture))
 
     expect(summary.checked).toBe(1)
     expect(summary.missing).toEqual([])
+    expect(summary.invalid_dimensions).toEqual([])
   })
 
   it('should throw when a published product image file is missing', async () => {
@@ -99,6 +108,21 @@ describe('assert-content-images', () => {
     writeFileSync(join(fixture.products_dir, 'missing-image-product.json'), JSON.stringify(makeProductJson()))
 
     await expect(assertContentImages(dirsFor(fixture))).rejects.toThrow(/Missing 1 published content image source file/)
+  })
+
+  it('should throw when a published product image has invalid dimensions', async () => {
+    const fixture = await makeFixtureProject()
+    writeFileSync(join(fixture.products_dir, 'wide-but-short-product.json'), JSON.stringify(makeProductJson()))
+    await sharp({
+      create: {
+        width: 1200,
+        height: 500,
+        channels: 3,
+        background: '#ffffff',
+      },
+    }).jpeg().toFile(join(fixture.products_dir, 'images', 'sample-product.jpg'))
+
+    await expect(assertContentImages(dirsFor(fixture))).rejects.toThrow(/Invalid dimensions 1 published content image source file/)
   })
 
   it('should ignore unpublished products with missing images', async () => {
@@ -109,5 +133,6 @@ describe('assert-content-images', () => {
 
     expect(summary.checked).toBe(0)
     expect(summary.missing).toEqual([])
+    expect(summary.invalid_dimensions).toEqual([])
   })
 })

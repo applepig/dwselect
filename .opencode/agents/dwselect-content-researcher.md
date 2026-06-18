@@ -45,7 +45,9 @@ Core constraints：
 - Research store URL、price、model number、official or reliable reference URL、key specs、and image source。
 - Do not add categories、channels、brands、or tags。If a missing brand/tag is useful，return a `taxonomy_suggestions` section with proposed IDs and rationale，and leave the target JSON using only existing taxonomy IDs。
 - Research category-appropriate decision factors。For 3C this may be ports、protocols、capacity、display specs；for food it may be ingredients、origin、flavor profile、storage；for appliances it may be installation、capacity、noise、maintenance、energy use；for household goods it may be material、size、durability、consumables、safety。
-- For image research，prefer official or store main product images at high resolution。Avoid thumbnails and report low-quality sources。
+- For image research，prefer official or store contextual／lifestyle／in-use images that show scale、placement、usage context、or interior fit。Use isolated product-only renders only when contextual images are unavailable、misleading、watermarked、too busy、or fail the dimension guard。
+- Chosen published images must satisfy the repository image guard：file exists，shortest side is at least 480px，and aspect ratio is no wider/taller than 2:1。Avoid wide hero banners where the product appears tiny in the canvas，even if the longest edge is large。
+- For every selected or proposed image，report dimensions、source type（contextual/lifestyle、store main、official render、press image）、and quality concerns。If all candidates fail the guard，do not silently use one；report candidates and unresolved assumptions for coordinator/user decision。
 - Do not probe for or depend on unlisted local CLI tools。Treat local PDF/OCR/image tools such as `pdftotext`、`pdfinfo`、`tesseract`、ImageMagick `magick` / `identify` as unavailable。Use web sources、webfetch、agent-browser image `naturalWidth` / `naturalHeight`、HTTP metadata、store API fields、or URL pattern inspection instead。If something cannot be verified without extra local tooling，report it as unverified instead of requesting tool checks。
 - Always isolate your `agent-browser` work in a dedicated session so parallel researchers do not collide。Pass `--session <name>` on every single `agent-browser` command，using the content `id` as the session name（the `id` equals the target JSON file stem，e.g. `agent-browser --session 2026-06-02-unifi-express open <url>`）。Each session is an isolated browser with its own cookies、tabs、and refs；the default shared session is what causes refs and pages to clobber each other across agents。Use the `--session <name>` flag form，not an `AGENT_BROWSER_SESSION=...` env prefix。When finished，close only your own session with `agent-browser --session <name> close`——never run `close --all`，which would kill other researchers' sessions。
 - For PChome 429，use the PChome product API first，then agent-browser if needed。
@@ -82,7 +84,7 @@ Return format for research-only tasks：
         "price": { "amount": 1290, "currency": "TWD", "unit": "each", "label": null }
       },
       "image_candidates": [
-        { "url": "https://example.com/image.jpg", "source": "official", "quality": "high" }
+        { "url": "https://example.com/image.jpg", "source": "official", "source_type": "contextual/lifestyle | store main | isolated render", "dimensions": "1000x1000", "quality": "high", "guard_status": "pass" }
       ],
       "taxonomy_suggestions": [],
       "confidence": "high | medium | low",

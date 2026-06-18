@@ -132,22 +132,30 @@ Images must be downloaded into the local content image folder。Do not use remot
 
 Preferred image sources：
 
-- Official product page media。
-- Store main product image at the highest available resolution。
-- Manufacturer press or support image。
+- Official product page media，prefer lifestyle／in-use／room context photos when they clearly show the assigned product。
+- Store main product image at the highest available resolution，especially when it is a real scene or useful scale/context shot。
+- Manufacturer press or support image，prefer contextual hero photos over isolated cutout-only product renders。
+
+Image selection preference：
+
+- Prefer images that help readers understand scale、placement、usage context、or interior fit，not just a floating product on a transparent/white background。
+- Use isolated clean product images only when contextual images are unavailable、too busy、watermarked、misleading、or fail the dimension guard。
+- Avoid wide hero banners where the product occupies only a small portion of the canvas；these often look tiny in cards even when the longest edge is large。
 
 Quality requirements：
 
-- Prefer at least 800px on the longest edge when available。
+- Must pass the repository image guard for every published content image：file exists，shortest side is at least 480px，and aspect ratio is no wider/taller than 2:1。
+- Prefer at least 800px on the longest edge when available，but do not use a wide banner if the shortest side is below 480px or the aspect ratio exceeds 2:1。
 - Avoid thumbnails such as `US40`、`SS64`、`SX300`、`SY300`、or obvious 300px preview URLs if a larger version exists。
 - Avoid watermarked、collage、text-heavy、or tiny images unless no better source exists。
 - Keep the product visible with enough padding and no severe crop。
-- If only low-quality images are available，report that limitation in the work summary。
+- If only low-quality or guard-failing images are available，do not silently use them；report candidate URLs、dimensions、why they fail、and ask coordinator/user for a decision。
 
 Image inspection workflow：
 
 - Prefer agent-browser to inspect image `naturalWidth` / `naturalHeight` or visible page media。
 - Use store API fields、HTTP metadata、or URL pattern inspection when browser inspection is enough。
+- Always report selected image dimensions and whether it is contextual/lifestyle、store main、or isolated product render。
 - Do not probe for or require unlisted local CLI tools for content research。Treat local PDF/OCR/image tools such as `pdftotext`、`pdfinfo`、`tesseract`、ImageMagick `magick` / `identify` as unavailable。If dimensions or PDF text cannot be verified without extra local tooling，mark them as unverified and continue。
 
 ## Browser Automation
@@ -203,7 +211,7 @@ When delegating content research/update to a subagent，the prompt must explicit
 - Keep `name` concise：prefer 32 visible characters or fewer，hard maximum 45；put full official names in `llm_description`、aliases、or model fields。
 - Provide sources、confidence、and unresolved assumptions。
 - For `llm_description`，write a blog-style Markdown brief with headings、bullet points、review/user feedback when available、and verified reference links；research specs instead of paraphrasing user text。
-- For images，prefer high-resolution official or store main images and report quality concerns。
+- For images，prefer contextual/lifestyle or in-use official/store images over isolated product-only renders；the chosen image must pass the guard（shortest side >= 480px，aspect ratio <= 2:1）and the subagent must report dimensions and source type。
 - Preserve user-provided offer URL and price text unless explicitly asked to replace them。
 - If offer is unavailable or unverifiable，keep it and report `offer_status` plus replacement candidates instead of changing it。
 - Add official product/spec pages to `reference_url`，not by replacing the user-provided offer link。
@@ -220,5 +228,5 @@ Update only that JSON file。Do not modify `summary`、`long_description`、`id`
 
 Research official/spec/store/review sources，then update agent-owned fields：`name`、`english_name`、`model_numbers`、`search_aliases`、`reference_url`、`llm_description`，and clearly missing price currency/unit metadata when verified。If you use agent-browser，pass `--session <content-id>` on every command and close only that session。Do not run `git`、`ls`、`cat`、`find`，or build/verify commands；the coordinator audits and rebuilds。
 
-Return：files changed、field summary、sources、confidence、offer_status、taxonomy_suggestions、unresolved assumptions。
+Return：files changed、field summary、sources、confidence、offer_status、image source type、image dimensions、taxonomy_suggestions、unresolved assumptions。
 ```
