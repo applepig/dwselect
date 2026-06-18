@@ -408,6 +408,127 @@ describe('search index', () => {
     expect(querySearchIndex(mini_search, '測試牌')).toContainEqual(expect.objectContaining({ document_id: 'product:2026-06-02-sample-product' }))
   })
 
+  it('should rank product title matches above tags, descriptions, llm descriptions and auxiliary fields', () => {
+    const weighted_taxonomies = {
+      ...test_taxonomies,
+      tags: [
+        ...test_tags,
+        { id: 'weighted-tag', label: 'boosttoken', description: 'boosttoken', aliases: [], nav_visible: true, sort_order: 60 },
+        { id: 'taxonomy-alias-only', label: '輔助欄位標籤', description: '輔助欄位標籤', aliases: ['boosttoken'], nav_visible: true, sort_order: 70 },
+      ],
+    }
+    const products = [
+      {
+        ...base_product,
+        id: 'search-alias-match',
+        name: 'A Search Alias Match',
+        long_description: '人工描述',
+        llm_description: '',
+        search_aliases: ['boosttoken'],
+        model_numbers: [],
+        tag_ids: ['keyboard'],
+      },
+      {
+        ...base_product,
+        id: 'model-number-match',
+        name: 'B Model Number Match',
+        long_description: '人工描述',
+        llm_description: '',
+        search_aliases: [],
+        model_numbers: ['boosttoken'],
+        tag_ids: ['keyboard'],
+      },
+      {
+        ...base_product,
+        id: 'taxonomy-alias-match',
+        name: 'C Taxonomy Alias Match',
+        long_description: '人工描述',
+        llm_description: '',
+        search_aliases: [],
+        model_numbers: [],
+        tag_ids: ['taxonomy-alias-only'],
+      },
+      {
+        ...base_product,
+        id: 'llm-description-match',
+        name: 'D LLM Description Match',
+        long_description: '人工描述',
+        llm_description: 'boosttoken',
+        search_aliases: [],
+        model_numbers: [],
+        tag_ids: ['keyboard'],
+      },
+      {
+        ...base_product,
+        id: 'description-match',
+        name: 'E Description Match',
+        long_description: 'boosttoken',
+        llm_description: '',
+        search_aliases: [],
+        model_numbers: [],
+        tag_ids: ['keyboard'],
+      },
+      {
+        ...base_product,
+        id: 'tag-match',
+        name: 'F Tag Match',
+        long_description: '人工描述',
+        llm_description: '',
+        search_aliases: [],
+        model_numbers: [],
+        tag_ids: ['weighted-tag'],
+      },
+      {
+        ...base_product,
+        id: 'title-match',
+        name: 'Z boosttoken Title Match',
+        long_description: '人工描述',
+        llm_description: '',
+        search_aliases: [],
+        model_numbers: [],
+        tag_ids: ['keyboard'],
+      },
+    ]
+    const payload = buildSearchIndexPayload({ products, guides: [], links: [] }, {
+      ...weighted_taxonomies,
+      generated_at: '2026-06-06T00:00:00+08:00',
+    })
+    const mini_search = loadSearchIndex(payload)
+
+    const result_ids = querySearchIndex(mini_search, 'boosttoken').map((result) => result.content_id)
+
+    expect(result_ids).toEqual(expect.arrayContaining([
+      'title-match',
+      'tag-match',
+      'description-match',
+      'llm-description-match',
+      'search-alias-match',
+      'model-number-match',
+      'taxonomy-alias-match',
+    ]))
+    expect(result_ids.indexOf('title-match')).toBeLessThan(result_ids.indexOf('tag-match'))
+    expect(result_ids.indexOf('tag-match')).toBeLessThan(result_ids.indexOf('description-match'))
+    expect(result_ids.indexOf('description-match')).toBeLessThan(result_ids.indexOf('llm-description-match'))
+    expect(result_ids.indexOf('llm-description-match')).toBeLessThan(result_ids.indexOf('search-alias-match'))
+    expect(result_ids.indexOf('llm-description-match')).toBeLessThan(result_ids.indexOf('model-number-match'))
+    expect(result_ids.indexOf('llm-description-match')).toBeLessThan(result_ids.indexOf('taxonomy-alias-match'))
+  })
+
+  it('should search guides and links by tag aliases', () => {
+    const guide = { ...base_guide, tag_ids: ['keyboard'] }
+    const link = { ...base_link, tag_ids: ['keyboard'] }
+    const payload = buildSearchIndexPayload({ products: [], guides: [guide], links: [link] }, {
+      ...test_taxonomies,
+      generated_at: '2026-06-06T00:00:00+08:00',
+    })
+    const mini_search = loadSearchIndex(payload)
+
+    expect(querySearchIndex(mini_search, '打字')).toEqual(expect.arrayContaining([
+      expect.objectContaining({ document_id: 'guide:2026-06-02-guide' }),
+      expect.objectContaining({ document_id: 'link:applepig-home' }),
+    ]))
+  })
+
   it('should order product documents by canonical category then updated_at then name (catalog-aligned baseline)', () => {
     // ADR 2026-06-18 (revises 2026-06-16): search documents share the catalog canonical
     // comparator (category sort_order -> updated_at desc -> compareText name). The time key
