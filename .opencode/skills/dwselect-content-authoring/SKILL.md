@@ -150,6 +150,23 @@ Image inspection workflow：
 - Use store API fields、HTTP metadata、or URL pattern inspection when browser inspection is enough。
 - Do not probe for or require unlisted local CLI tools for content research。Treat local PDF/OCR/image tools such as `pdftotext`、`pdfinfo`、`tesseract`、ImageMagick `magick` / `identify` as unavailable。If dimensions or PDF text cannot be verified without extra local tooling，mark them as unverified and continue。
 
+## Browser Automation
+
+When a research or image task needs `agent-browser`，always isolate it in a dedicated session so parallel researchers do not clobber each other。
+
+- Pass `--session <name>` on every single `agent-browser` command。Use the content `id` as the session name（the `id` equals the JSON file stem），for example `agent-browser --session 2026-06-02-unifi-express open <url>`。
+- Each `--session <name>` is an isolated browser with its own cookies、tabs、and refs。The default shared session is what makes pages and element refs collide when multiple agents run at once。
+- Use the `--session <name>` flag form，not an `AGENT_BROWSER_SESSION=...` env prefix（the env-prefixed command does not match the allowed `agent-browser *` permission）。
+- When finished，close only your own session with `agent-browser --session <name> close`。Never run `close --all`，which kills other researchers' sessions。
+
+## Scope Discipline
+
+Stay strictly within web research and single-file editing。
+
+- Do not inspect repository or filesystem state：no `git`（status、diff、log）、`ls`、`cat`、`find`、directory listing、or build/verification commands。
+- You do not need to confirm what changed or what the repo looks like——the coordinator audits and runs verification。
+- Read and edit only your assigned target JSON via the read/edit tools，and use bash only for the explicitly allowed research tools（`agent-browser`、`curl`、`node`、`python`、`file`、`jq`）。
+
 ## Verification For Content-Only Tasks
 
 Content-only tasks validate format、schema-readable content、taxonomy references、images、and generated artifacts。Do not validate the current CMS dataset by hard-coded counts or specific product IDs。
@@ -191,6 +208,8 @@ When delegating content research/update to a subagent，the prompt must explicit
 - If offer is unavailable or unverifiable，keep it and report `offer_status` plus replacement candidates instead of changing it。
 - Add official product/spec pages to `reference_url`，not by replacing the user-provided offer link。
 - Raise missing brand/tag/category/channel needs as `taxonomy_suggestions`；do not edit taxonomy without user confirmation。
+- For any `agent-browser` use，pass `--session <content-id>` on every command so parallel researchers do not collide，and close only that session（never `close --all`）。
+- Stay within research and editing the one assigned JSON。Do not inspect repo/filesystem state（no `git`、`ls`、`cat`、`find`、build/verify）；the coordinator audits and rebuilds。
 
 Suggested one-product implementation prompt shape：
 
@@ -199,7 +218,7 @@ Read and follow `dwselect-content-authoring`。This is implementation work for e
 
 Update only that JSON file。Do not modify `summary`、`long_description`、`id`、`status`、or user-provided `offers[].url` / `price_text`。Keep `name` concise（prefer <=32 visible characters，hard max 45）；put full official names in `llm_description`、`model_numbers`、or `search_aliases`。Preserve existing taxonomy IDs；if a missing brand/tag is useful，return `taxonomy_suggestions` instead of editing taxonomy。
 
-Research official/spec/store/review sources，then update agent-owned fields：`name`、`english_name`、`model_numbers`、`search_aliases`、`reference_url`、`llm_description`，and clearly missing price currency/unit metadata when verified。
+Research official/spec/store/review sources，then update agent-owned fields：`name`、`english_name`、`model_numbers`、`search_aliases`、`reference_url`、`llm_description`，and clearly missing price currency/unit metadata when verified。If you use agent-browser，pass `--session <content-id>` on every command and close only that session。Do not run `git`、`ls`、`cat`、`find`，or build/verify commands；the coordinator audits and rebuilds。
 
 Return：files changed、field summary、sources、confidence、offer_status、taxonomy_suggestions、unresolved assumptions。
 ```

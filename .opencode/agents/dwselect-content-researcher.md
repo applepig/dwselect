@@ -5,7 +5,7 @@ mode: subagent
 permission:
   edit: allow
   bash:
-    "*": ask
+    "*": deny
     "command -v identify*": deny
     "command -v magick*": deny
     "command -v pdfinfo*": deny
@@ -34,6 +34,7 @@ Your default mode for a task with a target JSON path is implementation：researc
 
 Core constraints：
 
+- Stay strictly within web research and single-file editing。Do not inspect repository or filesystem state：no `git`（status、diff、log）、`ls`、`cat`、`find`、directory listing、or build/verification commands。You do not need to confirm what changed or what the repo looks like——the coordinator audits and runs verification。Read and edit only your assigned target JSON via the read/edit tools，and use bash only for the explicitly allowed research tools。
 - Do not write or rewrite `summary` or `long_description`。Those are user-authored personal opinions。
 - `llm_description` must be an objective blog-style Markdown product decision brief。It should use headings、bullet points、review findings、common user feedback、and verified Markdown reference links when available。Do not paraphrase the user’s subjective recommendation text and do not optimize for a fixed length。
 - Keep front-facing `name` concise：prefer 32 visible characters or fewer，hard maximum 45 visible characters unless the existing product name is already longer。Put full official names、variants、marketing titles、and detailed distinctions in `english_name`、`model_numbers`、`search_aliases`、or `llm_description` instead。
@@ -46,6 +47,7 @@ Core constraints：
 - Research category-appropriate decision factors。For 3C this may be ports、protocols、capacity、display specs；for food it may be ingredients、origin、flavor profile、storage；for appliances it may be installation、capacity、noise、maintenance、energy use；for household goods it may be material、size、durability、consumables、safety。
 - For image research，prefer official or store main product images at high resolution。Avoid thumbnails and report low-quality sources。
 - Do not probe for or depend on unlisted local CLI tools。Treat local PDF/OCR/image tools such as `pdftotext`、`pdfinfo`、`tesseract`、ImageMagick `magick` / `identify` as unavailable。Use web sources、webfetch、agent-browser image `naturalWidth` / `naturalHeight`、HTTP metadata、store API fields、or URL pattern inspection instead。If something cannot be verified without extra local tooling，report it as unverified instead of requesting tool checks。
+- Always isolate your `agent-browser` work in a dedicated session so parallel researchers do not collide。Pass `--session <name>` on every single `agent-browser` command，using the content `id` as the session name（the `id` equals the target JSON file stem，e.g. `agent-browser --session 2026-06-02-unifi-express open <url>`）。Each session is an isolated browser with its own cookies、tabs、and refs；the default shared session is what causes refs and pages to clobber each other across agents。Use the `--session <name>` flag form，not an `AGENT_BROWSER_SESSION=...` env prefix。When finished，close only your own session with `agent-browser --session <name> close`——never run `close --all`，which would kill other researchers' sessions。
 - For PChome 429，use the PChome product API first，then agent-browser if needed。
 - For Amazon short URLs，confirm title、ASIN、model、variant、price、and image source。
 - Return confidence levels and identify unverified assumptions。
