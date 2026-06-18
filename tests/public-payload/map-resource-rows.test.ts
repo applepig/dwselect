@@ -50,7 +50,7 @@ describe('guide and link resource row build mapper', () => {
     ]
 
     expect(mapGuideRows(guides, labels)).toEqual([
-      expect.objectContaining({ id: 'local-guide', image_url: '/images/guides/local-guide.webp' }),
+      expect.objectContaining({ id: 'local-guide', image_url: '/guides/images/local-guide.png' }),
     ])
   })
 
@@ -76,7 +76,7 @@ describe('guide and link resource row build mapper', () => {
     ]
 
     expect(mapGuideRows(guides, labels)).toEqual([
-      expect.objectContaining({ id: 'quote-wrapped-guide', image_url: '/images/guides/quote-wrapped-guide.webp' }),
+      expect.objectContaining({ id: 'quote-wrapped-guide', image_url: '/guides/images/quote-wrapped-guide.webp' }),
     ])
   })
 

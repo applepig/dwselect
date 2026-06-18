@@ -14,8 +14,17 @@
         class="resource-row-media"
         aria-hidden="true"
       >
+        <NuxtImg
+          v-if="hasVisibleImage(row) && isLocalImageSource(row.image_url)"
+          :src="row.image_url ?? ''"
+          alt=""
+          class="resource-row-image"
+          loading="lazy"
+          format="webp"
+          @error="onResourceImageError(row.id)"
+        />
         <img
-          v-if="hasVisibleImage(row)"
+          v-else-if="hasVisibleImage(row)"
           :src="row.image_url ?? ''"
           alt=""
           class="resource-row-image"
@@ -70,6 +79,11 @@ function getRowComponent(row: CompactResourceRow): string | Component {
 
 function hasVisibleImage(row: CompactResourceRow): boolean {
   return row.image_url !== null && !failed_image_ids.value.has(row.id)
+}
+
+// 本地 content 圖（/products|guides/images/...）走 <NuxtImg>／IPX；外部 http 連結圖維持原生 <img>。
+function isLocalImageSource(image_url: string | null): boolean {
+  return image_url !== null && image_url.startsWith('/')
 }
 
 function onResourceImageError(row_id: string) {

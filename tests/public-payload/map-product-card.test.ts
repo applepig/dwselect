@@ -40,7 +40,7 @@ describe('product card build mapper', () => {
       id: 'published-product',
       name: '已上架商品',
       summary: '卡片短評',
-      image_url: '/images/products/published-product.webp',
+      image_url: '/products/images/published-product.jpg',
       category_id: 'computer',
       category_label: '電腦',
       channel_id: 'pchome',
@@ -88,7 +88,7 @@ describe('product card build mapper', () => {
       image_url: null,
     })
 
-    expect(mapProductCard(product, makeResolver()).image_url).toBe('/images/products/local-image-product.webp')
+    expect(mapProductCard(product, makeResolver()).image_url).toBe('/products/images/local-image-product.webp')
   })
 
   it('should reject external-only product images for cards', () => {
@@ -112,7 +112,7 @@ describe('product card build mapper', () => {
       image_url: null,
     })
 
-    expect(mapProductCard(product, makeResolver()).image_url).toBe('/images/products/quote-wrapped-image-product.webp')
+    expect(mapProductCard(product, makeResolver()).image_url).toBe('/products/images/quote-wrapped-image-product.jpg')
   })
 
   it('should normalize Nuxt Content runtime ids to canonical product ids', () => {

@@ -19,13 +19,14 @@
             @click="onBackClicked"
           />
 
-          <img
+          <NuxtImg
             v-if="!has_detail_image_failed"
             :src="detail.hero_image_url"
             :alt="detail.hero_alt"
             class="detail-hero-image"
+            format="webp"
             @error="onDetailImageError"
-          >
+          />
           <UIcon
             name="i-lucide-image-off"
             class="detail-image-fallback-icon"
@@ -203,15 +204,16 @@
           :aria-label="`查看 ${product.name} 詳情`"
         >
           <span class="related-product-image-tile">
-            <img
+            <NuxtImg
               v-if="!failed_related_image_ids.has(product.id)"
               :src="product.image_url"
               :alt="product.name"
               class="related-product-image"
               :data-product-id="product.id"
               loading="lazy"
+              format="webp"
               @error="onRelatedImageError(product.id)"
-            >
+            />
             <UIcon
               name="i-lucide-image-off"
               class="related-product-fallback-icon"

@@ -31,7 +31,7 @@ describe('product card base mapper', () => {
     expect(mapProductCardBase(product, makeResolver())).toEqual({
       id: 'base-product',
       name: '共通欄位商品',
-      image_url: '/images/products/base-product.webp',
+      image_url: '/products/images/base-product.jpg',
       category_label: '電腦',
       channel_label: 'PChome',
     })
@@ -60,7 +60,7 @@ describe('product card fields mapper', () => {
     expect(mapProductCardFields(product, makeResolver())).toEqual({
       id: 'fields-product',
       name: '卡片詳情共用商品',
-      image_url: '/images/products/sample-product.webp',
+      image_url: '/products/images/sample-product.jpg',
       category_label: '電腦',
       channel_id: 'pchome',
       channel_label: 'PChome',

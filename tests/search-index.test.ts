@@ -147,7 +147,7 @@ describe('search index', () => {
         category_labels: ['電腦'],
         tag_ids: ['keyboard', 'usb-c', 'fixture-brand'],
         tag_labels: ['鍵盤', 'USB-C', 'Fixture Brand'],
-        image_url: '/images/products/2026-06-02-sample-product.webp',
+        image_url: '/products/images/2026-06-02-sample-product.jpg',
         href: '/products/2026-06-02-sample-product',
         external: false,
         price_text: 'NT$ 1,990',
@@ -170,7 +170,7 @@ describe('search index', () => {
     }, test_taxonomies)).toEqual([
       expect.objectContaining({
         document_id: 'product:2026-06-02-sample-product',
-        image_url: '/images/products/2026-06-02-sample-product.webp',
+        image_url: '/products/images/2026-06-02-sample-product.jpg',
       }),
     ])
   })
@@ -234,7 +234,7 @@ describe('search index', () => {
     }, test_taxonomies)).toEqual([
       expect.objectContaining({
         document_id: 'guide:2026-06-02-guide',
-        image_url: '/images/guides/2026-06-02-guide.webp',
+        image_url: '/guides/images/2026-06-02-guide.jpg',
       }),
     ])
   })
@@ -382,7 +382,7 @@ describe('search index', () => {
           external: false,
           channel_label: 'PChome',
           price_text: 'NT$ 1,990',
-          image_url: '/images/products/2026-06-02-sample-product.webp',
+          image_url: '/products/images/2026-06-02-sample-product.jpg',
         },
       ],
     })
@@ -603,7 +603,7 @@ describe('search index', () => {
         summary: '熱插拔小尺寸鍵盤',
         category_labels: ['電腦'],
         tag_labels: ['鍵盤', 'USB-C', 'Fixture Brand'],
-        image_url: '/images/products/2026-06-02-sample-product.webp',
+        image_url: '/products/images/2026-06-02-sample-product.jpg',
         href: '/products/2026-06-02-sample-product',
         external: false,
         price_text: 'NT$ 1,990',

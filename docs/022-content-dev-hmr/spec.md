@@ -124,22 +124,24 @@ Nuxt Image local source path 規則：
 > 預期結果：`/api/content.json` 與 `/search-index.json` 在 dev 由 Nuxt server routes 即時產生，generate 後出現在 `.output/public`。
 > 驗證方式：`pnpm test tests/public-discovery.test.ts tests/search-index.test.ts tests/nuxt-smoke.test.ts`
 
-- [ ] 撰寫／更新測試（Red）：驗證 server route handler 使用 `readPublicContentSource()` 與既有 payload／search mapping，且 `nuxt.config.ts` prerender routes 包含 `/api/content.json`、`/search-index.json`。
-- [ ] 實作最小功能（Green）：新增 server routes，將 `fetchPublicContentPayload()` 改為 route fetch，移除 server side 直接讀 `public/api/content.json` 的 primary path。
-- [ ] Refactor 並確認測試維持通過：讓 build script 與 server route 共用 mapping function，避免 duplicated payload 邏輯。
+- [x] 撰寫／更新測試（Red）：驗證 server route handler 使用 `readPublicContentSource()` 與既有 payload／search mapping，且 `nuxt.config.ts` prerender routes 包含 `/api/content.json`、`/search-index.json`。
+- [x] 實作最小功能（Green）：新增 server routes，將 `fetchPublicContentPayload()` 改為 route fetch，移除 server side 直接讀 `public/api/content.json` 的 primary path。
+- [x] Refactor 並確認測試維持通過：讓 build script 與 server route 共用 mapping function，避免 duplicated payload 邏輯。
 
 ### Milestone 2：Nuxt Image content 圖片 pipeline
 > 預期結果：Product／Guide 圖片由 `<NuxtImg>` 顯示，dev 不需 `build-content-images` 即可看到 source image，generate 會輸出 optimized static images。
 > 驗證方式：`pnpm test tests/product-schema.test.ts tests/nuxt-smoke.test.ts tests/published-products/compact-app.test.ts tests/public-payload/map-product-card.test.ts tests/public-payload/map-product-detail.test.ts tests/public-payload/map-resource-rows.test.ts`
 
-- [ ] 撰寫／更新測試（Red）：驗證 public payload image contract 改為 source image metadata，UI 使用 Nuxt Image，舊 `/images/products/*.webp` contract 不再是主要輸出。
-- [ ] 實作最小功能（Green）：加入 `@nuxt/image` module，設定 local source dir／alias，改 Product card、detail、resource rows 使用 `<NuxtImg>`。
-- [ ] Refactor 並確認測試維持通過：移除或降級 `build-content-images` 在 generate 前置流程中的必要性，更新相關文件與 workflow 測試。
+- [x] 撰寫／更新測試（Red）：驗證 public payload image contract 改為 source image metadata，UI 使用 Nuxt Image，舊 `/images/products/*.webp` contract 不再是主要輸出。
+- [x] 實作最小功能（Green）：加入 `@nuxt/image` module，設定 local source dir／alias，改 Product card、detail、resource rows 使用 `<NuxtImg>`。
+- [x] Refactor 並確認測試維持通過：移除或降級 `build-content-images` 在 generate 前置流程中的必要性，更新相關文件與 workflow 測試。
 
 ### Milestone 3：SSG generate 與 dev authoring 驗收
 > 預期結果：內容、search API 與圖片都可透過 Nuxt dev／generate lifecycle 驗證，不再要求 content 更新後手動跑多個 artifact build script 才能預覽。
 > 驗證方式：`pnpm test`、`pnpm lint`、`pnpm typecheck`、`pnpm generate`、`node scripts/assert-runtime-google-sheet-clean.ts`，並在 `https://dwselect.toybox.local/` 手動確認內容與圖片可載入。
 
-- [ ] 撰寫／更新測試（Red）：更新 static generate workflow 測試，確認 generate 不依賴舊的 `build:content-images`／`build:public-artifacts` 作為唯一 API／圖片來源。
-- [ ] 實作最小功能（Green）：更新 package scripts、README、`docs/CONTENT.md`、AGENTS content authoring 指引；將 `public/api/content.json`、`public/search-index.json`、`public/images/**` 從 Git tracking 移除並加入 `.gitignore`。
+- [x] 撰寫／更新測試（Red）：更新 static generate workflow 測試，確認 generate 不依賴舊的 `build:content-images`／`build:public-artifacts` 作為唯一 API／圖片來源。
+- [x] 實作最小功能（Green）：更新 package scripts、README、`docs/CONTENT.md`、AGENTS content authoring 指引；將 `public/api/content.json`、`public/search-index.json`、`public/images/**` 從 Git tracking 移除並加入 `.gitignore`。
 - [ ] Refactor 並確認測試維持通過：執行完整品質閘門，手動打開主要頁面與商品詳情確認 SSG output 與 dev server 都可載入。
+  - 本機已完成 `pnpm test`（347 passed）、`pnpm lint`（clean）、`node scripts/assert-content-images.ts`（59/0）。
+  - 後續已更新 `pnpm-lock.yaml` 並補跑 `pnpm generate`，server route prerender 與 IPX static 圖片輸出通過。詳見 `works.md`。

@@ -100,7 +100,7 @@
 | `model_numbers` | string[] | Agent | 產品型號 |
 | `offers` | array | Agent | 至少一筆賣場資訊（見下方） |
 | `image_file` | string \| null | Agent | 本地圖片 source 檔名 `{id}.{ext}`。Published Product 必須填 `image_file`；尚未取得本地圖片時維持 draft 且填 `null` |
-| `image_url` | string \| null | Agent | Product 不接受外部圖片 fallback；必須填 `null` 或省略，本地圖片不要填 `/images/...` |
+| `image_url` | string \| null | Agent | Product 不接受外部圖片 fallback；必須填 `null` 或省略，本地圖片只填 `image_file`，不要手寫 `/products/images/...` 這類公開 path |
 | `category_id` | string | Agent | **單一** category ID（見 Taxonomy） |
 | `tag_ids` | string[] | Agent | tag ID 與 brand ID 混合陣列 |
 | `reference_url` | string \| null | Agent | 產品官網、評測文章等參考連結 |
@@ -167,7 +167,7 @@
 | `summary` | string | 由使用者提供 |
 | `source_url` | string | 原始文章 URL（如 Facebook 貼文） |
 | `image_file` | string \| null | 本地圖片檔名 `{id}.{ext}`；無圖時可省略或設為 `null` |
-| `image_url` | string \| null | 只有外部圖片 fallback 才填 HTTP(S) URL；本地圖片不要填 `/images/...` |
+| `image_url` | string \| null | 只有外部圖片 fallback 才填 HTTP(S) URL；本地圖片只填 `image_file`，不要手寫 `/guides/images/...` 這類公開 path |
 | `category_ids` | string[] | **複數** category ID 陣列（注意：Guide 用複數） |
 | `tag_ids` | string[] | tag ID 陣列（Guide 不包含 brand ID） |
 | `related_product_ids` | string[] | 相關商品的 ID 陣列 |
@@ -332,11 +332,10 @@ Content-only 任務只驗證格式、schema 可讀、taxonomy reference、圖片
 
 ```bash
 jq empty content/products/*.json content/taxonomies/*.json
-pnpm build:content-images
-pnpm build:public-artifacts
+pnpm generate
 ```
 
-`pnpm build:public-artifacts` 會透過 `scripts/content-reader.ts` 讀取 content，並重建 `public/api/content.json`、`public/search-index.json`、`public/rss.xml`、`public/sitemap.xml`。若變更會影響公開內容、taxonomy、圖片或路由，交付前再視需要執行 `pnpm generate` 確認 static output 可產生。
+catalog payload 與 search index 由 Nuxt server route 即時從 `content/` 產生，圖片由 `@nuxt/image` / IPX 在 runtime 最佳化，因此驗證圖片與 artifact 時直接跑 `pnpm generate` 即可——它會先檢查 published content 的本地圖片來源是否存在，再 prerender server route payload，並輸出頁面用到的 optimized 圖。`build:content-images`、`build:public-artifacts` 是 optional / legacy CLI，dev 已可直接用 `<NuxtImg>` 看圖，不需要在 authoring 流程預先跑。若變更會影響公開內容、taxonomy、圖片或路由，交付前以 `pnpm generate` 確認 static output 可產生。
 
 只有修改 schema、runtime logic、build script 或測試邏輯時，才跑相關 Vitest 測試；單純 CMS content 變更不要跑 full `pnpm test` 作為主要驗證，也不要為了 content 筆數變化修改測試基準。
 
@@ -367,7 +366,7 @@ pnpm build:public-artifacts
 - 需要 `icon`（Lucide icon class）
 - 需要 `sort_order`（排序數字）
 - `image_url` 是選填的，只能是 HTTP(S) URL、`null` 或省略
-- Link 不支援本地 `image_file`，不要建立 `/images/links/` 或 `content/links/images/`，也不要填 `/images/products/...` 或 `/images/guides/...` local path
+- Link 不支援本地 `image_file`，不要建立 `content/links/images/`，也不要填 `/products/images/...` 或 `/guides/images/...` 這類公開 path
 
 ### 更新內容
 
@@ -446,6 +445,6 @@ content: add Dyson brand to taxonomy
 2. **不要新增 category 或 channel**——這些很少變動，需要時請使用者手動處理
 3. **不要修改 schema 或程式碼**——你只操作 `content/` 目錄下的 JSON 和圖片檔案，以及 `content/taxonomies/` 下的 taxonomy 檔案
 4. **Taxonomy 新增必須先取得使用者確認**——先提議，確認後才寫入
-5. **所有 JSON 必須通過格式與 artifact 驗證**——跑 `jq empty content/products/*.json content/taxonomies/*.json`、`pnpm build:content-images`、`pnpm build:public-artifacts` 確認
+5. **所有 JSON 必須通過格式與 artifact 驗證**——跑 `jq empty content/products/*.json content/taxonomies/*.json` 確認格式，再以 `pnpm generate` 確認 server route payload 與圖片可產生（`build:content-images`、`build:public-artifacts` 為 optional / legacy）
 6. **一個任務一個 PR**——不要把不相關的變更混在一起
 7. **圖片先下載到本地**——不要用遠端 URL。如果下載失敗，可以暫時用遠端 URL，但在 PR 中說明

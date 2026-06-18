@@ -4,7 +4,7 @@ import { join } from 'node:path'
 import type { Guide, LinkDefinition, Product } from '../app/utils/product-schema.ts'
 import { compareProducts } from '../app/utils/content/compare-products.ts'
 import { readPublicContentSource, type ContentReaderOptions, type PublicContentSource } from './content-reader.ts'
-import { SITE_NAME, SITE_URL, buildPublicContentPayload, isPublished } from './public-content.ts'
+import { SITE_NAME, SITE_URL, isPublished } from './public-content.ts'
 
 type BuildPublicDiscoveryOptions = ContentReaderOptions & {
   public_dir?: string
@@ -42,7 +42,6 @@ export async function buildPublicDiscoveryFilesFromSource(
   options: Pick<BuildPublicDiscoveryOptions, 'public_dir'> = {},
 ): Promise<BuildPublicDiscoverySummary> {
   const public_dir = options.public_dir ?? DEFAULT_PUBLIC_DIR
-  const payload = buildPublicContentPayload(source)
   const published_products = source.products
     .filter(isPublished)
     .toSorted((left_product, right_product) => compareProducts(left_product, right_product, source.taxonomies))
@@ -53,23 +52,21 @@ export async function buildPublicDiscoveryFilesFromSource(
     join(public_dir, 'llms.txt'),
     join(public_dir, 'sitemap.xml'),
     join(public_dir, 'rss.xml'),
-    join(public_dir, 'api', 'content.json'),
   ]
 
-  await mkdir(join(public_dir, 'api'), { recursive: true })
+  await mkdir(public_dir, { recursive: true })
   await Promise.all([
     writeFile(output_paths[0], buildRobotsTxt()),
     writeFile(output_paths[1], buildLlmsTxt()),
     writeFile(output_paths[2], buildSitemapXml(published_products)),
     writeFile(output_paths[3], buildRssXml(published_products, published_guides, published_links)),
-    writeFile(output_paths[4], `${JSON.stringify(payload, null, 2)}\n`),
   ])
 
   return {
     output_paths,
-    product_count: payload.products.cards.length,
-    guide_count: payload.guides.length,
-    link_count: payload.links.length,
+    product_count: published_products.length,
+    guide_count: published_guides.length,
+    link_count: published_links.length,
   }
 }
 

@@ -9,6 +9,8 @@ describe('Nuxt SSG baseline', () => {
   it('should enable Nuxt UI and static generation without Nuxt Content', () => {
     expect(nuxt_config.modules).not.toContain('@nuxt/content')
     expect(nuxt_config.modules).toContain('@nuxt/ui')
+    expect(nuxt_config.modules).toContain('@nuxt/image')
+    expect(nuxt_config.image?.dir).toBe('../content')
     expect(nuxt_config.ui?.fonts).toBe(false)
     expect(nuxt_config.nitro?.preset).toBe('static')
     expect(nuxt_config.experimental?.viewTransition).toBe(false)
@@ -19,17 +21,22 @@ describe('Nuxt SSG baseline', () => {
     })
   })
 
-  it('should build the search index before static generation', () => {
-    expect(package_json.scripts.generate).toContain('pnpm build:public-artifacts')
-    expect(package_json.scripts.generate).not.toContain('pnpm build:search-index && pnpm build:public-discovery')
+  it('should generate static output from prerendered server routes without legacy artifact builds', () => {
+    expect(package_json.scripts.generate).toBe('pnpm build:public-discovery && node scripts/assert-content-images.ts && nuxt generate')
+    expect(package_json.scripts.build).toBe('pnpm build:public-discovery && node scripts/assert-content-images.ts && nuxt build')
+    expect(package_json.scripts.generate).not.toContain('build:public-artifacts')
+    expect(package_json.scripts.generate).not.toContain('build:search-index')
   })
 
-  it('should build optimized content images before public discovery and static generation', () => {
+  it('should fail static generation when any prerendered route errors (spec Case 1)', () => {
+    expect(nuxt_config.nitro?.prerender?.failOnError).toBe(true)
+  })
+
+  it('should keep content image optimization out of the generate prerequisite chain (Nuxt Image owns it)', () => {
     expect(package_json.scripts).toHaveProperty('build:content-images')
-    expect(package_json.scripts.build).toContain('pnpm build:content-images')
-    expect(package_json.scripts.generate).toContain('pnpm build:content-images')
-    expect(package_json.scripts.build.indexOf('pnpm build:content-images')).toBeLessThan(package_json.scripts.build.indexOf('pnpm build:public-artifacts'))
-    expect(package_json.scripts.generate.indexOf('pnpm build:content-images')).toBeLessThan(package_json.scripts.generate.indexOf('pnpm build:public-artifacts'))
+    expect(package_json.scripts.build).not.toContain('build:content-images')
+    expect(package_json.scripts.generate).not.toContain('build:content-images')
+    expect(package_json.devDependencies).toHaveProperty('@nuxt/image')
   })
 
   it('should avoid publishing raw content image directories through Nitro publicAssets', () => {
@@ -42,10 +49,10 @@ describe('Nuxt SSG baseline', () => {
     expect(JSON.stringify(public_assets)).not.toContain('content/guides/images')
   })
 
-  it('should resolve local content image files to optimized WebP static asset URLs', () => {
-    expect(resolveImageFileUrl('sample-product.jpg', 'products')).toBe('/images/products/sample-product.webp')
-    expect(resolveImageFileUrl('sample-guide.png', 'guides')).toBe('/images/guides/sample-guide.webp')
-    expect(resolveImageFileUrl('already-optimized.webp', 'products')).toBe('/images/products/already-optimized.webp')
+  it('should resolve local content image files to Nuxt Image source paths', () => {
+    expect(resolveImageFileUrl('sample-product.jpg', 'products')).toBe('/products/images/sample-product.jpg')
+    expect(resolveImageFileUrl('sample-guide.png', 'guides')).toBe('/guides/images/sample-guide.png')
+    expect(resolveImageFileUrl('already-optimized.webp', 'products')).toBe('/products/images/already-optimized.webp')
     expect(() => resolveImageFileUrl('../unsafe.jpg', 'products')).toThrow('Invalid image_file')
   })
 
@@ -143,7 +150,9 @@ describe('Nuxt SSG baseline', () => {
     expect(composable_source).toContain("useAsyncData('public-content'")
     expect(composable_source).toContain('fetchPublicContentPayload')
     expect(fetch_helper_source).toContain("$fetch<PublicContentPayload>('/api/content.json')")
-    expect(fetch_helper_source).toContain("'public/api/content.json'")
+    expect(fetch_helper_source).not.toContain('public/api/content.json')
+    expect(fetch_helper_source).not.toContain('readFile')
+    expect(fetch_helper_source).not.toContain('import.meta.server')
     expect(composable_source).not.toContain('queryCollection(')
     expect(composable_source).not.toContain('server: false')
     expect(fetch_helper_source).not.toContain('server: false')
@@ -610,6 +619,8 @@ describe('Nuxt SSG baseline', () => {
     expect(prerender_routes).toContain('/guide')
     expect(prerender_routes).toContain('/search')
     expect(prerender_routes).toContain('/links')
+    expect(prerender_routes).toContain('/api/content.json')
+    expect(prerender_routes).toContain('/search-index.json')
     expect(prerender_routes.filter((route) => route.startsWith('/products/'))).toHaveLength(product_route_count)
   })
 
@@ -638,12 +649,13 @@ describe('Nuxt SSG baseline', () => {
     expect(variable_css).toContain("'Microsoft JhengHei'")
   })
 
-  it('should document static search-index generation commands', () => {
+  it('should document the server-route content API and Nuxt Image generate workflow', () => {
     const readme_source = readFileSync(new URL('../README.md', import.meta.url), 'utf8')
 
-    expect(readme_source).toContain('pnpm build:public-artifacts')
-    expect(readme_source).toContain('public/search-index.json')
     expect(readme_source).toContain('pnpm generate')
+    expect(readme_source).toContain('/api/content.json')
+    expect(readme_source).toContain('/search-index.json')
+    expect(readme_source).toContain('@nuxt/image')
   })
 })
 

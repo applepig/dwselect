@@ -94,7 +94,7 @@ describe('client search lazy loader', () => {
         href: '/products/2026-06-02-sample-product',
         external: false,
         price_text: 'NT$ 1,990',
-        image_url: '/images/products/2026-06-02-sample-product.webp',
+        image_url: '/products/images/2026-06-02-sample-product.jpg',
         channel_id: 'pchome',
         channel_label: 'PChome',
       }),

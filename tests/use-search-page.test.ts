@@ -64,7 +64,7 @@ const product_suggestion: SearchSuggestion = {
   channel_id: 'pchome',
   channel_label: 'PChome',
   price_text: 'NT$ 1,990',
-  image_url: '/images/products/sharp-keyboard.jpg',
+  image_url: '/products/images/sharp-keyboard.jpg',
 }
 
 beforeEach(() => {

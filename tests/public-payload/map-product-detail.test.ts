@@ -71,7 +71,7 @@ describe('product detail build mapper', () => {
       summary: product.summary,
       long_description: '細節說明可以比卡片更長',
       llm_description: 'AI 觀點',
-      hero_image_url: '/images/products/detail.webp',
+      hero_image_url: '/products/images/detail.jpg',
       hero_alt: product.name,
       category_id: 'av',
       category_label: '影音',
@@ -111,7 +111,7 @@ describe('product detail build mapper', () => {
       image_url: null,
     })
 
-    expect(mapProductDetail(product, [product], makeResolver()).hero_image_url).toBe('/images/products/local-detail-product.webp')
+    expect(mapProductDetail(product, [product], makeResolver()).hero_image_url).toBe('/products/images/local-detail-product.avif')
   })
 
   it('should reject external-only product images for detail hero image', () => {
@@ -292,7 +292,7 @@ describe('related product build mapper', () => {
       {
         id: 'related-product',
         name: '相關商品',
-        image_url: '/images/products/sample-product.webp',
+        image_url: '/products/images/sample-product.jpg',
         category_label: '電腦',
         channel_label: 'momo',
       },

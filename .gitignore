@@ -8,6 +8,7 @@ pnpm-debug.log*
 lerna-debug.log*
 
 node_modules
+.pnpm-store/
 dist
 dist-ssr
 .data
@@ -17,6 +18,12 @@ test-results
 tests/post-edit-hook-fixture-*/
 *.local
 .env
+
+# Generated public artifacts：由 content/ 與 Nuxt server routes／@nuxt/image 重建，
+# 公開 API、search index 與圖片以 `pnpm generate` 的 .output/public 為準，不再進 Git。
+public/api/content.json
+public/search-index.json
+public/images/
 
 # Editor directories and files
 .vscode/*
