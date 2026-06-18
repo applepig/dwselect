@@ -17,7 +17,7 @@ export function parseContentMarkdown(markdown: string): ContentMarkdownBlock[] {
   let i = 0
 
   while (i < lines.length) {
-    const line = lines[i].trim()
+    const line = lines[i]!.trim()
 
     if (line === '') {
       i += 1
@@ -29,8 +29,8 @@ export function parseContentMarkdown(markdown: string): ContentMarkdownBlock[] {
     if (heading_match) {
       blocks.push({
         type: 'heading',
-        level: heading_match[1].length as 2 | 3 | 4,
-        segments: parseContentMarkdownInlines(heading_match[2]),
+        level: heading_match[1]!.length as 2 | 3 | 4,
+        segments: parseContentMarkdownInlines(heading_match[2]!),
       })
       i += 1
       continue
@@ -42,13 +42,13 @@ export function parseContentMarkdown(markdown: string): ContentMarkdownBlock[] {
       const items: ContentMarkdownInlineSegment[][] = []
 
       while (i < lines.length) {
-        const item_match = LIST_ITEM_PATTERN.exec(lines[i].trim())
+        const item_match = LIST_ITEM_PATTERN.exec(lines[i]!.trim())
 
         if (!item_match) {
           break
         }
 
-        items.push(parseContentMarkdownInlines(item_match[1]))
+        items.push(parseContentMarkdownInlines(item_match[1]!))
         i += 1
       }
 
@@ -60,7 +60,7 @@ export function parseContentMarkdown(markdown: string): ContentMarkdownBlock[] {
     i += 1
 
     while (i < lines.length) {
-      const next_line = lines[i].trim()
+      const next_line = lines[i]!.trim()
 
       if (next_line === '' || HEADING_PATTERN.test(next_line) || LIST_ITEM_PATTERN.test(next_line)) {
         break
@@ -85,7 +85,9 @@ export function parseContentMarkdownInlines(text: string): ContentMarkdownInline
 
   for (const match of text.matchAll(MARKDOWN_LINK_PATTERN)) {
     const match_index = match.index ?? 0
-    const [raw_link, link_text, href] = match
+    const raw_link = match[0]!
+    const link_text = match[1]!
+    const href = match[2]!
 
     if (match_index > last_index) {
       segments.push({ type: 'text', text: text.slice(last_index, match_index) })
