@@ -1,6 +1,7 @@
 import MiniSearch, { type SearchResult } from 'minisearch'
 
 import { compareGuides } from '../content/compare-guides.ts'
+import { compareLinks } from '../content/compare-links.ts'
 import { compareProducts } from '../content/compare-products.ts'
 import { extractContentId } from '../content/extract-content-id.ts'
 import { getPrimaryOffer } from '../content/primary-offer.ts'
@@ -144,7 +145,7 @@ export function getSearchDocuments(
       .map((guide) => mapGuideToSearchDocument(guide, labels, tag_aliases)),
     ...content.links
       .filter((link) => link.status === 'published')
-      .toSorted((left_link, right_link) => left_link.sort_order - right_link.sort_order)
+      .toSorted(compareLinks)
       .map((link) => mapLinkToSearchDocument(link, labels, tag_aliases)),
   ]
 }

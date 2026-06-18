@@ -1,6 +1,7 @@
 import type { Guide, LinkDefinition } from '../../app/utils/product-schema.ts'
 import type { CompactResourceRow } from '../../app/utils/published-products/types.ts'
 import { compareGuides } from '../../app/utils/content/compare-guides.ts'
+import { compareLinks } from '../../app/utils/content/compare-links.ts'
 import { resolveGuideImageUrl } from '../../app/utils/content-images/resolve-guide-image-url.ts'
 import type { TaxonomyLabelResolver } from '../../app/utils/content/taxonomy-labels.ts'
 
@@ -14,7 +15,7 @@ export function mapGuideRows(guides: Guide[], labels: TaxonomyLabelResolver): Co
 export function mapLinkRows(links: LinkDefinition[]): CompactResourceRow[] {
   return links
     .filter((link) => link.status === 'published')
-    .toSorted((left_link, right_link) => left_link.sort_order - right_link.sort_order)
+    .toSorted(compareLinks)
     .map(mapLinkToRow)
 }
 

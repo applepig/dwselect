@@ -334,7 +334,7 @@ describe('public discovery files', () => {
     expect(rss).toContain('<link>https://applepig.idv.tw/?a=1&amp;b=2</link>')
     expect(rss).toContain('<pubDate>Tue, 02 Jun 2026 00:00:00 +0800</pubDate>')
     expect(rss).not.toContain('draft-product')
-    expect(api.products.cards.map((card) => card.id)).toEqual(['2026-06-02-sample-product', 'no-published-at-product'])
+    expect(api.products.cards.map((card) => card.id)).toEqual(['no-published-at-product', '2026-06-02-sample-product'])
     expect(api.guides.map((guide) => guide.id)).toEqual(['2026-06-03-guide'])
     expect(api.links.map((link) => link.id)).toEqual(['applepig-home'])
   })

@@ -55,10 +55,10 @@ function compareRelatedProducts(current_invariants: CurrentProductInvariants, le
     return Number(right_score.same_channel) - Number(left_score.same_channel)
   }
 
-  const published_at_order = compareNullableTimestampDesc(left_product.published_at, right_product.published_at)
+  const updated_at_order = compareNullableTimestampDesc(left_product.updated_at, right_product.updated_at)
 
-  if (published_at_order !== 0) {
-    return published_at_order
+  if (updated_at_order !== 0) {
+    return updated_at_order
   }
 
   return compareText(left_product.name, right_product.name)

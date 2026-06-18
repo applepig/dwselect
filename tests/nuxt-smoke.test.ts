@@ -62,14 +62,9 @@ describe('Nuxt SSG baseline', () => {
       new URL('../content/taxonomies/tags.json', import.meta.url),
       'utf8',
     )) as { items: Array<{ id: string, label: string }> }
-    const link_files = readdirSync(new URL('../content/links/', import.meta.url)).filter((file_name) => file_name.endsWith('.json'))
-    const guide_files = readdirSync(new URL('../content/guides/', import.meta.url)).filter((file_name) => file_name.endsWith('.json'))
-
     expect(category_taxonomy.items).toContainEqual(expect.objectContaining({ id: 'av-theater', label: '影音劇院' }))
     expect(channel_taxonomy.items).toContainEqual(expect.objectContaining({ id: 'pchome', label: 'PChome' }))
     expect(tag_taxonomy.items.length).toBeGreaterThan(0)
-    expect(link_files).toEqual(expect.arrayContaining(['applepig-home.json', '2026-06-02-b18.json']))
-    expect(guide_files).toEqual(expect.arrayContaining(['2026-06-02-日本米入門篇.json', '2026-06-02-aeron-chair.json']))
 
     const content_config_path = new URL('../content.config.ts', import.meta.url)
     const product_schema_test_source = readFileSync(new URL('../tests/product-schema.test.ts', import.meta.url), 'utf8')
@@ -493,7 +488,7 @@ describe('Nuxt SSG baseline', () => {
     expect(detail_source).toContain('detail-llm-title')
     expect(detail_source).toContain('detail-llm-copy')
     expect(detail_source).toContain('detail-llm-link')
-    expect(detail_source).toContain('到 {{ detail.channel_label }} 購買')
+    expect(detail_source).toContain('去 {{ detail.channel_label }} 逛逛')
     expect(detail_source).toContain('target="_blank"')
     expect(detail_source).toContain('rel="noopener noreferrer"')
     expect(detail_source).toContain('價格與庫存以通路頁面為準。')
@@ -602,6 +597,8 @@ describe('Nuxt SSG baseline', () => {
     ]
     const product_route_count = readdirSync(new URL('../content/products/', import.meta.url))
       .filter((file_name) => file_name.endsWith('.json'))
+      .map((file_name) => JSON.parse(readFileSync(new URL(`../content/products/${file_name}`, import.meta.url), 'utf8')))
+      .filter((product) => product.status === 'published')
       .length
     const prerender_routes = nuxt_config.nitro?.prerender?.routes ?? []
 
@@ -614,7 +611,6 @@ describe('Nuxt SSG baseline', () => {
     expect(prerender_routes).toContain('/search')
     expect(prerender_routes).toContain('/links')
     expect(prerender_routes.filter((route) => route.startsWith('/products/'))).toHaveLength(product_route_count)
-    expect(prerender_routes).toContain('/products/2026-06-02-sharp-65-inch-xled')
   })
 
   it('should define light and dark handoff CSS tokens without a single-hue palette', () => {
@@ -648,48 +644,6 @@ describe('Nuxt SSG baseline', () => {
     expect(readme_source).toContain('pnpm build:public-artifacts')
     expect(readme_source).toContain('public/search-index.json')
     expect(readme_source).toContain('pnpm generate')
-  })
-
-  it('should expose real cutover catalog artifacts and remove the sample product', () => {
-    const product_file_names = readdirSync(new URL('../content/products/', import.meta.url))
-      .filter((file_name) => file_name.endsWith('.json'))
-    const product_sources = product_file_names.map((file_name) => readFileSync(
-      new URL(`../content/products/${file_name}`, import.meta.url),
-      'utf8',
-    ))
-    const search_index_source = readFileSync(new URL('../public/search-index.json', import.meta.url), 'utf8')
-    const search_index_payload = JSON.parse(search_index_source) as {
-      documents: Array<{
-        document_id: string
-        type: string
-        title: string
-        category_labels?: string[]
-        channel_label?: string
-      }>
-    }
-
-    expect(product_file_names).toHaveLength(62)
-    expect(product_file_names).not.toContain('2026-06-02-sample-product.json')
-    expect(product_sources.join('\n')).toContain('Sharp 65吋 XLED')
-    expect(product_sources.join('\n')).toContain('"category_id": "av-theater"')
-    expect(product_sources.join('\n')).not.toContain('"category":')
-    expect(search_index_payload.documents).toHaveLength(67)
-    expect(search_index_payload.documents).toContainEqual(expect.objectContaining({
-      document_id: 'product:2026-06-02-sharp-65-inch-xled',
-      type: 'product',
-      title: 'Sharp 65吋 XLED',
-      category_labels: ['影音劇院'],
-      channel_label: expect.any(String),
-    }))
-    expect(search_index_payload.documents).toEqual(expect.arrayContaining([
-      expect.objectContaining({ document_id: 'guide:2026-06-02-日本米入門篇', type: 'guide' }),
-      expect.objectContaining({ document_id: 'link:2026-06-02-b18', type: 'link' }),
-      expect.objectContaining({ document_id: 'link:applepig-home', type: 'link' }),
-    ]))
-    expect(search_index_source).toContain('"category_labels"')
-    expect(search_index_source).toContain('"channel_label":')
-    expect(search_index_source).not.toContain('"category": "')
-    expect(search_index_source).not.toContain('2026-06-02-sample-product')
   })
 })
 

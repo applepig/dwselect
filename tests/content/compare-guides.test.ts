@@ -18,30 +18,38 @@ function sortGuides(guides: Guide[]): string[] {
 }
 
 describe('compareGuides (canonical)', () => {
-  it('should order by published_at descending', () => {
-    const older = makeGuide({ id: 'older', published_at: '2026-06-01T00:00:00+08:00' })
-    const newer = makeGuide({ id: 'newer', published_at: '2026-06-05T00:00:00+08:00' })
+  it('should order by updated_at descending', () => {
+    const older = makeGuide({ id: 'older', updated_at: '2026-06-01T00:00:00+08:00' })
+    const newer = makeGuide({ id: 'newer', updated_at: '2026-06-05T00:00:00+08:00' })
 
     expect(sortGuides([older, newer])).toEqual(['newer', 'older'])
   })
 
-  it('should sort a null published_at last', () => {
-    const dated = makeGuide({ id: 'dated', published_at: '2026-06-01T00:00:00+08:00' })
-    const undated = makeGuide({ id: 'undated', published_at: null })
+  it('should prefer updated_at over published_at', () => {
+    const recently_published = makeGuide({
+      id: 'recently-published',
+      updated_at: '2026-06-01T00:00:00+08:00',
+      published_at: '2026-06-05T00:00:00+08:00',
+    })
+    const recently_updated = makeGuide({
+      id: 'recently-updated',
+      updated_at: '2026-06-05T00:00:00+08:00',
+      published_at: '2026-06-01T00:00:00+08:00',
+    })
 
-    expect(sortGuides([undated, dated])).toEqual(['dated', 'undated'])
+    expect(sortGuides([recently_published, recently_updated])).toEqual(['recently-updated', 'recently-published'])
   })
 
-  it('should tie-break by title using compareText when published_at matches', () => {
-    const banana = makeGuide({ id: 'banana', title: 'banana', published_at: '2026-06-01T00:00:00+08:00' })
-    const apple = makeGuide({ id: 'apple', title: 'apple', published_at: '2026-06-01T00:00:00+08:00' })
+  it('should tie-break by title using compareText when updated_at matches', () => {
+    const banana = makeGuide({ id: 'banana', title: 'banana', updated_at: '2026-06-01T00:00:00+08:00' })
+    const apple = makeGuide({ id: 'apple', title: 'apple', updated_at: '2026-06-01T00:00:00+08:00' })
 
     expect(sortGuides([banana, apple])).toEqual(['apple', 'banana'])
   })
 
   it('should NFKC normalize titles in the tie-break', () => {
-    const full_width = makeGuide({ id: 'full', title: 'ＡＢＣ', published_at: '2026-06-01T00:00:00+08:00' })
-    const half_width = makeGuide({ id: 'half', title: 'ABC', published_at: '2026-06-01T00:00:00+08:00' })
+    const full_width = makeGuide({ id: 'full', title: 'ＡＢＣ', updated_at: '2026-06-01T00:00:00+08:00' })
+    const half_width = makeGuide({ id: 'half', title: 'ABC', updated_at: '2026-06-01T00:00:00+08:00' })
 
     expect(compareGuides(full_width, half_width)).toBe(0)
   })

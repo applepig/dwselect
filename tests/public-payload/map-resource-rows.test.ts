@@ -80,6 +80,18 @@ describe('guide and link resource row build mapper', () => {
     ])
   })
 
+  it('should order published guide rows by updated_at descending then title', () => {
+    const older = { ...base_guide, id: 'older-guide', title: '舊指南', updated_at: '2026-06-01T00:00:00+08:00' }
+    const banana = { ...base_guide, id: 'banana-guide', title: 'banana', updated_at: '2026-06-05T00:00:00+08:00' }
+    const apple = { ...base_guide, id: 'apple-guide', title: 'apple', updated_at: '2026-06-05T00:00:00+08:00' }
+
+    expect(mapGuideRows([older, banana, apple], labels).map((row) => row.id)).toEqual([
+      'apple-guide',
+      'banana-guide',
+      'older-guide',
+    ])
+  })
+
   it('should map only published links to external resource rows with image fallback and safe attributes', () => {
     const links: LinkDefinition[] = [
       ...test_links,
@@ -114,6 +126,46 @@ describe('guide and link resource row build mapper', () => {
         image_url: 'https://example.com/applepig-logo.png',
         icon: 'i-lucide-link',
       }),
+    ])
+  })
+
+  it('should order published link rows by sort_order ascending then updated_at descending, title and id', () => {
+    const low_sort_old_update = {
+      ...test_links[0]!,
+      id: 'low-sort-old-update',
+      title: '低排序較舊',
+      sort_order: 1,
+      updated_at: '2026-06-01T00:00:00+08:00',
+    }
+    const high_sort_new_update = {
+      ...test_links[0]!,
+      id: 'high-sort-new-update',
+      title: '高排序較新',
+      sort_order: 2,
+      updated_at: '2026-06-05T00:00:00+08:00',
+    }
+    const low_sort_banana = {
+      ...test_links[0]!,
+      id: 'low-sort-banana',
+      title: 'banana',
+      sort_order: 1,
+      updated_at: '2026-06-05T00:00:00+08:00',
+    }
+    const low_sort_apple = {
+      ...test_links[0]!,
+      id: 'low-sort-apple',
+      title: 'apple',
+      sort_order: 1,
+      updated_at: '2026-06-05T00:00:00+08:00',
+    }
+
+    // low_sort_old_update keeps sort_order 1 despite the oldest updated_at, proving
+    // manual sort_order is not overridden by a fresher edit timestamp.
+    expect(mapLinkRows([high_sort_new_update, low_sort_old_update, low_sort_banana, low_sort_apple]).map((row) => row.id)).toEqual([
+      'low-sort-apple',
+      'low-sort-banana',
+      'low-sort-old-update',
+      'high-sort-new-update',
     ])
   })
 })
