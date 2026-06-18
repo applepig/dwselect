@@ -474,6 +474,17 @@
       ],
       "nav_visible": true,
       "sort_order": 490
+    },
+    {
+      "id": "asus",
+      "label": "ASUS",
+      "description": "ASUS 品牌商品",
+      "aliases": [
+        "華碩",
+        "ASUSTeK"
+      ],
+      "nav_visible": true,
+      "sort_order": 500
     }
   ]
 }

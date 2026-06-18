@@ -1,13 +1,23 @@
 {
   "id": "2026-06-02-unifi-express",
   "status": "published",
-  "name": "Unifi Express",
-  "english_name": "UniFi Express",
+  "name": "UniFi Express",
+  "english_name": "Ubiquiti UniFi Express (UX)",
   "summary": "你遲早是要裝Unifi全家桶的，為什麼不一開始就裝呢",
   "long_description": "你遲早是要裝Unifi全家桶的，為什麼不一開始就裝呢",
-  "llm_description": "",
-  "search_aliases": [],
-  "model_numbers": [],
+  "llm_description": "## 快速判斷\n\nUniFi Express（UX）是 Ubiquiti 的小型 UniFi Cloud Gateway，整合 1GbE 閘道器、防火牆、UniFi Network 控制器與 WiFi 6 AP。它的定位不是高吞吐量或大型網路核心，而是把小型住家、工作室或臨時據點帶進 UniFi 生態系；也能在既有 UniFi 網路中改作有線或無線 uplink 的 AP。\n\n## 重要規格\n\n- 產品型號：UX。\n- 角色：Cloud Gateway、UniFi Network 控制器、WiFi 6 AP；可作 gateway，也可作 existing UniFi Network 的 AP。\n- 網路埠：1 個 1GbE RJ45 WAN、1 個 1GbE RJ45 LAN。\n- 無線：802.11a/b/g/n/ac/ax（WiFi 6），2.4GHz 與 5GHz 皆為 2x2 DL/UL MU-MIMO；官方標示 5GHz PHY 最高 2.4Gbps、2.4GHz 573.5Mbps。\n- 覆蓋與容量：官方標示約 140 平方公尺覆蓋、50+ simultaneous users；UniFi 裝置管理數量屬小型部署等級，評測與 FAQ 常見說法是 gateway 模式最多再管理 4 台 UniFi Network 設備。\n- 硬體：dual-core ARM Cortex-A53 1GHz、1GB memory、0.96 吋狀態顯示器、USB-C 5V/3A 供電、最高 10W、302g、98 x 98 x 30mm。\n- 軟體生命週期注意：官方 tech specs 註明原版 UniFi Express 使用 UniFi Network 8.x；若要 UniFi Network 9.1 以上，官方指向 UniFi Express 7。\n\n## 優點與限制\n\n- 整合度高：不需要另外準備 Cloud Key 或自架 controller，就能管理一個小型 UniFi Network。\n- 部署彈性：可當主要 gateway，也可在日後升級為較大型 UniFi gateway 時改作 AP，降低汰換成本。\n- 小型網路友善：體積小、USB-C 供電、內建狀態螢幕，適合桌面、租屋、小辦公室或臨時場域。\n- 擴充限制明確：只有 1 個 LAN 埠、沒有 PoE、不是多 gigabit gateway；若需要多個有線端點，通常仍需搭配 switch。\n- 進階安全／效能限制：第三方評測指出 UX 不提供 IDS/IPS（Suspicious Activity）類功能；官方商店也提示啟用進階 gateway 功能（例如 Traffic Identification）可能降低效能。\n- Mesh AP 取捨：無線 mesh 方便擴充，但評測提醒 wireless backhaul 會吃掉部分無線頻寬；能拉線時，有線 uplink 仍是較穩定的做法。\n\n## 評測與使用者回饋\n\n- LazyAdmin 評測認為 UX 的 setup 流程簡單、作為小型 home network 或 small office 的 entry-level cloud gateway 很合適，但同時點出 1GHz dual-core 與 1GB memory 帶來的限制，包括不支援 IDS/IPS、VPN／Site Magic throughput 可能受限，以及 UniFi device 管理數量小。\n- McCann Tech 的產品分析強調 UX 的特殊性在於可在 gateway 與 AP 角色之間轉換；同文也提醒如果需求包含大型網路、多 gigabit、很多 UniFi devices／clients 或 IDS/IPS，UX 不應作為主要 gateway。\n- Crosstalk Solutions 介紹中肯定 UX 作為 router/firewall/AP all-in-one 的彈性，並提到可跑滿 1Gbps routing 的定位；其留言區可見部分使用者回報 AP／mesh 設定、WiFi 速度或後續 OS 效能感受不一，代表實際體驗仍會受 firmware、拓樸與環境影響。\n\n## 適合誰／不適合誰\n\n- 適合：想用 UniFi Network 管理小型網路、需要一台 all-in-one gateway + AP、或想先以低複雜度進入 UniFi 生態系的人。\n- 適合：已有 UniFi gateway，但想加一顆可改作 AP／mesh 節點的小型設備。\n- 不適合：需要 IDS/IPS、多 WAN、多 LAN、PoE、多 gigabit LAN/WAN、UniFi Protect／Access 等多 app console，或需要管理大量 UniFi switches／APs 的環境。\n\n## 參考來源\n\n- [Ubiquiti 台灣官方商店：UniFi Express](https://tw.store.ui.com/tw/zh-tw/category/cloud-gateways-wifi-integrated/products/ux)\n- [Ubiquiti 官方技術規格：UniFi Express UX](https://techspecs.ui.com/unifi/cloud-gateways/ux)\n- [LazyAdmin：UniFi Express Review](https://lazyadmin.nl/home-network/unifi-express-review/)\n- [McCann Tech：UniFi Express Preview](https://evanmccann.net/blog/2023/12/unifi-express-preview)\n- [Crosstalk Solutions：UniFi Express](https://www.crosstalksolutions.com/unifi-express-is-this-the-best-new-ubiquiti-device/)",
+  "search_aliases": [
+    "Unifi Express",
+    "UniFi Express UX",
+    "Ubiquiti UX",
+    "Ubiquiti UniFi Express",
+    "UniFi Cloud Gateway",
+    "UniFi WiFi 6 AP",
+    "UniFi 雲端閘道器"
+  ],
+  "model_numbers": [
+    "UX"
+  ],
   "offers": [
     {
       "channel_id": "other",
@@ -15,7 +25,7 @@
       "price_text": "5799",
       "price": {
         "amount": 5799,
-        "currency": null,
+        "currency": "TWD",
         "unit": "each",
         "label": null
       },
@@ -28,7 +38,7 @@
     "network-gear",
     "ubiquiti"
   ],
-  "reference_url": null,
+  "reference_url": "https://techspecs.ui.com/unifi/cloud-gateways/ux",
   "created_at": "2026-06-02T00:00:00+08:00",
   "updated_at": "2026-06-02T00:00:00+08:00",
   "published_at": "2026-06-02T00:00:00+08:00",

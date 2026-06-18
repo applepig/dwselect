@@ -1,0 +1,47 @@
+{
+  "id": "2026-06-18-zyxel-nwa50be",
+  "status": "published",
+  "name": "Zyxel NWA50BE WiFi 7 AP",
+  "english_name": "Zyxel NWA50BE BE5100 4-Stream WiFi 7 Dual-Radio NebulaFlex Access Point",
+  "summary": "Zyxel的poe AP也出了WiFi 7的了",
+  "long_description": "Zyxel的poe AP也出了WiFi 7的了",
+  "llm_description": "## 快速判斷\n\nZyxel NWA50BE 是 BE5100 等級的雙頻 WiFi 7 NebulaFlex 無線基地台，定位在小型辦公室、SOHO 與家庭空間的入門級雲端管理 AP。PChome 商品 API 的 Name 欄位標示 NWA50BE，Nick 欄位卻寫成 NWA30BE；官方產品頁與規格頁確認 NWA50BE 是吸頂／壁掛型 AP，和桌上型 NWA30BE 是不同產品。\n\n## 重要規格\n\n- 無線標準：IEEE 802.11be/ax/ac/n/g/b/a。\n- 無線速率：2.4GHz 688Mbps、5GHz 4324Mbps，合計 BE5100 等級。\n- 空間串流：2.4GHz 2x2:2、5GHz 2x2:2，內建天線。\n- 有線介面：1 個 1/2.5GbE LAN。\n- 供電：支援 802.3at PoE，標示功耗 16W；也隨附 12V/1.5A 電源供應器。\n- 管理：Nebula 雲端管理、Standalone、ZON Utility；支援 Web UI/CLI，不支援 SNMP。\n- 尺寸與重量：150 x 150 x 35 mm、約 412 g。\n\n## 優點與限制\n\n- 2.5GbE 上行埠可避免 WiFi 7 AP 被 1GbE 回程限制，適合已經升級 Multi-Gig / PoE+ switch 的小型網路。\n- Nebula 雲端管理適合多台 Zyxel AP、switch 或 gateway 一起管理；也可單機管理，部署彈性較高。\n- 只支援雙頻 2.4GHz＋5GHz，沒有 6GHz 頻段；如果要用 6GHz WiFi 7，需看其他三頻型號。\n- 官方規格列出 802.3af 不支援，若要用 PoE 供電需確認交換器或 injector 至少支援 802.3at。\n- 官方規格列出 Load balancing：No、SNMP：No，對需要企業級負載平衡或傳統 SNMP 監控的環境要先確認是否可接受。\n\n## 評測與使用者回饋\n\n公開可查的獨立評測與長期使用者回饋有限；目前主要可驗證資訊來自 Zyxel 官方產品頁、官方規格頁與 PChome 商品 API。購買前建議再次核對賣場實際出貨型號，因 PChome API 同一商品資料中 Name 與 Nick 欄位出現 NWA50BE／NWA30BE 不一致。\n\n## 參考來源\n\n- [Zyxel NWA50BE 官方產品頁](https://www.zyxel.com/tw/zh/products/wireless/be5100-4-stream-wifi-7-dual-radio-nebulaflex-access-point-nwa50be)\n- [Zyxel NWA50BE 官方規格頁](https://www.zyxel.com/tw/zh/products/wireless/be5100-4-stream-wifi-7-dual-radio-nebulaflex-access-point-nwa50be/specifications)\n- [Zyxel NWA50BE 官方產品圖片](https://www.zyxel.com/tw/zh/products/wireless/be5100-4-stream-wifi-7-dual-radio-nebulaflex-access-point-nwa50be/photos)\n- [PChome 24h 商品頁](https://24h.pchome.com.tw/prod/DRAF0I-A900JRYNO)\n- [PChome 商品 API](https://ecapi.pchome.com.tw/ecshop/prodapi/v2/prod/DRAF0I-A900JRYNO&fields=Id,Name,Nick,Price,Pic,Slogan,Describe,Spec&_callback=jsonp)",
+  "search_aliases": [
+    "Zyxel合勤 NWA50BE",
+    "合勤 NWA50BE",
+    "NWA50BE BE5100",
+    "BE5100 WiFi 7 AP",
+    "NebulaFlex NWA50BE",
+    "DRAF0I-A900JRYNO"
+  ],
+  "model_numbers": [
+    "NWA50BE"
+  ],
+  "offers": [
+    {
+      "channel_id": "pchome",
+      "url": "https://24h.pchome.com.tw/prod/DRAF0I-A900JRYNO",
+      "price_text": "3580",
+      "price": {
+        "amount": 3580,
+        "currency": "TWD",
+        "unit": "each",
+        "label": null
+      },
+      "checked_at": "2026-06-18T00:00:00+08:00"
+    }
+  ],
+  "image_file": "2026-06-18-zyxel-nwa50be.jpg",
+  "image_url": null,
+  "category_id": "network",
+  "tag_ids": [
+    "network-gear",
+    "zyxel"
+  ],
+  "reference_url": "https://www.zyxel.com/tw/zh/products/wireless/be5100-4-stream-wifi-7-dual-radio-nebulaflex-access-point-nwa50be",
+  "created_at": "2026-06-18T00:00:00+08:00",
+  "updated_at": "2026-06-19T00:00:00+08:00",
+  "published_at": "2026-06-18T00:00:00+08:00",
+  "unpublished_at": null,
+  "archived_at": null
+}

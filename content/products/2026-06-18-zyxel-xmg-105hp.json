@@ -1,0 +1,47 @@
+{
+  "id": "2026-06-18-zyxel-xmg-105hp",
+  "status": "published",
+  "name": "Zyxel XMG-105HP PoE 交換器",
+  "english_name": "Zyxel XMG-105HP 5-Port 2.5G PoE Unmanaged Switch with 10G Uplink",
+  "summary": "要用aruba的話就要配合2.5G poe switch",
+  "long_description": "要用aruba的話就要配合2.5G poe switch",
+  "llm_description": "## 快速判斷\n\nZyxel XMG-105HP 是 XMG100 Series 的 5 埠 2.5G PoE 無網管交換器，定位在家庭、SOHO 或小型辦公室把 Wi-Fi 6／6E AP、攝影機、NAS／伺服器上行鏈路升級到 Multi-Gig。它的重點是 5 個 2.5G RJ45、1 個 1G/10G SFP+、4 個 PoE++ 埠與 70W 總 PoE budget；限制是無網管設計，不提供 VLAN、LACP、QoS 細部設定或雲端管理。\n\n## 重要規格\n\n- 型號：XMG-105HP，XMG100 Series。\n- 連接埠：總埠數 6；5 x 2.5GBASE-T RJ45；1 x 1G SFP／10G SFP+。\n- PoE：4 個 IEEE 802.3bt PoE++ 埠，單埠規格最高 60W；總供電量 70W。多台高功耗 AP 或攝影機同時供電時，要先加總 PoE budget。\n- 效能：45Gbps switching capacity、33.5Mpps forwarding rate、1MB packet buffer、4K MAC address table、12K jumbo frame。\n- 電源與耗電：100–240V AC、50/60Hz 外接式電源；最大功耗 90W、最小功耗 1.62W。\n- 尺寸與部署：160 x 110 x 26mm、0.492kg；官方標示 fanless，可桌面或壁掛。\n- 環境規格：操作溫度 -20°C～40°C，濕度 10%～95%（非凝結）。\n\n## 優點與限制\n\n- 優點：用現有 Cat 5e／Cat 6 線材即可把 1GbE 端點升級到 2.5GbE；SFP+ 可作為 NAS、核心交換器或上行鏈路。\n- 優點：PoE++ 可減少 AP、IP camera、IoT 裝置的獨立電源需求，且無網管設計讓安裝流程接近 plug-and-play。\n- 限制：70W 是總 PoE budget，不等於 4 個 PoE++ 埠都能同時輸出 60W。\n- 限制：無網管交換器不適合需要 VLAN 隔離、port mirroring、link aggregation、ACL 或集中管理的網路。\n- 限制：唯一 10G 是 SFP+，若要接 RJ45 10GbE 裝置，需另外確認 SFP+ 模組或 DAC 相容性與散熱。\n\n## 評測與使用者回饋\n\n- Digital Reviews Network 的 XMG-105HP 評測紀錄，作者以 PoE 攝影機與 Synology Surveillance Station 情境替換舊 PoE switch；更換後先前的影像 live view freeze／power-cycle 問題消失。這是單一評測案例，不能視為所有環境都會有相同結果。\n- 該評測也確認它是 plug-and-play 的無網管交換器，並提到金屬外殼、fanless 靜音與 10G SFP+ 作為未來 NAS 上行升級點。\n- Amazon 頁面可搜尋到同型號與使用者評論入口，但本次 fetch 被 Amazon 擋在 continue shopping 頁，未能可靠擷取評論統計。\n\n## 參考來源\n\n- [Zyxel 台灣官方 XMG100 Series 產品頁](https://www.zyxel.com/tw/zh/products/switch/5-8-port-2-5g-unmanaged-switch-with-10g-uplink-xmg100-series)\n- [Zyxel 官方規格頁](https://www.zyxel.com/tw/zh/products/switch/5-8-port-2-5g-unmanaged-switch-with-10g-uplink-xmg100-series/specifications)\n- [Zyxel 官方產品圖片](https://www.zyxel.com/tw/zh/products/switch/5-8-port-2-5g-unmanaged-switch-with-10g-uplink-xmg100-series/photos)\n- [PChome 24h 商品頁](https://24h.pchome.com.tw/prod/DRAF0I-A900H07SZ)\n- [Digital Reviews Network 評測](https://www.digitalreviews.net/reviews/networking-and-smart-home/zyxel-xmg100-5-port-2-5g-poe-unmanaged-switch-with-10g-uplink-review/)",
+  "search_aliases": [
+    "Zyxel 合勤 XMG-105HP",
+    "XMG100 Series",
+    "XMG-105HP 6埠 Multi-Gig",
+    "5埠 2.5G PoE 交換器",
+    "10G SFP+ PoE switch",
+    "合勤 2.5G PoE switch"
+  ],
+  "model_numbers": [
+    "XMG-105HP"
+  ],
+  "offers": [
+    {
+      "channel_id": "pchome",
+      "url": "https://24h.pchome.com.tw/prod/DRAF0I-A900H07SZ",
+      "price_text": "3850",
+      "price": {
+        "amount": 3850,
+        "currency": "TWD",
+        "unit": "each",
+        "label": null
+      },
+      "checked_at": "2026-06-18T00:00:00+08:00"
+    }
+  ],
+  "image_file": "2026-06-18-zyxel-xmg-105hp.jpg",
+  "image_url": null,
+  "category_id": "network",
+  "tag_ids": [
+    "network-gear",
+    "zyxel"
+  ],
+  "reference_url": "https://www.zyxel.com/tw/zh/products/switch/5-8-port-2-5g-unmanaged-switch-with-10g-uplink-xmg100-series/specifications",
+  "created_at": "2026-06-18T00:00:00+08:00",
+  "updated_at": "2026-06-18T00:00:00+08:00",
+  "published_at": "2026-06-18T00:00:00+08:00",
+  "unpublished_at": null,
+  "archived_at": null
+}

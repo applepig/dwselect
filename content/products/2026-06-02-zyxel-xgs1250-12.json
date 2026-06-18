@@ -2,12 +2,21 @@
   "id": "2026-06-02-zyxel-xgs1250-12",
   "status": "published",
   "name": "Zyxel XGS1250-12",
-  "english_name": "Zyxel XGS1250 12",
+  "english_name": "Zyxel XGS1250-12 12-Port Web-Managed Multi-Gigabit Switch",
   "summary": "應該是目前最好買的10G switch，一孔SFP+、三孔Multigig、八孔gbe，應該這台就可以把全家的網路線都插在上面了",
   "long_description": "應該是目前最好買的10G switch，一孔SFP+、三孔Multigig、八孔gbe，應該這台就可以把全家的網路線都插在上面了",
-  "llm_description": "",
-  "search_aliases": [],
-  "model_numbers": [],
+  "llm_description": "## 快速判斷\n\nZyxel XGS1250-12 是一台 12 埠 Web Managed Multi-Gigabit switch，定位在家庭進階網路與小型辦公室的 10GbE 入門升級。它的重點不是全埠 10G，而是把 8 個 1GbE RJ-45、3 個 10G Multi-Gig RJ-45、1 個 10G SFP+ 放在同一台小型交換器裡，適合把 NAS、工作站、Wi-Fi AP 或上行鏈路集中在少數高速埠上。\n\n## 重要規格\n\n- 連接埠：8 個 100/1000 Mbps RJ-45、3 個 1G/2.5G/5G/10G RJ-45、1 個 1G/10G SFP+。\n- 管理類型：Web Managed，可設定 VLAN、QoS、IGMP snooping、Link Aggregation、Port Mirroring 等功能；也可依預設設定當作一般 switch 使用。\n- 效能規格：96 Gbps switching capacity、71.42 Mpps forwarding rate、1.5 MB packet buffer、16K MAC address table、最大 12K jumbo frame。\n- 電源與尺寸：外接電源，100–240 V AC 輸入；最大功耗 20.06 W、最小功耗 6.16 W；尺寸 250 × 104 × 27 mm，重量約 0.783 kg。\n- 線材與速率：官方說明指出 Multi-Gigabit 可利用既有 Cat 5e 線材升級到 2.5G／5G；10G 銅纜長距離仍需依線材等級與環境確認。\n\n## 優點與限制\n\n- 優點：同時提供 10G RJ-45 與 SFP+，比只有 2 個高速上行埠的入門 switch 更適合接多台 10G／Multi-Gig 裝置。\n- 優點：有基礎 Web 管理功能，對需要 VLAN、QoS 或 IGMP snooping 的家庭實驗室與小型辦公室比完全 unmanaged switch 更有彈性。\n- 限制：只有 3 個 10G Base-T 與 1 個 SFP+，不適合需要大量 10G 端點或雙 SFP+ 光纖鏈路的環境。\n- 限制：內建智慧風扇，官方描述為依溫度調速；若放在安靜桌面或高負載 10G 環境，風扇聲與散熱仍是採購前要評估的條件。\n\n## 評測與使用者回饋\n\n- Dong Knows Tech 實測評為 8.3/10，優點包含 4 個 10Gbps 連接埠、體積小、Web 介面反應快、功能組合完整；缺點是只有 1 個 SFP+、10G Base-T 埠只有 3 個，以及內建風扇。\n- 該評測以 10G 網卡與 Cat 6a 測得約 1051 MB/s（8408 Mbps）持續傳輸，Cat 5e 10G 測得約 920.39 MB/s（7363.12 Mbps），1G 測得約 99.88 MB/s（799.04 Mbps）；作者認為扣除 overhead 後屬於可接受範圍。\n- 評測本文表示測試期間風扇不常啟動，但留言區有使用者回報韌體更新、環境溫度或多個 10G 埠同時使用時，風扇與機身溫度會更明顯；這類回饋屬個案經驗，仍建議依實際放置位置與負載評估。\n\n## 適合誰／不適合誰\n\n- 適合：家中已有 10G NAS、Multi-Gig router、2.5G／10G 主機板或 Wi-Fi 6／Wi-Fi 7 AP，但高速端點數量不多的網路升級。\n- 適合：需要基本 VLAN、QoS、IGMP snooping 或 Port Mirroring，但不需要企業級 L3 管理、PoE 或大量 SFP+ 的使用情境。\n- 不適合：需要全埠 10G、PoE 供電、靜音無風扇、或雙 SFP+ 以上光纖拓撲的環境。\n\n## 參考來源\n\n- [Zyxel 台灣官方產品頁](https://www.zyxel.com/tw/zh/products/switch/12-port-web-managed-multi-gigabit-switch-includes-3-port-10g-and-1-port-10g-sfp-xgs1250-12)\n- [Zyxel 官方規格頁](https://www.zyxel.com/tw/zh/products/switch/12-port-web-managed-multi-gigabit-switch-includes-3-port-10g-and-1-port-10g-sfp-xgs1250-12/specifications)\n- [Dong Knows Tech 評測](https://dongknows.com/zyxel-xgs1250-12-multi-gigabit-switch-review/)\n- [PChome 商品頁](https://24h.pchome.com.tw/prod/DRAF0I-A900B7QHW)",
+  "search_aliases": [
+    "Zyxel 合勤 XGS1250-12",
+    "兆勤 XGS1250-12",
+    "合勤 XGS1250-12",
+    "12埠 Multi-Gigabit 簡易網管交換器",
+    "10G SFP+ switch",
+    "Multi-Gigabit switch"
+  ],
+  "model_numbers": [
+    "XGS1250-12"
+  ],
   "offers": [
     {
       "channel_id": "pchome",
@@ -28,7 +37,7 @@
     "network-gear",
     "zyxel"
   ],
-  "reference_url": "https://www.facebook.com/applepig/posts/pfbid0h5V9UwDvLD96ZTSEvoHctNK8sEqvfHaPKqMz5DWf1MrMZfuPyw9GoQj8k6C6RsCbl",
+  "reference_url": "https://www.zyxel.com/tw/zh/products/switch/12-port-web-managed-multi-gigabit-switch-includes-3-port-10g-and-1-port-10g-sfp-xgs1250-12",
   "created_at": "2026-06-02T00:00:00+08:00",
   "updated_at": "2026-06-02T00:00:00+08:00",
   "published_at": "2026-06-02T00:00:00+08:00",
