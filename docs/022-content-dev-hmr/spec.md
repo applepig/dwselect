@@ -28,6 +28,7 @@
 - [ ] 商品與指南圖片改由 `@nuxt/image` 顯示與最佳化；dev 不需要執行 `pnpm build:content-images` 才能看到新圖。
 - [ ] `pnpm generate` 會輸出頁面實際使用的 optimized images，static site 可在無 server runtime 下顯示圖片。
 - [ ] 舊的 `public/api/content.json`、`public/search-index.json`、`public/images/**` generated artifact 不再是 dev content preview 的必要步驟；若仍保留 script，只作 legacy／相容工具。
+- [ ] `public/api/content.json`、`public/search-index.json`、`public/images/**` 不再被 Git tracking，改由 `.gitignore` 忽略；production static output 以 `pnpm generate` 的 `.output/public` 為準。
 
 ## 相關檔案
 
@@ -41,6 +42,7 @@
 - `app/utils/content-images/resolve-image-file-url.ts` — 改為 resolve Nuxt Image source path，或由新 image view model 取代。
 - `nuxt.config.ts` — 加入 `@nuxt/image` module、image source dir、Nitro prerender routes。
 - `scripts/build-content-images.ts` — 移除 production 必要性；若保留，標記為 legacy 或只供 migration 使用。
+- `.gitignore` — 忽略不再需要 tracking 的 public generated artifacts。
 - `tests/nuxt-smoke.test.ts`、`tests/public-discovery.test.ts`、`tests/search-index.test.ts`、`tests/build-content-images.test.ts` — 更新 API／圖片 pipeline contract。
 - `README.md`、`docs/CONTENT.md`、`AGENTS.md` — 更新 content authoring 與 generate workflow 說明。
 
@@ -112,6 +114,9 @@ Nuxt Image local source path 規則：
 - 替代方案：把圖片納入 Vite `import.meta.glob`／`vite-imagetools`。排除原因：會讓 API payload 與 Vite asset manifest／hashed URL 耦合，對 JSON content source 與 SSG API 不如 Nuxt Image 直覺。
 - 決策：不導入 `@nuxt/content`。
 - 原因：專案已試過並因 bundle size 過大取消；本 sprint 只採用 Nuxt server routes 與 Nuxt Image，不導入 Content database。
+- 決策：完成 route／Nuxt Image 接手後，將 `public/api/content.json`、`public/search-index.json`、`public/images/**` 從 Git tracking 移除並加入 `.gitignore`。
+- 原因：這些檔案是可由 `content/` 與 Nuxt generate 重建的 generated artifacts；繼續 tracking 會造成 timestamp、排序或圖片最佳化輸出 drift，讓 content 變更與 runtime dependency 邊界不清。
+- 限制：移除 tracking 必須等 `/api/content.json`、`/search-index.json` route 與 Nuxt Image static output 已通過 generate 驗證後才能做，避免目前 runtime 失去必要檔案。
 
 ## Milestones
 
@@ -136,5 +141,5 @@ Nuxt Image local source path 規則：
 > 驗證方式：`pnpm test`、`pnpm lint`、`pnpm typecheck`、`pnpm generate`、`node scripts/assert-runtime-google-sheet-clean.ts`，並在 `https://dwselect.toybox.local/` 手動確認內容與圖片可載入。
 
 - [ ] 撰寫／更新測試（Red）：更新 static generate workflow 測試，確認 generate 不依賴舊的 `build:content-images`／`build:public-artifacts` 作為唯一 API／圖片來源。
-- [ ] 實作最小功能（Green）：更新 package scripts、README、`docs/CONTENT.md`、AGENTS content authoring 指引。
+- [ ] 實作最小功能（Green）：更新 package scripts、README、`docs/CONTENT.md`、AGENTS content authoring 指引；將 `public/api/content.json`、`public/search-index.json`、`public/images/**` 從 Git tracking 移除並加入 `.gitignore`。
 - [ ] Refactor 並確認測試維持通過：執行完整品質閘門，手動打開主要頁面與商品詳情確認 SSG output 與 dev server 都可載入。

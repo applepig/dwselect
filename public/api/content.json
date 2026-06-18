@@ -1077,11 +1077,11 @@
             "channel_label": "PChome"
           },
           {
-            "id": "2026-06-18-elecom-de-c39-power-bank",
-            "name": "ELECOM DE-C39 磷酸鋰鐵行動電源",
-            "image_url": "/images/products/2026-06-18-elecom-de-c39-power-bank.webp",
+            "id": "2026-06-02-aplus-ups",
+            "name": "Aplus Plus1L-US600N 在線互動式 UPS 600VA／360W",
+            "image_url": "/images/products/2026-06-02-aplus-ups.webp",
             "category_label": "電腦3C",
-            "channel_label": "Amazon JP"
+            "channel_label": "PChome"
           }
         ]
       },
@@ -1156,16 +1156,16 @@
             "channel_label": "PChome"
           },
           {
-            "id": "2026-06-18-msi-mag-401qr",
-            "name": "MSI MAG 401QR",
-            "image_url": "/images/products/2026-06-18-msi-mag-401qr.webp",
+            "id": "2026-06-02-aplus-ups",
+            "name": "Aplus Plus1L-US600N 在線互動式 UPS 600VA／360W",
+            "image_url": "/images/products/2026-06-02-aplus-ups.webp",
             "category_label": "電腦3C",
             "channel_label": "PChome"
           },
           {
-            "id": "2026-06-02-aplus-ups",
-            "name": "Aplus Plus1L-US600N 在線互動式 UPS 600VA／360W",
-            "image_url": "/images/products/2026-06-02-aplus-ups.webp",
+            "id": "2026-06-02-benq-rd280u",
+            "name": "BenQ RD280U",
+            "image_url": "/images/products/2026-06-02-benq-rd280u.webp",
             "category_label": "電腦3C",
             "channel_label": "PChome"
           }
@@ -1406,16 +1406,16 @@
         "fine_print": "價格與庫存以通路頁面為準。",
         "related_products": [
           {
-            "id": "2026-06-18-msi-mag-401qr",
-            "name": "MSI MAG 401QR",
-            "image_url": "/images/products/2026-06-18-msi-mag-401qr.webp",
+            "id": "2026-06-02-benq-rd280u",
+            "name": "BenQ RD280U",
+            "image_url": "/images/products/2026-06-02-benq-rd280u.webp",
             "category_label": "電腦3C",
             "channel_label": "PChome"
           },
           {
-            "id": "2026-06-02-benq-rd280u",
-            "name": "BenQ RD280U",
-            "image_url": "/images/products/2026-06-02-benq-rd280u.webp",
+            "id": "2026-06-18-msi-mag-401qr",
+            "name": "MSI MAG 401QR",
+            "image_url": "/images/products/2026-06-18-msi-mag-401qr.webp",
             "category_label": "電腦3C",
             "channel_label": "PChome"
           },
@@ -1549,9 +1549,9 @@
             "channel_label": "PChome"
           },
           {
-            "id": "2026-06-18-msi-mag-401qr",
-            "name": "MSI MAG 401QR",
-            "image_url": "/images/products/2026-06-18-msi-mag-401qr.webp",
+            "id": "2026-06-02-aplus-ups",
+            "name": "Aplus Plus1L-US600N 在線互動式 UPS 600VA／360W",
+            "image_url": "/images/products/2026-06-02-aplus-ups.webp",
             "category_label": "電腦3C",
             "channel_label": "PChome"
           }

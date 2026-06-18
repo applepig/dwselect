@@ -170,3 +170,25 @@
 
 - aibo 商品 `english_name` 經 enrich（`7fa9a2a`）後與精簡 `id` 不再對齊；採「`id` 為穩定 URL key、`english_name` 可獨立演進」決策放寬規則，未改動公開 URL。
 - 收尾期間順手修復非 021 scope 的 typecheck 紅燈：`app/utils/markdown/parse-content-markdown.ts`（commit `b1da97f` 遺留）的 9 個 `noUncheckedIndexedAccess` 錯，以 non-null assertion narrow array index 與 regex capture group（迴圈不變量與 match 成功保證），行為不變，`tests/content-markdown.test.ts` 通過。
+
+## 2026-06-18：Data Restructure 完整驗收收尾
+
+### Scope
+
+- 對 021 的資料排序語意、Links 排序、product `id` 穩定性與 public runtime 行為做完整驗收。
+- 補齊 UI／routing／generate 層級驗證，確認 021 可以進入完成狀態並銜接 022。
+
+### Verification
+
+- `pnpm test`：46 files / 337 tests 全綠。
+- `pnpm lint`：通過。
+- `pnpm typecheck`：通過。
+- `pnpm generate`：通過；content images `Optimized: 59`、`Missing: 0`、`Failed: 0`，public artifacts `Documents: 63`、`Products: 58`、`Guides: 2`、`Links: 3`，Nuxt prerender 126 routes。
+- `node scripts/assert-runtime-google-sheet-clean.ts`：通過。
+- `pnpm test:e2e`：60 passed / 12 skipped。
+- agent-browser：實際打開 `https://dwselect.toybox.local/`、`/guide`、`/links`、`/search?q=電源充電`、`/products/2026-06-18-elecom-de-c39-power-bank`；desktop 與 mobile 首頁可載入，商品詳情 CTA、官方連結、相關商品與 AI 描述區塊可見，未見 Vite／Nuxt error overlay。
+
+### Result
+
+- 021 驗收完成，可以進入 022。
+- `pnpm generate` 會重產 `public/api/content.json` 與 `public/search-index.json` 並留下 generated diff；這是 022 已納入處理的 generated artifact tracking 問題，不列為 021 blocker。
