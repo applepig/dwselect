@@ -102,6 +102,33 @@ test('renders category breadcrumb and aligns the desktop product grid with heade
   await expect(page.locator('.compact-top-bar .top-bar-title')).toHaveText('DW嚴選')
 })
 
+test('keeps sparse category product cards at tablet three-column width', async ({ page }, test_info) => {
+  test.skip(test_info.project.name !== 'tablet', 'tablet grid width check only runs on tablet')
+
+  await page.goto('/?category=network', { waitUntil: 'domcontentloaded' })
+  await expect(page.locator('vite-error-overlay')).toHaveCount(0)
+  await expect(page.locator('.compact-top-bar .top-bar-title')).toHaveText(getBreadcrumbTextPattern('網路通訊'))
+
+  const grid_metrics = await page.locator('.product-grid').evaluate((grid) => {
+    const style = window.getComputedStyle(grid)
+    const columns = style.gridTemplateColumns.split(' ').map((column) => Number.parseFloat(column))
+    const cards = Array.from(grid.querySelectorAll('.product-card')).map((card) => card.getBoundingClientRect().width)
+
+    return {
+      column_count: columns.length,
+      first_column_width: columns[0] ?? 0,
+      first_card_width: cards[0] ?? 0,
+      grid_width: grid.getBoundingClientRect().width,
+      product_count: cards.length,
+    }
+  })
+
+  expect(grid_metrics.product_count).toBe(2)
+  expect(grid_metrics.column_count).toBe(3)
+  expect(grid_metrics.first_card_width).toBeCloseTo(grid_metrics.first_column_width, 0)
+  expect(grid_metrics.first_card_width).toBeLessThan(grid_metrics.grid_width / 2)
+})
+
 test('switches home categories with a category-keyed result transition contract', async ({ page }, test_info) => {
   test.skip(test_info.project.name !== 'desktop', 'desktop category transition check only runs on desktop')
 
