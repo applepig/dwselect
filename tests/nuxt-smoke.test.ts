@@ -165,6 +165,22 @@ describe('Nuxt SSG baseline', () => {
     expect(home_source).not.toContain('runtime_taxonomies.value')
   })
 
+  it('should hot refresh public content data when content files change in Nuxt dev', () => {
+    const nuxt_config_source = readFileSync(new URL('../nuxt.config.ts', import.meta.url), 'utf8')
+    const plugin_source = readFileSync(new URL('../app/plugins/content-hmr.client.ts', import.meta.url), 'utf8')
+    const search_helper_source = readFileSync(new URL('../app/utils/search/client-search.ts', import.meta.url), 'utf8')
+
+    expect(nuxt_config_source).toContain("name: 'dwselect-content-hmr'")
+    expect(nuxt_config_source).toContain("server.watcher.add(['content/**/*.json', 'content/**/images/**/*'])")
+    expect(nuxt_config_source).toContain("type: 'custom'")
+    expect(nuxt_config_source).toContain("event: 'dwselect:content-updated'")
+    expect(plugin_source).toContain("import.meta.hot.on('dwselect:content-updated'")
+    expect(plugin_source).toContain("refreshNuxtData('public-content')")
+    expect(plugin_source).toContain('resetClientSearchIndex()')
+    expect(search_helper_source).toContain('export function resetClientSearchIndex()')
+    expect(search_helper_source).toContain('search_index_promise = null')
+  })
+
   it('should keep product detail and app shell from serializing the full catalog payload', () => {
     const detail_page_source = readFileSync(new URL('../app/pages/products/[id].vue', import.meta.url), 'utf8')
     const detail_composable_source = readFileSync(new URL('../app/composables/use-product-detail-data.ts', import.meta.url), 'utf8')

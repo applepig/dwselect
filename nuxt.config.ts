@@ -68,6 +68,30 @@ export default defineNuxtConfig({
     },
   },
   vite: {
+    plugins: [
+      {
+        name: 'dwselect-content-hmr',
+        configureServer(server) {
+          server.watcher.add(['content/**/*.json', 'content/**/images/**/*'])
+
+          const notifyContentUpdated = (file_path: string) => {
+            if (!file_path.includes('/content/') && !file_path.startsWith('content/')) {
+              return
+            }
+
+            server.ws.send({
+              type: 'custom',
+              event: 'dwselect:content-updated',
+              data: { path: file_path },
+            })
+          }
+
+          server.watcher.on('add', notifyContentUpdated)
+          server.watcher.on('change', notifyContentUpdated)
+          server.watcher.on('unlink', notifyContentUpdated)
+        },
+      },
+    ],
     server: {
       allowedHosts: [vite_host],
       hmr: {

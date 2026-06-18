@@ -66,3 +66,23 @@
 
 1. `pnpm typecheck` 與 `node scripts/assert-runtime-google-sheet-clean.ts` 可作為提交後的完整 CI 補驗證。
 2. 開 `https://dwselect.toybox.local/` 人工確認首頁卡片、商品詳情 hero／related、指南列表、search 結果圖片可載入，且 dev 改 content JSON／圖片後重新請求即反映。
+
+## 2026-06-19：Hotfix — content dev HMR 自動刷新
+
+### 問題描述
+
+- **症狀**：`docs/022-content-dev-hmr` 的目標是 content authoring dev HMR，但實作只讓 `/api/content.json` 重新請求時讀到最新 content，已開頁面不會在 `content/` JSON 或圖片變更後自動刷新。
+- **預期行為**：Nuxt dev server 偵測 `content/` JSON／本地圖片變更後，透過 Vite HMR 通知 client，已開頁面 refresh `public-content` async data；search index cache 也要失效，避免搜尋仍用舊索引。
+- **影響範圍**：本機 content authoring dev preview；production generate／static output 不受影響。
+
+### 根因分析
+
+- **根因**：M1／M2 只把 content API 與圖片改成 dev 可重新請求的 Nuxt routes／Nuxt Image，沒有註冊 Vite dev watcher，也沒有 client HMR listener 呼叫 `refreshNuxtData('public-content')`。
+- **定位過程**：比對 spec User Story 與驗收條件後，確認 `server/api/content.json.get.ts` 每次會重新讀檔，但 `app/composables/*` 只用 `useAsyncData('public-content')`，沒有 watcher、plugin 或 HMR event；`app/utils/search/client-search.ts` 也會快取 search index promise。
+- **受影響檔案**：`nuxt.config.ts`、`app/plugins/content-hmr.client.ts`、`app/utils/search/client-search.ts`、`tests/nuxt-smoke.test.ts`。
+
+### 修復內容
+
+- **修了什麼**：新增 Vite dev plugin `dwselect-content-hmr` 監看 `content/**/*.json` 與 `content/**/images/**/*`，在 add/change/unlink 時送出 `dwselect:content-updated` custom HMR event；新增 client plugin 收到 event 後 reset search index cache 並 `refreshNuxtData('public-content')`。
+- **測試**：新增 `nuxt-smoke` regression，驗證 dev watcher、custom HMR event、client refresh 與 search index reset contract。
+- **驗證結果**：`pnpm test tests/nuxt-smoke.test.ts` 通過，36 passed。
