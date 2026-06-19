@@ -1,13 +1,25 @@
 {
   "id": "2026-06-02-arnest-nagikire-ou",
   "status": "published",
-  "name": "Arnest 永切れ王",
-  "english_name": "Arnest Nagikire Ou",
+  "name": "永切れ王 全不鏽鋼三德刀",
+  "english_name": "Arnest Nagakire Ou All Stainless Santoku Knife A-77679",
   "summary": "刀刃開鋸齒型的三德，我覺得切起來超級順手的",
   "long_description": "刀刃開鋸齒型的三德，我覺得切起來超級順手的",
-  "llm_description": "",
-  "search_aliases": [],
-  "model_numbers": [],
+  "llm_description": "## 快速判斷\n\nArnest「三徳包丁 永切れ王 オールステンレス」是日本新潟燕三条製的 165mm 三德刀，商品代碼 A-77679。它的定位不是傳統純直刃三德刀，而是採用 Arnest 稱為「ファインソー加工」的專利鋸齒狀細刃設計，主打肉、魚、硬質蔬菜與麵包等不同食材都能處理，並維持較長時間的切味。\n\n## 重要規格\n\n- 型號／商品代碼：A-77679；JAN：4989082776798；Amazon ASIN：B0B1CTWNJR。\n- 刀型：三德刀，刃渡 16.5cm，總長約 29.5cm，高約 4.5cm，厚約 2cm。\n- 重量：約 120g。\n- 材質：刀刃為鉬釩鋼，握柄為不鏽鋼。\n- 產地：日本新潟縣燕三條地區。\n- 清潔：官方標示可使用洗碗機與烘碗機；全不鏽鋼握柄與刀身之間沒有接縫，清潔死角較少。\n- 官方建議售價：稅拔 3,500 日圓；官方商店售價查得為 3,850 日圓含稅。\n\n## 優點與限制\n\n- 適合想要一把可跨肉、魚、蔬菜、麵包等多類食材的家用三德刀，尤其重視清洗便利與洗碗機相容的人。\n- 全不鏽鋼結構有利於清潔與避免木柄接縫藏汙，但握感會和木柄或樹脂柄三德刀不同。\n- 「ファインソー加工」是它的核心差異；若偏好傳統直刃三德刀的切削手感或自行研磨體驗，購買前應留意這不是一般純直刃設計。\n\n## 評測與使用者回饋\n\n- Amazon JP 商品頁顯示 5.0／5，6 筆 global ratings；頁面可讀的日本 verified purchase 評論只有 1 則，重點是「切れ味最高です」並表示滿意。\n- Amazon 的完整 `/product-reviews/B0B1CTWNJR` 評論頁會導向登入頁，因此未能讀取所有個別評論；以上回饋只能視為非常小樣本。\n- Arnest 官方商店頁載入 U-KOMI review widget；動態 DOM 顯示「レビューはまだありません」，未查得官方商店個別評論。\n\n## 參考來源\n\n- [Arnest 官方產品頁：三徳包丁 永切れ王 オールステンレス / A-77679](https://www.ar-nest.co.jp/products/a-77679/)\n- [Arnest 官方商店：三徳包丁 永切れ王 オールステンレス](https://www.smilezakka.jp/77679/)\n- [Amazon JP 商品頁：ASIN B0B1CTWNJR](https://www.amazon.co.jp/dp/B0B1CTWNJR)",
+  "search_aliases": [
+    "三徳包丁 永切れ王 オールステンレス",
+    "アーネスト 永切れ王",
+    "永切れ王 オールステンレス",
+    "Arnest A-77679",
+    "Arnest Nagakire Ou",
+    "Naga-kire Ou",
+    "燕三条 三徳包丁"
+  ],
+  "model_numbers": [
+    "A-77679",
+    "JAN 4989082776798",
+    "ASIN B0B1CTWNJR"
+  ],
   "offers": [
     {
       "channel_id": "amazonjp",
@@ -28,7 +40,7 @@
     "arnest",
     "kitchen"
   ],
-  "reference_url": null,
+  "reference_url": "https://www.ar-nest.co.jp/products/a-77679/",
   "created_at": "2026-06-02T00:00:00+08:00",
   "updated_at": "2026-06-02T00:00:00+08:00",
   "published_at": "2026-06-02T00:00:00+08:00",

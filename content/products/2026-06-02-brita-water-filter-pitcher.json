@@ -1,13 +1,25 @@
 {
   "id": "2026-06-02-brita-water-filter-pitcher",
   "status": "published",
-  "name": "Brita",
-  "english_name": "BRITA Water Filter Pitcher",
+  "name": "BRITA 馬利拉濾水壺組",
+  "english_name": "BRITA Marella 2.4L Water Filter Jug Bundle with MAXTRA PRO Limescale Expert Filters",
   "summary": "Brita濾芯要注意一下特價，大概單價$166以下就可以買",
   "long_description": "Brita濾芯要注意一下特價，大概單價$166以下就可以買",
-  "llm_description": "",
-  "search_aliases": [],
-  "model_numbers": [],
+  "llm_description": "## 快速判斷\n\n這筆商品對應 PChome 上的 BRITA 官方直營組合：Marella 馬利拉 2.4L 藍色濾水壺，加上 MAXTRA PRO 去水垢專家濾芯 12 入，賣場標示為「共 1 壺 13 芯」。它比較像是一次補齊濾水壺與長期耗材的組合，而不是單買新款壺身。\n\n## 重要規格與差異\n\n- **賣場組合內容**：PChome title／meta 標示為 Marella 2.4L（藍）＋MAXTRA PRO 去水垢專家濾芯 12 入，共 1 壺 13 芯。\n- **壺身功能**：PChome meta 標示具備指壓式注水口、BRITA Memo 電子式濾芯狀態顯示器，並主打降低水垢、氯味與鉛、銅等重金屬。\n- **濾芯定位**：BRITA 官方說明 MAXTRA PRO 去水垢專家濾芯是為硬水區域設計，較 MAXTRA+ 提升 4 倍極淨濾效，且相較 MAXTRA PRO 純淨全效型提升 50% 去水垢能力。\n- **耗材週期**：官方建議每 4 週更換濾芯，以維持理想過濾效果。\n- **型號／容量注意**：BRITA 官方 Marella 頁目前主打 XL 3.5 公升（濾水量 2 公升）版本；本 PChome offer 標題是 2.4L 藍色組合，容量與現行官方頁的預設販售款式不同，購買時應以原 offer 頁標示為準。\n\n## 優點與限制\n\n- **適合**：需要壺身加一年左右濾芯庫存、所在地水質容易有水垢、或想降低快煮壺／咖啡機水垢累積的人。\n- **限制**：濾水壺不等於櫥下型或 RO 淨水系統；它主要改善口感、氯味、水垢與部分金屬／微量雜質，不應被視為所有污染物的完整解法。\n- **維護成本**：濾芯是持續耗材，實際划算程度取決於組合價與每顆濾芯折算單價。\n\n## 評測與使用者回饋\n\n- PChome 商品頁可動態開啟，但未看到商品評論、評分或評論分頁；頁面內嵌狀態顯示 `isSoft404: 1`、`isShowPage: 0`，主商品資訊可由 title／meta 驗證，但即時購買狀態與個別評論文字不可由前台確認。\n- BRITA 官方 Marella 頁未顯示評分或評論 widget；可查到的是官方產品資訊與用途說明，包括改善自來水口感、茶與咖啡風味、降低水垢並保護廚房電器。\n\n## 參考來源\n\n- [PChome 原 offer：BRITA Marella 2.4L 藍＋MAXTRA PRO 去水垢專家 12 入](https://24h.pchome.com.tw/prod/DEAY3A-A900GLY25)\n- [BRITA 官方 Marella 馬利拉濾水壺](https://www.brita.tw/water-filter-jug/marella)\n- [BRITA 官方 MAXTRA PRO 去水垢專家濾芯](https://www.brita.tw/water-filter-cartridges/maxtra-pro-limescale-expert)",
+  "search_aliases": [
+    "BRITA Marella",
+    "馬利拉濾水壺",
+    "Marella 2.4L",
+    "碧然德濾水壺",
+    "MAXTRA PRO 去水垢專家",
+    "1壺13芯",
+    "DEAY3A-A900GLY25"
+  ],
+  "model_numbers": [
+    "Marella",
+    "MAXTRA PRO Limescale Expert",
+    "DEAY3A-A900GLY25"
+  ],
   "offers": [
     {
       "channel_id": "pchome",
@@ -28,7 +40,7 @@
     "brita",
     "kitchen"
   ],
-  "reference_url": "https://www.facebook.com/applepig/posts/pfbid0XuCGpfNBnFb4TZN4QcTH2Zyh9U2rWqV2HonAm4DjS8YXtYoTQDqKBVL3QV3pesmBl",
+  "reference_url": "https://www.brita.tw/water-filter-jug/marella",
   "created_at": "2026-06-02T00:00:00+08:00",
   "updated_at": "2026-06-02T00:00:00+08:00",
   "published_at": "2026-06-02T00:00:00+08:00",

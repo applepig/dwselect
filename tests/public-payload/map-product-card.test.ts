@@ -55,7 +55,7 @@ describe('product card build mapper', () => {
     expect(card).not.toHaveProperty('image')
   })
 
-  it('should use price label over price text when an offer provides a labelled price', () => {
+  it('should display the price text and ignore the price label metadata', () => {
     const product = makeProduct({
       id: 'labelled-price-product',
       status: 'published',
@@ -76,7 +76,7 @@ describe('product card build mapper', () => {
       ],
     })
 
-    expect(mapProductCard(product, makeResolver()).price_label).toBe('NT$ 1,990 起')
+    expect(mapProductCard(product, makeResolver()).price_label).toBe('NT$ 1,990')
   })
 
   it('should resolve local product image files for cards', () => {

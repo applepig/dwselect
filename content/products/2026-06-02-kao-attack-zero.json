@@ -1,13 +1,22 @@
 {
   "id": "2026-06-02-kao-attack-zero",
   "status": "published",
-  "name": "花王 Attack Zero",
-  "english_name": "Kao Attack Zero",
+  "name": "Attack ZERO 噴槍型洗衣凝露",
+  "english_name": "Kao Attack ZERO One-hand Type Laundry Detergent 400 g + Refill 2100 g",
   "summary": "Attack Zero的噴罐超級好用",
   "long_description": "Attack Zero的噴罐超級好用",
-  "llm_description": "",
-  "search_aliases": [],
-  "model_numbers": [],
+  "llm_description": "## 快速判斷\n\nAttack ZERO 噴槍型洗衣凝露是花王 Attack ZERO 系列的濃縮液體洗衣劑組合，Costco 台灣目前同款商品頁標示為 400 公克噴槍瓶加 2100 公克補充包。重點不是香氛或柔軟，而是單手按壓計量、衣物去味、室內晾衣防臭與補充包續用。\n\n## 重要規格\n\n- Costco 商品頁品名：Attack ZERO 超濃縮噴槍型洗衣凝露 400 公克 + 補充包 2100 公克。\n- 英文品名：Attack ZERO One-hand Type Laundry Detergent 400 g + Refill 2100 g。\n- 內容量：噴槍瓶 400 公克 + 補充包 2100 公克；Costco 標示商品重量 3.6 公斤，尺寸 19.5 × 19.5 × 28.5 公分。\n- 用途：衣物洗滌專用，適用棉、麻、合成纖維等可水洗衣物。\n- 成分標示：界面活性劑、安定劑、分散劑、酵素；Costco 頁面另標示無添加螢光劑，但因共同生產設備可能有微量螢光劑反應。\n- 產地：日本。\n- 使用限制：不可與其他洗衣產品混合；補充時應使用 Attack ZERO 洗衣凝露補充包，且不要超過瓶身黑線。\n\n## 優點與限制\n\n- 噴槍／one-hand push 設計可單手按壓計量，減少倒瓶、量杯殘留與手部沾附；日本官方也將「片手で計量」「液だれしにくい」列為 Attack ZERO 的設計重點。\n- Costco 商品頁標示可強化化學纖維表面抗污力，並以日本研發抗菌因子支援 24 小時室內晾衣防臭。\n- 適合需要大量補充包、常洗運動衣、室內晾衣或重視按壓瓶操作的人。\n- 不適合只能手洗、不可水洗，或需避免濃縮洗劑原液長時間接觸的衣物；洗前仍需看衣物洗滌標示並做褪色測試。\n\n## 評測與使用者回饋\n\n- Costco 台灣目前同款商品頁顯示 4.9／5 分、59 則評論。頁面可見評論元件只呈現摘要，但結構化資料中可讀到部分個別評論。\n- 可讀評論樣本中，有使用者提到運動衣或室內晾衣效果特別有感、香味不刺激；另一則提到可去除異味且專用瓶裝方便使用。\n- 樣本限制：動態頁面未載入完整可翻頁評論列表，network inspection 也未捕捉到可直接翻頁的 Bazaarvoice API；以上只代表頁面結構化資料可讀到的少量評論文字，不應視為完整評論分布。\n\n## 參考來源\n\n- [Costco 台灣目前同款商品頁](https://www.costco.com.tw/Household-Baby-Toys/Household-Essentials/Laundry-Care/Attack-ZERO-One-hand-Type-Laundry-Detergent-400-g-Refill-2100-g/p/429229)\n- [花王日本 Attack ZERO 系列頁](https://www.kao.co.jp/attack/products/zero/)\n- [花王日本 Attack 產品型錄](https://www.kao.com/jp/products/attack/)\n- [花王台灣一匙靈品牌頁](https://web.kao.com/tw/attack/)",
+  "search_aliases": [
+    "Attack ZERO 洗衣凝露",
+    "Attack ZERO 噴槍型",
+    "Attack ZERO One-hand Type",
+    "Attack ZERO 補充包 2100g",
+    "一匙靈 Attack ZERO",
+    "アタックZERO"
+  ],
+  "model_numbers": [
+    "Costco #429229"
+  ],
   "offers": [
     {
       "channel_id": "costco",
@@ -29,7 +38,7 @@
     "daily-goods",
     "kao"
   ],
-  "reference_url": "https://www.facebook.com/applepig/posts/pfbid02yPa7pBxFXc2igdCXHNDjU89jarHuG7Fhj6cFQfqsADJAtfxbxxW5E2NvH7fJjCoLl",
+  "reference_url": "https://www.kao.co.jp/attack/products/zero/",
   "created_at": "2026-06-02T00:00:00+08:00",
   "updated_at": "2026-06-02T00:00:00+08:00",
   "published_at": "2026-06-02T00:00:00+08:00",

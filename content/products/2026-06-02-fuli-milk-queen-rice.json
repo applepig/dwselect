@@ -1,13 +1,26 @@
 {
   "id": "2026-06-02-fuli-milk-queen-rice",
   "status": "published",
-  "name": "富里牛奶皇后",
-  "english_name": "Fuli Milk Queen Rice",
+  "name": "富麗牛奶皇后 2kg",
+  "english_name": "Fuli Milky Queen Rice 2 kg",
   "summary": "牛奶皇后是最好吃的台灣米，不服來辯",
   "long_description": "牛奶皇后是最好吃的台灣米，不服來辯",
-  "llm_description": "",
-  "search_aliases": [],
-  "model_numbers": [],
+  "llm_description": "## 快速判斷\n\n富麗牛奶皇后 2kg 是富里鄉農會／富麗米系列的白米真空包，核心特色是日本牛奶皇后（ミルキークイーン，Milky Queen）品種。官方商品頁說明此品種由越光（コシヒカリ）改良而來，糙米外觀偏乳白、白米外觀較不透明，烹煮後口感偏軟黏，放涼後較不易變硬。\n\n## 重要規格\n\n- 品名：白米。\n- 品種：梗稻（日本牛奶皇后／Milky Queen）。\n- 產地：台灣花蓮縣富里鄉。\n- 淨重與包裝：2 公斤真空包。\n- 品質規格：官方頁標示 CNS 二等。\n- 保存：官方頁標示保存天數 10 個月；PChome 規格頁標示保存期限 300 日，並註明消費者收受日起算至少距有效日期 75 日以上。\n- 儲存注意：未開封請置於陰涼處、避免陽光直射；開封後建議冷藏並儘速食用。\n\n## 優點與限制\n\n- 牛奶皇后品種的定位偏向軟黏、冷飯不易變硬，適合需要放涼食用的便當、飯糰或隔餐情境。\n- 富里鄉農會官方頁與多個通路都標示為小面積栽種／限量供應，購買時需留意當期庫存與碾製日期。\n- PChome 規格頁的「認證」欄位標示為無；若需要有機、產銷履歷或其他認證，應以當批包裝或通路頁面標示為準。\n- PChome 商品詳情提醒：真空包裝用於預防蟲害；開封後若存放過久，少數蟲害屬可能發生的自然現象，應洗淨後儘速烹煮。\n\n## 評測與使用者回饋\n\n- PChome 商品頁可見 5.0 分、共 4 則評價；頁面顯示的可讀文字樣本很少。\n- 可讀到的一則 2024/06/11 評論表示商品符合預期，但運送過程可能因紙箱擠壓造成外包裝破損，建議包裝時留意。\n- 另外兩則可見評價只顯示使用者與日期，未顯示具體文字；因此目前可整理的使用者回饋主要限於小樣本與包裝運送風險。\n\n## 參考來源\n\n- [富里鄉農會官方商品頁](https://www.fulifa.com.tw/product_detail.php?category_fid=00001&product_id=655)\n- [PChome 24h 商品頁](https://24h.pchome.com.tw/prod/DBBY0J-A900F81AW)\n- [農金安心 GO 商品頁](https://www.ansingo.com.tw/products/3504e8b6-8d00-4d2a-8482-3b4a261f0b9a)\n- [農會趴趴灶商品頁](https://www.papazao.tw/products/fuli-milky-queen-rice-premium-soft-grain-2kg-vacuum-pack)",
+  "search_aliases": [
+    "富麗牛奶皇后2kg",
+    "富麗牛奶皇后米2公斤",
+    "富里牛奶皇后",
+    "富里牛奶皇后米",
+    "牛奶皇后米",
+    "日本牛奶皇后",
+    "ミルキークイーン",
+    "Milky Queen Rice",
+    "Fuli Milky Queen Rice"
+  ],
+  "model_numbers": [
+    "DBBY0J-A900F81AW",
+    "product_id=655"
+  ],
   "offers": [
     {
       "channel_id": "pchome",
@@ -29,7 +42,7 @@
     "fuli",
     "rice"
   ],
-  "reference_url": "https://www.facebook.com/applepig/posts/pfbid037AcHMyNMrZPFBvDg7GgQbquN8j2UNmPb1mvkM7YV9rJKuv8Us5BvASrcG8zzxRqjl",
+  "reference_url": "https://www.fulifa.com.tw/product_detail.php?category_fid=00001&product_id=655",
   "created_at": "2026-06-02T00:00:00+08:00",
   "updated_at": "2026-06-02T00:00:00+08:00",
   "published_at": "2026-06-02T00:00:00+08:00",

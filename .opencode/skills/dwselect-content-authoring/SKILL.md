@@ -114,6 +114,14 @@ Offer and price precedence：
 - If the original store page has no current offer but the user provided an approximate price，keep the approximate price and report the uncertainty。
 - If the original offer URL is deleted、unavailable、or unverifiable，keep the original offer URL and price text unless explicitly told to replace them。Return `offer_status` plus possible replacement candidates for coordinator/user review。
 
+Channel price digit obfuscation and cross-check（價格數字防呆）：
+
+- 部分台灣通路會把價格渲染得很難 parse：momo（尤其）、Yahoo 等常把數字拆成 sprite 圖、lazy-load 節點，或用「折扣後價格」「限時折後價」「促銷價」「momo幣回饋」這類 UI 文案包住數字。直接抓 DOM text 容易抓到 UI 文案、抓錯層、或整個漏掉數字。
+- 當通路頁的價格數字無法可靠讀出，或要驗證可疑數字時，改用比價聚合站交叉確認 plain-text 價格：BigGo（`https://biggo.com.tw`）與 FindPrice（`https://www.findprice.com.tw`）。用商品名／型號搜尋，對到同一通路的 listing，以聚合站的純文字價格確認 `price.amount`。
+- `price.amount` 必須是已確認的數字價格。`price_text` 是前端唯一的價格顯示來源，必須乾淨且完整、可直接顯示（純數字，可帶貨幣符號、千分位，或區間「起」字尾，例如 `39,512`、`NT$39,512`、`NT$1,990 起`），不可塞入通路 UI heading 原文（如「折扣後價格」「限時折後價」）。
+- `price.label`、`amount`、`currency`、`unit` 只是 metadata，前端不顯示。`label` 可選擇性記錄通路價格類型（例如「折扣價」「限時折扣」）當 metadata，但顯示完全只看 `price_text`，所以任何要顯示的修飾詞（區間「起」、幣別）都必須寫進 `price_text` 本身，不能只放在 `label`。
+- 通路同時顯示多層價格（市售價／促銷價／滿件折扣價）時，記錄使用者在該 offer 實際付的可購買價格，並把分層資訊寫進研究筆記或 `price_discrepancy`，不要塞進 label。
+
 PChome fallback：
 
 - PChome product pages may return 429。When that happens，use the PChome API first：`https://ecapi.pchome.com.tw/ecshop/prodapi/v2/prod/{PRODUCT_ID}&fields=Id,Name,Nick,Price,Pic,Slogan,Describe,Spec&_callback=jsonp`
@@ -125,6 +133,16 @@ Amazon fallback：
 - Expand short URLs when possible。
 - Confirm title、ASIN、model number、brand、price、main image、and product facts。
 - If Amazon shows multiple variants，record the selected variant and confidence。
+
+Review/user feedback research：
+
+- If a page shows a rating、review count、「評論摘要」or review tab，do not stop at the aggregate score。Try to obtain readable individual review text before writing that reviews are unavailable。
+- Minimum effort before claiming individual reviews cannot be obtained：open the page with `agent-browser` in the dedicated content-id session；wait for dynamic content；scroll to or click the review section/tab；click「顯示更多」、「更多評論」、pagination、sort/filter controls when present；extract text from the review container；inspect network requests for review providers or review APIs；check embedded page state、JSON-LD、script data、and provider widgets when the DOM is sparse。
+- Common review providers and signals to inspect include Bazaarvoice、Trustvoice、Yotpo、Judge.me、PowerReviews、native store review endpoints、Amazon visible top reviews、Amazon `/product-reviews/{ASIN}` pages、Costco/Samsung/Electrolux review widgets、and PChome/Yahoo/momo review blocks or APIs。
+- Use `agent-browser network requests` and browser `eval` to identify review API URLs、product IDs、deployment IDs、offset/limit parameters、and hidden widget state。If a review API is visible，try the first page and at least one additional page or offset when allowed，unless the source returns a hard blocker such as 401、403、429、504、login wall、CAPTCHA、or consent wall。
+- When review text is readable，summarize recurring points conservatively。Distinguish official reviews、store reviews、third-party editorial reviews、and discussion/forum comments。Mention sample size and visibility limits when only a partial page is readable。
+- When review text is not reliably readable，write the limitation precisely：what aggregate facts were verified、which source was tried、which interaction/API attempt failed、and why the remaining text is unavailable。Avoid vague phrases like「查詢時資源未能載入」unless you also state the concrete blocker。
+- Do not use search result snippets as review evidence。They may justify further investigation，but not a final user-feedback summary unless the original page or API confirms the same facts。
 
 ## Image Quality
 
@@ -211,6 +229,7 @@ When delegating content research/update to a subagent，the prompt must explicit
 - Keep `name` concise：prefer 32 visible characters or fewer，hard maximum 45；put full official names in `llm_description`、aliases、or model fields。
 - Provide sources、confidence、and unresolved assumptions。
 - For `llm_description`，write a blog-style Markdown brief with headings、bullet points、review/user feedback when available、and verified reference links；research specs instead of paraphrasing user text。
+- For review/user feedback，do not give up after static fetch。If rating/count or a review widget exists，use the review research workflow：agent-browser dynamic page、review tab/scroll/show-more interactions、DOM text extraction、network/API inspection、and precise blocker reporting before claiming individual reviews are unavailable。
 - For images，prefer contextual/lifestyle or in-use official/store images over isolated product-only renders；the chosen image must pass the guard（shortest side >= 480px，aspect ratio <= 2:1）and the subagent must report dimensions and source type。
 - Preserve user-provided offer URL and price text unless explicitly asked to replace them。
 - If offer is unavailable or unverifiable，keep it and report `offer_status` plus replacement candidates instead of changing it。
@@ -226,7 +245,7 @@ Read and follow `dwselect-content-authoring`。This is implementation work for e
 
 Update only that JSON file。Do not modify `summary`、`long_description`、`id`、`status`、or user-provided `offers[].url` / `price_text`。Keep `name` concise（prefer <=32 visible characters，hard max 45）；put full official names in `llm_description`、`model_numbers`、or `search_aliases`。Preserve existing taxonomy IDs；if a missing brand/tag is useful，return `taxonomy_suggestions` instead of editing taxonomy。
 
-Research official/spec/store/review sources，then update agent-owned fields：`name`、`english_name`、`model_numbers`、`search_aliases`、`reference_url`、`llm_description`，and clearly missing price currency/unit metadata when verified。If you use agent-browser，pass `--session <content-id>` on every command and close only that session。Do not run `git`、`ls`、`cat`、`find`，or build/verify commands；the coordinator audits and rebuilds。
+Research official/spec/store/review sources，then update agent-owned fields：`name`、`english_name`、`model_numbers`、`search_aliases`、`reference_url`、`llm_description`，and clearly missing price currency/unit metadata when verified。For reviews，if rating/count or a review widget exists，use agent-browser dynamic inspection、review interactions、DOM extraction、and network/API inspection before claiming individual review text is unavailable。If you use agent-browser，pass `--session <content-id>` on every command and close only that session。Do not run `git`、`ls`、`cat`、`find`，or build/verify commands；the coordinator audits and rebuilds。
 
 Return：files changed、field summary、sources、confidence、offer_status、image source type、image dimensions、taxonomy_suggestions、unresolved assumptions。
 ```

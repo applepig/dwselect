@@ -69,7 +69,7 @@ describe('product card fields mapper', () => {
     })
   })
 
-  it('should prefer the labelled price over price text', () => {
+  it('should ignore the price label for display when it is not contained in the price text (label is metadata only)', () => {
     const product = makeProduct({
       id: 'labelled-price',
       status: 'published',
@@ -85,10 +85,29 @@ describe('product card fields mapper', () => {
       ],
     })
 
-    expect(mapProductCardFields(product, makeResolver()).price_label).toBe('NT$ 1,990 起')
+    expect(mapProductCardFields(product, makeResolver()).price_label).toBe('NT$ 1,990')
   })
 
-  it('should keep the full price text when the price label is only a prefix qualifier', () => {
+  it('should always return the price text for display regardless of the price label value (label is metadata only)', () => {
+    const product = makeProduct({
+      id: 'unrelated-label-price',
+      status: 'published',
+      name: '無關標籤商品',
+      offers: [
+        {
+          channel_id: 'pchome',
+          url: 'https://example.com/buy',
+          price_text: 'NT$ 1,990',
+          price: { amount: null, currency: 'TWD', unit: 'each', label: '這段完全不同的 metadata' },
+          checked_at: '2026-06-02T00:00:00+08:00',
+        },
+      ],
+    })
+
+    expect(mapProductCardFields(product, makeResolver()).price_label).toBe('NT$ 1,990')
+  })
+
+  it('should always return the price text for display even when the price label is a prefix qualifier', () => {
     const product = makeProduct({
       id: 'qualified-price',
       status: 'published',

@@ -29,7 +29,7 @@
     {
       "channel_id": "momo",
       "url": "https://www.momoshop.com.tw/goods/GoodsDetail.jsp?i_code=14355104",
-      "price_text": "折扣後價格39,512元",
+      "price_text": "39,512",
       "price": {
         "amount": 39512,
         "currency": "TWD",
