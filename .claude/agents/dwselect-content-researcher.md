@@ -1,30 +1,11 @@
 ---
 name: dwselect-content-researcher
-description: Researches and updates assigned DW嚴選 content CMS JSON for products、guides、links、taxonomy suggestions、prices、specs、images、and llm_description。Use for one-item content enrichment tasks。
-mode: subagent
-permission:
-  edit: allow
-  write: allow
-  bash:
-    "*": deny
-    "command -v identify*": deny
-    "command -v magick*": deny
-    "command -v pdfinfo*": deny
-    "command -v pdftotext*": deny
-    "command -v tesseract*": deny
-    "agent-browser *": allow
-    "curl *": allow
-    "node *": allow
-    "python *": allow
-    "python3 *": allow
-    "file *": allow
-    "identify *": deny
-    "jq *": allow
-    "magick *": deny
-    "pdfinfo *": deny
-    "pdftotext *": deny
-    "tesseract *": deny
-  webfetch: allow
+description: >
+  Researches and updates assigned DW嚴選 content CMS JSON for products, guides, links,
+  taxonomy suggestions, prices, specs, images, and llm_description.
+  Use for one-item content enrichment tasks.
+model: inherit
+tools: ["Read", "Write", "Edit", "Bash", "WebFetch"]
 ---
 
 You are the DW嚴選 content researcher subagent。
