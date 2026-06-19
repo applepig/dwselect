@@ -31,7 +31,7 @@ describe('product card base mapper', () => {
     expect(mapProductCardBase(product, makeResolver())).toEqual({
       id: 'base-product',
       name: '共通欄位商品',
-      image_url: '/images/products/base-product.webp',
+      image_url: '/products/images/base-product.jpg',
       category_label: '電腦',
       channel_label: 'PChome',
     })
@@ -60,7 +60,7 @@ describe('product card fields mapper', () => {
     expect(mapProductCardFields(product, makeResolver())).toEqual({
       id: 'fields-product',
       name: '卡片詳情共用商品',
-      image_url: '/images/products/sample-product.webp',
+      image_url: '/products/images/sample-product.jpg',
       category_label: '電腦',
       channel_id: 'pchome',
       channel_label: 'PChome',
@@ -69,7 +69,7 @@ describe('product card fields mapper', () => {
     })
   })
 
-  it('should prefer the labelled price over price text', () => {
+  it('should ignore the price label for display when it is not contained in the price text (label is metadata only)', () => {
     const product = makeProduct({
       id: 'labelled-price',
       status: 'published',
@@ -85,6 +85,44 @@ describe('product card fields mapper', () => {
       ],
     })
 
-    expect(mapProductCardFields(product, makeResolver()).price_label).toBe('NT$ 1,990 起')
+    expect(mapProductCardFields(product, makeResolver()).price_label).toBe('NT$ 1,990')
+  })
+
+  it('should always return the price text for display regardless of the price label value (label is metadata only)', () => {
+    const product = makeProduct({
+      id: 'unrelated-label-price',
+      status: 'published',
+      name: '無關標籤商品',
+      offers: [
+        {
+          channel_id: 'pchome',
+          url: 'https://example.com/buy',
+          price_text: 'NT$ 1,990',
+          price: { amount: null, currency: 'TWD', unit: 'each', label: '這段完全不同的 metadata' },
+          checked_at: '2026-06-02T00:00:00+08:00',
+        },
+      ],
+    })
+
+    expect(mapProductCardFields(product, makeResolver()).price_label).toBe('NT$ 1,990')
+  })
+
+  it('should always return the price text for display even when the price label is a prefix qualifier', () => {
+    const product = makeProduct({
+      id: 'qualified-price',
+      status: 'published',
+      name: '含價格修飾詞商品',
+      offers: [
+        {
+          channel_id: 'amazonjp',
+          url: 'https://example.com/buy',
+          price_text: '約¥5000',
+          price: { amount: 5000, currency: 'JPY', unit: 'each', label: '約' },
+          checked_at: '2026-06-18T00:00:00+08:00',
+        },
+      ],
+    })
+
+    expect(mapProductCardFields(product, makeResolver()).price_label).toBe('約¥5000')
   })
 })

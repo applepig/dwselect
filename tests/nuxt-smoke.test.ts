@@ -9,6 +9,8 @@ describe('Nuxt SSG baseline', () => {
   it('should enable Nuxt UI and static generation without Nuxt Content', () => {
     expect(nuxt_config.modules).not.toContain('@nuxt/content')
     expect(nuxt_config.modules).toContain('@nuxt/ui')
+    expect(nuxt_config.modules).toContain('@nuxt/image')
+    expect(nuxt_config.image?.dir).toBe('../content')
     expect(nuxt_config.ui?.fonts).toBe(false)
     expect(nuxt_config.nitro?.preset).toBe('static')
     expect(nuxt_config.experimental?.viewTransition).toBe(false)
@@ -19,17 +21,22 @@ describe('Nuxt SSG baseline', () => {
     })
   })
 
-  it('should build the search index before static generation', () => {
-    expect(package_json.scripts.generate).toContain('pnpm build:public-artifacts')
-    expect(package_json.scripts.generate).not.toContain('pnpm build:search-index && pnpm build:public-discovery')
+  it('should generate static output from prerendered server routes without legacy artifact builds', () => {
+    expect(package_json.scripts.generate).toBe('pnpm build:public-discovery && node scripts/assert-content-images.ts && nuxt generate')
+    expect(package_json.scripts.build).toBe('pnpm build:public-discovery && node scripts/assert-content-images.ts && nuxt build')
+    expect(package_json.scripts.generate).not.toContain('build:public-artifacts')
+    expect(package_json.scripts.generate).not.toContain('build:search-index')
   })
 
-  it('should build optimized content images before public discovery and static generation', () => {
+  it('should fail static generation when any prerendered route errors (spec Case 1)', () => {
+    expect(nuxt_config.nitro?.prerender?.failOnError).toBe(true)
+  })
+
+  it('should keep content image optimization out of the generate prerequisite chain (Nuxt Image owns it)', () => {
     expect(package_json.scripts).toHaveProperty('build:content-images')
-    expect(package_json.scripts.build).toContain('pnpm build:content-images')
-    expect(package_json.scripts.generate).toContain('pnpm build:content-images')
-    expect(package_json.scripts.build.indexOf('pnpm build:content-images')).toBeLessThan(package_json.scripts.build.indexOf('pnpm build:public-artifacts'))
-    expect(package_json.scripts.generate.indexOf('pnpm build:content-images')).toBeLessThan(package_json.scripts.generate.indexOf('pnpm build:public-artifacts'))
+    expect(package_json.scripts.build).not.toContain('build:content-images')
+    expect(package_json.scripts.generate).not.toContain('build:content-images')
+    expect(package_json.devDependencies).toHaveProperty('@nuxt/image')
   })
 
   it('should avoid publishing raw content image directories through Nitro publicAssets', () => {
@@ -42,10 +49,10 @@ describe('Nuxt SSG baseline', () => {
     expect(JSON.stringify(public_assets)).not.toContain('content/guides/images')
   })
 
-  it('should resolve local content image files to optimized WebP static asset URLs', () => {
-    expect(resolveImageFileUrl('sample-product.jpg', 'products')).toBe('/images/products/sample-product.webp')
-    expect(resolveImageFileUrl('sample-guide.png', 'guides')).toBe('/images/guides/sample-guide.webp')
-    expect(resolveImageFileUrl('already-optimized.webp', 'products')).toBe('/images/products/already-optimized.webp')
+  it('should resolve local content image files to Nuxt Image source paths', () => {
+    expect(resolveImageFileUrl('sample-product.jpg', 'products')).toBe('/products/images/sample-product.jpg')
+    expect(resolveImageFileUrl('sample-guide.png', 'guides')).toBe('/guides/images/sample-guide.png')
+    expect(resolveImageFileUrl('already-optimized.webp', 'products')).toBe('/products/images/already-optimized.webp')
     expect(() => resolveImageFileUrl('../unsafe.jpg', 'products')).toThrow('Invalid image_file')
   })
 
@@ -62,14 +69,9 @@ describe('Nuxt SSG baseline', () => {
       new URL('../content/taxonomies/tags.json', import.meta.url),
       'utf8',
     )) as { items: Array<{ id: string, label: string }> }
-    const link_files = readdirSync(new URL('../content/links/', import.meta.url)).filter((file_name) => file_name.endsWith('.json'))
-    const guide_files = readdirSync(new URL('../content/guides/', import.meta.url)).filter((file_name) => file_name.endsWith('.json'))
-
     expect(category_taxonomy.items).toContainEqual(expect.objectContaining({ id: 'av-theater', label: '影音劇院' }))
     expect(channel_taxonomy.items).toContainEqual(expect.objectContaining({ id: 'pchome', label: 'PChome' }))
     expect(tag_taxonomy.items.length).toBeGreaterThan(0)
-    expect(link_files).toEqual(expect.arrayContaining(['applepig-home.json', '2026-06-02-b18.json']))
-    expect(guide_files).toEqual(expect.arrayContaining(['2026-06-02-日本米入門篇.json', '2026-06-02-aeron-chair.json']))
 
     const content_config_path = new URL('../content.config.ts', import.meta.url)
     const product_schema_test_source = readFileSync(new URL('../tests/product-schema.test.ts', import.meta.url), 'utf8')
@@ -148,7 +150,9 @@ describe('Nuxt SSG baseline', () => {
     expect(composable_source).toContain("useAsyncData('public-content'")
     expect(composable_source).toContain('fetchPublicContentPayload')
     expect(fetch_helper_source).toContain("$fetch<PublicContentPayload>('/api/content.json')")
-    expect(fetch_helper_source).toContain("'public/api/content.json'")
+    expect(fetch_helper_source).not.toContain('public/api/content.json')
+    expect(fetch_helper_source).not.toContain('readFile')
+    expect(fetch_helper_source).not.toContain('import.meta.server')
     expect(composable_source).not.toContain('queryCollection(')
     expect(composable_source).not.toContain('server: false')
     expect(fetch_helper_source).not.toContain('server: false')
@@ -159,6 +163,29 @@ describe('Nuxt SSG baseline', () => {
     expect(home_source).toContain('content_payload.value')
     expect(home_source).not.toContain('all_products.value')
     expect(home_source).not.toContain('runtime_taxonomies.value')
+  })
+
+  it('should hot refresh public content data when content files change in Nuxt dev', () => {
+    const nuxt_config_source = readFileSync(new URL('../nuxt.config.ts', import.meta.url), 'utf8')
+    const plugin_source = readFileSync(new URL('../app/plugins/content-hmr.client.ts', import.meta.url), 'utf8')
+    const detail_page_source = readFileSync(new URL('../app/pages/products/[id].vue', import.meta.url), 'utf8')
+    const search_helper_source = readFileSync(new URL('../app/utils/search/client-search.ts', import.meta.url), 'utf8')
+
+    expect(nuxt_config_source).toContain("name: 'dwselect-content-hmr'")
+    expect(nuxt_config_source).toContain('const content_watch_paths = [fileURLToPath(new URL(\'./content/\', import.meta.url))]')
+    expect(nuxt_config_source).toContain('server.watcher.add(content_watch_paths)')
+    expect(nuxt_config_source).toContain("type: 'custom'")
+    expect(nuxt_config_source).toContain("event: 'dwselect:content-updated'")
+    expect(plugin_source).toContain("import.meta.hot.on('dwselect:content-updated'")
+    // refreshNuxtData 必須包在 runWithContext 內：hot.on callback 在 Nuxt context 之外觸發。
+    expect(plugin_source).toContain("nuxtApp.runWithContext(() => refreshNuxtData('public-content'))")
+    expect(plugin_source).toContain('resetClientSearchIndex()')
+    expect(search_helper_source).toContain('export function resetClientSearchIndex()')
+    expect(search_helper_source).toContain('search_index_promise = null')
+    // detail 頁用 watchEffect 同步 product_detail，content HMR 刷新後才會帶出最新 detail；
+    // 不可退回一次性快照賦值（只在 setup 跑一次，刷新後陳舊）。
+    expect(detail_page_source).toMatch(/watchEffect\(\(\) => \{\s*product_detail\.value = product_detail_data\.value\s*\}\)/)
+    expect(detail_page_source).not.toMatch(/\nproduct_detail\.value = product_detail_data\.value\n<\/script>/)
   })
 
   it('should keep product detail and app shell from serializing the full catalog payload', () => {
@@ -489,7 +516,11 @@ describe('Nuxt SSG baseline', () => {
     expect(detail_source).toContain('detail.long_description || detail.summary')
     expect(detail_source).toContain('AI 怎麼說')
     expect(detail_source).toContain('v-if="detail.llm_description"')
-    expect(detail_source).toContain('到 {{ detail.channel_label }} 購買')
+    expect(detail_source).toContain('parseContentMarkdown')
+    expect(detail_source).toContain('detail-llm-title')
+    expect(detail_source).toContain('detail-llm-copy')
+    expect(detail_source).toContain('detail-llm-link')
+    expect(detail_source).toContain('去 {{ detail.channel_label }} 逛逛')
     expect(detail_source).toContain('target="_blank"')
     expect(detail_source).toContain('rel="noopener noreferrer"')
     expect(detail_source).toContain('價格與庫存以通路頁面為準。')
@@ -520,7 +551,8 @@ describe('Nuxt SSG baseline', () => {
     }
 
     expect(detail_source).toContain(':description="detail.long_description || detail.summary"')
-    expect(detail_source).toContain(':description="detail.llm_description"')
+    expect(detail_source).toContain('parsed_llm_blocks')
+    expect(detail_source).not.toContain(':description="detail.llm_description"')
     expect(detail_source).toContain('detail.category_label')
     expect(detail_source.indexOf('detail.category_label')).toBeLessThan(detail_source.indexOf('detail.channel_label'))
     expect(detail_source.indexOf('detail.channel_label')).toBeLessThan(detail_source.indexOf('v-for="tag in detail.tag_labels"'))
@@ -597,6 +629,8 @@ describe('Nuxt SSG baseline', () => {
     ]
     const product_route_count = readdirSync(new URL('../content/products/', import.meta.url))
       .filter((file_name) => file_name.endsWith('.json'))
+      .map((file_name) => JSON.parse(readFileSync(new URL(`../content/products/${file_name}`, import.meta.url), 'utf8')))
+      .filter((product) => product.status === 'published')
       .length
     const prerender_routes = nuxt_config.nitro?.prerender?.routes ?? []
 
@@ -608,8 +642,9 @@ describe('Nuxt SSG baseline', () => {
     expect(prerender_routes).toContain('/guide')
     expect(prerender_routes).toContain('/search')
     expect(prerender_routes).toContain('/links')
+    expect(prerender_routes).toContain('/api/content.json')
+    expect(prerender_routes).toContain('/search-index.json')
     expect(prerender_routes.filter((route) => route.startsWith('/products/'))).toHaveLength(product_route_count)
-    expect(prerender_routes).toContain('/products/2026-06-02-sharp-65-inch-xled')
   })
 
   it('should define light and dark handoff CSS tokens without a single-hue palette', () => {
@@ -637,54 +672,13 @@ describe('Nuxt SSG baseline', () => {
     expect(variable_css).toContain("'Microsoft JhengHei'")
   })
 
-  it('should document static search-index generation commands', () => {
+  it('should document the server-route content API and Nuxt Image generate workflow', () => {
     const readme_source = readFileSync(new URL('../README.md', import.meta.url), 'utf8')
 
-    expect(readme_source).toContain('pnpm build:public-artifacts')
-    expect(readme_source).toContain('public/search-index.json')
     expect(readme_source).toContain('pnpm generate')
-  })
-
-  it('should expose real cutover catalog artifacts and remove the sample product', () => {
-    const product_file_names = readdirSync(new URL('../content/products/', import.meta.url))
-      .filter((file_name) => file_name.endsWith('.json'))
-    const product_sources = product_file_names.map((file_name) => readFileSync(
-      new URL(`../content/products/${file_name}`, import.meta.url),
-      'utf8',
-    ))
-    const search_index_source = readFileSync(new URL('../public/search-index.json', import.meta.url), 'utf8')
-    const search_index_payload = JSON.parse(search_index_source) as {
-      documents: Array<{
-        document_id: string
-        type: string
-        title: string
-        category_labels?: string[]
-        channel_label?: string
-      }>
-    }
-
-    expect(product_file_names).toHaveLength(62)
-    expect(product_file_names).not.toContain('2026-06-02-sample-product.json')
-    expect(product_sources.join('\n')).toContain('Sharp 65吋 XLED')
-    expect(product_sources.join('\n')).toContain('"category_id": "av-theater"')
-    expect(product_sources.join('\n')).not.toContain('"category":')
-    expect(search_index_payload.documents).toHaveLength(67)
-    expect(search_index_payload.documents).toContainEqual(expect.objectContaining({
-      document_id: 'product:2026-06-02-sharp-65-inch-xled',
-      type: 'product',
-      title: 'Sharp 65吋 XLED',
-      category_labels: ['影音劇院'],
-      channel_label: expect.any(String),
-    }))
-    expect(search_index_payload.documents).toEqual(expect.arrayContaining([
-      expect.objectContaining({ document_id: 'guide:2026-06-02-日本米入門篇', type: 'guide' }),
-      expect.objectContaining({ document_id: 'link:2026-06-02-b18', type: 'link' }),
-      expect.objectContaining({ document_id: 'link:applepig-home', type: 'link' }),
-    ]))
-    expect(search_index_source).toContain('"category_labels"')
-    expect(search_index_source).toContain('"channel_label":')
-    expect(search_index_source).not.toContain('"category": "')
-    expect(search_index_source).not.toContain('2026-06-02-sample-product')
+    expect(readme_source).toContain('/api/content.json')
+    expect(readme_source).toContain('/search-index.json')
+    expect(readme_source).toContain('@nuxt/image')
   })
 })
 

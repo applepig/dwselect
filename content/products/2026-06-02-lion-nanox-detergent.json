@@ -1,13 +1,23 @@
 {
   "id": "2026-06-02-lion-nanox-detergent",
   "status": "published",
-  "name": "Lion Nanox洗衣精",
-  "english_name": "Lion Nanox Detergent",
+  "name": "NANOX one洗衣精補充包",
+  "english_name": "Lion NANOX one Standard Laundry Detergent Refill 820g x 6",
   "summary": "今年Nanox One新版上市了，橘色的是標準款、紫色的強化殺菌、藍綠色的PRO全面強化，但是價錢都顯著的比去年貴",
   "long_description": "今年Nanox One新版上市了，橘色的是標準款、紫色的強化殺菌、藍綠色的PRO全面強化，但是價錢都顯著的比去年貴",
-  "llm_description": "",
-  "search_aliases": [],
-  "model_numbers": [],
+  "llm_description": "## 快速判斷\n\n這筆 PChome offer 對應的是日本獅王 LION NANOX／奈米樂洗衣精補充包，賣場標題標示為 820g×6 的箱購組。PChome 目前仍保留商品頁 meta title 與主圖，但頁面狀態顯示 soft 404、沒有可見加入購物車或現貨價格；既有 offer URL 與使用者填入的 NT$1,099 因此保留供編輯審核。\n\n## 重要規格與差異\n\n- 賣場標示：LION 日本獅王「奈米樂超濃縮抗菌洗衣精補充包 820g×6」。\n- PChome meta description 標示重點：減少室內晾衣異味、pH 值中性、無螢光劑，香味包含清新柑橘香／純淨皂香，並主打減少衣服變黃與褪色。\n- 官方 NANOX one 系列現行頁面將產品線分成「洗浄プラス」、「ニオイ専用」、「PRO」；官方 FAQ 說明，過去橘色瓶 NANOX one Standard 最接近現行白色瓶「NANOX one 洗浄プラス」，且香味相同。\n- 官方頁標示 NANOX one 為濃縮液體洗劑，標準用量以水 30L 對 10g 為基準；強調無螢光劑、可用於淡色衣物與嬰兒衣物，且建議可設定すすぎ 1 回。\n- Amazon JP 同系列 Standard 1530g 頁面列出成分為界面活性劑 53％（polyoxyethylene alkyl ether、linear alkylbenzene sulfonate、alkyl ether sulfate ester salt）、穩定劑、pH 調整劑、去污成分與酵素；這是同系列不同容量頁面的資料，不能完全替代 PChome 820g×6 包裝標示。\n\n## 優點與限制\n\n- 適合需要箱購補充包、且重視抗菌、除味、無螢光劑與衣物顏色維持的人。\n- 820g×6 是賣場組合包，不等同於官方現行頁面列出的 600g 本體、765g／1080g／1530g 補充包或 PRO 740g／1010g／1400g 規格；若要比價，需先確認容量與香味是否一致。\n- PChome 商品頁目前沒有可購買狀態與即時價格；若要重新上架，建議重新確認同款或現行替代款。\n\n## 評測與使用者回饋\n\n- PChome 頁面沒有可見評分、評論或 review widget；動態檢查頁面文字也沒有評論／評價訊號。\n- Amazon JP 同系列 NANOX One Standard 1530g 頁面顯示 4.4／5、830 global ratings，產品頁可見的日本 top reviews 多提到洗後味道不易殘留、室內晾衣異味控制、大容量方便與補充包容量划算；也有個別評論指出若按標準用量，去污力覺得不足，需要稍微多加。\n- Amazon `/product-reviews/B0CKSFH6DX` 會導向登入頁，因此完整評論列表無法未登入讀取；上述回饋只代表產品頁可見樣本，且來自同系列不同容量，不是 PChome 820g×6 offer 的直接評論。\n\n## 參考來源\n\n- [Lion NANOX one 官方產品頁](https://nanox.lion.co.jp/)\n- [PChome 原 offer](https://24h.pchome.com.tw/prod/DAAK2J-1900H333K?fq=/S/DAAK2J)\n- [Amazon JP：NANOX One Standard 1530g](https://www.amazon.co.jp/-/en/NANOX-Standard-Refill-Ultra-Jumbo/dp/B0CKSFH6DX)",
+  "search_aliases": [
+    "Lion Nanox洗衣精",
+    "日本獅王 奈米樂超濃縮抗菌洗衣精補充包 820g x6",
+    "獅王奈米樂洗衣精",
+    "NANOX one Standard",
+    "ナノックスワン スタンダード",
+    "NANOX one 洗浄プラス",
+    "DAAK2J-1900H333K"
+  ],
+  "model_numbers": [
+    "DAAK2J-1900H333K"
+  ],
   "offers": [
     {
       "channel_id": "pchome",
@@ -29,7 +39,7 @@
     "daily-goods",
     "lion"
   ],
-  "reference_url": "https://www.facebook.com/applepig/posts/pfbid0FhDw2JMyJfPJ8pGNG5U8ujWYGevTxEnRNobThWiBFzp24riVpstAuTLP8An66rc9l",
+  "reference_url": "https://nanox.lion.co.jp/",
   "created_at": "2026-06-02T00:00:00+08:00",
   "updated_at": "2026-06-02T00:00:00+08:00",
   "published_at": "2026-06-02T00:00:00+08:00",

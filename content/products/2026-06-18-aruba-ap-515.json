@@ -1,0 +1,48 @@
+{
+  "id": "2026-06-18-aruba-ap-515",
+  "status": "published",
+  "name": "Aruba AP-515",
+  "english_name": "HPE Aruba Networking AP-515 (US) Q9H63A",
+  "summary": "我上次買的時候才105塊，賺到",
+  "long_description": "我上次買的時候才105塊，賺到",
+  "llm_description": "## 快速判斷\n\nHPE Aruba Networking AP-515（Q9H63A）是 510 Series 的室內企業級 Wi‑Fi 6（802.11ax）Campus Access Point，Amazon ASIN 為 B07JQ9Y7DD。它適合已經使用 Aruba／HPE Aruba Networking 管理系統、需要中密度室內無線覆蓋與 IoT radio 的環境；如果只是家用即插即用路由器，則需要先確認 PoE 供電、管理方式、韌體與授權條件。\n\n## 重要規格\n\n- 型號／SKU：Q9H63A；產品線：HPE Aruba Networking 510 Series；機型：AP-515（US regulatory domain）。\n- 無線：Wi‑Fi 6／802.11ax，雙頻 2.4 GHz + 5 GHz；Amazon 標題列出 5 GHz 最高 4.8 Gbps、2.4 GHz 最高 575 Mbps，HPE Store 的 510 Series 頁面則以 2.69 Gbps combined data rate 描述系列規格，建議採購前以實際韌體與通道寬度設定確認。\n- 射頻與天線：AP-515 為內建天線版本；HPE Store 將 Q9H63A 標示為 Dual Radio 4x4/2x2 802.11ax Internal Antennas Unified Campus AP。\n- 有線與 IoT：HPE Store 510 Series 規格列出 2.5 Gbps Ethernet、1 Gbps Ethernet、USB host port，並內建 Bluetooth 5 與 802.15.4 radio，可用於 Zigbee／IoT 與定位相關部署。\n- 管理與安全：可搭配 HPE Aruba Networking Central；官方介紹列出 OFDMA、MU‑MIMO、Target Wake Time、WPA3、Enhanced Open（OWE）、Dynamic Segmentation、Policy Enforcement Firewall 與 TPM。\n\n## 優點與限制\n\n- 優點：企業級 AP，重點不是消費型路由器功能，而是多 AP 管理、ClientMatch、IoT radio、ZTP 與集中式政策控管。\n- 優點：2.5GbE uplink 對 Wi‑Fi 6 AP 較有餘裕，避免上行固定在 1GbE。\n- 限制：Q9H63A 是 US 版本，跨區使用需確認當地法規、韌體與控制器／Central 相容性。\n- 限制：Amazon 商品頁目前是第三方賣家供貨；若是二手或拆封品，需另外確認序號、保固、配件、支架與可註冊狀態。\n\n## 評測與使用者回饋\n\n- Amazon 商品頁可讀到部分美國買家個別評論；專用 `product-reviews` 列表頁仍會導向登入頁，因此以下僅依商品頁可見評論摘要。樣本很小：頁面顯示約 4.6／5、19 則 global ratings，商品頁可見的美國評論約 8 則，不應推論成普遍結論。\n- 正面回饋集中在企業級 AP 的覆蓋與穩定性：有使用者回報單台覆蓋約 4,100 sq. ft. 辦公室、PoE 安裝順利，也有人提到家用／小型商務情境可透過 Instant／virtual controller 設定。\n- 採購風險多半不是射頻效能，而是通路、配件與相容性：評論提到需自備電源供應器或使用 PoE、吊頂安裝支架可能不合、舊 200 Series 與 500 Series 的 InstantOS 版本／cluster 相容性需要重建設定。\n- 有負面評論警告非授權 reseller 可能導致 Aruba 保固處理受阻；若從 Amazon marketplace 購買，建議確認賣家、New／Used／Renewed 狀態、序號、保固與支架內容。\n\n## 參考來源\n\n- [Amazon 商品頁（ASIN B07JQ9Y7DD）](https://www.amazon.com/dp/B07JQ9Y7DD)\n- [HPE Store：HPE Aruba Networking 510 Series Campus Access Points](https://buy.hpe.com/us/en/networking/wireless-devices/wlan-access-points/hpe-aruba-networking-campus-access-point-products/hpe-aruba-networking-510-series-campus-access-points/p/1011028705)\n- [HPE Store：Q9H63A 型號頁](https://buy.hpe.com/us/en/networking/wireless-devices/wlan-access-points/hpe-aruba-networking-campus-access-point-products/hpe-aruba-networking-510-series-campus-access-points/p/q9h63a)\n- [HPE 510 Series Data Sheet](https://www.hpe.com/psnow/doc/a00058534enw)",
+  "search_aliases": [
+    "HPE Aruba AP-515",
+    "Aruba AP 515",
+    "Aruba 510 Series",
+    "Q9H63A",
+    "B07JQ9Y7DD",
+    "HEWLETT PACKARD AP-515"
+  ],
+  "model_numbers": [
+    "Q9H63A",
+    "AP-515",
+    "B07JQ9Y7DD"
+  ],
+  "offers": [
+    {
+      "channel_id": "amazonus",
+      "url": "https://a.co/d/0dmMEEBb",
+      "price_text": "105",
+      "price": {
+        "amount": 105,
+        "currency": "USD",
+        "unit": "each",
+        "label": null
+      },
+      "checked_at": "2026-06-18T00:00:00+08:00"
+    }
+  ],
+  "image_url": null,
+  "category_id": "network",
+  "tag_ids": [
+    "network-gear"
+  ],
+  "reference_url": "https://buy.hpe.com/us/en/networking/wireless-devices/wlan-access-points/hpe-aruba-networking-campus-access-point-products/hpe-aruba-networking-510-series-campus-access-points/p/q9h63a",
+  "created_at": "2026-06-18T00:00:00+08:00",
+  "updated_at": "2026-06-18T00:00:00+08:00",
+  "published_at": "2026-06-18T00:00:00+08:00",
+  "unpublished_at": null,
+  "archived_at": null,
+  "image_file": "2026-06-18-aruba-ap-515.jpg"
+}

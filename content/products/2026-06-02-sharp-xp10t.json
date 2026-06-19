@@ -1,37 +1,47 @@
 {
   "id": "2026-06-02-sharp-xp10t",
   "status": "published",
-  "name": "Sharp XP10T",
-  "english_name": "Sharp XP10T",
+  "name": "夏普 AX-XP10T 水波爐",
+  "english_name": "SHARP HEALSIO AX-XP10T Water Oven",
   "summary": "家裡如果有長輩怕微波爐的話，就直上XP10T，這台才有強調無微波調理功能（然後你還是可以自己拿他的微波功能來用",
   "long_description": "家裡如果有長輩怕微波爐的話，就直上XP10T，這台才有強調無微波調理功能（然後你還是可以自己拿他的微波功能來用",
-  "llm_description": "",
-  "search_aliases": [],
-  "model_numbers": [],
+  "llm_description": "## 快速判斷\n\nSHARP HEALSIO AX-XP10T 是夏普台灣販售的 30L 旗艦水波爐，核心定位是用過熱水蒸氣與熱風循環完成蒸、烤、炸、炙燒、雙層料理等調理。官方規格明確列出它同時具備 800W 變頻微波與 4 段火力，因此選購時要把它理解成「以過熱水蒸氣為主、也保留微波功能」的多功能調理爐，而不是單一用途烤箱。\n\n## 重要規格\n\n- 型號：AX-XP10T；官方頁列出番茄紅（R）與洋蔥白（W）兩色。\n- 容積：30L；本體尺寸約 50 × 46.5 × 42 cm，庫內尺寸約 40 × 31.1 × 24 cm，重量約 23 kg。\n- 加熱方式：過熱水蒸氣＋熱風循環；官方標示可做炙燒、熱風燒烤、熱風烘烤、蒸煮、水波熱風燒烤、水波熱風烘烤、雙層燒烤、雙層蒸煮、上下同時蒸烤等。\n- 感測與操作：64 眼紅外線掃描與溫度感測器、4.3 吋彩色液晶觸控螢幕。\n- 選單與食譜：官方標示 361 道食譜、381 種自動選單，另提供線上食譜書與食譜檢索。\n- 烤箱溫度：烘烤 100～250℃；發酵 30・35・40・45℃。\n- 微波功能：800W 變頻、4 段火力；若是為了完全避開微波，需確認實際使用的模式是否為過熱水蒸氣／熱風模式。\n- 清潔維護：檸檬酸清洗、爐內高溫蒸氣清潔、烤盤／網子蒸氣清潔、爐內乾燥；支援耐熱餐具與廚房用品除菌行程。\n- 附屬品：調理網 2 個、烤盤 2 個、使用說明書。\n\n## 優點與限制\n\n- 適合需要一台機器整合蒸、烤、熱風、炙燒、自動料理與除菌清潔的人，尤其是常用自動選單、雙層料理或線上食譜的廚房。\n- 30L 與雙層加熱讓它比小型微波爐更接近料理設備，但 50 cm 寬、23 kg 的機身需要預留檯面深度、散熱與搬運空間。\n- 過熱水蒸氣是這台的主要差異點；相對地，若只需要基本微波加熱或小份量烘烤，功能與價格都可能超出需求。\n- 官方強調全程過熱水蒸氣調理可用於脫油、減鹽與保留營養素；這類效果會受食材、份量、烹調模式與使用習慣影響，不能只看規格就視為固定結果。\n\n## 評測與使用者回饋\n\n- 這次查證沒有找到足夠可引用的獨立長篇評測或大量使用者評論；目前可確認資訊主要來自夏普官方產品頁、官方食譜資源與 PChome 商品資料。\n- PChome API 仍可查到既有商品頁，商品名稱為「夏普Healsio炙燒水波爐AX-XP10T」，顯示售價為 NT$28,800；原頁面直接讀取時可能回 429，因此以 PChome 商品 API 作為同 URL 價格查證來源。\n\n## 參考來源\n\n- [夏普台灣官方產品頁](https://tw.sharp/products/ax-xp10t)\n- [PChome 24h 商品頁](https://24h.pchome.com.tw/prod/DMBJ02-1900I5KFC)\n- [AX-XP10T 線上食譜書](https://tw.sharp/healsio/ebook/AX-XP10T/Healsio.html)\n- [AX-XP10T 使用說明書 PDF](https://tw.sharp/sites/default/files/products/documents/AX-XP10T-%E4%BD%BF%E7%94%A8%E8%AA%AA%E6%98%8E%E6%9B%B8.pdf)",
+  "search_aliases": [
+    "Sharp XP10T",
+    "SHARP AX-XP10T",
+    "夏普 Healsio 炙燒水波爐",
+    "夏普 HEALSIO 旗艦水波爐",
+    "AX-XP10T(R)",
+    "AX-XP10T(W)",
+    "夏普水波爐 XP10T"
+  ],
+  "model_numbers": [
+    "AX-XP10T"
+  ],
   "offers": [
     {
       "channel_id": "pchome",
       "url": "https://24h.pchome.com.tw/prod/DMBJ02-1900I5KFC",
-      "price_text": "29900",
+      "price_text": "28800",
       "price": {
-        "amount": 29900,
+        "amount": 28800,
         "currency": "TWD",
         "unit": "each",
         "label": null
       },
-      "checked_at": "2026-06-02T00:00:00+08:00"
+      "checked_at": "2026-06-19T00:00:00+08:00"
     }
   ],
   "image_url": null,
-  "category_id": "small-appliance",
+  "category_id": "kitchen-appliance",
   "tag_ids": [
     "countertop",
     "kitchen",
     "sharp"
   ],
-  "reference_url": "https://www.facebook.com/applepig/posts/pfbid02voWvQVJp7FoCmJx3WbbENaNpKFf35jp6H4Ram3UqNxmTcCEYLUvZ23BgRnEdAAw7l",
+  "reference_url": "https://tw.sharp/products/ax-xp10t",
   "created_at": "2026-06-02T00:00:00+08:00",
-  "updated_at": "2026-06-02T00:00:00+08:00",
+  "updated_at": "2026-06-19T00:00:00+08:00",
   "published_at": "2026-06-02T00:00:00+08:00",
   "unpublished_at": null,
   "archived_at": null,

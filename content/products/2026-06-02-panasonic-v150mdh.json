@@ -1,25 +1,34 @@
 {
   "id": "2026-06-02-panasonic-v150mdh",
   "status": "published",
-  "name": "Panasonic V150MDH",
-  "english_name": "Panasonic V150MDH",
+  "name": "Panasonic NA-V150MDH",
+  "english_name": "Panasonic NA-V150MDH-W 15kg Front Load Washer Dryer",
   "summary": "總之洗衣機都現看Panasonic，這是自動加洗衣精的洗脫烘中最便宜的",
   "long_description": "總之洗衣機都現看Panasonic，這是自動加洗衣精的洗脫烘中最便宜的",
-  "llm_description": "",
-  "search_aliases": [],
-  "model_numbers": [],
+  "llm_description": "## 快速判斷\n\nPanasonic NA-V150MDH-W 是國際牌台灣販售的 15 kg 洗衣／10 kg 烘衣滾筒洗脫烘機，重點規格是洗劑量自動精準投入、溫水泡洗淨、nanoe™ X、IoT 智慧健康家電與 ECONAVI 智慧節能。它適合想把洗衣、脫水、烘衣整合在同一台，且安裝寬度約 64 cm 以內的家庭；如果每天大量烘衣、特別在意低溫烘乾與耗電，應另外比較 Panasonic 之後推出的熱泵式機種或雙機方案。\n\n## 重要規格\n\n- 型號：NA-V150MDH-W，冰鑽白。\n- 容量：洗衣 15 kg、烘衣 10 kg。\n- 尺寸與重量：寬 640 × 深 773 × 高 1035 mm；通路規格頁標示機器重量約 95 kg，搬運與安裝前要確認門框、電梯、轉角、排水與進水條件。\n- 洗淨與保養：泡洗淨、新舞動水流、3D 智慧洗淨、雙效自動槽洗淨、筒窗／膠圈清潔。\n- 溫水行程：30℃、40℃、60℃ 溫水洗衣，並有 40℃ 溫泡洗與 30℃ 溫水槽洗淨等設定。\n- 烘衣方式：官方列為「溫風循環烘衣」，不是熱泵式烘乾；烘乾後仍需要定期清理棉絮濾網與相關通風路徑。\n- 智慧功能：Panasonic IoT／SMART APP 遠端查看與操作、洗劑量自動精準投入、ECONAVI 依衣物重量與水溫調整水量／時間。\n\n## 優點與限制\n\n- 自動投入洗劑可降低每次手動量洗衣精的步驟，對固定使用液體洗劑的家庭較方便。\n- 15 kg 洗衣容量搭配 10 kg 烘衣容量，能處理一般家庭衣物與部分寢具，但洗烘一體機的烘衣容量低於洗衣容量；要完整烘乾時不宜把洗衣容量裝滿。\n- 溫水、nanoe™ X、槽洗淨與膠圈清潔是這台和較基礎滾筒機種的主要差異。\n- 非熱泵式設計代表烘乾溫度、耗電與衣物材質限制要比照一般洗脫烘機看待；容易縮水、怕熱或厚重衣物仍需分批與低溫模式測試。\n- 大型家電購買前應確認配送、安裝、舊機回收與樓層加價條件，避免到場後無法安裝或搬運。\n\n## 評測與使用者回饋\n\n- Mobile01 開箱使用者回報：洗脫烘約落在 4 小時左右，聲音可接受，低溫烘乾能烘乾衣物；但也提到 App 功能較陽春、每次使用後要清濾網。這是單一使用者案例，不能視為普遍保證。\n- 一篇長期使用心得提到：自動投入與 App 通知便利，烘乾在潮濕季節實用；但長期大量使用烘乾時，棉絮可能堆積在濾網或出風口，造成 U11、烘不乾或異味，作者後續也記錄過 H29 風扇維修案例。這些問題提示使用者需要把棉絮清潔與通風路徑檢查列入日常維護。\n- PTT 選購討論中，有使用者把 NA-V150MDH-W 與 LG、Samsung 及 Panasonic 17 kg／熱泵機種比較；常見考量是預算、顏色、是否有棉絮濾網、烘衣容量仍為 10 kg，以及熱泵式烘乾的價差。\n\n## 參考來源\n\n- [Panasonic 台灣官方產品頁](https://www.panasonic.com/tw/consumer/washing-machine/roller/na-v150mdh.html)\n- [PChome 24h 商品頁](https://24h.pchome.com.tw/prod/DPAI1H-A900FQ5GC)\n- [燦坤商品規格頁](https://www.tk3c.com/ptview.aspx?pidqr=234080)\n- [賈維斯商品規格頁](https://www.jarvis.com.tw/appliances/panasonic/washing-machine/panasonic-na-v150mdh-w/)\n- [Mobile01 開箱討論](https://www.mobile01.com/topicdetail.php?f=730&t=7047910)\n- [長期使用心得與維修紀錄](https://album.ioi.tw/2022/12/panasonic-nv-v150mdh.html)\n- [PTT 選購討論](https://www.ptt.cc/bbs/E-appliance/M.1726155561.A.3B0.html)",
+  "search_aliases": [
+    "Panasonic 國際牌 NA-V150MDH-W",
+    "國際牌 15公斤洗脫烘",
+    "NA-V150MDH-W",
+    "NA-V150MDH",
+    "V150MDH",
+    "Panasonic V150MDH"
+  ],
+  "model_numbers": [
+    "NA-V150MDH-W"
+  ],
   "offers": [
     {
       "channel_id": "pchome",
       "url": "https://24h.pchome.com.tw/prod/DPAI1H-A900FQ5GC",
-      "price_text": "41000",
+      "price_text": "35910",
       "price": {
-        "amount": 41000,
+        "amount": 35910,
         "currency": "TWD",
         "unit": "each",
         "label": null
       },
-      "checked_at": "2026-06-02T00:00:00+08:00"
+      "checked_at": "2026-06-19T00:00:00+08:00"
     }
   ],
   "image_url": null,
@@ -28,9 +37,9 @@
     "laundry",
     "panasonic"
   ],
-  "reference_url": null,
+  "reference_url": "https://www.panasonic.com/tw/consumer/washing-machine/roller/na-v150mdh.html",
   "created_at": "2026-06-02T00:00:00+08:00",
-  "updated_at": "2026-06-02T00:00:00+08:00",
+  "updated_at": "2026-06-19T00:00:00+08:00",
   "published_at": "2026-06-02T00:00:00+08:00",
   "unpublished_at": null,
   "archived_at": null,

@@ -1,6 +1,6 @@
 {
   "id": "2026-06-02-synology-ds723-plus",
-  "status": "published",
+  "status": "archived",
   "name": "Synology DS723+",
   "english_name": "Synology DS723 Plus",
   "summary": "最近硬碟單顆有16TB，小小一台2bay即使裝RAID 1也還是有16TB可用，應該遠超過大部分人的需求",
@@ -19,7 +19,7 @@
         "unit": "each",
         "label": null
       },
-      "checked_at": "2026-06-02T00:00:00+08:00"
+      "checked_at": "2026-06-18T00:00:00+08:00"
     }
   ],
   "image_url": null,
@@ -30,9 +30,9 @@
   ],
   "reference_url": "https://www.facebook.com/applepig/posts/pfbid0yWM3dPV3ZJMNFVrzBwkSZgkgFhHakf79DAhhFQwd3A1kUgnY23D4Exb5PZS2r9Hvl",
   "created_at": "2026-06-02T00:00:00+08:00",
-  "updated_at": "2026-06-02T00:00:00+08:00",
+  "updated_at": "2026-06-18T00:00:00+08:00",
   "published_at": "2026-06-02T00:00:00+08:00",
   "unpublished_at": null,
-  "archived_at": null,
+  "archived_at": "2026-06-18T00:00:00+08:00",
   "image_file": "2026-06-02-synology-ds723-plus.jpg"
 }

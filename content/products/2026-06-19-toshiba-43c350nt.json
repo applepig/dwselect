@@ -1,0 +1,41 @@
+{
+  "id": "2026-06-19-toshiba-43c350nt",
+  "status": "published",
+  "name": "Toshiba 43C350NT 43型電視",
+  "english_name": "TOSHIBA REGZA 43-inch 4K Google TV LCD Display 43C350NT",
+  "summary": "便宜小電視就還是Toshiba 43\"",
+  "long_description": "便宜小電視就還是Toshiba 43\"",
+  "llm_description": "## 快速判斷\n\nTOSHIBA 東芝 REGZA 43C350NT 是 43 型 4K LED 液晶顯示器，主打 Google TV 串流介面與入門價位帶常見的完整電視功能。PChome 商品頁標示為 Google TV、4K、60Hz，並列出 VRR、ALLM、Game Bar、畫質銳化與清晰度增強等賣點；因此它比較適合臥室、小客廳、租屋處或第二台電視，而不是追求高更新率、Mini LED／OLED 黑位或進階 HDR 表現的影音玩家。\n\n## 重要規格\n\n- 型號：43C350NT；PChome 商品編號：DPADO5-1900I0ZHE。\n- 類型與尺寸：43 型 LED 液晶顯示器。\n- 解析度與更新率：4K、60Hz。\n- 智慧平台：Google TV，適合直接使用串流影音 App 與 Google 內容推薦。\n- 遊戲相關：通路頁列出支援 VRR、ALLM 與 Game Bar；未查得可文字驗證的 HDMI 版本與輸入延遲數據。\n- 認證與保固：BSMI R3A020、NCC CCAH21Y10890T0；PChome 規格頁標示 3 年保固。\n\n## 優點與限制\n\n- 優點：43 型 4K 尺寸適合中小空間；Google TV 降低外接串流盒需求；通路頁可見基本安裝與大家電配送資訊。\n- 優點：PChome 頁面標示日本精細調教、畫質銳化、字更平滑、清晰度增強，定位在一般電視節目、串流與日常觀看。\n- 限制：60Hz 是入門 4K TV 常見規格，不適合以 120Hz／144Hz 高更新率為核心需求的遊戲場景。\n- 限制：未在可文字查證來源找到亮度、分區背光、HDMI 數量、聲道瓦數等完整規格；若要接多台遊戲主機、Soundbar 或追求 HDR 峰值亮度，仍需向官方或賣場確認。\n\n## 評測與使用者回饋\n\n- PChome 商品頁顯示 4.8／5、共 89 則評價。可見留言多提到配送與安裝速度、工程人員協助、商品狀況良好；公開頁面可見評論較少深入討論面板均勻性、HDR 或遊戲延遲。\n- 通路價格同時顯示網路價 9,999 元與活動折扣價 8,888 元；實際結帳價可能依活動、折價券與檔期變動。\n\n## 適合誰／不適合誰\n\n- 適合：需要 43 型 4K、內建 Google TV、以串流影片與一般電視觀看為主的使用者。\n- 不適合：需要 120Hz 以上、進階 HDR、Mini LED／OLED 對比、或已明確需要多組 HDMI 2.1 裝置的人。\n\n## 參考來源\n\n- [PChome 24h 商品頁與規格／評價](https://24h.pchome.com.tw/prod/DPADO5-1900I0ZHE)\n- [TOSHIBA TV 台灣官方型號頁](https://toshiba-tv.com/tw/43c350nt)",
+  "category_id": "av-theater",
+  "tag_ids": ["toshiba", "display"],
+  "image_file": "2026-06-19-toshiba-43c350nt.jpg",
+  "image_url": null,
+  "model_numbers": ["43C350NT"],
+  "search_aliases": [
+    "TOSHIBA 東芝 REGZA 43型4K Google TV液晶顯示器 43C350NT",
+    "TOSHIBA 東芝 REGZA 43吋4K Google TV液晶螢幕顯示器 43C350NT",
+    "REGZA 43C350NT",
+    "東芝 43C350NT",
+    "DPADO5-1900I0ZHE"
+  ],
+  "reference_url": "https://24h.pchome.com.tw/prod/DPADO5-1900I0ZHE",
+  "offers": [
+    {
+      "channel_id": "pchome",
+      "url": "https://24h.pchome.com.tw/prod/DPADO5-1900I0ZHE",
+      "price_text": "9999",
+      "price": {
+        "amount": 9999,
+        "currency": "TWD",
+        "unit": "each",
+        "label": null
+      },
+      "checked_at": "2026-06-19T00:00:00+08:00"
+    }
+  ],
+  "created_at": "2026-06-19T00:00:00+08:00",
+  "updated_at": "2026-06-19T00:00:00+08:00",
+  "published_at": "2026-06-19T00:00:00+08:00",
+  "unpublished_at": null,
+  "archived_at": null
+}

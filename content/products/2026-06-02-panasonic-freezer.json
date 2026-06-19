@@ -1,13 +1,23 @@
 {
   "id": "2026-06-02-panasonic-freezer",
-  "status": "published",
-  "name": "Panasonic 冷凍櫃",
-  "english_name": "Panasonic Freezer",
+  "status": "archived",
+  "name": "Panasonic 242L 冷凍櫃",
+  "english_name": "Panasonic NR-FZ250A-S 242L Upright Freezer",
   "summary": "這台跟普通的冰箱差不多大，買的時候要注意一下要放哪",
   "long_description": "這台跟普通的冰箱差不多大，買的時候要注意一下要放哪",
-  "llm_description": "",
-  "search_aliases": [],
-  "model_numbers": [],
+  "llm_description": "## 快速判斷\n\nPanasonic NR-FZ250A-S 是國際牌 242L 單門直立式冷凍櫃，定位是家用備用冷凍空間，不是小型桌上型冷凍櫃。查證時，原 PChome offer 頁仍可開啟商品標題與 metadata，但頁面內部狀態顯示 soft404，且可見內容主要導向其他冷凍櫃；Panasonic 台灣松下官方購物商城同型號頁面也顯示「售完！貨到通知我」，因此此內容已封存。\n\n## 重要規格\n\n- 型號：NR-FZ250A-S。\n- 類型：單門直立式冷凍櫃，右開門。\n- 有效容積：242L。\n- 官方商城列出年耗電量 300 度，特色包含分層透明抽屜與附簡易安裝。\n- 第三方賣場規格列出尺寸約高 1722 × 寬 595 × 深 670 mm、110V／60Hz、定頻馬達、R600a 環保冷媒、全機保固 1 年、壓縮機保固 5 年。\n- PChome metadata 另標示門未關警示音、自動除霜、冷凍／冷藏切換功能與 5 段溫度調控面板。\n\n## 選購與安裝注意\n\n- 機身高度超過 1.7 公尺，接近一台窄型冰箱；購買前需要先量放置位置、門寬、電梯／樓梯動線與散熱空間。\n- 242L 容量適合大量冷凍食材、備餐或家中主冰箱冷凍室不足的情境；若只是少量冰品或短期存放，體積與耗電可能過大。\n- 定頻機種通常不如變頻新款在節能與運轉聲表現上有彈性；若仍要找同容量級距，建議另查目前在售的變頻直立式冷凍櫃。\n\n## 評測與使用者回饋\n\n公開長篇評測不多。Mobile01 有使用者討論 NR-FZ250A-S 的門開關／門未關警示音問題：其中一位使用者描述箱門開關角度導致蜂鳴器持續響，後續回覆提到可透過上方螺絲調整；同串也有使用者詢問運轉聲是否偏吵。這些是零散個案，不足以代表所有機器，但可作為驗收與安裝時需要現場確認的檢查項目。\n\n## 參考來源\n\n- [Panasonic 台灣松下官方購物商城：NR-FZ250A-S](https://pstw.panasonic.com.tw/Shop/product/detail/GO6SCTS5Z6L6OLEQJFJ9/NR-FZ250A-S)\n- [PChome 24h 原 offer 頁](https://24h.pchome.com.tw/prod/DPAC1T-A900ALMUG)\n- [QKShopping 規格頁](https://www.qkshopping.com.tw/product/nr-fz250a-s/)\n- [Mobile01 使用者討論](https://www.mobile01.com/topicdetail.php?f=729&t=6375197)",
+  "search_aliases": [
+    "Panasonic 國際牌 242公升直立式冷凍櫃",
+    "國際牌冷凍櫃242公升",
+    "NR-FZ250A-S",
+    "FZ250A",
+    "直立式冷凍櫃",
+    "冷凍冰箱"
+  ],
+  "model_numbers": [
+    "NR-FZ250A-S",
+    "NR-FZ250A"
+  ],
   "offers": [
     {
       "channel_id": "pchome",
@@ -23,17 +33,17 @@
     }
   ],
   "image_url": null,
-  "category_id": "major-appliance",
+  "category_id": "kitchen-appliance",
   "tag_ids": [
     "kitchen",
     "panasonic",
     "refrigeration"
   ],
-  "reference_url": "https://www.facebook.com/1630614087/posts/pfbid02oKqtivtsPk5GdtoUW5WZciD43s3NJQRAsn8QG3j3CU8YpV8awbyMUrLXZ52yPiCQl/",
+  "reference_url": "https://pstw.panasonic.com.tw/Shop/product/detail/GO6SCTS5Z6L6OLEQJFJ9/NR-FZ250A-S",
   "created_at": "2026-06-02T00:00:00+08:00",
-  "updated_at": "2026-06-02T00:00:00+08:00",
+  "updated_at": "2026-06-19T00:00:00+08:00",
   "published_at": "2026-06-02T00:00:00+08:00",
   "unpublished_at": null,
-  "archived_at": null,
+  "archived_at": "2026-06-19T00:00:00+08:00",
   "image_file": "2026-06-02-panasonic-freezer.jpg"
 }

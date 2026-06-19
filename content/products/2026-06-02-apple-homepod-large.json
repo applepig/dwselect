@@ -1,13 +1,25 @@
 {
   "id": "2026-06-02-apple-homepod-large",
   "status": "published",
-  "name": "Homepod（大）",
-  "english_name": "Apple HomePod Large",
+  "name": "HomePod（第 2 代）",
+  "english_name": "Apple HomePod (2nd generation)",
   "summary": "新的Apple TV可以把Homepod拿來當電視喇叭，兩萬多塊範圍我覺得很難有對手",
   "long_description": "新的Apple TV可以把Homepod拿來當電視喇叭，兩萬多塊範圍我覺得很難有對手",
-  "llm_description": "",
-  "search_aliases": [],
-  "model_numbers": [],
+  "llm_description": "## 快速判斷\n\nApple HomePod（第 2 代）是 Apple 的全尺寸智慧喇叭，定位在高傳真音樂播放、Siri 智慧家庭中樞，以及搭配 Apple TV 4K 的家庭劇院音訊。它最適合已經使用 iPhone、iPad、Apple Music、Apple TV 4K 或 HomeKit／Matter 配件的使用者；如果主要使用 Spotify、Tidal、YouTube Music，或想把喇叭當一般藍牙／有線輸入喇叭，限制會比較明顯。\n\n目前這筆 offer 指向 PChome 的「Apple 蘋果 HomePod-白色 二入組」頁面；二入組可用於同型號 HomePod stereo pair，但建立立體聲組合必須是兩部相同機型。\n\n## 重要規格\n\n- 官方產品：Apple HomePod（第 2 代），顏色為午夜色、白色。\n- 尺寸與重量：寬 142 mm、高 168 mm、重 2.3 kg。\n- 音訊硬體：4 吋長衝程低音喇叭、五個號角式高音喇叭陣列、低頻校準麥克風、四麥克風遠距 Siri。\n- 音訊功能：即時運算調音、室內空間感測、AirPlay 多室音訊、同型號立體聲組合、搭配 Apple TV 4K 時支援杜比全景聲／空間音訊。\n- 智慧家庭：可作為 HomeKit／Matter 家庭中樞，支援 Thread 網路技術、溫度與濕度感測、煙霧與一氧化碳警報聲音辨識。\n- 無線與系統需求：802.11n Wi‑Fi、Bluetooth 5.0、Ultra Wideband 裝置距離感測；設定需要相容 iPhone 或 iPad 與 Wi‑Fi 網際網路。\n- 輸入限制：官方音訊來源以 Apple Music、iTunes 購買內容、第三方音樂服務與 AirPlay 為主；沒有 3.5 mm、HDMI、光纖等實體音訊輸入。\n\n## 評測與使用者回饋重點\n\n- What Hi‑Fi? 評測認為 HomePod 2 的聲音自然、扎實且有活力，播放 Atmos 內容時空間感明顯，做工也很完整；但也指出它仍主要適合 Apple 使用者，Spotify、Tidal 等服務不能像 Apple Music 一樣完整用 Siri 控制，部分競品有更直接的聲音投射。\n- 評測也提到，如果預算允許，兩顆 HomePod 組成立體聲時，重量感、結像與空間感會比單顆更明顯；這與二入組賣場頁面的使用情境相符。\n- 常見限制是生態系依賴：非 Apple 裝置、非 Apple Music 串流服務、或需要傳統藍牙配對／有線輸入的場景，不是它的強項。\n\n## 適合誰／不適合誰\n\n- 適合：Apple Music 使用者、Apple TV 4K 使用者、HomeKit／Matter 智慧家庭使用者、想用兩顆同型號喇叭建立簡潔 stereo pair 的客廳或書房。\n- 不適合：以 Android／Windows 為主、需要一般藍牙喇叭用途、需要有線輸入、或主要透過 Spotify／Tidal 語音點播的人。\n\n## 參考來源\n\n- [Apple 台灣 HomePod（第 2 代）技術規格](https://www.apple.com/tw/homepod-2nd-generation/specs/)\n- [Apple Support：Identify your HomePod model](https://support.apple.com/en-us/101609)\n- [EveryMac：Apple HomePod 2nd Gen A2825 specs](https://everymac.com/systems/apple/homepod/specs/apple-homepod-2nd-gen-smart-speaker-a2825-specs.html)\n- [What Hi‑Fi?：Apple HomePod 2 review](https://www.whathifi.com/reviews/apple-homepod-2)\n- [RTINGS：Apple HomePod (2nd generation) Review](https://www.rtings.com/speaker/reviews/apple/homepod-2nd-generation)",
+  "search_aliases": [
+    "HomePod 2",
+    "HomePod 第 2 代",
+    "Apple HomePod 2nd generation",
+    "Apple HomePod 白色二入組",
+    "Apple 智慧音箱",
+    "AirPlay 2 喇叭",
+    "Apple TV 4K HomePod"
+  ],
+  "model_numbers": [
+    "A2825",
+    "AudioAccessory6,1",
+    "EMC 8208"
+  ],
   "offers": [
     {
       "channel_id": "pchome",
@@ -28,9 +40,9 @@
     "apple",
     "speaker"
   ],
-  "reference_url": "https://www.facebook.com/applepig/posts/pfbid0Nrstr8AQMc2kBqbJLvqXNZ1LJzQxEMRrjrC13RRukbHTsBNSg8YoEpvVRJXBHD8il",
+  "reference_url": "https://www.apple.com/tw/homepod-2nd-generation/specs/",
   "created_at": "2026-06-02T00:00:00+08:00",
-  "updated_at": "2026-06-02T00:00:00+08:00",
+  "updated_at": "2026-06-19T00:00:00+08:00",
   "published_at": "2026-06-02T00:00:00+08:00",
   "unpublished_at": null,
   "archived_at": null,

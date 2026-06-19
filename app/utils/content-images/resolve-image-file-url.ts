@@ -2,6 +2,8 @@ export type ContentImageDirectory = 'products' | 'guides'
 
 const IMAGE_FILE_PATTERN = /^[^./\\/?#"][^\\/?#"]*\.(jpg|jpeg|png|webp|gif|avif)$/
 
+// 回傳 Nuxt Image local source path（對應 image.dir='../content' 下的 content/{dir}/images/{file}）。
+// 不再轉成 generated WebP 檔名——最佳化交給 <NuxtImg>／IPX，這裡只給來源路徑。
 export function resolveImageFileUrl(image_file: string | null | undefined, image_directory: ContentImageDirectory): string | null {
   if (image_file === null || image_file === undefined) {
     return null
@@ -13,11 +15,7 @@ export function resolveImageFileUrl(image_file: string | null | undefined, image
     throw new Error(`Invalid image_file: ${image_file}`)
   }
 
-  return `/images/${image_directory}/${getOptimizedImageFileName(normalized_image_file)}`
-}
-
-function getOptimizedImageFileName(image_file: string): string {
-  return `${image_file.replace(/\.[^.]+$/, '')}.webp`
+  return `/${image_directory}/images/${normalized_image_file}`
 }
 
 function normalizeImageFile(image_file: string): string {

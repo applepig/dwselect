@@ -1,13 +1,25 @@
 {
   "id": "2026-06-02-ohashi-koshihikari-rice",
   "status": "published",
-  "name": "大橋牌越光米",
-  "english_name": "Ohashi Koshihikari Rice",
+  "name": "大橋牌 CAS 越光米",
+  "english_name": "Big Bridge Rice CAS Koshihikari Rice 1 kg × 8",
   "summary": "他們每年新米都會有這種8包1kg的禮盒，小包裝就比較不用怕米潮掉",
   "long_description": "他們每年新米都會有這種8包1kg的禮盒，小包裝就比較不用怕米潮掉",
-  "llm_description": "",
-  "search_aliases": [],
-  "model_numbers": [],
+  "llm_description": "## 快速判斷\n\n大橋牌 CAS 越光米是台灣產白米商品，常見賣場規格為 1 kg × 8 包，總重量 8 kg。PChome 2026 一期頁面標示「日本原種臺灣栽培、純度 100%」與「大橋稻米產銷契作集團產區」，momo 同款頁則列出成分、產地、負責廠商、食品業者登錄字號與產品責任險等食品標示資訊。\n\n原本的 PChome offer URL 仍保留在商品資料中；研究時該 2023 二期商品 API 回傳空陣列，頁面主要導向 2026 一期同款預購商品。購買前需要確認原連結是否仍可實際下單，或改由同款現行頁面比價。\n\n## 重要規格與保存\n\n- 規格：1 kg × 8 包，總重量 8 kg；1 kg 分包比單一大包裝更方便分批開封與保存管理。\n- 食品標示：momo 同款頁標示內容物為白米、食品添加物為無、原產地為台灣。\n- 保存期限：PChome 2026 一期頁標示保存期限 365 日；PChome 與 momo 頁面皆標示以消費者收受日起算至少距有效日期前 91 日以上。\n- 負責廠商：米屋智農股份有限公司，食品業者登錄字號 B-182786909-00000-8，產品責任險為新光產物保險股份有限公司 130210AKP0000521。\n- 預購限制：momo 2026 一期頁標示預購出貨區間為 2026/06/29～2026/07/09，並提醒農產品可能因氣候與採收狀況調整出貨日期；PChome 2026 一期頁標示為新米直送並附年度贈品。\n\n## 購買與價格觀察\n\n- 既有 offer 的價格文字保留為使用者提供的 `125/kg`。\n- 研究時 PChome 2026 一期同款頁顯示售價 NT$999，換算約 NT$125/kg；momo 同款頁顯示促銷價 NT$999、活動折扣後 NT$809，活動價格與折扣條件可能隨檔期變動。\n- 原 PChome 2023 二期 offer URL 的商品 API 回空，但頁面仍保留舊商品 metadata，並露出 2026 一期同款推薦。\n\n## 評測與使用者回饋\n\n- momo 同款商品頁顯示 4.9/5、20 則評價、總銷量 >100。實際檢查評論 tab、DOM、network 與 `getGoodsComment` API 後，API 只回傳前 2 則個別評論，嘗試加入 page／offset／limit 參數仍回同一批資料。\n- 可讀的 2 則 momo 評論皆為 5 星：一則提到包裝完整，另一則提到小包裝有助保持新鮮，並表示若口味符合期待會回購。樣本數很小，僅能作為可見評論摘要，不宜視為完整評價分布。\n- PChome 原頁與 2026 一期頁未露出可讀的商品評論區或評分 widget；可查證內容主要是商品標題、價格、規格與圖片。\n\n## 適合誰／注意事項\n\n- 適合固定消耗白米、希望以 1 kg 分包降低每次開封量的家庭或辦公室。\n- 若需要即期最低單價，需注意不同通路的活動折扣、折價券、預購出貨日與年度贈品版本可能不同。\n- 若重視來源與食品標示，應以現行商品頁上的食品業者登錄、責任險、保存期限與出貨批次為準。\n\n## 參考來源\n\n- [PChome 原 offer 頁](https://24h.pchome.com.tw/prod/DBBY0M-A900GMBY7)\n- [PChome 2026 一期同款頁](https://24h.pchome.com.tw/prod/DBBY1D-A900JYC33)\n- [momo 2026 一期同款頁](https://www.momoshop.com.tw/goods/GoodsDetail.jsp?i_code=14452508)",
+  "search_aliases": [
+    "大橋 CAS 越光米",
+    "大橋越光米",
+    "大橋牌 CAS越光米 1KG*8包",
+    "2026一期新米預購 大橋越光米",
+    "Ohashi Koshihikari Rice",
+    "Big Bridge Rice Koshihikari",
+    "米屋智農 大橋牌"
+  ],
+  "model_numbers": [
+    "DBBY0M-A900GMBY7",
+    "DBBY1D-A900JYC33",
+    "momo 14452508"
+  ],
   "offers": [
     {
       "channel_id": "pchome",
@@ -29,7 +41,7 @@
     "ohashi",
     "rice"
   ],
-  "reference_url": "https://www.facebook.com/applepig/posts/pfbid037AcHMyNMrZPFBvDg7GgQbquN8j2UNmPb1mvkM7YV9rJKuv8Us5BvASrcG8zzxRqjl",
+  "reference_url": "https://24h.pchome.com.tw/prod/DBBY1D-A900JYC33",
   "created_at": "2026-06-02T00:00:00+08:00",
   "updated_at": "2026-06-02T00:00:00+08:00",
   "published_at": "2026-06-02T00:00:00+08:00",

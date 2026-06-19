@@ -17,12 +17,13 @@
         class="product-image-tile"
         :style="{ 'view-transition-name': `product-image-${product.id}` }"
       >
-        <img
+        <NuxtImg
           :src="product.image_url"
           :alt="product.name"
           class="product-image"
           loading="lazy"
-        >
+          format="webp"
+        />
       </span>
 
       <span class="product-card-body">

@@ -1,6 +1,7 @@
 import MiniSearch, { type SearchResult } from 'minisearch'
 
 import { compareGuides } from '../content/compare-guides.ts'
+import { compareLinks } from '../content/compare-links.ts'
 import { compareProducts } from '../content/compare-products.ts'
 import { extractContentId } from '../content/extract-content-id.ts'
 import { getPrimaryOffer } from '../content/primary-offer.ts'
@@ -37,6 +38,10 @@ export type SearchDocument = {
   channel_label?: string
   published_at: string | null
   description?: string
+  llm_description?: string
+  search_aliases_text?: string
+  model_numbers_text?: string
+  taxonomy_aliases_text?: string
   search_text?: string
 }
 
@@ -97,11 +102,28 @@ const SEARCH_FIELDS: Array<keyof SearchDocument> = [
   'title',
   'summary',
   'description',
+  'llm_description',
+  'search_aliases_text',
+  'model_numbers_text',
+  'taxonomy_aliases_text',
   'search_text',
   'category_labels',
   'tag_labels',
   'channel_label',
 ]
+const SEARCH_FIELD_BOOSTS: Partial<Record<keyof SearchDocument, number>> = {
+  title: 8,
+  tag_labels: 5,
+  description: 3,
+  llm_description: 2,
+  summary: 1.5,
+  search_aliases_text: 1,
+  model_numbers_text: 1,
+  taxonomy_aliases_text: 1,
+  search_text: 1,
+  category_labels: 1,
+  channel_label: 1,
+}
 const SEARCH_STORE_FIELDS: Array<keyof SearchDocument> = [
   'document_id',
   'content_id',
@@ -144,7 +166,7 @@ export function getSearchDocuments(
       .map((guide) => mapGuideToSearchDocument(guide, labels, tag_aliases)),
     ...content.links
       .filter((link) => link.status === 'published')
-      .toSorted((left_link, right_link) => left_link.sort_order - right_link.sort_order)
+      .toSorted(compareLinks)
       .map((link) => mapLinkToSearchDocument(link, labels, tag_aliases)),
   ]
 }
@@ -185,7 +207,7 @@ export function querySearchIndex(
     return []
   }
 
-  const results = mini_search.search(normalized_query, { prefix: true, fuzzy: 0.2 })
+  const results = mini_search.search(normalized_query, { prefix: true, fuzzy: 0.2, boost: SEARCH_FIELD_BOOSTS })
 
   if (limit === undefined) {
     return results.map(mapSearchResultToSuggestion)
@@ -209,21 +231,20 @@ function createSearchIndex() {
   return new MiniSearch<SearchDocument>(getSearchOptions())
 }
 
-type SearchDocumentBase = Omit<SearchDocument, 'description' | 'search_text'>
+type SearchOnlyFieldName = 'description' | 'llm_description' | 'search_aliases_text' | 'model_numbers_text' | 'taxonomy_aliases_text' | 'search_text'
+type SearchDocumentBase = Omit<SearchDocument, SearchOnlyFieldName>
 
-// description/search_text 必須維持 non-enumerable：供 MiniSearch 索引，但不被序列化進 document summary。
+// Search-only fields 必須維持 non-enumerable：供 MiniSearch 索引，但不被序列化進 document summary。
 function attachSearchFields(
   document: SearchDocumentBase,
-  fields: { description: string, search_text: string },
+  fields: Record<SearchOnlyFieldName, string>,
 ): SearchDocument {
-  Object.defineProperty(document, 'description', {
-    value: fields.description,
-    enumerable: false,
-  })
-  Object.defineProperty(document, 'search_text', {
-    value: fields.search_text,
-    enumerable: false,
-  })
+  for (const [field_name, field_value] of Object.entries(fields)) {
+    Object.defineProperty(document, field_name, {
+      value: field_value,
+      enumerable: false,
+    })
+  }
 
   return document as SearchDocument
 }
@@ -256,13 +277,11 @@ function mapProductToSearchDocument(
 
   return attachSearchFields(document, {
     description: product.long_description,
-    search_text: [
-      product.english_name,
-      product.llm_description,
-      ...product.search_aliases,
-      ...product.model_numbers,
-      ...getTagAliases(product.tag_ids, tag_aliases),
-    ].join(' '),
+    llm_description: product.llm_description,
+    search_aliases_text: product.search_aliases.join(' '),
+    model_numbers_text: product.model_numbers.join(' '),
+    taxonomy_aliases_text: getTagAliases(product.tag_ids, tag_aliases).join(' '),
+    search_text: product.english_name,
   })
 }
 
@@ -288,8 +307,12 @@ function mapGuideToSearchDocument(
   }
 
   return attachSearchFields(document, {
-    description: guide.summary,
-    search_text: getTagAliases(guide.tag_ids, tag_aliases).join(' '),
+    description: '',
+    llm_description: '',
+    search_aliases_text: '',
+    model_numbers_text: '',
+    taxonomy_aliases_text: getTagAliases(guide.tag_ids, tag_aliases).join(' '),
+    search_text: '',
   })
 }
 
@@ -315,8 +338,12 @@ function mapLinkToSearchDocument(
   }
 
   return attachSearchFields(document, {
-    description: link.summary,
-    search_text: getTagAliases(link.tag_ids, tag_aliases).join(' '),
+    description: '',
+    llm_description: '',
+    search_aliases_text: '',
+    model_numbers_text: '',
+    taxonomy_aliases_text: getTagAliases(link.tag_ids, tag_aliases).join(' '),
+    search_text: '',
   })
 }
 

@@ -1,6 +1,6 @@
 {
   "id": "2026-06-02-msi-desktop-pc",
-  "status": "published",
+  "status": "archived",
   "name": "MSI桌上型",
   "english_name": "MSI Desktop PC",
   "summary": "i5 / 32G / 1TB / 4060，還三年保固",
@@ -19,7 +19,7 @@
         "unit": "each",
         "label": null
       },
-      "checked_at": "2026-06-02T00:00:00+08:00"
+      "checked_at": "2026-06-18T00:00:00+08:00"
     }
   ],
   "image_url": null,
@@ -30,9 +30,9 @@
   ],
   "reference_url": null,
   "created_at": "2026-06-02T00:00:00+08:00",
-  "updated_at": "2026-06-02T00:00:00+08:00",
+  "updated_at": "2026-06-18T00:00:00+08:00",
   "published_at": "2026-06-02T00:00:00+08:00",
   "unpublished_at": null,
-  "archived_at": null,
+  "archived_at": "2026-06-18T00:00:00+08:00",
   "image_file": "2026-06-02-msi-desktop-pc.jpg"
 }

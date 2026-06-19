@@ -1,13 +1,25 @@
 {
   "id": "2026-06-02-battery-charger",
   "status": "published",
-  "name": "電池充電器",
-  "english_name": "Battery Charger",
+  "name": "KANDO C4 3號／4號鎳氫 LCD 四槽充電器",
+  "english_name": "KANDO C4 Ni-MH LCD 4-Slot Battery Charger",
   "summary": "這個倒是可以不用找IKEA，這顆用豆腐頭輸入的，反而比插牆上好用",
   "long_description": "這個倒是可以不用找IKEA，這顆用豆腐頭輸入的，反而比插牆上好用",
-  "llm_description": "",
-  "search_aliases": [],
-  "model_numbers": [],
+  "llm_description": "## 快速判斷\n\nKANDO C4 是 KAMERA／佳美能官方販售的 3 號 AA、4 號 AAA 鎳氫充電電池用四槽充電器。它的重點是四槽可單顆充電、LCD 電量顯示，以及以 DC 5V/2A USB 電源供電，適合滑鼠、遙控器、玩具或小型電子用品使用 AA／AAA Ni-MH 充電電池的情境。\n\n## 重要規格\n\n- 品牌／系列：KANDO 感動；官方商店與 PChome 標示為 KAMERA／佳美能販售。\n- 型號：C4；商品編號：BCGKAMLCDDUA004；PChome 商品 ID：DCABC4-A900BOW1X。\n- 適用電池：3 號 AA、4 號 AAA 鎳氫充電電池；官方頁未標示支援鋰電池、鹼性電池或其他尺寸。\n- 槽數與充電方式：四槽，官方標示可支援單顆充電。\n- 輸入：DC 5V/2A，可搭配 USB 電源來源；官方頁提到可接行動電源、車用 USB 充電器、筆電等 USB 輸出設備。\n- 輸出：1.48V／0.8A × 4。\n- 顯示：LCD 液晶電量顯示。\n- 尺寸與重量：本體約 90 × 55 × 30 mm，淨重約 71g（不含配件）。\n- 配件：C4 充電器 × 1、充電線 × 1、說明書 × 1；不含電池。\n- 產地與保固：中國製，官方標示保固 6 個月。\n\n## 優點與限制\n\n- 四槽設計加上單槽充電，適合一次充 1～4 顆 AA／AAA Ni-MH 電池，不需要湊滿成對。\n- USB 5V 供電讓它可接行動電源、車充或其他 USB 電源，但官方規格只列 DC 5V/2A，未明確標示充電器本體端子的接頭型式。\n- LCD 顯示有助於快速查看充電狀態，但官方頁未提供每槽獨立資訊細節、充滿判定邏輯或完整充電曲線。\n- 安全機制方面，官方描述為內部智慧保護晶片，充電完成後自動轉涓流；未列出溫控、短路、反接或壞電池偵測等更細項保護規格。\n- 此賣場版本不含充電電池，若需要 AA／AAA 電池需另外購買或選擇套裝組。\n\n## 評測與使用者回饋\n\n- 官方頁顯示此單品已銷售 45 件，但未提供獨立使用者評論內容。\n- 本次未查到可驗證的第三方評測；目前可確認資訊主要來自 KAMERA 官方規格頁與 PChome 商品 API。\n\n## 參考來源\n\n- [KAMERA 官方產品頁：KANDO C4 3號／4號鎳氫液晶四槽充電器](https://www.kamera.com.tw/products/bcgkamlcddua004)\n- [PChome 商品頁：Kamera 佳美能 3號／4號鎳氫液晶四槽充電器 C4](https://24h.pchome.com.tw/prod/DCABC4-A900BOW1X)",
+  "search_aliases": [
+    "KANDO C4",
+    "Kamera C4",
+    "佳美能 C4",
+    "感動 C4",
+    "3號4號鎳氫液晶四槽充電器",
+    "AA AAA Ni-MH charger",
+    "BCGKAMLCDDUA004"
+  ],
+  "model_numbers": [
+    "C4",
+    "BCGKAMLCDDUA004",
+    "DCABC4-A900BOW1X"
+  ],
   "offers": [
     {
       "channel_id": "pchome",
@@ -19,7 +31,7 @@
         "unit": "each",
         "label": null
       },
-      "checked_at": "2026-06-02T00:00:00+08:00"
+      "checked_at": "2026-06-18T00:00:00+08:00"
     }
   ],
   "image_url": null,
@@ -27,9 +39,9 @@
   "tag_ids": [
     "power-charging"
   ],
-  "reference_url": null,
+  "reference_url": "https://www.kamera.com.tw/products/bcgkamlcddua004",
   "created_at": "2026-06-02T00:00:00+08:00",
-  "updated_at": "2026-06-02T00:00:00+08:00",
+  "updated_at": "2026-06-18T00:00:00+08:00",
   "published_at": "2026-06-02T00:00:00+08:00",
   "unpublished_at": null,
   "archived_at": null,

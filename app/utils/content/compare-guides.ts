@@ -3,10 +3,10 @@ import { compareNullableTimestampDesc } from './compare-nullable-timestamp-desc.
 import { compareText } from './compare-text.ts'
 
 export function compareGuides(left_guide: Guide, right_guide: Guide): number {
-  const published_at_order = compareNullableTimestampDesc(left_guide.published_at, right_guide.published_at)
+  const updated_at_order = compareNullableTimestampDesc(left_guide.updated_at, right_guide.updated_at)
 
-  if (published_at_order !== 0) {
-    return published_at_order
+  if (updated_at_order !== 0) {
+    return updated_at_order
   }
 
   return compareText(left_guide.title, right_guide.title)

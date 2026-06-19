@@ -2,12 +2,21 @@
   "id": "2026-06-02-elac-connex-dcb41",
   "status": "published",
   "name": "ELAC ConneX DCB41",
-  "english_name": "ELAC ConneX DCB41",
+  "english_name": "ELAC Debut ConneX DCB41 Powered Speakers",
   "summary": "這是有HDMI ARC的主動式喇叭，最適合拿來當電視喇叭",
   "long_description": "這是有HDMI ARC的主動式喇叭，最適合拿來當電視喇叭",
-  "llm_description": "",
-  "search_aliases": [],
-  "model_numbers": [],
+  "llm_description": "## 快速判斷\n\nELAC Debut ConneX DCB41 是一組小型主動式書架喇叭系統，由一顆內建擴大機的主喇叭搭配一顆被動副喇叭。它的定位不是網路串流喇叭，而是以 HDMI ARC、USB、光纖、RCA line／phono 與 Bluetooth aptX 把電視、電腦、黑膠唱盤與手機集中到同一組 2 聲道喇叭。\n\n## 重要規格\n\n- 型號：DCB41；官方產品系列為 Debut ConneX。\n- 喇叭形式：低音反射式主動喇叭系統，一顆 powered speaker 加一顆 passive speaker。\n- 擴大機功率：50W x 2。\n- 單體：3/4 吋軟半球高音、4-1/2 吋 polypropylene 低音。\n- 頻率響應：66Hz–25kHz（anechoic）、50Hz–25kHz（in-room）。\n- 最大系統輸出：102dB @ 1m；THD 標示為 ≤0.20%，S/N ≥90dB。\n- 輸入：HDMI ARC、USB 24-bit／96kHz、optical、RCA line／phono 可切換、Bluetooth aptX。\n- 輸出與控制：subwoofer out、左右聲道喇叭端子、紅外線遙控器；韌體可透過 USB 更新。\n- 尺寸與重量：每顆約 5-1/2 x 9-5/8 x 8 吋；主喇叭約 7.6 lb，副喇叭約 6.3 lb。\n- 顏色：官方頁列出 Black Ash、Walnut、Royal Blue、Orange；此 PChome offer 標題為橘色一對。\n\n## 優點與限制\n\n- HDMI ARC／CEC 可讓電視遙控器控制音量，對想用傳統左右聲道取代 soundbar 的使用情境較直接。\n- 內建 MM phono preamp，可直接接唱盤；若已使用外接唱放，也可切到 line input。\n- 沒有 Wi-Fi、AirPlay、Chromecast 或內建串流平台；串流主要依賴 Bluetooth 或外接訊源。\n- 後置低音反射埠與後方面板旋鈕代表擺位仍需要留意牆距，音量／輸入旋鈕也不如前置控制直覺。\n- 若要更低頻延伸，可接主動式 subwoofer；內建 XBass 可增強低頻，但評測指出不一定適合所有音樂。\n\n## 評測與使用者回饋\n\n- What Hi-Fi? 2024 更新評測給予 5 星，重點稱讚聲音平衡、有資訊量、功能完整與不挑錄音；主要缺點是沒有音量指示、音量／輸入控制在背面不方便，以及內建 phono stage 表現不如數位輸入。\n- What Hi-Fi? 評測也指出它不像 KEF LSX II 等產品內建 network streaming，需要由外部訊源提供音樂。\n- ecoustics 的產品介紹確認 DCB41 支援 HDMI ARC／CEC、USB 24-bit／96kHz、Bluetooth aptX、switchable phono preamp、subwoofer output，並列出隨附遙控器、HDMI 線、喇叭線、電源線、腳墊與網罩。\n- 原 PChome offer 可開啟並顯示商品標題，但頁面文字未顯示本商品現價，且出現「到貨通知我」狀態；目前不宜把推薦區其他喇叭價格視為本商品售價。\n\n## 參考來源\n\n- [ELAC 官方 Debut ConneX DCB41 產品頁](https://elac.com/dcb41)\n- [What Hi-Fi?：Elac Debut ConneX DCB41 review](https://www.whathifi.com/reviews/elac-debut-connex-dcb41)\n- [ecoustics：ELAC Debut ConneX Powered Loudspeakers](https://www.ecoustics.com/products/elac-debut-connex-dcb41/)\n- [PChome 24h 原 offer](https://24h.pchome.com.tw/prod/DMAAH8-A900HVR8U)",
+  "search_aliases": [
+    "ELAC Debut ConneX DCB41",
+    "ELAC DCB41",
+    "Debut ConneX",
+    "ConneX DCB41",
+    "HDMI ARC 主動式喇叭",
+    "主動式書架喇叭"
+  ],
+  "model_numbers": [
+    "DCB41"
+  ],
   "offers": [
     {
       "channel_id": "pchome",
@@ -15,8 +24,8 @@
       "price_text": "大概16000",
       "price": {
         "amount": null,
-        "currency": null,
-        "unit": null,
+        "currency": "TWD",
+        "unit": "each",
         "label": "大概16000"
       },
       "checked_at": "2026-06-02T00:00:00+08:00"
@@ -29,9 +38,9 @@
     "elac",
     "speaker"
   ],
-  "reference_url": null,
+  "reference_url": "https://elac.com/dcb41",
   "created_at": "2026-06-02T00:00:00+08:00",
-  "updated_at": "2026-06-02T00:00:00+08:00",
+  "updated_at": "2026-06-19T00:00:00+08:00",
   "published_at": "2026-06-02T00:00:00+08:00",
   "unpublished_at": null,
   "archived_at": null,

@@ -28,7 +28,7 @@ export function mapProductCardFields(product: Product, labels: TaxonomyLabelReso
   return {
     ...mapProductCardBase(product, labels),
     channel_id: primary_offer.channel_id,
-    price_label: primary_offer.price.label ?? primary_offer.price_text,
+    price_label: primary_offer.price_text,
     tag_labels: product.tag_ids.map((tag_id) => labels.getProductTagLabel(tag_id)),
   }
 }

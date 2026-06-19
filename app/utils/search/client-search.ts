@@ -39,6 +39,10 @@ export async function loadClientSearchIndex() {
   }
 }
 
+export function resetClientSearchIndex() {
+  search_index_promise = null
+}
+
 export async function getClientSearchResults(query: string): Promise<SearchSuggestion[]> {
   if (query.trim() === '') {
     return []

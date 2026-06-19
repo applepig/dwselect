@@ -1,13 +1,27 @@
 {
   "id": "2026-06-02-trusco-trunk-cargo",
   "status": "published",
-  "name": "Trusco 物流箱",
-  "english_name": "TRUSCO Trunk Cargo",
+  "name": "TRUSCO 折疊物流箱",
+  "english_name": "TRUSCO TR-C50B Folding Container 50L",
   "summary": "從日本搬東西回來的好幫手，詳情請看下面參考資料",
   "long_description": "從日本搬東西回來的好幫手，詳情請看下面參考資料",
-  "llm_description": "",
-  "search_aliases": [],
-  "model_numbers": [],
+  "llm_description": "## 快速判斷\n\nTRUSCO TR-C50B 是日本工業用品品牌 TRUSCO 的 50L 級薄型折疊物流箱，Amazon JP 這個 ASIN 對應 50L、滑扣上蓋、藍色系款式；MonotaRO 同系列規格頁則列出多色與 30L／40L／50L／75L 變體。它的定位比較接近可反覆配送、備品管理、露營／工具搬運用的摺疊コンテナ，而不是密封防潮收納箱。\n\n## 重要規格\n\n- 型號：TR-C50B／TRC50B；Amazon ASIN：B002A5VPSO。\n- 容量：51.3L；Amazon 標示約 16.1 gallons。\n- 外寸：約 530 × 366 × 336 mm；有效內寸：約 493 × 335 × 311 mm。\n- 折疊後高度：71 mm，官方／商店說明主打比傳統型折疊時高度最多低 35%，有助於空箱收納與回收運送。\n- 材質：聚丙烯（PP）；Amazon 標示重量約 2.22 kg，最大載重 8 kg。\n- 上蓋：滑動鎖扣上蓋；箱身有シボ加工，主打貼標籤後較容易撕除且較不殘膠。\n- 用途：商品、零件、備品配送與保管；也常被使用者拿來整理倉庫、押入、車載露營用品或工具資材。\n\n## 優點與限制\n\n- 優點：可折疊、可堆疊、有上蓋與滑扣，適合需要多次搬運、回收空箱或統一箱型的場景。\n- 優點：半透明／透明系款式能從外側辨識內容物；藍色或深色款則比較遮蔽內容物。\n- 限制：50L 裝滿後總重量會明顯增加，Amazon 使用者也提到箱體本身約 2 kg 多，搬運時要注意負重。\n- 限制：這類折疊箱不是氣密防水箱；Amazon 評論中有人提醒側面縫隙可能進風或積灰，長期放置怕潮物品時仍需另做防潮。\n- 限制：長時間重壓堆疊時可能逐漸變形；若要放重物，應參考 8 kg 載重與實際堆疊條件。\n\n## 評測與使用者回饋\n\n- Amazon JP 商品頁顯示 4.5／5 星、6,623 筆 global ratings；商品頁可見日本評論多半肯定堅固度、可堆疊、上蓋防塵、折疊後薄、半透明便於找物。\n- 可見 Amazon 評論也提到負面條件：50L 裝滿會很重；折疊結構不等於密封箱；長期上方承重超過約 10 kg 時，下層箱體可能逐漸變形或側面卡合處鬆脫。\n- MonotaRO 同系列頁顯示 33 件評論；可見評論提到活動物品運搬時比紙箱耐用、滑扣上蓋與不殘膠貼標方便，也有人用於工具資材、A4 文件箱或保管部品整理。\n- Amazon 的完整 `/product-reviews/B002A5VPSO` 評論列表在未登入狀態導向 Sign-In；因此上述 Amazon 回饋只根據商品頁可見 top reviews 與評分摘要。\n\n## 參考來源\n\n- [Amazon JP 商品頁：TR-C50B／B002A5VPSO](https://www.amazon.co.jp/dp/B002A5VPSO)\n- [MonotaRO 規格與使用者評論：薄型折りたたみコンテナ（スライドロックフタ付）](https://www.monotaro.com/g/00340211/)\n- [TRUSCO Orange Book 站內搜尋：TR-C50B](https://www.orange-book.com/ja/c/search/result.html?keyword=TR-C50B)",
+  "search_aliases": [
+    "Trusco 物流箱",
+    "TRUSCO Trunk Cargo",
+    "TRUSCO 折りたたみコンテナ",
+    "トラスコ 薄型折りたたみコンテナ",
+    "TR-C50B",
+    "TRC50B",
+    "B002A5VPSO",
+    "50L 折疊收納箱",
+    "滑扣上蓋折疊箱"
+  ],
+  "model_numbers": [
+    "TR-C50B",
+    "TRC50B",
+    "B002A5VPSO"
+  ],
   "offers": [
     {
       "channel_id": "amazonjp",
@@ -28,7 +42,7 @@
     "organizing",
     "trusco"
   ],
-  "reference_url": "https://www.facebook.com/applepig/posts/pfbid0mPFP5y2HqLf9Ew39QFyMv6onqBUevdjA4wKsRUSz6NttNTxDEh2xNKGvUoJqoGrfl",
+  "reference_url": "https://www.monotaro.com/g/00340211/",
   "created_at": "2026-06-02T00:00:00+08:00",
   "updated_at": "2026-06-02T00:00:00+08:00",
   "published_at": "2026-06-02T00:00:00+08:00",

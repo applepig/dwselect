@@ -1,37 +1,45 @@
 {
   "id": "2026-06-02-panasonic-nn-bs607",
   "status": "published",
-  "name": "Panasonic NN-BS607",
-  "english_name": "Panasonic NN BS607",
+  "name": "Panasonic NN-BS607 蒸烘烤微波爐",
+  "english_name": "Panasonic NN-BS607 27L Steam Oven Microwave",
   "summary": "別管什麼小烤箱了，直上水波爐吧",
   "long_description": "別管什麼小烤箱了，直上水波爐吧",
-  "llm_description": "",
-  "search_aliases": [],
-  "model_numbers": [],
+  "llm_description": "## 快速判斷\n\nPanasonic NN-BS607 是 27L 檯面式蒸烘烤微波爐，定位在一台機器整合蒸、烘、烤、微波的廚房家電。它的重點不是單純加熱便當，而是用過熱水蒸氣、紅外線自動感知、旋風微波加熱與 69 道自動料理，覆蓋蒸魚、烘烤、燒烤、加熱與簡易料理。\n\n## 重要規格\n\n- 容量：27L。\n- 烹調模式：4 in 1，支援蒸、烘、烤、微波。\n- 蒸氣功能：過熱水蒸氣。\n- 微波輸出：最高 950W；微波火力 6 段；振盪頻率 2450MHz。\n- 消耗電功率：微波 1150W、燒烤 1220W、烘烤 1220W、蒸氣 1020W。\n- 溫度範圍：官方標示 80℃～250℃低溫烘烤。\n- 自動功能：69 道自動料理、紅外線自動加熱感知、旋風微波加熱、自動清潔行程、電費計算、兒童安全鎖。\n- 尺寸與重量：本體約 347 × 500 × 456mm（高 × 寬 × 深，含把手深度），爐內約 215 × 319 × 350mm，重量約 15.7kg。\n- 配件：雙面烤盤 1 個、方盤 1 個。\n- 電源：AC110V／60Hz。\n\n## 優點與限制\n\n- 主要優點是功能密度高：比單一微波爐多了蒸氣與烘烤能力，比小烤箱多了微波、感測加熱與自動料理。\n- 27L 容量適合希望用一台機器取代微波爐、小烤箱與部分蒸煮工具的人；但若主要需求只是回溫便當，功能與價格都會高於基本微波爐。\n- 15.7kg 與 500mm 寬的機身需要穩固檯面，購買前應確認櫃體深度、上方散熱與開門空間；官方頁另提供安裝空間圖，但本次未逐項轉錄間距數字。\n- 950W 最高微波輸出在官方備註中標示為短時輸出，且會在自動菜單的「飲料」功能中作用，不能直接等同所有微波模式都長時間維持 950W。\n\n## 評測與使用者回饋\n\n- 本次查到的可靠來源以官方規格與 PChome 商品頁為主，未找到可核對的長篇獨立評測。\n- PChome 既有商品頁在 2026-06-19 可開啟，顯示同型號 Panasonic 國際牌 27L 蒸烘烤微波爐 NN-BS607，頁面標示折後價 NT$12,490；同頁也列出 NN-BS807、NN-BS1700 等較高階或較大容量型號，可作為容量與預算比較。\n\n## 適合誰／不適合誰\n\n- 適合：想用一台檯面設備整合微波、蒸氣、燒烤與烘烤，且願意使用自動料理菜單的人。\n- 適合：廚房沒有內嵌烤箱，但需要比基本微波爐更完整調理能力的家庭。\n- 不適合：只需要便當加熱、泡麵加熱或超低預算微波爐的人。\n- 不適合：檯面寬度、深度或承重不足，無法安全放置 15.7kg 機身與預留散熱空間的環境。\n\n## 參考來源\n\n- [Panasonic 官方產品頁](https://www.panasonic.com/tw/consumer/kitchen/microwave/nn-bs607.html)\n- [Panasonic 官方規格頁](https://www.panasonic.com/tw/consumer/kitchen/microwave/nn-bs607.specs.html)\n- [PChome 24h 商品頁](https://24h.pchome.com.tw/prod/DMBJ02-A900HB5FS)",
+  "search_aliases": [
+    "國際牌 NN-BS607",
+    "Panasonic 蒸烘烤微波爐 NN-BS607",
+    "NN-BS607 水波爐",
+    "27L 蒸烘烤微波爐",
+    "過熱水蒸氣微波爐"
+  ],
+  "model_numbers": [
+    "NN-BS607"
+  ],
   "offers": [
     {
       "channel_id": "pchome",
       "url": "https://24h.pchome.com.tw/prod/DMBJ02-A900HB5FS",
-      "price_text": "12900",
+      "price_text": "12490",
       "price": {
-        "amount": 12900,
+        "amount": 12490,
         "currency": "TWD",
         "unit": "each",
         "label": null
       },
-      "checked_at": "2026-06-02T00:00:00+08:00"
+      "checked_at": "2026-06-19T00:00:00+08:00"
     }
   ],
   "image_url": null,
-  "category_id": "small-appliance",
+  "category_id": "kitchen-appliance",
   "tag_ids": [
     "countertop",
     "kitchen",
     "panasonic"
   ],
-  "reference_url": null,
+  "reference_url": "https://www.panasonic.com/tw/consumer/kitchen/microwave/nn-bs607.html",
   "created_at": "2026-06-02T00:00:00+08:00",
-  "updated_at": "2026-06-02T00:00:00+08:00",
+  "updated_at": "2026-06-19T00:00:00+08:00",
   "published_at": "2026-06-02T00:00:00+08:00",
   "unpublished_at": null,
   "archived_at": null,

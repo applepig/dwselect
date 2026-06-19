@@ -1,37 +1,48 @@
 {
   "id": "2026-06-02-mitsubishi-electric-freezer",
   "status": "published",
-  "name": "Mitsubishi 冷凍櫃",
-  "english_name": "Mitsubishi Electric Freezer",
-  "summary": "只是需要稍微擴充冷凍庫的話可以買這台，他身高比較低，上面還可以擺電鍋或水波爐",
-  "long_description": "只是需要稍微擴充冷凍庫的話可以買這台，他身高比較低，上面還可以擺電鍋或水波爐",
-  "llm_description": "",
-  "search_aliases": [],
-  "model_numbers": [],
+  "name": "三菱 144L 直立冷凍櫃",
+  "english_name": "Mitsubishi Electric MF-U14T-W-C 144L Upright Freezer",
+  "summary": "冷凍櫃我推抽屜式的，三菱的很compact，上面還能放微波爐",
+  "long_description": "冷凍櫃我推抽屜式的，三菱的很compact，上面還能放微波爐",
+  "llm_description": "## 快速判斷\n\nMitsubishi Electric MF-U14T-W-C 是 144L 單門直立式冷凍櫃，定位是替家用冰箱補一段獨立冷凍容量，而不是大容量商用冷凍庫。官方主打風扇循環冷流、自動除霜、透明抽屜、3 小時急速冷凍、SIAA 抗菌把手，以及可耐熱 100℃、承重 30kg 的頂層。\n\n## 重要規格\n\n- 型號：MF-U14T-W-C。\n- 類型：直立式冷凍櫃、單門、右開門。\n- 容量：144L。\n- 顏色：純淨白。\n- 外部尺寸：寬 480 × 深 586 × 高 1291 mm；BigGo 彙整頁另列建議安裝空間寬 530 × 深 642 × 高 1340 mm。\n- 重量：36kg。\n- 冷卻／除霜：風扇循環冷流系統，並具自動除霜；官方說明此設計可降低結霜造成的冷凍效能影響。\n- 收納：透明抽屜配置，方便辨識內容物；官方頁未提供抽屜數量的文字規格。\n- 機能：3 小時急速冷凍、SIAA 抗菌把手、100℃ 耐熱頂層且承重 30kg。\n\n## 優點與限制\n\n- 適合需要額外冷凍空間、但不想使用臥式冷凍櫃的人；直立式與抽屜式收納比臥式更容易分層取物。\n- 480mm 寬度與 1291mm 高度對小廚房或家電區較友善，但仍需保留散熱與開門空間。\n- 自動除霜可降低日常維護負擔；若特別在意極低溫、變頻節能或更大容量，應與 200L 以上或變頻直立冷凍櫃比較。\n- Yahoo 使用者評論提到運轉聲音小、體積不佔空間與冷凍效果強；也有評論指出內部沒有照明，這是選購前應確認的限制。\n\n## 評測與使用者回饋\n\n- Yahoo 購物中心同型號頁面顯示 4.9／5，累積 12 則評價；可見文字評論多集中在配送服務、安靜、體積輕巧與冷凍效果。\n- 可見評論數量仍少，且主要來自單一賣場；若要判斷長期耐用度，仍需更多跨通路或長期使用資料。\n\n## 參考來源\n\n- [三菱電機官方產品頁](https://www.mitsubishielectric.com.tw/home/refrigerator/PRODUCT_MF-U14T-W-C.html)\n- [PChome 24h 商品頁](https://24h.pchome.com.tw/prod/DPAC34-A900H86CY)\n- [Yahoo 購物中心同型號頁與使用者評價](https://tw.buy.yahoo.com/gdsale/MITSUBISHI%E4%B8%89%E8%8F%B1-144%E5%85%AC%E5%8D%87-%E5%B0%8F%E5%B7%A7%E5%A4%A7%E5%AE%B9%E9%87%8F-%E7%9B%B4%E7%AB%8B%E5%BC%8F%E5%86%B7%E5%87%8D%E6%AB%83-MF-U14T-W-C-10936688.html)\n- [BigGo 規格與通路價格彙整](https://biggo.com.tw/gp/tw_Mitsubishi_MF-U14T-W-C)",
+  "search_aliases": [
+    "MITSUBISHI 三菱 144公升直立式自動除霜冷凍櫃",
+    "三菱電機 MF-U14T-W-C",
+    "三菱 MF-U14T",
+    "MF-U14T",
+    "MF-U14T-W-C",
+    "三菱 144L 冷凍櫃",
+    "三菱直立式冷凍櫃",
+    "Mitsubishi MF-U14T-W-C"
+  ],
+  "model_numbers": [
+    "MF-U14T-W-C"
+  ],
   "offers": [
     {
       "channel_id": "pchome",
       "url": "https://24h.pchome.com.tw/prod/DPAC34-A900H86CY",
-      "price_text": "12000",
+      "price_text": "11999",
       "price": {
-        "amount": 12000,
+        "amount": 11999,
         "currency": "TWD",
         "unit": "each",
         "label": null
       },
-      "checked_at": "2026-06-02T00:00:00+08:00"
+      "checked_at": "2026-06-19T00:00:00+08:00"
     }
   ],
   "image_url": null,
-  "category_id": "major-appliance",
+  "category_id": "kitchen-appliance",
   "tag_ids": [
     "kitchen",
     "mitsubishi-electric",
     "refrigeration"
   ],
-  "reference_url": "https://www.facebook.com/1630614087/posts/pfbid02oKqtivtsPk5GdtoUW5WZciD43s3NJQRAsn8QG3j3CU8YpV8awbyMUrLXZ52yPiCQl/",
+  "reference_url": "https://www.mitsubishielectric.com.tw/home/refrigerator/PRODUCT_MF-U14T-W-C.html",
   "created_at": "2026-06-02T00:00:00+08:00",
-  "updated_at": "2026-06-02T00:00:00+08:00",
+  "updated_at": "2026-06-19T00:00:00+08:00",
   "published_at": "2026-06-02T00:00:00+08:00",
   "unpublished_at": null,
   "archived_at": null,

@@ -10,6 +10,9 @@ if (!app_url && !process.argv.some((a) => a === 'generate' || a === 'build')) {
 const vite_host = app_url ?? 'dwselect.toybox.local'
 
 const product_routes = buildProductRoutes(fileURLToPath(new URL('./content/products/', import.meta.url)))
+// 監看 content/ 目錄絕對路徑而非 glob：Vite 7 的 chokidar 5 已移除 glob 支援，
+// 傳 'content/**/*.json' 進 watcher.add() 不會匹配任何檔案。
+const content_watch_paths = [fileURLToPath(new URL('./content/', import.meta.url))]
 const google_tag_manager_script = `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
 new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
 j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
@@ -18,7 +21,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 const google_tag_manager_noscript = '<iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KTZKC8CH" height="0" width="0" style="display:none;visibility:hidden"></iframe>'
 
 export default defineNuxtConfig({
-  modules: ['@nuxt/eslint', '@nuxt/ui'],
+  modules: ['@nuxt/eslint', '@nuxt/ui', '@nuxt/image'],
   app: {
     pageTransition: {
       name: 'compact-page-fade',
@@ -53,16 +56,45 @@ export default defineNuxtConfig({
   nitro: {
     preset: 'static',
     prerender: {
+      // failOnError：任一 prerender route（含 /api/content.json、/search-index.json、product detail）
+      // 失敗時讓 nuxt generate 以非零碼中止，避免壞 content／壞 route 靜默產出殘缺 static 站（spec Case 1）。
+      failOnError: true,
       routes: [
         '/',
         '/guide',
         '/search',
         '/links',
+        '/api/content.json',
+        '/search-index.json',
         ...product_routes,
       ],
     },
   },
   vite: {
+    plugins: [
+      {
+        name: 'dwselect-content-hmr',
+        configureServer(server) {
+          server.watcher.add(content_watch_paths)
+
+          const notifyContentUpdated = (file_path: string) => {
+            if (!file_path.includes('/content/') && !file_path.startsWith('content/')) {
+              return
+            }
+
+            server.ws.send({
+              type: 'custom',
+              event: 'dwselect:content-updated',
+              data: { path: file_path },
+            })
+          }
+
+          server.watcher.on('add', notifyContentUpdated)
+          server.watcher.on('change', notifyContentUpdated)
+          server.watcher.on('unlink', notifyContentUpdated)
+        },
+      },
+    ],
     server: {
       allowedHosts: [vite_host],
       hmr: {
@@ -81,5 +113,11 @@ export default defineNuxtConfig({
         commaDangle: 'always-multiline',
       },
     },
+  },
+  image: {
+    // image.dir 由 @nuxt/image 以 resolve(srcDir, dir) 解析；Nuxt 4 srcDir 預設為 app/，
+    // 因此用 '../content' 指向專案根目錄的 content/，讓 <NuxtImg> 的 /{domain}/images/{file}
+    // src 對應到 content 來源檔（dev 用 IPX 即時最佳化，generate 輸出到 .output/public/_ipx）。
+    dir: '../content',
   },
 })

@@ -2,12 +2,20 @@
   "id": "2026-06-02-irobot-roomba-j7",
   "status": "published",
   "name": "Roomba j7+",
-  "english_name": "iRobot Roomba j7",
+  "english_name": "iRobot Roomba j7+ Self-Emptying Robot Vacuum",
   "summary": "應該是Roomba現行款式中最強的機種，現在跟我之前從amazon買的價格差不多了",
   "long_description": "應該是Roomba現行款式中最強的機種，現在跟我之前從amazon買的價格差不多了",
-  "llm_description": "",
-  "search_aliases": [],
-  "model_numbers": [],
+  "llm_description": "## 快速判斷\n\nRoomba j7+ 是 iRobot 以避障與自動集塵為主打的掃地機器人。j7+ 與一般 j7 的主要差異是隨附 Clean Base® Automatic Dirt Disposal，自動把機身集塵盒內容物吸入底座集塵袋；它不是掃拖一體機，若需要拖地功能應與 Roomba Combo j7+ 分開看。\n\n官方頁面標示此型號為 Item # J755020，定位在可辨識並避開寵物排泄物、電線、襪子、鞋子等障礙物的 Roomba。PChome 既有商品頁仍能辨識為同一商品，但目前頁面主區只顯示「預購」與「到貨通知我」，未能查到可直接購買的現行價格。\n\n## 重要規格\n\n- 型號／Item：J755020；官方商品名為 Roomba® j7+ Self-Emptying Robot Vacuum。\n- 清潔系統：3-stage Cleaning System、Edge-Sweeping Brush、Dual Multi-Surface Rubber Brushes；官方標示 Power-Lifting Suction 為 Roomba 600 系列的 10 倍。\n- 導航與避障：PrecisionVision Navigation 搭配 iRobot OS，可辨識並避開寵物排泄物、電線、鞋襪等常見障礙物；支援 P.O.O.P.（Pet Owner Official Promise）相關避障保證條款。\n- 地圖與控制：Imprint® Smart Mapping、Clean Zones、Keep Out Zones、指定房間清掃、充電後續掃；支援 Alexa 與 Google Assistant 語音控制。\n- 自動集塵：Clean Base® Automatic Dirt Disposal，官方標示集塵袋可容納最長約 60 天髒污，但需要後續耗材。\n- 尺寸與重量：機器人約 13.3 吋寬、3.4 吋高，重 7.49 lb；Clean Base 約 15.7 × 11.9 × 13.3 吋。\n- 電池：Lithium Ion。\n\n## 評測與使用者回饋\n\n- Tom's Guide 給予 Editor's Choice，實測總清潔分數 91.81，肯定障礙物迴避、清掃資料學習、no-go zones 設定與較不突兀的新版 Clean Base；限制是 Clean Base 自動集塵聲音很大，地毯上的寵物毛清除表現中等，寵物毛分數為 82.5。\n- TechRadar 評測認為它在硬地與地毯細塵／大顆粒清潔、寵物排泄物避障與自動集塵上表現突出；同時指出自動倒垃圾時偏吵、邊刷可能把較大碎屑撥開，App 內電量顯示不夠清楚。\n- iRobot 官方頁面顯示使用者評分約 3.72 / 5、1,343 則評論；常見決策點集中在避障可靠度、自動集塵便利性，以及底座噪音與耗材成本。\n\n## 適合誰／不適合誰\n\n- 適合：家中有寵物、地上常有線材或小物、想減少清掃前整理與倒集塵盒次數的人。\n- 適合：重視房間地圖、禁區、指定區域清掃與智慧家庭語音控制的使用情境。\n- 不適合：需要掃拖一體、熱水洗拖布、上下水基站等新世代掃拖機功能的人。\n- 不適合：對自動集塵噪音敏感，或不想負擔集塵袋耗材的人。\n\n## 參考來源\n\n- [iRobot 官方產品頁](https://www.irobot.com/en_US/roomba-j7-plus-self-emptying-robot-vacuum/J755020.html)\n- [PChome 既有商品頁](https://24h.pchome.com.tw/prod/DMBL0J-A900DZHJ9)\n- [Tom's Guide 評測](https://www.tomsguide.com/reviews/irobot-roomba-j7-plus)\n- [TechRadar 評測](https://www.techradar.com/reviews/irobot-roomba-j7-plus)",
+  "search_aliases": [
+    "iRobot Roomba j7+",
+    "Roomba j7 Plus",
+    "Roomba J7+",
+    "iRobot J755020",
+    "自動倒垃圾鷹眼避障掃地機器人"
+  ],
+  "model_numbers": [
+    "J755020"
+  ],
   "offers": [
     {
       "channel_id": "pchome",
@@ -28,9 +36,9 @@
     "cleaning",
     "irobot"
   ],
-  "reference_url": "https://www.facebook.com/applepig/posts/pfbid02CRwmCLGyfhoMAKLLoj5tpPhSLanYirfQxF6Fv8BeJGi7NY5j8hBF9dJ4UfQYeu7pl",
+  "reference_url": "https://www.irobot.com/en_US/roomba-j7-plus-self-emptying-robot-vacuum/J755020.html",
   "created_at": "2026-06-02T00:00:00+08:00",
-  "updated_at": "2026-06-02T00:00:00+08:00",
+  "updated_at": "2026-06-19T00:00:00+08:00",
   "published_at": "2026-06-02T00:00:00+08:00",
   "unpublished_at": null,
   "archived_at": null,

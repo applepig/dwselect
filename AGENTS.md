@@ -18,14 +18,14 @@
 - Lint：`pnpm lint` 等同 `eslint . --max-warnings=0`；單檔自動修正用 `pnpm lint:file -- <file>`。
 - Format：`pnpm format` 等同 `eslint . --fix`，使用 ESLint `@stylistic`，不使用 Prettier。
 - Typecheck：`pnpm typecheck` 固定走 `nuxt typecheck`，fresh checkout 先由 `prepare: nuxt prepare` 產生 `.nuxt` types/config。
-- Static generate：`pnpm generate` 會先跑 `pnpm build:search-index` 與 `pnpm build:public-discovery` 再 `nuxt generate`，輸出到 `.output/public`。
+- Static generate：`pnpm generate` 會先跑 `pnpm build:public-discovery`（sitemap/rss/robots/llms）與 `node scripts/assert-content-images.ts`，再 `nuxt generate`，輸出到 `.output/public`；catalog payload 與 search index 由 server route 在 prerender 階段產生，圖片由 @nuxt/image ipxStatic 輸出 optimized 圖到 `.output/public/_ipx`。
 - CI 等級驗證順序：`pnpm test` → `pnpm lint` → `pnpm typecheck` → `pnpm generate` → `node scripts/assert-runtime-google-sheet-clean.ts`。
 
 ## Content Model
 
 - Products：`content/products/*.json`；Guides：`content/guides/*.json`；Links：`content/links/*.json`；taxonomy 在 `content/taxonomies/{categories,channels,tags}.json`。
 - Schema 與 taxonomy reference 驗證集中在 `app/utils/product-schema.ts` 與 `tests/product-schema.test.ts`。
-- Build-time content 讀取集中在 `scripts/content-reader.ts`；公開 runtime 使用 `public/api/content.json` 靜態 payload。
+- Content 讀取集中在 `scripts/content-reader.ts`；公開 runtime 不再讀靜態 `public/api/content.json`，而是透過 Nuxt server route `GET /api/content.json`（handler 在 `server/api/content.json.get.ts`）即時從 `content/` 產生，`pnpm generate` 會 prerender 成 static file，app 端 server 與 client 都用 `$fetch('/api/content.json')` 取得。
 - `id` 必須等於 JSON 檔名 stem；timestamps 使用 `YYYY-MM-DDTHH:mm:ss+08:00` 這類含 timezone offset 格式。
 - Product 使用 `category_id`、`channel_id`、`tag_ids`；Guide／Link 使用 `category_ids`、`tag_ids`；不要新增 legacy `category` 或自由字串 `tags`。
 - `status = "published"` 才能出現在首頁、指南、連結、category counts 與 search index。
@@ -34,9 +34,11 @@
 
 ## Search And Static Output
 
-- Search index 由 `scripts/build-search-index.ts` 產生到 `public/search-index.json`，納入 published products、guides、links。
-- Public discovery payload 由 `scripts/build-public-discovery.ts` 產生到 `public/api/content.json`，納入 published products、guides、links 與 taxonomy。
-- 內容或 taxonomy 變更後要跑 `pnpm build:search-index` 與 `pnpm build:public-discovery`，或直接跑 `pnpm generate` 讓 index、payload 與 SSG 一起更新。
+- Catalog payload 由 Nuxt server route `GET /api/content.json`（`server/api/content.json.get.ts`）即時從 `content/` 產生，納入 published products、guides、links 與 taxonomy；`pnpm generate` 會 prerender 成 `.output/public/api/content.json`。
+- Search index 由 Nuxt server route `GET /search-index.json`（`server/routes/search-index.json.get.ts`）產生，納入 published products、guides、links；client MiniSearch fetch 同一個 `/search-index.json` URL，`pnpm generate` 一樣 prerender 成 static file。
+- 圖片由 `@nuxt/image` 處理：`nuxt.config.ts` 設 `image.dir = '../content'` 指向專案根的 `content/`，UI 用 `<NuxtImg :src="image_url" format="webp">`（外部 http 連結圖仍用原生 `<img>`）；dev 由 IPX 即時最佳化，`pnpm generate` 用 ipxStatic 輸出 optimized 圖到 `.output/public/_ipx`，不需先跑 `build:content-images`。
+- 內容或 taxonomy 變更後直接跑 `pnpm generate` 即可讓 payload、index、圖片與 SSG 一起更新；`build:content-images`、`build:search-index`、`build:public-artifacts` 是 legacy CLI，不再是 generate 的必要前置步驟。
+- `public/api/content.json`、`public/search-index.json`、`public/images/**` 已 gitignore 並從版控移除；sitemap、rss、robots、llms 等 discovery 檔仍由 `pnpm build:public-discovery` 產生並維持 tracked。
 - `node scripts/assert-runtime-google-sheet-clean.ts` 會掃 runtime source 與 `.output/public`，確保公開 runtime 沒有 Google Sheets TSV 指標。
 
 ## Routing And UI

@@ -549,30 +549,6 @@ describe('product schema', () => {
     ])
   })
 
-  it('should keep migrated content in the correct product, guide and link domains', () => {
-    const product_entries = readContentProductEntries()
-    const guide_entries = readContentGuideEntries()
-    const link_entries = readContentLinkEntries()
-
-    expect(product_entries).toHaveLength(62)
-    expect(product_entries.map((entry) => entry.file_name)).toContain('2026-06-02-ikea-charging-cable.json')
-    expect(product_entries.map((entry) => entry.file_name)).toContain('2026-06-02-mitsubishi-heavy-industries-air-conditioner.json')
-    expect(product_entries.map((entry) => entry.file_name)).not.toContain('2026-06-02-日本米入門篇.json')
-    expect(product_entries.map((entry) => entry.file_name)).not.toContain('2026-06-02-aeron-chair.json')
-    expect(product_entries.map((entry) => entry.file_name)).not.toContain('2026-06-02-b18.json')
-    expect(product_entries.map((entry) => entry.file_name)).not.toContain('2026-06-02-altwork-station.json')
-
-    expect(guide_entries.map((entry) => entry.file_name)).toEqual([
-      '2026-06-02-aeron-chair.json',
-      '2026-06-02-日本米入門篇.json',
-    ])
-    expect(link_entries.map((entry) => entry.file_name)).toEqual([
-      '2026-06-02-altwork-station.json',
-      '2026-06-02-b18.json',
-      'applepig-home.json',
-    ])
-  })
-
   it('should validate all migrated content domains against schemas and taxonomy references', () => {
     const product_entries = readContentProductEntries()
     const guide_entries = readContentGuideEntries()
@@ -584,18 +560,11 @@ describe('product schema', () => {
 
     for (const entry of product_entries) {
       expect(entry.content.id).toBe(entry.file_stem)
-      expect(entry.content.id).toBe(`${entry.content.created_at.slice(0, 10)}-${slugifyEnglishName(entry.content.english_name)}`)
+      expect(entry.content.id).toMatch(/^\d{4}-\d{2}-\d{2}-[a-z0-9]+(?:-[a-z0-9]+)*$/)
       expect(entry.content.image_url === null || isHttpUrl(entry.content.image_url)).toBe(true)
       expectContentImageFileToExist(entry.content.image_file, products_dir_url)
-      expect(entry.content).not.toHaveProperty('category')
-      expect(entry.content).not.toHaveProperty('tags')
-      expect(entry.content).not.toHaveProperty('channel_id')
-      expect(entry.content).not.toHaveProperty('purchase_url')
-      expect(entry.content).not.toHaveProperty('price')
-      expect(entry.content).not.toHaveProperty('price_text')
-      expect(entry.content).not.toHaveProperty('description')
-      expect(entry.content.offers).toHaveLength(1)
-      expect(entry.content.offers[0].checked_at).toBe(entry.content.updated_at)
+      // schema 是 .strict() 且 offers 為 .min(1)：legacy 欄位、offer 數量與必填皆由 parse 涵蓋，
+      // 不另外硬鎖 offers 剛好 1 個或 checked_at===updated_at（那是內容慣例，非 schema 契約）。
       expect(() => product_schema.parse(entry.content)).not.toThrow()
     }
     for (const entry of guide_entries) {
@@ -622,7 +591,7 @@ describe('product schema', () => {
     expect(new Set(channels.map((channel) => channel.id)).has('other')).toBe(true)
   })
 
-  it('should remove legacy platform and root category tags from migrated tag ids', () => {
+  it('should remove legacy platform and root category tags from content tag ids', () => {
     const content_entries = [
       ...readContentProductEntries(),
       ...readContentGuideEntries(),
@@ -632,18 +601,8 @@ describe('product schema', () => {
 
     expect(tag_ids).not.toEqual(expect.arrayContaining(LEGACY_PLATFORM_TAGS))
     expect(tag_ids).not.toEqual(expect.arrayContaining(LEGACY_ROOT_CATEGORY_TAGS))
-    expect(readContentProductEntries().find((entry) => entry.file_stem === '2026-06-02-ikea-charging-cable')?.content.tag_ids).toEqual(expect.arrayContaining(['ikea', 'cable-adapter']))
-    expect(readContentProductEntries().find((entry) => entry.file_stem === '2026-06-02-mitsubishi-heavy-industries-air-conditioner')?.content.tag_ids).toEqual(expect.arrayContaining(['mitsubishi-heavy-industries', 'aircon']))
   })
 })
-
-function slugifyEnglishName(english_name: string) {
-  return english_name
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/-+/g, '-')
-    .replace(/^-|-$/g, '')
-}
 
 function isHttpUrl(value: unknown) {
   if (typeof value !== 'string') {

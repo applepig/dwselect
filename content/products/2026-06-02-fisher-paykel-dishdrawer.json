@@ -1,36 +1,44 @@
 {
   "id": "2026-06-02-fisher-paykel-dishdrawer",
   "status": "published",
-  "name": "Fisher&Paykel 抽屜式洗碗機",
-  "english_name": "Fisher Paykel DishDrawer",
+  "name": "Fisher&Paykel 單層抽屜洗碗機",
+  "english_name": "Fisher & Paykel DD60SCTHX9 Single DishDrawer Dishwasher",
   "summary": "其實Panasonic也有抽屜式，但是台灣沒有進，日規的又太深比較麻煩，所以可以優先考慮這台",
   "long_description": "其實Panasonic也有抽屜式，但是台灣沒有進，日規的又太深比較麻煩，所以可以優先考慮這台",
-  "llm_description": "",
-  "search_aliases": [],
-  "model_numbers": [],
+  "llm_description": "## 快速判斷\n\nFisher & Paykel DD60SCTHX9 是 60cm 寬、110V 的單層抽屜式洗碗機，台灣通路多以「7 人份」、「單層不鏽鋼／加高款」、「含標準安裝」銷售。它的主要差異不是容量最大，而是 DishDrawer 抽屜式開闔：拿取碗盤時不必像傳統前開門洗碗機一樣大幅彎腰，也較適合把洗碗機整合在流理台下方。\n\n## 重要規格\n\n- 型號：DD60SCTHX9。\n- 類型：單層抽屜式、崁入式／落地型安裝，無指紋不鏽鋼門板。\n- 容量：7 人份；通路規格列為標準款 7 人份大容量。\n- 尺寸：約寬 599 × 深 573 × 高 454 mm；櫥櫃／安裝尺寸約寬 600 × 深 560 × 高 456 mm。\n- 電力：110V／60Hz；BS 頁面列功率 500–600W。\n- 噪音與用水：43dB，最大耗水量 6.9L。\n- 功能：通路頁面列出 6 種洗程、3 種附加選項、自動排風烘乾、73℃ 高溫殺菌、兒童安全鎖與可調整碗籃。\n- 台灣 PChome 頁面標示 BSMI／商檢字號 R33533／T33533。\n\n## 優點與限制\n\n- 抽屜式結構是最大賣點，適合想減少彎腰、或廚房配置偏好流理台下方抽拉使用的人。\n- 單層 7 人份容量比一般 12–14 人份全尺寸洗碗機小；若經常一次洗大量鍋具或家庭人數較多，需先確認碗籃空間是否足夠。\n- 安裝前要核對櫥櫃開孔、深度、110V 電源與給排水條件；PChome 頁面也提醒偏遠地區與外島配送、搬運與安裝限制。\n- PChome 規格備註指出 Fisher & Paykel 菲雪品克品牌原廠目前東部無服務站，台灣東部地區購買可能影響保固／服務安排，購買前應向通路確認最新條款。\n\n## 評測與使用者回饋\n\n- 本次查到的 BS 商品頁顯示「尚未有任何評價」，PChome 商品頁也未看到可整理的公開顧客評論；因此目前只能依通路規格與安裝條件判斷，不宜把零星賣場文案當成大量使用者回饋。\n- 官方 Fisher & Paykel 零件頁把 DD60SCTHX9 列在相容型號中，可作為型號存在與 DishDrawer 系列配件相容性的輔助佐證，但該頁不是完整產品規格頁。\n\n## 參考來源\n\n- [PChome 24h 商品頁](https://24h.pchome.com.tw/prod/DMBR24-A900GK0BS)\n- [BS 廚衛精品網商品頁](https://www.bsbs.co/products/fisherpaykel-dd60scthx9--dishwasher)\n- [Fisher & Paykel 官方零件相容性頁](https://www.fisherpaykel.com/us/spare-parts/dishwashing-spare-parts/cutlery-basket-511870p-511870P.html)",
+  "search_aliases": [
+    "Fisher Paykel DishDrawer",
+    "Fisher&Paykel DD60SCTHX9",
+    "菲雪品克 DD60SCTHX9",
+    "DD60SCTHX9",
+    "單層抽屜式洗碗機"
+  ],
+  "model_numbers": [
+    "DD60SCTHX9"
+  ],
   "offers": [
     {
       "channel_id": "pchome",
       "url": "https://24h.pchome.com.tw/prod/DMBR24-A900GK0BS",
-      "price_text": "45000",
+      "price_text": "41,830",
       "price": {
-        "amount": 45000,
+        "amount": 41830,
         "currency": "TWD",
         "unit": "each",
-        "label": null
+        "label": "折扣價"
       },
-      "checked_at": "2026-06-02T00:00:00+08:00"
+      "checked_at": "2026-06-19T00:00:00+08:00"
     }
   ],
   "image_url": null,
-  "category_id": "major-appliance",
+  "category_id": "kitchen-appliance",
   "tag_ids": [
     "fisher-paykel",
     "kitchen"
   ],
-  "reference_url": "https://www.facebook.com/applepig/posts/pfbid02SjcyKSNfiwr9rFQheqiiqgyrpyu5Qi1DsP7sLFoXdGQ8b6CtxfMBVq2MwYuE81Jhl",
+  "reference_url": "https://www.bsbs.co/products/fisherpaykel-dd60scthx9--dishwasher",
   "created_at": "2026-06-02T00:00:00+08:00",
-  "updated_at": "2026-06-02T00:00:00+08:00",
+  "updated_at": "2026-06-19T00:00:00+08:00",
   "published_at": "2026-06-02T00:00:00+08:00",
   "unpublished_at": null,
   "archived_at": null,

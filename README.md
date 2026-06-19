@@ -1,6 +1,6 @@
 # DW嚴選
 
-DW嚴選公開站使用 Nuxt SSG 與 Nuxt Content。商品資料放在 `content/products/*.json`，公開首頁只顯示 `status = "published"` 的商品。
+DW嚴選公開站使用 Nuxt SSG、Nuxt server routes 與 `@nuxt/image`。商品資料放在 `content/products/*.json`，公開首頁只顯示 `status = "published"` 的商品。
 
 ## Local development
 
@@ -31,14 +31,15 @@ pnpm lint
 pnpm typecheck
 ```
 
-產生公開站 build artifacts：
+公開內容 API 與圖片由 Nuxt server routes 與 `@nuxt/image` 即時提供，dev 不需手動重建 artifacts：
 
-```bash
-pnpm build:public-artifacts   # search index → public/search-index.json、discovery payload → public/api/content.json
-pnpm build:content-images     # 本地化 content 圖片
-```
+- `GET /api/content.json`：Nuxt server route，從 `content/` 即時產生 published products／guides／links／taxonomy／navigation payload。
+- `GET /search-index.json`：Nuxt server route，產生 client MiniSearch 需要的 payload。
+- 圖片：`@nuxt/image`（`<NuxtImg format="webp">` + IPX，source dir 指向 `content/`）。dev 即時最佳化來源圖片，不需先跑 `build:content-images`。
 
-`pnpm generate` 與 `pnpm build` 會先跑 `build:content-images` 與 `build:public-artifacts`，確保靜態輸出使用最新 Git-backed content；單獨的 `build:search-index`、`build:public-discovery` 仍保留為個別 CLI。
+`pnpm generate` 會先產生 discovery 檔（sitemap／rss／robots／llms）、檢查 published content 的本地圖片來源是否存在，接著 prerender 頁面與 `/api/content.json`、`/search-index.json` 到 `.output/public`，並輸出頁面實際使用的 optimized images 到 `.output/public/_ipx`，production 不需 server runtime。`build:content-images`、`build:search-index`、`build:public-artifacts` 降為 legacy CLI，已不是 dev／generate 的必要步驟。
+
+`public/api/content.json`、`public/search-index.json`、`public/images/**` 改由上述流程產生，已不再進 Git；正式 static output 以 `pnpm generate` 的 `.output/public` 為準。
 
 ## Migration
 

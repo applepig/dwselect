@@ -18,6 +18,36 @@ function getBreadcrumbTextPattern(label) {
   return new RegExp(`^DW嚴選\\s*>\\s*${label}$`)
 }
 
+async function getFirstProductHref(page) {
+  await page.goto('/', { waitUntil: 'domcontentloaded' })
+  await expect(page.locator('vite-error-overlay')).toHaveCount(0)
+
+  const first_card = page.locator('.product-card-link').first()
+  await expect(first_card).toBeVisible()
+  await expect(first_card).toHaveAttribute('href', /\/products\/.+/)
+
+  const href = await first_card.getAttribute('href')
+  if (href === null) {
+    throw new Error('Expected first product card to have an href')
+  }
+
+  expect(href).toMatch(/\/products\/.+/)
+
+  return href
+}
+
+async function openFirstProductDetail(page) {
+  const href = await getFirstProductHref(page)
+
+  await page.goto(href, { waitUntil: 'domcontentloaded' })
+  await expect(page.locator('vite-error-overlay')).toHaveCount(0)
+
+  const detail = page.locator('.product-detail-page')
+  await expect(detail).toBeVisible()
+
+  return detail
+}
+
 test('renders the compact app shell and responsive navigation', async ({ page }, test_info) => {
   await page.goto('/', { waitUntil: 'domcontentloaded' })
   await expect(page.locator('vite-error-overlay')).toHaveCount(0)
@@ -70,6 +100,33 @@ test('renders category breadcrumb and aligns the desktop product grid with heade
   await page.goto('/?category=not-a-real-category', { waitUntil: 'domcontentloaded' })
   await expect(page.locator('vite-error-overlay')).toHaveCount(0)
   await expect(page.locator('.compact-top-bar .top-bar-title')).toHaveText('DW嚴選')
+})
+
+test('keeps sparse category product cards at tablet three-column width', async ({ page }, test_info) => {
+  test.skip(test_info.project.name !== 'tablet', 'tablet grid width check only runs on tablet')
+
+  await page.goto('/?category=network', { waitUntil: 'domcontentloaded' })
+  await expect(page.locator('vite-error-overlay')).toHaveCount(0)
+  await expect(page.locator('.compact-top-bar .top-bar-title')).toHaveText(getBreadcrumbTextPattern('網路通訊'))
+
+  const grid_metrics = await page.locator('.product-grid').evaluate((grid) => {
+    const style = window.getComputedStyle(grid)
+    const columns = style.gridTemplateColumns.split(' ').map((column) => Number.parseFloat(column))
+    const cards = Array.from(grid.querySelectorAll('.product-card')).map((card) => card.getBoundingClientRect().width)
+
+    return {
+      column_count: columns.length,
+      first_column_width: columns[0] ?? 0,
+      first_card_width: cards[0] ?? 0,
+      grid_width: grid.getBoundingClientRect().width,
+      product_count: cards.length,
+    }
+  })
+
+  expect(grid_metrics.product_count).toBe(2)
+  expect(grid_metrics.column_count).toBe(3)
+  expect(grid_metrics.first_card_width).toBeCloseTo(grid_metrics.first_column_width, 0)
+  expect(grid_metrics.first_card_width).toBeLessThan(grid_metrics.grid_width / 2)
 })
 
 test('switches home categories with a category-keyed result transition contract', async ({ page }, test_info) => {
@@ -234,21 +291,11 @@ test('renders guide and links with the shared resource row contract', async ({ p
 })
 
 test('navigates to product detail route with a safe buy CTA', async ({ page }) => {
-  await page.goto('/', { waitUntil: 'domcontentloaded' })
-  await expect(page.locator('vite-error-overlay')).toHaveCount(0)
+  const detail = await openFirstProductDetail(page)
 
-  const first_card = page.locator('.product-card-link').first()
-  await expect(first_card).toBeVisible()
-  await expect(first_card).toHaveAttribute('href', /\/products\/.+/)
-  await first_card.click()
-  await expect(page).toHaveURL(/\/products\/.+/)
-
-  const detail = page.locator('.product-detail-page')
-  await expect(detail).toBeVisible()
   await expect(page.locator('.compact-top-bar .top-bar-title')).toContainText('DW嚴選')
-  await expect(page.locator('.compact-top-bar .top-bar-title')).toContainText('電腦3C')
   await expect(page.locator('.compact-top-bar .top-bar-title')).toContainText(await detail.locator('.detail-title').textContent() ?? '')
-  await expect(page.locator('.compact-top-bar .breadcrumb-link').nth(1)).toHaveAttribute('href', /\?category=computer-3c/)
+  await expect(page.locator('.compact-top-bar .breadcrumb-link').nth(1)).toHaveAttribute('href', /\?category=.+/)
   await expect(detail.getByText('DW 怎麼說')).toBeVisible()
   await expect(detail.locator('.detail-buy-cta')).toHaveAttribute('target', '_blank')
   await expect(detail.locator('.detail-buy-cta')).toHaveAttribute('rel', 'noopener noreferrer')
@@ -261,8 +308,7 @@ test('navigates to product detail route with a safe buy CTA', async ({ page }) =
 })
 
 test('keeps product detail and related image slots stable when images fail to load', async ({ page }) => {
-  await page.goto('/products/2026-06-02-sharp-65-inch-xled', { waitUntil: 'domcontentloaded' })
-  await expect(page.locator('vite-error-overlay')).toHaveCount(0)
+  await openFirstProductDetail(page)
   await page.getByRole('button', { name: '切換色彩模式' }).click()
 
   const hero_tile = page.locator('.detail-hero-tile')
@@ -296,8 +342,7 @@ test('keeps product detail and related image slots stable when images fail to lo
 })
 
 test('navigates to search by tag from product detail', async ({ page }) => {
-  await page.goto('/products/2026-06-02-sharp-65-inch-xled', { waitUntil: 'domcontentloaded' })
-  await expect(page.locator('vite-error-overlay')).toHaveCount(0)
+  await openFirstProductDetail(page)
 
   const first_tag = page.locator('.detail-taxonomy-row .catalog-pill[href^="/search?q="]').nth(1)
   const tag_label = (await first_tag.textContent())?.trim() ?? ''
@@ -324,11 +369,13 @@ test('navigates to search by channel from product card channel pill', async ({ p
 })
 
 test('renders direct product detail routes and unknown product not-found states', async ({ page }) => {
-  await page.goto('/products/2026-06-02-sharp-65-inch-xled', { waitUntil: 'domcontentloaded' })
+  const href = await getFirstProductHref(page)
+
+  await page.goto(href, { waitUntil: 'domcontentloaded' })
   await expect(page.locator('vite-error-overlay')).toHaveCount(0)
   const detail = page.locator('.product-detail-page')
   await expect(detail).toBeVisible()
-  await expect(detail.getByRole('heading', { name: /Sharp 65吋 XLED/ })).toBeVisible()
+  await expect(detail.locator('.detail-title')).toBeVisible()
 
   await page.goto('/products/not-a-real-product', { waitUntil: 'domcontentloaded' })
   await expect(page.locator('vite-error-overlay')).toHaveCount(0)

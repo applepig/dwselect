@@ -71,7 +71,7 @@ describe('product detail build mapper', () => {
       summary: product.summary,
       long_description: '細節說明可以比卡片更長',
       llm_description: 'AI 觀點',
-      hero_image_url: '/images/products/detail.webp',
+      hero_image_url: '/products/images/detail.jpg',
       hero_alt: product.name,
       category_id: 'av',
       category_label: '影音',
@@ -111,7 +111,7 @@ describe('product detail build mapper', () => {
       image_url: null,
     })
 
-    expect(mapProductDetail(product, [product], makeResolver()).hero_image_url).toBe('/images/products/local-detail-product.webp')
+    expect(mapProductDetail(product, [product], makeResolver()).hero_image_url).toBe('/products/images/local-detail-product.avif')
   })
 
   it('should reject external-only product images for detail hero image', () => {
@@ -153,7 +153,7 @@ describe('related product build mapper', () => {
       category_id: 'computer',
       offers: [makeOffer('pchome')],
       tag_ids: ['typing', 'wireless'],
-      published_at: '2026-06-05T00:00:00+08:00',
+      updated_at: '2026-06-05T00:00:00+08:00',
     })
     const products = [
       current_product,
@@ -164,7 +164,7 @@ describe('related product build mapper', () => {
         category_id: 'computer',
         offers: [makeOffer('momo')],
         tag_ids: ['typing', 'wireless'],
-        published_at: '2026-06-01T00:00:00+08:00',
+        updated_at: '2026-06-01T00:00:00+08:00',
       }),
       makeProduct({
         id: 'same-category-one-tag-same-channel-old',
@@ -173,7 +173,7 @@ describe('related product build mapper', () => {
         category_id: 'computer',
         offers: [makeOffer('pchome')],
         tag_ids: ['typing'],
-        published_at: '2026-06-02T00:00:00+08:00',
+        updated_at: '2026-06-02T00:00:00+08:00',
       }),
       makeProduct({
         id: 'same-category-one-tag-new',
@@ -182,7 +182,7 @@ describe('related product build mapper', () => {
         category_id: 'computer',
         offers: [makeOffer('momo')],
         tag_ids: ['typing'],
-        published_at: '2026-06-04T00:00:00+08:00',
+        updated_at: '2026-06-04T00:00:00+08:00',
       }),
       makeProduct({
         id: 'draft-related',
@@ -191,7 +191,7 @@ describe('related product build mapper', () => {
         category_id: 'computer',
         offers: [makeOffer('pchome')],
         tag_ids: ['typing', 'wireless'],
-        published_at: '2026-06-07T00:00:00+08:00',
+        updated_at: '2026-06-07T00:00:00+08:00',
       }),
     ]
 
@@ -204,7 +204,7 @@ describe('related product build mapper', () => {
     ])
   })
 
-  it('should break ties by name when category, tags, channel and published_at are all equal', () => {
+  it('should break ties by name when category, tags, channel and updated_at are all equal', () => {
     const current_product = makeProduct({
       id: 'current-product',
       status: 'published',
@@ -212,14 +212,14 @@ describe('related product build mapper', () => {
       category_id: 'computer',
       offers: [makeOffer('pchome')],
       tag_ids: ['typing'],
-      published_at: '2026-06-05T00:00:00+08:00',
+      updated_at: '2026-06-05T00:00:00+08:00',
     })
     const shared_attrs = {
       status: 'published' as const,
       category_id: 'computer',
       offers: [makeOffer('pchome')],
       tag_ids: ['typing'],
-      published_at: '2026-06-05T00:00:00+08:00',
+      updated_at: '2026-06-05T00:00:00+08:00',
     }
     const products = [
       current_product,
@@ -231,6 +231,42 @@ describe('related product build mapper', () => {
     const related = getRelatedProductCards(current_product, products, createTaxonomyLabelResolver(test_taxonomies))
 
     expect(related.map((product) => product.name)).toEqual(['丙', '乙', '甲'])
+  })
+
+  it('should break score ties by updated_at descending, preferring it over published_at', () => {
+    const current_product = makeProduct({
+      id: 'current-product',
+      status: 'published',
+      name: '目前商品',
+      category_id: 'computer',
+      offers: [makeOffer('pchome')],
+      tag_ids: ['typing'],
+      updated_at: '2026-06-05T00:00:00+08:00',
+    })
+    const shared_attrs = {
+      status: 'published' as const,
+      category_id: 'computer',
+      offers: [makeOffer('pchome')],
+      tag_ids: ['typing'],
+    }
+    const recently_updated = makeProduct({
+      id: 'recently-updated',
+      name: '較新更新',
+      ...shared_attrs,
+      updated_at: '2026-06-05T00:00:00+08:00',
+      published_at: '2026-06-01T00:00:00+08:00',
+    })
+    const recently_published = makeProduct({
+      id: 'recently-published',
+      name: '較新發佈',
+      ...shared_attrs,
+      updated_at: '2026-06-01T00:00:00+08:00',
+      published_at: '2026-06-05T00:00:00+08:00',
+    })
+
+    const related = getRelatedProductCards(current_product, [current_product, recently_published, recently_updated], createTaxonomyLabelResolver(test_taxonomies))
+
+    expect(related.map((product) => product.id)).toEqual(['recently-updated', 'recently-published'])
   })
 
   it('should expose related product cards with only the related semantic keys', () => {
@@ -256,7 +292,7 @@ describe('related product build mapper', () => {
       {
         id: 'related-product',
         name: '相關商品',
-        image_url: '/images/products/sample-product.webp',
+        image_url: '/products/images/sample-product.jpg',
         category_label: '電腦',
         channel_label: 'momo',
       },
@@ -322,7 +358,7 @@ describe('details_by_id assembly', () => {
       name: `相關商品 ${index + 1}`,
       category_id: 'computer',
       tag_ids: ['typing'],
-      published_at: `2026-06-0${index + 1}T00:00:00+08:00`,
+      updated_at: `2026-06-0${index + 1}T00:00:00+08:00`,
     }))
 
     const payload = makePayload([current_product, ...related_products])

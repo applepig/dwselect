@@ -1,13 +1,20 @@
 {
   "id": "2026-06-02-kolin-ceramic-heater",
-  "status": "published",
-  "name": "Kolin 電暖器",
-  "english_name": "Kolin Ceramic Heater",
+  "status": "archived",
+  "name": "歌林 PTC 陶瓷電暖器",
+  "english_name": "Kolin PTC Ceramic Heater KFH-MN607A",
   "summary": "暖氣我是比較推陶瓷式的啦，體積小、比較便宜、不會亮、而且還有風扇強制對流，暖房效果比看起來的更好",
   "long_description": "暖氣我是比較推陶瓷式的啦，體積小、比較便宜、不會亮、而且還有風扇強制對流，暖房效果比看起來的更好",
-  "llm_description": "",
-  "search_aliases": [],
-  "model_numbers": [],
+  "llm_description": "## 快速判斷\n\n歌林 KFH-MN607A 是 600W 的小型 PTC 陶瓷電暖器，定位偏向桌邊、腳邊或個人近距離取暖，而不是整間房間長時間暖房。既有 PChome 商品頁仍保留標題與 SEO 資訊，但頁面內嵌資料標示 `isShowPage: 0`、`isSoft404: 1`，且目前未顯示可購買價格與主商品購買區，因此此內容已封存。\n\n## 重要規格\n\n- 型號：KFH-MN607A\n- 加熱方式：PTC 陶瓷加熱。\n- 額定電壓／頻率：AC 110V／60Hz。\n- 額定消耗電功率：600W。\n- 安全設計：防傾倒斷電、過熱斷電；外殼標示為 ABS 耐燃塑膠。\n- 尺寸與重量：本體約 W168 × D150 × H210 mm；淨重約 0.8 kg。\n- 操作與外觀：單鍵開關、仿皮提把、復古小型外觀。\n- 其他識別：商檢字號 R37945；國際條碼 4714711375529。\n\n## 優點與限制\n\n- 600W 功率與小尺寸讓它較適合近距離局部取暖；若需求是大坪數或整室升溫，應改看更高功率、具溫控或循環設計的機種。\n- PTC 陶瓷加熱與風扇送風通常不會像石英管／鹵素機種有明顯發光，但查到的規格沒有列出溫控段數、擺頭、定時或遙控功能。\n- 既有 PChome offer 頁目前不可作為有效購買來源；其他賣場頁仍可作為規格交叉參考，但未替換原始 offer。\n\n## 評測與使用者回饋\n\n- 查到的公開資料以賣場規格頁與商品影片摘要為主，未找到可交叉驗證的獨立評測或大量使用者評論；因此噪音、長時間耐用度與實際暖房速度未做延伸推論。\n\n## 參考來源\n\n- [PChome 既有商品頁](https://24h.pchome.com.tw/prod/DMAZ0F-A900H16LY)\n- [Furimori 商品規格頁](https://www.furimori.com/products/%E3%80%90kolin-%E6%AD%8C%E6%9E%97%E3%80%91ptc%E9%99%B6%E7%93%B7%E9%9B%BB%E6%9A%96%E5%99%A8kfh-mn607a)",
+  "search_aliases": [
+    "KOLIN 歌林 PTC陶瓷電暖器KFH-MN607A",
+    "歌林陶瓷電暖器",
+    "Kolin ceramic heater",
+    "KFH MN607A"
+  ],
+  "model_numbers": [
+    "KFH-MN607A"
+  ],
   "offers": [
     {
       "channel_id": "pchome",
@@ -28,11 +35,11 @@
     "air-care",
     "kolin"
   ],
-  "reference_url": null,
+  "reference_url": "https://www.furimori.com/products/%E3%80%90kolin-%E6%AD%8C%E6%9E%97%E3%80%91ptc%E9%99%B6%E7%93%B7%E9%9B%BB%E6%9A%96%E5%99%A8kfh-mn607a",
   "created_at": "2026-06-02T00:00:00+08:00",
-  "updated_at": "2026-06-02T00:00:00+08:00",
+  "updated_at": "2026-06-19T00:00:00+08:00",
   "published_at": "2026-06-02T00:00:00+08:00",
   "unpublished_at": null,
-  "archived_at": null,
+  "archived_at": "2026-06-19T00:00:00+08:00",
   "image_file": "2026-06-02-kolin-ceramic-heater.jpg"
 }

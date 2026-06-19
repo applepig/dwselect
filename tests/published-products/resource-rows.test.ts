@@ -1,7 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
 import { getResourceRowLinkAttributes, getSearchResultSections } from '../../app/utils/published-products/resource-rows'
-import { readContentGuides, readContentLinks } from './fixtures'
 
 describe('resource row link attributes and search sections', () => {
   it('should derive safe attributes for external and internal resource rows', () => {
@@ -38,18 +37,6 @@ describe('resource row link attributes and search sections', () => {
     })).toEqual({
       to: '/guide/internal-guide',
     })
-  })
-
-  it('should keep migrated guide and link content available outside products', () => {
-    expect(readContentGuides().map((guide) => guide.id)).toEqual([
-      '2026-06-02-aeron-chair',
-      '2026-06-02-日本米入門篇',
-    ])
-    expect(readContentLinks().map((link) => link.id)).toEqual([
-      '2026-06-02-altwork-station',
-      '2026-06-02-b18',
-      'applepig-home',
-    ])
   })
 
   it('should group mixed search suggestions into fixed non-empty resource sections', () => {

@@ -192,7 +192,7 @@ describe('frontend-ready public content payload shape', () => {
       id: '2026-06-02-sample-product',
       name: '機械鍵盤 & <滑鼠>',
       summary: '熱插拔 & 小尺寸鍵盤',
-      image_url: '/images/products/2026-06-02-sample-product.webp',
+      image_url: '/products/images/2026-06-02-sample-product.jpg',
       category_id: 'computer-3c',
       category_label: '電腦3C',
       channel_id: 'pchome',
@@ -217,7 +217,7 @@ describe('frontend-ready public content payload shape', () => {
       summary: '熱插拔 & 小尺寸鍵盤',
       long_description: '適合長時間寫程式的繁中鍵盤',
       llm_description: 'Alice layout with gasket mount',
-      hero_image_url: '/images/products/2026-06-02-sample-product.webp',
+      hero_image_url: '/products/images/2026-06-02-sample-product.jpg',
       hero_alt: '機械鍵盤 & <滑鼠>',
       category_id: 'computer-3c',
       category_label: '電腦3C',
@@ -243,7 +243,7 @@ describe('frontend-ready public content payload shape', () => {
       {
         id: 'related-product',
         name: '相關商品',
-        image_url: '/images/products/related-product.webp',
+        image_url: '/products/images/related-product.jpg',
         category_label: '電腦3C',
         channel_label: 'PChome',
       },
@@ -283,7 +283,7 @@ describe('frontend-ready public content payload shape', () => {
 })
 
 describe('public discovery files', () => {
-  it('should build robots, llms, sitemap, RSS and JSON API files from content directories', async () => {
+  it('should build robots, llms, sitemap and RSS files from content directories', async () => {
     const temp_dir = await makeFixtureProject()
     const output_dir = join(temp_dir, 'public')
 
@@ -299,15 +299,15 @@ describe('public discovery files', () => {
     const llms = await readFile(join(output_dir, 'llms.txt'), 'utf8')
     const sitemap = await readFile(join(output_dir, 'sitemap.xml'), 'utf8')
     const rss = await readFile(join(output_dir, 'rss.xml'), 'utf8')
-    const api = JSON.parse(await readFile(join(output_dir, 'api', 'content.json'), 'utf8')) as ReturnType<typeof buildPublicContentPayload>
 
+    // content.json 已改由 /api/content.json server route 產生，不再是 discovery build 的輸出。
+    expect(existsSync(join(output_dir, 'api', 'content.json'))).toBe(false)
     expect(summary).toEqual({
       output_paths: [
         join(output_dir, 'robots.txt'),
         join(output_dir, 'llms.txt'),
         join(output_dir, 'sitemap.xml'),
         join(output_dir, 'rss.xml'),
-        join(output_dir, 'api', 'content.json'),
       ],
       product_count: 2,
       guide_count: 1,
@@ -334,9 +334,6 @@ describe('public discovery files', () => {
     expect(rss).toContain('<link>https://applepig.idv.tw/?a=1&amp;b=2</link>')
     expect(rss).toContain('<pubDate>Tue, 02 Jun 2026 00:00:00 +0800</pubDate>')
     expect(rss).not.toContain('draft-product')
-    expect(api.products.cards.map((card) => card.id)).toEqual(['2026-06-02-sample-product', 'no-published-at-product'])
-    expect(api.guides.map((guide) => guide.id)).toEqual(['2026-06-03-guide'])
-    expect(api.links.map((link) => link.id)).toEqual(['applepig-home'])
   })
 
   it('should return empty arrays when content directories are missing', async () => {
@@ -353,18 +350,13 @@ describe('public discovery files', () => {
       taxonomies_dir,
       public_dir: join(temp_dir, 'public'),
     })
-    const api = JSON.parse(await readFile(join(temp_dir, 'public', 'api', 'content.json'), 'utf8')) as ReturnType<typeof buildPublicContentPayload>
     const sitemap = await readFile(join(temp_dir, 'public', 'sitemap.xml'), 'utf8')
     const rss = await readFile(join(temp_dir, 'public', 'rss.xml'), 'utf8')
 
     expect(summary.product_count).toBe(0)
     expect(summary.guide_count).toBe(0)
     expect(summary.link_count).toBe(0)
-    expect(api.products.cards).toEqual([])
-    expect(api.products.details_by_id).toEqual({})
-    expect(api.guides).toEqual([])
-    expect(api.links).toEqual([])
-    expect(api.taxonomies.categories).toHaveLength(test_categories.length)
+    expect(existsSync(join(temp_dir, 'public', 'api', 'content.json'))).toBe(false)
     expect(sitemap).toContain('<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">')
     expect(rss).toContain('<channel>')
   })
@@ -392,7 +384,7 @@ describe('public discovery files', () => {
     expect(existsSync(join(output_dir, 'llms.txt'))).toBe(true)
     expect(existsSync(join(output_dir, 'sitemap.xml'))).toBe(true)
     expect(existsSync(join(output_dir, 'rss.xml'))).toBe(true)
-    expect(existsSync(join(output_dir, 'api', 'content.json'))).toBe(true)
+    expect(existsSync(join(output_dir, 'api', 'content.json'))).toBe(false)
   })
 
   it('should run the combined public artifacts build script from a single content source read', async () => {
@@ -415,11 +407,11 @@ describe('public discovery files', () => {
 
     expect(stdout).toContain(`Public artifacts written: ${output_dir}`)
     expect(existsSync(join(output_dir, 'search-index.json'))).toBe(true)
-    expect(existsSync(join(output_dir, 'api', 'content.json'))).toBe(true)
+    expect(existsSync(join(output_dir, 'api', 'content.json'))).toBe(false)
     expect(existsSync(join(output_dir, 'sitemap.xml'))).toBe(true)
   })
 
-  it('should wire build and generate scripts to build content images and search index before discovery artifacts', async () => {
+  it('should keep legacy artifact scripts available while build and generate rely on discovery plus prerendered routes', async () => {
     const package_source = await readFile(new URL('../package.json', import.meta.url), 'utf8')
     const package_json = JSON.parse(package_source) as { scripts: Record<string, string> }
     const artifacts_source = await readFile(new URL('../scripts/build-public-artifacts.ts', import.meta.url), 'utf8')
@@ -427,8 +419,8 @@ describe('public discovery files', () => {
     expect(package_json.scripts['build:public-discovery']).toBe('node scripts/build-public-discovery.ts')
     expect(package_json.scripts['build:search-index']).toBe('node scripts/build-search-index.ts')
     expect(package_json.scripts['build:public-artifacts']).toBe('node scripts/build-public-artifacts.ts')
-    expect(package_json.scripts.build).toBe('pnpm build:content-images && pnpm build:public-artifacts && nuxt build')
-    expect(package_json.scripts.generate).toBe('pnpm build:content-images && pnpm build:public-artifacts && nuxt generate')
+    expect(package_json.scripts.build).toBe('pnpm build:public-discovery && node scripts/assert-content-images.ts && nuxt build')
+    expect(package_json.scripts.generate).toBe('pnpm build:public-discovery && node scripts/assert-content-images.ts && nuxt generate')
     expect(artifacts_source.match(/await readPublicContentSource\(/g)).toHaveLength(1)
     expect(artifacts_source).toContain('buildSearchIndexFileFromSource(source')
     expect(artifacts_source).toContain('buildPublicDiscoveryFilesFromSource(source')

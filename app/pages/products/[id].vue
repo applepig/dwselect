@@ -62,5 +62,9 @@ if (product_detail_data.value === null || product_detail_data.value === undefine
   })
 }
 
-product_detail.value = product_detail_data.value
+// useHead／useSeoMeta 需在 await 前同步註冊（見 head-before-async 測試），故 product_detail 用獨立 ref；
+// 改用 watchEffect 而非一次性賦值，content HMR 刷新 public-content 後才會把最新 detail 同步進來。
+watchEffect(() => {
+  product_detail.value = product_detail_data.value
+})
 </script>

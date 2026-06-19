@@ -1,13 +1,21 @@
 {
   "id": "2026-06-02-toto-thermostatic-faucet",
   "status": "published",
-  "name": "TOTO恆溫水龍頭",
-  "english_name": "TOTO Thermostatic Faucet",
+  "name": "TOTO 恆溫淋浴水栓",
+  "english_name": "TOTO TBV03401J1 Wall-Mounted Thermostatic Mixing Faucet",
   "summary": "如果你家熱水器夠熱、但是洗澡的水溫不穩的話，通常裝上恆溫水龍頭就能得到有效的改善  而且他的把手一邊調溫度、另一邊調淋浴/龍頭，可以徹底杜絕調了水量溫度就變了的問題",
   "long_description": "如果你家熱水器夠熱、但是洗澡的水溫不穩的話，通常裝上恆溫水龍頭就能得到有效的改善  而且他的把手一邊調溫度、另一邊調淋浴/龍頭，可以徹底杜絕調了水量溫度就變了的問題",
-  "llm_description": "",
-  "search_aliases": [],
-  "model_numbers": [],
+  "llm_description": "## 快速判斷\n\nTOTO TBV03401J1 是日本 TOTO GG 系列的浴室用壁付サーモスタット混合水栓，定位是浴室牆面安裝的恆溫混合水栓，搭配 170 mm 出水嘴與 90φ Comfort Wave 1 模式蓮蓬頭。它適合既有浴室牆出水口要更換成恆溫控制、且可接受一般地用規格的情境；若安裝地點有寒冷地防凍需求，Amazon 同頁另有寒冷地用 variant，不能直接把一般地用視為通用。\n\n## 重要規格\n\n- 官方型號：`TBV03401J1`；TOTO COM-ET 登錄商品名為「壁付サーモスタット混合水栓（コンフォートウエーブ1モード）」。\n- 系列：GG；生產開始：2022/09；TOTO 官方希望小売価格為 ¥52,000（含稅 ¥57,200），這是建議售價，不等於 Amazon offer 價格。\n- 安裝型態：浴室用、壁付き、サーモスタット水栓；一般地用；溫度調節把手在左側。\n- 出水與淋浴：170 mm スパウト、整流吐水、可切換出水、有手持蓮蓬頭；散水板 90φ、Comfort Wave shower head。\n- 安全／維護：官方仕様一覧標示有逆止弁；COM-ET 也提供商品圖、説明書、分解圖與補修品列表，適合安裝前確認尺寸與維修料號。\n- Amazon 商品資訊標示此版本相較前代將蓮蓬頭尺寸由 80φ 增加到 90φ，並調整 shower hook hold 深度；也標示節湯 B1／節湯 B。\n\n## 優點與限制\n\n- 恆溫混合水栓的核心價值是用溫度把手設定目標水溫，再用另一側操作出水／止水與淋浴切換；但實際穩定度仍取決於熱水器供水能力、冷熱水壓與既有管路狀態。\n- 170 mm 出水嘴是明確尺寸，替換舊水栓前要確認浴缸邊緣、牆面深度與既有偏心腳位置；Amazon 可見評論中有人提醒旋轉出水嘴可能不夠長、未必能伸到浴缸內。\n- `TBV03401J1` 是一般地用；若安裝環境需要寒冷地用，應改查同系列寒冷地用型號／variant。\n\n## 評測與使用者回饋\n\nAmazon JP 商品頁可見 4.5／5 星、416 件 global ratings；完整 `/product-reviews/B0BNHWCWB4` 頁面會導向 Amazon 登入頁，因此只摘要商品頁上可讀的日本 Top reviews 樣本。可見評論多數提到 DIY 安裝順利、止水俐落、切換把手較輕、外觀有質感；負面或注意點包含 170 mm 旋轉出水嘴可能偏短、有人覺得蓮蓬頭水壓稍弱，以及一則 3 星評論提到法蘭會讓纏繞止洩帶較不方便。\n\n## 參考來源\n\n- [TOTO COM-ET 商品情報詳細：TBV03401J1](https://www.com-et.com/jp/item_view_scale/searchStr=tbv03401j/isHaiban=1/kensaku_info=2/datatype=1/hinban=TBV03401J1/isNC=1/)\n- [TOTO COM-ET 仕様一覧：TBV03401J1](https://www.com-et.com/jp/item_view_spec/?searchStr=tbv03401j&isHaiban=1&kensaku_info=2&datatype=1&hinban=TBV03401J1&renban=1&isNC=1&product_type=4)\n- [TOTO 官方：浴室水栓金具（壁付き）](https://jp.toto.com/products/faucetbath/showerwall/)\n- [Amazon JP 商品頁與可見評論：B0BNHWCWB4](https://www.amazon.co.jp/dp/B0BNHWCWB4)",
+  "search_aliases": [
+    "TOTO TBV03401J1",
+    "TOTO 浴室用壁付サーモスタット混合水栓",
+    "壁付サーモスタット混合水栓",
+    "GG コンフォートウエーブ",
+    "浴室恆溫混合水栓"
+  ],
+  "model_numbers": [
+    "TBV03401J1"
+  ],
   "offers": [
     {
       "channel_id": "amazonjp",
@@ -29,7 +37,7 @@
     "fixed-install",
     "toto"
   ],
-  "reference_url": null,
+  "reference_url": "https://www.com-et.com/jp/item_view_scale/searchStr=tbv03401j/isHaiban=1/kensaku_info=2/datatype=1/hinban=TBV03401J1/isNC=1/",
   "created_at": "2026-06-02T00:00:00+08:00",
   "updated_at": "2026-06-02T00:00:00+08:00",
   "published_at": "2026-06-02T00:00:00+08:00",

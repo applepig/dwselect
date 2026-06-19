@@ -15,10 +15,10 @@ export function compareProducts(
     return category_order
   }
 
-  const published_at_order = compareNullableTimestampDesc(left_product.published_at, right_product.published_at)
+  const updated_at_order = compareNullableTimestampDesc(left_product.updated_at, right_product.updated_at)
 
-  if (published_at_order !== 0) {
-    return published_at_order
+  if (updated_at_order !== 0) {
+    return updated_at_order
   }
 
   return compareText(left_product.name, right_product.name)

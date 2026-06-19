@@ -1,37 +1,48 @@
 {
   "id": "2026-06-02-panasonic-np-th4",
   "status": "published",
-  "name": "Panasonic NP-TH4",
-  "english_name": "Panasonic NP TH4",
+  "name": "Panasonic NP-TH4 洗碗機",
+  "english_name": "Panasonic NP-TH4WHR1TW Countertop Dishwasher",
   "summary": "桌面型洗碗機只有這台可以買了（認真",
   "long_description": "桌面型洗碗機只有這台可以買了（認真",
-  "llm_description": "",
-  "search_aliases": [],
-  "model_numbers": [],
+  "llm_description": "## 快速判斷\n\nPanasonic NP-TH4 是桌上型食器洗い乾燥機／洗碗烘乾機，PChome 目前販售的台灣通路品名為 NP-TH4WHR1TW。它屬於需要接給水與排水管的桌上型機種，不是水箱式免安裝小型機；選購重點應先確認檯面寬度、龍頭分水／給水條件、排水位置與接地。\n\n## 重要規格\n\n- 容量：官方規格為約 40 件餐具、約 5 人份，庫內容積約 50L。\n- 安裝尺寸：本體約寬 550 × 高 598 × 深 344mm；門開啟時最大深度約 579mm。重量約 19kg。\n- 用水與行程：標準使用水量約 11L；標準行程約 84 分（50Hz）／79 分（60Hz），消費電力量約 770Wh。\n- 清潔與烘乾：具乾燥功能、ストリーム除菌洗浄、80℃すすぎ；低溫柔洗與乾燥-only 模式不能使用 80℃すすぎ。\n- 噪音：官方標示約 37dB（50Hz）／39dB（60Hz）。\n- 配管：官方附件包含約 1.2m 給水管、約 1m 排水管；PChome 商品頁標示「含基本安裝」。\n\n## 優點與限制\n\n- 優點：比水箱式小型洗碗機容量大，適合需要一次處理多件餐具、鍋具或家庭日常餐具的使用情境。\n- 優點：瓶類清洗可搭配官方提到的 bottle holder；官方與 Kakaku 新聞也把「ストリーム除菌洗浄」與「80℃すすぎ」列為 NP-TH4 的主要差異點。\n- 限制：本體深度雖標示 344mm，但前開門開啟時需要約 579mm 深度空間，檯面前方與水槽旁位置要實際量測。\n- 限制：需要進排水與接地條件；若租屋、不可改裝水龍頭或排水位置不合，安裝可行性比水箱式機種更需要先確認。\n\n## 評測與使用者回饋\n\n- Kakaku 白色款 NP-TH4-W 頁面顯示使用者評分 3.89／5、34 則 review、199 則討論；回饋分布不是單一方向，代表它是有明確容量優勢、但安裝與使用細節也會影響體驗的機種。\n- 使用者評論中常見正向點包括容量足以處理家庭餐具、洗淨力與既有 Panasonic 桌上型機種延續性；負面或注意點則包括體積較大、擺放方式影響餐具排列，以及安裝零件／售後溝通可能成為實際體驗變因。\n\n## 參考來源\n\n- [Panasonic 官方規格表](https://panasonic.jp/dish/p-db/NP-TH4_spec.html)\n- [Panasonic 官方產品頁](https://panasonic.jp/dish/products/NP-TH4.html)\n- [PChome 商品頁](https://24h.pchome.com.tw/prod/DMBR1P-A900GT5EO)\n- [Kakaku NP-TH4-W 使用者評價與規格](https://kakaku.com/item/K0001273302/)\n- [Kakaku 新品新聞：NP-TH4 發表資訊](https://news.kakaku.com/prdnews/cd=kaden/ctcd=2127/id=96233/)",
+  "search_aliases": [
+    "Panasonic NP-TH4WHR1TW",
+    "Panasonic NP-TH4-W",
+    "國際牌桌上型洗碗機",
+    "Panasonic 桌上型自動洗碗機",
+    "食器洗い乾燥機 NP-TH4",
+    "NP TH4"
+  ],
+  "model_numbers": [
+    "NP-TH4WHR1TW",
+    "NP-TH4-W",
+    "NP-TH4"
+  ],
   "offers": [
     {
       "channel_id": "pchome",
       "url": "https://24h.pchome.com.tw/prod/DMBR1P-A900GT5EO",
-      "price_text": "21000",
+      "price_text": "16900",
       "price": {
-        "amount": 21000,
+        "amount": 16900,
         "currency": "TWD",
         "unit": "each",
         "label": null
       },
-      "checked_at": "2026-06-02T00:00:00+08:00"
+      "checked_at": "2026-06-19T00:00:00+08:00"
     }
   ],
   "image_url": null,
-  "category_id": "small-appliance",
+  "category_id": "kitchen-appliance",
   "tag_ids": [
     "countertop",
     "kitchen",
     "panasonic"
   ],
-  "reference_url": "https://www.facebook.com/applepig/posts/pfbid02SjcyKSNfiwr9rFQheqiiqgyrpyu5Qi1DsP7sLFoXdGQ8b6CtxfMBVq2MwYuE81Jhl",
+  "reference_url": "https://panasonic.jp/dish/p-db/NP-TH4_spec.html",
   "created_at": "2026-06-02T00:00:00+08:00",
-  "updated_at": "2026-06-02T00:00:00+08:00",
+  "updated_at": "2026-06-19T00:00:00+08:00",
   "published_at": "2026-06-02T00:00:00+08:00",
   "unpublished_at": null,
   "archived_at": null,

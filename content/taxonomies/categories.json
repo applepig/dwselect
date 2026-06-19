@@ -29,6 +29,13 @@
       "sort_order": 40
     },
     {
+      "id": "kitchen-appliance",
+      "label": "廚房家電",
+      "short_label": "廚房家電",
+      "nav_visible": true,
+      "sort_order": 45
+    },
+    {
       "id": "major-appliance",
       "label": "大家電",
       "short_label": "大家電",

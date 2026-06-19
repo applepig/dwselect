@@ -1,13 +1,24 @@
 {
   "id": "2026-06-02-toshiba-yd5000",
-  "status": "published",
-  "name": "Toshiba YD5000",
-  "english_name": "Toshiba YD5000",
+  "status": "archived",
+  "name": "Toshiba 石窯ドーム ER-YD5000",
+  "english_name": "Toshiba Ishigama Dome ER-YD5000 Steam Oven Range",
   "summary": "看得懂日文的話買水貨還是比較便宜，這台是次旗艦，而且amazon還免運費直接到你家",
   "long_description": "看得懂日文的話買水貨還是比較便宜，這台是次旗艦，而且amazon還免運費直接到你家",
-  "llm_description": "",
-  "search_aliases": [],
-  "model_numbers": [],
+  "llm_description": "## 快速判斷\n\nToshiba ER-YD5000 是日本東芝「石窯ドーム」系列 30L 過熱水蒸氣 oven range。官方頁面已標示為生產終了品，原 Amazon JP 商品頁也顯示 Currently unavailable，因此這筆內容適合保留作為型號與規格參考，不適合作為目前可購買商品。\n\n## 重要規格\n\n- 類型：30L 過熱水蒸氣オーブンレンジ，ワイド＆フラット庫內，支援 2 段調理。\n- 加熱：石窯ドーム熱風 convection oven；官方標示 100～300℃與 350℃模式，350℃運轉約 5 分鐘後會自動切換到 230℃。\n- Microwave：最高 1000W 約 5 分鐘，連續定格為 600W，另有 600W／500W／200W 相當／100W 相當。\n- 感測：1024 點「ねらって赤外線センサー」加溫度感測器，用於自動加熱與溫度控制。\n- 自動料理：311 recipes／129 automatic menus；支援「石窯おまかせ焼き」、深皿料理、過熱水蒸氣、hybrid cooking、non-fry cooking、steam reheating。\n- 尺寸與安裝：外形約 498 × 399 × 396 mm，重量約 21 kg；把手含入時深度約 446 mm，上方需預留 10 cm 以上散熱空間。\n- 配件：深皿 1 枚、遠赤包み焼き角皿 2 枚、烤網、說明書與料理集。\n\n## 優點與限制\n\n- 優點是 30L、2 段熱風、350℃短時間高溫、1024 點紅外線感測與深皿配件，定位接近高階家庭 oven range。\n- 相比同世代 ER-YD7000，ER-YD5000 保留 30L／2 段／350℃等核心加熱能力，但自動菜單與 recipes 較少，且官方功能表標示 IoT 功能為「-」。\n- 需要注意這是日本國內規格家電，Amazon 頁面標示電壓 100V，保固描述也限定日本使用；在台灣使用時需自行確認電壓、接地、維修與零件風險。\n- 官方已列為生產終了品，Amazon 原商品頁目前無庫存；後續若購買中古或平行輸入，應重新確認實際賣家、庫存、配件與保固條件。\n\n## 評測與使用者回饋\n\n- Amazon JP 商品頁顯示 ASIN B0CCRRJ6LC、ER-YD5000(K) 黑色款，頁面彙總為 4.3／5 分、35 則評價；靜態頁面未提供足夠逐則文字，因此只能作為粗略使用者滿意度訊號。\n- Amazon 商品頁的 manufacturer comparison table 顯示 ER-YD5000 與 ER-YD7000 同為 30L／2 段／350℃級距，ER-YD3000 則是 30L／2 段／300℃與較少自動菜單，這有助於辨識 ER-YD5000 的系列定位。\n\n## 參考來源\n\n- [Toshiba 官方 ER-YD5000 產品頁](https://www.toshiba-lifestyle.com/jp/microwaves/er-yd5000)\n- [Toshiba 官方 ER-YD5000 功能一覧](https://www.toshiba-lifestyle.com/jp/microwaves/er-yd5000/function)\n- [Toshiba 官方 ER-YD5000 寸法・仕様](https://www.toshiba-lifestyle.com/jp/microwaves/er-yd5000/spec)\n- [Amazon JP ER-YD5000(K) 商品頁](https://www.amazon.co.jp/-/en/dp/B0CCRRJ6LC)",
+  "search_aliases": [
+    "東芝 石窯ドーム ER-YD5000",
+    "ER-YD5000(K)",
+    "ER-YD5000(W)",
+    "Toshiba Stone Kiln Dome",
+    "東芝 過熱水蒸気オーブンレンジ"
+  ],
+  "model_numbers": [
+    "ER-YD5000",
+    "ER-YD5000(K)",
+    "ER-YD5000(W)",
+    "ASIN B0CCRRJ6LC"
+  ],
   "offers": [
     {
       "channel_id": "amazonjp",
@@ -23,16 +34,16 @@
     }
   ],
   "image_url": null,
-  "category_id": "major-appliance",
+  "category_id": "kitchen-appliance",
   "tag_ids": [
     "kitchen",
     "toshiba"
   ],
-  "reference_url": null,
+  "reference_url": "https://www.toshiba-lifestyle.com/jp/microwaves/er-yd5000",
   "created_at": "2026-06-02T00:00:00+08:00",
-  "updated_at": "2026-06-02T00:00:00+08:00",
+  "updated_at": "2026-06-19T00:00:00+08:00",
   "published_at": "2026-06-02T00:00:00+08:00",
   "unpublished_at": null,
-  "archived_at": null,
+  "archived_at": "2026-06-19T00:00:00+08:00",
   "image_file": "2026-06-02-toshiba-yd5000.jpg"
 }

@@ -1,0 +1,51 @@
+{
+  "id": "2026-06-18-msi-mag-401qr",
+  "status": "published",
+  "name": "MSI MAG 401QR",
+  "english_name": "MSI MAG 401QR",
+  "summary": "3440*1440 94ppi的螢幕，字大小非常剛好，但是視線太寬了需要適應一下",
+  "long_description": "3440*1440 94ppi的螢幕，字大小非常剛好，但是視線太寬了需要適應一下",
+  "llm_description": "## 快速判斷\n\nMSI MAG 401QR 是一台 40 吋、平面 IPS、21:9 UWQHD（3440 × 1440）電競／多工螢幕。它的主要定位不是高 PPI 精細度，而是以接近 95 公分寬的可視寬度，提供比一般 16:9 螢幕更寬的工作區與遊戲視野。選購時最需要注意的是輸入端子限制：完整 3440 × 1440 @ 155Hz 需要使用 DisplayPort 或 USB-C；HDMI 2.0b 最高只到 3440 × 1440 @ 100Hz。\n\n## 重要規格\n\n- 40 吋平面 IPS 面板，解析度 3440 × 1440，比例 21:9。\n- 官方 pixel pitch 為 0.2697 mm，換算約 94 PPI。\n- 更新率 155Hz，反應時間 1ms MPRT，支援 AMD FreeSync Premium。\n- 亮度 400 nits typical／400 nits HDR peak，支援 VESA DisplayHDR 400。\n- 色域標示為 Adobe RGB 90%、DCI-P3 94%、sRGB 118%（CIE1976）。\n- 端子包含 HDMI 2.0b × 2、DisplayPort 1.4a × 1、USB-C（DP Alt Mode／PD 65W）× 1、USB 2.0 hub、Type-B upstream 與 headphone out。\n- 支援 KVM、PIP／PBP、Gaming Intelligence APP、Night Vision、Anti-Flicker 與 Less Blue Light。\n- 支架官方僅列 tilt -5°～20°；未列高度調整、左右旋轉或 pivot。VESA 為 100 × 100 mm。\n\n## 優點與限制\n\n- 優點：40 吋 21:9 面積適合多視窗、時間軸、表格、程式開發或需要橫向空間的工作流。\n- 優點：USB-C 可同時處理顯示輸入與最高 65W 供電，搭配筆電使用時較方便。\n- 限制：HDMI 最高 100Hz；如果要用 155Hz，需確認電腦、線材與端子使用 DP 或 USB-C。\n- 限制：官方只列仰角調整，若桌面深度、螢幕高度或桌面空間有限，可能需要另購能承重的 VESA 支架或壁掛方案。\n- 限制：官方規格未列內建喇叭；不要把 headphone out 誤解為內建音訊輸出。\n\n## 評測與使用者回饋\n\n- 巴哈姆特使用者開箱提到，21:9 對文書與視窗分割有幫助，也提到 40 吋寬度與底座會明顯占用桌面空間。\n- 使用者討論中有提醒 HDMI 無法跑滿 155Hz，需用 DP 才能達到官方高更新率規格；這點也與 MSI 官方規格相符。\n- 另一篇開箱留言提到線上會議分享整個超寬畫面時，接收端可能不易閱讀；若常分享螢幕，可能需要改分享單一視窗或使用筆電／副螢幕。\n- 有使用者提到 OSD 五向搖桿聲音與曾遇到工程模式顯示問題，後者透過重設 OSD 解決；這屬個別回饋，不代表通案故障率。\n\n## 參考來源\n\n- [MSI 台灣官方規格頁](https://tw.msi.com/Monitor/MAG401QR/Specification)\n- [MSI 台灣產品頁](https://tw.msi.com/Monitor/MAG401QR)\n- [PChome 商品頁](https://24h.pchome.com.tw/prod/DSABPE-A900JTMJA)\n- [Yahoo 購物中心商品頁](https://tw.buy.yahoo.com/gdsale/MSI%E5%BE%AE%E6%98%9F-MAG-401QR-40%E5%9E%8B-155Hz-2K-HDR%E9%9B%BB%E7%AB%B6%E8%9E%A2%E5%B9%95-10892601.html)\n- [巴哈姆特使用者開箱討論](https://forum.gamer.com.tw/C.php?bsn=60030&snA=647232)\n- [巴哈姆特使用者開箱文章](https://home.gamer.com.tw/artwork.php?sn=6027615)",
+  "search_aliases": [
+    "MSI 40 吋螢幕",
+    "MAG 401QR",
+    "3440x1440 螢幕",
+    "MSI MAG401QR",
+    "微星 MAG401QR",
+    "微星 MAG 401QR",
+    "40吋 UWQHD 螢幕",
+    "21:9 155Hz 螢幕",
+    "MSI 401QR"
+  ],
+  "model_numbers": [
+    "MAG401QR",
+    "MAG 401QR"
+  ],
+  "offers": [
+    {
+      "channel_id": "pchome",
+      "url": "https://24h.pchome.com.tw/prod/DSABPE-A900JTMJA",
+      "price_text": "9990",
+      "price": {
+        "amount": 9990,
+        "currency": "TWD",
+        "unit": "each",
+        "label": null
+      },
+      "checked_at": "2026-06-18T00:00:00+08:00"
+    }
+  ],
+  "image_url": null,
+  "category_id": "computer-3c",
+  "tag_ids": [
+    "display",
+    "msi"
+  ],
+  "reference_url": "https://tw.msi.com/Monitor/MAG401QR/Specification",
+  "created_at": "2026-06-18T00:00:00+08:00",
+  "updated_at": "2026-06-18T00:00:00+08:00",
+  "published_at": "2026-06-18T00:00:00+08:00",
+  "unpublished_at": null,
+  "archived_at": null,
+  "image_file": "2026-06-18-msi-mag-401qr.jpg"
+}

@@ -1,6 +1,6 @@
 {
   "id": "2026-06-02-adata-power-bank",
-  "status": "published",
+  "status": "archived",
   "name": "ADATA 行動電源",
   "english_name": "ADATA Power Bank",
   "summary": "體積相當小，而且還很便宜",
@@ -19,7 +19,7 @@
         "unit": "each",
         "label": null
       },
-      "checked_at": "2026-06-02T00:00:00+08:00"
+      "checked_at": "2026-06-18T00:00:00+08:00"
     }
   ],
   "image_url": null,
@@ -30,9 +30,9 @@
   ],
   "reference_url": null,
   "created_at": "2026-06-02T00:00:00+08:00",
-  "updated_at": "2026-06-02T00:00:00+08:00",
+  "updated_at": "2026-06-18T00:00:00+08:00",
   "published_at": "2026-06-02T00:00:00+08:00",
   "unpublished_at": null,
-  "archived_at": null,
+  "archived_at": "2026-06-18T00:00:00+08:00",
   "image_file": "2026-06-02-adata-power-bank.jpg"
 }

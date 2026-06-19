@@ -40,7 +40,7 @@ describe('product card build mapper', () => {
       id: 'published-product',
       name: '已上架商品',
       summary: '卡片短評',
-      image_url: '/images/products/published-product.webp',
+      image_url: '/products/images/published-product.jpg',
       category_id: 'computer',
       category_label: '電腦',
       channel_id: 'pchome',
@@ -55,7 +55,7 @@ describe('product card build mapper', () => {
     expect(card).not.toHaveProperty('image')
   })
 
-  it('should use price label over price text when an offer provides a labelled price', () => {
+  it('should display the price text and ignore the price label metadata', () => {
     const product = makeProduct({
       id: 'labelled-price-product',
       status: 'published',
@@ -76,7 +76,7 @@ describe('product card build mapper', () => {
       ],
     })
 
-    expect(mapProductCard(product, makeResolver()).price_label).toBe('NT$ 1,990 起')
+    expect(mapProductCard(product, makeResolver()).price_label).toBe('NT$ 1,990')
   })
 
   it('should resolve local product image files for cards', () => {
@@ -88,7 +88,7 @@ describe('product card build mapper', () => {
       image_url: null,
     })
 
-    expect(mapProductCard(product, makeResolver()).image_url).toBe('/images/products/local-image-product.webp')
+    expect(mapProductCard(product, makeResolver()).image_url).toBe('/products/images/local-image-product.webp')
   })
 
   it('should reject external-only product images for cards', () => {
@@ -112,7 +112,7 @@ describe('product card build mapper', () => {
       image_url: null,
     })
 
-    expect(mapProductCard(product, makeResolver()).image_url).toBe('/images/products/quote-wrapped-image-product.webp')
+    expect(mapProductCard(product, makeResolver()).image_url).toBe('/products/images/quote-wrapped-image-product.jpg')
   })
 
   it('should normalize Nuxt Content runtime ids to canonical product ids', () => {

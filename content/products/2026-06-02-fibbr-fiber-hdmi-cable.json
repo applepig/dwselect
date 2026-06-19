@@ -1,13 +1,26 @@
 {
   "id": "2026-06-02-fibbr-fiber-hdmi-cable",
   "status": "published",
-  "name": "FIBBR光纖HDMI線",
-  "english_name": "FIBBR Fiber HDMI Cable",
+  "name": "FIBBR Quantum 光纖 HDMI",
+  "english_name": "FIBBR Quantum 8K HDMI Optical Fiber Cable 10 ft / 3 m",
   "summary": "光纖HDMI線可以減少很多要壞不壞的靈異現象，而且他現在入門款賣的也很便宜，三條就免運了",
   "long_description": "光纖HDMI線可以減少很多要壞不壞的靈異現象，而且他現在入門款賣的也很便宜，三條就免運了",
-  "llm_description": "",
-  "search_aliases": [],
-  "model_numbers": [],
+  "llm_description": "## 快速判斷\n\nFIBBR Quantum 是主打 8K／HDMI 2.1 規格的主動式光纖 HDMI 線（AOC），Amazon 這筆 offer 對應 10 ft／約 3 m 版本，頁面列出的 model 為 Quantum-3M、ASIN 為 B09KZ435N6。它的重點不是短距離便宜銅線，而是用光纖傳輸降低長距離衰減與 EMI 干擾，適合電視、投影機、AVR、PS5／Xbox／PC 等影音或遊戲設備之間需要較穩定訊號的安裝情境。\n\n## 重要規格\n\n- 線材類型：HDMI Type-A 公對公、主動式光纖 HDMI 線，需注意方向性安裝。Amazon 頁面說明兩端標示「1」與「2」，「1」接訊號來源端，「2」接顯示端。\n- 頻寬與影像：Amazon 與官方頁均標示 48Gbps；支援 8K@60Hz、4K@120Hz，Amazon 頁面另列 2K@240Hz、Dynamic HDR、Dolby Vision、eARC、HDCP 2.2／2.3、VRR、ALLM、QFT、QMS、DSC 等功能。\n- 官方 Quantum 系列參數：Pattern 為 F-H3M-QT，長度範圍 1m–20m，線徑 4.4mm，不需外接電源，動態／靜態彎曲半徑 40mm／20mm，工作溫度 0–50°C。\n- Amazon 變體資訊：10 ft／約 3 m、Model／Part Number 為 Quantum-3M，UPC 799408887541。\n\n## 優點與限制\n\n- 光纖 AOC 的優勢是線徑較細、抗電磁干擾、長距離訊號衰減較低；官方頁也把低功耗與光電引擎一體射出成型列為 Quantum 系列特色。\n- 限制是它不是一般雙向被動銅線，接反來源端與顯示端會沒有訊號；埋線或穿管前應先在實際設備上測試方向與相容性。\n- 若你需要的是「已認證 Ultra High Speed HDMI Cable」而不只是頁面標示 48Gbps／HDMI 2.1，HDMI LA 建議確認包裝上的官方認證標籤與 QR code；本次研究未在 Amazon 頁面查到可直接驗證的 HDMI 認證 banner。\n\n## 評測與使用者回饋\n\n- Amazon 商品頁顯示 4.0／5 星、137 則評分，並出現「Solid HDMI cable for gaming!」與「slim & flexible fiber optic cable」等公開可見影片／評論片段；完整評論頁需要登入，無法進一步驗證正負評比例或長期耐用性。\n- Amazon 目前顯示此 ASIN unavailable，因此原 offer 價格「20~30鎂」應視為歷史或使用者提供價格，不代表目前可直接下單價格。\n\n## 參考來源\n\n- [FIBBR Quantum 8K HDMI Optical Fiber Cable 官方頁](https://fibbr.com/products/home-theater/HDMI_Quantum.html)\n- [Amazon US 商品頁（ASIN B09KZ435N6）](https://www.amazon.com/Cable-FIBBR-48Gbps-Compatible-Blu-ray/dp/B09KZ435N6)\n- [HDMI LA：Ultra High Speed HDMI Cable 與認證標籤說明](https://www.hdmi.org/spec21sub/ultrahighspeedcable)",
+  "search_aliases": [
+    "FIBBR 8K Fiber Optic HDMI Cable",
+    "FIBBR Quantum HDMI",
+    "FIBBR Quantum-3M",
+    "F-H3M-QT",
+    "B09KZ435N6",
+    "8K HDMI 光纖線",
+    "HDMI 2.1 光纖線",
+    "AOC HDMI"
+  ],
+  "model_numbers": [
+    "Quantum-3M",
+    "F-H3M-QT",
+    "B09KZ435N6"
+  ],
   "offers": [
     {
       "channel_id": "amazonus",
@@ -28,9 +41,9 @@
     "cable-adapter",
     "fibbr"
   ],
-  "reference_url": null,
+  "reference_url": "https://fibbr.com/products/home-theater/HDMI_Quantum.html",
   "created_at": "2026-06-02T00:00:00+08:00",
-  "updated_at": "2026-06-02T00:00:00+08:00",
+  "updated_at": "2026-06-19T00:00:00+08:00",
   "published_at": "2026-06-02T00:00:00+08:00",
   "unpublished_at": null,
   "archived_at": null,

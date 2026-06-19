@@ -1,0 +1,50 @@
+{
+  "id": "2026-06-18-asus-zenwifi-bd5-2-pack",
+  "status": "published",
+  "name": "ASUS ZenWiFi BD5 二入",
+  "english_name": "ASUS ZenWiFi BD5 2 Pack BE5000 Dual-Band WiFi 7 AiMesh Router White",
+  "summary": "不想搞那麼麻煩的話還是BD5比較保險",
+  "long_description": "不想搞那麼麻煩的話還是BD5比較保險",
+  "llm_description": "## 快速判斷\n\nASUS ZenWiFi BD5（BD5(W-2-PK)）是二入裝的雙頻 WiFi 7 AiMesh 網狀路由器，官方定位為 BE5000：5GHz 最高 4323 Mbps、2.4GHz 最高 688 Mbps。PChome API 的 Name、商品圖與 ASUS 官方規格都對應 BD5；同一筆 API 的 Nick 欄位寫成 BT8，但 BT8 官方規格是 BE14000、三頻且含 6GHz，與此商品的 BE5000 雙頻規格不符，因此此筆內容以 BD5 建檔，並把 Nick 不一致列為需人工 audit 的賣場欄位問題。\n\n## 重要規格\n\n- 套裝與顏色：BD5(W-2-PK) 二入組，白色。\n- 無線規格：WiFi 7 (802.11be) 雙頻，5GHz 最高 4323 Mbps、2.4GHz 最高 688 Mbps。\n- WiFi 7 功能：官方列出 MLO、4096-QAM、OFDMA、Beamforming；規格頁列出 20/40/80/160/240 MHz bandwidth，並註明 240 MHz 可用性依國家而定。\n- Mesh 與覆蓋：支援 ASUS AiMesh；官方概覽頁標示 2 台覆蓋範圍最高 140 坪、3 台最高 190 坪，實際覆蓋仍會受建材、樓層與擺位影響。\n- 有線連接：每台具備 2 個 2.5G 乙太網路埠，支援 WAN/LAN 自動偵測，適合使用 2.5G WAN 或 2.5G 有線回程。\n- 硬體：4 支內建天線、2.4GHz 2x2、5GHz 2x2、1.5GHz 四核心處理器、RAM 512MB、Flash 128MB。\n- 尺寸與電源：140 × 70 × 140 mm；電源供應為 12V / 1.5A。\n- 管理與安全：支援 ASUS Router App、AiProtection Pro、家長控制、Guest Network、Smart Home Master SSID、VPN Fusion、WireGuard / OpenVPN / IPSec / PPTP 伺服器與用戶端功能。\n\n## 優點與限制\n\n- 優點：雙 2.5G 埠讓 WAN、LAN 或節點間有線回程更有彈性，不會只停留在 1GbE。\n- 優點：AiMesh 可與相容 ASUS 路由器擴充，對已經使用 ASUS Router App 或 ASUSWRT 的家庭網路較容易整合。\n- 優點：AiProtection Pro、家長控制與多種 VPN 功能是官方規格內建，不需要額外訂閱才能啟用基本路由器防護與控管功能。\n- 限制：BD5 是雙頻機種，沒有 BT8 的 6GHz 頻段與三頻規格；若節點之間主要靠無線回程，三頻機種通常會有更多回程頻寬餘裕。\n- 限制：每台只有 2 個 2.5G 網路埠，沒有額外 1GbE LAN 或 USB；有多台有線設備時仍可能需要交換器。\n- 限制：WiFi 7 與 MLO 的實際效果需要相容終端、韌體與現場環境配合；官方也明確註明實際 throughput 與覆蓋會因網路條件與建材而下降。\n\n## 評測與使用者回饋\n\n- ASUS 官方評論頁列出 ZenWiFi BD5 / BD4 獲得 2025 Golden Pin Design Award，這是設計獎項，不是吞吐量或穩定性長測。\n- ASUS 官方概覽頁引用 PCMag Readers’ Choice 對 ASUS ZenWiFi 系列在 mesh 覆蓋、WiFi 速度與網路管理的高分回饋；該引用屬系列層級，不等同 BD5 單品獨立測試。\n- 本次未查到可直接引用的獨立 BD5 長測或大量使用者評論，因此不對實際速度、漫遊表現或韌體穩定度做超出官方規格的推論。\n\n## 參考來源\n\n- [ASUS 台灣官方產品頁](https://www.asus.com/tw/networking-iot-servers/whole-home-mesh-systems/asus-zenwifi/asus-zenwifi-bd5/)\n- [ASUS 台灣官方規格頁](https://www.asus.com/tw/networking-iot-servers/whole-home-mesh-systems/asus-zenwifi/asus-zenwifi-bd5/techspec/)\n- [ASUS 台灣官方評論頁](https://www.asus.com/tw/networking-iot-servers/whole-home-mesh-systems/asus-zenwifi/asus-zenwifi-bd5/review/)\n- [ASUS 台灣 BT8 規格頁（用於辨識 PChome Nick 不一致）](https://www.asus.com/tw/networking-iot-servers/whole-home-mesh-systems/asus-zenwifi/asus-zenwifi-bt8/techspec/)\n- [PChome 商品頁](https://24h.pchome.com.tw/prod/DRAF01-A900I3ETA)\n- [PChome 商品 API](https://ecapi.pchome.com.tw/ecshop/prodapi/v2/prod/DRAF01-A900I3ETA&fields=Id,Name,Nick,Price,Pic,Slogan,Describe,Spec&_callback=jsonp)",
+  "search_aliases": [
+    "華碩 ZenWiFi BD5",
+    "ASUS ZenWiFi BD5 二入",
+    "ZenWiFi BD5 2 Pack",
+    "BD5(W-2-PK)",
+    "BE5000 WiFi 7 Mesh",
+    "ASUS AiMesh BD5",
+    "DRAF01-A900I3ETA"
+  ],
+  "model_numbers": [
+    "BD5(W-2-PK)",
+    "ASUS ZenWiFi BD5",
+    "BD5"
+  ],
+  "offers": [
+    {
+      "channel_id": "pchome",
+      "url": "https://24h.pchome.com.tw/prod/DRAF01-A900I3ETA",
+      "price_text": "4618",
+      "price": {
+        "amount": 4618,
+        "currency": "TWD",
+        "unit": "each",
+        "label": null
+      },
+      "checked_at": "2026-06-19T00:00:00+08:00"
+    }
+  ],
+  "image_url": null,
+  "category_id": "network",
+  "tag_ids": [
+    "network-gear",
+    "asus"
+  ],
+  "reference_url": "https://www.asus.com/tw/networking-iot-servers/whole-home-mesh-systems/asus-zenwifi/asus-zenwifi-bd5/techspec/",
+  "created_at": "2026-06-18T00:00:00+08:00",
+  "updated_at": "2026-06-19T00:00:00+08:00",
+  "published_at": "2026-06-18T00:00:00+08:00",
+  "unpublished_at": null,
+  "archived_at": null,
+  "image_file": "2026-06-18-asus-zenwifi-bd5-2-pack.jpg"
+}

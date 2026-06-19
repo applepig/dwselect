@@ -1,13 +1,24 @@
 {
   "id": "2026-06-02-aibo-qi-power-bank",
   "status": "published",
-  "name": "aibo Qi行動電源",
-  "english_name": "aibo Qi Power Bank",
+  "name": "aibo PD+QC3.0 無線快充10000mAh行動電源",
+  "english_name": "aibo PD/QC3.0 Qi Wireless Fast Charging 10000mAh Power Bank",
   "summary": "我手邊的是之前捕蚊達人那一批的，看起來應該是一樣的",
   "long_description": "我手邊的是之前捕蚊達人那一批的，看起來應該是一樣的",
-  "llm_description": "",
-  "search_aliases": [],
-  "model_numbers": [],
+  "llm_description": "## 快速判斷\n\n這是 aibo 的 10000mAh／37Wh Qi 無線快充行動電源，型號 BPN-TXD100K。它的定位是把 Qi 無線充電、USB-A QC3.0、Type-C PD 雙向快充集中在一顆布紋外殼的行動電源上，適合同時帶有 Qi 手機與 USB-A／Type-C 裝置的人。主要限制是總輸出標示為 18W MAX，多裝置同時充電時不代表每個裝置都能各自維持 18W；無線充電也只標示 Qi 最高 10W、iPhone 7.5W，沒有查到 Qi2 或磁吸定位規格。\n\n## 重要規格\n\n- 型號：BPN-TXD100K；商品型式：TXD100K。\n- 容量：10000mAh／37Wh，聚合物鋰電池。\n- 額定容量：USB QC3.0 為 5V/6600mAh、9V/3600mAh、12V/2600mAh；Type-C PD 為 5V/6400mAh、9V/3600mAh、12V/2500mAh。\n- 無線充電：Qi 5V/2A，官方特色頁標示最高 10W，iPhone 7.5W；最大感應距離標示 ≦8mm。\n- 輸入：Micro USB 5V/3A、9V/2A；Type-C PD 5V/3A、9V/2A；雙輸入合計最高 18W MAX。\n- 輸出：USB-A QC3.0 5V/3A、9V/2A、12V/1.5A；Type-C PD 5V/3A、9V/2A、12V/1.5A；Qi 無線輸出 5V/2A。\n- 合計最大輸出：官方規格標示 5V/18W MAX，賣場文案標示 Qi+PD+QC3.0 Total 18W MAX。\n- 尺寸與重量：約 14.2 × 6.9 × 1.6 cm、約 208g。\n- 電量顯示：4 階 LED，25／50／75／100%。\n- 保護與認證：短路、過充、過熱保護；BSMI R31921；NCC CCAP21LP0890T1。\n- 內容物：行動電源、Micro USB 充電線、Type-C 轉接頭、說明書。\n- 保固：非人為因素 6 個月；線材與轉接頭屬耗材，不在保固範圍內。\n\n## 使用限制與注意事項\n\n- 官方注意事項明確提醒，不要讓同一支手機同時使用無線充電與有線充電，避免電壓電流不穩。\n- 無線充電需要把裝置感應區對準行動電源閃電符號處；放偏可能無法充電或速度變慢。\n- 建議使用符合安規且輸出足 5V/2A 的充電器替行動電源充電；充電時間約 8–12 小時，依充電方式與電壓而異。\n- 長期不使用時，官方建議放在陰涼乾燥處，並每月充放電一次。\n\n## 評測與使用者回饋\n\n- PChome API 顯示此商品評分為 4.4／5、評論數 33，但本次未取得評論文字，因此無法整理具體使用者常見優缺點。\n- 官方與 PChome 文案都強調布紋防滑外殼、Qi／PD／QC3.0 三種充電模式，以及可同時為三款 3C 產品供電；這些屬規格與賣場描述，非獨立評測結論。\n\n## 參考來源\n\n- [aibo 官方商品頁](https://www.aibo-shop.com.tw/products/bpn-txd100k)\n- [PChome 24h 商品頁](https://24h.pchome.com.tw/prod/DYAOE1-A900HDHBH?fq=/S/DYAOAU)\n- [aibo 官方 YouTube：aibo PD 無線快充行動電源｜BPN-TXD100K](https://www.youtube.com/watch?v=mEc9ERGf6BM)",
+  "search_aliases": [
+    "aibo Qi行動電源",
+    "aibo PD 無線快充行動電源",
+    "aibo PD+QC3.0 無線快充10000mAh行動電源",
+    "Qi無線充+10000mAh 3孔 PD/QC 布紋外型 行動電源",
+    "BPN-TXD100K",
+    "TXD100K"
+  ],
+  "model_numbers": [
+    "BPN-TXD100K",
+    "TXD100K",
+    "BPN-TXD100K-DG"
+  ],
   "offers": [
     {
       "channel_id": "pchome",
@@ -19,7 +30,7 @@
         "unit": "each",
         "label": null
       },
-      "checked_at": "2026-06-02T00:00:00+08:00"
+      "checked_at": "2026-06-18T00:00:00+08:00"
     }
   ],
   "image_url": null,
@@ -28,9 +39,9 @@
     "aibo",
     "power-charging"
   ],
-  "reference_url": null,
+  "reference_url": "https://www.aibo-shop.com.tw/products/bpn-txd100k",
   "created_at": "2026-06-02T00:00:00+08:00",
-  "updated_at": "2026-06-02T00:00:00+08:00",
+  "updated_at": "2026-06-18T00:00:00+08:00",
   "published_at": "2026-06-02T00:00:00+08:00",
   "unpublished_at": null,
   "archived_at": null,

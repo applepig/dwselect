@@ -5,9 +5,19 @@
   "english_name": "BenQ RD280U",
   "summary": "28\" 3840*2560的螢幕，比一般的4K多了一些高度，160ppi設200%的話字也不算太大，不過價錢還沒降可以再等等",
   "long_description": "28\" 3840*2560的螢幕，比一般的4K多了一些高度，160ppi設200%的話字也不算太大，不過價錢還沒降可以再等等",
-  "llm_description": "",
-  "search_aliases": [],
-  "model_numbers": [],
+  "llm_description": "## 快速判斷\n\nBenQ RD280U 是 BenQ RD 系列的 28.2 吋程式設計取向螢幕，重點在 3840 × 2560、3:2 比例、Nano Matte 低反射面板、USB-C 90W、KVM、MoonHalo 背光與 Display Pilot 2 軟體功能。它比較像是工作流與閱讀舒適度優先的螢幕，而不是遊戲或高速影像取向機種：官方規格更新率為 60Hz，反應時間 5ms，HDR 為 DisplayHDR 400 等級。\n\n## 重要規格\n\n- 尺寸／比例／解析度：28.2 吋、3:2、3840 × 2560，官方標示 PPI 為 164。\n- 面板：IPS、LED 背光、Nano Matte Panel／Nano Matte 表面塗層。\n- 亮度與 HDR：典型亮度 350 nits，HDR 峰值亮度 400 nits，支援 HDR10 與 VESA DisplayHDR 400。\n- 色彩：95% P3、10.7 億色，色彩模式包含 sRGB、HDR、M-book、ePaper、Cinema，以及 Coding 深色／淺色主題。\n- 更新率與反應：官方規格列 60Hz（DP、USB-C）與 5ms GtG；不屬於高更新率遊戲螢幕。\n- 端子：HDMI 2.0 × 1、DisplayPort 1.4 × 1、USB-C（DP Alt Mode、Data、PD 90W）× 1、USB-C 輸出 MST 串接、USB-B upstream × 1、USB-A downstream × 3、USB-C downstream × 1、耳機孔。\n- USB-C 與串接限制：官方說明 USB-C 可同時傳輸影像、資料並供電 90W；多螢幕串接走 USB-C MST。Mac／MacBook 串接需走 Thunderbolt，HDMI 與一般 USB 不支援串接；M1／M2 Mac 官方提醒僅能連接單一外接顯示器。\n- 支架與安裝：支援高度 110mm、傾角 -5°～20°、左右旋轉 15°／15°，VESA 100 × 100mm；官方 FAQ 指出 RD280U 不支援 pivot 旋轉直立。\n- 尺寸重量：含支架 474.3～587.3 × 610.4 × 244.5mm，未含底座 427.8 × 610.4 × 87.1mm；淨重 10.4kg，未含底座 7.5kg。\n- 音訊：內建 2W × 2 喇叭與耳機孔。\n\n## Coding 與護眼功能\n\n- Coding 模式提供深色與淺色主題，官方定位是提升字體清晰度與程式碼區分。\n- Function Bar／Coding HotKey 可快速切換 Coding 相關功能；官方 FAQ 提醒需移除 Function Bar 保護貼後再按壓中央快捷鍵。\n- MoonHalo 背光可調整亮度、色溫與燈光模式，並可透過 Display Pilot 2 控制。\n- Display Pilot 2 支援 MoonHalo 控制、快捷鍵、桌面分割、Application Mode、Software Dimming、Circadian Mode 等工作流設定。\n- 護眼功能包含 Flicker-free、B.I. Gen2 自動亮度、Low Blue Light Plus、ePaper、Eye Reminder、Night Hours Protection；官方規格也列 TÜV Eye Comfort 2.0、Eyesafe 2.0、Reflection Free 等認證。\n\n## 適合誰／不適合誰\n\n- 適合：重視文字清晰度、3:2 工作區、低反射表面、USB-C 單線連接、KVM、MST 串接與軟體工作流控制的桌面工作者。\n- 不適合：需要高更新率、硬體校色、Thunderbolt 原生連接、pivot 直立旋轉，或期待 HDR 內容有高峰值亮度表現的使用情境。\n\n## 參考來源\n\n- [BenQ 台灣官方規格表](https://www.benq.com/zh-tw/monitor/programming/rd280u/spec.html)\n- [BenQ 台灣產品頁](https://www.benq.com/zh-tw/monitor/programming/rd280u.html)\n- [BenQ 台灣顯示器保固內容](https://www.benq.com/zh-tw/support/registration-warranty/warranty-information/monitor.html)\n- [PChome 商品頁](https://24h.pchome.com.tw/prod/DSABSO-A900HJAH0?fq=/S/DSABSO)",
+  "search_aliases": [
+    "BenQ RD280U",
+    "明基 RD280U",
+    "BENQ RD280U 4K 光智慧護眼螢幕",
+    "RD280U 4K+ 3:2",
+    "RD280U MoonHalo",
+    "BenQ Programming Monitor RD280U",
+    "BenQ 28.2 吋 4K+ 程式設計護眼螢幕"
+  ],
+  "model_numbers": [
+    "RD280U"
+  ],
   "offers": [
     {
       "channel_id": "pchome",
@@ -19,7 +29,7 @@
         "unit": "each",
         "label": null
       },
-      "checked_at": "2026-06-02T00:00:00+08:00"
+      "checked_at": "2026-06-18T00:00:00+08:00"
     }
   ],
   "image_url": null,
@@ -28,9 +38,9 @@
     "benq",
     "display"
   ],
-  "reference_url": null,
+  "reference_url": "https://www.benq.com/zh-tw/monitor/programming/rd280u/spec.html",
   "created_at": "2026-06-02T00:00:00+08:00",
-  "updated_at": "2026-06-02T00:00:00+08:00",
+  "updated_at": "2026-06-18T00:00:00+08:00",
   "published_at": "2026-06-02T00:00:00+08:00",
   "unpublished_at": null,
   "archived_at": null,

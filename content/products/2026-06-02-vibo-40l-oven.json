@@ -1,37 +1,45 @@
 {
   "id": "2026-06-02-vibo-40l-oven",
   "status": "published",
-  "name": "威寶40L烤箱",
-  "english_name": "Vibo 40L Oven",
+  "name": "威寶40L微蒸氣炸烤箱",
+  "english_name": "Kaiser Vibo KHAC-40L 40L Countertop Steam Air Fryer Oven",
   "summary": "這是要認真烤麵包用的烤箱，價格不是走親民路線的",
   "long_description": "這是要認真烤麵包用的烤箱，價格不是走親民路線的",
-  "llm_description": "",
-  "search_aliases": [],
-  "model_numbers": [],
+  "llm_description": "## 快速判斷\n\nKaiser 威寶 KHAC-40L 是 40L 檯面式多功能微蒸氣炸烤箱，定位在一般小烤箱與嵌入式烤箱之間。它把蒸氣輔助、氣炸旋風、上下火獨立控溫、發酵與果乾烘烤集中在同一台機器，適合需要較大爐腔、想做麵包或多種烘焙模式，但廚房不方便安裝大型烤箱的使用情境。\n\n## 重要規格\n\n- 型號：KHAC-40L。\n- 容量：40L；外觀尺寸約 53.4 × 52.5 × 36.7 cm，內部尺寸約 39.5 × 32.5 × 31.5 cm。\n- 電力：110V／60Hz，額定功率 1500W。\n- 溫控與時間：citiesocial 商品資料列出 25–230°C 廣域溫控、最長 120 分鐘設定，並有 NTC 雙感溫探頭。\n- 烘焙模式：momo 商品頁標示可獨立上下火不同溫度控制、單獨上火／單獨下火／全火＋旋風，並有果乾烘烤功能；citiesocial 另列蒸氣烘烤、氣炸、旋轉烤、發酵、解凍與保溫等功能。\n- 發酵：citiesocial 商品資料描述二段發酵溫度，一檔 25–30°C、二檔 31–40°C。\n- 重量與材質：約 13.5 kg；操作面板 430 不鏽鋼、外殼冷軋鋼板噴粉、門片鋼化玻璃；momo 規格另列冷板噴粉／鋼化玻璃／PBT。\n- 配件：烤盤／滴油盤、烤網、自動旋轉軸架全套、轉軸取出把手、烤盤取出把手、集屑盤、量杯與食譜。\n- 商檢字號：R33348；citiesocial 頁面標示產地中國、威華格公司保固 12 個月。\n\n## 優點與限制\n\n- 40L 爐腔比常見 10–30L 小烤箱更適合吐司、麵包、較大份量烘烤或同時處理多份食材，但機身深度約 52.5 cm、重量約 13.5 kg，檯面空間與散熱距離要先確認。\n- 上下火可獨立設定，對需要調整表面上色與底火的烘焙比固定上下火機種有彈性。\n- 微蒸氣、旋風與氣炸功能讓它可兼顧濕潤烘烤與熱風料理，但這類檯面式蒸氣輔助通常不是全尺寸蒸烤爐，不能直接等同嵌入式蒸烤箱的蒸氣量與控濕能力。\n- 1500W 功率屬高耗電廚房小家電，使用時應確認插座與延長線額定容量。\n\n## 評測與使用者回饋\n\n- 這次查到的公開來源主要是 momo、citiesocial 與威寶家電／威華格商品頁，未找到足以引用的獨立長篇評測。\n- momo 既有商品頁顯示「商品評價(0)」，因此目前沒有足夠平台評論樣本可整理常見使用者回饋。\n\n## 參考來源\n\n- [momo 商品頁：Kaiser 威寶 40升美廚全功能微蒸氣炸烤箱 KHAC-40L](https://www.momoshop.com.tw/goods/GoodsDetail.jsp?i_code=11521511)\n- [citiesocial 商品頁：KAISER威寶 頂級40公升美廚全功能微蒸氣炸烤箱](https://www.citiesocial.com/products/product-8929)\n- [威寶家電／威華格商品頁：Kaiser 威寶 40升美廚全功能微蒸氣炸烤箱](https://www.logobridge.com/product.php?wshop=logobridge&lang=zh-tw&Opt=detailed&type1=201&type2=208&id=120)",
+  "search_aliases": [
+    "Kaiser 威寶 40升美廚全功能微蒸氣炸烤箱",
+    "威寶 KHAC-40L",
+    "Vibo KHAC-40L",
+    "Kaiser Vibo KHAC-40L",
+    "40升微蒸氣炸烤箱"
+  ],
+  "model_numbers": [
+    "KHAC-40L"
+  ],
   "offers": [
     {
       "channel_id": "momo",
       "url": "https://www.momoshop.com.tw/goods/GoodsDetail.jsp?i_code=11521511&fbclid=IwAR16a9uh8O9XNFHzk5BDybSfMkVZccfXvu-54vWPl8ZbC4aYLj9bkMI-NTQ",
-      "price_text": "9000",
+      "price_text": "4990",
       "price": {
-        "amount": 9000,
+        "amount": 4990,
         "currency": "TWD",
         "unit": "each",
         "label": null
       },
-      "checked_at": "2026-06-02T00:00:00+08:00"
+      "checked_at": "2026-06-19T00:00:00+08:00"
     }
   ],
   "image_url": null,
-  "category_id": "small-appliance",
+  "category_id": "kitchen-appliance",
   "tag_ids": [
     "countertop",
     "kitchen",
     "vibo"
   ],
-  "reference_url": "https://www.facebook.com/applepig/posts/pfbid0rU7gfAonS3fuEhbnHWh31XhoPaGAK1xF2HbwEeYFtFmDsuKm1Bw63znYUccsHve6l",
+  "reference_url": "https://www.logobridge.com/product.php?wshop=logobridge&lang=zh-tw&Opt=detailed&type1=201&type2=208&id=120",
   "created_at": "2026-06-02T00:00:00+08:00",
-  "updated_at": "2026-06-02T00:00:00+08:00",
+  "updated_at": "2026-06-19T00:00:00+08:00",
   "published_at": "2026-06-02T00:00:00+08:00",
   "unpublished_at": null,
   "archived_at": null,

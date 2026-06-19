@@ -1,9 +1,8 @@
 import MiniSearch from 'minisearch'
 import { execFile } from 'node:child_process'
-import { readFileSync, readdirSync } from 'node:fs'
 import { mkdir, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
-import { join, parse } from 'node:path'
+import { join } from 'node:path'
 import { promisify } from 'node:util'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
@@ -53,10 +52,6 @@ const base_product: Product = {
   unpublished_at: null,
   archived_at: null,
 }
-const products_dir_url = new URL('../content/products/', import.meta.url)
-const guides_dir_url = new URL('../content/guides/', import.meta.url)
-const links_dir_url = new URL('../content/links/', import.meta.url)
-const search_index_url = new URL('../public/search-index.json', import.meta.url)
 const execFileAsync = promisify(execFile)
 
 const base_guide: Guide = {
@@ -139,31 +134,6 @@ afterEach(async () => {
   await Promise.all(temp_paths.splice(0).map((path) => rm(path, { recursive: true, force: true })))
 })
 
-function readContentProducts(): Product[] {
-  return readdirSync(products_dir_url)
-    .filter((file_name) => file_name.endsWith('.json'))
-    .toSorted((left_file_name, right_file_name) => left_file_name.localeCompare(right_file_name))
-    .map((file_name) => JSON.parse(readFileSync(new URL(file_name, products_dir_url), 'utf8')) as Product)
-}
-
-function readContentGuides(): Guide[] {
-  return readdirSync(guides_dir_url)
-    .filter((file_name) => file_name.endsWith('.json'))
-    .toSorted((left_file_name, right_file_name) => left_file_name.localeCompare(right_file_name))
-    .map((file_name) => JSON.parse(readFileSync(new URL(file_name, guides_dir_url), 'utf8')) as Guide)
-}
-
-function readContentLinks(): LinkDefinition[] {
-  return readdirSync(links_dir_url)
-    .filter((file_name) => file_name.endsWith('.json'))
-    .toSorted((left_file_name, right_file_name) => left_file_name.localeCompare(right_file_name))
-    .map((file_name) => JSON.parse(readFileSync(new URL(file_name, links_dir_url), 'utf8')) as LinkDefinition)
-}
-
-function readStaticSearchIndexPayload() {
-  return JSON.parse(readFileSync(search_index_url, 'utf8')) as ReturnType<typeof buildSearchIndexPayload>
-}
-
 describe('search index', () => {
   it('should map published products to search documents', () => {
     expect(getSearchDocuments({ products: [base_product], guides: [], links: [] }, test_taxonomies)).toEqual([
@@ -177,7 +147,7 @@ describe('search index', () => {
         category_labels: ['電腦'],
         tag_ids: ['keyboard', 'usb-c', 'fixture-brand'],
         tag_labels: ['鍵盤', 'USB-C', 'Fixture Brand'],
-        image_url: '/images/products/2026-06-02-sample-product.webp',
+        image_url: '/products/images/2026-06-02-sample-product.jpg',
         href: '/products/2026-06-02-sample-product',
         external: false,
         price_text: 'NT$ 1,990',
@@ -200,7 +170,7 @@ describe('search index', () => {
     }, test_taxonomies)).toEqual([
       expect.objectContaining({
         document_id: 'product:2026-06-02-sample-product',
-        image_url: '/images/products/2026-06-02-sample-product.webp',
+        image_url: '/products/images/2026-06-02-sample-product.jpg',
       }),
     ])
   })
@@ -264,7 +234,7 @@ describe('search index', () => {
     }, test_taxonomies)).toEqual([
       expect.objectContaining({
         document_id: 'guide:2026-06-02-guide',
-        image_url: '/images/guides/2026-06-02-guide.webp',
+        image_url: '/guides/images/2026-06-02-guide.jpg',
       }),
     ])
   })
@@ -412,7 +382,7 @@ describe('search index', () => {
           external: false,
           channel_label: 'PChome',
           price_text: 'NT$ 1,990',
-          image_url: '/images/products/2026-06-02-sample-product.webp',
+          image_url: '/products/images/2026-06-02-sample-product.jpg',
         },
       ],
     })
@@ -438,13 +408,134 @@ describe('search index', () => {
     expect(querySearchIndex(mini_search, '測試牌')).toContainEqual(expect.objectContaining({ document_id: 'product:2026-06-02-sample-product' }))
   })
 
-  it('should order product documents by canonical category then published_at then name (catalog-aligned baseline)', () => {
-    // ADR 2026-06-16: search documents now share the catalog canonical comparator
-    // (category sort_order -> published_at desc -> compareText name) instead of the
-    // former date-desc -> localeCompare ordering. This is a deliberate behaviour change.
-    const home_old = { ...base_product, id: 'home-old', name: 'home old', category_id: 'home', published_at: '2026-06-01T00:00:00+08:00' }
-    const home_new = { ...base_product, id: 'home-new', name: 'home new', category_id: 'home', published_at: '2026-06-05T00:00:00+08:00' }
-    const computer_new = { ...base_product, id: 'computer-new', name: 'computer new', category_id: 'computer', published_at: '2026-06-09T00:00:00+08:00' }
+  it('should rank product title matches above tags, descriptions, llm descriptions and auxiliary fields', () => {
+    const weighted_taxonomies = {
+      ...test_taxonomies,
+      tags: [
+        ...test_tags,
+        { id: 'weighted-tag', label: 'boosttoken', description: 'boosttoken', aliases: [], nav_visible: true, sort_order: 60 },
+        { id: 'taxonomy-alias-only', label: '輔助欄位標籤', description: '輔助欄位標籤', aliases: ['boosttoken'], nav_visible: true, sort_order: 70 },
+      ],
+    }
+    const products = [
+      {
+        ...base_product,
+        id: 'search-alias-match',
+        name: 'A Search Alias Match',
+        long_description: '人工描述',
+        llm_description: '',
+        search_aliases: ['boosttoken'],
+        model_numbers: [],
+        tag_ids: ['keyboard'],
+      },
+      {
+        ...base_product,
+        id: 'model-number-match',
+        name: 'B Model Number Match',
+        long_description: '人工描述',
+        llm_description: '',
+        search_aliases: [],
+        model_numbers: ['boosttoken'],
+        tag_ids: ['keyboard'],
+      },
+      {
+        ...base_product,
+        id: 'taxonomy-alias-match',
+        name: 'C Taxonomy Alias Match',
+        long_description: '人工描述',
+        llm_description: '',
+        search_aliases: [],
+        model_numbers: [],
+        tag_ids: ['taxonomy-alias-only'],
+      },
+      {
+        ...base_product,
+        id: 'llm-description-match',
+        name: 'D LLM Description Match',
+        long_description: '人工描述',
+        llm_description: 'boosttoken',
+        search_aliases: [],
+        model_numbers: [],
+        tag_ids: ['keyboard'],
+      },
+      {
+        ...base_product,
+        id: 'description-match',
+        name: 'E Description Match',
+        long_description: 'boosttoken',
+        llm_description: '',
+        search_aliases: [],
+        model_numbers: [],
+        tag_ids: ['keyboard'],
+      },
+      {
+        ...base_product,
+        id: 'tag-match',
+        name: 'F Tag Match',
+        long_description: '人工描述',
+        llm_description: '',
+        search_aliases: [],
+        model_numbers: [],
+        tag_ids: ['weighted-tag'],
+      },
+      {
+        ...base_product,
+        id: 'title-match',
+        name: 'Z boosttoken Title Match',
+        long_description: '人工描述',
+        llm_description: '',
+        search_aliases: [],
+        model_numbers: [],
+        tag_ids: ['keyboard'],
+      },
+    ]
+    const payload = buildSearchIndexPayload({ products, guides: [], links: [] }, {
+      ...weighted_taxonomies,
+      generated_at: '2026-06-06T00:00:00+08:00',
+    })
+    const mini_search = loadSearchIndex(payload)
+
+    const result_ids = querySearchIndex(mini_search, 'boosttoken').map((result) => result.content_id)
+
+    expect(result_ids).toEqual(expect.arrayContaining([
+      'title-match',
+      'tag-match',
+      'description-match',
+      'llm-description-match',
+      'search-alias-match',
+      'model-number-match',
+      'taxonomy-alias-match',
+    ]))
+    expect(result_ids.indexOf('title-match')).toBeLessThan(result_ids.indexOf('tag-match'))
+    expect(result_ids.indexOf('tag-match')).toBeLessThan(result_ids.indexOf('description-match'))
+    expect(result_ids.indexOf('description-match')).toBeLessThan(result_ids.indexOf('llm-description-match'))
+    expect(result_ids.indexOf('llm-description-match')).toBeLessThan(result_ids.indexOf('search-alias-match'))
+    expect(result_ids.indexOf('llm-description-match')).toBeLessThan(result_ids.indexOf('model-number-match'))
+    expect(result_ids.indexOf('llm-description-match')).toBeLessThan(result_ids.indexOf('taxonomy-alias-match'))
+  })
+
+  it('should search guides and links by tag aliases', () => {
+    const guide = { ...base_guide, tag_ids: ['keyboard'] }
+    const link = { ...base_link, tag_ids: ['keyboard'] }
+    const payload = buildSearchIndexPayload({ products: [], guides: [guide], links: [link] }, {
+      ...test_taxonomies,
+      generated_at: '2026-06-06T00:00:00+08:00',
+    })
+    const mini_search = loadSearchIndex(payload)
+
+    expect(querySearchIndex(mini_search, '打字')).toEqual(expect.arrayContaining([
+      expect.objectContaining({ document_id: 'guide:2026-06-02-guide' }),
+      expect.objectContaining({ document_id: 'link:applepig-home' }),
+    ]))
+  })
+
+  it('should order product documents by canonical category then updated_at then name (catalog-aligned baseline)', () => {
+    // ADR 2026-06-18 (revises 2026-06-16): search documents share the catalog canonical
+    // comparator (category sort_order -> updated_at desc -> compareText name). The time key
+    // was changed from published_at to updated_at. This is a deliberate behaviour change.
+    const home_old = { ...base_product, id: 'home-old', name: 'home old', category_id: 'home', updated_at: '2026-06-01T00:00:00+08:00' }
+    const home_new = { ...base_product, id: 'home-new', name: 'home new', category_id: 'home', updated_at: '2026-06-05T00:00:00+08:00' }
+    const computer_new = { ...base_product, id: 'computer-new', name: 'computer new', category_id: 'computer', updated_at: '2026-06-09T00:00:00+08:00' }
 
     const documents = getSearchDocuments({ products: [computer_new, home_old, home_new], guides: [], links: [] }, test_taxonomies)
 
@@ -452,6 +543,30 @@ describe('search index', () => {
       'product:home-new',
       'product:home-old',
       'product:computer-new',
+    ])
+  })
+
+  it('should order guides by updated_at descending and links by sort_order ascending with stable fallbacks', () => {
+    const older_guide = { ...base_guide, id: 'older-guide', title: '舊指南', updated_at: '2026-06-01T00:00:00+08:00' }
+    const newer_guide = { ...base_guide, id: 'newer-guide', title: '新指南', updated_at: '2026-06-05T00:00:00+08:00' }
+    const first_sort_old_link = { ...base_link, id: 'first-sort-old-link', title: '低排序較舊', sort_order: 1, updated_at: '2026-06-01T00:00:00+08:00' }
+    const second_sort_new_link = { ...base_link, id: 'second-sort-new-link', title: '高排序較新', sort_order: 2, updated_at: '2026-06-05T00:00:00+08:00' }
+    const first_sort_new_link = { ...base_link, id: 'first-sort-new-link', title: '低排序較新', sort_order: 1, updated_at: '2026-06-05T00:00:00+08:00' }
+
+    const documents = getSearchDocuments({
+      products: [],
+      guides: [older_guide, newer_guide],
+      links: [first_sort_old_link, second_sort_new_link, first_sort_new_link],
+    }, test_taxonomies)
+
+    // first_sort_old_link keeps its sort_order=1 slot ahead of the newer second_sort link,
+    // proving manual sort_order wins over a fresher updated_at.
+    expect(documents.map((document) => document.document_id)).toEqual([
+      'guide:newer-guide',
+      'guide:older-guide',
+      'link:first-sort-new-link',
+      'link:first-sort-old-link',
+      'link:second-sort-new-link',
     ])
   })
 
@@ -488,7 +603,7 @@ describe('search index', () => {
         summary: '熱插拔小尺寸鍵盤',
         category_labels: ['電腦'],
         tag_labels: ['鍵盤', 'USB-C', 'Fixture Brand'],
-        image_url: '/images/products/2026-06-02-sample-product.webp',
+        image_url: '/products/images/2026-06-02-sample-product.jpg',
         href: '/products/2026-06-02-sample-product',
         external: false,
         price_text: 'NT$ 1,990',
@@ -663,74 +778,5 @@ describe('search index', () => {
     expect(querySearchIndex(mini_search, '機械鍵盤')).toEqual([
       expect.objectContaining({ document_id: 'product:2026-06-02-sample-product' }),
     ])
-  })
-
-  it('should keep the generated static search index document count aligned with cutover content', () => {
-    const published_count = [
-      ...readContentProducts(),
-      ...readContentGuides(),
-      ...readContentLinks(),
-    ].filter((content) => content.status === 'published').length
-    const payload = readStaticSearchIndexPayload()
-
-    expect(published_count).toBe(67)
-    expect(payload.documents).toHaveLength(published_count)
-    expect(payload.index.documentCount).toBe(published_count)
-    expect(payload.documents.map((document) => document.document_id)).not.toContain('product:2026-06-02-sample-product')
-    expect(payload.documents.map((document) => document.document_id)).not.toEqual(expect.arrayContaining([
-      'product:2026-06-02-日本米入門篇',
-      'product:2026-06-02-aeron-chair',
-      'product:2026-06-02-b18',
-      'product:2026-06-02-altwork-station',
-      'product:2026-06-02-sharp-65吋-xled',
-    ]))
-    expect(payload.documents.map((document) => document.document_id)).toEqual(expect.arrayContaining([
-      'guide:2026-06-02-日本米入門篇',
-      'guide:2026-06-02-aeron-chair',
-      'link:2026-06-02-b18',
-      'link:2026-06-02-altwork-station',
-      'link:applepig-home',
-    ]))
-    expect(readContentProducts().map((product) => product.id)).toEqual(
-      readdirSync(products_dir_url)
-        .filter((file_name) => file_name.endsWith('.json'))
-        .map((file_name) => parse(file_name).name)
-        .toSorted((left_file_name, right_file_name) => left_file_name.localeCompare(right_file_name)),
-    )
-    expect(payload.documents).toContainEqual(expect.objectContaining({
-      document_id: 'product:2026-06-02-sharp-65-inch-xled',
-      title: 'Sharp 65吋 XLED',
-      category_labels: ['影音劇院'],
-      channel_label: expect.any(String),
-    }))
-  })
-
-  it('should query real mixed content names, summaries, category labels, channel labels and tags from the generated static search index', () => {
-    const mini_search = loadSearchIndex(readStaticSearchIndexPayload())
-
-    expect(querySearchIndex(mini_search, 'Sharp 65吋 XLED')).toContainEqual(expect.objectContaining({
-      document_id: 'product:2026-06-02-sharp-65-inch-xled',
-      label: 'Sharp 65吋 XLED',
-      type: 'product',
-      category_labels: ['影音劇院'],
-    }))
-    expect(querySearchIndex(mini_search, '日本米入門篇')).toContainEqual(expect.objectContaining({
-      document_id: 'guide:2026-06-02-日本米入門篇',
-      type: 'guide',
-      external: true,
-      href: expect.stringMatching(/^https?:\/\//),
-    }))
-    expect(querySearchIndex(mini_search, 'B18')).toContainEqual(expect.objectContaining({
-      document_id: 'link:2026-06-02-b18',
-      type: 'link',
-      external: true,
-      href: expect.stringMatching(/^https?:\/\//),
-    }))
-    expect(querySearchIndex(mini_search, '如果不想買OLED').length).toBeGreaterThan(0)
-    expect(querySearchIndex(mini_search, 'Sharp XLED應該是最好的選擇').length).toBeGreaterThan(0)
-    expect(querySearchIndex(mini_search, '廚房').length).toBeGreaterThan(0)
-    expect(querySearchIndex(mini_search, '網通').length).toBeGreaterThan(0)
-    expect(querySearchIndex(mini_search, 'PCHome').length).toBeGreaterThan(0)
-    expect(querySearchIndex(mini_search, '國際牌').length).toBeGreaterThan(0)
   })
 })

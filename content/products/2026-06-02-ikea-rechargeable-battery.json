@@ -1,13 +1,29 @@
 {
   "id": "2026-06-02-ikea-rechargeable-battery",
   "status": "published",
-  "name": "IKEA充電電池",
-  "english_name": "IKEA Rechargeable Battery",
+  "name": "IKEA LADDA 充電電池",
+  "english_name": "IKEA LADDA Rechargeable Battery",
   "summary": "三號、四號電池都找他們家買就對了",
   "long_description": "三號、四號電池都找他們家買就對了",
-  "llm_description": "",
-  "search_aliases": [],
-  "model_numbers": [],
+  "llm_description": "## 快速判斷\n\nIKEA LADDA 是 IKEA 的 AA／AAA 預充式充電電池系列，台灣頁面目前可查到 3 種 4 入包裝：AA 2450mAh、AA 1900mAh、AAA 750mAh。官方規格皆為 1.2V，搭配 STENKOL 或 TJUGO 等指定充電器使用。\n\n- AA 2450mAh：容量最高，官方標示比 1900mAh 約多 30% 使用時間，但循環次數為最多 500 次。\n- AA 1900mAh：容量較低，但官方標示最多可重複充電 1000 次。\n- AAA 750mAh：適合 AAA 規格裝置，官方標示最多可重複充電 1000 次。\n- 注意：Ni-MH 充電電池標稱電壓為 1.2V，少數嚴格要求 1.5V 一次性電池電壓的裝置可能不相容或電量判斷不準。\n\n## 重要規格\n\n- 類型：AA／AAA 充電電池；IKEA STENKOL 充電器頁面標示適用 AA／AAA rechargeable NiMH batteries，並建議搭配 LADDA 使用。\n- AA 2450mAh：產品編號 905.065.28，1.2V，4 件裝，最多可重複充電 500 次，預充、可立即使用。\n- AA 1900mAh：產品編號 705.098.15，1.2V，4 件裝，最多可重複充電 1000 次，預充、可立即使用。\n- AAA 750mAh：產品編號 705.098.20，1.2V，4 件裝，最多可重複充電 1000 次，預充、可立即使用。\n- 適用情境：官方列為可用於各類產品，特別提到攜帶式喇叭、玩具、手電筒、相機等耗電量較高的裝置。\n- 低自放電：IKEA 台灣頁面寫明「已經完成充電」與「可立即使用」；第三方電池測試站 HKJ／lygte-info 將 LADDA 的 ready to use 標示解讀為 Low Self Discharge（LSD），但 IKEA 台灣頁面未提供自放電保持率數字。\n\n## 使用限制與安全注意\n\n- 僅使用指定充電器替充電電池充電；官方列出 STENKOL、TJUGO 作為可搭配的充電器。\n- 充電完成後應將電池自充電器取出。\n- 安裝時需確認正負極方向。\n- 不要混用新舊電池、不同品牌或不同類型電池。\n- 不可替非充電電池充電；不可扭曲、損毀、拆解、打開或短路電池。\n- 避免高溫、火源與液體；若漏液接觸皮膚或眼睛，需以大量清水沖洗並就醫。\n- 電池需遠離兒童與寵物；誤食可能造成嚴重傷害，需立即就醫。\n- 使用後依當地規範回收，可能需視為特殊廢棄物處理。\n\n## 評測與使用者回饋\n\n- IKEA 美國 LADDA AA 2450mAh 頁面顯示 4.6／5，1,327 則評論；AAA 750mAh 頁面顯示 4.6／5，1,575 則評論。常見正面回饋集中在可重複充電、續航與家用便利性。\n- 常見負面或限制回饋包含：1.2V 與部分裝置預期的 1.5V 不同、個別使用者遇到壽命或充電異常、部分市場運送限制。\n- HKJ／lygte-info 對舊款 IKEA LADDA AA 2450mAh 測試結論為表現接近其他 2450mAh 電池；對 LADDA AAA 750mAh 測試結論為一般使用表現平均，但在非常高電流下較吃力。這些測試不一定等同台灣現行料號，適合作為同系列參考而非唯一規格來源。\n\n## 參考來源\n\n- [IKEA 台灣 LADDA AA 2450mAh 905.065.28](https://www.ikea.com.tw/zh/products/electronics/power-supply-and-charging/ladda-art-90506528)\n- [IKEA 台灣 LADDA AA 1900mAh 705.098.15](https://www.ikea.com.tw/zh/products/electronics/power-supply-and-charging/ladda-art-70509815)\n- [IKEA 台灣 LADDA AAA 750mAh 705.098.20](https://www.ikea.com.tw/zh/products/electronics/power-supply-and-charging/ladda-art-70509820)\n- [IKEA 美國 STENKOL 充電器 Ni-MH 相容資訊](https://www.ikea.com/us/en/p/stenkol-battery-charger-50506525/)\n- [HKJ／lygte-info IKEA LADDA AA 2450mAh 測試](https://lygte-info.dk/review/batteries2012/Ikea%20Ladda%20AA%202450mAh%20%28White%29%20UK.html)",
+  "search_aliases": [
+    "LADDA",
+    "IKEA LADDA",
+    "IKEA 充電電池",
+    "3號充電電池",
+    "4號充電電池",
+    "AA 充電電池",
+    "AAA 充電電池",
+    "HR06",
+    "HR03",
+    "Ni-MH 充電電池",
+    "低自放電充電電池"
+  ],
+  "model_numbers": [
+    "905.065.28",
+    "705.098.15",
+    "705.098.20"
+  ],
   "offers": [
     {
       "channel_id": "other",
@@ -15,11 +31,11 @@
       "price_text": "249~349",
       "price": {
         "amount": null,
-        "currency": null,
+        "currency": "TWD",
         "unit": null,
         "label": "249~349"
       },
-      "checked_at": "2026-06-02T00:00:00+08:00"
+      "checked_at": "2026-06-18T00:00:00+08:00"
     }
   ],
   "image_url": null,
@@ -28,9 +44,9 @@
     "ikea",
     "power-charging"
   ],
-  "reference_url": null,
+  "reference_url": "https://www.ikea.com.tw/zh/products/electronics/power-supply-and-charging/ladda-art-90506528",
   "created_at": "2026-06-02T00:00:00+08:00",
-  "updated_at": "2026-06-02T00:00:00+08:00",
+  "updated_at": "2026-06-18T00:00:00+08:00",
   "published_at": "2026-06-02T00:00:00+08:00",
   "unpublished_at": null,
   "archived_at": null,

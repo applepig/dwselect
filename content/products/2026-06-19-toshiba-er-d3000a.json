@@ -1,0 +1,50 @@
+{
+  "id": "2026-06-19-toshiba-er-d3000a",
+  "status": "published",
+  "name": "Toshiba ER-D3000A 石窯 Dome",
+  "english_name": "Toshiba ER-D3000A Ishigama Dome 30L Steam Oven Microwave",
+  "summary": "偶爾會有免運的賣家出現",
+  "long_description": "偶爾會有免運的賣家出現",
+  "llm_description": "## 快速判斷\n\nToshiba ER-D3000A 是日本東芝石窯 Dome 系列 30L 過熱水蒸氣 oven range，定位是 30L、熱風 2 段、300°C 高火力的標準型。Amazon JP 這筆 ASIN 為白色款，頁面顯示可寄送台灣，但查核時商品價與配送費分開計算；使用者提到偶爾會有免運賣家，因此購買前需要重新確認實際賣家與結帳運費。\n\n## 重要規格\n\n- 型號：ER-D3000A，Amazon 頁面為白色／Gran White。\n- 類型：30L 過熱水蒸氣 oven range／蒸氣烤箱微波爐。\n- 烤箱：300°C 熱風 2 段，官方註明 300°C 運轉約 5 分鐘後會自動切換到 230°C。\n- 微波：最高 1000W，官方註明為最大 5 分鐘短時高輸出，連續輸出會切換到 600W。\n- 自動菜單：119。\n- 尺寸與重量：寬 498 × 深 399 × 高 396 mm；把手不含入深度 399 mm，把手含入深度 446 mm；本體約 20kg。\n- 年耗電量：73.5kWh／年。\n- 配件：遠赤包み焼き角皿 41.2 × 29.1 cm 兩枚、說明書兼料理集。\n\n## 優點與限制\n\n- 30L、2 段熱風與 300°C 短時高溫適合想做烘烤、麵包、點心與多盤料理的人；比基本微波爐更接近一台檯面型烤箱。\n- 39.9cm 機身深度是官方主打的薄型重點，但仍需留意把手後的實際深度、上方 10cm 以上散熱空間與 20kg 承重。\n- 這是日本國內規格家電，Amazon 商品頁列出 100V；在台灣使用需自行確認電壓、接地、保固與維修風險。\n- 官方頁已標示 ER-D3000A 為生產終了品，後續價格、庫存與免運狀態可能波動很大。\n\n## 評測與使用者回饋\n\nAmazon JP 商品頁查核時顯示 4.3／5、61 則評價與 300+ bought in past month。靜態頁面沒有足夠可讀逐則評論可歸納長期耐用度，因此此處只把它視為通路評分訊號，不延伸成品質結論。\n\n## 參考來源\n\n- [Toshiba 官方產品頁](https://www.toshiba-lifestyle.com/jp/microwaves/er-d3000a)\n- [Toshiba 官方寸法・仕様](https://www.toshiba-lifestyle.com/jp/microwaves/er-d3000a/spec)\n- [Amazon JP 商品頁](https://www.amazon.co.jp/dp/B0DNYMH51D)",
+  "search_aliases": [
+    "東芝 ER-D3000A",
+    "Toshiba 石窯ドーム ER-D3000A",
+    "ER-D3000A(W)",
+    "東芝水波爐",
+    "過熱水蒸氣オーブンレンジ",
+    "ASIN B0DNYMH51D"
+  ],
+  "model_numbers": [
+    "ER-D3000A",
+    "ER-D3000A(W)",
+    "ASIN B0DNYMH51D"
+  ],
+  "offers": [
+    {
+      "channel_id": "amazonjp",
+      "url": "https://www.amazon.co.jp/dp/B0DNYMH51D",
+      "price_text": "TWD 10,366.70",
+      "price": {
+        "amount": 10366.7,
+        "currency": "TWD",
+        "unit": "each",
+        "label": null
+      },
+      "checked_at": "2026-06-19T00:00:00+08:00"
+    }
+  ],
+  "image_file": "2026-06-19-toshiba-er-d3000a.jpg",
+  "image_url": null,
+  "category_id": "kitchen-appliance",
+  "tag_ids": [
+    "countertop",
+    "kitchen",
+    "toshiba"
+  ],
+  "reference_url": "https://www.toshiba-lifestyle.com/jp/microwaves/er-d3000a",
+  "created_at": "2026-06-19T00:00:00+08:00",
+  "updated_at": "2026-06-19T00:00:00+08:00",
+  "published_at": "2026-06-19T00:00:00+08:00",
+  "unpublished_at": null,
+  "archived_at": null
+}

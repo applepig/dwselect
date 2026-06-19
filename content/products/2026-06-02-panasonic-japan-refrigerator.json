@@ -1,13 +1,21 @@
 {
   "id": "2026-06-02-panasonic-japan-refrigerator",
-  "status": "published",
-  "name": "Panasonic 日規冰箱",
-  "english_name": "Panasonic Japan Refrigerator",
+  "status": "archived",
+  "name": "Panasonic NR-F607VT 冰箱",
+  "english_name": "Panasonic NR-F607VT-N1 601L Six-Door Inverter Refrigerator",
   "summary": "日規六門冰箱比較好買的是Pana、Hitachi、三菱，規格其實很像，我覺得都可以買",
   "long_description": "日規六門冰箱比較好買的是Pana、Hitachi、三菱，規格其實很像，我覺得都可以買",
-  "llm_description": "",
-  "search_aliases": [],
-  "model_numbers": [],
+  "llm_description": "## 快速判斷\n\nPanasonic NR-F607VT-N1 是 PChome 原商品頁標示的 601 公升六門變頻冰箱，顏色／版本為香檳金。2026-06-19 查核時，原 PChome offer URL 仍可開啟並保留商品 title 與 meta description，但頁面主內容已不提供可驗證的主商品售價、加入購物車或立即購買入口；PChome 商品 API 對同一商品 ID 也回傳空陣列。因此此內容已封存，不應視為目前可直接購買的商品。\n\n## 已驗證資訊\n\n- 型號：NR-F607VT-N1。\n- 類型：601 公升、六門、變頻冰箱。\n- 顏色／外觀關鍵字：香檳金。\n- PChome meta description 提到的功能與保固：nanoe™ X 健康科技、新 1 級能源效率、全機 1 年保固、主要零件 3 年保固、壓縮機 5 年保固。\n- 原商品頁沒有在可見頁面中提供目前主商品價格；現有 JSON 內的價格應視為歷史使用者輸入，不是本次查核後的現售價格。\n\n## 選購與維護注意\n\n- 六門日製／日規冰箱通常需要先確認搬運路徑、廚房預留寬深高、門片開啟空間、電壓與保固服務條件；此舊商品頁未能重新驗證完整安裝尺寸與重量。\n- 若要購買同系列或近似 Panasonic 六門冰箱，應以 Panasonic 台灣目前產品頁或仍有庫存的賣場頁重新比對容量、門數、能效等級、保固年限與含運／定位／舊機回收條件。\n\n## 評測與使用者回饋\n\n未找到可可靠對應 NR-F607VT-N1 的公開評測或大量使用者評論；不應把相近 Panasonic 六門冰箱的評價直接套用到此型號。\n\n## 參考來源\n\n- [PChome 24h 原商品頁](https://24h.pchome.com.tw/prod/DPAC74-A900BNXAJ)\n- [Panasonic 台灣六門電冰箱分類](https://www.panasonic.com/tw/consumer/refrigerator/six-door.html)",
+  "search_aliases": [
+    "Panasonic 國際牌 NR-F607VT-N1",
+    "國際牌 601公升六門冰箱",
+    "NR-F607VT",
+    "Panasonic 601L 六門變頻冰箱 香檳金",
+    "nanoe X 冰箱"
+  ],
+  "model_numbers": [
+    "NR-F607VT-N1"
+  ],
   "offers": [
     {
       "channel_id": "pchome",
@@ -23,17 +31,17 @@
     }
   ],
   "image_url": null,
-  "category_id": "major-appliance",
+  "category_id": "kitchen-appliance",
   "tag_ids": [
     "kitchen",
     "panasonic",
     "refrigeration"
   ],
-  "reference_url": "https://www.facebook.com/applepig/posts/pfbid02tsU6X2EFHExDnZrPXiyYkcu8WRHRDt1YuoPfY8pisDhG51FRWLsfFA9CwyQvRUUtl",
+  "reference_url": "https://24h.pchome.com.tw/prod/DPAC74-A900BNXAJ",
   "created_at": "2026-06-02T00:00:00+08:00",
-  "updated_at": "2026-06-02T00:00:00+08:00",
+  "updated_at": "2026-06-19T00:00:00+08:00",
   "published_at": "2026-06-02T00:00:00+08:00",
   "unpublished_at": null,
-  "archived_at": null,
+  "archived_at": "2026-06-19T00:00:00+08:00",
   "image_file": "2026-06-02-panasonic-japan-refrigerator.jpg"
 }
