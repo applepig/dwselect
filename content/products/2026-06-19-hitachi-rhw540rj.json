@@ -1,0 +1,48 @@
+{
+  "id": "2026-06-19-hitachi-rhw540rj",
+  "status": "published",
+  "name": "Hitachi R-HW540RJ 冰箱",
+  "english_name": "HITACHI R-HW540RJ 537L Six-Door Inverter Refrigerator",
+  "summary": "日規冰箱懶人包：要記得買高階的才有真空抽屜",
+  "long_description": "日規冰箱懶人包：要記得買高階的才有真空抽屜",
+  "llm_description": "## 快速判斷\n\nHITACHI R-HW540RJ 是 PChome 通路販售的 537L 日本原裝六門變頻冰箱，顏色標示為琉璃金（XN）。它的選購重點在於日立高階多門冰箱常見的保鮮分區與抽屜式收納；若購買目標是「真空抽屜／真空冰溫室」，應逐頁確認該通路規格與型號，不要只用 Hitachi 品牌或六門外觀判斷。\n\n## 已驗證資訊\n\n- 型號：R-HW540RJ，PChome 標題另寫作 RHW540RJ。\n- 類型：日本原裝、537 公升、六門、變頻冰箱。\n- 顏色：琉璃金（XN）。\n- PChome API 目前可驗證商品名稱、價格與主圖，但未提供完整尺寸、重量、分區名稱、能效與保固條件。\n- 2026-06-19 查核時 PChome 商品 API 顯示目前價 NT$73,900。\n\n## 選購注意\n\n- 六門 537L 冰箱需要比 500L 五門機更仔細確認搬運動線、門寬、電梯、廚房預留寬深高與開門空間。\n- 日立高階多門冰箱的核心賣點常在冷藏、製冰、蔬果、冷凍與特殊保鮮抽屜的分工；實際是否含真空保鮮抽屜，請以賣場規格或原廠型錄為準。\n- 若只需要均衡容量與多門收納，502L～540L 級距都可比較；若指定真空保鮮，應優先篩出明確寫有真空冰溫室／真空抽屜的型號。\n\n## 參考來源\n\n- [PChome 24h 商品頁](https://24h.pchome.com.tw/prod/DPAC46-A900FN450)\n- [PChome 商品 API](https://ecapi.pchome.com.tw/ecshop/prodapi/v2/prod/DPAC46-A900FN450&fields=Id,Name,Nick,Price,Pic,Slogan,Describe,Spec&_callback=jsonp)",
+  "search_aliases": [
+    "HITACHI 日立 R-HW540RJ",
+    "RHW540RJ",
+    "日立 537L 六門冰箱",
+    "日立日本原裝變頻六門冰箱",
+    "日立真空冰溫室冰箱"
+  ],
+  "model_numbers": [
+    "R-HW540RJ",
+    "RHW540RJ"
+  ],
+  "offers": [
+    {
+      "channel_id": "pchome",
+      "url": "https://24h.pchome.com.tw/prod/DPAC46-A900FN450",
+      "price_text": "73900",
+      "price": {
+        "amount": 73900,
+        "currency": "TWD",
+        "unit": "each",
+        "label": null
+      },
+      "checked_at": "2026-06-19T00:00:00+08:00"
+    }
+  ],
+  "image_file": "2026-06-19-hitachi-rhw540rj.png",
+  "image_url": null,
+  "category_id": "kitchen-appliance",
+  "tag_ids": [
+    "kitchen",
+    "hitachi",
+    "refrigeration"
+  ],
+  "reference_url": "https://24h.pchome.com.tw/prod/DPAC46-A900FN450",
+  "created_at": "2026-06-19T00:00:00+08:00",
+  "updated_at": "2026-06-19T00:00:00+08:00",
+  "published_at": "2026-06-19T00:00:00+08:00",
+  "unpublished_at": null,
+  "archived_at": null
+}

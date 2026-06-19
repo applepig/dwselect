@@ -168,17 +168,24 @@ describe('Nuxt SSG baseline', () => {
   it('should hot refresh public content data when content files change in Nuxt dev', () => {
     const nuxt_config_source = readFileSync(new URL('../nuxt.config.ts', import.meta.url), 'utf8')
     const plugin_source = readFileSync(new URL('../app/plugins/content-hmr.client.ts', import.meta.url), 'utf8')
+    const detail_page_source = readFileSync(new URL('../app/pages/products/[id].vue', import.meta.url), 'utf8')
     const search_helper_source = readFileSync(new URL('../app/utils/search/client-search.ts', import.meta.url), 'utf8')
 
     expect(nuxt_config_source).toContain("name: 'dwselect-content-hmr'")
-    expect(nuxt_config_source).toContain("server.watcher.add(['content/**/*.json', 'content/**/images/**/*'])")
+    expect(nuxt_config_source).toContain('const content_watch_paths = [fileURLToPath(new URL(\'./content/\', import.meta.url))]')
+    expect(nuxt_config_source).toContain('server.watcher.add(content_watch_paths)')
     expect(nuxt_config_source).toContain("type: 'custom'")
     expect(nuxt_config_source).toContain("event: 'dwselect:content-updated'")
     expect(plugin_source).toContain("import.meta.hot.on('dwselect:content-updated'")
-    expect(plugin_source).toContain("refreshNuxtData('public-content')")
+    // refreshNuxtData 必須包在 runWithContext 內：hot.on callback 在 Nuxt context 之外觸發。
+    expect(plugin_source).toContain("nuxtApp.runWithContext(() => refreshNuxtData('public-content'))")
     expect(plugin_source).toContain('resetClientSearchIndex()')
     expect(search_helper_source).toContain('export function resetClientSearchIndex()')
     expect(search_helper_source).toContain('search_index_promise = null')
+    // detail 頁用 watchEffect 同步 product_detail，content HMR 刷新後才會帶出最新 detail；
+    // 不可退回一次性快照賦值（只在 setup 跑一次，刷新後陳舊）。
+    expect(detail_page_source).toMatch(/watchEffect\(\(\) => \{\s*product_detail\.value = product_detail_data\.value\s*\}\)/)
+    expect(detail_page_source).not.toMatch(/\nproduct_detail\.value = product_detail_data\.value\n<\/script>/)
   })
 
   it('should keep product detail and app shell from serializing the full catalog payload', () => {

@@ -86,3 +86,37 @@
 - **修了什麼**：新增 Vite dev plugin `dwselect-content-hmr` 監看 `content/**/*.json` 與 `content/**/images/**/*`，在 add/change/unlink 時送出 `dwselect:content-updated` custom HMR event；新增 client plugin 收到 event 後 reset search index cache 並 `refreshNuxtData('public-content')`。
 - **測試**：新增 `nuxt-smoke` regression，驗證 dev watcher、custom HMR event、client refresh 與 search index reset contract。
 - **驗證結果**：`pnpm test tests/nuxt-smoke.test.ts` 通過，36 passed。
+
+## 2026-06-19：Hotfix 後續 — HMR 自動刷新實際不生效，重做 reactive chain
+
+### 問題描述
+
+- **症狀**：上一筆 hotfix 後，dev 改 `content/` JSON，已開頁面仍不會自動更新；GPT 接手 debug 留下半成品（`tests/nuxt-smoke.test.ts` 已改成 manual-fetch 期望但 plugin 未實作 → 測試 fail）。
+- **預期行為**：dev 改 content 後，已開頁面不重整即反映最新資料。
+
+### 根因分析（三個疊在一起）
+
+1. **Watcher 沒註冊到任何檔案**：`server.watcher.add(['content/**/*.json', ...])` 用 glob 字串，但本專案是 Vite 7 + **chokidar 5.0.0**，chokidar v4 起已移除 glob 支援，傳 glob 進 `.add()` 不匹配任何檔案。→ 改監看 `content/` 目錄絕對路徑（`content_watch_paths`）。
+2. **Hot callback 失去 Nuxt context（真正卡點）**：`import.meta.hot.on(...)` callback 由 websocket 觸發、跑在 Nuxt async context 之外，`refreshNuxtData('public-content')` 內部 `useNuxtApp()` 會丟 "nuxt instance unavailable"，刷新靜默失敗。→ 用 `nuxtApp.runWithContext(() => refreshNuxtData('public-content'))` 包住。GPT 想改成手動 `useNuxtData` + `$fetch` 繞過，但設計較差（`useNuxtData` 回傳 `{ data }` 形狀坑）且 plugin 未實作。
+3. **詳情頁快照式賦值**：`[id].vue` 原 `product_detail.value = product_detail_data.value` 只在 setup 跑一次，payload 刷新後 ref 陳舊。→ 用 `watchEffect` 同步（中間 ref 不可省，因 `useHead`／`useSeoMeta` 需在 await 前註冊，由 head-before-async 測試守護）。
+
+### 修復內容
+
+- `nuxt.config.ts`：watcher 改監看 `content/` 目錄絕對路徑（含 why 註解），移除 debug `console.info`。
+- `app/plugins/content-hmr.client.ts`：`refreshNuxtData('public-content')` 改包在 `nuxtApp.runWithContext(...)` 內。
+- `app/pages/products/[id].vue`：`product_detail` 改用 `watchEffect` 同步（取代一次性快照賦值）。
+- `tests/nuxt-smoke.test.ts`：plugin 期望改為 `runWithContext` 形式；detail 頁回到 `watchEffect` 契約。
+
+### 驗證結果
+
+- `pnpm test tests/nuxt-smoke.test.ts`：36 passed。`pnpm lint`、`pnpm typecheck`：clean。
+- **瀏覽器實測（agent-browser）**：開 `/products/2026-06-19-toshiba-er-d3000a`，改 JSON `name` 加 `[HMR-TEST]`，**未重整** → 頁面 h1／h2／圖片 alt 即時更新；還原 JSON 後頁面同步回復。整條 reactive chain（watcher → ws event → runWithContext refresh → computed → watchEffect → render）端到端確認。
+
+### 連帶：移除耦合 content 慣例的過度測試
+
+- `tests/product-schema.test.ts` 的「validate all migrated content domains」loop 原本對真實 `content/` 強加三類過度約束，已移除（schema `.strict()` + `offers.min(1)` 的 `product_schema.parse` 已完整涵蓋，不需在測試層重覆或加碼）：
+  - `offers[0].checked_at === updated_at`：耦合兩個語意不同的時間戳（offer 最後查價 vs 記錄最後編輯），content 重編輯即破，原本造成的紅燈。
+  - `offers.toHaveLength(1)`：比 schema 的 `.min(1)` 更嚴，禁止合法的多 offer 商品。
+  - 7 行 `not.toHaveProperty(legacy 欄位)`：`.strict()` parse 已拒絕任何未知 key，純冗餘。
+- 全面掃過其他讀真實 `content/` 的測試（`server-content-routes`、`content-taxonomy-references`、`content/extract-content-id`、`nuxt-smoke`、`public-discovery`），其餘斷言均為健康的結構性 invariant 或參照完整性檢查，無同類問題。
+- `pnpm test`：**352 passed（48 files）**。

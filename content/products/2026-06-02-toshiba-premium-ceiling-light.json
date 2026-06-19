@@ -1,25 +1,33 @@
 {
   "id": "2026-06-02-toshiba-premium-ceiling-light",
   "status": "published",
-  "name": "Toshiba高階吸頂燈",
-  "english_name": "Toshiba Premium Ceiling Light",
+  "name": "Toshiba 28B吸頂燈 14畳",
+  "english_name": "Toshiba NLEH14028B-LC LED Ceiling Light",
   "summary": "這顆是演色力比較強的高階款，可惜不是以前那個羅浮宮級的了",
   "long_description": "這顆是演色力比較強的高階款，可惜不是以前那個羅浮宮級的了",
-  "llm_description": "",
-  "search_aliases": [],
-  "model_numbers": [],
+  "llm_description": "## 快速判斷\n\nToshiba NLEH14028B-LC 是日本市場的 14 畳用 LED ceiling light，屬於東芝 28B 系列的調光・ワイド調色款。重點不是智慧連線，而是大空間亮度、寬色溫調整、定時器與簡單遙控操作。\n\n- Amazon JP 商品頁確認 ASIN `B0C9LYBKD3` 對應 14 畳、High-end model / dimmable and wide tone 變體。\n- 可存取來源確認全光束為 6,099 lm，色溫範圍 2000K～6500K，適合需要從暖色休息光到高色溫閱讀／工作光的客廳或房間。\n- 目前可查來源未確認平均演色評價數（Ra）；若主要需求是高演色，購買前應再查日文型錄或說明書。\n\n## 重要規格與功能\n\n- 型號：`NLEH14028B-LC`；ASIN：`B0C9LYBKD3`。\n- 適用範圍：14 畳。\n- 光束：6,099 lm（Shopstaff 商品規格）。\n- 色溫：2000K～6500K，支援調光與ワイド調色。\n- 尺寸／重量：585 × 105 mm、約 3.3 kg（Shopstaff 商品規格）。\n- 主要功能：明るさ約 1.3 倍アップ、ON/OFF timer、おやすみ timer、お目ざめ timer、勉強 mode、sleep assist。\n- 清潔與防蟲：Amazon 商品說明提到 Clean Ace 防靜電處理與 ムシールド 防蟲設計。\n- 安裝：日本家用吸頂燈常見的引掛シーリング情境；跨境使用時需確認台灣天花板接頭、固定方式與日本 100V 電氣規格是否適用。\n\n## 評測與使用者回饋\n\n- Amazon JP 商品頁顯示 4.3／5、119 則評分，並顯示現貨銷售；此分數可作為大致使用者滿意度參考，但未能抓取完整評論內文。\n- Shopstaff 給予 4.7／5、同類 23／68 的評價，摘要指出優勢集中在 14 畳亮度、寬色溫、定時器與 5 年保固；限制則是外觀偏簡單，若重視設計感可能要比較其他款式。\n- Shopstaff 彙整的回饋提到「明るい」「必要な機能が網羅」等正面意見，也提醒收貨時留意運送破損、並依空間調整亮度避免眼睛疲勞。\n\n## 適合誰／不適合誰\n\n- 適合：需要 14 畳級亮度、想要暖色到晝光色寬範圍調整、偏好實體遙控與定時器的人。\n- 不適合：需要 Matter／Wi-Fi／app 智慧控制、強調造型設計、或必須明確確認高 Ra 演色數值的人。\n\n## 參考來源\n\n- [Amazon JP 商品頁](https://www.amazon.co.jp/dp/B0C9LYBKD3)\n- [東芝ライテック ホームライト LED シーリングライト系列頁](https://www.tlt.co.jp/tlt/products/home_lighting/home_led/led_ceiling/led_ceiling.htm)\n- [Shopstaff 商品評價與規格頁](https://shopstaff.jp/items/B0C9LYBKD3)",
+  "search_aliases": [
+    "東芝 LEDシーリングライト 14畳",
+    "TOSHIBA LEDシーリングライト NLEH14028B-LC",
+    "NLEH14028BLC",
+    "28B Series 14畳",
+    "B0C9LYBKD3"
+  ],
+  "model_numbers": [
+    "NLEH14028B-LC"
+  ],
   "offers": [
     {
       "channel_id": "amazonjp",
       "url": "https://www.amazon.co.jp/dp/B0C9LYBKD3",
-      "price_text": "￥30000",
+      "price_text": "TWD 4,085.57",
       "price": {
-        "amount": 30000,
-        "currency": "JPY",
+        "amount": 4085.57,
+        "currency": "TWD",
         "unit": "each",
         "label": null
       },
-      "checked_at": "2026-06-02T00:00:00+08:00"
+      "checked_at": "2026-06-19T00:00:00+08:00"
     }
   ],
   "image_url": null,
@@ -28,9 +36,9 @@
     "lighting",
     "toshiba"
   ],
-  "reference_url": "https://www.facebook.com/applepig/posts/pfbid0qLvB8BELCJiUZrbXYL11uhKJWWUrEqtRK4zxx3JTjX2xjJwj4zK9rWhNvqLMesR3l",
+  "reference_url": "https://shopstaff.jp/items/B0C9LYBKD3",
   "created_at": "2026-06-02T00:00:00+08:00",
-  "updated_at": "2026-06-02T00:00:00+08:00",
+  "updated_at": "2026-06-19T00:00:00+08:00",
   "published_at": "2026-06-02T00:00:00+08:00",
   "unpublished_at": null,
   "archived_at": null,

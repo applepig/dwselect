@@ -1,0 +1,48 @@
+{
+  "id": "2026-06-19-panasonic-nr-e507xt",
+  "status": "published",
+  "name": "Panasonic NR-E507XT 冰箱",
+  "english_name": "Panasonic NR-E507XT 502L Five-Door Inverter Refrigerator",
+  "summary": "日規冰箱懶人包：規格最平衡、我喜歡他們家的門上空間",
+  "long_description": "日規冰箱懶人包：規格最平衡、我喜歡他們家的門上空間",
+  "llm_description": "## 快速判斷\n\nPanasonic NR-E507XT 是日本製 502L 平面鋼板五門變頻冰箱，定位在日製多門冰箱中容量、門數與價格較均衡的級距。PChome 這筆 offer 為香檳金／淺栗金款，Panasonic 台灣官方頁則列出香檳金與晶鑽白兩種外觀。\n\n## 重要規格\n\n- 型號：NR-E507XT，PChome 版本標示為 NR-E507XT-N1。\n- 類型：日本製、平面鋼板、五門、變頻電冰箱。\n- 有效容積：502L。\n- 尺寸：高 1828 × 寬 650 × 深 699 mm。\n- 年耗電量：288 度。\n- 官方特色：-3°C 微凍結、智慧保濕蔬果室、nanoe™ X 健康科技、ECONAVI 智慧節能科技、自動製冰。\n- PChome 商品頁標示顏色為淺栗金／香檳金，並列為 502 公升日本製平面鋼板五門冰箱。\n\n## 選購注意\n\n- 五門 502L 屬於日製多門冰箱的中大型尺寸，購買前需要確認廚房寬度、深度、門片開啟方向、搬運動線與散熱空間。\n- 若重點是冷藏門內收納、蔬果室與冷凍抽屜分區，NR-E507XT 的多門配置比雙門或三門冰箱更容易做食材分類；但也要接受機身高度與價格都高於一般雙門冰箱。\n- 與六門高階款相比，五門機型通常少一層細分抽屜或高階保鮮機能；若指定真空冰溫、更多獨立溫控或更大容量，應另外比較 Hitachi、Mitsubishi 或 Panasonic 六門級距。\n\n## 參考來源\n\n- [Panasonic 台灣官方產品頁](https://www.panasonic.com/tw/consumer/refrigerator/five-door/nr-e507xt.html)\n- [Panasonic 台灣官方規格頁](https://www.panasonic.com/tw/consumer/refrigerator/five-door/nr-e507xt.specs.html)\n- [PChome 24h 商品頁](https://24h.pchome.com.tw/prod/DPACHE-A900II6EM)",
+  "search_aliases": [
+    "Panasonic 國際牌 NR-E507XT",
+    "國際牌 502L 五門冰箱",
+    "NR-E507XT-N1",
+    "Panasonic 502公升日本製冰箱",
+    "日規五門冰箱"
+  ],
+  "model_numbers": [
+    "NR-E507XT",
+    "NR-E507XT-N1"
+  ],
+  "offers": [
+    {
+      "channel_id": "pchome",
+      "url": "https://24h.pchome.com.tw/prod/DPACHE-A900II6EM",
+      "price_text": "54400",
+      "price": {
+        "amount": 54400,
+        "currency": "TWD",
+        "unit": "each",
+        "label": null
+      },
+      "checked_at": "2026-06-19T00:00:00+08:00"
+    }
+  ],
+  "image_file": "2026-06-19-panasonic-nr-e507xt.jpg",
+  "image_url": null,
+  "category_id": "kitchen-appliance",
+  "tag_ids": [
+    "kitchen",
+    "panasonic",
+    "refrigeration"
+  ],
+  "reference_url": "https://www.panasonic.com/tw/consumer/refrigerator/five-door/nr-e507xt.html",
+  "created_at": "2026-06-19T00:00:00+08:00",
+  "updated_at": "2026-06-19T00:00:00+08:00",
+  "published_at": "2026-06-19T00:00:00+08:00",
+  "unpublished_at": null,
+  "archived_at": null
+}

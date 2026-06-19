@@ -1,13 +1,26 @@
 {
   "id": "2026-06-02-lixil-bidet-seat",
   "status": "published",
-  "name": "Lixil免治馬桶座",
-  "english_name": "LIXIL Bidet Seat",
+  "name": "LIXIL INAX CW-RT20 免治座",
+  "english_name": "LIXIL INAX Shower Toilet RT Series CW-RT20/BN8",
   "summary": "TOTO的最近在amazon上價錢很亂，相較之下Lixil的比較合理",
   "long_description": "TOTO的最近在amazon上價錢很亂，相較之下Lixil的比較合理",
-  "llm_description": "",
-  "search_aliases": [],
-  "model_numbers": [],
+  "llm_description": "## 快速判斷\n\nLIXIL INAX CW-RT20/BN8 是日本家用的 Shower Toilet RT 系列溫水洗淨便座，BN8 代表オフホワイト色。定位上是貯湯式、壁掛遙控、附 W Power 脫臭的中階機型；重點不是高階自動開蓋或瞬間加熱，而是基本洗淨、暖房便座、脫臭與容易清潔。\n\n## 重要規格\n\n- 型號：CW-RT20/BN8；系列：シャワートイレ RT シリーズ；色號：BN8 オフホワイト。\n- 供電：日本 AC 100V、50/60Hz；定格消費電力 350W。跨國使用需確認電壓、接地與漏電保護條件。\n- 本體尺寸與重量：約寬 421 × 深 554 × 高 149mm，約 3.6kg。\n- 給水／給湯：水道直結式、貯湯式，熱水槽容量約 0.67L。\n- 洗淨流量：おしり約 0.27～0.57L/分、ビデ約 0.45～0.65L/分，皆為 6 段調整。\n- 溫度：溫水約 32～40℃、暖房便座約 28～36℃，皆為 6 段切換。\n- 清潔與維護：おしり／ビデ分離噴嘴、噴嘴自動清潔、可更換噴嘴前端、本體滑動拆卸、可拆式便蓋。\n- 舒適功能：W Power 脫臭、暖房便座、緩降便座／便蓋、著座感應、8 小時一鍵節電與自動節電。\n- 遙控器：壁掛遙控，尺寸約寬 176 × 深 24 × 高 110mm，使用 3 號鹼性電池 2 顆。\n- 保固：賣場標示メーカー保証 2 年。\n\n## 優點與限制\n\n- RT20 的重點是「遙控 + 脫臭 + 基本洗淨」；相較側邊控制面板機型，壁掛遙控可讓便座周邊比較容易清掃。\n- 貯湯式通常機構單純、價格較瞬間式低，但連續多人使用時，熱水續航與待機耗電是需要注意的取捨。\n- Amazon 商品比較表顯示 RT20 沒有溫風乾燥；若需要乾燥功能，需往 RT30 等更高階型號比較。\n- 日本內銷規格以 AC 100V 為前提，在台灣安裝前應確認電源、插座接地、給水接頭與便器相容性。\n\n## 評測與使用者回饋\n\n- Amazon JP 頁面顯示 4.3/5、74 則評價；Yahoo! Shopping 同型號頁面顯示 4.67/5、12 則評價。\n- 常見正面回饋集中在自行安裝可行、遙控按鍵簡單、清掃容易與基本功能足夠。Yahoo! 頁面 AI 摘要也把「簡單な設置」「使いやすいデザイン」「掃除がしやすい」列為主要優點。\n- 個別評論提到從既有 LIXIL／INAX 機種更換時使用感落差小，也有人回報約 20 分鐘到 1 小時完成安裝；但亦有評論指出水道栓接合部形狀不同時會增加安裝難度。\n\n## 參考來源\n\n- [Amazon JP 商品頁：CW-RT20/BN8、ASIN B00HE7XTI2](https://www.amazon.co.jp/dp/B00HE7XTI2/)\n- [LIXIL iinavi 型號搜尋：CW-RT20](https://iinavi.inax.lixil.co.jp/search_sp/index.php?keyword=CW-RT20)\n- [LIXIL 取扱・施工説明書頁：シャワートイレ RT シリーズ](https://www.biz-lixil.com/descript/detail.php?textfield=CW-RT20&op=and&complete_match=)\n- [Yahoo! Shopping 同型號頁：規格與使用者評論](https://store.shopping.yahoo.co.jp/anchor/cw-rt20-bn8.html)",
+  "search_aliases": [
+    "LIXIL シャワートイレ RT20",
+    "INAX CW-RT20",
+    "CW-RT20-BN8",
+    "リクシル イナックス シャワートイレ",
+    "溫水洗淨便座",
+    "免治馬桶座",
+    "RTシリーズ"
+  ],
+  "model_numbers": [
+    "CW-RT20/BN8",
+    "CW-RT20",
+    "B00HE7XTI2",
+    "4989236345054"
+  ],
   "offers": [
     {
       "channel_id": "amazonjp",
@@ -28,9 +41,9 @@
     "bathroom",
     "lixil"
   ],
-  "reference_url": "https://www.facebook.com/photo/?fbid=10225665699022514&set=a.4011662783214",
+  "reference_url": "https://iinavi.inax.lixil.co.jp/search_sp/index.php?keyword=CW-RT20",
   "created_at": "2026-06-02T00:00:00+08:00",
-  "updated_at": "2026-06-02T00:00:00+08:00",
+  "updated_at": "2026-06-19T00:00:00+08:00",
   "published_at": "2026-06-02T00:00:00+08:00",
   "unpublished_at": null,
   "archived_at": null,

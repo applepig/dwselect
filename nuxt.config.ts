@@ -10,6 +10,9 @@ if (!app_url && !process.argv.some((a) => a === 'generate' || a === 'build')) {
 const vite_host = app_url ?? 'dwselect.toybox.local'
 
 const product_routes = buildProductRoutes(fileURLToPath(new URL('./content/products/', import.meta.url)))
+// 監看 content/ 目錄絕對路徑而非 glob：Vite 7 的 chokidar 5 已移除 glob 支援，
+// 傳 'content/**/*.json' 進 watcher.add() 不會匹配任何檔案。
+const content_watch_paths = [fileURLToPath(new URL('./content/', import.meta.url))]
 const google_tag_manager_script = `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
 new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
 j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
@@ -72,7 +75,7 @@ export default defineNuxtConfig({
       {
         name: 'dwselect-content-hmr',
         configureServer(server) {
-          server.watcher.add(['content/**/*.json', 'content/**/images/**/*'])
+          server.watcher.add(content_watch_paths)
 
           const notifyContentUpdated = (file_path: string) => {
             if (!file_path.includes('/content/') && !file_path.startsWith('content/')) {

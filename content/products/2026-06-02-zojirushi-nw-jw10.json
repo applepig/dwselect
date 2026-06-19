@@ -1,13 +1,22 @@
 {
   "id": "2026-06-02-zojirushi-nw-jw10",
   "status": "published",
-  "name": "象印NW-JW10",
-  "english_name": "Zojirushi NW JW10",
+  "name": "象印 炎舞炊き NW-JW10",
+  "english_name": "Zojirushi Enbu-Daki NW-JW10-BA Pressure IH Rice Cooker",
   "summary": "這台的賣點是煮飯快、要清洗的零件少，不過煮起來還是略輸本炭釜",
   "long_description": "這台的賣點是煮飯快、要清洗的零件少，不過煮起來還是略輸本炭釜",
-  "llm_description": "",
-  "search_aliases": [],
-  "model_numbers": [],
+  "llm_description": "## 快速判斷\n\n象印 NW-JW10-BA 是日本 Amazon 上仍可找到的 5.5 合（約 1L）壓力 IH 電子鍋，屬於象印「炎舞炊き」系列。它的定位不是入門 IH，而是以高火力、高壓力、可調口感與簡化清潔為主的日規高階機種。\n\n## 重要規格\n\n- 型號：NW-JW10-BA；色號 BA 為黑色。\n- 容量：5.5 合／約 1L，適合一般小家庭或每日煮白米的使用情境。\n- 加熱方式：壓力 IH，Amazon 商品頁列出「大火力＆高圧力」與 7 種壓力炊分設定。\n- 口感調整：列有 81 通り「わが家炊き」選單，可記錄偏好並微調飯感。\n- 清潔設計：主打沒有蒸氣口組件、平面上蓋與平面框，頁面標示清潔零件為 2 件。\n- 尺寸／重量：Amazon 商品 facts 標示約 34.5 × 27.5 × 21.5 cm、約 6.5 kg。\n- 電源限制：日本國內 100V 產品；Amazon 商品頁明示海外不同電壓／頻率不可使用，海外使用時也不適用日本原廠保固。\n\n## 優點與限制\n\n- 優點是壓力 IH 與多段口感調整比一般 IH 機種更細，且清潔件數少，適合重視每日煮飯口感但不想清洗太多零件的人。\n- 限制是它是日規 100V 機型，台灣使用需自行處理電壓與保固風險；跨境購買也要注意運送、退換貨與維修成本。\n- Amazon 商品頁同時提示已有較新的 NW-JZ10-BA 後繼／新款選項，因此購買前應確認是要舊款價格、庫存品，還是改買新款。\n\n## 評測與使用者回饋\n\n- Amazon JP 商品頁可驗證的聚合評分為 4.2／5、568 則評價；但評論頁需要登入，無法逐則查證具體常見抱怨或好評內容，因此不把個別評論推論成普遍結論。\n- 商品頁仍顯示新貨購買選項，但庫存量有限，且賣家不是象印官方直營；價格與庫存需以下單當下為準。\n\n## 參考來源\n\n- [Amazon JP 商品頁／ASIN B089M6CRXJ](https://www.amazon.co.jp/dp/B089M6CRXJ)",
+  "search_aliases": [
+    "象印炎舞炊き",
+    "炎舞炊き NW-JW10",
+    "NW-JW10-BA",
+    "Zojirushi Enbu Daki",
+    "Zojirushi Pressure IH Rice Cooker"
+  ],
+  "model_numbers": [
+    "NW-JW10-BA",
+    "NW-JW10"
+  ],
   "offers": [
     {
       "channel_id": "amazonjp",
@@ -23,15 +32,15 @@
     }
   ],
   "image_url": null,
-  "category_id": "small-appliance",
+  "category_id": "kitchen-appliance",
   "tag_ids": [
     "countertop",
     "kitchen",
     "zojirushi"
   ],
-  "reference_url": null,
+  "reference_url": "https://www.amazon.co.jp/dp/B089M6CRXJ",
   "created_at": "2026-06-02T00:00:00+08:00",
-  "updated_at": "2026-06-02T00:00:00+08:00",
+  "updated_at": "2026-06-19T00:00:00+08:00",
   "published_at": "2026-06-02T00:00:00+08:00",
   "unpublished_at": null,
   "archived_at": null,

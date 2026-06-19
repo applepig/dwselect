@@ -1,25 +1,34 @@
 {
   "id": "2026-06-02-hitachi-rd-14fr",
   "status": "published",
-  "name": "Hitachi RD-14FR",
-  "english_name": "Hitachi RD 14FR",
+  "name": "日立 RD-14FR 除濕機",
+  "english_name": "HITACHI 7L Energy-Saving Dehumidifier RD-14FR",
   "summary": "日立這系列最近大概降了20%，現在應該不需要考慮其他牌子",
   "long_description": "日立這系列最近大概降了20%，現在應該不需要考慮其他牌子",
-  "llm_description": "",
-  "search_aliases": [],
-  "model_numbers": [],
+  "llm_description": "## 快速判斷\n\nHITACHI RD-14FR 是台灣通路販售的 7 公升／日壓縮機式除濕機，定位在小房間、衣櫃旁或 5–9 坪左右空間的日常除濕與輔助乾衣。PChome 與 Yahoo 商品頁都標示為 2 級能效、7 公升／日、舒適節電、快速乾衣；PChome 規格頁另標示定頻、3 年保固與 BSMI 許可字號 R41010。\n\n## 重要規格與決策點\n\n- 除濕能力：7 公升／日，通路分類落在 6.1–10L／7–10 公升級距。\n- 適用空間：PChome 規格標示 5–9 坪；適合臥室、小書房、衣物乾燥區等中小型空間，不是大坪數全屋除濕取向。\n- 能效與機型：通路標示 2 級能效、定頻；若很在意長時間運轉電費，可與 1 級能效或變頻機型比較。\n- 功能重點：快速乾衣、低濕乾燥、舒適節電；未在可讀規格中確認空氣清淨、Wi-Fi 或變頻靜音等進階功能。\n- 保固與合規：PChome 規格標示保固 3 年、BSMI 許可字號 R41010；頁面同時標示可申請貨物稅退稅 $500。\n\n## 評測與使用者回饋\n\n- PChome 頁面顯示約 1,234 則評價、總評 4.9；Yahoo 商品頁顯示 168 則評價、商品品質／符合度／包裝皆 4.9。\n- 可讀評論中，常見正面回饋集中在除濕效果、聲音不大、出貨快與外觀；其中一則 PChome 評論提到距離 50 公分實測約 42 dB，但這是使用者個別測量，不能視為官方噪音規格。\n- 可讀負面或限制多與通路配送、包裝、出風導板角度不能微調、水箱蓋較薄等使用細節有關；選購時可留意退換貨與到貨箱況。\n\n## 適合誰／不適合誰\n\n- 適合：需要 7L 級日常除濕、偶爾輔助乾衣、空間約 5–9 坪、希望找日立品牌且預算落在 6 千元上下的使用者。\n- 不適合：需要大坪數、連續高濕環境大量除濕、指定 1 級能效、變頻、Wi-Fi、空氣清淨或非常明確低噪音規格的人。\n\n## 參考來源\n\n- [PChome 24h 商品頁](https://24h.pchome.com.tw/prod/DMBQ01-A900GSFE3)\n- [PChome 商品 API](https://ecapi.pchome.com.tw/ecshop/prodapi/v2/prod/DMBQ01-A900GSFE3&fields=Id,Name,Nick,Price,Pic,Slogan,Describe,Spec&_callback=jsonp)\n- [Yahoo 購物中心商品頁](https://tw.buy.yahoo.com/gdsale/gdsale.asp?gdid=10844289)\n- [Hitachi 台灣家電產品分類頁](https://hitachi-homeappliances.com.tw/products/)",
+  "search_aliases": [
+    "HITACHI日立 7公升舒適節電除濕機",
+    "日立 RD-14FR",
+    "日立7公升除濕機",
+    "RD 14FR",
+    "RD14FR",
+    "HITACHI RD-14FR"
+  ],
+  "model_numbers": [
+    "RD-14FR"
+  ],
   "offers": [
     {
       "channel_id": "pchome",
       "url": "https://24h.pchome.com.tw/prod/DMBQ01-A900GSFE3",
-      "price_text": "5999",
+      "price_text": "5866",
       "price": {
-        "amount": 5999,
+        "amount": 5866,
         "currency": "TWD",
         "unit": "each",
         "label": null
       },
-      "checked_at": "2026-06-02T00:00:00+08:00"
+      "checked_at": "2026-06-19T00:00:00+08:00"
     }
   ],
   "image_url": null,
@@ -28,9 +37,9 @@
     "air-care",
     "hitachi"
   ],
-  "reference_url": "https://www.facebook.com/applepig/posts/pfbid02NJssM3r5EVu8ekue21HnszURe3KdzudkyFDY1t6sfrF1hL6PkWueXR5Gvg1kEQE9l",
+  "reference_url": "https://tw.buy.yahoo.com/gdsale/gdsale.asp?gdid=10844289",
   "created_at": "2026-06-02T00:00:00+08:00",
-  "updated_at": "2026-06-02T00:00:00+08:00",
+  "updated_at": "2026-06-19T00:00:00+08:00",
   "published_at": "2026-06-02T00:00:00+08:00",
   "unpublished_at": null,
   "archived_at": null,

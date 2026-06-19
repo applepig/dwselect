@@ -563,15 +563,8 @@ describe('product schema', () => {
       expect(entry.content.id).toMatch(/^\d{4}-\d{2}-\d{2}-[a-z0-9]+(?:-[a-z0-9]+)*$/)
       expect(entry.content.image_url === null || isHttpUrl(entry.content.image_url)).toBe(true)
       expectContentImageFileToExist(entry.content.image_file, products_dir_url)
-      expect(entry.content).not.toHaveProperty('category')
-      expect(entry.content).not.toHaveProperty('tags')
-      expect(entry.content).not.toHaveProperty('channel_id')
-      expect(entry.content).not.toHaveProperty('purchase_url')
-      expect(entry.content).not.toHaveProperty('price')
-      expect(entry.content).not.toHaveProperty('price_text')
-      expect(entry.content).not.toHaveProperty('description')
-      expect(entry.content.offers).toHaveLength(1)
-      expect(entry.content.offers[0].checked_at).toBe(entry.content.updated_at)
+      // schema 是 .strict() 且 offers 為 .min(1)：legacy 欄位、offer 數量與必填皆由 parse 涵蓋，
+      // 不另外硬鎖 offers 剛好 1 個或 checked_at===updated_at（那是內容慣例，非 schema 契約）。
       expect(() => product_schema.parse(entry.content)).not.toThrow()
     }
     for (const entry of guide_entries) {

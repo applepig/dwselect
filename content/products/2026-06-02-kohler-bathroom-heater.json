@@ -1,13 +1,23 @@
 {
   "id": "2026-06-02-kohler-bathroom-heater",
   "status": "published",
-  "name": "Kohler暖風機",
-  "english_name": "Kohler Bathroom Heater",
+  "name": "KOHLER 浴室淨暖機",
+  "english_name": "KOHLER Multifunction Bathroom Heater K-77317TW-G-MZ",
   "summary": "他們家的暖風機面板非常好看，而且無線遙控款才賣一萬出頭，你浴室有拉220V的話可以考慮",
   "long_description": "他們家的暖風機面板非常好看，而且無線遙控款才賣一萬出頭，你浴室有拉220V的話可以考慮",
-  "llm_description": "",
-  "search_aliases": [],
-  "model_numbers": [],
+  "llm_description": "## 快速判斷\n\nKOHLER 官方旗艦店販售的這款「多功能浴室淨暖機（30x30cm，不含清淨功能）」是固定安裝型浴室暖風設備，商店頁 SKU 為 `77317TW-G-MZ`。它與 KOHLER 台灣官網 Bathroom Heaters 分類中的 K-77316TW-G-MZ 同屬 Underscore／浴室淨暖機系列，但本商品頁明確標示為「不含清淨功能」版本，因此選購時應以商店頁的型號、價格與功能標示為準。\n\n## 重要規格與安裝重點\n\n- 型號／SKU：`77317TW-G-MZ`，安裝說明書檔名標示適用 `K-77316 77317TW-G-MZ`。\n- 尺寸版本：30 x 30 cm，商店頁標示為不含清淨功能。\n- 主要功能：鏡面玻璃面板、陶瓷瞬熱暖風、雙色柔和發光面板（黃光／白光）。\n- 官方商店價：NT$10,900，頁面同時顯示原價 NT$26,400。\n- 安裝費用：KOHLER 安裝費頁面列出浴室淨暖機一般安裝 NT$3,500、吊頂安裝 NT$4,000，且不含開孔、風管、電線；商品頁選項也列出一般安裝 NT$3,500。\n- 購買前要確認現場條件：天花板開孔、風管路徑、電源迴路、吊頂形式與既有設備拆除費用。商店頁和可讀文字未完整列出功率、電壓、噪音、換氣量等細部規格，需以安裝說明書或 KOHLER／安裝商確認。\n\n## 優點與限制\n\n- 優點：外觀偏衛浴品牌整合設計，30 x 30 cm 規格適合需要方形面板的浴室配置；官方頁面強調鏡面玻璃便於清潔，以及陶瓷瞬熱供暖。\n- 限制：這個 offer 是「不含清淨功能」版本；若需要空氣清淨調節，需改查 KOHLER 官網列出的含清淨功能機型（例如 K-77316TW-G-MZ）。\n- 固定式浴室電器的總成本不只商品價，還要把安裝、開孔、風管、電線、偏遠地區交通費與拆除費納入預算。\n\n## 評測與使用者回饋\n\n- KOHLER 官方旗艦店商品頁標示「尚無評論」。\n- 未找到可可靠引用的第三方長期評測或大量使用者回饋；因此目前判斷主要依據官方商店頁、KOHLER 台灣官網分類頁與安裝費用頁。\n\n## 參考來源\n\n- [KOHLER 官方旗艦店商品頁：多功能浴室淨暖機（30x30cm，不含清淨功能）](https://shop.kohler.com.tw/30x30cm-1/)\n- [KOHLER 台灣 Bathroom Heaters 分類](https://www.kohler.com.tw/browse/bathroom/Categories/bathroom-heaters)\n- [KOHLER 安裝費用頁](https://shop.kohler.com.tw/installation)\n- [KOHLER 台灣電子產品保固登記／服務條款](https://www.kohler.com.tw/warranty-registration)",
+  "search_aliases": [
+    "Kohler 暖風機",
+    "Kohler 浴室暖風機",
+    "KOHLER 多功能浴室淨暖機",
+    "科勒浴室淨暖機",
+    "30x30cm 不含清淨功能",
+    "77317TW-G-MZ"
+  ],
+  "model_numbers": [
+    "K-77317TW-G-MZ",
+    "77317TW-G-MZ"
+  ],
   "offers": [
     {
       "channel_id": "other",
@@ -15,11 +25,11 @@
       "price_text": "10900",
       "price": {
         "amount": 10900,
-        "currency": null,
+        "currency": "TWD",
         "unit": "each",
         "label": null
       },
-      "checked_at": "2026-06-02T00:00:00+08:00"
+      "checked_at": "2026-06-19T00:00:00+08:00"
     }
   ],
   "image_url": null,
@@ -30,9 +40,9 @@
     "fixed-install",
     "kohler"
   ],
-  "reference_url": null,
+  "reference_url": "https://shop.kohler.com.tw/30x30cm-1/",
   "created_at": "2026-06-02T00:00:00+08:00",
-  "updated_at": "2026-06-02T00:00:00+08:00",
+  "updated_at": "2026-06-19T00:00:00+08:00",
   "published_at": "2026-06-02T00:00:00+08:00",
   "unpublished_at": null,
   "archived_at": null,

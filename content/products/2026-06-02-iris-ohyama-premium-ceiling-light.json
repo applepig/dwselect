@@ -1,13 +1,24 @@
 {
   "id": "2026-06-02-iris-ohyama-premium-ceiling-light",
   "status": "published",
-  "name": "Iris高階吸頂燈",
-  "english_name": "IRIS OHYAMA Premium Ceiling Light",
+  "name": "IRIS 導光板吸頂燈",
+  "english_name": "IRIS OHYAMA CEA-A12DLP LED Panel Ceiling Light 12畳",
   "summary": "這顆是導光板的高階款，水平方向的擴散比較強，可以減少房間角落太暗的問題",
   "long_description": "這顆是導光板的高階款，水平方向的擴散比較強，可以減少房間角落太暗的問題",
-  "llm_description": "",
-  "search_aliases": [],
-  "model_numbers": [],
+  "llm_description": "## 快速判斷\n\nIRIS OHYAMA CEA-A12DLP 是日本 12 畳用 LED 吸頂燈，重點不是一般圓形燈罩，而是採用導光板／panel light 結構，讓光從面板擴散，視覺上比傳統中央發光的吸頂燈更像室內間接照明。Amazon JP 現有 ASIN B09923R2X3 對應 12 畳、約 5,200 lm 款式；IRIS Plaza 的官方系列頁也列出 CEA-A12DLP 系列規格。\n\n## 重要規格\n\n- 適用空間：12 畳等級，日本規格常見於客廳、臥室或書房；實際亮度仍需依天花板高度、牆面反射與房間形狀調整。\n- 亮度：12 畳款最大光束約 5,200 lm。\n- 調光／調色：遙控器操作，亮度與色溫可分段調整；Amazon 商品頁標示調光、調色各 10 段。\n- 顯色性：官方頁列出 Ra85，屬住宅照明中比基本 Ra80 更高一階的規格。\n- 光源壽命：LED 模組約 40,000 小時；這是亮度衰減到約 70% 的推估壽命，不等於整機保固。\n- 功能：附遙控器，具記憶設定、夜燈與睡眠定時；Amazon 頁標示睡眠定時可 15／30 分鐘漸暗關燈。\n- 安裝：日本常見引掛シーリング／ローゼット天花板接頭可自行安裝；若住家天花板接頭不同，需先確認配線器具或找電工處理。\n\n## 優點與限制\n\n- 導光板設計的賣點是光線擴散與外觀質感，適合不想只看到中央一顆亮點、希望天花板照明比較柔和的人。\n- 12 畳 5,200 lm 屬於大空間款，若裝在小房間可能需要常態調低亮度。\n- 這是日本市場商品，電壓規格以 AC100V 為主；在台灣使用前應確認供電、安裝配件與保固條件。\n- 產品頁顯示多個外觀與尺寸變體，購買時要確認選到 12 畳 CEA-A12DLP／ASIN B09923R2X3，而不是 8 畳或方形、雙燈等相近款。\n\n## 評測與使用者回饋\n\n- Amazon JP 商品頁顯示約 4.3／5 分、1,600 則以上評價，常見回饋集中在亮度、調光調色與安裝便利性。\n- IRIS Plaza 對應 CEA-A12DLP 系列頁顯示約 4.6／5 分、數十則評價；官方商店評論偏向肯定亮度與外觀，但屬賣場評論，仍應搭配實際安裝環境判斷。\n\n## 參考來源\n\n- [Amazon JP：IRIS OHYAMA CEA-A12DLP / ASIN B09923R2X3](https://www.amazon.co.jp/dp/B09923R2X3)\n- [IRIS Plaza 官方商品頁：LED シーリングライト パネルライト CEA-A12DLP-N](https://www.irisplaza.co.jp/index.php?KB=SHOSAI&SID=110461)",
+  "search_aliases": [
+    "IRIS OHYAMA CEA-A12DLP",
+    "アイリスオーヤマ CEA-A12DLP",
+    "アイリスオーヤマ パネルライト 12畳",
+    "LEDシーリングライト パネルライト",
+    "導光板 吸頂燈",
+    "B09923R2X3"
+  ],
+  "model_numbers": [
+    "CEA-A12DLP",
+    "CEA-A12DLP-N",
+    "B09923R2X3"
+  ],
   "offers": [
     {
       "channel_id": "amazonjp",
@@ -28,9 +39,9 @@
     "iris-ohyama",
     "lighting"
   ],
-  "reference_url": "https://www.facebook.com/applepig/posts/pfbid0qLvB8BELCJiUZrbXYL11uhKJWWUrEqtRK4zxx3JTjX2xjJwj4zK9rWhNvqLMesR3l",
+  "reference_url": "https://www.irisplaza.co.jp/index.php?KB=SHOSAI&SID=110461",
   "created_at": "2026-06-02T00:00:00+08:00",
-  "updated_at": "2026-06-02T00:00:00+08:00",
+  "updated_at": "2026-06-19T00:00:00+08:00",
   "published_at": "2026-06-02T00:00:00+08:00",
   "unpublished_at": null,
   "archived_at": null,

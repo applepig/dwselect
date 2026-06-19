@@ -1,37 +1,45 @@
 {
   "id": "2026-06-02-panasonic-sr-kt069",
   "status": "published",
-  "name": "Panasonic SR-KT069",
-  "english_name": "Panasonic SR KT069",
+  "name": "Panasonic SR-KT069 電子鍋",
+  "english_name": "Panasonic SR-KT069 4人份 IH 微電腦電子鍋",
   "summary": "四人份小電鍋唯一推薦",
   "long_description": "四人份小電鍋唯一推薦",
-  "llm_description": "",
-  "search_aliases": [],
-  "model_numbers": [],
+  "llm_description": "## 快速判斷\n\nPanasonic SR-KT069 是 4 人份小容量 IH 微電腦電子鍋，定位在小家庭、租屋或不想使用大型 6～10 人份電子鍋的廚房。官方商城列出的重點是 IH 大火力、玻璃觸控面板與輕巧機身；Yahoo 商品頁補充其特色包含 2 段 IH 大火力、10 項炊煮行程與 2.0mm 備長炭內鍋。\n\n## 重要規格與選購重點\n\n- 容量：4 人份；飛比彙整的商品標題另標示 630ml。\n- 加熱方式：IH 微電腦電子鍋；相較傳統底盤加熱電子鍋，選購重點在加熱均勻性與米飯口感，但價格通常也高於同容量機械式電子鍋。\n- 內鍋：Yahoo 商品頁標示 2.0mm 備長炭內鍋；搜尋篩選資訊顯示內鍋材質為不粘塗層合金。\n- 操作：LED 玻璃觸控面板；外觀整潔，但觸控面板是否適合長輩或濕手操作需依使用習慣判斷。\n- 烹調功能：Yahoo 商品頁標示 10 項炊煮行程，適合需要白飯以外米飯模式的人；官方頁未以文字列出完整 10 項名稱。\n- 電氣規格：Yahoo 搜尋篩選標示 110V、60Hz，功率分類為 600～700W。\n- 安規：官方商城頁標示 BSMI 識別號碼 R31417。\n\n## 優點與限制\n\n- 優點：4 人份容量比常見 6～10 人份鍋更省空間；IH 加熱與微電腦行程是同容量入門鍋以外的差異點。\n- 優點：官方與零售頁一致指向 SR-KT069 型號，PChome 既有 offer 可由 API 查到同商品名稱與庫存。\n- 限制：官方商城 detail 頁目前顯示「售完！貨到通知我」，但 PChome 既有商品 API 仍回傳數量與售價；購買前仍應以實際賣場頁結帳狀態為準。\n- 限制：官方可讀文字規格較少，完整尺寸、重量與全部炊煮模式未能由非圖片文字來源完整確認。\n\n## 評測與使用者回饋\n\n- Yahoo 商品頁顯示「尚無任何評價」；本次未找到可信的長篇第三方評測。\n- 可查到的公開資料多為官方／賣場規格與價格比較彙整，因此此商品判斷主要依容量、IH 加熱、內鍋、行程與通路狀態，而非大量使用者回饋。\n\n## 參考來源\n\n- [Panasonic 台灣官方購物商城商品頁](https://pstw.panasonic.com.tw/Shop/Product/Detail/ZVJEDB4ZYR4MCWUNT87C)\n- [PChome 24h 商品頁](https://24h.pchome.com.tw/prod/DMBI0H-A900AOX6V)\n- [PChome 商品 API](https://ecapi.pchome.com.tw/ecshop/prodapi/v2/prod/DMBI0H-A900AOX6V&fields=Id,Name,Nick,Price,Pic,Slogan,Describe,Spec&_callback=jsonp)\n- [Yahoo 購物中心商品頁](https://tw.buy.yahoo.com/gdsale/Panasonic國際牌4人份IH微電腦電子鍋-SR-KT069-8915805.html)\n- [飛比價格搜尋結果](https://feebee.com.tw/s/SR-KT069/)",
+  "search_aliases": [
+    "國際牌 SR-KT069",
+    "Panasonic 4人份IH電子鍋",
+    "4人份 IH 微電腦電子鍋",
+    "SR KT069",
+    "國際牌4人份IH微電腦電子鍋"
+  ],
+  "model_numbers": [
+    "SR-KT069"
+  ],
   "offers": [
     {
       "channel_id": "pchome",
       "url": "https://24h.pchome.com.tw/prod/DMBI0H-A900AOX6V",
-      "price_text": "5000",
+      "price_text": "4950",
       "price": {
-        "amount": 5000,
+        "amount": 4950,
         "currency": "TWD",
         "unit": "each",
         "label": null
       },
-      "checked_at": "2026-06-02T00:00:00+08:00"
+      "checked_at": "2026-06-19T00:00:00+08:00"
     }
   ],
   "image_url": null,
-  "category_id": "small-appliance",
+  "category_id": "kitchen-appliance",
   "tag_ids": [
     "countertop",
     "kitchen",
     "panasonic"
   ],
-  "reference_url": "https://www.facebook.com/applepig/posts/pfbid0qpSR2V4dzA2a1ciNswbcp3DcDTT43Aok39FL1yDxG4RcyoJceQr9G28WxMu95PNcl",
+  "reference_url": "https://pstw.panasonic.com.tw/Shop/Product/Detail/ZVJEDB4ZYR4MCWUNT87C",
   "created_at": "2026-06-02T00:00:00+08:00",
-  "updated_at": "2026-06-02T00:00:00+08:00",
+  "updated_at": "2026-06-19T00:00:00+08:00",
   "published_at": "2026-06-02T00:00:00+08:00",
   "unpublished_at": null,
   "archived_at": null,
