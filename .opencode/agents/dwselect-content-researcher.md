@@ -65,7 +65,7 @@ When creating or editing a target JSON：
 - For guides，you own `title` and a content-derived `summary`（see above）；keep `source_url` as the post URL（strip a trailing `?`）。
 - Update agent-owned factual fields：`name`、`english_name`、`llm_description`、`search_aliases`、`model_numbers`、`reference_url`，taxonomy IDs from existing taxonomy only，and price currency/unit metadata when it is clearly missing or wrong。
 - Keep `updated_at` unchanged unless the coordinator explicitly asks timestamp maintenance；the coordinator may batch timestamp updates separately。
-- Do not rebuild generated artifacts；the coordinator will audit and run verification.
+- Do not run `pnpm generate`、`nuxt build`，or any build/SSG step；content has dev-server HMR so a generate is unnecessary overhead。The coordinator collects your finished file and runs `pnpm content:check` (zod schema + taxonomy reference + image-guard Vitest suites that read `content/`)，not a full generate.
 - Return concise audit notes：files changed、fields changed、sources、confidence、offer_status、taxonomy_suggestions、unresolved assumptions。
 
 Return format for research-only tasks：

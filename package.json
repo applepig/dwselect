@@ -9,7 +9,7 @@
   },
   "scripts": {
     "prepare": "nuxt prepare",
-    "dev": "nuxt dev",
+    "dev": "node scripts/assert-in-container.mjs && nuxt dev",
     "build": "pnpm build:public-discovery && node scripts/assert-content-images.ts && nuxt build",
     "build:content-images": "node scripts/build-content-images.ts",
     "build:search-index": "node scripts/build-search-index.ts",
@@ -17,6 +17,7 @@
     "build:public-artifacts": "node scripts/build-public-artifacts.ts",
     "test:e2e": "playwright test",
     "test": "vitest run --exclude 'tests/e2e/**'",
+    "content:check": "node scripts/content-check.mjs",
     "lint": "eslint . --max-warnings=0",
     "lint:file": "eslint --fix --max-warnings=0",
     "format": "eslint . --fix",
