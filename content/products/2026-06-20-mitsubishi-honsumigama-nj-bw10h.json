@@ -1,0 +1,53 @@
+{
+  "id": "2026-06-20-mitsubishi-honsumigama-nj-bw10h",
+  "status": "published",
+  "name": "三菱 本炭釜 NJ-BW10H",
+  "english_name": "Mitsubishi Electric Hon-Sumigama Tsumugi NJ-BW10H IH Rice Cooker",
+  "summary": "",
+  "long_description": "",
+  "llm_description": "## 快速判斷\n\n三菱電機 NJ-BW10H 是 2025 年 5 月推出的「本炭釜 紬（つむぎ）」系列 5.5 合 IH 電子鍋（非壓力式）。最大特徵是內鍋採用純度 99.9% 的純炭素「本炭釜」，主打高遠紅外線、強火直火炊飯，與壓力 IH 路線（象印炎舞炊き、Panasonic Bistro）走相反方向，追求粒粒分明、冷掉也好吃的口感。\n\n## 重要規格\n\n- 型號：NJ-BW10H；色號 NJ-BW10H-B（炭漆黑）、NJ-BW10H-W（白真珠）。\n- 容量：5.5 合（約 1.0L），適合 3～4 人小家庭。\n- 加熱方式：IH 非壓力式，連續沸騰「本炊き」高火力炊法。\n- 內鍋：本炭釜，純度 99.9% 炭素，職人削り出し製法、耗時約 100 天製成；遠紅外線導熱，但材質不耐強衝擊（官方明示與金屬內鍋不同）。\n- 內鍋厚度：約 10mm。\n- 炊飯模式：銘柄芳潤炊き（約 50 種米／9 種口感）、炊分け名人（15 種口感）、白米／玄米／發芽玄米／雜穀／麥飯／ダイズライス（大豆米）、うま早・お急ぎ快速、少量名人、低温調理（65～85°C）。\n- 尺寸：約 261×257×315mm；重量約 5.7kg；消費電力約 1400W；每次炊飯耗電約 161.9Wh。\n- 電源：日本國內 100V 機型。\n\n## 優點與限制\n\n- 優點：本炭釜純炭素內鍋的遠紅外線強火直火，口感主打粒立ち與冷飯仍好吃，是三菱炊飯器的招牌風格；非壓力路線適合偏好硬挺、分明口感而非黏軟口感的人。\n- 優點：模式豐富，新增大豆米（ダイズライス）模式為本世代亮點，另有低温調理與少量炊煮。\n- 限制：本炭釜內鍋不耐強衝擊，需小心使用與清洗，碰撞可能造成破損。\n- 限制：日規 100V 機型，台灣使用需自行處理變壓與原廠保固問題；跨境購買也要評估運送、維修與退換貨成本。\n\n## 評測與使用者回饋\n\n- 價格.com 評論分頁可讀到的個別評論中，三菱本炭釜的招牌印象是「しゃっきり／粒立つ」（飯粒硬挺分明）與「冷めても美味しい」（冷掉也好吃），本世代的大豆米模式也被點名為亮點。\n- 樣本數須留意：頁面上多數可見評論屬於專業評論（不列入平均分），一般使用者的集計樣本極少（集計對象約 1 件），因此聚合分數參考價值有限，不宜當作普遍結論。\n\n## 參考來源\n\n- [三菱電機 本炭釜 官方產品頁](https://www.mitsubishielectric.co.jp/home/suihanki/products/honsumigama_bw10h/)\n- [價格.com 商品頁／NJ-BW10H](https://kakaku.com/item/J0000048028/)",
+  "search_aliases": [
+    "三菱本炭釜",
+    "本炭釜 紬",
+    "本炭釜 つむぎ",
+    "ホンスミガマ",
+    "NJ-BW10H",
+    "NJ-BW10H-B",
+    "NJ-BW10H-W",
+    "Mitsubishi Hon-Sumigama",
+    "Mitsubishi NJ-BW10H Rice Cooker"
+  ],
+  "model_numbers": [
+    "NJ-BW10H",
+    "NJ-BW10H-B",
+    "NJ-BW10H-W"
+  ],
+  "offers": [
+    {
+      "channel_id": "other",
+      "url": "https://kakaku.com/item/J0000048028/",
+      "price_text": "¥59,800",
+      "price": {
+        "amount": 59800,
+        "currency": "JPY",
+        "unit": "each",
+        "label": "最低価格"
+      },
+      "checked_at": "2026-06-20T00:00:00+08:00"
+    }
+  ],
+  "image_url": null,
+  "category_id": "kitchen-appliance",
+  "tag_ids": [
+    "countertop",
+    "kitchen",
+    "mitsubishi-electric"
+  ],
+  "reference_url": "https://www.mitsubishielectric.co.jp/home/suihanki/products/honsumigama_bw10h/",
+  "created_at": "2026-06-20T00:00:00+08:00",
+  "updated_at": "2026-06-20T00:00:00+08:00",
+  "published_at": "2026-06-20T00:00:00+08:00",
+  "unpublished_at": null,
+  "archived_at": null,
+  "image_file": "2026-06-20-mitsubishi-honsumigama-nj-bw10h.jpg"
+}
