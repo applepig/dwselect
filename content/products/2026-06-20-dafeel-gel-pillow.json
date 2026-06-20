@@ -1,0 +1,53 @@
+{
+  "id": "2026-06-20-dafeel-gel-pillow",
+  "name": "Dafeel 無重力ジェルピロー",
+  "english_name": "Dafeel TPE Gel Pillow (深眠枕 PRO / Wave Pillow), Height Adjustable, 53×34cm",
+  "status": "published",
+  "category_id": "household",
+  "tag_ids": [
+    "bedding-sleep",
+    "dafeel"
+  ],
+  "summary": "綿羊枕的下位互換，枕套明顯輸了一截，但是價格只要一半。",
+  "long_description": "綿羊枕的下位互換，枕套明顯輸了一截，但是價格只要一半。",
+  "llm_description": "## 快速判斷\n\n- Dafeel 是 Amazon JP 上的 TPE 凝膠枕（商品頁標示「深眠枕 PRO」／「Wave Pillow」），主打人體工學波浪造型與 3D 三角格子結構，被多位日本使用者直接稱為「ひつじのいらない枕」的同類替代品（ジェネリック）。\n- 核心定位是「同樣是 TPE 凝膠枕、價格約為知名品牌一半」的選擇；代價是枕套／外罩質感明顯較陽春。\n- 適合想先用較低成本體驗 TPE 凝膠枕觸感的人；對枕套質感或想要更高枕高的人，需留意限制。\n\n## 重要規格\n\n- 材質：高彈性 TPE 凝膠（thermoplastic elastomer），一體成型。\n- 結構：一體式 3D 三角格子減壓結構，官方標示約 1,600 個透氣孔，主打散熱與透氣。\n- 尺寸：約 53 × 34 cm。\n- 高度：可翻面雙向調節，約 8 cm／10 cm（官方頁標示，部分頁面英譯為 3.1／3.9 吋）。\n- 重量：本體約 3.3 kg，偏重；使用者回饋指出重量帶來不易滑動的穩定感。\n- 清洗：本體可整顆水洗、易乾。\n- 耐用：官方內部測試標示 500 次壓縮後仍維持約 92% 回彈。\n- 認證：TPE 通過第三方檢測並依 REACH 規範檢驗；標示在日、韓、中、澳取得智財權與國際設計獎認證。\n- 附件：附專用枕套與禮盒；商品頁可見多種「枕本體 × 枕套」組合（深眠枕／Tsuju 枕、不同內外套）。\n- 注意：TPE 為熱塑材質，置於 75°C 以上環境超過 10 分鐘後勿立即施壓。\n\n## 與「ヒツジのいらない枕」比較\n\n- 材質相近：兩者皆為 TPE 凝膠、格子／波浪結構的同類產品，觸感（ムニュムニュ的凝膠手感、透氣不悶熱）方向一致。\n- 價格差：Dafeel 約為知名品牌的一半上下，日本使用者明確以「較便宜的同類」為購買理由（有評論提到在 Bic Camera 看到ひつじ後改買這款）。\n- 觸感差異：有使用者比較認為此款相當於ひつじ「極柔」等級、甚至更軟，下沉量更大；雖規格高度比ひつじ高約 1～2 cm，實際躺起來反而感覺較低。想要較高枕高者偏好ひつじ。\n- 枕套／外罩質感：使用者與定位資訊指出枕套品質明顯較陽春，是與品牌款最直接的取捨點；部分人會改套較緊的彈性枕套以抑制下沉，但會犧牲部分柔軟度。\n\n## 評測與使用者回饋\n\n- Amazon JP 評價：約 4.2 / 5，668 則評分（5 星 54%、4 星 27%、3 星 10%、2 星 4%、1 星 5%）。\n- 正面回饋：包覆頭部、入睡感變好；凝膠特有觸感獨特有趣；不悶熱、透氣佳；重量重不易移位；蝴蝶／波浪造型仰睡側睡都舒適；無異味。\n- 中性／負面回饋：本體偏重且軟塌，初次使用可能不適應（有人首日頸部不適、隔日改善）；下沉深，平躺戴頭戴式耳機不便；想要更高枕高者覺得偏低。\n\n## 參考來源\n\n- [Amazon JP 商品頁（ASIN B09MB3SY8V）](https://www.amazon.co.jp/dp/B09MB3SY8V)\n- [Amazon JP 評論頁](https://www.amazon.co.jp/product-reviews/B09MB3SY8V)",
+  "model_numbers": [
+    "B09MB3SY8V"
+  ],
+  "search_aliases": [
+    "Dafeel",
+    "Dafeel 枕",
+    "Dafeel pillow",
+    "Dafeel 深眠枕 PRO",
+    "Dafeel Wave Pillow",
+    "無重力ジェルピロー",
+    "ジェルまくら",
+    "TPE ジェル枕",
+    "ひつじのいらない枕 類似",
+    "ひつじのいらない枕 ジェネリック",
+    "TPE gel pillow",
+    "凝膠枕"
+  ],
+  "reference_url": "https://www.amazon.co.jp/dp/B09MB3SY8V",
+  "image_url": null,
+  "image_file": "2026-06-20-dafeel-gel-pillow.jpg",
+  "offers": [
+    {
+      "channel_id": "amazonjp",
+      "url": "https://www.amazon.co.jp/dp/B09MB3SY8V",
+      "price_text": "￥8,000",
+      "price": {
+        "amount": 8000,
+        "currency": "JPY",
+        "unit": "each",
+        "label": null
+      },
+      "checked_at": "2026-06-20T00:00:00+08:00"
+    }
+  ],
+  "created_at": "2026-06-20T00:00:00+08:00",
+  "published_at": "2026-06-20T00:00:00+08:00",
+  "updated_at": "2026-06-20T00:00:00+08:00",
+  "unpublished_at": null,
+  "archived_at": null
+}

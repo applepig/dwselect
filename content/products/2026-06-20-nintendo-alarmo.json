@@ -1,0 +1,51 @@
+{
+  "id": "2026-06-20-nintendo-alarmo",
+  "status": "published",
+  "name": "任天堂 Alarmo 智慧鬧鐘",
+  "english_name": "Nintendo Sound Clock: Alarmo",
+  "summary": "Alarmo 真的超有娛樂性，不過我是不會起床的。",
+  "long_description": "Alarmo 真的超有娛樂性，不過我是不會起床的。",
+  "llm_description": "## 快速判斷\n\n- Nintendo Sound Clock: Alarmo（任天堂智慧鬧鐘）是任天堂推出的互動式鬧鐘，核心賣點是用毫米波感應器偵測使用者在床上的動作，依入睡與起床狀態播放任天堂遊戲音效、音樂與動畫。\n- 它先是趣味喚醒體驗、其次才是鬧鐘；定位接近 Nintendo 品牌精品周邊，而非嚴肅的睡眠追蹤裝置。\n- 此頁為台灣公司貨（PChome 通路），與日本／海外版的差異主要在保固與出貨來源；功能與韌體更新一致。\n\n## 運作方式\n\n- 採用 24GHz 毫米波（mmWave）感應器，無接觸偵測床上的翻身與離床動作，不需穿戴裝置。\n- 設定流程：選遊戲主題 → 選場景 → 設定時間。鬧鐘響起時播放該場景的音效與音樂，並有遊戲角色出現在螢幕上。\n- 賴床時可揮手或移動身體讓鈴聲變小（手勢貪睡）；完全離床後鬧鐘自動停止並播放過關 fanfare。\n- 提供 Steady Mode（賴床越久鈴聲越強烈）、Gentle Mode（穩定音量）與 Button Mode（傳統按鈕操作）三種喚醒模式。\n\n## 重要規格\n\n- 型號：CLO-001。\n- 螢幕：2.8 吋彩色 LCD，320 × 240 解析度，鐘頂為發光旋鈕／確認鍵。\n- 感應：24GHz 毫米波感應器；連線：2.4GHz Wi-Fi。\n- 供電：USB-C 供電（最低約 7.5W），需自備 USB AC 變壓器（盒裝僅附 USB 線、不含變壓器）。\n- 內含：Alarmo 本體、USB 連接線、使用說明。\n- 適用床型：Twin 到 King size。\n- 睡眠紀錄：在「Records」可查看在床時間與睡眠期間的翻身／移動量（為趣味參考，非醫療級睡眠監測）。\n\n## 遊戲主題與更新\n\n- 上市時收錄 5 款遊戲、各 7 種場景共 35 組鬧鈴：Super Mario Odyssey、薩爾達傳說 曠野之息、Splatoon 3、Pikmin 4、Ring Fit Adventure。\n- 連結 Nintendo Account 並透過 Wi-Fi 可免費下載後續追加主題：Mario Kart 8 Deluxe、超級瑪利歐兄弟、動物森友會、星之卡比 探索發現、超級瑪利歐兄弟 驚奇、Donkey Kong Bananza 等，場景數已累積至 67 種以上並持續更新。\n- 主題下載需 Nintendo Account 與網路；基本鬧鐘功能不強制連網或 Nintendo Switch Online。\n\n## 評測與使用者回饋\n\n- PChome 商品頁：5.0 分、27 則評價、100% 為 5 星（動態檢視確認，樣本量小且皆短評）。常見回饋為「真的很難賴床」「沒辦法賴床的好東西」「人物會跟著本人左右移動、增添樂趣」「很可愛、配合喜歡的遊戲 IP」，亦有「高貴的任天堂鬧鐘」這類價格相關感想。\n- 國外媒體評測（Nintendo Life 給 7/10、The Verge 與 CNET 為褒貶並陳）共同點：設計與互動討喜、喚醒體驗有趣，但本質是要價約 US$99.99 的品牌鬧鐘，睡眠追蹤偏娛樂性、實用價值見仁見智。\n\n## 適合誰／不適合誰\n\n- 適合：任天堂粉絲、喜歡趣味喚醒體驗、想要床頭擺飾兼話題性的人。\n- 不適合：想要極簡或便宜鬧鐘、需要醫療級睡眠監測、或重度賴床到任何鬧鐘都叫不醒的人——對這類使用者娛樂性大於實用性。\n\n## 參考來源\n\n- [Nintendo Sound Clock: Alarmo 官方頁（Singapore）](https://www.nintendo.com/sg/hardware/alarmo/)\n- [ニンテンドーサウンドクロック Alarmo 官方頁（Japan）](https://www.nintendo.com/jp/hardware/alarmo/index.html)\n- [Alarmo - Wikipedia](https://en.wikipedia.org/wiki/Alarmo)\n- [PChome 24h 商品頁](https://24h.pchome.com.tw/prod/DGBJCB-A900J4FW8)",
+  "search_aliases": [
+    "Alarmo",
+    "任天堂鬧鐘",
+    "任天堂智慧鬧鐘",
+    "Nintendo Sound Clock",
+    "Nintendo Alarmo",
+    "智慧鬧鐘",
+    "體感鬧鐘",
+    "瑪利歐鬧鐘",
+    "毫米波鬧鐘",
+    "ニンテンドーサウンドクロック"
+  ],
+  "model_numbers": [
+    "CLO-001"
+  ],
+  "offers": [
+    {
+      "channel_id": "pchome",
+      "url": "https://24h.pchome.com.tw/prod/DGBJCB-A900J4FW8",
+      "price_text": "2,690",
+      "price": {
+        "amount": 2690,
+        "currency": "TWD",
+        "unit": "each",
+        "label": "PChome 售價"
+      },
+      "checked_at": "2026-06-20T00:00:00+08:00"
+    }
+  ],
+  "image_url": null,
+  "category_id": "household",
+  "tag_ids": [
+    "bedding-sleep",
+    "nintendo"
+  ],
+  "reference_url": "https://www.nintendo.com/sg/hardware/alarmo/",
+  "created_at": "2026-06-20T00:00:00+08:00",
+  "updated_at": "2026-06-20T00:00:00+08:00",
+  "published_at": "2026-06-20T00:00:00+08:00",
+  "unpublished_at": null,
+  "archived_at": null,
+  "image_file": "2026-06-20-nintendo-alarmo.jpg"
+}

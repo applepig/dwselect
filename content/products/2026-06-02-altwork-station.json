@@ -1,0 +1,46 @@
+{
+  "id": "2026-06-02-altwork-station",
+  "status": "published",
+  "name": "Altwork Station 躺臥式工作站",
+  "english_name": "Altwork Signature Station",
+  "summary": "相信每個人都有「躺著用電腦」的夢想，這個看起來很棒，對吧？  （對不起我不知道怎麼買、也不知道買回來要放哪裡",
+  "long_description": "相信每個人都有「躺著用電腦」的夢想，這個看起來很棒，對吧？  （對不起我不知道怎麼買、也不知道買回來要放哪裡",
+  "llm_description": "## 快速判斷\n\nAltwork Station（官方全名 Altwork Signature Station）是 Altwork 推出的整合式「躺臥工作站」，把人體工學椅、電動升降桌面與磁吸式螢幕臂結合成單一機構。它的核心賣點是讓使用者從站姿、坐姿一路調整到完全平躺（zero-gravity 後仰）仍能正常操作鍵盤滑鼠與螢幕，桌面與螢幕會隨椅子角度同步移動，鍵盤與滑鼠靠磁吸桌面固定，平躺時也不會掉落。屬於高單價、利基型辦公家具，不是一般升降桌或人體工學椅的替代品。\n\n## 重要規格\n\n- 類型：整合椅＋電動升降桌面＋螢幕臂的躺臥式工作站\n- 體位範圍：站姿／坐姿到完全後仰平躺（zero-gravity）；平躺時雙腿略高於心臟\n- 承重：使用者體重上限約 136 kg（300 lbs）\n- 適用身高：約 155–198 cm（5'1\"–6'6\"）\n- 桌面尺寸：約 74 × 41 cm（29\" × 16\"）；磁吸桌面，附磁鐵吸附鍵盤與滑鼠，平躺時也不會滑落\n- 螢幕支援：VESA 100×100mm，螢幕＋筆電總重上限約 18 kg（40 lbs）；標配單螢幕，多螢幕需另購配件\n- 整機尺寸：背靠最寬處約 89 cm（35\"）；完全後仰長度約 183 cm（72\"）；操作所有姿勢約需 1.7 m²（18 sq ft）佔地\n- 電源：需電源插座，提供 110V 與 220V 版本\n- 配件：頭枕、腰／肘支撐、可調腿靠、磁吸桌面、組裝工具\n- 保固：5 年有限保固；美國本土 48 州 30 天退貨\n- 出貨：以棧板分五箱寄送，其中兩箱較大、最重一箱約 54 kg（120 lbs），官方建議兩人約 2 小時組裝\n\n## 優點與限制\n\n- 優點：可在完全平躺姿勢下維持正常的螢幕＋鍵鼠操作；桌面與螢幕隨椅角調整、磁吸固定周邊；機構整合度高，免自行拼湊升降桌與螢幕臂\n- 限制：單價極高（定價 US$8,950、促銷 US$6,950）；體積大、操作佔地約 1.7 m²，分五箱以棧板寄送、需兩人搬運與約 2 小時組裝；標配單螢幕，多螢幕需加購\n- 採購限制：官方為美國品牌、線上自售；30 天退貨僅限美國本土 48 州，台灣無公開零售通路，須直接向官方洽詢國際運送、電壓版本與報價\n\n## 適合誰／不適合誰\n\n- 適合：有長時間電腦作業需求、且因背部／頸部負擔而需要平躺辦公的使用者；有足夠預算與固定空間（家庭辦公室／工作室）容納大型機構者\n- 不適合：只想要一般升降桌或人體工學椅、預算有限、空間狹小、或需要在台灣便利購買與售後服務的使用者\n\n## 參考來源\n\n- [Altwork 官方產品頁](https://altwork.com/products/altwork-signature-station)\n- [Altwork 官方 FAQ（規格與運送）](https://altwork.com/pages/faq)",
+  "search_aliases": [
+    "Altwork Signature Station",
+    "Altwork 工作站",
+    "躺著用電腦工作站",
+    "躺臥工作站",
+    "zero gravity workstation",
+    "lying down computer workstation",
+    "reclining workstation"
+  ],
+  "model_numbers": [],
+  "offers": [
+    {
+      "channel_id": "other",
+      "url": "https://altwork.com/products/altwork-signature-station",
+      "price_text": "US$6,950",
+      "price": {
+        "amount": 6950,
+        "currency": "USD",
+        "unit": "each",
+        "label": "官方促銷價（原價 US$8,950）"
+      },
+      "checked_at": "2026-06-20T00:00:00+08:00"
+    }
+  ],
+  "image_url": null,
+  "category_id": "computer-3c",
+  "tag_ids": [
+    "altwork",
+    "ergonomic"
+  ],
+  "reference_url": "https://altwork.com/products/altwork-signature-station",
+  "created_at": "2026-06-02T00:00:00+08:00",
+  "updated_at": "2026-06-20T00:00:00+08:00",
+  "published_at": "2026-06-02T00:00:00+08:00",
+  "unpublished_at": null,
+  "archived_at": null,
+  "image_file": "2026-06-02-altwork-station.png"
+}
