@@ -567,6 +567,29 @@
       ],
       "nav_visible": true,
       "sort_order": 570
+    },
+    {
+      "id": "marna",
+      "label": "Marna",
+      "description": "日本生活雜貨品牌マーナ（marna），以廚房、清潔、收納等家用小物著稱，知名系列包含「極（きわみ）」冷凍ごはん容器。",
+      "aliases": [
+        "マーナ",
+        "marna"
+      ],
+      "nav_visible": true,
+      "sort_order": 580
+    },
+    {
+      "id": "itoen",
+      "label": "伊藤園",
+      "description": "日本飲料與茶葉品牌株式会社伊藤園（ITO EN），主力包含お〜いお茶綠茶與健康ミネラルむぎ茶等麥茶產品。",
+      "aliases": [
+        "ITO EN",
+        "Ito En",
+        "Itoen"
+      ],
+      "nav_visible": true,
+      "sort_order": 590
     }
   ]
 }
