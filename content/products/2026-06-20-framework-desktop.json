@@ -1,0 +1,52 @@
+{
+  "id": "2026-06-20-framework-desktop",
+  "status": "published",
+  "name": "Framework Desktop（Ryzen AI Max）",
+  "english_name": "Framework Desktop with AMD Ryzen AI Max 300 Series",
+  "summary": "如果我要跑地端模型的話應該是買這台，但是我沒有要跑",
+  "long_description": "如果我要跑地端模型的話應該是買這台，但是我沒有要跑",
+  "llm_description": "## 快速判斷\n\nFramework Desktop 是 Framework 推出的小型桌機，採 AMD Ryzen AI Max 300 系列 APU 搭配最高 128GB 焊死的 LPDDR5x 統一記憶體。它的定位不是傳統可升級桌機，而是「用一顆 APU 與大容量統一記憶體跑地端 AI 推論」的迷你工作站：CPU 與內顯共用同一塊大記憶體，最高可把 96GB 配置為顯示卡可定址記憶體，因此能在單機上載入需要大量 VRAM 的大型 LLM。\n\n與 Framework 筆電不同，這台機器的記憶體與 APU 都是焊在主機板上、無法升級，主要的彈性留在儲存、I/O 擴充卡與外殼。\n\n## 重要規格\n\n- APU 選項（三個出廠等級）：\n  - Ryzen AI Max 385：8 核 16 緒，最高 5.0GHz boost，32MB L3，內顯 Radeon 8050S，搭 32GB 記憶體。\n  - Ryzen AI Max+ 395：16 核 32 緒，最高 5.1GHz boost，64MB L3，內顯 Radeon 8060S，搭 64GB 記憶體。\n  - Ryzen AI Max+ 395：同上 APU，搭 128GB 記憶體。\n- 記憶體：LPDDR5x-8000，焊死不可升級，256-bit 記憶體匯流排，最高可將 96GB 指定為顯示卡可定址記憶體。\n- 儲存：2 個 M.2 2280 NVMe PCIe 4.0 x4 插槽（含散熱片），單條最高 8TB，使用者可自行安裝。\n- 主機板：Mini-ITX；機殼尺寸 96.8 × 205.5 × 226.1mm，整機約 3.1kg。\n- 電源：FlexATX 400W（150.0 × 81.5 × 40.5mm），附 0-RPM 模式風扇。\n- 散熱：120mm CPU 風扇，可選 Noctua NF-A12x25 HS-PWM 或 Cooler Master Mobius 120 系列。\n- 網路：AMD RZ717 Wi-Fi 7、Realtek RTL8126 5Gbit 有線網路。\n- 影像輸出：2× DisplayPort 2.1（主機板上）。\n- I/O：前面板採 Framework 擴充卡（Expansion Card）系統，可換 USB-C／USB-A／microSD／SD／乙太網路／音訊孔等。\n- 形式：提供 DIY Edition（自行選 OS／儲存）。\n\n## 地端 LLM／AI 定位\n\n- 主打用統一記憶體跨越消費級顯卡 VRAM 上限的限制：官方宣稱可在桌上以接近對話速度跑 Llama 3.3 70B（Q6）這類大模型。\n- 128GB 版本能容納單張消費級顯卡難以載入的大模型；對 local inference／自架 LLM 是這台的核心賣點。\n- 透過 USB4 與 5Gbit 乙太網路可串接多台機器，處理像 DeepSeek R1 671B 這類更大的模型。\n- 限制：APU 內顯與焊死記憶體的設計，記憶體頻寬（256-bit LPDDR5x）低於獨立高階顯卡的 GDDR/HBM，token 生成速度受頻寬限制；重度訓練或要求極致 throughput 的場景仍以獨立 GPU 較佳。\n\n## 優點與限制\n\n- 優點：單機大統一記憶體（最高 128GB，最高 96GB 給 GPU）、體積小、Mini-ITX 標準主機板、可換 I/O 擴充卡、Wi-Fi 7／5GbE。\n- 限制：記憶體與 APU 焊死不可升級、記憶體頻寬不及獨立顯卡、價格隨記憶體容量大幅跳升、屬利基（地端 AI）導向而非一般文書／遊戲首選。\n\n## 適合誰／不適合誰\n\n- 適合：想在本機跑大型 LLM／AI 推論、需要大 VRAM 但不想堆多張顯卡、偏好小型桌機的使用者。\n- 不適合：想日後升級記憶體者、追求最高記憶體頻寬與訓練效能者、只做一般文書或遊戲而不需大統一記憶體的人。\n\n## 價格與購買\n\n- Framework 主要透過官方直購站 frame.work 販售；台灣站（frame.work/tw）可下單，出貨標示「Ships within 5 business days」。\n- 台灣官方設定器 DIY Edition 起始價（未含 OS／儲存，依 APU／記憶體分層）：\n  - Max 385 - 32GB：NT$41,400\n  - Max+ 395 - 64GB：NT$64,000\n  - Max+ 395 - 128GB：NT$112,500\n- 美金定價（發表時）：32GB 版 US$1,099 起、128GB 版 US$1,999。\n\n## 參考來源\n\n- [Framework Desktop 官方產品頁](https://frame.work/desktop)\n- [Framework Desktop 台灣官方產品／設定頁](https://frame.work/tw/en/products/desktop-diy-amd-aimax300/configuration/new)\n- [Framework 官方部落格：Introducing the Framework Desktop](https://frame.work/blog/introducing-the-framework-desktop)",
+  "search_aliases": [
+    "Framework Desktop",
+    "Framework 桌機",
+    "Framework Ryzen AI Max",
+    "Ryzen AI Max 385",
+    "Ryzen AI Max+ 395",
+    "AMD Strix Halo",
+    "Framework Desktop 128GB",
+    "地端 LLM 主機",
+    "local LLM 迷你主機",
+    "統一記憶體 AI 主機"
+  ],
+  "model_numbers": [
+    "desktop-diy-amd-aimax300",
+    "Ryzen AI Max 385",
+    "Ryzen AI Max+ 395"
+  ],
+  "offers": [
+    {
+      "channel_id": "other",
+      "url": "https://frame.work/tw/en/products/desktop-diy-amd-aimax300/configuration/new",
+      "price_text": "NT$41,400 起",
+      "price": {
+        "amount": 41400,
+        "currency": "TWD",
+        "unit": "each",
+        "label": "Max 385 - 32GB 起始配置"
+      },
+      "checked_at": "2026-06-20T00:00:00+08:00"
+    }
+  ],
+  "image_url": null,
+  "category_id": "computer-3c",
+  "tag_ids": [
+    "framework"
+  ],
+  "reference_url": "https://frame.work/desktop",
+  "created_at": "2026-06-20T00:00:00+08:00",
+  "updated_at": "2026-06-20T00:00:00+08:00",
+  "published_at": "2026-06-20T00:00:00+08:00",
+  "unpublished_at": null,
+  "archived_at": null,
+  "image_file": "2026-06-20-framework-desktop.jpg"
+}

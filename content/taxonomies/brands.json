@@ -485,6 +485,66 @@
       ],
       "nav_visible": true,
       "sort_order": 500
+    },
+    {
+      "id": "hitsuji-no-iranai-makura",
+      "label": "ヒツジのいらない枕",
+      "description": "日本太陽（Taiyo）旗下寢具品牌，主打 TPE 凝膠三角格子結構的快眠枕系列。",
+      "aliases": [
+        "不需要綿羊枕",
+        "無羊枕",
+        "No Sheep Required Pillow",
+        "Taiyo",
+        "太陽"
+      ],
+      "nav_visible": true,
+      "sort_order": 510
+    },
+    {
+      "id": "sleepy-tofu",
+      "label": "眠豆腐",
+      "description": "眠豆腐 Sleepy Tofu，台灣設計製造的床墊與寢具品牌。",
+      "aliases": [
+        "Sleepy Tofu",
+        "SleepyTofu",
+        "眠豆沙"
+      ],
+      "nav_visible": true,
+      "sort_order": 520
+    },
+    {
+      "id": "dafeel",
+      "label": "Dafeel",
+      "description": "凝膠寢具品牌，產品以 TPE 凝膠格狀枕為主。",
+      "aliases": [
+        "ダフィール",
+        "Deep Sleep Pillow"
+      ],
+      "nav_visible": true,
+      "sort_order": 530
+    },
+    {
+      "id": "altwork",
+      "label": "Altwork",
+      "description": "美國人體工學家具品牌，主打可從坐姿到完全後仰平躺操作的整合工作站。",
+      "aliases": [
+        "alt.work",
+        "Altwork Station",
+        "Altwork Signature Station"
+      ],
+      "nav_visible": true,
+      "sort_order": 540
+    },
+    {
+      "id": "framework",
+      "label": "Framework",
+      "description": "主打模組化、可維修與可升級的電腦品牌，產品線涵蓋筆電、主機板與桌機。",
+      "aliases": [
+        "frame.work",
+        "Framework Computer"
+      ],
+      "nav_visible": true,
+      "sort_order": 550
     }
   ]
 }

@@ -332,6 +332,21 @@
       ],
       "nav_visible": true,
       "sort_order": 300
+    },
+    {
+      "id": "bedding-sleep",
+      "label": "寢具睡眠",
+      "description": "枕頭、床墊、棉被、床包等睡眠寢具相關商品。",
+      "aliases": [
+        "寢具",
+        "睡眠",
+        "枕頭",
+        "床墊",
+        "bedding",
+        "sleep"
+      ],
+      "nav_visible": true,
+      "sort_order": 310
     }
   ]
 }
