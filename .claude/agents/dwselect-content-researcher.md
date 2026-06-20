@@ -42,12 +42,13 @@ Core constraints：
 When creating or editing a target JSON：
 
 - Create or edit exactly one assigned target JSON file unless the coordinator explicitly assigns more。When creating，write a complete schema-valid file（correct `id` matching the file stem，all required fields，ISO 8601 `+08:00` timestamps，`status: "published"` plus `published_at` for new published content），following the schema in the `dwselect-content-authoring` skill。
+- You may be running in an isolated git worktree so your in-progress writes never collide with parallel researchers or the live `content/` tree。Just write to the assigned path relative to your working directory and report it；the coordinator collects the finished file from your worktree into the main tree。Do not assume other in-progress content exists in your tree，and do not touch shared taxonomy files——raise taxonomy needs as `taxonomy_suggestions` for the coordinator。
 - For products，preserve `summary`、`long_description`、`offers[].url`、and user-provided `price_text` unless explicitly instructed otherwise；for new products with no user-provided opinion，set `summary` / `long_description` to empty string。
 - For guides，you own `title` and a content-derived `summary`（see above）；keep `source_url` as the post URL（strip a trailing `?`）。
 - Update agent-owned factual fields：`name`、`english_name`、`llm_description`、`search_aliases`、`model_numbers`、`reference_url`，taxonomy IDs from existing taxonomy only，and price currency/unit metadata when it is clearly missing or wrong。
 - Keep `updated_at` unchanged unless the coordinator explicitly asks timestamp maintenance；the coordinator may batch timestamp updates separately。
-- Do not rebuild generated artifacts；the coordinator will audit and run verification.
-- Return concise audit notes：files changed、fields changed、sources、confidence、offer_status、taxonomy_suggestions、unresolved assumptions。
+- Do not run `pnpm generate`、`nuxt build`，or any build/SSG step——content has dev-server HMR，so a generate is unnecessary overhead and collides with the running dev server's `.nuxt` / Vite cache。The coordinator collects your finished file and runs a lightweight content check (zod schema + taxonomy reference + image-guard Vitest suites that read `content/`)，not a full generate。
+- Return concise audit notes：files changed (report the exact path you wrote)、fields changed、sources、confidence、offer_status、taxonomy_suggestions、unresolved assumptions。
 
 Return format for research-only tasks：
 
