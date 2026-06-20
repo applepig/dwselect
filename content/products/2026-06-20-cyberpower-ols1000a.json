@@ -1,0 +1,48 @@
+{
+  "id": "2026-06-20-cyberpower-ols1000a",
+  "status": "published",
+  "name": "CyberPower OLS1000A 不斷電系統",
+  "english_name": "CyberPower Smart App Online S OLS1000A Online Double-Conversion UPS 1000VA / 900W",
+  "summary": "前幾天我家跳電，網路沒斷線但是 aruba 重開機了，於是買了這台，才六千多。",
+  "long_description": "前幾天我家跳電，網路沒斷線但是 aruba 重開機了，於是買了這台，才六千多。",
+  "llm_description": "## 快速判斷\n\nCyberPower OLS1000A 是 1000VA / 900W 等級的「在線式（online double-conversion，雙轉換）」直立式不斷電系統，屬於 Smart App Online S 系列。和常見的家用 line-interactive（離線式／在線互動式）UPS 不同，它持續把市電整流為直流再逆變回交流輸出，市電異常時切換時間為零，並全程輸出純正弦波。適合需要乾淨穩定電源、不能容忍切換空檔的 NAS、伺服器、監控 DVR、網通設備；對只跑文書的一般 PC 而言規格與價位偏 overkill。\n\n## 重要規格\n\n- 拓樸：雙轉換在線式（online double-conversion），零轉換時間；相較 line-interactive 提供持續穩壓、頻率再生與更乾淨的電力。\n- 容量：1000VA / 900W。\n- 輸出波形：純正弦波。\n- 輸出電壓：100 / 110 / 115 / 120 / 127 Vac（±1%，可選）。\n- 後備時間：半載約 9.5 分鐘（官方規格）。\n- 插座：NEMA 5-15R x 4，含突波保護（台灣常見需自備轉接或選台規型號，以實機為準）。\n- 電池：24V 內置密閉鉛酸電池，使用者可自行更換；系列支援外接電池模組（EBM）擴充延長後備時間。\n- 顯示：彩色 LCD 面板，可監看負載、電池與狀態設定。\n- 管理：USB 連接埠（搭配 PowerPanel 軟體做監控與自動關機）、可選配 SNMP/HTTP 遠端管理卡（RMCARD 系列）。\n- 其他：智慧電池管理（SBM）、ECO 節能模式、EPO 緊急斷電埠、變速風扇降噪、可與發電機相容。\n- 體積與重量：約 140 x 191 x 327 mm、約 8.1 kg（直立式機箱）。\n\n## 在線式 vs 在線互動式\n\n- 在線式（本機）：市電全程經整流＋逆變，輸出穩定純正弦波、切換時間 0ms，對電壓／頻率波動容忍度高；缺點是價格較高、滿載效率較低、風扇較常運轉。\n- 在線互動式（line-interactive，多數家用 UPS）：平時直通市電，僅在停電瞬間切換到電池，有數毫秒切換時間，價格較低，適合一般 PC。\n- 因此 OLS1000A 的價值在「電源品質」而非單純的停電備援。\n\n## 評測與使用者回饋\n\n- PChome 商品頁顯示評分 5.0／5、共 5 則評價（100% 五星）。實際以 agent-browser 展開評論區後，多數為純評分、僅少量文字；可讀到的留言例如「買 UPS 真的要好好的了解一下在線式」，呼應此機種定位偏向了解在線式需求的使用者，而非一般入門備援。\n- 第三方評測在官方頁外未取得可文字驗證的深入評測；上述為通路頁可見評論的有限樣本，不代表整體。\n\n## 適合誰／不適合誰\n\n- 適合：NAS、家用／小型機房伺服器、監控 DVR、網通與基礎設施設備，需要持續乾淨電源與零切換時間者。\n- 不適合：只需停電時保住一般文書 PC 幾分鐘存檔關機的人；該情境用 line-interactive UPS 即可，成本更低、風扇更安靜。\n\n## 參考來源\n\n- [CyberPower OLS1000A 官方產品頁](https://www.cyberpower.com/tw/zh/product/sku/ols1000a)\n- [CyberPower Smart App Online S（Advanced）系列頁](https://www.cyberpower.com/tw/zh/product/series/smart_app_online_s_(advanced)_ups)\n- [PChome 24h 商品頁與評價](https://24h.pchome.com.tw/prod/DCAR1D-A900JA0BI)",
+  "category_id": "computer-3c",
+  "tag_ids": ["power-charging", "cyberpower"],
+  "image_file": "2026-06-20-cyberpower-ols1000a.jpg",
+  "image_url": null,
+  "model_numbers": ["OLS1000A"],
+  "search_aliases": [
+    "CyberPower 在線式 Smart App Online S 直立式不斷電系統(OLS1000A)",
+    "CyberPower OLS1000A",
+    "Smart App Online S OLS1000A",
+    "碩天 OLS1000A",
+    "不斷電系統",
+    "UPS",
+    "在線式 UPS",
+    "雙轉換在線式",
+    "online double conversion UPS",
+    "純正弦波 UPS",
+    "1000VA UPS",
+    "DCAR1D-A900JA0BI"
+  ],
+  "reference_url": "https://www.cyberpower.com/tw/zh/product/sku/ols1000a",
+  "offers": [
+    {
+      "channel_id": "pchome",
+      "url": "https://24h.pchome.com.tw/prod/DCAR1D-A900JA0BI",
+      "price_text": "約 6,500",
+      "price": {
+        "amount": 6500,
+        "currency": "TWD",
+        "unit": "each",
+        "label": "使用者實際入手價"
+      },
+      "checked_at": "2026-06-20T00:00:00+08:00"
+    }
+  ],
+  "created_at": "2026-06-20T00:00:00+08:00",
+  "updated_at": "2026-06-20T00:00:00+08:00",
+  "published_at": "2026-06-20T00:00:00+08:00",
+  "unpublished_at": null,
+  "archived_at": null
+}

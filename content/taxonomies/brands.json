@@ -545,6 +545,28 @@
       ],
       "nav_visible": true,
       "sort_order": 550
+    },
+    {
+      "id": "cyberpower",
+      "label": "CyberPower",
+      "description": "美國電源保護品牌，主力產品為 UPS 不斷電系統、突波保護與電源管理裝置。",
+      "aliases": [
+        "CyberPower Systems",
+        "碩天",
+        "碩天科技"
+      ],
+      "nav_visible": true,
+      "sort_order": 560
+    },
+    {
+      "id": "nintendo",
+      "label": "Nintendo",
+      "description": "日本電子遊戲與娛樂裝置品牌，產品線涵蓋遊戲主機、遊戲軟體與周邊裝置。",
+      "aliases": [
+        "任天堂"
+      ],
+      "nav_visible": true,
+      "sort_order": 570
     }
   ]
 }
