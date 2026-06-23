@@ -41,6 +41,19 @@ export type ProductDetailView = {
   related_products: RelatedProductCardView[]
 }
 
+export type GuideDetailView = {
+  id: string
+  title: string
+  summary: string
+  body: string
+  hero_image_url: string
+  hero_alt: string
+  category_labels: string[]
+  tag_labels: string[]
+  source_url: string
+  related_products: RelatedProductCardView[]
+}
+
 export type CategoryChipView = {
   id: Product['category_id'] | 'all'
   label: string

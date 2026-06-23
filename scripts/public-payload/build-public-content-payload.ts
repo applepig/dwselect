@@ -1,11 +1,13 @@
-import type { Product } from '../../app/utils/product-schema.ts'
-import type { ProductDetailView } from '../../app/utils/public-content-view-types.ts'
+import type { Guide, Product } from '../../app/utils/product-schema.ts'
+import type { GuideDetailView, ProductDetailView } from '../../app/utils/public-content-view-types.ts'
 import type { PublicContentPayload } from '../../app/utils/public-content-payload.ts'
+import { compareGuides } from '../../app/utils/content/compare-guides.ts'
 import { compareProducts } from '../../app/utils/content/compare-products.ts'
 import { extractContentId } from '../../app/utils/content/extract-content-id.ts'
 import type { PublicContentSource } from '../content-reader.ts'
 import { PUBLIC_CONTENT_VERSION, SITE_NAME, SITE_URL, isPublished } from '../public-content.ts'
 import { buildNavigation } from './build-navigation.ts'
+import { mapGuideDetail } from './map-guide-detail.ts'
 import { mapGuideRows, mapLinkRows } from './map-resource-rows.ts'
 import { mapProductCard } from './map-product-card.ts'
 import { mapProductDetail } from './map-product-detail.ts'
@@ -16,6 +18,8 @@ export function buildPublicContentPayload(source: PublicContentSource): PublicCo
   const published_products = source.products.filter(isPublished)
   const sorted_products = published_products
     .toSorted((left_product, right_product) => compareProducts(left_product, right_product, source.taxonomies))
+  const published_guides = source.guides.filter(isPublished)
+  const sorted_guides = published_guides.toSorted(compareGuides)
 
   return {
     version: PUBLIC_CONTENT_VERSION,
@@ -27,7 +31,10 @@ export function buildPublicContentPayload(source: PublicContentSource): PublicCo
       cards: sorted_products.map((product) => mapProductCard(product, labels)),
       details_by_id: buildDetailsById(sorted_products, published_products, labels),
     },
-    guides: mapGuideRows(source.guides, labels),
+    guides: {
+      rows: mapGuideRows(source.guides, labels),
+      details_by_id: buildGuideDetailsById(sorted_guides, published_products, labels),
+    },
     links: mapLinkRows(source.links),
     navigation: buildNavigation(
       { products: source.products, guides: source.guides, links: source.links },
@@ -51,6 +58,20 @@ function buildDetailsById(
 
   for (const product of sorted_products) {
     details_by_id[extractContentId(product.id)] = mapProductDetail(product, published_products, labels)
+  }
+
+  return details_by_id
+}
+
+function buildGuideDetailsById(
+  sorted_guides: Guide[],
+  published_products: Product[],
+  labels: ReturnType<typeof createTaxonomyLabelResolver>,
+): Record<string, GuideDetailView> {
+  const details_by_id: Record<string, GuideDetailView> = {}
+
+  for (const guide of sorted_guides) {
+    details_by_id[extractContentId(guide.id)] = mapGuideDetail(guide, published_products, labels)
   }
 
   return details_by_id

@@ -17,9 +17,11 @@
 
 - 測試與檢查指令（`vitest.config.ts` 已用 `process.loadEnvFile()` 載入 `.env`，不必再手動帶 `APP_URL=` 前綴）：
   - `pnpm test`（單元測試）
+  - `pnpm test:e2e`（Playwright E2E；需 dev/preview 服務可連線）
   - `pnpm lint`
   - `pnpm typecheck`
   - `pnpm generate`（SSG build）
+  - `pnpm content:check`（content/ 資料 gate；改動內容 JSON / taxonomy 後跑）
 - CI 沒有 `.env` 檔，靠 workflow job env 提供 `APP_URL`；`vitest.config.ts` 對 `.env` 不存在採容錯略過。
 
 ## Local Runtime

@@ -79,10 +79,10 @@ const current_breadcrumb_items = computed<BreadcrumbItem[]>(() => {
   }
 
   if (route.path.startsWith('/products/')) {
-    const product_id = getRouteProductId()
+    const product_id = getRouteId()
     const product_item = product_id === null
       ? undefined
-      : catalog_shell_data.value?.product_breadcrumb_items_by_id[product_id]
+      : catalog_shell_data.value?.product_details_by_id[product_id]
 
     if (product_item === undefined) {
       return [{ label: '商品詳情' }]
@@ -94,6 +94,22 @@ const current_breadcrumb_items = computed<BreadcrumbItem[]>(() => {
         to: { path: '/', query: { category: product_item.category_id } },
       },
       { label: product_item.name },
+    ]
+  }
+
+  if (route.path.startsWith('/guide/')) {
+    const guide_id = getRouteId()
+    const guide_item = guide_id === null
+      ? undefined
+      : catalog_shell_data.value?.guide_details_by_id[guide_id]
+
+    if (guide_item === undefined) {
+      return [{ label: '指南詳情' }]
+    }
+
+    return [
+      { label: '指南', to: '/guide' },
+      { label: guide_item.title },
     ]
   }
 
@@ -120,13 +136,13 @@ function getActiveHomeCategoryId(): Exclude<CategoryChipView['id'], 'all'> | nul
   return category_item.id
 }
 
-function getRouteProductId() {
-  const route_product_id = route.params.id
+function getRouteId() {
+  const route_id = route.params.id
 
-  if (Array.isArray(route_product_id)) {
-    return route_product_id[0] ?? null
+  if (Array.isArray(route_id)) {
+    return route_id[0] ?? null
   }
 
-  return typeof route_product_id === 'string' ? route_product_id : null
+  return typeof route_id === 'string' ? route_id : null
 }
 </script>

@@ -94,12 +94,12 @@ describe('compact app view state', () => {
         title: '已發布指南',
         subtitle: '指南摘要',
         meta: '電腦',
-        href: 'https://example.com/published-guide',
+        href: '/guide/published-guide',
         image_url: null,
         icon: 'i-lucide-book-open',
-        external: true,
-        target: '_blank',
-        rel: 'noopener noreferrer',
+        external: false,
+        target: null,
+        rel: null,
       },
     ])
     expect(compact_view.guide.empty_reason).toBeNull()

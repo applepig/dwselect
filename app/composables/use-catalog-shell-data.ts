@@ -15,14 +15,8 @@ export async function useCatalogShellData() {
       },
       desktop_category_items: content_payload.value.navigation.desktop_category_items,
       category_ids: getSelectableCategoryIds(content_payload.value.navigation.category_chips),
-      product_breadcrumb_items_by_id: Object.fromEntries(Object.values(content_payload.value.products.details_by_id).map((detail) => [
-        detail.id,
-        {
-          name: detail.name,
-          category_id: detail.category_id,
-          category_label: detail.category_label,
-        },
-      ])),
+      product_details_by_id: content_payload.value.products.details_by_id,
+      guide_details_by_id: content_payload.value.guides.details_by_id,
     }
   })
 }

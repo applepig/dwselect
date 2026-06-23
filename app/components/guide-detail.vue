@@ -2,14 +2,11 @@
   <article
     ref="detail_root"
     class="product-detail-page"
-    :data-product-id="detail.id"
+    :data-guide-id="detail.id"
   >
     <section class="detail-content">
       <div class="detail-hero-layout">
-        <div
-          class="detail-hero-tile"
-          :style="{ 'view-transition-name': `product-image-${detail.id}` }"
-        >
+        <div class="detail-hero-tile">
           <UButton
             class="detail-back"
             icon="i-lucide-arrow-left"
@@ -20,12 +17,12 @@
           />
 
           <NuxtImg
-            v-if="!has_detail_image_failed"
+            v-if="has_hero_image"
             :src="detail.hero_image_url"
             :alt="detail.hero_alt"
             class="detail-hero-image"
             format="webp"
-            @error="onDetailImageError"
+            @error="onHeroImageError"
           />
           <UIcon
             name="i-lucide-image-off"
@@ -36,97 +33,86 @@
 
         <div class="detail-summary-column">
           <h2 class="detail-title">
-            {{ detail.name }}
+            {{ detail.title }}
           </h2>
 
           <div
             class="detail-taxonomy-row"
-            aria-label="商品分類、通路與 tags"
+            aria-label="指南分類與 tags"
           >
             <CatalogPill
-              :to="{ path: '/', query: { category: detail.category_id } }"
+              v-for="category_label in detail.category_labels"
+              :key="`category-${category_label}`"
+              :to="{ path: '/search', query: { q: category_label } }"
             >
-              {{ detail.category_label }}
+              {{ category_label }}
             </CatalogPill>
             <CatalogPill
-              :to="{ path: '/search', query: { q: detail.channel_label } }"
+              v-for="tag_label in detail.tag_labels"
+              :key="`tag-${tag_label}`"
+              :to="{ path: '/search', query: { q: tag_label } }"
             >
-              {{ detail.channel_label }}
-            </CatalogPill>
-            <CatalogPill
-              v-for="tag in detail.tag_labels"
-              :key="tag"
-              :to="{ path: '/search', query: { q: tag } }"
-            >
-              {{ tag }}
+              {{ tag_label }}
             </CatalogPill>
           </div>
 
-          <p class="detail-price">
-            {{ detail.price_label }}
-          </p>
-
-          <UAlert
-            class="detail-dw-says"
-            color="primary"
-            variant="subtle"
-            title="DW 怎麼說"
-            :description="detail.long_description || detail.summary"
-          />
-
           <a
             class="detail-summary-buy-link"
-            :href="detail.buy_url"
+            :href="detail.source_url"
             target="_blank"
             rel="noopener noreferrer"
-          >去 {{ detail.channel_label }} 逛逛</a>
+          >看原文</a>
         </div>
       </div>
 
       <section
-        v-if="detail.llm_description"
         class="detail-llm-says"
-        aria-labelledby="detail-llm-says-title"
+        aria-labelledby="detail-guide-body-title"
       >
         <h3
-          id="detail-llm-says-title"
+          id="detail-guide-body-title"
           class="detail-llm-title"
         >
-          AI 怎麼說
+          內容
         </h3>
         <div class="detail-llm-copy">
-          <ContentMarkdown :source="detail.llm_description" />
+          <ContentMarkdown
+            v-if="detail.body"
+            :source="detail.body"
+          />
+          <p
+            v-else
+            class="detail-llm-paragraph"
+          >
+            {{ detail.summary }}
+          </p>
         </div>
       </section>
 
       <UButton
         class="detail-buy-cta"
-        :to="detail.buy_url"
+        :to="detail.source_url"
         target="_blank"
         rel="noopener noreferrer"
         block
         size="xl"
       >
-        去 {{ detail.channel_label }} 逛逛
+        看原文
       </UButton>
-
-      <p class="detail-fine-print">
-        {{ detail.fine_print || '價格與庫存以通路頁面為準。' }}
-      </p>
     </section>
 
     <section
-      v-if="displayed_related_products.length > 0"
+      v-if="detail.related_products.length > 0"
       class="related-products-section"
-      aria-label="You may also like"
+      aria-label="相關商品"
     >
       <h3 class="related-products-title">
-        You may also like
+        相關商品
       </h3>
 
       <div class="related-products-grid">
         <NuxtLink
-          v-for="product in displayed_related_products"
+          v-for="product in detail.related_products"
           :key="product.id"
           :to="`/products/${product.id}`"
           class="related-product-card"
@@ -161,24 +147,25 @@
 </template>
 
 <script setup lang="ts">
-import type { ProductDetailView } from '../utils/public-content-view-types'
+import { computed, onMounted, ref } from 'vue'
+import type { GuideDetailView } from '../utils/public-content-view-types'
 
 const router = useRouter()
 
 const props = defineProps<{
-  detail: ProductDetailView
+  detail: GuideDetailView
 }>()
 
-const has_detail_image_failed = ref(false)
+const has_hero_image_failed = ref(false)
 const failed_related_image_ids = ref<Set<string>>(new Set())
 const detail_root = ref<HTMLElement | null>(null)
-const displayed_related_products = computed(() => props.detail.related_products)
+const has_hero_image = computed(() => props.detail.hero_image_url !== '' && !has_hero_image_failed.value)
 
 onMounted(() => {
   const hero_image = detail_root.value?.querySelector<HTMLImageElement>('.detail-hero-image') ?? null
 
   if (isBrokenImage(hero_image)) {
-    onDetailImageError()
+    onHeroImageError()
   }
 
   const related_images = detail_root.value?.querySelectorAll<HTMLImageElement>('.related-product-image') ?? []
@@ -192,8 +179,8 @@ onMounted(() => {
   }
 })
 
-function onDetailImageError() {
-  has_detail_image_failed.value = true
+function onHeroImageError() {
+  has_hero_image_failed.value = true
 }
 
 function onRelatedImageError(product_id: string) {
@@ -211,7 +198,7 @@ function onBackClicked() {
     return
   }
 
-  router.push('/')
+  router.push('/guide')
 }
 
 function canReturnToSameOriginPage(): boolean {

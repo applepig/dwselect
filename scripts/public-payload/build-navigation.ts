@@ -107,7 +107,7 @@ function getSortedPopularChips(tag_counts: Map<string, number>): CompactTagChip[
     label,
     count,
     active: false,
-  })).filter((tag) => tag.count > POPULAR_TAG_MIN_COUNT)
+  })).filter((tag) => tag.count >= POPULAR_TAG_MIN_COUNT)
     .toSorted((left_tag, right_tag) => {
       if (left_tag.count !== right_tag.count) {
         return right_tag.count - left_tag.count

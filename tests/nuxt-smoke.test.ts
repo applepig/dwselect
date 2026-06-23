@@ -205,7 +205,12 @@ describe('Nuxt SSG baseline', () => {
     expect(detail_composable_source).not.toContain('server: false')
     expect(shell_composable_source).toContain("useAsyncData('public-content'")
     expect(shell_composable_source).toContain('desktop_category_items')
-    expect(shell_composable_source).toContain('product_breadcrumb_items_by_id')
+    // shell data 直接傳出 details_by_id reference（O(1) 投影），不再為全部商品重建 breadcrumb map。
+    expect(shell_composable_source).toContain('product_details_by_id: content_payload.value.products.details_by_id')
+    // 指南詳情 breadcrumb 也走同樣的 O(1) reference 投影。
+    expect(shell_composable_source).toContain('guide_details_by_id: content_payload.value.guides.details_by_id')
+    expect(shell_composable_source).not.toContain('product_breadcrumb_items_by_id')
+    expect(shell_composable_source).not.toContain('Object.fromEntries')
     expect(shell_composable_source).toContain('fetchPublicContentPayload')
     expect(shell_composable_source).not.toContain('transform:')
     expect(shell_composable_source).not.toContain('server: false')
@@ -231,7 +236,7 @@ describe('Nuxt SSG baseline', () => {
   it('should expose compact app empty states in the public source', () => {
     const page_source = [
       '../app/pages/index.vue',
-      '../app/pages/guide.vue',
+      '../app/pages/guide/index.vue',
       '../app/pages/search.vue',
       '../app/pages/links.vue',
       '../app/components/search/search-idle-panel.vue',
@@ -333,7 +338,7 @@ describe('Nuxt SSG baseline', () => {
   it('should expose breadcrumb header links and home category result transition in source', () => {
     const layout_source = readFileSync(new URL('../app/layouts/default.vue', import.meta.url), 'utf8')
     const home_source = readFileSync(new URL('../app/pages/index.vue', import.meta.url), 'utf8')
-    const guide_source = readFileSync(new URL('../app/pages/guide.vue', import.meta.url), 'utf8')
+    const guide_source = readFileSync(new URL('../app/pages/guide/index.vue', import.meta.url), 'utf8')
     const links_source = readFileSync(new URL('../app/pages/links.vue', import.meta.url), 'utf8')
     const search_source = readFileSync(new URL('../app/pages/search.vue', import.meta.url), 'utf8')
     const catalog_css = readFileSync(new URL('../app/assets/styles/catalog.css', import.meta.url), 'utf8')
@@ -343,11 +348,22 @@ describe('Nuxt SSG baseline', () => {
     expect(layout_source).toContain('to="/"')
     expect(layout_source).toContain('class="breadcrumb-link"')
     expect(layout_source).toContain('current_breadcrumb_items')
-    expect(layout_source).toContain('product_breadcrumb_items_by_id')
+    // layout 只索引當前商品的 detail，不依賴預先建好的全量 breadcrumb map。
+    expect(layout_source).toContain('product_details_by_id[product_id]')
+    expect(layout_source).not.toContain('product_breadcrumb_items_by_id')
+    // breadcrumb 輸出契約不變：分類連結（category_label → /?category=category_id）＋ 商品名。
+    expect(layout_source).toContain('label: product_item.category_label')
+    expect(layout_source).toContain('query: { category: product_item.category_id }')
+    expect(layout_source).toContain('label: product_item.name')
     expect(layout_source).toContain("route.path === '/guide'")
     expect(layout_source).toContain("route.path === '/links'")
     expect(layout_source).toContain("route.path === '/search'")
     expect(layout_source).toContain("route.path.startsWith('/products/')")
+    // 指南詳情 breadcrumb：[指南→/guide, guide.title]，與商品詳情對稱但合理。
+    expect(layout_source).toContain("route.path.startsWith('/guide/')")
+    expect(layout_source).toContain('guide_details_by_id[guide_id]')
+    expect(layout_source).toContain("{ label: '指南', to: '/guide' }")
+    expect(layout_source).toContain('label: guide_item.title')
 
     expect(guide_source).toContain('aria-label="指南"')
     expect(guide_source).not.toContain('class="section-heading-row"')
@@ -399,7 +415,7 @@ describe('Nuxt SSG baseline', () => {
     const layout_source = readFileSync(new URL('../app/layouts/default.vue', import.meta.url), 'utf8')
     const page_sources = [
       '../app/pages/index.vue',
-      '../app/pages/guide.vue',
+      '../app/pages/guide/index.vue',
       '../app/pages/search.vue',
       '../app/pages/links.vue',
       '../app/pages/products/[id].vue',
@@ -472,7 +488,7 @@ describe('Nuxt SSG baseline', () => {
   })
 
   it('should render guide, link and mixed search results with external safety attributes in source', () => {
-    const guide_source = readFileSync(new URL('../app/pages/guide.vue', import.meta.url), 'utf8')
+    const guide_source = readFileSync(new URL('../app/pages/guide/index.vue', import.meta.url), 'utf8')
     const links_source = readFileSync(new URL('../app/pages/links.vue', import.meta.url), 'utf8')
     const search_source = readFileSync(new URL('../app/pages/search.vue', import.meta.url), 'utf8')
     const resource_rows_source = readFileSync(new URL('../app/utils/published-products/resource-rows.ts', import.meta.url), 'utf8')
@@ -516,10 +532,9 @@ describe('Nuxt SSG baseline', () => {
     expect(detail_source).toContain('detail.long_description || detail.summary')
     expect(detail_source).toContain('AI 怎麼說')
     expect(detail_source).toContain('v-if="detail.llm_description"')
-    expect(detail_source).toContain('parseContentMarkdown')
+    expect(detail_source).toContain('<ContentMarkdown :source="detail.llm_description" />')
     expect(detail_source).toContain('detail-llm-title')
     expect(detail_source).toContain('detail-llm-copy')
-    expect(detail_source).toContain('detail-llm-link')
     expect(detail_source).toContain('去 {{ detail.channel_label }} 逛逛')
     expect(detail_source).toContain('target="_blank"')
     expect(detail_source).toContain('rel="noopener noreferrer"')
@@ -551,7 +566,7 @@ describe('Nuxt SSG baseline', () => {
     }
 
     expect(detail_source).toContain(':description="detail.long_description || detail.summary"')
-    expect(detail_source).toContain('parsed_llm_blocks')
+    expect(detail_source).toContain(':source="detail.llm_description"')
     expect(detail_source).not.toContain(':description="detail.llm_description"')
     expect(detail_source).toContain('detail.category_label')
     expect(detail_source.indexOf('detail.category_label')).toBeLessThan(detail_source.indexOf('detail.channel_label'))
@@ -622,16 +637,14 @@ describe('Nuxt SSG baseline', () => {
   it('should define routed page files and prerender every product detail route', () => {
     const page_files = [
       '../app/pages/index.vue',
-      '../app/pages/guide.vue',
+      '../app/pages/guide/index.vue',
+      '../app/pages/guide/[id].vue',
       '../app/pages/search.vue',
       '../app/pages/links.vue',
       '../app/pages/products/[id].vue',
     ]
-    const product_route_count = readdirSync(new URL('../content/products/', import.meta.url))
-      .filter((file_name) => file_name.endsWith('.json'))
-      .map((file_name) => JSON.parse(readFileSync(new URL(`../content/products/${file_name}`, import.meta.url), 'utf8')))
-      .filter((product) => product.status === 'published')
-      .length
+    const product_route_count = countPublishedContent('../content/products/')
+    const guide_route_count = countPublishedContent('../content/guides/')
     const prerender_routes = nuxt_config.nitro?.prerender?.routes ?? []
 
     for (const file_path of page_files) {
@@ -645,6 +658,8 @@ describe('Nuxt SSG baseline', () => {
     expect(prerender_routes).toContain('/api/content.json')
     expect(prerender_routes).toContain('/search-index.json')
     expect(prerender_routes.filter((route) => route.startsWith('/products/'))).toHaveLength(product_route_count)
+    // /guide 列表本身也以 /guide/ 開頭，故扣掉它才是 detail route 數，須等於 published guide 數（AC13）。
+    expect(prerender_routes.filter((route) => route.startsWith('/guide/'))).toHaveLength(guide_route_count)
   })
 
   it('should define light and dark handoff CSS tokens without a single-hue palette', () => {
@@ -681,6 +696,14 @@ describe('Nuxt SSG baseline', () => {
     expect(readme_source).toContain('@nuxt/image')
   })
 })
+
+function countPublishedContent(relative_dir: string): number {
+  return readdirSync(new URL(relative_dir, import.meta.url))
+    .filter((file_name) => file_name.endsWith('.json'))
+    .map((file_name) => JSON.parse(readFileSync(new URL(`${relative_dir}${file_name}`, import.meta.url), 'utf8')))
+    .filter((content) => content.status === 'published')
+    .length
+}
 
 function getContrastRatio(foreground_hex: string, background_hex: string) {
   const foreground = getRelativeLuminance(getRgb(foreground_hex))

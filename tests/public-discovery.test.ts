@@ -142,7 +142,7 @@ describe('public content payload', () => {
     })
     expect(payload.products.cards.map((card) => card.id)).toEqual(['a-product', 'z-product'])
     expect(Object.keys(payload.products.details_by_id)).toEqual(['a-product', 'z-product'])
-    expect(payload.guides.map((guide) => guide.id)).toEqual(['2026-06-03-guide'])
+    expect(payload.guides.rows.map((guide) => guide.id)).toEqual(['2026-06-03-guide'])
     expect(payload.links.map((link) => link.id)).toEqual(['applepig-home'])
     expect(JSON.stringify(payload)).not.toContain('草稿')
     expect(JSON.stringify(payload)).not.toContain('封存')

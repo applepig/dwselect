@@ -5,6 +5,7 @@ import type {
 } from './product-schema'
 import type {
   CategoryChipView,
+  GuideDetailView,
   ProductCardView,
   ProductDetailView,
 } from './public-content-view-types'
@@ -27,7 +28,10 @@ export type PublicContentPayload = {
     cards: ProductCardView[]
     details_by_id: Record<string, ProductDetailView>
   }
-  guides: CompactResourceRow[]
+  guides: {
+    rows: CompactResourceRow[]
+    details_by_id: Record<string, GuideDetailView>
+  }
   links: CompactResourceRow[]
   navigation: {
     category_chips: CategoryChipView[]

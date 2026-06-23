@@ -28,12 +28,12 @@ function mapGuideToRow(guide: Guide, labels: TaxonomyLabelResolver): CompactReso
     title: guide.title,
     subtitle: guide.summary,
     meta: category_labels.length === 0 ? null : category_labels.join('、'),
-    href: guide.source_url,
+    href: `/guide/${guide.id}`,
     image_url: resolveGuideImageUrl(guide),
     icon: 'i-lucide-book-open',
-    external: true,
-    target: '_blank',
-    rel: 'noopener noreferrer',
+    external: false,
+    target: null,
+    rel: null,
   }
 }
 

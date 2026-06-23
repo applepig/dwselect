@@ -14,6 +14,21 @@ export function getCanonicalUrl(path: string): string {
   return new URL(normalized_path.replace(/^\/+/, ''), SITE_URL).toString()
 }
 
+export function getOgImageUrl(image_url: string | null | undefined): string {
+  const trimmed = image_url?.trim() ?? ''
+
+  if (trimmed === '') {
+    return SITE_OG_IMAGE
+  }
+
+  // 已是絕對 URL 的圖片直接用，不經 getCanonicalUrl 重組，避免破壞外部 host
+  if (/^https?:\/\//i.test(trimmed)) {
+    return trimmed
+  }
+
+  return getCanonicalUrl(trimmed)
+}
+
 export function getSeoDescription(description: string | null | undefined): string {
   const trimmed_description = description?.trim() ?? ''
 

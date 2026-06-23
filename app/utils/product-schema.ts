@@ -79,6 +79,7 @@ export const guide_schema = z.object({
   status: content_status_schema,
   title: z.string().min(1),
   summary: z.string(),
+  body: z.string().optional(),
   source_url: http_url_schema,
   image_file: optional_image_file_schema,
   image_url: optional_http_image_url_schema,

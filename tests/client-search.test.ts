@@ -232,7 +232,17 @@ describe('client search lazy loader', () => {
         throw new Error('localStorage unavailable')
       },
       removeItem: vi.fn(),
-    })).toEqual([])
+    })).toEqual(['鍵盤'])
+  })
+
+  it('should keep the in-memory history when localStorage write fails on quota', () => {
+    expect(saveSearchHistoryItem('滑鼠', {
+      getItem: () => JSON.stringify(['鍵盤']),
+      setItem: () => {
+        throw new Error('QuotaExceededError')
+      },
+      removeItem: vi.fn(),
+    })).toEqual(['滑鼠', '鍵盤'])
   })
 
   it('should return null when the browser localStorage getter throws', () => {

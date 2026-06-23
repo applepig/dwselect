@@ -1,6 +1,7 @@
 import { defineNuxtConfig } from 'nuxt/config'
 import { fileURLToPath } from 'node:url'
 
+import { buildGuideRoutes } from './scripts/build-guide-routes'
 import { buildProductRoutes } from './scripts/build-product-routes'
 
 const app_url = process.env.APP_URL
@@ -10,6 +11,7 @@ if (!app_url && !process.argv.some((a) => a === 'generate' || a === 'build')) {
 const vite_host = app_url ?? 'dwselect.toybox.local'
 
 const product_routes = buildProductRoutes(fileURLToPath(new URL('./content/products/', import.meta.url)))
+const guide_routes = buildGuideRoutes(fileURLToPath(new URL('./content/guides/', import.meta.url)))
 // 監看 content/ 目錄絕對路徑而非 glob：Vite 7 的 chokidar 5 已移除 glob 支援，
 // 傳 'content/**/*.json' 進 watcher.add() 不會匹配任何檔案。
 const content_watch_paths = [fileURLToPath(new URL('./content/', import.meta.url))]
@@ -67,6 +69,7 @@ export default defineNuxtConfig({
         '/api/content.json',
         '/search-index.json',
         ...product_routes,
+        ...guide_routes,
       ],
     },
   },

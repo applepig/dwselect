@@ -6,7 +6,9 @@ import nuxt_config from '../nuxt.config'
 
 describe('dev server script', () => {
   it('should not bind to a specific host (Docker uses NUXT_HOST env var)', () => {
-    expect(package_json.scripts.dev).toBe('nuxt dev')
+    // dev script 前置 assert-in-container.mjs 守門（擋 host 直跑），故用 toContain 而非 toBe，
+    // 但核心契約不變：跑的是 `nuxt dev` 且不帶 --host（host binding 交給 NUXT_HOST env）。
+    expect(package_json.scripts.dev).toContain('nuxt dev')
     expect(package_json.scripts.dev).not.toContain('--host')
   })
 

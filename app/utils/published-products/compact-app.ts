@@ -31,7 +31,7 @@ export function getCompactAppView(
   const home_products = selected_category_id === 'all'
     ? cards
     : cards.filter((card) => card.category_id === selected_category_id)
-  const guide_rows = payload.guides
+  const guide_rows = payload.guides.rows
 
   return {
     tabs: COMPACT_APP_TABS.map((tab) => ({

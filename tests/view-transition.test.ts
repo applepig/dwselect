@@ -14,7 +14,7 @@ describe('route-driven view transition contract', () => {
   it('should not use the legacy helper for route or query state changes', () => {
     const routed_sources = [
       '../app/pages/index.vue',
-      '../app/pages/guide.vue',
+      '../app/pages/guide/index.vue',
       '../app/pages/search.vue',
       '../app/pages/links.vue',
       '../app/pages/products/[id].vue',

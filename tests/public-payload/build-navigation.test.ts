@@ -70,6 +70,27 @@ describe('navigation build', () => {
     expect(navigation.popular_search_tags.tags[0]).toEqual({ label: '標籤 A', count: 5, active: false })
     expect(navigation.popular_search_tags.brands).toEqual([
       { label: 'Brand A', count: 5, active: false },
+      { label: 'Brand B', count: 3, active: false },
+    ])
+  })
+
+  it('should keep tags that appear exactly the minimum popular count', () => {
+    const taxonomies: TaxonomyDefinitions = {
+      ...test_taxonomies,
+      tags: [
+        { id: 'tag-min', label: '剛好門檻', description: '出現剛好門檻次數', aliases: [], nav_visible: true, sort_order: 10 },
+      ],
+    }
+    const products = [
+      makeProduct({ id: 'p1', status: 'published', name: '一號', tag_ids: ['tag-min'] }),
+      makeProduct({ id: 'p2', status: 'published', name: '二號', tag_ids: ['tag-min'] }),
+      makeProduct({ id: 'p3', status: 'published', name: '三號', tag_ids: ['tag-min'] }),
+    ]
+
+    const navigation = buildNavigation({ products, guides: [], links: [] }, taxonomies)
+
+    expect(navigation.popular_search_tags.tags).toEqual([
+      { label: '剛好門檻', count: 3, active: false },
     ])
   })
 
