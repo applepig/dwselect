@@ -4,6 +4,7 @@ const TIMESTAMP_PATTERN = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}[+-]\d{2}:\d{2}$/
 const KEBAB_CASE_ASCII_ID_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/
 
 const content_status_schema = z.enum(['draft', 'published', 'unpublished', 'archived'])
+const content_id_schema = z.string().regex(KEBAB_CASE_ASCII_ID_PATTERN, 'must be a kebab-case ASCII content id')
 const taxonomy_id_schema = z.string().regex(KEBAB_CASE_ASCII_ID_PATTERN, 'must be a kebab-case ASCII taxonomy id')
 const category_id_schema = taxonomy_id_schema
 const channel_id_schema = taxonomy_id_schema
@@ -50,7 +51,8 @@ const product_offer_schema = z.object({
 }).strict()
 
 export const product_schema = z.object({
-  id: z.string().min(1),
+  id: content_id_schema,
+  slug: content_id_schema,
   status: content_status_schema,
   name: z.string().min(1),
   english_name: z.string().min(1),
@@ -75,7 +77,8 @@ export const product_schema = z.object({
 })
 
 export const guide_schema = z.object({
-  id: z.string().min(1),
+  id: content_id_schema,
+  slug: content_id_schema,
   status: content_status_schema,
   title: z.string().min(1),
   summary: z.string(),
@@ -96,7 +99,8 @@ export const guide_schema = z.object({
 })
 
 export const link_schema = z.object({
-  id: z.string().min(1),
+  id: content_id_schema,
+  slug: content_id_schema,
   status: content_status_schema,
   title: z.string().min(1),
   summary: z.string(),

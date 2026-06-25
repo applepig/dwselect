@@ -63,10 +63,49 @@ describe('product card fields mapper', () => {
       image_url: '/products/images/sample-product.jpg',
       category_label: '電腦',
       channel_id: 'pchome',
+      channel_ids: ['pchome'],
       channel_label: 'PChome',
       price_label: 'NT$ 2,490',
+      tag_ids: ['tag-a'],
       tag_labels: ['標籤 A'],
     })
+  })
+
+  it('should collect the channel id of every offer (deduplicated) for channel-page selection', () => {
+    const product = makeProduct({
+      id: 'multi-offer-product',
+      status: 'published',
+      name: '多通路商品',
+      offers: [
+        {
+          channel_id: 'pchome',
+          url: 'https://example.com/pchome',
+          price_text: 'NT$ 1,990',
+          price: { amount: 1990, currency: 'TWD', unit: 'each', label: null },
+          checked_at: '2026-06-02T00:00:00+08:00',
+        },
+        {
+          channel_id: 'momo',
+          url: 'https://example.com/momo',
+          price_text: 'NT$ 2,090',
+          price: { amount: 2090, currency: 'TWD', unit: 'each', label: null },
+          checked_at: '2026-06-02T00:00:00+08:00',
+        },
+        {
+          channel_id: 'pchome',
+          url: 'https://example.com/pchome-2',
+          price_text: 'NT$ 1,950',
+          price: { amount: 1950, currency: 'TWD', unit: 'each', label: null },
+          checked_at: '2026-06-02T00:00:00+08:00',
+        },
+      ],
+    })
+
+    const fields = mapProductCardFields(product, makeResolver())
+
+    // primary（顯示用）仍是第一個 offer 的 channel；channel_ids 帶所有 offer 的 channel、去重。
+    expect(fields.channel_id).toBe('pchome')
+    expect(fields.channel_ids).toEqual(['pchome', 'momo'])
   })
 
   it('should ignore the price label for display when it is not contained in the price text (label is metadata only)', () => {

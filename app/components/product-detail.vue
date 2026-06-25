@@ -44,21 +44,28 @@
             aria-label="商品分類、通路與 tags"
           >
             <CatalogPill
-              :to="{ path: '/', query: { category: detail.category_id } }"
+              :to="`/category/${detail.category_id}`"
             >
               {{ detail.category_label }}
             </CatalogPill>
             <CatalogPill
-              :to="{ path: '/search', query: { q: detail.channel_label } }"
+              :to="`/channel/${detail.channel_id}`"
             >
               {{ detail.channel_label }}
             </CatalogPill>
             <CatalogPill
-              v-for="tag in detail.tag_labels"
-              :key="tag"
-              :to="{ path: '/search', query: { q: tag } }"
+              v-for="brand in detail_brands"
+              :key="`brand-${brand.id}`"
+              :to="`/brand/${brand.id}`"
             >
-              {{ tag }}
+              {{ brand.label }}
+            </CatalogPill>
+            <CatalogPill
+              v-for="tag in detail_tags"
+              :key="`tag-${tag.id}`"
+              :to="`/tag/${tag.id}`"
+            >
+              {{ tag.label }}
             </CatalogPill>
           </div>
 
@@ -173,6 +180,17 @@ const has_detail_image_failed = ref(false)
 const failed_related_image_ids = ref<Set<string>>(new Set())
 const detail_root = ref<HTMLElement | null>(null)
 const displayed_related_products = computed(() => props.detail.related_products)
+// tag_ids 與 tag_labels 為並列陣列、由 mapper 同源同序映射（tag_ids.map(...)），故以 index 配對安全。
+// 配對後 pill 能同時顯示 label 又精準連到對應 tag id。
+const detail_tags = computed(() => props.detail.tag_ids.map((id, index) => ({
+  id,
+  label: props.detail.tag_labels[index] ?? id,
+})))
+// brand pill 深連 /brand/{id}（專屬前綴、單一 canonical，ADR-8）；brand_ids／brand_labels 同源同序。
+const detail_brands = computed(() => props.detail.brand_ids.map((id, index) => ({
+  id,
+  label: props.detail.brand_labels[index] ?? id,
+})))
 
 onMounted(() => {
   const hero_image = detail_root.value?.querySelector<HTMLImageElement>('.detail-hero-image') ?? null

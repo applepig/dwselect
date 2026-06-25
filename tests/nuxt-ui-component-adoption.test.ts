@@ -79,8 +79,11 @@ describe('clickable chips adopt UButton with variant-based active state', () => 
     expect(idle_panel_source).toContain('<UButton')
     expect(idle_panel_source).not.toContain('<button')
     expect(idle_panel_source).toContain('@click="$emit(\'history-clicked\', history_item)"')
-    expect(idle_panel_source).toContain(':to="{ path: \'/search\', query: { q: tag.label } }"')
-    expect(idle_panel_source).toContain('@click="$emit(\'tag-clicked\', tag.label)"')
+    // 熱門 chip 深連 taxonomy 頁（AC16），不再以 label 打文字搜尋；
+    // 標籤走 /tag、品牌走 /brand（AC24），前綴由 section.to_prefix 決定。
+    expect(idle_panel_source).toContain(':to="`${section.to_prefix}/${tag.id}`"')
+    expect(idle_panel_source).toContain("to_prefix: '/tag'")
+    expect(idle_panel_source).toContain("to_prefix: '/brand'")
     expect(idle_panel_source).toContain('{{ tag.count }}')
   })
 

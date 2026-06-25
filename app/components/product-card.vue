@@ -43,7 +43,7 @@
       <CatalogPill
         class="channel-badge"
         variant="dark"
-        :to="{ path: '/search', query: { q: product.channel_label } }"
+        :to="`/channel/${product.channel_id}`"
       >
         <span class="channel-dot" />
         {{ product.channel_label }}

@@ -34,6 +34,8 @@ function mapGuideToRow(guide: Guide, labels: TaxonomyLabelResolver): CompactReso
     external: false,
     target: null,
     rel: null,
+    category_ids: guide.category_ids,
+    tag_ids: guide.tag_ids,
   }
 }
 
@@ -50,5 +52,7 @@ function mapLinkToRow(link: LinkDefinition): CompactResourceRow {
     external: true,
     target: '_blank',
     rel: 'noopener noreferrer',
+    category_ids: link.category_ids,
+    tag_ids: link.tag_ids,
   }
 }

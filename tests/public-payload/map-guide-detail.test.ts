@@ -36,11 +36,32 @@ describe('guide detail build mapper', () => {
       body: '## 重點\n\n第一段內文。',
       hero_image_url: '/guides/images/keyboard-guide.jpg',
       hero_alt: '鍵盤入門指南',
+      category_ids: ['computer'],
       category_labels: ['電腦'],
+      tag_ids: ['typing'],
       tag_labels: ['輸入'],
+      brand_ids: [],
+      brand_labels: [],
       source_url: 'https://example.com/keyboard-guide',
       related_products: [],
     })
+  })
+
+  it('should split brand ids out of tag_ids into a brand group so brand pills route to /brand (not dead /tag/{brand})', () => {
+    const brand_labels = createTaxonomyLabelResolver({
+      ...test_taxonomies,
+      brands: [
+        { id: 'panasonic', label: 'Panasonic', description: '', aliases: [], nav_visible: true, sort_order: 10 },
+      ],
+    })
+    const guide = makeGuide({ id: 'brand-guide', tag_ids: ['typing', 'panasonic'] })
+
+    const detail = mapGuideDetail(guide, [], brand_labels)
+
+    expect(detail.tag_ids).toEqual(['typing'])
+    expect(detail.brand_ids).toEqual(['panasonic'])
+    expect(detail.brand_labels).toEqual(['Panasonic'])
+    expect(detail.tag_ids).not.toContain('panasonic')
   })
 
   it('should use the guide title as the hero alt text', () => {
@@ -83,6 +104,15 @@ describe('guide detail build mapper', () => {
     const guide = makeGuide({ id: 'multi-tag-guide', tag_ids: ['typing', 'wireless'] })
 
     expect(mapGuideDetail(guide, [], labels).tag_labels).toEqual(['輸入', '無線'])
+  })
+
+  it('should carry the raw category and tag ids so the detail can deep link to /category/{id} and /tag/{id}', () => {
+    const guide = makeGuide({ id: 'id-carrying-guide', category_ids: ['computer', 'home'], tag_ids: ['typing', 'wireless'] })
+
+    const detail = mapGuideDetail(guide, [], labels)
+
+    expect(detail.category_ids).toEqual(['computer', 'home'])
+    expect(detail.tag_ids).toEqual(['typing', 'wireless'])
   })
 
   it('should include related product cards for published referenced products in reference order', () => {

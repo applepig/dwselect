@@ -1,8 +1,12 @@
 import { defineNuxtConfig } from 'nuxt/config'
 import { fileURLToPath } from 'node:url'
 
+import { buildBrandRoutes } from './scripts/build-brand-routes'
+import { buildCategoryRoutes } from './scripts/build-category-routes'
+import { buildChannelRoutes } from './scripts/build-channel-routes'
 import { buildGuideRoutes } from './scripts/build-guide-routes'
 import { buildProductRoutes } from './scripts/build-product-routes'
+import { buildTagRoutes } from './scripts/build-tag-routes'
 
 const app_url = process.env.APP_URL
 if (!app_url && !process.argv.some((a) => a === 'generate' || a === 'build')) {
@@ -12,6 +16,16 @@ const vite_host = app_url ?? 'dwselect.toybox.local'
 
 const product_routes = buildProductRoutes(fileURLToPath(new URL('./content/products/', import.meta.url)))
 const guide_routes = buildGuideRoutes(fileURLToPath(new URL('./content/guides/', import.meta.url)))
+const taxonomy_content_dirs = {
+  products_dir: fileURLToPath(new URL('./content/products/', import.meta.url)),
+  guides_dir: fileURLToPath(new URL('./content/guides/', import.meta.url)),
+  links_dir: fileURLToPath(new URL('./content/links/', import.meta.url)),
+  taxonomies_dir: fileURLToPath(new URL('./content/taxonomies/', import.meta.url)),
+}
+const category_routes = buildCategoryRoutes(taxonomy_content_dirs)
+const tag_routes = buildTagRoutes(taxonomy_content_dirs)
+const brand_routes = buildBrandRoutes(taxonomy_content_dirs)
+const channel_routes = buildChannelRoutes(taxonomy_content_dirs)
 // 監看 content/ 目錄絕對路徑而非 glob：Vite 7 的 chokidar 5 已移除 glob 支援，
 // 傳 'content/**/*.json' 進 watcher.add() 不會匹配任何檔案。
 const content_watch_paths = [fileURLToPath(new URL('./content/', import.meta.url))]
@@ -70,6 +84,10 @@ export default defineNuxtConfig({
         '/search-index.json',
         ...product_routes,
         ...guide_routes,
+        ...category_routes,
+        ...tag_routes,
+        ...brand_routes,
+        ...channel_routes,
       ],
     },
   },

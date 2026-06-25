@@ -19,6 +19,7 @@ import {
 
 const base_product: Product = {
   id: '2026-06-02-sample-product',
+  slug: '2026-06-02-sample-product',
   status: 'published',
   name: '機械鍵盤',
   english_name: 'Mechanical Keyboard',
@@ -56,6 +57,7 @@ const execFileAsync = promisify(execFile)
 
 const base_guide: Guide = {
   id: '2026-06-02-guide',
+  slug: '2026-06-02-guide',
   status: 'published',
   title: '日本米入門篇',
   summary: '如何挑選日本米',
@@ -73,6 +75,7 @@ const base_guide: Guide = {
 
 const base_link: LinkDefinition = {
   id: 'applepig-home',
+  slug: 'applepig-home',
   status: 'published',
   title: 'applepig.idv.tw',
   summary: 'DW 的主站入口',
@@ -646,6 +649,7 @@ describe('search index', () => {
     await mkdir(products_dir)
     await writeFile(join(products_dir, '2026-06-07-filename-stem.json'), JSON.stringify({
       id: 'internal-json-id',
+      slug: 'internal-json-id',
       status: 'published',
       name: '檔名商品',
       english_name: 'Filename Stem',

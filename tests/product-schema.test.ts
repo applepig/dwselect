@@ -15,6 +15,7 @@ import {
 
 const valid_product = {
   id: '2026-06-02-sample-product',
+  slug: '2026-06-02-sample-product',
   status: 'published',
   name: '商品名稱',
   english_name: 'Sample Product',
@@ -51,6 +52,7 @@ const valid_product = {
 
 const valid_guide = {
   id: 'sample-guide',
+  slug: 'sample-guide',
   status: 'published',
   title: '指南標題',
   summary: '指南摘要',
@@ -68,6 +70,7 @@ const valid_guide = {
 
 const valid_link = {
   id: 'sample-link',
+  slug: 'sample-link',
   status: 'published',
   title: '連結標題',
   summary: '連結摘要',
@@ -128,6 +131,50 @@ function readContentEntries(directory_url: URL) {
 describe('product schema', () => {
   it('should accept a valid product document', () => {
     expect(() => product_schema.parse(valid_product)).not.toThrow()
+  })
+
+  it('should accept product, guide and link documents carrying a non-empty slug', () => {
+    expect(() => product_schema.parse({ ...valid_product, slug: valid_product.id })).not.toThrow()
+    expect(() => guide_schema.parse({ ...valid_guide, slug: valid_guide.id })).not.toThrow()
+    expect(() => link_schema.parse({ ...valid_link, slug: valid_link.id })).not.toThrow()
+  })
+
+  it('should reject product, guide and link documents missing the slug field', () => {
+    const { slug: _product_slug, ...product_without_slug } = valid_product
+    const { slug: _guide_slug, ...guide_without_slug } = valid_guide
+    const { slug: _link_slug, ...link_without_slug } = valid_link
+
+    expect(() => product_schema.parse(product_without_slug)).toThrow()
+    expect(() => guide_schema.parse(guide_without_slug)).toThrow()
+    expect(() => link_schema.parse(link_without_slug)).toThrow()
+  })
+
+  it('should reject an empty slug across product, guide and link schemas', () => {
+    expect(() => product_schema.parse({ ...valid_product, slug: '' })).toThrow()
+    expect(() => guide_schema.parse({ ...valid_guide, slug: '' })).toThrow()
+    expect(() => link_schema.parse({ ...valid_link, slug: '' })).toThrow()
+  })
+
+  it('should accept kebab-case ASCII id and slug across product, guide and link schemas (AC1c)', () => {
+    expect(() => product_schema.parse({ ...valid_product, id: '2026-06-02-japanese-rice-intro', slug: '2026-06-02-japanese-rice-intro' })).not.toThrow()
+    expect(() => guide_schema.parse({ ...valid_guide, id: '2026-06-02-japanese-rice-intro', slug: '2026-06-02-japanese-rice-intro' })).not.toThrow()
+    expect(() => link_schema.parse({ ...valid_link, id: 'applepig-home', slug: 'applepig-home' })).not.toThrow()
+  })
+
+  it('should reject non-kebab content id across product, guide and link schemas (AC1c)', () => {
+    for (const invalid_id of ['2026-06-02-日本米入門篇', 'Japanese-Rice', 'japanese_rice', 'japanese rice', '-japanese-rice', 'japanese-rice-']) {
+      expect(() => product_schema.parse({ ...valid_product, id: invalid_id })).toThrow()
+      expect(() => guide_schema.parse({ ...valid_guide, id: invalid_id })).toThrow()
+      expect(() => link_schema.parse({ ...valid_link, id: invalid_id })).toThrow()
+    }
+  })
+
+  it('should reject non-kebab content slug across product, guide and link schemas (AC1c)', () => {
+    for (const invalid_slug of ['2026-06-02-日本米入門篇', 'Japanese-Rice', 'japanese_rice', 'japanese rice', '-japanese-rice', 'japanese-rice-']) {
+      expect(() => product_schema.parse({ ...valid_product, slug: invalid_slug })).toThrow()
+      expect(() => guide_schema.parse({ ...valid_guide, slug: invalid_slug })).toThrow()
+      expect(() => link_schema.parse({ ...valid_link, slug: invalid_slug })).toThrow()
+    }
   })
 
   it('should reject legacy free-string product tags', () => {
@@ -560,6 +607,7 @@ describe('product schema', () => {
 
     for (const entry of product_entries) {
       expect(entry.content.id).toBe(entry.file_stem)
+      expect(entry.content.slug).toBe(entry.content.id)
       expect(entry.content.id).toMatch(/^\d{4}-\d{2}-\d{2}-[a-z0-9]+(?:-[a-z0-9]+)*$/)
       expect(entry.content.image_url === null || isHttpUrl(entry.content.image_url)).toBe(true)
       expectContentImageFileToExist(entry.content.image_file, products_dir_url)
@@ -569,6 +617,7 @@ describe('product schema', () => {
     }
     for (const entry of guide_entries) {
       expect(entry.content.id).toBe(entry.file_stem)
+      expect(entry.content.slug).toBe(entry.content.id)
       expect(entry.content).not.toHaveProperty('tags')
       expect(entry.content.image_url === null || isHttpUrl(entry.content.image_url)).toBe(true)
       expectContentImageFileToExist(entry.content.image_file, guides_dir_url)
@@ -576,6 +625,7 @@ describe('product schema', () => {
     }
     for (const entry of link_entries) {
       expect(entry.content.id).toBe(entry.file_stem)
+      expect(entry.content.slug).toBe(entry.content.id)
       expect(entry.content).not.toHaveProperty('tags')
       expect(() => link_schema.parse(entry.content)).not.toThrow()
     }

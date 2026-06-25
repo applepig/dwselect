@@ -21,8 +21,11 @@ afterEach(() => {
   temp_roots.length = 0
 })
 
-function makeProductJson(overrides: { id_name: string, status?: string } & Record<string, unknown>) {
+// id 由 reader 從檔名覆寫、slug 須為 ASCII kebab（AC1c）；name 保留任意字串（含 CJK），
+// 供 Case 5 的「封存商品字串不外洩 payload」斷言。
+function makeProductJson(overrides: { id_name: string, slug: string, status?: string } & Record<string, unknown>) {
   return {
+    slug: overrides.slug,
     status: overrides.status ?? 'published',
     name: overrides.id_name,
     english_name: 'Sample Product',
@@ -141,8 +144,8 @@ describe('public content route data source boundary behaviour', () => {
 
   it('should reflect newly added and archived products in the payload the route returns (spec Case 5)', async () => {
     const fixture = await makeContentFixture()
-    writeFileSync(join(fixture.products_dir, 'published-product.json'), JSON.stringify(makeProductJson({ id_name: '已上架商品' })))
-    writeFileSync(join(fixture.products_dir, 'archived-product.json'), JSON.stringify(makeProductJson({ id_name: '已封存商品', status: 'archived' })))
+    writeFileSync(join(fixture.products_dir, 'published-product.json'), JSON.stringify(makeProductJson({ id_name: '已上架商品', slug: 'published-product' })))
+    writeFileSync(join(fixture.products_dir, 'archived-product.json'), JSON.stringify(makeProductJson({ id_name: '已封存商品', slug: 'archived-product', status: 'archived' })))
 
     const payload = buildPublicContentPayload(await readPublicContentSource(readerOptions(fixture)))
 

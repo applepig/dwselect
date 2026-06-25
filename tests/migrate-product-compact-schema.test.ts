@@ -106,6 +106,7 @@ describe('compact product migration helpers', () => {
 
     expect(migrated_product).toEqual({
       id: 'sample-product',
+      slug: 'sample-product',
       status: 'draft',
       name: '範例商品',
       english_name: '範例商品',

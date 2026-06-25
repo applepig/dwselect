@@ -175,6 +175,8 @@ export function getCompactProductMigration(legacy_product: LegacyProduct): Produ
   const migrated_status = status === 'published' && !has_local_image_file ? 'draft' : status
   const migrated_product = {
     ...product_without_legacy_fields,
+    // Why: schema 新增必填 slug（ADR-5），legacy 匯入輸出須與遷移後內容一致（slug = id）。
+    slug: legacy_product.id,
     status: migrated_status,
     english_name: legacy_product.name,
     summary: legacy_product.description,

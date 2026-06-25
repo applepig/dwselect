@@ -15,6 +15,7 @@ const execFileAsync = promisify(execFile)
 
 const base_product: Product = {
   id: '2026-06-02-sample-product',
+  slug: '2026-06-02-sample-product',
   status: 'published',
   name: '機械鍵盤 & <滑鼠>',
   english_name: 'Mechanical Keyboard',
@@ -51,6 +52,7 @@ const base_product: Product = {
 
 const base_guide: Guide = {
   id: '2026-06-03-guide',
+  slug: '2026-06-03-guide',
   status: 'published',
   title: '日本米入門篇',
   summary: '如何挑選日本米',
@@ -68,6 +70,7 @@ const base_guide: Guide = {
 
 const base_link: LinkDefinition = {
   id: 'applepig-home',
+  slug: 'applepig-home',
   status: 'published',
   title: 'applepig.idv.tw',
   summary: 'DW 的主站入口',
@@ -196,8 +199,10 @@ describe('frontend-ready public content payload shape', () => {
       category_id: 'computer-3c',
       category_label: '電腦3C',
       channel_id: 'pchome',
+      channel_ids: ['pchome'],
       channel_label: 'PChome',
       price_label: 'NT$ 1,990',
+      tag_ids: ['keyboard', 'fixture-brand'],
       tag_labels: ['鍵盤', 'Fixture Brand'],
       published_at: '2026-06-02T00:00:00+08:00',
     })
@@ -223,7 +228,10 @@ describe('frontend-ready public content payload shape', () => {
       category_label: '電腦3C',
       channel_id: 'pchome',
       channel_label: 'PChome',
-      tag_labels: ['鍵盤', 'Fixture Brand'],
+      tag_ids: ['keyboard'],
+      tag_labels: ['鍵盤'],
+      brand_ids: ['fixture-brand'],
+      brand_labels: ['Fixture Brand'],
       price_label: 'NT$ 1,990',
       buy_url: 'https://example.com/product?a=1&b=2',
       fine_print: '價格與庫存以通路頁面為準。',
@@ -325,6 +333,17 @@ describe('public discovery files', () => {
     expect(sitemap).toContain('<loc>https://dwselect.applepig.net/products/2026-06-02-sample-product</loc>')
     expect(sitemap).toContain('<loc>https://dwselect.applepig.net/products/no-published-at-product</loc>')
     expect(sitemap).toContain('<lastmod>2026-06-03</lastmod>')
+    // Taxonomy 頁要可索引：非空 category／tag（跨三型別 published 關聯）須進 sitemap。
+    expect(sitemap).toContain('<loc>https://dwselect.applepig.net/category/computer-3c</loc>')
+    expect(sitemap).toContain('<loc>https://dwselect.applepig.net/category/household</loc>')
+    expect(sitemap).toContain('<loc>https://dwselect.applepig.net/category/other</loc>')
+    expect(sitemap).toContain('<loc>https://dwselect.applepig.net/tag/keyboard</loc>')
+    expect(sitemap).toContain('<loc>https://dwselect.applepig.net/tag/food</loc>')
+    // brand id 走專屬 /brand/ 前綴、不再出現於 /tag/（ADR-8 單一 canonical）。
+    expect(sitemap).toContain('<loc>https://dwselect.applepig.net/brand/fixture-brand</loc>')
+    expect(sitemap).not.toContain('<loc>https://dwselect.applepig.net/tag/fixture-brand</loc>')
+    // channel 頁（products-only）：被 published product offer 引用的 channel 須進 sitemap。
+    expect(sitemap).toContain('<loc>https://dwselect.applepig.net/channel/pchome</loc>')
     expect(sitemap).not.toContain('draft-product')
     expect(sitemap).not.toContain('dwselect.toybox.local')
     expect(rss.indexOf('<title>日本米入門篇</title>')).toBeLessThan(rss.indexOf('<title>機械鍵盤 &amp; &lt;滑鼠&gt;</title>'))

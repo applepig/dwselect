@@ -41,18 +41,25 @@
             aria-label="指南分類與 tags"
           >
             <CatalogPill
-              v-for="category_label in detail.category_labels"
-              :key="`category-${category_label}`"
-              :to="{ path: '/search', query: { q: category_label } }"
+              v-for="category in detail_categories"
+              :key="`category-${category.id}`"
+              :to="`/category/${category.id}`"
             >
-              {{ category_label }}
+              {{ category.label }}
             </CatalogPill>
             <CatalogPill
-              v-for="tag_label in detail.tag_labels"
-              :key="`tag-${tag_label}`"
-              :to="{ path: '/search', query: { q: tag_label } }"
+              v-for="brand in detail_brands"
+              :key="`brand-${brand.id}`"
+              :to="`/brand/${brand.id}`"
             >
-              {{ tag_label }}
+              {{ brand.label }}
+            </CatalogPill>
+            <CatalogPill
+              v-for="tag in detail_tags"
+              :key="`tag-${tag.id}`"
+              :to="`/tag/${tag.id}`"
+            >
+              {{ tag.label }}
             </CatalogPill>
           </div>
 
@@ -160,6 +167,21 @@ const has_hero_image_failed = ref(false)
 const failed_related_image_ids = ref<Set<string>>(new Set())
 const detail_root = ref<HTMLElement | null>(null)
 const has_hero_image = computed(() => props.detail.hero_image_url !== '' && !has_hero_image_failed.value)
+// category_ids／category_labels（及 tag 同理）為並列陣列，由 mapper 同源同序映射（*_ids.map(...)），
+// 故以 index 配對安全；配對後 pill 能顯示 label 又精準連到對應 taxonomy id。
+const detail_categories = computed(() => props.detail.category_ids.map((id, index) => ({
+  id,
+  label: props.detail.category_labels[index] ?? id,
+})))
+const detail_tags = computed(() => props.detail.tag_ids.map((id, index) => ({
+  id,
+  label: props.detail.tag_labels[index] ?? id,
+})))
+// brand pill 深連 /brand/{id}（ADR-8）；brand_ids／brand_labels 同源同序。
+const detail_brands = computed(() => props.detail.brand_ids.map((id, index) => ({
+  id,
+  label: props.detail.brand_labels[index] ?? id,
+})))
 
 onMounted(() => {
   const hero_image = detail_root.value?.querySelector<HTMLImageElement>('.detail-hero-image') ?? null

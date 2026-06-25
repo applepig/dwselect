@@ -40,6 +40,8 @@ describe('guide and link resource row build mapper', () => {
         external: false,
         target: null,
         rel: null,
+        category_ids: ['computer'],
+        tag_ids: ['typing'],
       },
     ])
   })
@@ -111,6 +113,8 @@ describe('guide and link resource row build mapper', () => {
         external: true,
         target: '_blank',
         rel: 'noopener noreferrer',
+        category_ids: ['other'],
+        tag_ids: [],
       },
     ])
   })

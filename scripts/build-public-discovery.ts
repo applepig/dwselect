@@ -3,6 +3,7 @@ import { join } from 'node:path'
 
 import type { Guide, LinkDefinition, Product } from '../app/utils/product-schema.ts'
 import { compareProducts } from '../app/utils/content/compare-products.ts'
+import { collectNonEmptyTaxonomyIds } from '../app/utils/published-products/non-empty-taxonomy-ids.ts'
 import { readPublicContentSource, type ContentReaderOptions, type PublicContentSource } from './content-reader.ts'
 import { SITE_NAME, SITE_URL, isPublished } from './public-content.ts'
 
@@ -58,7 +59,12 @@ export async function buildPublicDiscoveryFilesFromSource(
   await Promise.all([
     writeFile(output_paths[0], buildRobotsTxt()),
     writeFile(output_paths[1], buildLlmsTxt()),
-    writeFile(output_paths[2], buildSitemapXml(published_products)),
+    writeFile(output_paths[2], buildSitemapXml(published_products, {
+      products: published_products,
+      guides: published_guides,
+      links: published_links,
+      brand_ids: new Set(source.taxonomies.brands.map((brand) => brand.id)),
+    })),
     writeFile(output_paths[3], buildRssXml(published_products, published_guides, published_links)),
   ])
 
@@ -78,11 +84,47 @@ function buildLlmsTxt() {
   return `# ${SITE_NAME}\n\n> ${SITE_NAME}是個人選物網站，整理商品、指南與實用連結。\n\n## Public Data\n\n- [All content JSON](${SITE_URL}api/content.json): Published products, guides, links, and taxonomies.\n- [Search index](${SITE_URL}search-index.json): Lightweight searchable document index.\n- [Sitemap](${SITE_URL}sitemap.xml): Canonical public URLs.\n- [RSS](${SITE_URL}rss.xml): Recent published updates.\n\n## Usage Notes\n\nPublic agents may read and summarize public content. Do not attempt write actions, checkout automation, account actions, or content mutation from the public site.\n`
 }
 
-function buildSitemapXml(products: Product[]) {
+type TaxonomySitemapSource = {
+  products: Product[]
+  guides: Guide[]
+  links: LinkDefinition[]
+  brand_ids: Set<string>
+}
+
+function buildSitemapXml(
+  products: Product[],
+  taxonomy_source: TaxonomySitemapSource,
+) {
   const route_entries = ROOT_ROUTES.map((route) => buildSitemapUrlEntry(`${SITE_URL}${route.slice(1)}`))
   const product_entries = products.map((product) => buildSitemapUrlEntry(getProductUrl(product.id), getDateText(product.updated_at)))
+  const taxonomy_entries = buildTaxonomySitemapEntries(taxonomy_source)
 
-  return `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${[...route_entries, ...product_entries].join('\n')}\n</urlset>\n`
+  return `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${[...route_entries, ...product_entries, ...taxonomy_entries].join('\n')}\n</urlset>\n`
+}
+
+// Why: 非空 category／tag／brand／channel 與 route builder 共用 collectNonEmptyTaxonomyIds，使 sitemap 收錄的
+// taxonomy 頁集合與 prerender 路由集合完全一致，不漂移。taxonomy id 為 ASCII kebab-case，無需 encodeURIComponent。
+// brand id 走 /brand/（不出現於 /tag/，ADR-8）；channel id 來自 product offers（products-only，ADR-9）。
+function buildTaxonomySitemapEntries(source: TaxonomySitemapSource) {
+  const { category_ids, tag_ids, brand_ids, channel_ids } = collectNonEmptyTaxonomyIds(
+    {
+      products: source.products.map((product) => ({
+        category_id: product.category_id,
+        tag_ids: product.tag_ids,
+        channel_ids: product.offers.map((offer) => offer.channel_id),
+      })),
+      guides: source.guides.map((guide) => ({ category_ids: guide.category_ids, tag_ids: guide.tag_ids })),
+      links: source.links.map((link) => ({ category_ids: link.category_ids, tag_ids: link.tag_ids })),
+    },
+    { brand_ids: source.brand_ids },
+  )
+
+  return [
+    ...Array.from(category_ids, (category_id) => buildSitemapUrlEntry(`${SITE_URL}category/${category_id}`)),
+    ...Array.from(tag_ids, (tag_id) => buildSitemapUrlEntry(`${SITE_URL}tag/${tag_id}`)),
+    ...Array.from(brand_ids, (brand_id) => buildSitemapUrlEntry(`${SITE_URL}brand/${brand_id}`)),
+    ...Array.from(channel_ids, (channel_id) => buildSitemapUrlEntry(`${SITE_URL}channel/${channel_id}`)),
+  ]
 }
 
 function buildSitemapUrlEntry(url: string, lastmod?: string) {

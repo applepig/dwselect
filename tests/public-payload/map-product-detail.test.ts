@@ -77,7 +77,10 @@ describe('product detail build mapper', () => {
       category_label: '影音',
       channel_id: 'pchome',
       channel_label: 'PChome',
+      tag_ids: product.tag_ids,
       tag_labels: product.tag_ids,
+      brand_ids: [],
+      brand_labels: [],
       price_label: 'NT$ 123,456,789 起',
       buy_url: 'https://24h.pchome.com.tw/prod/detail',
       fine_print: '價格與庫存以通路頁面為準。',
@@ -126,7 +129,7 @@ describe('product detail build mapper', () => {
     expect(() => mapProductDetail(product, [product], makeResolver())).toThrow('Published product image_file is required')
   })
 
-  it('should resolve product detail tag labels from taxonomy tags and brands', () => {
+  it('should split tag_ids into a brand group (→/brand) and a tag group (→/tag) so brand pills never hit dead /tag/{brand} routes', () => {
     const product = makeProduct({
       id: 'brand-detail-product',
       status: 'published',
@@ -140,7 +143,24 @@ describe('product detail build mapper', () => {
       ],
     }
 
-    expect(mapProductDetail(product, [product], makeResolver(taxonomies)).tag_labels).toEqual(['輸入', 'Fixture Brand'])
+    const detail = mapProductDetail(product, [product], makeResolver(taxonomies))
+
+    expect(detail.tag_ids).toEqual(['typing'])
+    expect(detail.tag_labels).toEqual(['輸入'])
+    expect(detail.brand_ids).toEqual(['fixture-brand'])
+    expect(detail.brand_labels).toEqual(['Fixture Brand'])
+    expect(detail.tag_ids).not.toContain('fixture-brand')
+  })
+
+  it('should carry the raw tag ids (not labels) so the detail can deep link to /tag/{id}', () => {
+    const product = makeProduct({
+      id: 'id-carrying-product',
+      status: 'published',
+      name: '帶 id 商品',
+      tag_ids: ['typing', 'wireless'],
+    })
+
+    expect(mapProductDetail(product, [product], makeResolver()).tag_ids).toEqual(['typing', 'wireless'])
   })
 })
 

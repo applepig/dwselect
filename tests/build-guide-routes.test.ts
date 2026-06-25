@@ -63,11 +63,12 @@ describe('buildGuideRoutes', () => {
     }
   })
 
-  it('should preserve non-ascii (CJK) stems from the file name', () => {
-    const dir = makeGuidesDir({ '2026-06-02-日本米入門篇.json': { status: 'published' } })
+  it('should take the route stem verbatim from the date-prefixed kebab file name', () => {
+    // content id 已強制 ASCII kebab（AC1c／ADR-11）；stem 取自檔名、含 date 前綴，無需 encodeURIComponent。
+    const dir = makeGuidesDir({ '2026-06-02-japanese-rice-intro.json': { status: 'published' } })
 
     try {
-      expect(buildGuideRoutes(dir)).toEqual(['/guide/2026-06-02-日本米入門篇'])
+      expect(buildGuideRoutes(dir)).toEqual(['/guide/2026-06-02-japanese-rice-intro'])
     }
     finally {
       rmSync(dir, { recursive: true, force: true })

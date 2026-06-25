@@ -354,18 +354,18 @@ test('navigates to search by tag from product detail', async ({ page }) => {
   await expect(page.getByPlaceholder('在找什麼嗎？™')).toHaveValue(tag_label)
 })
 
-test('navigates to search by channel from product card channel pill', async ({ page }) => {
+test('deep-links to the channel taxonomy page from a product card channel pill', async ({ page }) => {
   await page.goto('/', { waitUntil: 'domcontentloaded' })
   await expect(page.locator('vite-error-overlay')).toHaveCount(0)
 
-  const first_channel = page.locator('.product-card .channel-badge[href^="/search?q="]').first()
+  const first_channel = page.locator('.product-card .channel-badge[href^="/channel/"]').first()
   const channel_label = (await first_channel.textContent())?.trim() ?? ''
 
-  await expect(first_channel).toHaveAttribute('href', /\/search\?q=/)
+  await expect(first_channel).toHaveAttribute('href', /\/channel\//)
   await first_channel.click()
 
-  await expect(page).toHaveURL(new RegExp(`\\/search\\?q=${encodeURIComponent(channel_label)}`))
-  await expect(page.getByPlaceholder('在找什麼嗎？™')).toHaveValue(channel_label)
+  await expect(page).toHaveURL(/\/channel\//)
+  await expect(page.locator('.taxonomy-page-title')).toHaveText(channel_label)
 })
 
 test('renders direct product detail routes and unknown product not-found states', async ({ page }) => {

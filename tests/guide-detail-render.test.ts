@@ -53,8 +53,12 @@ function makeGuideDetailView(overrides: Partial<GuideDetailView> = {}): GuideDet
     body: '## 標題\n\n第一段內文 [參考連結](https://example.com/ref) 結尾。\n\n- 項目一\n- 項目二',
     hero_image_url: '/guides/images/sample-guide.jpg',
     hero_alt: '示範指南',
+    category_ids: ['computer'],
     category_labels: ['電腦'],
+    tag_ids: ['typing'],
     tag_labels: ['輸入'],
+    brand_ids: [],
+    brand_labels: [],
     source_url: 'https://example.com/sample-guide',
     related_products: [],
     ...overrides,
@@ -94,7 +98,12 @@ describe('GuideDetail', () => {
   })
 
   it('should render category and tag pills with their labels', () => {
-    const wrapper = mountGuideDetail(makeGuideDetailView({ category_labels: ['電腦', '居家'], tag_labels: ['輸入', '無線'] }))
+    const wrapper = mountGuideDetail(makeGuideDetailView({
+      category_ids: ['computer', 'home-living'],
+      category_labels: ['電腦', '居家'],
+      tag_ids: ['typing', 'wireless'],
+      tag_labels: ['輸入', '無線'],
+    }))
     const pill_texts = wrapper.findAll('.catalog-pill').map((pill) => pill.text())
 
     expect(pill_texts).toContain('電腦')

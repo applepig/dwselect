@@ -100,6 +100,8 @@ describe('compact app view state', () => {
         external: false,
         target: null,
         rel: null,
+        category_ids: ['computer'],
+        tag_ids: ['typing'],
       },
     ])
     expect(compact_view.guide.empty_reason).toBeNull()
@@ -213,6 +215,8 @@ describe('compact app view state', () => {
         external: true,
         target: '_blank',
         rel: 'noopener noreferrer',
+        category_ids: ['other'],
+        tag_ids: [],
       },
     ])
   })

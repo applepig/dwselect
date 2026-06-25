@@ -208,7 +208,9 @@
   text-decoration: none;
 }
 
-.product-card-link:hover {
+/* hover 底色掛在整張卡（.product-card），讓兄弟節點 .product-card-meta（價格＋channel badge）也跟著變色；
+   只掛 .product-card-link 會漏掉 meta 區，dark theme 下尤其明顯（AC27）。一律走 --dw-* token 支援 light/dark 反相。 */
+.product-card:hover {
   background: color-mix(in srgb, var(--dw-accent) 5%, transparent);
 }
 
@@ -1121,6 +1123,33 @@
   color: var(--dw-muted);
   font-size: 0.78rem;
   font-weight: 900;
+}
+
+/* taxonomy 瀏覽頁：沿用 .compact-panel／.section-title／.section-kicker／.product-grid／.resource-list，
+   僅補頁面標題區與各型別區段的版面 gap 與簡介文字色（皆走 --dw-* token）。 */
+.taxonomy-page-header {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+}
+
+.taxonomy-page-description {
+  margin: 6px 0 0;
+  color: var(--dw-muted);
+  font-size: 0.9rem;
+  line-height: 1.55;
+  overflow-wrap: anywhere;
+}
+
+.taxonomy-section {
+  display: grid;
+  gap: 12px;
+  min-width: 0;
+}
+
+.taxonomy-section-title {
+  font-size: 1.1rem;
+  font-weight: 950;
 }
 
 @media (max-width: 767px) {
