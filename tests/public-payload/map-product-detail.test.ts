@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 
 import { mapProductDetail } from '../../scripts/public-payload/map-product-detail'
 import { getRelatedProductCards } from '../../scripts/public-payload/map-related-product-card'
-import { buildPublicContentPayload } from '../../scripts/public-content'
+import { buildProductDetail } from '../../scripts/public-payload/build-detail-by-id'
 import { createTaxonomyLabelResolver } from '../../app/utils/content/taxonomy-labels'
 import { makeProduct, test_taxonomies } from '../published-products/fixtures'
 
@@ -25,13 +25,16 @@ function makeOffer(channel_id: string) {
   }
 }
 
-function makePayload(products: ReturnType<typeof makeProduct>[]) {
-  return buildPublicContentPayload({
-    products,
-    guides: [],
-    links: [],
-    taxonomies: test_taxonomies,
-  })
+function buildDetail(products: ReturnType<typeof makeProduct>[], id: string) {
+  return buildProductDetail(
+    {
+      products,
+      guides: [],
+      links: [],
+      taxonomies: test_taxonomies,
+    },
+    id,
+  )
 }
 
 describe('product detail build mapper', () => {
@@ -334,8 +337,8 @@ describe('related product build mapper', () => {
   })
 })
 
-describe('details_by_id assembly', () => {
-  it('should key details by content id without serializing raw catalog records for other products', () => {
+describe('per-id detail assembly', () => {
+  it('should build the detail by content id without serializing raw catalog records for other products', () => {
     const current_product = makeProduct({
       id: 'current-product',
       status: 'published',
@@ -354,8 +357,7 @@ describe('details_by_id assembly', () => {
       offers: [makeOffer('momo')],
     })
 
-    const payload = makePayload([current_product, related_product])
-    const detail = payload.products.details_by_id['current-product']!
+    const detail = buildDetail([current_product, related_product], 'current-product')!
 
     expect(detail.id).toBe('current-product')
     expect(detail.long_description).toBe('目前商品完整描述')
@@ -381,18 +383,14 @@ describe('details_by_id assembly', () => {
       updated_at: `2026-06-0${index + 1}T00:00:00+08:00`,
     }))
 
-    const payload = makePayload([current_product, ...related_products])
-
-    expect(payload.products.details_by_id['current-product']!.related_products.map((product) => product.id)).toEqual([
+    expect(buildDetail([current_product, ...related_products], 'current-product')!.related_products.map((product) => product.id)).toEqual([
       'related-product-5',
       'related-product-4',
       'related-product-3',
     ])
   })
 
-  it('should not create a detail entry for a missing product id', () => {
-    const payload = makePayload([makeProduct({ id: 'current-product', status: 'published', name: '目前商品' })])
-
-    expect(payload.products.details_by_id['missing-product']).toBeUndefined()
+  it('should not build a detail for a missing product id', () => {
+    expect(buildDetail([makeProduct({ id: 'current-product', status: 'published', name: '目前商品' })], 'missing-product')).toBeNull()
   })
 })

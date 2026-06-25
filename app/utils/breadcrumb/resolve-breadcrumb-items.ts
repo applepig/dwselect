@@ -19,8 +19,9 @@ type BreadcrumbDetailEntry = {
 
 export type BreadcrumbShellData = {
   desktop_category_items: CategoryChipView[]
-  product_details_by_id: Record<string, BreadcrumbDetailEntry>
-  guide_details_by_id: Record<string, BreadcrumbDetailEntry>
+  // 028 拆分：shell 不再傳全量 detail map，改用 cards／rows 來的精簡 breadcrumb lookup（同欄位即可）。
+  product_breadcrumb_by_id: Record<string, BreadcrumbDetailEntry>
+  guide_breadcrumb_by_id: Record<string, BreadcrumbDetailEntry>
   taxonomies: PublicTaxonomies
 }
 
@@ -87,7 +88,7 @@ function resolveActiveHomeCategoryLabel(route_query: RouteQuery, shell_data: Bre
 
 function resolveProductBreadcrumb(route_path: string, shell_data: BreadcrumbShellData | null): BreadcrumbItem[] {
   const product_id = getRouteId(route_path)
-  const product_item = product_id === null ? undefined : shell_data?.product_details_by_id[product_id]
+  const product_item = product_id === null ? undefined : shell_data?.product_breadcrumb_by_id[product_id]
 
   if (product_item === undefined) {
     return [{ label: '商品詳情' }]
@@ -104,7 +105,7 @@ function resolveProductBreadcrumb(route_path: string, shell_data: BreadcrumbShel
 
 function resolveGuideBreadcrumb(route_path: string, shell_data: BreadcrumbShellData | null): BreadcrumbItem[] {
   const guide_id = getRouteId(route_path)
-  const guide_item = guide_id === null ? undefined : shell_data?.guide_details_by_id[guide_id]
+  const guide_item = guide_id === null ? undefined : shell_data?.guide_breadcrumb_by_id[guide_id]
 
   if (guide_item === undefined) {
     return [{ label: '指南詳情' }]

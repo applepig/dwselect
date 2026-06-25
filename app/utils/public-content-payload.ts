@@ -5,9 +5,7 @@ import type {
 } from './product-schema'
 import type {
   CategoryChipView,
-  GuideDetailView,
   ProductCardView,
-  ProductDetailView,
 } from './public-content-view-types'
 import type { CompactResourceRow, CompactSearchTagGroups } from './published-products/types'
 
@@ -26,11 +24,9 @@ export type PublicContentPayload = {
   }
   products: {
     cards: ProductCardView[]
-    details_by_id: Record<string, ProductDetailView>
   }
   guides: {
     rows: CompactResourceRow[]
-    details_by_id: Record<string, GuideDetailView>
   }
   links: CompactResourceRow[]
   navigation: {

@@ -198,19 +198,22 @@ describe('Nuxt SSG baseline', () => {
     expect(detail_page_source).toContain('await useProductDetailData(product_id)')
     expect(detail_page_source).not.toContain('await useCatalogData()')
     expect(detail_page_source).not.toContain('all_products')
-    expect(detail_composable_source).toContain("useAsyncData('public-content'")
-    expect(detail_composable_source).toContain('details_by_id[product_id]')
-    expect(detail_composable_source).toContain('fetchPublicContentPayload')
+    // 028 拆分：詳情頁只 fetch 自己那一筆 detail（per-id key），不再載入整包 content payload。
+    expect(detail_composable_source).toContain('`product-detail-${product_id}`')
+    expect(detail_composable_source).toContain('fetchProductDetail(product_id)')
+    expect(detail_composable_source).not.toContain("useAsyncData('public-content'")
+    expect(detail_composable_source).not.toContain('details_by_id')
+    expect(detail_composable_source).not.toContain('fetchPublicContentPayload')
     expect(detail_composable_source).not.toContain('transform:')
     expect(detail_composable_source).not.toContain('server: false')
     expect(shell_composable_source).toContain("useAsyncData('public-content'")
     expect(shell_composable_source).toContain('desktop_category_items')
-    // shell data 直接傳出 details_by_id reference（O(1) 投影），不再為全部商品重建 breadcrumb map。
-    expect(shell_composable_source).toContain('product_details_by_id: content_payload.value.products.details_by_id')
-    // 指南詳情 breadcrumb 也走同樣的 O(1) reference 投影。
-    expect(shell_composable_source).toContain('guide_details_by_id: content_payload.value.guides.details_by_id')
-    expect(shell_composable_source).not.toContain('product_breadcrumb_items_by_id')
-    expect(shell_composable_source).not.toContain('Object.fromEntries')
+    // 028 拆分：shell 不再傳出全量 detail，麵包屑改用 cards／rows 的精簡欄位 lookup。
+    expect(shell_composable_source).not.toContain('details_by_id')
+    expect(shell_composable_source).toContain('product_breadcrumb_by_id')
+    expect(shell_composable_source).toContain('guide_breadcrumb_by_id')
+    expect(shell_composable_source).toContain('content_payload.value.products.cards')
+    expect(shell_composable_source).toContain('content_payload.value.guides.rows')
     expect(shell_composable_source).toContain('fetchPublicContentPayload')
     expect(shell_composable_source).not.toContain('transform:')
     expect(shell_composable_source).not.toContain('server: false')
@@ -352,9 +355,9 @@ describe('Nuxt SSG baseline', () => {
     expect(layout_source).toContain('class="breadcrumb-link"')
     expect(layout_source).toContain('current_breadcrumb_items')
     // breadcrumb 推導抽成純函式（resolveBreadcrumbItems）；輸出契約改驗 helper source。
-    // layout 只索引當前商品的 detail，不依賴預先建好的全量 breadcrumb map。
-    expect(breadcrumb_source).toContain('product_details_by_id[product_id]')
-    expect(breadcrumb_source).not.toContain('product_breadcrumb_items_by_id')
+    // 028 拆分：resolver 改用 cards／rows 來的精簡 breadcrumb lookup，不再依賴全量 detail map。
+    expect(breadcrumb_source).toContain('product_breadcrumb_by_id[product_id]')
+    expect(breadcrumb_source).not.toContain('product_details_by_id')
     // breadcrumb 輸出契約不變：分類連結（category_label → /?category=category_id）＋ 商品名。
     expect(breadcrumb_source).toContain('product_item.category_label')
     expect(breadcrumb_source).toContain('category: product_item.category_id')
@@ -365,7 +368,7 @@ describe('Nuxt SSG baseline', () => {
     expect(breadcrumb_source).toContain("route_path.startsWith('/products/')")
     // 指南詳情 breadcrumb：[指南→/guide, guide.title]，與商品詳情對稱但合理。
     expect(breadcrumb_source).toContain("route_path.startsWith('/guide/')")
-    expect(breadcrumb_source).toContain('guide_details_by_id[guide_id]')
+    expect(breadcrumb_source).toContain('guide_breadcrumb_by_id[guide_id]')
     expect(breadcrumb_source).toContain("{ label: '指南', to: '/guide' }")
     expect(breadcrumb_source).toContain('guide_item.title')
     // AC26：taxonomy 頁標題改用 layout breadcrumb，四種前綴都解析 label。
@@ -655,6 +658,8 @@ describe('Nuxt SSG baseline', () => {
     ]
     const product_route_count = countPublishedContent('../content/products/')
     const guide_route_count = countPublishedContent('../content/guides/')
+    const first_published_product_id = firstPublishedId('../content/products/')
+    const first_published_guide_id = firstPublishedId('../content/guides/')
     const prerender_routes = nuxt_config.nitro?.prerender?.routes ?? []
 
     for (const file_path of page_files) {
@@ -667,9 +672,19 @@ describe('Nuxt SSG baseline', () => {
     expect(prerender_routes).toContain('/links')
     expect(prerender_routes).toContain('/api/content.json')
     expect(prerender_routes).toContain('/search-index.json')
-    expect(prerender_routes.filter((route) => route.startsWith('/products/'))).toHaveLength(product_route_count)
+    expect(prerender_routes.filter((route) => route.startsWith('/products/') && !route.startsWith('/api/'))).toHaveLength(product_route_count)
     // /guide 列表本身也以 /guide/ 開頭，故扣掉它才是 detail route 數，須等於 published guide 數（AC13）。
-    expect(prerender_routes.filter((route) => route.startsWith('/guide/'))).toHaveLength(guide_route_count)
+    expect(prerender_routes.filter((route) => route.startsWith('/guide/') && !route.startsWith('/api/'))).toHaveLength(guide_route_count)
+    // 028 拆分：每筆 published 商品／指南都要 prerender 出 per-id detail JSON，數量與 detail 頁 route 一致，
+    // 否則 generate 會漏產 detail JSON 讓詳情頁載入失敗（failOnError 把缺漏放大為 build 中止）。
+    expect(prerender_routes.filter((route) => route.startsWith('/api/products/'))).toHaveLength(product_route_count)
+    expect(prerender_routes.filter((route) => route.startsWith('/api/guides/'))).toHaveLength(guide_route_count)
+    expect(prerender_routes).toContain(`/api/products/${first_published_product_id}.json`)
+    expect(prerender_routes).toContain(`/api/guides/${first_published_guide_id}.json`)
+  })
+
+  it('should default NuxtLink prefetch to interaction so the home page does not background prefetch every link (ADR-3)', () => {
+    expect(nuxt_config.experimental?.defaults?.nuxtLink?.prefetchOn).toEqual({ interaction: true })
   })
 
   it('should define light and dark handoff CSS tokens without a single-hue palette', () => {
@@ -713,6 +728,19 @@ function countPublishedContent(relative_dir: string): number {
     .map((file_name) => JSON.parse(readFileSync(new URL(`${relative_dir}${file_name}`, import.meta.url), 'utf8')))
     .filter((content) => content.status === 'published')
     .length
+}
+
+function firstPublishedId(relative_dir: string): string {
+  const file_name = readdirSync(new URL(relative_dir, import.meta.url))
+    .filter((name) => name.endsWith('.json'))
+    .toSorted((left, right) => left.localeCompare(right))
+    .find((name) => JSON.parse(readFileSync(new URL(`${relative_dir}${name}`, import.meta.url), 'utf8')).status === 'published')
+
+  if (file_name === undefined) {
+    throw new Error(`No published content in ${relative_dir}`)
+  }
+
+  return file_name.replace(/\.json$/, '')
 }
 
 function getContrastRatio(foreground_hex: string, background_hex: string) {

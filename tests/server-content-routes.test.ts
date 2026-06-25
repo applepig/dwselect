@@ -10,6 +10,8 @@ import { buildSearchIndexPayload } from '../app/utils/search/search-index'
 
 const content_route_url = new URL('../server/api/content.json.get.ts', import.meta.url)
 const search_route_url = new URL('../server/routes/search-index.json.get.ts', import.meta.url)
+const product_detail_route_url = new URL('../server/api/products/[id].json.get.ts', import.meta.url)
+const guide_detail_route_url = new URL('../server/api/guides/[id].json.get.ts', import.meta.url)
 
 const temp_roots: string[] = []
 
@@ -95,6 +97,32 @@ describe('public content server routes', () => {
     expect(route_source).toContain('buildPublicContentPayload')
   })
 
+  it('should expose /api/products/{id}.json from a per-id route reusing the shared reader and product detail builder', () => {
+    expect(existsSync(product_detail_route_url)).toBe(true)
+
+    const route_source = readFileSync(product_detail_route_url, 'utf8')
+
+    expect(route_source).toContain('defineEventHandler')
+    expect(route_source).toContain('readPublicContentSource')
+    expect(route_source).toContain('buildProductDetail')
+    // h3 把 [id].json 整段解析成單一 param，須由 event.path 還原 id（見 detail-route-id-resolution.test）。
+    expect(route_source).toContain('extractContentId(event.path)')
+    // id 不存在 → 404（spec Case 1），不可退回 500 或回 null。
+    expect(route_source).toContain('statusCode: 404')
+  })
+
+  it('should expose /api/guides/{id}.json from a per-id route reusing the shared reader and guide detail builder', () => {
+    expect(existsSync(guide_detail_route_url)).toBe(true)
+
+    const route_source = readFileSync(guide_detail_route_url, 'utf8')
+
+    expect(route_source).toContain('defineEventHandler')
+    expect(route_source).toContain('readPublicContentSource')
+    expect(route_source).toContain('buildGuideDetail')
+    expect(route_source).toContain('extractContentId(event.path)')
+    expect(route_source).toContain('statusCode: 404')
+  })
+
   it('should expose /search-index.json from a Nuxt server route using the shared content reader and search mapper', () => {
     expect(existsSync(search_route_url)).toBe(true)
 
@@ -111,7 +139,9 @@ describe('public content server routes', () => {
 
     expect(payload.version).toBe(1)
     expect(payload.products.cards.length).toBeGreaterThan(0)
-    expect(Object.keys(payload.products.details_by_id)).toHaveLength(payload.products.cards.length)
+    // 028 拆分：共用 payload 不再內嵌全量 detail（detail 改 per-id route）。
+    expect(payload.products).not.toHaveProperty('details_by_id')
+    expect(payload.guides).not.toHaveProperty('details_by_id')
 
     for (const card of payload.products.cards) {
       expect(card.image_url).toMatch(/^\/products\/images\//)

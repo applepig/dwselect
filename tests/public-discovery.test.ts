@@ -9,6 +9,7 @@ import { afterEach, describe, expect, it } from 'vitest'
 
 import type { CategoryDefinition, ChannelDefinition, Guide, LinkDefinition, Product, TagDefinition } from '../app/utils/product-schema'
 import { buildPublicContentPayload } from '../scripts/public-content'
+import { buildProductDetail } from '../scripts/public-payload/build-detail-by-id'
 import { buildPublicDiscoveryFiles } from '../scripts/build-public-discovery'
 
 const execFileAsync = promisify(execFile)
@@ -144,7 +145,9 @@ describe('public content payload', () => {
       },
     })
     expect(payload.products.cards.map((card) => card.id)).toEqual(['a-product', 'z-product'])
-    expect(Object.keys(payload.products.details_by_id)).toEqual(['a-product', 'z-product'])
+    // 028 拆分：共用 payload 不再內嵌全量 detail，detail 改由 per-id route 取得。
+    expect(payload.products).not.toHaveProperty('details_by_id')
+    expect(payload.guides).not.toHaveProperty('details_by_id')
     expect(payload.guides.rows.map((guide) => guide.id)).toEqual(['2026-06-03-guide'])
     expect(payload.links.map((link) => link.id)).toEqual(['applepig-home'])
     expect(JSON.stringify(payload)).not.toContain('草稿')
@@ -161,8 +164,8 @@ describe('public content payload', () => {
 })
 
 describe('frontend-ready public content payload shape', () => {
-  function buildSamplePayload() {
-    return buildPublicContentPayload({
+  function buildSampleSource() {
+    return {
       products: [
         base_product,
         {
@@ -184,7 +187,16 @@ describe('frontend-ready public content payload shape', () => {
         tags: test_tags,
         brands: test_brands,
       },
-    })
+    }
+  }
+
+  function buildSamplePayload() {
+    return buildPublicContentPayload(buildSampleSource())
+  }
+
+  // 028 拆分：detail 形狀改由 per-id builder（route 用的同一條）產出，不再從共用 payload 取。
+  function buildSampleDetail(id: string) {
+    return buildProductDetail(buildSampleSource(), id)
   }
 
   it('should map product cards to semantic fields without buy url or long description', () => {
@@ -213,8 +225,7 @@ describe('frontend-ready public content payload shape', () => {
   })
 
   it('should map product detail to content semantics without dw_says or generic description', () => {
-    const payload = buildSamplePayload()
-    const detail = payload.products.details_by_id['2026-06-02-sample-product']!
+    const detail = buildSampleDetail('2026-06-02-sample-product')!
 
     expect(detail).toMatchObject({
       id: '2026-06-02-sample-product',
@@ -244,8 +255,7 @@ describe('frontend-ready public content payload shape', () => {
   })
 
   it('should expose related product cards with only related semantic keys and no placeholders', () => {
-    const payload = buildSamplePayload()
-    const detail = payload.products.details_by_id['2026-06-02-sample-product']!
+    const detail = buildSampleDetail('2026-06-02-sample-product')!
 
     expect(detail.related_products).toEqual([
       {

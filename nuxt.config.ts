@@ -26,6 +26,11 @@ const category_routes = buildCategoryRoutes(taxonomy_content_dirs)
 const tag_routes = buildTagRoutes(taxonomy_content_dirs)
 const brand_routes = buildBrandRoutes(taxonomy_content_dirs)
 const channel_routes = buildChannelRoutes(taxonomy_content_dirs)
+// 028 拆分：每筆 published detail 頁都要對應 prerender 出一份 per-id detail JSON。
+// 沿用 detail 頁 route builder（published-only 同源），把 /products/{id} → /api/products/{id}.json，
+// 確保 detail JSON 與 detail 頁同進退，generate 不會漏產（failOnError 維持有效）。
+const product_detail_json_routes = product_routes.map((route) => `/api${route}.json`)
+const guide_detail_json_routes = guide_routes.map((route) => `/api${route.replace('/guide/', '/guides/')}.json`)
 // 監看 content/ 目錄絕對路徑而非 glob：Vite 7 的 chokidar 5 已移除 glob 支援，
 // 傳 'content/**/*.json' 進 watcher.add() 不會匹配任何檔案。
 const content_watch_paths = [fileURLToPath(new URL('./content/', import.meta.url))]
@@ -67,6 +72,13 @@ export default defineNuxtConfig({
   },
   experimental: {
     viewTransition: false,
+    // ADR-3：<NuxtLink> 全站預設 hover/focus 才預抓，消除「進站即背景狂 prefetch 全部站內 payload／chunk」的冗餘流量；
+    // 保留「點擊前已預載」的換頁順暢感（非全關 prefetch）。
+    defaults: {
+      nuxtLink: {
+        prefetchOn: { interaction: true },
+      },
+    },
   },
   compatibilityDate: '2026-06-05',
   nitro: {
@@ -88,6 +100,8 @@ export default defineNuxtConfig({
         ...tag_routes,
         ...brand_routes,
         ...channel_routes,
+        ...product_detail_json_routes,
+        ...guide_detail_json_routes,
       ],
     },
   },

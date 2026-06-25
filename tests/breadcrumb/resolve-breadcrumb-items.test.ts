@@ -22,8 +22,8 @@ const shell = {
   desktop_category_items: [
     { id: 'computer', label: '電腦', count: 3 },
   ],
-  product_details_by_id: {},
-  guide_details_by_id: {},
+  product_breadcrumb_by_id: {},
+  guide_breadcrumb_by_id: {},
   taxonomies,
 } as never
 
@@ -70,7 +70,7 @@ describe('resolveBreadcrumbItems for existing routes (regression)', () => {
   it('should resolve a product detail breadcrumb from its detail entry', () => {
     const shell_with_product = {
       ...shell,
-      product_details_by_id: { 'a-product': { name: '商品甲', category_id: 'computer', category_label: '電腦' } },
+      product_breadcrumb_by_id: { 'a-product': { name: '商品甲', category_id: 'computer', category_label: '電腦' } },
     } as never
 
     expect(resolveBreadcrumbItems('/products/a-product', {}, shell_with_product)).toEqual([
