@@ -13,6 +13,7 @@ dist
 dist-ssr
 .data
 .nuxt
+.nuxt-build
 .output
 test-results
 tests/post-edit-hook-fixture-*/

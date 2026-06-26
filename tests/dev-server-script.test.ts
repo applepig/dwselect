@@ -22,6 +22,14 @@ describe('dev server script', () => {
     expect(package_json.scripts.dev).not.toContain('--host')
   })
 
+  it('should route quality-gate and helper commands through dev.sh as the single entry point', () => {
+    expect(package_json.scripts.test).toBe('./dev.sh test')
+    expect(package_json.scripts.lint).toBe('./dev.sh lint')
+    expect(package_json.scripts.typecheck).toBe('./dev.sh typecheck')
+    expect(package_json.scripts['content:check']).toBe('./dev.sh content-check')
+    expect(package_json.scripts.preview).toBe('./dev.sh preview')
+  })
+
   it('should read APP_URL for Vite allowed hosts without localhost fallback', () => {
     const allowed_hosts = nuxt_config.vite?.server?.allowedHosts
     expect(allowed_hosts).toBeDefined()
@@ -144,10 +152,78 @@ describe('dev server script', () => {
 
     expect(result.status).toBe(0)
     expect(readFileSync(fixture.log_path, 'utf8')).toBe([
-      `chown -R node:node ${app_root}/.nuxt ${app_root}/.output ${app_root}/node_modules`,
+      `chown -R node:node ${app_root}/.nuxt ${app_root}/.nuxt-build ${app_root}/.output ${app_root}/node_modules`,
       'su-exec node ./dev.sh entrypoint',
       '',
     ].join('\n'))
+  })
+
+  it('should run typecheck with an isolated buildDir when inside the container', () => {
+    const fixture = makeShellFixture()
+    writeFakeCommand(fixture.bin_dir, 'docker', 'printf "unexpected docker %s\\n" "$*" >> "$CALL_LOG"\nexit 42\n')
+    writeFakeCommand(fixture.bin_dir, 'pnpm', 'printf "pnpm %s NUXT_BUILD_DIR=%s VITE_CACHE_DIR=%s\\n" "$*" "${NUXT_BUILD_DIR:-}" "${VITE_CACHE_DIR:-}" >> "$CALL_LOG"\n')
+
+    const result = runDevSh(['typecheck'], fixture, { DWSELECT_IN_CONTAINER: '1' })
+
+    expect(result.status).toBe(0)
+    expect(readFileSync(fixture.log_path, 'utf8')).toBe(
+      'pnpm exec nuxt typecheck NUXT_BUILD_DIR=.nuxt-build VITE_CACHE_DIR=node_modules/.cache/vite-build\n',
+    )
+  })
+
+  it('should run typecheck with the default buildDir under CI without entering docker', () => {
+    const fixture = makeShellFixture()
+    writeFakeCommand(fixture.bin_dir, 'docker', 'printf "unexpected docker %s\\n" "$*" >> "$CALL_LOG"\nexit 42\n')
+    writeFakeCommand(fixture.bin_dir, 'pnpm', 'printf "pnpm %s NUXT_BUILD_DIR=%s VITE_CACHE_DIR=%s\\n" "$*" "${NUXT_BUILD_DIR:-}" "${VITE_CACHE_DIR:-}" >> "$CALL_LOG"\n')
+
+    const result = runDevSh(['typecheck'], fixture, { CI: 'true' })
+
+    expect(result.status).toBe(0)
+    expect(readFileSync(fixture.log_path, 'utf8')).toBe(
+      'pnpm exec nuxt typecheck NUXT_BUILD_DIR= VITE_CACHE_DIR=\n',
+    )
+  })
+
+  it('should delegate typecheck into the container when run from the host', () => {
+    const fixture = makeShellFixture()
+    writeFakeCommand(fixture.bin_dir, 'docker', 'printf "docker %s\\n" "$*" >> "$CALL_LOG"\n')
+    writeFakeCommand(fixture.bin_dir, 'pnpm', 'printf "unexpected pnpm %s\\n" "$*" >> "$CALL_LOG"\nexit 42\n')
+
+    const result = runDevSh(['typecheck'], fixture, {})
+
+    expect(result.status).toBe(0)
+    expect(readFileSync(fixture.log_path, 'utf8')).toBe('docker compose exec app ./dev.sh typecheck\n')
+  })
+
+  it('should run the CI-equivalent quality gate in order with production APP_URL when verifying in the container', () => {
+    const fixture = makeShellFixture()
+    writeFakeCommand(fixture.bin_dir, 'docker', 'printf "unexpected docker %s\\n" "$*" >> "$CALL_LOG"\nexit 42\n')
+    writeFakeCommand(fixture.bin_dir, 'pnpm', 'printf "pnpm %s APP_URL=%s NUXT_BUILD_DIR=%s\\n" "$*" "${APP_URL:-}" "${NUXT_BUILD_DIR:-}" >> "$CALL_LOG"\n')
+    writeFakeCommand(fixture.bin_dir, 'node', 'printf "node %s APP_URL=%s\\n" "$*" "${APP_URL:-}" >> "$CALL_LOG"\n')
+
+    const result = runDevSh(['verify'], fixture, { DWSELECT_IN_CONTAINER: '1' })
+
+    expect(result.status).toBe(0)
+    expect(readFileSync(fixture.log_path, 'utf8')).toBe([
+      'pnpm test APP_URL=dwselect.applepig.net NUXT_BUILD_DIR=',
+      'pnpm lint APP_URL=dwselect.applepig.net NUXT_BUILD_DIR=',
+      'pnpm exec nuxt typecheck APP_URL=dwselect.applepig.net NUXT_BUILD_DIR=.nuxt-build',
+      'pnpm build:public-discovery APP_URL=dwselect.applepig.net NUXT_BUILD_DIR=',
+      'node scripts/assert-content-images.ts APP_URL=dwselect.applepig.net',
+      'pnpm exec nuxt generate APP_URL=dwselect.applepig.net NUXT_BUILD_DIR=.nuxt-build',
+      '',
+    ].join('\n'))
+  })
+
+  it('should delegate verify into the container when run from the host', () => {
+    const fixture = makeShellFixture()
+    writeFakeCommand(fixture.bin_dir, 'docker', 'printf "docker %s\\n" "$*" >> "$CALL_LOG"\n')
+    writeFakeCommand(fixture.bin_dir, 'pnpm', 'printf "unexpected pnpm %s\\n" "$*" >> "$CALL_LOG"\nexit 42\n')
+
+    const result = runDevSh(['verify'], fixture, {})
+
+    expect(result.status).toBe(0)
+    expect(readFileSync(fixture.log_path, 'utf8')).toBe('docker compose exec app ./dev.sh verify\n')
   })
 })
 
@@ -174,8 +250,12 @@ function runDevSh(
   extra_env: Record<string, string> = {},
 ) {
   const env = { ...process.env }
-  delete env.DWSELECT_IN_CONTAINER
+  // 預設模擬「純 host」：強制 is_container=false，讓本檔在容器內（/.dockerenv 存在）跑 verify
+  // 時，host 案例仍成立；容器態案例由 extra_env 覆寫 DWSELECT_IN_CONTAINER='1'。
+  env.DWSELECT_IN_CONTAINER = '0'
   delete env.DWSELECT_ALLOW_HOST_GENERATE
+  // GitHub Actions 自動設 CI=true；不清掉會讓「純 host」案例誤入 dev.sh 的 CI 直跑分支。
+  delete env.CI
 
   return spawnSync('bash', ['./dev.sh', ...args], {
     cwd: project_root,

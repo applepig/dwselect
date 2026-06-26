@@ -16,14 +16,14 @@
     "build:public-discovery": "node scripts/build-public-discovery.ts",
     "build:public-artifacts": "node scripts/build-public-artifacts.ts",
     "test:e2e": "playwright test",
-    "test": "vitest run --exclude 'tests/e2e/**'",
-    "content:check": "node scripts/content-check.mjs",
-    "lint": "eslint . --max-warnings=0",
+    "test": "./dev.sh test",
+    "content:check": "./dev.sh content-check",
+    "lint": "./dev.sh lint",
     "lint:file": "eslint --fix --max-warnings=0",
     "format": "eslint . --fix",
-    "typecheck": "nuxt typecheck",
+    "typecheck": "./dev.sh typecheck",
     "generate": "./dev.sh generate",
-    "preview": "nuxt preview"
+    "preview": "./dev.sh preview"
   },
   "dependencies": {
     "@nuxt/ui": "^4.8.2",

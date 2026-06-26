@@ -14,6 +14,12 @@ if (!app_url && !process.argv.some((a) => a === 'generate' || a === 'build')) {
 }
 const vite_host = app_url ?? 'dwselect.toybox.local'
 
+// 029：buildDir / Vite cacheDir 可由環境變數覆寫，讓本機/容器的一次性 build（typecheck/generate/build）
+// 與常駐 dev 的 .nuxt 隔離、互不踩 chunk hash；未設時維持 Nuxt 預設，dev 行為零影響。
+// 何時注入哪個值由 dev.sh 的三態分流負責（容器內隔離、CI 預設、host 引導進容器）。
+const build_dir = process.env.NUXT_BUILD_DIR || '.nuxt'
+const vite_cache_dir = process.env.VITE_CACHE_DIR || 'node_modules/.cache/vite'
+
 const product_routes = buildProductRoutes(fileURLToPath(new URL('./content/products/', import.meta.url)))
 const guide_routes = buildGuideRoutes(fileURLToPath(new URL('./content/guides/', import.meta.url)))
 const taxonomy_content_dirs = {
@@ -70,6 +76,7 @@ export default defineNuxtConfig({
   ui: {
     fonts: false,
   },
+  buildDir: build_dir,
   experimental: {
     viewTransition: false,
     // ADR-3：<NuxtLink> 全站預設 hover/focus 才預抓，消除「進站即背景狂 prefetch 全部站內 payload／chunk」的冗餘流量；
@@ -106,6 +113,7 @@ export default defineNuxtConfig({
     },
   },
   vite: {
+    cacheDir: vite_cache_dir,
     plugins: [
       {
         name: 'dwselect-content-hmr',
