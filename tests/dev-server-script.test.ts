@@ -124,6 +124,18 @@ describe('dev server script', () => {
     ].join('\n'))
   })
 
+  it('should forward test file arguments to Vitest while keeping the E2E exclude', () => {
+    const fixture = makeShellFixture()
+    writeFakeCommand(fixture.bin_dir, 'pnpm', 'printf "pnpm %s\\n" "$*" >> "$CALL_LOG"\n')
+
+    const result = runDevSh(['test', 'tests/product-schema.test.ts', '--runInBand'], fixture, {})
+
+    expect(result.status).toBe(0)
+    expect(readFileSync(fixture.log_path, 'utf8')).toBe(
+      'pnpm exec vitest run --exclude tests/e2e/** tests/product-schema.test.ts --runInBand\n',
+    )
+  })
+
   it('should allow direct host generate only when CI explicitly opts in', () => {
     const fixture = makeShellFixture()
     writeFakeCommand(fixture.bin_dir, 'docker', 'printf "unexpected docker %s\\n" "$*" >> "$CALL_LOG"\nexit 42\n')

@@ -301,8 +301,8 @@ function mapGuideToSearchDocument(
     tag_ids: [...guide.tag_ids],
     tag_labels: guide.tag_ids.map((tag_id) => labels.getContentTagLabel(tag_id)),
     image_url: resolveGuideSearchImageUrl(guide),
-    href: guide.source_url,
-    external: true,
+    href: `/guide/${guide.id}`,
+    external: false,
     published_at: guide.published_at,
   }
 

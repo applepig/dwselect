@@ -26,6 +26,10 @@ export function getOgImageUrl(image_url: string | null | undefined): string {
     return trimmed
   }
 
+  if (/^\/?(?:products|guides)\/images\//.test(trimmed)) {
+    return SITE_OG_IMAGE
+  }
+
   return getCanonicalUrl(trimmed)
 }
 

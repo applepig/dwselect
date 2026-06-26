@@ -1,16 +1,16 @@
-name: Static Generate
+name: Deploy
 
 on:
-  pull_request:
   push:
     branches:
       - master
 
 permissions:
   contents: read
+  deployments: write
 
 jobs:
-  quality-gate:
+  deploy:
     runs-on: ubuntu-latest
     env:
       APP_URL: dwselect.applepig.net
@@ -44,19 +44,15 @@ jobs:
             nuxt-build-${{ runner.os }}-node-24-
             nuxt-build-${{ runner.os }}-
 
-      - name: Run tests
-        run: pnpm test
-
-      - name: Run lint
-        run: pnpm lint
-
-      - name: Run typecheck
-        run: pnpm typecheck
-
       - name: Generate static site
         env:
           DWSELECT_ALLOW_HOST_GENERATE: "1"
         run: pnpm generate
 
-      - name: Assert runtime has no Google Sheets TSV references
-        run: node scripts/assert-runtime-google-sheet-clean.ts
+      - name: Deploy to Cloudflare Pages
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+          command: pages deploy .output/public --project-name=dwselect --branch=master

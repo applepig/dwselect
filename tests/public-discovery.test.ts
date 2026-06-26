@@ -342,6 +342,10 @@ describe('public discovery files', () => {
     expect(sitemap).toContain('<loc>https://dwselect.applepig.net/links</loc>')
     expect(sitemap).toContain('<loc>https://dwselect.applepig.net/products/2026-06-02-sample-product</loc>')
     expect(sitemap).toContain('<loc>https://dwselect.applepig.net/products/no-published-at-product</loc>')
+    expect(sitemap).toContain([
+      '<loc>https://dwselect.applepig.net/guide/2026-06-03-guide</loc>',
+      '<lastmod>2026-06-03</lastmod>',
+    ].join('\n    '))
     expect(sitemap).toContain('<lastmod>2026-06-03</lastmod>')
     // Taxonomy 頁要可索引：非空 category／tag（跨三型別 published 關聯）須進 sitemap。
     expect(sitemap).toContain('<loc>https://dwselect.applepig.net/category/computer-3c</loc>')
@@ -355,6 +359,7 @@ describe('public discovery files', () => {
     // channel 頁（products-only）：被 published product offer 引用的 channel 須進 sitemap。
     expect(sitemap).toContain('<loc>https://dwselect.applepig.net/channel/pchome</loc>')
     expect(sitemap).not.toContain('draft-product')
+    expect(sitemap).not.toContain('draft-guide')
     expect(sitemap).not.toContain('dwselect.toybox.local')
     expect(rss.indexOf('<title>日本米入門篇</title>')).toBeLessThan(rss.indexOf('<title>機械鍵盤 &amp; &lt;滑鼠&gt;</title>'))
     expect(rss.indexOf('<title>機械鍵盤 &amp; &lt;滑鼠&gt;</title>')).toBeLessThan(rss.indexOf('<title>applepig.idv.tw</title>'))
@@ -481,6 +486,7 @@ async function makeFixtureProject() {
   await writeFile(join(product_images_dir, '2026-06-02-sample-product.jpg'), createTinySvg())
   await writeFile(join(product_images_dir, 'no-published-at-product.jpg'), createTinySvg())
   await writeFile(join(guides_dir, '2026-06-03-guide.json'), JSON.stringify(base_guide))
+  await writeFile(join(guides_dir, 'draft-guide.json'), JSON.stringify({ ...base_guide, id: 'draft-guide', status: 'draft', title: '草稿指南' }))
   await writeFile(join(links_dir, 'applepig-home.json'), JSON.stringify(base_link))
   await writeTaxonomies(taxonomies_dir)
 

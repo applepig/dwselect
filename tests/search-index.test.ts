@@ -190,7 +190,7 @@ describe('search index', () => {
     }, test_taxonomies)).toThrow('Published product image_file is required')
   })
 
-  it('should map published guides and links to external search documents', () => {
+  it('should map published guides to internal search documents while keeping links external', () => {
     expect(getSearchDocuments({ products: [], guides: [base_guide], links: [base_link] }, test_taxonomies)).toEqual([
       {
         document_id: 'guide:2026-06-02-guide',
@@ -203,8 +203,8 @@ describe('search index', () => {
         tag_ids: ['rice'],
         tag_labels: ['日本米'],
         image_url: null,
-        href: 'https://example.com/guide',
-        external: true,
+        href: '/guide/2026-06-02-guide',
+        external: false,
         published_at: '2026-06-02T00:00:00+08:00',
       },
       {

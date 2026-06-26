@@ -204,7 +204,7 @@ cmd_verify() {
 
 # 中性命令（不碰 buildDir，任何環境都可直跑）：收進 dev.sh 作為單一入口，內部直呼底層工具。
 cmd_test() {
-    pnpm exec vitest run --exclude 'tests/e2e/**'
+    pnpm exec vitest run --exclude 'tests/e2e/**' "$@"
 }
 
 cmd_lint() {
@@ -325,7 +325,7 @@ case "${1:-}" in
     generate)  cmd_generate ;;
     typecheck) cmd_typecheck ;;
     verify)    cmd_verify ;;
-    test)      cmd_test ;;
+    test)      shift; cmd_test "$@" ;;
     lint)      cmd_lint ;;
     content-check) cmd_content_check ;;
     preview)   cmd_preview ;;

@@ -97,9 +97,10 @@ function buildSitemapXml(
 ) {
   const route_entries = ROOT_ROUTES.map((route) => buildSitemapUrlEntry(`${SITE_URL}${route.slice(1)}`))
   const product_entries = products.map((product) => buildSitemapUrlEntry(getProductUrl(product.id), getDateText(product.updated_at)))
+  const guide_entries = taxonomy_source.guides.map((guide) => buildSitemapUrlEntry(getGuideUrl(guide.id), getDateText(guide.updated_at)))
   const taxonomy_entries = buildTaxonomySitemapEntries(taxonomy_source)
 
-  return `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${[...route_entries, ...product_entries, ...taxonomy_entries].join('\n')}\n</urlset>\n`
+  return `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${[...route_entries, ...product_entries, ...guide_entries, ...taxonomy_entries].join('\n')}\n</urlset>\n`
 }
 
 // Why: 非空 category／tag／brand／channel 與 route builder 共用 collectNonEmptyTaxonomyIds，使 sitemap 收錄的
@@ -193,6 +194,10 @@ function compareRssItems(left_item: RssItem, right_item: RssItem) {
 
 function getProductUrl(product_id: string) {
   return `${SITE_URL}products/${encodeURIComponent(product_id)}`
+}
+
+function getGuideUrl(guide_id: string) {
+  return `${SITE_URL}guide/${encodeURIComponent(guide_id)}`
 }
 
 function getDateText(timestamp: string) {

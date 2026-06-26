@@ -132,3 +132,16 @@ xreview 抓到 AC41「E2E 全綠」未達成：實跑 `pnpm test:e2e` 為 41 pas
 ### Deferred（Docker gate，本機 toolchain 跑不動）
 
 `pnpm typecheck`／`content:check`／`generate`／`test:e2e`。風險低：#1 把 `channels` 改為 required input，唯一呼叫者是測試（無 production caller）；#4 (b) E2E 依既有 Playwright pattern 撰寫，lint 已過語法。
+
+## PR #9 Codex inline review P2 修正（2026-06-27）
+
+- **OG image local content path 破圖**：`getOgImageUrl()` 對 `/products/images/...`、`/guides/images/...`（含無 leading slash 與前後空白）改回 `SITE_OG_IMAGE`，避免 SSG 未輸出的 source path 進入 OG metadata；外部 `http(s)` 圖片與非 content relative path 行為維持不變。測試：`tests/seo-metadata.test.ts`。
+- **Guide search result 導向舊外部來源**：guide search document 改為 `href: /guide/{id}`、`external: false`；link document 仍維持外部 URL。測試：`tests/search-index.test.ts`。
+- **Sitemap 缺 guide detail pages**：`build-public-discovery` 將 published guides 加入 sitemap，URL 為 `/guide/{id}`，`lastmod` 取 `guide.updated_at`；draft guide 不輸出。測試：`tests/public-discovery.test.ts`。
+- **`dev.sh test` 未 forwarding args**：`cmd_test "$@"` 保留 `--exclude 'tests/e2e/**'` 並追加剩餘參數，case dispatch 對 `test` 先 `shift` 再傳入。測試：`tests/dev-server-script.test.ts` fake pnpm 驗證 `./dev.sh test tests/product-schema.test.ts --runInBand` 參數完整傳到 Vitest。
+
+### 驗證結果（2026-06-27）
+
+- Red phase：`pnpm exec vitest run --exclude 'tests/e2e/**' tests/seo-metadata.test.ts tests/search-index.test.ts tests/public-discovery.test.ts tests/dev-server-script.test.ts` → 4 files failed / 7 tests failed（對應四項 P2）。
+- Green phase：同命令 → 4 files / 61 tests passed。
+- 最終指定入口驗證：`pnpm test tests/seo-metadata.test.ts tests/search-index.test.ts tests/public-discovery.test.ts tests/dev-server-script.test.ts` → 4 files / 61 tests passed。

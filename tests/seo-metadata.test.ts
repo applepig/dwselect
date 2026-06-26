@@ -3,22 +3,24 @@ import { describe, expect, it } from 'vitest'
 import { getOgImageUrl, SITE_OG_IMAGE } from '../app/utils/seo-metadata'
 
 describe('getOgImageUrl', () => {
-  it('should resolve a leading-slash relative path to an absolute site URL (AC1)', () => {
-    expect(getOgImageUrl('/products/images/x.jpg')).toBe(
-      'https://dwselect.applepig.net/products/images/x.jpg',
-    )
+  it('should fall back to the site OG image for a leading-slash local product image path (AC1)', () => {
+    expect(getOgImageUrl('/products/images/x.jpg')).toBe(SITE_OG_IMAGE)
   })
 
-  it('should resolve a relative path without a leading slash to the same absolute URL (AC2)', () => {
-    expect(getOgImageUrl('products/images/x.jpg')).toBe(
-      'https://dwselect.applepig.net/products/images/x.jpg',
-    )
+  it('should fall back to the site OG image for a local guide image path (AC1)', () => {
+    expect(getOgImageUrl('/guides/images/x.jpg')).toBe(SITE_OG_IMAGE)
   })
 
-  it('should trim surrounding whitespace before resolving (AC3)', () => {
-    expect(getOgImageUrl('  /products/images/x.jpg  ')).toBe(
-      'https://dwselect.applepig.net/products/images/x.jpg',
-    )
+  it('should fall back to the site OG image for a local content image path without a leading slash (AC2)', () => {
+    expect(getOgImageUrl('products/images/x.jpg')).toBe(SITE_OG_IMAGE)
+  })
+
+  it('should trim surrounding whitespace before detecting local content image paths (AC3)', () => {
+    expect(getOgImageUrl('  /products/images/x.jpg  ')).toBe(SITE_OG_IMAGE)
+  })
+
+  it('should still resolve non-content relative paths to an absolute site URL (AC3)', () => {
+    expect(getOgImageUrl('/og-custom.jpg')).toBe('https://dwselect.applepig.net/og-custom.jpg')
   })
 
   it('should fall back to the site OG image for an empty string (AC4)', () => {
