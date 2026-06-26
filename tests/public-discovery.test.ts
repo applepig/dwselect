@@ -449,7 +449,7 @@ describe('public discovery files', () => {
     expect(package_json.scripts['build:search-index']).toBe('node scripts/build-search-index.ts')
     expect(package_json.scripts['build:public-artifacts']).toBe('node scripts/build-public-artifacts.ts')
     expect(package_json.scripts.build).toBe('pnpm build:public-discovery && node scripts/assert-content-images.ts && nuxt build')
-    expect(package_json.scripts.generate).toBe('pnpm build:public-discovery && node scripts/assert-content-images.ts && nuxt generate')
+    expect(package_json.scripts.generate).toBe('./dev.sh generate')
     expect(artifacts_source.match(/await readPublicContentSource\(/g)).toHaveLength(1)
     expect(artifacts_source).toContain('buildSearchIndexFileFromSource(source')
     expect(artifacts_source).toContain('buildPublicDiscoveryFilesFromSource(source')

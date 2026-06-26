@@ -75,7 +75,8 @@ describe('selectPublishedTaxonomyItems', () => {
     expect(selectPublishedTaxonomyItems(source, { kind: 'category', id: 'shared' }).products.map((item) => item.id)).toEqual(['p'])
   })
 
-  it('should match brand the same way as tag via tag_ids (ADR-8, shared namespace)', () => {
+  it('should select brand only from products via tag_ids and keep guides/links empty (products-only)', () => {
+    // brand 收斂為 products-only：成員只來自 product 的 tag_ids，guide/link 不貢獻 brand（與 validator 一致）。
     const source: TaxonomyItemsSource = {
       products: [
         { id: 'p-panasonic', category_id: 'home', tag_ids: ['panasonic'], channel_ids: ['pchome'] },
@@ -87,8 +88,8 @@ describe('selectPublishedTaxonomyItems', () => {
     const result = selectPublishedTaxonomyItems(source, { kind: 'brand', id: 'panasonic' })
 
     expect(result.products.map((item) => item.id)).toEqual(['p-panasonic'])
-    expect(result.guides.map((item) => item.id)).toEqual(['g-panasonic'])
-    expect(result.links.map((item) => item.id)).toEqual(['l-panasonic'])
+    expect(result.guides).toEqual([])
+    expect(result.links).toEqual([])
   })
 
   it('should select channel only from products via channel_ids and keep guides/links empty (ADR-9, products-only)', () => {

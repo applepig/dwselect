@@ -89,4 +89,18 @@ describe('collectNonEmptyTaxonomyIds', () => {
     expect(result.brand_ids).toEqual(new Set())
     expect(result.tag_ids).toEqual(new Set(['typing', 'food', 'link-only']))
   })
+
+  it('should derive brand ids only from product tag_ids, never from guide or link tag_ids (products-only)', () => {
+    // 一個 brand id 只被 guide/link 以 tag_ids 引用時，不得產生 brand id；
+    // 且既然它是已知 brand，也不得殘留於 tag_ids（brand 不出現在 /tag，ADR-8）。
+    const source: TaxonomyItemsSource = {
+      products: [{ category_id: 'home', tag_ids: ['panasonic'], channel_ids: [] }],
+      guides: [{ category_ids: ['home'], tag_ids: ['sony'] }],
+      links: [{ category_ids: ['home'], tag_ids: ['sony'] }],
+    }
+    const result = collectNonEmptyTaxonomyIds(source, { brand_ids: new Set(['panasonic', 'sony']) })
+
+    expect(result.brand_ids).toEqual(new Set(['panasonic']))
+    expect(result.tag_ids).toEqual(new Set())
+  })
 })

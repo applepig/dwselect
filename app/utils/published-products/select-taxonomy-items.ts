@@ -25,8 +25,8 @@ export type TaxonomyItemsSource<
   links: L[]
 }
 
-// brand 為 tag 的 alias mode（共用 tag_ids predicate，ADR-8）；channel 以 product offers 的 channel_id 過濾，
-// guides/links 無購買連結，恆空（products-only，ADR-9）。
+// brand 與 channel 皆為 products-only：brand 以 product 的 tag_ids 過濾、channel 以 product offers 的 channel_id 過濾，
+// guides/links 不貢獻（與 validator 一致，ADR-8/9）。tag 仍跨三型別。
 export type TaxonomyKind = 'category' | 'tag' | 'brand' | 'channel'
 
 export type TaxonomySelector = {
@@ -54,8 +54,18 @@ export function selectPublishedTaxonomyItems<
     }
   }
 
-  // brand 與 tag 共用 tag_ids namespace 與 membership predicate（ADR-8）。
-  if (selector.kind === 'tag' || selector.kind === 'brand') {
+  // brand 與 tag 共用 tag_ids predicate，但 brand 為 products-only：成員只來自 product 的 tag_ids，
+  // guide/link 不貢獻 brand（與 validator 一致，ADR-8）。
+  if (selector.kind === 'brand') {
+    return {
+      products: source.products.filter((product) => product.tag_ids.includes(selector.id)),
+      guides: [],
+      links: [],
+    }
+  }
+
+  // tag 跨三型別以 tag_ids 過濾。
+  if (selector.kind === 'tag') {
     return {
       products: source.products.filter((product) => product.tag_ids.includes(selector.id)),
       guides: source.guides.filter((guide) => guide.tag_ids.includes(selector.id)),

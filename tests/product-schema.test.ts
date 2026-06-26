@@ -543,6 +543,9 @@ describe('product schema', () => {
       tags: [
         { id: 'tag-a', label: 'Tag A', description: '測試 tag', aliases: [], nav_visible: true, sort_order: 10 },
       ],
+      channels: [
+        { id: 'other', label: '其他通路', tint: 'neutral', host_patterns: [], sort_order: 999 },
+      ],
       brands: [
         { id: 'brand-a', label: 'Brand A', description: '測試 brand', aliases: [], nav_visible: true, sort_order: 10 },
       ],
@@ -585,6 +588,9 @@ describe('product schema', () => {
       tags: [
         { id: 'tag-a', label: 'Tag A', description: '測試 tag', aliases: [], nav_visible: true, sort_order: 10 },
       ],
+      channels: [
+        { id: 'other', label: '其他通路', tint: 'neutral', host_patterns: [], sort_order: 999 },
+      ],
       brands: [
         { id: 'brand-a', label: 'Brand A', description: '測試 brand', aliases: [], nav_visible: true, sort_order: 10 },
       ],
@@ -594,6 +600,63 @@ describe('product schema', () => {
       { content_type: 'guide', content_id: 'guide-with-brand-reference', field: 'tag_ids', value: 'brand-a' },
       { content_type: 'link', content_id: 'link-with-brand-reference', field: 'tag_ids', value: 'brand-a' },
     ])
+  })
+
+  it('should report a product offer that references a channel id missing from channels.json', () => {
+    const reference_violations = validateContentTaxonomyReferences({
+      products: [
+        {
+          ...valid_product,
+          id: 'product-with-bad-channel',
+          category_id: 'home',
+          tag_ids: ['tag-a'],
+          offers: [
+            { ...valid_product.offers[0], channel_id: 'other' },
+            { ...valid_product.offers[0], channel_id: 'typo-channel' },
+          ],
+        },
+      ],
+      categories: [
+        { id: 'home', label: '居家', short_label: '居家', nav_visible: true, sort_order: 10 },
+      ],
+      tags: [
+        { id: 'tag-a', label: 'Tag A', description: '測試 tag', aliases: [], nav_visible: true, sort_order: 10 },
+      ],
+      brands: [],
+      channels: [
+        { id: 'other', label: '其他通路', tint: 'neutral', host_patterns: [], sort_order: 999 },
+      ],
+    })
+
+    expect(reference_violations).toEqual([
+      { content_type: 'product', content_id: 'product-with-bad-channel', field: 'channel_id', value: 'typo-channel' },
+    ])
+  })
+
+  it('should not flag a product offer that references a defined channel id', () => {
+    const reference_violations = validateContentTaxonomyReferences({
+      products: [
+        {
+          ...valid_product,
+          id: 'product-with-valid-channel',
+          category_id: 'home',
+          tag_ids: ['tag-a'],
+          offers: [{ ...valid_product.offers[0], channel_id: 'other' }],
+        },
+      ],
+      categories: [
+        { id: 'home', label: '居家', short_label: '居家', nav_visible: true, sort_order: 10 },
+      ],
+      tags: [
+        { id: 'tag-a', label: 'Tag A', description: '測試 tag', aliases: [], nav_visible: true, sort_order: 10 },
+      ],
+      brands: [],
+      channels: [
+        { id: 'other', label: '其他通路', tint: 'neutral', host_patterns: [], sort_order: 999 },
+      ],
+    })
+
+    expect(reference_violations).toEqual([])
   })
 
   it('should validate all migrated content domains against schemas and taxonomy references', () => {
@@ -636,6 +699,7 @@ describe('product schema', () => {
       links: link_entries.map((entry) => entry.content),
       categories,
       tags,
+      channels,
       brands,
     })).toEqual([])
     expect(new Set(channels.map((channel) => channel.id)).has('other')).toBe(true)

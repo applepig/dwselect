@@ -69,3 +69,11 @@ review 前先清雜訊讓 payload 可跑（原 >1MB 超 Codex 上限）：`.giti
 ### Commit
 - 先行 3 commit（降 review 雜訊）：`chore: gitignore .worktree`、`content: add slug field`、`docs(027): handoff screenshots`。
 - 「整包」commit：027 sprint 程式＋測試＋文件（M1–M5）一次提交。
+
+## 2026-06-26 — xreview 修正（027+028 複驗，027 相關項）
+
+第二輪 cross review（claude:opus + codex:gpt-5.5）橫跨 027/028。完整紀錄見 `docs/028-payload-split/works.md`「xreview 修正（2026-06-26）」；以下為 027 範圍的修正（使用者逐條決策、`ddd-developer` TDD，本機 `pnpm test` 547 passed／`lint` clean）：
+
+- **[Important] channel_id 參照完整性**：taxonomy infra 缺口——`validateContentTaxonomyReferences` 不驗 `offers[].channel_id`，typo channel 讓整站 generate 崩潰。已補 channel 驗證＋red 測試（詳見 028 works.md）。
+- **[Minor] brand 驗證/route 行為語義分裂 → 收斂 products-only**：validator 本就禁止 guide/link 帶 brand id（products-only），但 `select-taxonomy-items.ts`／`non-empty-taxonomy-ids.ts` 卻跨三型別蒐集 brand。經使用者裁決收斂為 **brand products-only**（與 channel ADR-9 對稱、與 validator 一致）：brand selector 只匹配 products、brand 切分只看 product 的 `tag_ids`；tag 仍跨三型別。spec AC20／ADR-8／目標／邊界案例／routing 同步更新（補 2026-06-26 收斂註記）。`select-taxonomy-items.test.ts`／`non-empty-taxonomy-ids.test.ts`／`build-brand-routes.test.ts` 更新為 products-only 語義並補反向斷言。→ 綠。
+- **[Minor] spec 完成度敘述不一致**：狀態列稱「M1–M5 完成」但 AC1–AC23 多數 checkbox 仍 `[ ]`。逐條對照程式碼/測試後把已實作且本機可驗的 AC 標 `[x]`（24 條）；仍待 Docker gate 的 AC3/AC8/AC19 與待 Frontend handoff 的 AC14/AC25 維持 `[ ]`，狀態列加註對齊說明。

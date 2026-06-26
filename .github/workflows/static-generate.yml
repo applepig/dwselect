@@ -54,6 +54,8 @@ jobs:
         run: pnpm typecheck
 
       - name: Generate static site
+        env:
+          DWSELECT_ALLOW_HOST_GENERATE: "1"
         run: pnpm generate
 
       - name: Assert runtime has no Google Sheets TSV references

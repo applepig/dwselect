@@ -1,7 +1,7 @@
 FROM node:22-alpine
 
-# Install build tools for native module compilation (e.g. better-sqlite3)
-RUN apk add --no-cache python3 make g++
+# Install build tools for native module compilation, bash for dev.sh, and su-exec for dropping root in the entrypoint.
+RUN apk add --no-cache python3 make g++ bash su-exec
 
 # Enable corepack and prepare pnpm
 RUN corepack enable && corepack prepare pnpm@10.20.0 --activate

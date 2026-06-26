@@ -222,22 +222,24 @@ export type ContentTypeWithTaxonomyReferences = 'product' | 'guide' | 'link'
 export type ContentTaxonomyReferenceViolation = {
   content_type: ContentTypeWithTaxonomyReferences
   content_id: string
-  field: 'category_id' | 'category_ids' | 'tag_ids'
+  field: 'category_id' | 'category_ids' | 'tag_ids' | 'channel_id'
   value: string
 }
 
 export type ContentTaxonomyReferenceInput = {
-  products?: Array<{ id: string, category_id: string, tag_ids: string[] }>
+  products?: Array<{ id: string, category_id: string, tag_ids: string[], offers: Array<{ channel_id: string }> }>
   guides?: Array<{ id: string, category_ids: string[], tag_ids: string[] }>
   links?: Array<{ id: string, category_ids: string[], tag_ids: string[] }>
   categories: Array<Pick<CategoryDefinition, 'id'>>
   tags: Array<Pick<TagDefinition, 'id'>>
+  channels: Array<Pick<ChannelDefinition, 'id'>>
   brands?: Array<Pick<TagDefinition, 'id'>>
 }
 
 export function validateContentTaxonomyReferences(input: ContentTaxonomyReferenceInput): ContentTaxonomyReferenceViolation[] {
   const category_ids = new Set<string>(input.categories.map((category) => category.id))
   const tag_ids = new Set(input.tags.map((tag) => tag.id))
+  const channel_ids = new Set(input.channels.map((channel) => channel.id))
   const product_tag_ids = new Set([
     ...input.tags.map((tag) => tag.id),
     ...(input.brands ?? []).map((brand) => brand.id),
@@ -255,6 +257,19 @@ export function validateContentTaxonomyReferences(input: ContentTaxonomyReferenc
     }
 
     addMissingTaxonomyViolations(violations, 'product', product.id, product.tag_ids, product_tag_ids, 'tag_ids')
+
+    // offers[].channel_id 須 ∈ channels.json：build-channel-routes 會把所有 offer 引用的 channel 變成
+    // /channel/{id} prerender 路由，typo channel 在 generate 時 throw 404 中止整個 build；故在 content gate 攔下。
+    for (const offer of product.offers) {
+      if (!channel_ids.has(offer.channel_id)) {
+        violations.push({
+          content_type: 'product',
+          content_id: product.id,
+          field: 'channel_id',
+          value: offer.channel_id,
+        })
+      }
+    }
   }
 
   for (const guide of input.guides ?? []) {

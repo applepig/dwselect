@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { existsSync, readFileSync, readdirSync } from 'node:fs'
+import { fileURLToPath } from 'node:url'
+import { loadNuxt } from 'nuxt'
 
 import nuxt_config from '../nuxt.config'
 import package_json from '../package.json'
@@ -22,10 +24,8 @@ describe('Nuxt SSG baseline', () => {
   })
 
   it('should generate static output from prerendered server routes without legacy artifact builds', () => {
-    expect(package_json.scripts.generate).toBe('pnpm build:public-discovery && node scripts/assert-content-images.ts && nuxt generate')
+    expect(package_json.scripts.generate).toBe('./dev.sh generate')
     expect(package_json.scripts.build).toBe('pnpm build:public-discovery && node scripts/assert-content-images.ts && nuxt build')
-    expect(package_json.scripts.generate).not.toContain('build:public-artifacts')
-    expect(package_json.scripts.generate).not.toContain('build:search-index')
   })
 
   it('should fail static generation when any prerendered route errors (spec Case 1)', () => {
@@ -35,7 +35,6 @@ describe('Nuxt SSG baseline', () => {
   it('should keep content image optimization out of the generate prerequisite chain (Nuxt Image owns it)', () => {
     expect(package_json.scripts).toHaveProperty('build:content-images')
     expect(package_json.scripts.build).not.toContain('build:content-images')
-    expect(package_json.scripts.generate).not.toContain('build:content-images')
     expect(package_json.devDependencies).toHaveProperty('@nuxt/image')
   })
 
@@ -683,8 +682,27 @@ describe('Nuxt SSG baseline', () => {
     expect(prerender_routes).toContain(`/api/guides/${first_published_guide_id}.json`)
   })
 
-  it('should default NuxtLink prefetch to interaction so the home page does not background prefetch every link (ADR-3)', () => {
-    expect(nuxt_config.experimental?.defaults?.nuxtLink?.prefetchOn).toEqual({ interaction: true })
+  it('should resolve NuxtLink prefetch to interaction-only so the home page does not background prefetch every link (ADR-3)', async () => {
+    expect(nuxt_config.experimental?.defaults?.nuxtLink?.prefetchOn).toEqual({
+      interaction: true,
+      visibility: false,
+    })
+
+    const nuxt = await loadNuxt({
+      cwd: fileURLToPath(new URL('..', import.meta.url)),
+      dev: false,
+      ready: false,
+    })
+
+    try {
+      expect(nuxt.options.experimental.defaults.nuxtLink.prefetchOn).toEqual({
+        interaction: true,
+        visibility: false,
+      })
+    }
+    finally {
+      await nuxt.close()
+    }
   })
 
   it('should define light and dark handoff CSS tokens without a single-hue palette', () => {

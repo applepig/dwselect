@@ -76,7 +76,7 @@ export default defineNuxtConfig({
     // 保留「點擊前已預載」的換頁順暢感（非全關 prefetch）。
     defaults: {
       nuxtLink: {
-        prefetchOn: { interaction: true },
+        prefetchOn: { interaction: true, visibility: false },
       },
     },
   },

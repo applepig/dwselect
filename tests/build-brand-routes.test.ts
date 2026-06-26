@@ -53,7 +53,9 @@ function cleanup(dirs: Dirs) {
 }
 
 describe('buildBrandRoutes', () => {
-  it('should build a /brand/:id route for every brand referenced by a published item via tag_ids', () => {
+  it('should build a /brand/:id route for every brand referenced by a published product via tag_ids (products-only)', () => {
+    // brand 為 products-only：sony 只被 guide 以 tag_ids 引用，不得產生 /brand/sony；
+    // unused-brand 無任何引用，亦不產生。只有 product 引用的 panasonic 生成路由。
     const dirs = makeContentDirs({
       products: { 'a.json': { status: 'published', category_id: 'home', tag_ids: ['panasonic', 'typing'], offers: [] } },
       guides: { 'g.json': { status: 'published', category_ids: ['home'], tag_ids: ['sony'] } },
@@ -61,7 +63,10 @@ describe('buildBrandRoutes', () => {
     })
 
     try {
-      expect(buildBrandRoutes(dirs).toSorted()).toEqual(['/brand/panasonic', '/brand/sony'])
+      const routes = buildBrandRoutes(dirs)
+
+      expect(routes).toEqual(['/brand/panasonic'])
+      expect(routes).not.toContain('/brand/sony')
     }
     finally {
       cleanup(dirs)

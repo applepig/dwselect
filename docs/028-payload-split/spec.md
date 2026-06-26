@@ -11,7 +11,7 @@
 
 連帶把 layout 麵包屑對「全量 detail」的依賴砍掉——改用 cards / rows 既有的精簡欄位 lookup。
 
-3. **止血冗餘流量** — `<NuxtLink>` 全站預設改 `prefetchOn: 'interaction'`（hover/focus 才預抓），消除「首頁一進站就背景狂 prefetch 幾十份 payload」這第二種冗餘（018 已點名為載入慢主因之一）。這與 detail 拆分同屬「處理 redundant data/traffic」，零風險一行設定，故併入本 sprint。
+3. **止血冗餘流量** — `<NuxtLink>` 全站預設改 `prefetchOn: { interaction: true, visibility: false }`（hover/focus 才預抓），消除「首頁一進站就背景狂 prefetch 幾十份 payload」這第二種冗餘（018 已點名為載入慢主因之一）。這與 detail 拆分同屬「處理 redundant data/traffic」，零風險一行設定，故併入本 sprint。（**註**：字串形式 `'interaction'` 不可用——Nuxt 4.4.8 的型別已排除 string；且需顯式寫 `visibility: false` 才能對抗 Nuxt defaults merge 把 `visibility` 補回 `true`。）
 
 ## 非目標
 
@@ -37,7 +37,7 @@
 - [ ] `pnpm generate` 後，列表頁（如首頁）的 `_payload.json` 不再含任何商品／指南 detail 內容，體積明顯下降。
 - [ ] `pnpm generate` prerender 全部 product / guide detail json route，failOnError 維持有效（壞 id 或壞 content 讓 build 中止）。
 - [ ] 不存在的 detail id：per-id route 回 404，詳情頁維持現有 `throw createError(404)` 行為。
-- [ ] `<NuxtLink>` 全站預設 `prefetchOn: 'interaction'`；首頁載入時不再自動背景 prefetch 全部站內連結的 payload／chunk。
+- [ ] `<NuxtLink>` 全站預設 `prefetchOn: { interaction: true, visibility: false }`；首頁載入時不再自動背景 prefetch 全部站內連結的 payload／chunk。（字串形式 `'interaction'` 不可用：Nuxt 4.4.8 型別排除 string，且需顯式 `visibility: false` 對抗 defaults merge 把 `visibility` 補回 `true`。）
 - [ ] 既有 unit test、E2E、`pnpm lint`、`pnpm typecheck`、`pnpm content:check` 全綠；實際打開首頁、商品詳情、指南詳情頁確認可用。
 
 ## 相關檔案
@@ -51,8 +51,8 @@
 - `app/utils/`（新增）— per-id detail fetch helper。
 - `app/composables/use-product-detail-data.ts`、`use-guide-detail-data.ts` — 改 per-id fetch。
 - `app/composables/use-catalog-shell-data.ts` — 移除 details 回傳，改供麵包屑 lookup。
-- `app/layouts/default.vue` — 麵包屑改 lookup 來源。
-- `nuxt.config.ts` — prerender routes 加入 detail json routes；設定 `<NuxtLink>` 全站 `prefetchOn: 'interaction'` 預設（確認 Nuxt 4 正確設定點，如 `experimental.defaults.nuxtLink`）。
+- `app/utils/breadcrumb/resolve-breadcrumb-items.ts` — 麵包屑 lookup 來源欄位改名（實作落點；`default.vue` 本就委派此 helper，未動）。
+- `nuxt.config.ts` — prerender routes 加入 detail json routes；設定 `<NuxtLink>` 全站 `prefetchOn: { interaction: true, visibility: false }` 預設（確認 Nuxt 4 正確設定點，如 `experimental.defaults.nuxtLink`）。
 - `scripts/build-product-routes.ts`、`scripts/build-guide-routes.ts` — 既有 detail 頁 route builder，比照產出 json route 清單。
 
 ## 既有資產盤點 / Reuse Map
@@ -142,7 +142,7 @@
 
 ### ADR-3：prefetch 改 `interaction` 而非全關
 
-- 決策：`<NuxtLink>` 全站預設 `prefetchOn: 'interaction'`，而非 `prefetch: false`。
+- 決策：`<NuxtLink>` 全站預設 `prefetchOn: { interaction: true, visibility: false }`，而非 `prefetch: false`。
 - 原因：全關會讓每次站內換頁都得現抓 chunk（首次點擊略慢）；`interaction`（hover/focus 才抓）保留「點下去前已預載」的順暢感，同時消除「進站即背景狂抓」的冗餘流量。是省流量與換頁體感的折衷，使用者已確認採此。
 - 替代方案：`prefetch: false`（最省但換頁略慢）、維持預設 viewport 自動 prefetch（冗餘流量大）。皆不採。
 
@@ -165,8 +165,8 @@
 - [ ] Red → Green → Refactor：`PublicContentPayload` 型別與 `build-public-content-payload` 移除 details（更新對應測試）。
 - [ ] Red → Green → Refactor：per-id detail builder + `server/api/products/[id].json.get.ts`、`server/api/guides/[id].json.get.ts`（含 404）。
 - [ ] Red → Green → Refactor：per-id detail fetch helper + `use-product-detail-data` / `use-guide-detail-data` 改 per-id key。
-- [ ] Red → Green → Refactor：`use-catalog-shell-data` 改供麵包屑 lookup、`default.vue` 改 lookup 來源。
-- [ ] `nuxt.config.ts` prerender 加入 detail json routes（沿用 route builder）；設定 `<NuxtLink>` 全站 `prefetchOn: 'interaction'`。
+- [ ] Red → Green → Refactor：`use-catalog-shell-data` 改供麵包屑 lookup、`resolve-breadcrumb-items.ts` 改 lookup 來源欄位（`default.vue` 本就委派此 helper，未動）。
+- [ ] `nuxt.config.ts` prerender 加入 detail json routes（沿用 route builder）；設定 `<NuxtLink>` 全站 `prefetchOn: { interaction: true, visibility: false }`。
 - [ ] 全套檢查 + 實際開頁驗收（含確認首頁不再自動 prefetch）。
 
 ## 後續方向（靜態化路線圖，非本 sprint 範圍）

@@ -4,9 +4,9 @@ import type { TaxonomyItemsSource } from './select-taxonomy-items'
 // 與 sitemap（決定哪些 taxonomy entry 進 sitemap）的共同前提；兩處邏輯必須一致，故抽成單一 helper 避免漂移。
 // 輸入須為 published-only 清單——呼叫端負責先過濾 status。
 //
-// brand 與 tag 共用 tag_ids namespace（ADR-8）：給定已知 brand id 集合時，把非空 tag_ids 切分為
-// brand_ids（∈ 已知 brands）與 tag_ids（其餘），兩 namespace 互斥，確保 brand id 不殘留於 /tag。
-// channel 成員來自 product offers 的 channel_id（products-only，ADR-9）。
+// brand 與 tag 共用 tag_ids namespace（ADR-8），但 brand 為 products-only：brand_ids 只從 product 的
+// tag_ids 切分（∈ 已知 brands），guide/link 的 tag_ids 不貢獻 brand（與 validator 一致）。tag_ids 仍跨三型別蒐集。
+// 兩 namespace 互斥，確保 brand id 不殘留於 /tag。channel 成員來自 product offers 的 channel_id（products-only，ADR-9）。
 
 export type NonEmptyTaxonomyIds = {
   category_ids: Set<string>
@@ -26,11 +26,14 @@ export function collectNonEmptyTaxonomyIds(
   const known_brand_ids = options.brand_ids ?? new Set<string>()
   const category_ids = new Set<string>()
   const referenced_tag_ids = new Set<string>()
+  // brand 切分只看 product 的 tag_ids（products-only）；故與跨型別的 referenced_tag_ids 分開蒐集。
+  const product_tag_ids = new Set<string>()
   const channel_ids = new Set<string>()
 
   for (const product of source.products) {
     category_ids.add(product.category_id)
     addAll(referenced_tag_ids, product.tag_ids)
+    addAll(product_tag_ids, product.tag_ids)
     addAll(channel_ids, product.channel_ids)
   }
 
@@ -47,12 +50,17 @@ export function collectNonEmptyTaxonomyIds(
   const tag_ids = new Set<string>()
   const brand_ids = new Set<string>()
 
+  // tag_ids：跨三型別的引用，扣掉已知 brand（brand 不入 /tag，即使只被 guide/link 引用）。
   for (const id of referenced_tag_ids) {
+    if (!known_brand_ids.has(id)) {
+      tag_ids.add(id)
+    }
+  }
+
+  // brand_ids：只有被 product 以 tag_ids 引用、且 ∈ 已知 brands 的 id（products-only）。
+  for (const id of product_tag_ids) {
     if (known_brand_ids.has(id)) {
       brand_ids.add(id)
-    }
-    else {
-      tag_ids.add(id)
     }
   }
 
