@@ -130,7 +130,7 @@ GET /?category=not-a-real    → 留在 /，顯示全部（不 redirect、不報
 > 驗證：`pnpm test:e2e`（需 dev/preview 服務）；手動造訪舊 `/?category=computer-3c` 確認 redirect；`pnpm generate` 確認 SSG prerender 未破壞，至少抽查 `.output/public/category/{id}`、`.output/public/api/content.json`、`.output/public/search-index.json` 皆產生；CI 等級再跑 `node scripts/assert-runtime-google-sheet-clean.ts`
 > 預期結果：舊 `?category={valid}` redirect 到專屬頁；e2e 逐條遷移／刪除完成、無測舊契約卻意外綠者（AC12）；static output 含 taxonomy 頁、catalog payload 與 search index；`pnpm content:check` 不受影響
 
-- [ ] Red → Green → Refactor
+- [x] Red → Green → Refactor
 
 ### Milestone 3: View Transition 重啟（spike／不得未驗證上線）
 > 範圍：`nuxt.config.ts`（flag）、`catalog.css`（reduced-motion guard）

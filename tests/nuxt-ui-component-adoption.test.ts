@@ -44,7 +44,10 @@ function getChipTextWithoutCount(text: string) {
   return text.replace(/\d+$/, '').trim()
 }
 
-async function mountIndexPage() {
+async function mountIndexPage(options: {
+  route_query?: Record<string, string | string[]>
+  category_ids?: string[]
+} = {}) {
   const content_payload = ref(buildPublicContentPayload({
     products: [
       makeProduct({ id: 'home-product', status: 'published', name: '居家商品', category_id: 'home' }),
@@ -54,12 +57,18 @@ async function mountIndexPage() {
     links: test_links,
     taxonomies: test_taxonomies,
   }))
+  const category_ids = ref(new Set(options.category_ids ?? ['home', 'computer']))
+  const navigate_to = vi.fn()
 
   vi.stubGlobal('computed', computed)
-  vi.stubGlobal('useRoute', () => ({ path: '/', query: {} }))
-  vi.stubGlobal('useCatalogData', async () => ({ content_payload }))
+  vi.stubGlobal('useRoute', () => ({ path: '/', query: options.route_query ?? {} }))
+  vi.stubGlobal('useCatalogData', async () => ({ content_payload, category_ids }))
   vi.stubGlobal('useHead', vi.fn())
   vi.stubGlobal('useSeoMeta', vi.fn())
+  vi.stubGlobal('navigateTo', navigate_to)
+  vi.stubGlobal('useNuxtApp', () => ({
+    runWithContext: (callback: () => unknown) => callback(),
+  }))
 
   const wrapper = mount(defineComponent({
     components: { IndexPage },
@@ -76,7 +85,7 @@ async function mountIndexPage() {
 
   await flushPromises()
 
-  return wrapper
+  return { wrapper, navigate_to }
 }
 
 afterEach(() => {
@@ -133,7 +142,7 @@ describe('clickable chips adopt UButton with variant-based active state', () => 
   const catalog_css = readSource('../app/assets/styles/catalog.css')
 
   it('should render home category chips as UButton links with variant active state and counts', async () => {
-    const wrapper = await mountIndexPage()
+    const { wrapper } = await mountIndexPage()
     const chip_links = new Map(wrapper.findAll('.category-chip').map((chip) => [
       getChipTextWithoutCount(chip.text()),
       {
@@ -157,6 +166,29 @@ describe('clickable chips adopt UButton with variant-based active state', () => 
       count: '1',
     })
     expect(wrapper.find('button.category-chip').exists()).toBe(false)
+  })
+
+  it('should soft redirect a single selectable legacy category query to the category taxonomy page', async () => {
+    const { navigate_to } = await mountIndexPage({
+      route_query: { category: 'computer' },
+      category_ids: ['home', 'computer'],
+    })
+
+    expect(navigate_to).toHaveBeenCalledWith('/category/computer')
+  })
+
+  it.each([
+    ['unknown category id', { category: 'missing' }],
+    ['empty category id', { category: '' }],
+    ['all sentinel', { category: 'all' }],
+    ['array category query', { category: ['home', 'computer'] }],
+  ])('should keep rendering the full home page for an invalid legacy category query: %s', async (_case_name, route_query) => {
+    const { navigate_to } = await mountIndexPage({
+      route_query,
+      category_ids: ['home', 'computer'],
+    })
+
+    expect(navigate_to).not.toHaveBeenCalled()
   })
 
   it('should render tag-explorer tag chips and clear button as UButton with variant active state', () => {

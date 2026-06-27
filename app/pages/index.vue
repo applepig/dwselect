@@ -47,6 +47,8 @@
 </template>
 
 <script setup lang="ts">
+import { onMounted } from 'vue'
+
 import { getCompactAppStateFromRoute, getCompactAppView } from '../utils/published-products/compact-app'
 import { getCanonicalUrl, SITE_DESCRIPTION, SITE_NAME, SITE_OG_IMAGE, SITE_TITLE } from '../utils/seo-metadata'
 
@@ -76,7 +78,25 @@ useSeoMeta({
 })
 
 const route = useRoute()
-const { content_payload } = await useCatalogData()
+const nuxt_app = useNuxtApp()
+const catalog_data = useCatalogData()
+onMounted(() => {
+  void catalog_data.then(({ category_ids }) => {
+    const category_query = route.query.category
+
+    if (typeof category_query !== 'string') {
+      return
+    }
+
+    if (!category_ids.value.has(category_query)) {
+      return
+    }
+
+    void nuxt_app.runWithContext(() => navigateTo(`/category/${category_query}`))
+  })
+})
+const { content_payload } = await catalog_data
+
 const route_state = computed(() => getCompactAppStateFromRoute(
   { path: route.path, query: route.query },
 ))

@@ -42,3 +42,34 @@
 
 - Red：`pnpm test tests/nuxt-smoke.test.ts` → 1 failed（新增 dynamic viewport contract 時，`catalog.css` 仍有 `100vh`）。
 - Green：`pnpm test tests/nuxt-smoke.test.ts` → 38 tests passed。
+
+## Milestone 2: 舊連結相容 + E2E 遷移（非 URL find-replace）
+
+### 技術決策
+
+- 舊 `/?category={id}` 僅在首頁 mount 後作 client soft redirect，合法 id 判定重用 `useCatalogData().category_ids` 的 selectable category set；invalid、empty、`all` 與 array query 留在首頁全部。
+- E2E 不做 URL 字串 find-replace，而是依新頁面契約遷移：分類 grid 量 `/category/{id}` taxonomy 頁、刪除 home results transition 舊契約、sidebar 與 breadcrumb 改斷言 `/category/{id}`。
+- `navigateTo` 在 mount 後透過 `nuxt_app.runWithContext` 執行，避免 async callback 跨過 `await` 後離開 Nuxt context 而在真瀏覽器沒有導頁。
+
+### 問題與解法
+
+- Red 階段確認新增 legacy redirect component/E2E 測試時，valid `/?category=computer-3c` 仍停在首頁。
+- 根因是初版 `onMounted(async () => { await catalog_data; navigateTo(...) })` 在真瀏覽器中跨 async boundary 後沒有可靠保留 Nuxt context；改為先取得 `useNuxtApp()`，在 `catalog_data.then(...)` 內用 `runWithContext(() => navigateTo(...))`。
+- 028 split 相關 request monitor timeout 的根因是 E2E 綁到瀏覽器直接請求 `/api/products|guides/{id}.json`；實際 Nuxt client navigation 會先請求 detail route 的 `_payload.json`，payload 內 async data 仍由 per-id detail route 產生。測試改驗「首頁不預抓 detail route payload／API，點擊後只抓該 detail route payload」。
+
+### 測試結果
+
+- Red：`pnpm test tests/nuxt-ui-component-adoption.test.ts` → 新增 valid redirect 測試時失敗（`navigateTo` 0 calls）。
+- Red：`pnpm test:e2e --project=desktop tests/e2e/compact-app.spec.ts -g "soft redirects valid legacy category query"` → 1 failed（URL 停在 `/?category=computer-3c`）。
+- Green：`pnpm test tests/nuxt-ui-component-adoption.test.ts` → 16 tests passed。
+- Green：`pnpm test:e2e --project=desktop tests/e2e/compact-app.spec.ts -g "soft redirects valid legacy category query"` → 1 passed。
+- 028 focused E2E：`pnpm test:e2e --project=desktop tests/e2e/compact-app.spec.ts -g "fetches a single product detail json"` → 1 passed。
+- 028 focused E2E：`pnpm test:e2e --project=desktop tests/e2e/compact-app.spec.ts -g "fetches a single guide detail json"` → 1 passed。
+- Desktop E2E：`pnpm test:e2e --project=desktop tests/e2e/compact-app.spec.ts` → 24 passed，2 skipped。
+- Full E2E：`pnpm test:e2e` → 66 passed，12 skipped。
+- M2 focused E2E：`pnpm test:e2e tests/e2e/compact-app.spec.ts -g "soft redirects|sparse category|mobile header lightweight|safe buy CTA|restores category taxonomy|expands product categories|desktop product grid"` → 11 passed, 10 skipped。
+- Unit regression：`pnpm test` → 75 files passed，564 tests passed（worker 執行）。
+- Typecheck：`pnpm typecheck` → 通過（worker 執行）。
+- Content check：`pnpm content:check` → 13 files passed，141 tests passed。
+- SSG：`NUXT_MODE=build ./dev.sh restart` 完成 prerender，logs 顯示 `Prerendered 516 routes` 與 `Generated public .output/public`；抽查 `.output/public/category/`、`.output/public/api/content.json`、`.output/public/search-index.json` 皆存在。
+- Runtime guard：`node scripts/assert-runtime-google-sheet-clean.ts` → 通過（無錯誤輸出）。

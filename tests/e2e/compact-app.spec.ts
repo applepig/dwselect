@@ -76,11 +76,12 @@ test('renders the compact app shell and responsive navigation', async ({ page },
   }
 })
 
-test('renders category breadcrumb and aligns the desktop product grid with header copy', async ({ page }, test_info) => {
-  test.skip(test_info.project.name !== 'desktop', 'desktop breadcrumb and alignment check only runs on desktop')
+test('soft redirects valid legacy category query links and keeps invalid ones on home', async ({ page }, test_info) => {
+  test.skip(test_info.project.name !== 'desktop', 'desktop legacy category redirect check only runs on desktop')
 
   await page.goto('/?category=computer-3c', { waitUntil: 'domcontentloaded' })
   await expect(page.locator('vite-error-overlay')).toHaveCount(0)
+  await expect(page).toHaveURL('/category/computer-3c', { timeout: SEARCH_RESULT_TIMEOUT_MS })
 
   await expect(page.locator('.compact-top-bar .top-bar-title')).toHaveText(getBreadcrumbTextPattern('電腦3C'))
 
@@ -99,42 +100,18 @@ test('renders category breadcrumb and aligns the desktop product grid with heade
 
   await page.goto('/?category=not-a-real-category', { waitUntil: 'domcontentloaded' })
   await expect(page.locator('vite-error-overlay')).toHaveCount(0)
+  await expect(page).toHaveURL('/?category=not-a-real-category')
   await expect(page.locator('.compact-top-bar .top-bar-title')).toHaveText('DW嚴選')
 })
 
 test('keeps sparse category product cards at tablet three-column width', async ({ page }, test_info) => {
   test.skip(test_info.project.name !== 'tablet', 'tablet grid width check only runs on tablet')
 
-  await page.goto('/?category=network', { waitUntil: 'domcontentloaded' })
+  await page.goto('/category/network', { waitUntil: 'domcontentloaded' })
   await expect(page.locator('vite-error-overlay')).toHaveCount(0)
   await expect(page.locator('.compact-top-bar .top-bar-title')).toHaveText(getBreadcrumbTextPattern('網路通訊'))
 
-  // The home grid runs a Vue Transition (mode="out-in"): on load it briefly shows the
-  // previous "all" state (71 cards) then leave/enter-swaps to the network state. Measuring
-  // mid-transition can catch a freshly-mounted grid before layout settles (column_count=1).
-  // Settle signal: the active category chip's count is the source of truth for how many cards
-  // should render (UI-derived, not hardcoded), and the transition must have no -active classes.
-  await page.waitForFunction(() => {
-    const grid = document.querySelector('.product-grid')
-    const results = document.querySelector('.home-results')
-
-    if (grid === null || results === null) {
-      return false
-    }
-
-    if (results.className.includes('-active')) {
-      return false
-    }
-
-    const pressed_count = document.querySelector('.category-chip[aria-pressed="true"] .chip-count')
-    const expected_card_count = pressed_count === null ? null : Number(pressed_count.textContent)
-
-    if (expected_card_count === null || Number.isNaN(expected_card_count)) {
-      return false
-    }
-
-    return grid.querySelectorAll('.product-card').length === expected_card_count
-  }, { timeout: 10_000 })
+  await expect(page.locator('.taxonomy-products-section .product-grid')).toBeVisible()
 
   const grid_metrics = await page.locator('.product-grid').evaluate((grid) => {
     const style = window.getComputedStyle(grid)
@@ -158,39 +135,10 @@ test('keeps sparse category product cards at tablet three-column width', async (
   expect(grid_metrics.first_card_width).toBeLessThan(grid_metrics.grid_width / 2)
 })
 
-test('switches home categories with a category-keyed result transition contract', async ({ page }, test_info) => {
-  test.skip(test_info.project.name !== 'desktop', 'desktop category transition check only runs on desktop')
-
-  await page.goto('/', { waitUntil: 'domcontentloaded' })
-  await expect(page.locator('vite-error-overlay')).toHaveCount(0)
-  await expect(page.locator('.compact-top-bar .top-bar-title')).toHaveText('DW嚴選')
-
-  const transition_contract = await page.evaluate(() => {
-    const element = document.createElement('div')
-    element.className = 'home-results-enter-active'
-    document.body.append(element)
-    const style = window.getComputedStyle(element)
-    const contract = {
-      transition_duration: style.transitionDuration,
-      transition_property: style.transitionProperty,
-    }
-
-    element.remove()
-
-    return contract
-  })
-  expect(transition_contract.transition_duration).not.toBe('0s')
-  expect(transition_contract.transition_property).toContain('opacity')
-
-  await page.locator('.compact-app-sidebar').getByRole('link', { name: /電腦3C/ }).click()
-  await expect(page).toHaveURL('/?category=computer-3c')
-  await expect(page.locator('.compact-top-bar .top-bar-title')).toHaveText(getBreadcrumbTextPattern('電腦3C'))
-})
-
 test('keeps the mobile header lightweight without card chrome', async ({ page }, test_info) => {
   test.skip(test_info.project.name !== 'phone', 'mobile header chrome check only runs on phone')
 
-  await page.goto('/?category=network', { waitUntil: 'domcontentloaded' })
+  await page.goto('/category/network', { waitUntil: 'domcontentloaded' })
   await expect(page.locator('vite-error-overlay')).toHaveCount(0)
   await expect(page.locator('.compact-top-bar .top-bar-title')).toHaveText(getBreadcrumbTextPattern('網路通訊'))
 
@@ -330,7 +278,7 @@ test('navigates to product detail route with a safe buy CTA', async ({ page }) =
 
   await expect(page.locator('.compact-top-bar .top-bar-title')).toContainText('DW嚴選')
   await expect(page.locator('.compact-top-bar .top-bar-title')).toContainText(await detail.locator('.detail-title').textContent() ?? '')
-  await expect(page.locator('.compact-top-bar .breadcrumb-link').nth(1)).toHaveAttribute('href', /\?category=.+/)
+  await expect(page.locator('.compact-top-bar .breadcrumb-link').nth(1)).toHaveAttribute('href', /\/category\/.+/)
   await expect(detail.getByText('DW 怎麼說')).toBeVisible()
   await expect(detail.locator('.detail-buy-cta')).toHaveAttribute('target', '_blank')
   await expect(detail.locator('.detail-buy-cta')).toHaveAttribute('rel', 'noopener noreferrer')
@@ -345,7 +293,7 @@ test('navigates to product detail route with a safe buy CTA', async ({ page }) =
 test('fetches a single product detail json on navigation without prefetching details on home (028 split)', async ({ page }) => {
   const detail_requests: string[] = []
   page.on('request', (request) => {
-    if (/\/api\/(products|guides)\/[^/]+\.json/.test(request.url())) {
+    if (/\/(products|guide)\/[^/]+\/_payload\.json/.test(request.url()) || /\/api\/(products|guides)\/[^/]+\.json/.test(request.url())) {
       detail_requests.push(request.url())
     }
   })
@@ -354,7 +302,7 @@ test('fetches a single product detail json on navigation without prefetching det
   await expect(page.locator('vite-error-overlay')).toHaveCount(0)
 
   // 028 + ADR-3：首頁初載走共用 /api/content.json，prefetchOn interaction(visibility:false) 下
-  // 不應背景 prefetch 任何商品／指南 detail JSON。
+  // 不應背景 prefetch 任何商品／指南 detail route payload 或 API JSON。
   expect(detail_requests).toEqual([])
 
   const first_card = page.locator('.product-card-link').first()
@@ -363,13 +311,14 @@ test('fetches a single product detail json on navigation without prefetching det
   const expected_id = href?.split('/').at(-1) ?? ''
   expect(expected_id).not.toBe('')
 
-  // client-side 導航才觸發 per-id fetch：只應請求自己那一筆 detail JSON。
-  const detail_request = page.waitForRequest(/\/api\/products\/[^/]+\.json/)
+  // Nuxt client-side 導航會先抓該 route 的 payload；payload 內的 async data 仍由
+  // per-id detail route 產生，不應在首頁背景預抓整批 detail。
+  const detail_request = page.waitForRequest(new RegExp(`/products/${expected_id}/_payload\\.json`))
   await first_card.click()
   const request = await detail_request
 
   await expect(page.locator('.product-detail-page')).toBeVisible()
-  expect(request.url()).toContain(`/api/products/${expected_id}.json`)
+  expect(request.url()).toContain(`/products/${expected_id}/_payload.json`)
 })
 
 test('fetches a single guide detail json on navigation into a guide (028 split)', async ({ page }) => {
@@ -382,11 +331,11 @@ test('fetches a single guide detail json on navigation into a guide (028 split)'
   const expected_id = href?.split('/').at(-1) ?? ''
   expect(expected_id).not.toBe('')
 
-  const detail_request = page.waitForRequest(/\/api\/guides\/[^/]+\.json/)
+  const detail_request = page.waitForRequest(new RegExp(`/guide/${expected_id}/_payload\\.json`))
   await first_guide.click()
   const request = await detail_request
 
-  expect(request.url()).toContain(`/api/guides/${expected_id}.json`)
+  expect(request.url()).toContain(`/guide/${expected_id}/_payload.json`)
 })
 
 test('keeps product detail and related image slots stable when images fail to load', async ({ page }) => {
@@ -469,16 +418,13 @@ test('renders direct product detail routes and unknown product not-found states'
   await expect(page.getByRole('link', { name: '回首頁' })).toBeVisible()
 })
 
-test('restores category and search state from query strings', async ({ page }, test_info) => {
-  await page.goto('/?category=av-theater', { waitUntil: 'domcontentloaded' })
+test('restores category taxonomy route state and search query strings', async ({ page }, test_info) => {
+  await page.goto('/category/av-theater', { waitUntil: 'domcontentloaded' })
   await expect(page.locator('vite-error-overlay')).toHaveCount(0)
+  await expect(page.locator('.compact-top-bar .top-bar-title')).toHaveText(getBreadcrumbTextPattern('影音劇院'))
 
   if (test_info.project.name === 'desktop') {
-    await expect(page.locator('.home-category-chip-list')).toBeHidden()
     await expect(page.locator('.compact-app-sidebar').getByRole('link', { name: /影音劇院/ })).toHaveAttribute('aria-current', 'page')
-  }
-  else {
-    await expect(page.getByRole('button', { name: /影音劇院/ })).toHaveAttribute('aria-pressed', 'true')
   }
 
   await page.goto('/guide?tags=影音劇院', { waitUntil: 'domcontentloaded' })
@@ -751,7 +697,7 @@ test('expands product categories in desktop sidebar only', async ({ page }, test
   await expect(sidebar.locator('.desktop-category-items')).toBeVisible()
   await expect(sidebar.locator('.desktop-category-items').getByRole('link', { name: /其他/ })).toHaveCount(0)
   await sidebar.getByRole('link', { name: /影音劇院/ }).click()
-  await expect(page).toHaveURL('/?category=av-theater')
+  await expect(page).toHaveURL('/category/av-theater')
   await expect(sidebar.getByRole('link', { name: /影音劇院/ })).toHaveAttribute('aria-current', 'page')
 })
 
@@ -797,7 +743,7 @@ test('keeps desktop product grid columns fluid without stretching sparse categor
   expect(layout.max_card_width).toBeGreaterThan(240)
   expect(layout.grid_width).toBeGreaterThan(0)
 
-  await page.goto('/?category=network', { waitUntil: 'domcontentloaded' })
+  await page.goto('/category/network', { waitUntil: 'domcontentloaded' })
   await expect(page.locator('vite-error-overlay')).toHaveCount(0)
 
   const sparse_category_layout = await page.evaluate(() => {
