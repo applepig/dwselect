@@ -32,13 +32,11 @@ const TAXONOMY_PREFIXES = ['/category/', '/tag/', '/brand/', '/channel/'] as con
 
 export function resolveBreadcrumbItems(
   route_path: string,
-  route_query: RouteQuery,
+  _route_query: RouteQuery,
   shell_data: BreadcrumbShellData | null,
 ): BreadcrumbItem[] {
   if (route_path === '/') {
-    const label = resolveActiveHomeCategoryLabel(route_query, shell_data)
-
-    return label === null ? [] : [{ label }]
+    return []
   }
 
   if (route_path === '/guide') {
@@ -70,22 +68,6 @@ export function resolveBreadcrumbItems(
   return []
 }
 
-function resolveActiveHomeCategoryLabel(route_query: RouteQuery, shell_data: BreadcrumbShellData | null): string | null {
-  const category_query = route_query.category
-
-  if (typeof category_query !== 'string' || category_query === '' || category_query === 'all') {
-    return null
-  }
-
-  const category_item = shell_data?.desktop_category_items.find((item) => item.id === category_query)
-
-  if (category_item === undefined || category_item.id === 'all') {
-    return null
-  }
-
-  return category_item.label
-}
-
 function resolveProductBreadcrumb(route_path: string, shell_data: BreadcrumbShellData | null): BreadcrumbItem[] {
   const product_id = getRouteId(route_path)
   const product_item = product_id === null ? undefined : shell_data?.product_breadcrumb_by_id[product_id]
@@ -97,7 +79,7 @@ function resolveProductBreadcrumb(route_path: string, shell_data: BreadcrumbShel
   return [
     {
       label: product_item.category_label ?? '',
-      to: { path: '/', query: { category: product_item.category_id ?? '' } },
+      to: `/category/${product_item.category_id ?? ''}`,
     },
     { label: product_item.name ?? '' },
   ]

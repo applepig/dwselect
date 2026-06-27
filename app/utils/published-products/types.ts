@@ -13,7 +13,6 @@ export type CompactAppTabId = 'home' | 'guide' | 'search' | 'links'
 
 export type CompactAppState = {
   active_tab?: CompactAppTabId
-  home_category_id?: Product['category_id'] | 'all'
   search_query?: string
 }
 
@@ -22,11 +21,6 @@ export type CompactRouteQueryValue = string | Array<string | null> | null | unde
 export type CompactRouteState = {
   path: string
   query?: Record<string, CompactRouteQueryValue>
-}
-
-export type CompactRouteStateOptions = {
-  category_ids?: string[]
-  tag_labels?: string[]
 }
 
 export type CompactAppTab = {

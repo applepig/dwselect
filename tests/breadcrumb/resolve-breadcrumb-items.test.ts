@@ -59,8 +59,8 @@ describe('resolveBreadcrumbItems for existing routes (regression)', () => {
     expect(resolveBreadcrumbItems('/', {}, shell)).toEqual([])
   })
 
-  it('should resolve the active home category label from the category query', () => {
-    expect(resolveBreadcrumbItems('/', { category: 'computer' }, shell)).toEqual([{ label: '電腦' }])
+  it('should ignore category query state on the home root', () => {
+    expect(resolveBreadcrumbItems('/', { category: 'computer' }, shell)).toEqual([])
   })
 
   it('should label the guide index route', () => {
@@ -74,7 +74,7 @@ describe('resolveBreadcrumbItems for existing routes (regression)', () => {
     } as never
 
     expect(resolveBreadcrumbItems('/products/a-product', {}, shell_with_product)).toEqual([
-      { label: '電腦', to: { path: '/', query: { category: 'computer' } } },
+      { label: '電腦', to: '/category/computer' },
       { label: '商品甲' },
     ])
   })

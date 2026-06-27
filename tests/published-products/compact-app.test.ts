@@ -26,14 +26,14 @@ describe('compact app view state', () => {
     return getCompactAppView(buildPayload(products, links, guides, taxonomies), state)
   }
 
-  it('should expose four compact tabs and category chips for home filtering', () => {
+  it('should expose four compact tabs, category chips, and all home products', () => {
     const products = [
       makeProduct({ id: 'home-product', status: 'published', name: '居家商品', category_id: 'home' }),
       makeProduct({ id: 'computer-product', status: 'published', name: '電腦商品', category_id: 'computer' }),
       makeProduct({ id: 'draft-product', status: 'draft', name: '草稿商品', category_id: 'home' }),
     ]
 
-    const compact_view = getCompactView(products, { active_tab: 'home', home_category_id: 'computer' })
+    const compact_view = getCompactView(products, { active_tab: 'home' })
 
     expect(compact_view.tabs).toEqual([
       { id: 'home', label: '首頁', icon: 'i-lucide-house', active: true },
@@ -42,14 +42,14 @@ describe('compact app view state', () => {
       { id: 'links', label: '連結', icon: 'i-lucide-link', active: false },
     ])
     expect(compact_view.home.category_chips).toEqual([
-      { id: 'all', label: '全部', count: 2, active: false },
+      { id: 'all', label: '全部', count: 2, active: true },
       { id: 'home', label: '居家', count: 1, active: false },
-      { id: 'computer', label: '電腦', count: 1, active: true },
+      { id: 'computer', label: '電腦', count: 1, active: false },
     ])
-    expect(compact_view.home.products.map((product) => product.id)).toEqual(['computer-product'])
+    expect(compact_view.home.products.map((product) => product.id)).toEqual(['home-product', 'computer-product'])
   })
 
-  it('should mark the active category chip from state without mutating navigation counts', () => {
+  it('should keep the all chip active without mutating navigation counts', () => {
     const products = [
       makeProduct({ id: 'home-product', status: 'published', name: '居家商品', category_id: 'home' }),
       makeProduct({ id: 'draft-kitchen-product', status: 'draft', name: '廚房草稿', category_id: 'kitchen' }),
@@ -120,15 +120,14 @@ describe('compact app view state', () => {
     expect(compact_view.home.products).toHaveLength(2)
   })
 
-  it('should expose empty home reasons for no products and no filtered results', () => {
+  it('should expose the empty home reason only when no published products exist', () => {
     expect(getCompactView([]).home.empty_reason).toBe('no-products')
 
     const products = [
       makeProduct({ id: 'home-product', status: 'published', name: '居家商品', category_id: 'home' }),
     ]
 
-    expect(getCompactView(products, { home_category_id: 'computer' }).home.empty_reason).toBe('no-results')
-    expect(getCompactView(products, { home_category_id: 'home' }).home.empty_reason).toBeNull()
+    expect(getCompactView(products).home.empty_reason).toBeNull()
   })
 
   it('should expose the fallback other category label in compact category chips', () => {
@@ -136,11 +135,11 @@ describe('compact app view state', () => {
       makeProduct({ id: 'other-product', status: 'published', name: '未知分類商品', category_id: 'other' }),
     ]
 
-    const compact_view = getCompactView(products, { home_category_id: 'other' })
+    const compact_view = getCompactView(products)
 
     expect(compact_view.home.category_chips).toEqual([
-      { id: 'all', label: '全部', count: 1, active: false },
-      { id: 'other', label: '其他', count: 1, active: true },
+      { id: 'all', label: '全部', count: 1, active: true },
+      { id: 'other', label: '其他', count: 1, active: false },
     ])
     expect(compact_view.home.products.map((product) => product.id)).toEqual(['other-product'])
   })
@@ -166,17 +165,13 @@ describe('compact app view state', () => {
         tag_ids: ['fixture-brand'],
       }),
     ]
-    const route_state = getCompactAppStateFromRoute(
-      { path: '/', query: { category: 'audio-gear' } },
-      { category_ids: taxonomies.categories.map((category) => category.id) },
-    )
+    const route_state = getCompactAppStateFromRoute({ path: '/', query: { category: 'audio-gear' } })
 
     const compact_view = getCompactView(products, route_state, test_links, test_guides, taxonomies)
 
-    expect(route_state.home_category_id).toBe('audio-gear')
     expect(compact_view.home.category_chips).toEqual([
-      { id: 'all', label: '全部', count: 1, active: false },
-      { id: 'audio-gear', label: '音響', count: 1, active: true },
+      { id: 'all', label: '全部', count: 1, active: true },
+      { id: 'audio-gear', label: '音響', count: 1, active: false },
     ])
     expect(compact_view.home.category_chips.map((chip) => chip.id)).not.toContain('empty-new-category')
     expect(compact_view.home.products).toEqual([
@@ -226,7 +221,6 @@ describe('route-driven compact app state', () => {
   it('should derive active compact tab from route path', () => {
     expect(getCompactAppStateFromRoute({ path: '/', query: {} })).toEqual({
       active_tab: 'home',
-      home_category_id: 'all',
     })
     expect(getCompactAppStateFromRoute({ path: '/guide', query: {} })).toEqual({
       active_tab: 'guide',
@@ -240,50 +234,35 @@ describe('route-driven compact app state', () => {
     })
   })
 
-  it('should parse valid category and search query values from route query', () => {
-    expect(getCompactAppStateFromRoute(
-      { path: '/', query: { category: 'computer' } },
-      { category_ids: ['home', 'computer'], tag_labels: [] },
-    )).toEqual({
-      active_tab: 'home',
-      home_category_id: 'computer',
-    })
-
+  it('should parse search query values from route query', () => {
     expect(getCompactAppStateFromRoute({ path: '/search', query: { q: '  機械鍵盤  ' } })).toEqual({
       active_tab: 'search',
       search_query: '機械鍵盤',
     })
   })
 
-  it('should parse category ids from caller supplied taxonomy ids only', () => {
+  it('should ignore category query values on the home route', () => {
     expect(getCompactAppStateFromRoute(
       { path: '/', query: { category: 'audio-gear' } },
-      { category_ids: ['home', 'audio-gear'] },
     )).toEqual({
       active_tab: 'home',
-      home_category_id: 'audio-gear',
     })
 
     expect(getCompactAppStateFromRoute(
       { path: '/', query: { category: 'audio-gear' } },
-      { category_ids: ['home'] },
     )).toEqual({
       active_tab: 'home',
-      home_category_id: 'all',
     })
   })
 
   it('should fallback invalid or empty query values to the route defaults', () => {
     expect(getCompactAppStateFromRoute(
       { path: '/', query: { category: 'missing' } },
-      { category_ids: ['home', 'computer'], tag_labels: [] },
     )).toEqual({
       active_tab: 'home',
-      home_category_id: 'all',
     })
     expect(getCompactAppStateFromRoute(
       { path: '/guide', query: { tags: ['不存在', '影音'] } },
-      { category_ids: [], tag_labels: ['影音'] },
     )).toEqual({ active_tab: 'guide' })
     expect(getCompactAppStateFromRoute({ path: '/search', query: { q: ['  ', 'ignored'] } })).toEqual({
       active_tab: 'search',
@@ -294,7 +273,6 @@ describe('route-driven compact app state', () => {
   it('should ignore a single guide tag delivered as a Vue Router string query', () => {
     expect(getCompactAppStateFromRoute(
       { path: '/guide', query: { tags: '工作' } },
-      { tag_labels: ['工作'] },
     )).toEqual({
       active_tab: 'guide',
     })
@@ -303,20 +281,17 @@ describe('route-driven compact app state', () => {
   it('should ignore multiple guide tags delivered as a Vue Router array query', () => {
     expect(getCompactAppStateFromRoute(
       { path: '/guide', query: { tags: ['工作', '輸入'] } },
-      { tag_labels: ['工作', '輸入'] },
     )).toEqual({
       active_tab: 'guide',
     })
   })
 
   it('should not create a guide tag URL contract for labels containing commas', () => {
-    const tag_with_comma = 'a,b'
     const selected_tags = ['a,b', 'c']
     const round_tripped_query = { tags: selected_tags }
 
     expect(getCompactAppStateFromRoute(
       { path: '/guide', query: round_tripped_query },
-      { tag_labels: [tag_with_comma, 'c'] },
     )).toEqual({
       active_tab: 'guide',
     })

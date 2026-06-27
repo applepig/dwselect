@@ -11,7 +11,7 @@
         <NuxtLink
           v-for="category in desktop_category_items"
           :key="`sidebar-category-${category.id}`"
-          :to="category.id === 'all' ? '/' : `/?category=${category.id}`"
+          :to="category.id === 'all' ? '/' : `/category/${category.id}`"
           class="app-nav-button desktop-category-link"
           :class="{ 'is-active': isCategoryActive(category.id) }"
           :aria-current="isCategoryActive(category.id) ? 'page' : undefined"
@@ -81,7 +81,6 @@ import type { CategoryChipView } from '../utils/public-content-view-types'
 
 const route = useRoute()
 const catalog_shell_data = await useCatalogShellData()
-const category_ids = computed(() => new Set(catalog_shell_data.value?.category_ids ?? []))
 const nav_items = [
   { id: 'home', label: '首頁', icon: 'i-lucide-house', to: '/' },
   { id: 'guide', label: '指南', icon: 'i-lucide-tags', to: '/guide' },
@@ -96,26 +95,10 @@ function isRouteActive(path: string) {
 }
 
 function isCategoryActive(category_id: CategoryChipView['id']) {
-  if (route.path !== '/') {
-    return false
+  if (category_id === 'all') {
+    return route.path === '/'
   }
 
-  return getActiveCategoryId() === category_id
-}
-
-function getActiveCategoryId(): CategoryChipView['id'] {
-  const active_category = typeof route.query.category === 'string' ? route.query.category : 'all'
-
-  if (active_category === '' || active_category === 'all') {
-    return 'all'
-  }
-
-  const category_id = active_category as Exclude<CategoryChipView['id'], 'all'>
-
-  if (!category_ids.value.has(category_id)) {
-    return 'all'
-  }
-
-  return category_id
+  return route.path === `/category/${category_id}`
 }
 </script>

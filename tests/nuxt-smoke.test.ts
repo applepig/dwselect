@@ -338,7 +338,7 @@ describe('Nuxt SSG baseline', () => {
     expect(home_source).not.toContain('最近值得看')
   })
 
-  it('should expose breadcrumb header links and home category result transition in source', () => {
+  it('should expose breadcrumb header links without home category result transition in source', () => {
     const layout_source = readFileSync(new URL('../app/layouts/default.vue', import.meta.url), 'utf8')
     const home_source = readFileSync(new URL('../app/pages/index.vue', import.meta.url), 'utf8')
     const guide_source = readFileSync(new URL('../app/pages/guide/index.vue', import.meta.url), 'utf8')
@@ -357,9 +357,9 @@ describe('Nuxt SSG baseline', () => {
     // 028 拆分：resolver 改用 cards／rows 來的精簡 breadcrumb lookup，不再依賴全量 detail map。
     expect(breadcrumb_source).toContain('product_breadcrumb_by_id[product_id]')
     expect(breadcrumb_source).not.toContain('product_details_by_id')
-    // breadcrumb 輸出契約不變：分類連結（category_label → /?category=category_id）＋ 商品名。
+    // breadcrumb 輸出契約：分類連結（category_label → /category/{id}）＋ 商品名。
     expect(breadcrumb_source).toContain('product_item.category_label')
-    expect(breadcrumb_source).toContain('category: product_item.category_id')
+    expect(breadcrumb_source).toContain('`/category/${product_item.category_id')
     expect(breadcrumb_source).toContain('product_item.name')
     expect(breadcrumb_source).toContain("route_path === '/guide'")
     expect(breadcrumb_source).toContain("route_path === '/links'")
@@ -386,9 +386,9 @@ describe('Nuxt SSG baseline', () => {
     expect(search_source).not.toContain('class="section-heading-row"')
     expect(search_source).not.toMatch(/<h2 class="section-title">[\s\S]*搜看看/)
 
-    expect(home_source).toContain('<Transition')
-    expect(home_source).toContain('name="home-results"')
-    expect(home_source).toContain(':key="active_home_category_key"')
+    expect(home_source).not.toContain('<Transition')
+    expect(home_source).not.toContain('name="home-results"')
+    expect(home_source).not.toContain('active_home_category_key')
     expect(catalog_css).toMatch(/\.breadcrumb-separator\s*\{[\s\S]*margin-inline:\s*[^;]+;/)
     expect(catalog_css).toContain('.breadcrumb-link')
     expect(catalog_css).toContain('.breadcrumb-link:focus-visible')
@@ -420,6 +420,15 @@ describe('Nuxt SSG baseline', () => {
     expect(catalog_css).toContain('.compact-app-shell')
     expect(catalog_css).toContain('max-width: 100%')
     expect(catalog_css).toContain('overflow-x: clip')
+  })
+
+  it('should size the app shell with dynamic viewport height for iPad Safari', () => {
+    const catalog_css = readFileSync(new URL('../app/assets/styles/catalog.css', import.meta.url), 'utf8')
+
+    expect(catalog_css).toMatch(/\.compact-app-shell\s*\{[\s\S]*min-height:\s*100dvh;/)
+    expect(catalog_css).toMatch(/\.compact-app-rail\s*\{[\s\S]*min-height:\s*100dvh;/)
+    expect(catalog_css).toMatch(/\.compact-app-sidebar\s*\{[\s\S]*min-height:\s*100dvh;/)
+    expect(catalog_css).not.toContain('min-height: 100vh;')
   })
 
   it('should split compact app shell into navigation, theme, card, tag and link components', () => {
@@ -489,7 +498,7 @@ describe('Nuxt SSG baseline', () => {
     expect(home_source).toContain('home-category-chip-list')
     expect(nav_source).toContain('desktop-category-items')
     expect(nav_source).toContain('desktop-category-link')
-    expect(nav_source).toContain('category.id === \'all\' ? \'/\' : `/?category=${category.id}`')
+    expect(nav_source).toContain('category.id === \'all\' ? \'/\' : `/category/${category.id}`')
     expect(nav_source).toContain('desktop_category_items')
     expect(catalog_css).toContain('.desktop-category-items')
     expect(catalog_css).toContain('.desktop-category-link')

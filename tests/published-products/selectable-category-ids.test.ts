@@ -24,7 +24,7 @@ describe('getSelectableCategoryIds', () => {
   })
 })
 
-describe('selectable category ids drive route parsing to visible chips only', () => {
+describe('selectable category ids no longer drive home route filtering', () => {
   function buildSelectableCategoryIds(
     products: ReturnType<typeof makeProduct>[],
     taxonomies: TaxonomyDefinitions = test_taxonomies,
@@ -34,23 +34,21 @@ describe('selectable category ids drive route parsing to visible chips only', ()
     return getSelectableCategoryIds(payload.navigation.category_chips)
   }
 
-  it('should keep a category that is rendered as a visible chip', () => {
+  it('should ignore a category that is rendered as a visible chip', () => {
     const products = [
       makeProduct({ id: 'home-product', status: 'published', name: '居家商品', category_id: 'home' }),
     ]
     const category_ids = buildSelectableCategoryIds(products)
 
-    expect(getSelectableCategoryIds).toBeDefined()
+    expect(category_ids).toEqual(['home'])
     expect(getCompactAppStateFromRoute(
       { path: '/', query: { category: 'home' } },
-      { category_ids },
     )).toEqual({
       active_tab: 'home',
-      home_category_id: 'home',
     })
   })
 
-  it('should fallback to all when category exists in taxonomies but has no published products', () => {
+  it('should ignore a category that exists in taxonomies but has no published products', () => {
     const products = [
       makeProduct({ id: 'home-product', status: 'published', name: '居家商品', category_id: 'home' }),
     ]
@@ -59,14 +57,12 @@ describe('selectable category ids drive route parsing to visible chips only', ()
     expect(category_ids).not.toContain('computer')
     expect(getCompactAppStateFromRoute(
       { path: '/', query: { category: 'computer' } },
-      { category_ids },
     )).toEqual({
       active_tab: 'home',
-      home_category_id: 'all',
     })
   })
 
-  it('should fallback to all when category exists in taxonomies but is not nav visible', () => {
+  it('should ignore a category that exists in taxonomies but is not nav visible', () => {
     const taxonomies: TaxonomyDefinitions = {
       ...test_taxonomies,
       categories: [
@@ -82,54 +78,40 @@ describe('selectable category ids drive route parsing to visible chips only', ()
     expect(category_ids).not.toContain('hidden-cat')
     expect(getCompactAppStateFromRoute(
       { path: '/', query: { category: 'hidden-cat' } },
-      { category_ids },
     )).toEqual({
       active_tab: 'home',
-      home_category_id: 'all',
     })
   })
 
-  it('should fallback to all when the category id does not exist at all', () => {
+  it('should ignore a category id that does not exist at all', () => {
     const products = [
       makeProduct({ id: 'home-product', status: 'published', name: '居家商品', category_id: 'home' }),
     ]
     const category_ids = buildSelectableCategoryIds(products)
 
+    expect(category_ids).not.toContain('does-not-exist')
     expect(getCompactAppStateFromRoute(
       { path: '/', query: { category: 'does-not-exist' } },
-      { category_ids },
     )).toEqual({
       active_tab: 'home',
-      home_category_id: 'all',
     })
   })
 
-  it('should keep all and array query behavior unchanged', () => {
-    const products = [
-      makeProduct({ id: 'home-product', status: 'published', name: '居家商品', category_id: 'home' }),
-    ]
-    const category_ids = buildSelectableCategoryIds(products)
-
+  it('should ignore all, empty and array category query values', () => {
     expect(getCompactAppStateFromRoute(
       { path: '/', query: { category: 'all' } },
-      { category_ids },
     )).toEqual({
       active_tab: 'home',
-      home_category_id: 'all',
     })
     expect(getCompactAppStateFromRoute(
       { path: '/', query: { category: '' } },
-      { category_ids },
     )).toEqual({
       active_tab: 'home',
-      home_category_id: 'all',
     })
     expect(getCompactAppStateFromRoute(
       { path: '/', query: { category: ['home', 'computer'] } },
-      { category_ids },
     )).toEqual({
       active_tab: 'home',
-      home_category_id: 'home',
     })
   })
 })

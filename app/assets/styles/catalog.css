@@ -3,7 +3,7 @@
   --nav-sidebar-width: 232px;
   width: 100%;
   max-width: 100%;
-  min-height: 100vh;
+  min-height: 100dvh;
   overflow-x: clip;
   background: var(--dw-bg);
   color: var(--dw-text);
@@ -1201,7 +1201,7 @@
     align-content: start;
     gap: 10px;
     width: var(--nav-rail-width);
-    min-height: 100vh;
+    min-height: 100dvh;
     padding: 18px 10px;
     border-right: 1px solid var(--dw-border);
     background: color-mix(in srgb, var(--dw-panel) 72%, transparent);
@@ -1276,7 +1276,7 @@
     align-content: start;
     gap: 26px;
     width: var(--nav-sidebar-width);
-    min-height: 100vh;
+    min-height: 100dvh;
     padding: 28px 16px;
     border-right: 1px solid var(--dw-border);
     background: color-mix(in srgb, var(--dw-panel) 76%, transparent);

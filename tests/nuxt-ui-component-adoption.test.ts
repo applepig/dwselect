@@ -1,9 +1,87 @@
-import { describe, expect, it } from 'vitest'
+// @vitest-environment happy-dom
+
+import { flushPromises, mount } from '@vue/test-utils'
+import { describe, expect, it, afterEach, vi } from 'vitest'
 import { readFileSync } from 'node:fs'
+import { computed, defineComponent, h, ref } from 'vue'
+
+import IndexPage from '../app/pages/index.vue'
+import { buildPublicContentPayload } from '../scripts/public-content'
+import { makeProduct, test_guides, test_links, test_taxonomies } from './published-products/fixtures'
 
 function readSource(relative_path: string) {
   return readFileSync(new URL(relative_path, import.meta.url), 'utf8')
 }
+
+const UButtonStub = defineComponent({
+  name: 'UButton',
+  props: {
+    to: { type: [String, Object], default: null },
+    color: { type: String, default: '' },
+    variant: { type: String, default: '' },
+  },
+  setup(props, { attrs, slots }) {
+    return () => h('a', {
+      ...attrs,
+      href: typeof props.to === 'string' ? props.to : undefined,
+      'data-color': props.color,
+      'data-variant': props.variant,
+    }, [slots.default?.(), slots.trailing?.()])
+  },
+})
+
+const ProductCardStub = defineComponent({
+  name: 'ProductCard',
+  props: {
+    product: { type: Object, required: true },
+  },
+  setup(props) {
+    return () => h('article', { class: 'product-card' }, String((props.product as { name?: string }).name ?? ''))
+  },
+})
+
+function getChipTextWithoutCount(text: string) {
+  return text.replace(/\d+$/, '').trim()
+}
+
+async function mountIndexPage() {
+  const content_payload = ref(buildPublicContentPayload({
+    products: [
+      makeProduct({ id: 'home-product', status: 'published', name: '居家商品', category_id: 'home' }),
+      makeProduct({ id: 'computer-product', status: 'published', name: '電腦商品', category_id: 'computer' }),
+    ],
+    guides: test_guides,
+    links: test_links,
+    taxonomies: test_taxonomies,
+  }))
+
+  vi.stubGlobal('computed', computed)
+  vi.stubGlobal('useRoute', () => ({ path: '/', query: {} }))
+  vi.stubGlobal('useCatalogData', async () => ({ content_payload }))
+  vi.stubGlobal('useHead', vi.fn())
+  vi.stubGlobal('useSeoMeta', vi.fn())
+
+  const wrapper = mount(defineComponent({
+    components: { IndexPage },
+    template: '<Suspense><IndexPage /></Suspense>',
+  }), {
+    global: {
+      stubs: {
+        ProductCard: ProductCardStub,
+        UButton: UButtonStub,
+        UEmpty: true,
+      },
+    },
+  })
+
+  await flushPromises()
+
+  return wrapper
+}
+
+afterEach(() => {
+  vi.unstubAllGlobals()
+})
 
 describe('search input adopts UInput', () => {
   const input_source = readSource('../app/components/search/search-input.vue')
@@ -50,19 +128,35 @@ describe('search input adopts UInput', () => {
 })
 
 describe('clickable chips adopt UButton with variant-based active state', () => {
-  const index_source = readSource('../app/pages/index.vue')
   const tag_explorer_source = readSource('../app/components/tag-explorer.vue')
   const idle_panel_source = readSource('../app/components/search/search-idle-panel.vue')
   const catalog_css = readSource('../app/assets/styles/catalog.css')
 
-  it('should render home category chips as UButton, drop the is-active class hook and keep aria-pressed and count', () => {
-    expect(index_source).toContain('<UButton')
-    expect(index_source).not.toContain('class="category-chip"\n        :class="{ \'is-active\': chip.active }"')
-    expect(index_source).not.toContain('\'is-active\': chip.active')
-    expect(index_source).toContain(':variant="chip.active ? \'solid\' : \'subtle\'"')
-    expect(index_source).toContain(':aria-pressed="chip.active"')
-    expect(index_source).toContain('{{ chip.count }}')
-    expect(index_source).toContain('@click="onCategoryChipClicked(chip.id)"')
+  it('should render home category chips as UButton links with variant active state and counts', async () => {
+    const wrapper = await mountIndexPage()
+    const chip_links = new Map(wrapper.findAll('.category-chip').map((chip) => [
+      getChipTextWithoutCount(chip.text()),
+      {
+        aria_pressed: chip.attributes('aria-pressed'),
+        href: chip.attributes('href'),
+        variant: chip.attributes('data-variant'),
+        count: chip.find('.chip-count').text(),
+      },
+    ]))
+
+    expect(chip_links.get('全部')).toEqual({
+      aria_pressed: 'true',
+      href: '/',
+      variant: 'solid',
+      count: '2',
+    })
+    expect(chip_links.get('電腦')).toEqual({
+      aria_pressed: 'false',
+      href: '/category/computer',
+      variant: 'subtle',
+      count: '1',
+    })
+    expect(wrapper.find('button.category-chip').exists()).toBe(false)
   })
 
   it('should render tag-explorer tag chips and clear button as UButton with variant active state', () => {

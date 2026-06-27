@@ -10,12 +10,11 @@
       <UButton
         v-for="chip in compact_view.home.category_chips"
         :key="chip.id"
-        type="button"
+        :to="chip.id === 'all' ? '/' : `/category/${chip.id}`"
         class="category-chip"
         :color="chip.active ? 'primary' : 'neutral'"
         :variant="chip.active ? 'solid' : 'subtle'"
         :aria-pressed="chip.active"
-        @click="onCategoryChipClicked(chip.id)"
       >
         <span>{{ chip.label }}</span>
         <template #trailing>
@@ -24,37 +23,30 @@
       </UButton>
     </div>
 
-    <Transition
-      name="home-results"
-      mode="out-in"
+    <div
+      class="home-results"
     >
-      <div
-        :key="active_home_category_key"
-        class="home-results"
-      >
-        <UEmpty
-          v-if="compact_view.home.empty_reason"
-          icon="i-lucide-package-open"
-          title="目前沒有已上架商品"
-        />
+      <UEmpty
+        v-if="compact_view.home.empty_reason"
+        icon="i-lucide-package-open"
+        title="目前沒有已上架商品"
+      />
 
-        <div
-          v-else
-          class="product-grid"
-        >
-          <ProductCard
-            v-for="product in compact_view.home.products"
-            :key="product.id"
-            :product="product"
-          />
-        </div>
+      <div
+        v-else
+        class="product-grid"
+      >
+        <ProductCard
+          v-for="product in compact_view.home.products"
+          :key="product.id"
+          :product="product"
+        />
       </div>
-    </Transition>
+    </div>
   </section>
 </template>
 
 <script setup lang="ts">
-import type { CompactCategoryChip } from '../utils/published-products/types'
 import { getCompactAppStateFromRoute, getCompactAppView } from '../utils/published-products/compact-app'
 import { getCanonicalUrl, SITE_DESCRIPTION, SITE_NAME, SITE_OG_IMAGE, SITE_TITLE } from '../utils/seo-metadata'
 
@@ -84,11 +76,9 @@ useSeoMeta({
 })
 
 const route = useRoute()
-const router = useRouter()
-const { content_payload, category_ids } = await useCatalogData()
+const { content_payload } = await useCatalogData()
 const route_state = computed(() => getCompactAppStateFromRoute(
   { path: route.path, query: route.query },
-  { category_ids: category_ids.value },
 ))
 const compact_view = computed(() => {
   if (content_payload.value === null || content_payload.value === undefined) {
@@ -97,12 +87,4 @@ const compact_view = computed(() => {
 
   return getCompactAppView(content_payload.value, route_state.value)
 })
-const active_home_category_key = computed(() => route_state.value.home_category_id ?? 'all')
-
-function onCategoryChipClicked(category_id: CompactCategoryChip['id']) {
-  router.push({
-    path: '/',
-    query: category_id === 'all' ? {} : { category: category_id },
-  })
-}
 </script>
