@@ -174,7 +174,7 @@ describe('clickable chips adopt UButton with variant-based active state', () => 
       category_ids: ['home', 'computer'],
     })
 
-    expect(navigate_to).toHaveBeenCalledWith('/category/computer')
+    expect(navigate_to).toHaveBeenCalledWith('/category/computer', { replace: true })
   })
 
   it.each([
