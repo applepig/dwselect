@@ -78,7 +78,7 @@ export default defineNuxtConfig({
   },
   buildDir: build_dir,
   experimental: {
-    viewTransition: false,
+    viewTransition: true,
     // ADR-3：<NuxtLink> 全站預設 hover/focus 才預抓，消除「進站即背景狂 prefetch 全部站內 payload／chunk」的冗餘流量；
     // 保留「點擊前已預載」的換頁順暢感（非全關 prefetch）。
     defaults: {

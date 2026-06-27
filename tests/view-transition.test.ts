@@ -4,11 +4,10 @@ import { readFileSync } from 'node:fs'
 import nuxt_config from '../nuxt.config'
 
 describe('route-driven view transition contract', () => {
-  it('should keep Nuxt experimental view transitions suppressed for mobile Safari safety', () => {
-    // iOS Safari 的 startViewTransition 會在 hydration 視窗內 crash（useHead without context /
-    // currentRenderingInstance.ce），且為 WebKit 層級 bug，手刻同樣會踩；公開站行動 Safari 受眾大，
-    // 故 WebKit 修穩前刻意停用。詳見 docs/007-routed-navigation-view-transitions/works.md 決策。
-    expect(nuxt_config.experimental?.viewTransition).toBe(false)
+  it('should temporarily enable Nuxt experimental view transitions for the M3 iPad Safari spike', () => {
+    // M3 只準備 spike：暫時翻回 true 讓使用者做實機 iPad Safari 驗證。
+    // AC10 尚未 PASS 前不得宣稱可 ship；若 FAIL 或未驗證，merge／上線前必須 revert/維持 false。
+    expect(nuxt_config.experimental?.viewTransition).toBe(true)
   })
 
   it('should not use the legacy helper for route or query state changes', () => {
@@ -38,8 +37,10 @@ describe('route-driven view transition contract', () => {
     expect(catalog_css).toContain('::view-transition-group(.product-card)')
     expect(catalog_css).toContain('::view-transition-old(.product-card)')
     expect(catalog_css).toContain('::view-transition-new(.product-card)')
+    expect(catalog_css).toMatch(/@media \(prefers-reduced-motion: no-preference\)[\s\S]*view-transition-class: product-card/)
     expect(catalog_css).toContain('@media (prefers-reduced-motion: reduce)')
-    expect(catalog_css).toContain('animation: none')
+    expect(catalog_css).toMatch(/@media \(prefers-reduced-motion: reduce\)[\s\S]*view-transition-name: none !important/)
+    expect(catalog_css).toMatch(/@media \(prefers-reduced-motion: reduce\)[\s\S]*animation: none !important/)
     expect(catalog_css).toContain('.compact-page-fade-enter-active')
     expect(catalog_css).toContain('.compact-page-fade-leave-active')
     expect(catalog_css).toContain('.compact-page-fade-enter-from')

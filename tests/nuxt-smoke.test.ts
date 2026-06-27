@@ -15,7 +15,8 @@ describe('Nuxt SSG baseline', () => {
     expect(nuxt_config.image?.dir).toBe('../content')
     expect(nuxt_config.ui?.fonts).toBe(false)
     expect(nuxt_config.nitro?.preset).toBe('static')
-    expect(nuxt_config.experimental?.viewTransition).toBe(false)
+    // M3 spike：暫時重啟，等待使用者實機 iPad Safari 驗證；未 PASS 前不得 ship true。
+    expect(nuxt_config.experimental?.viewTransition).toBe(true)
     expect(nuxt_config.app?.pageTransition).toMatchObject({
       name: 'compact-page-fade',
       mode: 'out-in',
@@ -348,7 +349,8 @@ describe('Nuxt SSG baseline', () => {
 
     const breadcrumb_source = readFileSync(new URL('../app/utils/breadcrumb/resolve-breadcrumb-items.ts', import.meta.url), 'utf8')
 
-    expect(nuxt_config.experimental?.viewTransition).toBe(false)
+    // M3 spike：暫時重啟，等待使用者實機 iPad Safari 驗證；未 PASS 前不得 ship true。
+    expect(nuxt_config.experimental?.viewTransition).toBe(true)
     expect(layout_source).toContain('<NuxtLink')
     expect(layout_source).toContain('to="/"')
     expect(layout_source).toContain('class="breadcrumb-link"')
