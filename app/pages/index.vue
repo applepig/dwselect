@@ -92,7 +92,7 @@ onMounted(() => {
       return
     }
 
-    void nuxt_app.runWithContext(() => navigateTo(`/category/${category_query}`))
+    void nuxt_app.runWithContext(() => navigateTo(`/category/${category_query}`, { replace: true }))
   })
 })
 const { content_payload } = await catalog_data

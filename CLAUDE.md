@@ -18,7 +18,7 @@
 - 命令統一入口是 `./dev.sh <cmd>`；`package.json` scripts 多為其薄 wrapper，`pnpm <cmd>` 與 `./dev.sh <cmd>` 等價（CI 用 `pnpm`）。委派的有 `dev`/`test`/`lint`/`typecheck`/`generate`/`content:check`/`preview`。例外：`prepare`（pnpm 生命週期 hook）與殘留未用的 `build`（nuxt build，且 `dev.sh build`=Docker image build，命名衝突）維持直跑、不委派。
 - 測試與檢查指令（`vitest.config.ts` 已用 `process.loadEnvFile()` 載入 `.env`，不必再手動帶 `APP_URL=` 前綴）：
   - `pnpm test`（單元測試）
-  - `pnpm test:e2e`（Playwright E2E；需 dev/preview 服務可連線）
+  - `pnpm test:e2e`（Playwright E2E；需 dev/preview 服務可連線。**必須在 host 跑、不在 Alpine 容器內跑**——容器 base `node:22-alpine` 是 musl libc，無法執行 Playwright 的 glibc Chromium；host 已有 `~/.cache/ms-playwright` browser。它連既有容器 dev server（`toybox.local`），`reuseExistingServer:true` 故 dev server 活著時不會在 host 誤啟 `pnpm dev`。`baseURL` 由 `APP_URL` 組成。）
   - `pnpm lint`
   - `pnpm typecheck`（隔離 buildDir，可在常駐 dev 旁跑）
   - `pnpm generate`（SSG build；同上隔離）
@@ -31,7 +31,7 @@
 - 開發環境透過 Docker 容器執行，用 `./dev.sh start` 啟動，透過 Traefik docker label 自動註冊路由到 `https://${APP_URL}/`（預設 `dwselect.toybox.local`）。
 - Host 分工：`dwselect.toybox.local` 是本機／開發站入口；`dwselect.applepig.net` 是正式站入口。CI、production build、deploy、SEO canonical 或任何公開正式環境設定，不要使用 `dwselect.toybox.local`。
 - 環境設定集中在 `.env`（不進 git）：`APP_URL` 控制 Traefik 路由與 Vite allowedHosts；`NUXT_MODE=dev` 跑 dev server（含 HMR），未設定或其他值則跑 `nuxt generate` + `nuxt preview`。
-- 容器管理用 `./dev.sh`（start/stop/restart/build/rebuild/logs/exec/shell/install/status/clean）；開發／建置子命令有 `dev`/`generate`/`typecheck`/`verify`/`test`/`lint`/`content-check`/`preview`。不要直接在 host 上跑 `pnpm dev`——應透過 Docker 容器。
+- 容器管理用 `./dev.sh`（start/stop/restart/build/rebuild/logs/exec/shell/install/status/clean）；開發／建置子命令有 `dev`/`generate`/`typecheck`/`verify`/`test`/`lint`/`content-check`/`preview`。不要直接在 host 上跑 `pnpm dev`——應透過 Docker 容器（例外：Playwright e2e 在 host 跑 browser、連容器 dev server，那不是在 host 跑 dev server，見 Commands）。
 - 一次性 build（`typecheck`/`generate`/`verify`）在容器內自動用隔離 buildDir（`.nuxt-build`）＋ Vite cacheDir，與常駐 dev 的 `.nuxt` 分離，可在 dev server 跑著時安全執行；`./dev.sh` 三態：容器內隔離、`CI=true` 用預設 `.nuxt`、純 host 引導進容器。隔離只在本機／容器生效，CI workflow 不需改。
 - 除錯 `toybox.local` 壞掉時，先用 `./dev.sh status` 確認容器狀態，再看 `./dev.sh logs` 查 Nuxt log；接著檢查 Traefik route/service 與 container 的 network 連線。
 - `package.json` 的依賴更新後，用 `./dev.sh install`（container 內 `pnpm install`）同步；若 native module 版本不對，用 `./dev.sh rebuild` 重建 image 和 volumes。

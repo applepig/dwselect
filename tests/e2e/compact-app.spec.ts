@@ -104,6 +104,20 @@ test('soft redirects valid legacy category query links and keeps invalid ones on
   await expect(page.locator('.compact-top-bar .top-bar-title')).toHaveText('DW嚴選')
 })
 
+test('legacy category redirect replaces history so the back button is not trapped', async ({ page }, test_info) => {
+  test.skip(test_info.project.name !== 'desktop', 'desktop legacy category redirect history check only runs on desktop')
+
+  // Establish home as the prior history entry, then enter via a legacy ?category URL.
+  await page.goto('/', { waitUntil: 'domcontentloaded' })
+  await page.goto('/?category=computer-3c', { waitUntil: 'domcontentloaded' })
+  await expect(page).toHaveURL('/category/computer-3c', { timeout: SEARCH_RESULT_TIMEOUT_MS })
+
+  // The redirect must use history replace, so going back escapes to home instead of
+  // bouncing back to /?category=computer-3c and getting re-pushed forward (the trap).
+  await page.goBack()
+  await expect(page).toHaveURL('/', { timeout: SEARCH_RESULT_TIMEOUT_MS })
+})
+
 test('keeps sparse category product cards at tablet three-column width', async ({ page }, test_info) => {
   test.skip(test_info.project.name !== 'tablet', 'tablet grid width check only runs on tablet')
 

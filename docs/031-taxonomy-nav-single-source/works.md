@@ -73,3 +73,41 @@
 - Content check：`pnpm content:check` → 13 files passed，141 tests passed。
 - SSG：`NUXT_MODE=build ./dev.sh restart` 完成 prerender，logs 顯示 `Prerendered 516 routes` 與 `Generated public .output/public`；抽查 `.output/public/category/`、`.output/public/api/content.json`、`.output/public/search-index.json` 皆存在。
 - Runtime guard：`node scripts/assert-runtime-google-sheet-clean.ts` → 通過（無錯誤輸出）。
+
+### Follow-up: legacy redirect 改 history replace（修上一頁陷阱）
+
+#### 技術決策
+
+- `index.vue` 的 legacy `/?category={id}` soft redirect 由預設 history push 改為 `navigateTo(\`/category/${id}\`, { replace: true })`。redirect 去向（valid → `/category/{id}`、invalid／empty／array 留首頁）完全不變，只改 history 寫入方式。
+- 根因：push 會在歷史堆疊插入額外 entry。使用者從舊書籤 `/?category={valid}` 進站被 push 前進到 `/category/{id}` 後，按瀏覽器上一頁回到 `/?category={id}`，index.vue 重新 mount 又 push 前進，在兩頁間來回彈跳出不去。ADR-2 的書籤連續性目的被此 trap 反噬，replace 消除多餘 entry 即解。
+
+#### 問題與解法
+
+- e2e 守門斷言設計：因 push（buggy）版 goBack 會回到 `/?category=` 後再被 onMounted 彈回 `/category/{id}`，單純斷言「URL 不是 ?category」在 buggy 版會因彈跳而變綠、無法穩定 Red。改為先 `goto('/')` 建立 home base entry，redirect 後 `goBack()` 斷言能回到 home `/`：replace 生效可逃回首頁（綠），push trap 被彈回 `/category` 永遠到不了 `/`（紅）。此斷言同時蘊含「不會回到舊 query URL」且能穩定 Red。
+
+#### 測試結果
+
+- 新增 e2e：`tests/e2e/compact-app.spec.ts` desktop-only `legacy category redirect replaces history so the back button is not trapped`（緊接既有 valid/invalid redirect 測試之後）。
+- e2e 實機驗證受環境阻擋：dev 容器為 Alpine Linux（musl libc），Playwright 內建 Chromium 為 glibc build（需 `/lib64/ld-linux-x86-64.so.2` 與 `libglib-2.0` 等），在 musl 上 spawn ENOENT 無法啟動；容器原本未安裝任何 browser（印證 e2e 正常於 CI ubuntu 跑）。Red／Green 兩步皆無法在本 session 實機驗證，須於 CI／glibc 環境執行。
+- Typecheck：`./dev.sh typecheck` → 通過（exit 0），確認 `navigateTo(..., { replace: true })` 簽章合法。
+
+## Milestone 3: View Transition 重啟 spike（待實機驗證）
+
+### 技術決策
+
+- 依 M3 spike 範圍，暫時將 `nuxt.config.ts` 的 `experimental.viewTransition` 從 `false` 翻為 `true`，讓使用者可進行實機 iPad Safari 驗證。
+- `app/assets/styles/catalog.css` 既有 `@media (prefers-reduced-motion: no-preference)` 與 `@media (prefers-reduced-motion: reduce)` guard 已涵蓋 product-card view-transition class/name、page fade transition 與 `animation: none` 保險絲；本次測試確認契約存在，未修改 CSS。
+- 本狀態不是 AC10 PASS：實機 iPad Safari hydration 與轉場尚未驗證。若使用者實機 PASS 未被記錄，merge／上線前必須 revert 或維持 `viewTransition: false`；FAIL 或未驗證皆不得 ship `true`。
+- 測試品質修正：移除讀取 `spec.md` 並 `toContain` 文件文字的 source-grep 型假斷言，以符合 AC13 精神；待實機驗證狀態改由本 works 記錄。
+
+### 測試結果
+
+- Red：`pnpm test tests/view-transition.test.ts tests/nuxt-smoke.test.ts` → 2 files failed，3 tests failed（預期失敗：`nuxt.config.ts` 仍為 `viewTransition: false`）。
+- Green／Refactor：`pnpm test tests/view-transition.test.ts tests/nuxt-smoke.test.ts` → 2 files passed，41 tests passed。
+- Typecheck：`pnpm typecheck` → 通過（命令完成且無錯誤輸出）。
+- Browser smoke：`agent-browser` 透過 `https://dwselect.toybox.local/` 開啟首頁與 `/category/computer-3c`，兩頁皆可載入且未見未捕獲錯誤輸出；此檢查不取代 iPad Safari 實機驗證。
+
+### 未驗證
+
+- 使用者實機 iPad Safari 全新分頁驗證 hydration 與轉場：尚未執行。
+- `prefers-reduced-motion: reduce` 在實機 iPad Safari 下的無動畫行為：尚未手動驗證；目前僅以 CSS 契約測試確認 fallback 存在。
