@@ -161,4 +161,25 @@ describe('GuideDetail', () => {
     expect(wrapper.find('.detail-hero-image').exists()).toBe(false)
     expect(wrapper.find('.detail-image-fallback-icon').exists()).toBe(true)
   })
+
+  // 守護視覺回歸：catalog.css 把 .product-detail-page 共用選擇器背景改為 transparent，
+  // panel 表面色（--dw-panel）改由 root 直屬的 .product-transition-shell 背景層補回。
+  // guide 詳情頁 root 同掛 .product-detail-page，必須一併有此背景 shell，否則整頁掉 panel 底色。
+  it('should render a transition shell background layer directly under the detail page root', () => {
+    const wrapper = mountGuideDetail(makeGuideDetailView())
+    const root = wrapper.find('.product-detail-page')
+    const shell = root.element.querySelector(':scope > .product-transition-shell')
+
+    expect(shell).not.toBeNull()
+  })
+
+  // guide 不參與卡片→詳情 morph，shell 純粹承載 panel 背景，
+  // 不應掛 product-vt-card（避免多出無用的 view-transition-name）。
+  it('should not tag the guide transition shell as a view-transition card', () => {
+    const wrapper = mountGuideDetail(makeGuideDetailView())
+    const shell = wrapper.find('.product-transition-shell')
+
+    expect(shell.exists()).toBe(true)
+    expect(shell.classes()).not.toContain('product-vt-card')
+  })
 })

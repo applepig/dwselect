@@ -721,10 +721,43 @@ test('hides empty general categories from home chips and desktop sidebar', async
   await page.goto('/', { waitUntil: 'domcontentloaded' })
   await expect(page.locator('vite-error-overlay')).toHaveCount(0)
 
-  await expect(page.locator('.home-category-chip-list')).toBeHidden()
-  await expect(page.locator('.home-category-chip-list').getByRole('button', { name: /全部/ })).toHaveCount(0)
+  await expect(page.locator('.category-chip-bar')).toBeHidden()
+  await expect(page.locator('.category-chip-bar').getByRole('button', { name: /全部/ })).toHaveCount(0)
   await expect(page.locator('.category-chip-list').getByRole('button', { name: /其他/ })).toHaveCount(0)
   await expect(page.locator('.compact-app-sidebar .desktop-category-items').getByRole('link', { name: /其他/ })).toHaveCount(0)
+})
+
+test('hides the category chip bar on desktop category pages while keeping sidebar navigation', async ({ page }, test_info) => {
+  test.skip(test_info.project.name !== 'desktop', 'desktop chip bar hide check only runs on desktop')
+
+  // AC8 / Case6：桌機（≥1200px）分類頁的 chip bar 套用與首頁同一條 display:none 規則，
+  // 分類導航改走 sidebar，不在桌機重複出現 pill。
+  await page.goto('/category/computer-3c', { waitUntil: 'domcontentloaded' })
+  await expect(page.locator('vite-error-overlay')).toHaveCount(0)
+
+  await expect(page.locator('.category-chip-bar')).toBeHidden()
+  await expect(page.locator('.compact-app-sidebar .desktop-category-items')).toBeVisible()
+})
+
+test('persists the category chip bar with active state after navigating from home on touch viewports', async ({ page }, test_info) => {
+  test.skip(test_info.project.name === 'desktop', 'chip bar persistence is a touch-viewport (<1200px) behaviour')
+
+  // User story B / AC9：iPad／手機從首頁點分類 chip 進 /category/{id} 後，chip bar 不再消失、
+  // 當前分類呈 active（aria-pressed=true），使用者可直接再切換——這是 B1 的核心持久化修復。
+  await page.goto('/', { waitUntil: 'domcontentloaded' })
+  await expect(page.locator('vite-error-overlay')).toHaveCount(0)
+
+  const chip_bar = page.locator('.category-chip-bar')
+  await expect(chip_bar).toBeVisible()
+
+  await chip_bar.locator('.category-chip', { hasText: '電腦3C' }).click()
+  await expect(page).toHaveURL('/category/computer-3c', { timeout: SEARCH_RESULT_TIMEOUT_MS })
+
+  // 導航後 chip bar 必須仍可見（持久化主線），且唯一 active chip 為當前分類。
+  await expect(chip_bar).toBeVisible()
+  const active_chip = chip_bar.locator('.category-chip[aria-pressed="true"]')
+  await expect(active_chip).toHaveCount(1)
+  await expect(active_chip).toContainText('電腦3C')
 })
 
 test('keeps desktop product grid columns fluid without stretching sparse categories', async ({ page }, test_info) => {

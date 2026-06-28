@@ -9,6 +9,8 @@ function readPage(file_path: string): string {
 
 const category_source = readPage('app/pages/category/[id].vue')
 const tag_source = readPage('app/pages/tag/[id].vue')
+const brand_source = readPage('app/pages/brand/[id].vue')
+const channel_source = readPage('app/pages/channel/[id].vue')
 
 describe('taxonomy page shells', () => {
   it('should throw a fatal 404 when the taxonomy resolves to no data, matching detail pages', () => {
@@ -47,6 +49,16 @@ describe('taxonomy page shells', () => {
       expect(source).toContain('<TaxonomyPage')
       expect(source).not.toContain('product-grid')
       expect(source).not.toContain('<ResourceList')
+    }
+  })
+
+  it('should mount the shared CategoryChipBar only on the category shell, never on other taxonomy shells', () => {
+    // 031.1 B1（AC6）：分類頁以共用 CategoryChipBar 持久化 chip bar。
+    // Why：鎖住此接線，防 B1 行為被誤移除；並守住非目標邊界——
+    // tag/brand/channel 頁不得出現 category chip bar（spec「非目標」第二條），避免 chip bar 外溢其他 taxonomy 頁。
+    expect(category_source).toContain('<CategoryChipBar')
+    for (const source of [tag_source, brand_source, channel_source]) {
+      expect(source).not.toContain('<CategoryChipBar')
     }
   })
 })

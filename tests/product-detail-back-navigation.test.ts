@@ -8,6 +8,10 @@ function readProductDetailSource() {
   return readFileSync(product_detail_url, 'utf8')
 }
 
+function getClassTokenIndex(source: string, class_name: string) {
+  return source.search(new RegExp(`class="[^"]*(?<=["\\s])${class_name}(?=["\\s])`))
+}
+
 describe('product detail back navigation fallback', () => {
   it('should only use router.back for same-origin browser history and fallback to home', () => {
     const product_detail_source = readProductDetailSource()
@@ -26,9 +30,9 @@ describe('product detail back navigation fallback', () => {
     const product_detail_source = readProductDetailSource()
     const catalog_css = readFileSync(catalog_css_url, 'utf8')
     const detail_back_css = getCssBlock(catalog_css, '.detail-back')
-    const hero_tile_start = product_detail_source.indexOf('class="detail-hero-tile"')
-    const back_button_index = product_detail_source.indexOf('class="detail-back"')
-    const hero_image_index = product_detail_source.indexOf('class="detail-hero-image"')
+    const hero_tile_start = getClassTokenIndex(product_detail_source, 'detail-hero-tile')
+    const back_button_index = getClassTokenIndex(product_detail_source, 'detail-back')
+    const hero_image_index = getClassTokenIndex(product_detail_source, 'detail-hero-image')
 
     expect(hero_tile_start).toBeGreaterThanOrEqual(0)
     expect(back_button_index).toBeGreaterThan(hero_tile_start)
@@ -46,17 +50,17 @@ describe('product detail back navigation fallback', () => {
 
   it('should keep AI copy and purchase actions below the desktop hero layout', () => {
     const product_detail_source = readProductDetailSource()
-    const hero_layout_index = product_detail_source.indexOf('class="detail-hero-layout"')
-    const hero_tile_index = product_detail_source.indexOf('class="detail-hero-tile"')
-    const summary_column_index = product_detail_source.indexOf('class="detail-summary-column"')
-    const title_index = product_detail_source.indexOf('class="detail-title"')
-    const taxonomy_index = product_detail_source.indexOf('class="detail-taxonomy-row"')
-    const price_index = product_detail_source.indexOf('class="detail-price"')
-    const dw_says_index = product_detail_source.indexOf('class="detail-dw-says"')
-    const summary_buy_link_index = product_detail_source.indexOf('class="detail-summary-buy-link"')
-    const llm_says_index = product_detail_source.indexOf('class="detail-llm-says"')
-    const buy_cta_index = product_detail_source.indexOf('class="detail-buy-cta"')
-    const fine_print_index = product_detail_source.indexOf('class="detail-fine-print"')
+    const hero_layout_index = getClassTokenIndex(product_detail_source, 'detail-hero-layout')
+    const hero_tile_index = getClassTokenIndex(product_detail_source, 'detail-hero-tile')
+    const summary_column_index = getClassTokenIndex(product_detail_source, 'detail-summary-column')
+    const title_index = getClassTokenIndex(product_detail_source, 'detail-title')
+    const taxonomy_index = getClassTokenIndex(product_detail_source, 'detail-taxonomy-row')
+    const price_index = getClassTokenIndex(product_detail_source, 'detail-price')
+    const dw_says_index = getClassTokenIndex(product_detail_source, 'detail-dw-says')
+    const summary_buy_link_index = getClassTokenIndex(product_detail_source, 'detail-summary-buy-link')
+    const llm_says_index = getClassTokenIndex(product_detail_source, 'detail-llm-says')
+    const buy_cta_index = getClassTokenIndex(product_detail_source, 'detail-buy-cta')
+    const fine_print_index = getClassTokenIndex(product_detail_source, 'detail-fine-print')
     const first_full_width_section_index = product_detail_source.indexOf('\n      <section\n        v-if="detail.llm_description"', dw_says_index)
     const top_layout_source = product_detail_source.slice(hero_layout_index, first_full_width_section_index)
 

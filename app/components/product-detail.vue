@@ -4,11 +4,17 @@
     class="product-detail-page"
     :data-product-id="detail.id"
   >
+    <span
+      class="product-transition-shell product-vt-card"
+      :style="getProductViewTransitionStyle(detail.id, 'card')"
+      aria-hidden="true"
+    />
+
     <section class="detail-content">
       <div class="detail-hero-layout">
         <div
-          class="detail-hero-tile"
-          :style="{ 'view-transition-name': `product-image-${detail.id}` }"
+          class="detail-hero-tile product-vt-image"
+          :style="getProductViewTransitionStyle(detail.id, 'image')"
         >
           <UButton
             class="detail-back"
@@ -35,7 +41,10 @@
         </div>
 
         <div class="detail-summary-column">
-          <h2 class="detail-title">
+          <h2
+            class="detail-title product-vt-title"
+            :style="getProductViewTransitionStyle(detail.id, 'title')"
+          >
             {{ detail.name }}
           </h2>
 
@@ -69,16 +78,20 @@
             </CatalogPill>
           </div>
 
-          <p class="detail-price">
+          <p
+            class="detail-price product-vt-price"
+            :style="getProductViewTransitionStyle(detail.id, 'price')"
+          >
             {{ detail.price_label }}
           </p>
 
           <UAlert
-            class="detail-dw-says"
+            class="detail-dw-says product-vt-summary"
             color="primary"
             variant="subtle"
             title="DW 怎麼說"
             :description="detail.long_description || detail.summary"
+            :style="getProductViewTransitionStyle(detail.id, 'summary')"
           />
 
           <a
@@ -169,6 +182,7 @@
 
 <script setup lang="ts">
 import type { ProductDetailView } from '../utils/public-content-view-types'
+import { getProductViewTransitionStyle } from '../utils/product-view-transition'
 
 const router = useRouter()
 

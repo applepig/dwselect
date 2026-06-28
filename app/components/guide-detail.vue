@@ -4,6 +4,11 @@
     class="product-detail-page"
     :data-guide-id="detail.id"
   >
+    <span
+      class="product-transition-shell"
+      aria-hidden="true"
+    />
+
     <section class="detail-content">
       <div class="detail-hero-layout">
         <div class="detail-hero-tile">

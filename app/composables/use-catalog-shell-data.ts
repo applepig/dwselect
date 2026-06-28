@@ -31,6 +31,8 @@ export async function useCatalogShellData() {
         published: content_payload.value.navigation.counts.products,
       },
       desktop_category_items: content_payload.value.navigation.desktop_category_items,
+      // 共用 CategoryChipBar 在首頁與分類頁取用同一份 chip 資料（單一來源，零新 fetch）。
+      category_chips: content_payload.value.navigation.category_chips,
       category_ids: getSelectableCategoryIds(content_payload.value.navigation.category_chips),
       product_breadcrumb_by_id,
       guide_breadcrumb_by_id,

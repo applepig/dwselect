@@ -1,8 +1,12 @@
 <template>
-  <TaxonomyPage
-    v-if="page_data"
-    :data="page_data"
-  />
+  <div class="compact-page">
+    <CategoryChipBar />
+
+    <TaxonomyPage
+      v-if="page_data"
+      :data="page_data"
+    />
+  </div>
 </template>
 
 <script setup lang="ts">

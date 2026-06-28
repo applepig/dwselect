@@ -47,6 +47,15 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-KTZKC8CH')`
 const google_tag_manager_noscript = '<iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KTZKC8CH" height="0" width="0" style="display:none;visibility:hidden"></iframe>'
 
+// View Transition feature flag 的單一真相：同一個常數同時餵給 experimental.viewTransition（Nuxt 內建 VT）
+// 與 appConfig.enableViewTransition（client middleware 讀取），避免兩處 flag drift（AC2）。
+// 用 appConfig 而非 runtimeConfig.public：後者會被 NUXT_PUBLIC_* env 於 build/generate 時單邊覆寫，
+// 但 experimental.viewTransition 是 build-time only、永不吃 env——兩者 override 機制不對稱，
+// 設 NUXT_PUBLIC_ENABLE_VIEW_TRANSITION=false 會讓 middleware 停關 Vue transition 而 VT 仍接手、雙動畫互打復活。
+// appConfig 為 build-time 烤入、非 env-overridable，與 experimental 真正同源不可分歧。
+// AC10 gate 未 PASS 前若需 revert，只改這一個常數，experimental 與 disable-vue-transitions middleware 一起進退。
+const ENABLE_VIEW_TRANSITION = true
+
 export default defineNuxtConfig({
   modules: ['@nuxt/eslint', '@nuxt/ui', '@nuxt/image'],
   app: {
@@ -76,9 +85,14 @@ export default defineNuxtConfig({
   ui: {
     fonts: false,
   },
+  appConfig: {
+    // client middleware（disable-vue-transitions.global）只讀此值判斷是否把換頁交給 VT；
+    // 與 experimental.viewTransition 同步自 ENABLE_VIEW_TRANSITION，非 env-overridable（見上方常數註解）。
+    enableViewTransition: ENABLE_VIEW_TRANSITION,
+  },
   buildDir: build_dir,
   experimental: {
-    viewTransition: true,
+    viewTransition: ENABLE_VIEW_TRANSITION,
     // ADR-3：<NuxtLink> 全站預設 hover/focus 才預抓，消除「進站即背景狂 prefetch 全部站內 payload／chunk」的冗餘流量；
     // 保留「點擊前已預載」的換頁順暢感（非全關 prefetch）。
     defaults: {

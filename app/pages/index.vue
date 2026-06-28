@@ -1,49 +1,33 @@
 <template>
-  <section
-    class="compact-panel"
-    aria-label="首頁"
-  >
-    <div
-      class="category-chip-list home-category-chip-list"
-      aria-label="商品分類"
-    >
-      <UButton
-        v-for="chip in compact_view.home.category_chips"
-        :key="chip.id"
-        :to="chip.id === 'all' ? '/' : `/category/${chip.id}`"
-        class="category-chip"
-        :color="chip.active ? 'primary' : 'neutral'"
-        :variant="chip.active ? 'solid' : 'subtle'"
-        :aria-pressed="chip.active"
-      >
-        <span>{{ chip.label }}</span>
-        <template #trailing>
-          <span class="chip-count">{{ chip.count }}</span>
-        </template>
-      </UButton>
-    </div>
+  <div class="compact-page">
+    <CategoryChipBar />
 
-    <div
-      class="home-results"
+    <section
+      class="compact-panel"
+      aria-label="首頁"
     >
-      <UEmpty
-        v-if="compact_view.home.empty_reason"
-        icon="i-lucide-package-open"
-        title="目前沒有已上架商品"
-      />
-
       <div
-        v-else
-        class="product-grid"
+        class="home-results"
       >
-        <ProductCard
-          v-for="product in compact_view.home.products"
-          :key="product.id"
-          :product="product"
+        <UEmpty
+          v-if="compact_view.home.empty_reason"
+          icon="i-lucide-package-open"
+          title="目前沒有已上架商品"
         />
+
+        <div
+          v-else
+          class="product-grid"
+        >
+          <ProductCard
+            v-for="product in compact_view.home.products"
+            :key="product.id"
+            :product="product"
+          />
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
+  </div>
 </template>
 
 <script setup lang="ts">

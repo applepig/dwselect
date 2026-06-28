@@ -40,9 +40,14 @@ const ProductCardStub = defineComponent({
   },
 })
 
-function getChipTextWithoutCount(text: string) {
-  return text.replace(/\d+$/, '').trim()
-}
+// chip 列已抽成共用 CategoryChipBar（B1），首頁僅委派渲染；chip 行為斷言移至 category-chip-bar.test.ts。
+// 此處 stub 元件，只驗首頁有掛載共用 chip bar、不再各寫一份。
+const CategoryChipBarStub = defineComponent({
+  name: 'CategoryChipBar',
+  setup() {
+    return () => h('div', { class: 'category-chip-bar-stub' })
+  },
+})
 
 async function mountIndexPage(options: {
   route_query?: Record<string, string | string[]>
@@ -77,6 +82,7 @@ async function mountIndexPage(options: {
     global: {
       stubs: {
         ProductCard: ProductCardStub,
+        CategoryChipBar: CategoryChipBarStub,
         UButton: UButtonStub,
         UEmpty: true,
       },
@@ -141,31 +147,13 @@ describe('clickable chips adopt UButton with variant-based active state', () => 
   const idle_panel_source = readSource('../app/components/search/search-idle-panel.vue')
   const catalog_css = readSource('../app/assets/styles/catalog.css')
 
-  it('should render home category chips as UButton links with variant active state and counts', async () => {
+  it('should delegate home category chips to the shared CategoryChipBar instead of inlining its own chip list', async () => {
     const { wrapper } = await mountIndexPage()
-    const chip_links = new Map(wrapper.findAll('.category-chip').map((chip) => [
-      getChipTextWithoutCount(chip.text()),
-      {
-        aria_pressed: chip.attributes('aria-pressed'),
-        href: chip.attributes('href'),
-        variant: chip.attributes('data-variant'),
-        count: chip.find('.chip-count').text(),
-      },
-    ]))
 
-    expect(chip_links.get('全部')).toEqual({
-      aria_pressed: 'true',
-      href: '/',
-      variant: 'solid',
-      count: '2',
-    })
-    expect(chip_links.get('電腦')).toEqual({
-      aria_pressed: 'false',
-      href: '/category/computer',
-      variant: 'subtle',
-      count: '1',
-    })
-    expect(wrapper.find('button.category-chip').exists()).toBe(false)
+    // chip 列已抽成共用元件（AC6）：首頁掛載 CategoryChipBar，不再各自 inline 一份 chip markup。
+    // chip 的 href／active／aria-pressed／count 行為由 tests/category-chip-bar.test.ts 以 DOM 斷言驗收。
+    expect(wrapper.find('.category-chip-bar-stub').exists()).toBe(true)
+    expect(wrapper.find('.category-chip').exists()).toBe(false)
   })
 
   it('should soft redirect a single selectable legacy category query to the category taxonomy page', async () => {
