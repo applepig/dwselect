@@ -50,6 +50,7 @@
 ```json
 {
   "id": "2026-06-13-samsung-galaxy-s25",
+  "slug": "2026-06-13-samsung-galaxy-s25",
   "status": "published",
   "name": "Galaxy S25",
   "english_name": "Samsung Galaxy S25",
@@ -90,6 +91,7 @@
 | 欄位 | 類型 | 填寫者 | 說明 |
 |------|------|--------|------|
 | `id` | string | Agent | 必須與檔名 stem 一致 |
+| `slug` | string | Agent | 必填，URL slug，kebab-case ASCII；目前一律與 `id` 相同（鋪路用，未來才可能脫鉤） |
 | `status` | enum | Agent | 預設 `"published"` |
 | `name` | string | Agent | 中文產品名稱 |
 | `english_name` | string | Agent | 英文品牌 + 型號 |
@@ -142,6 +144,7 @@
 ```json
 {
   "id": "2026-06-13-monitor-buying-guide",
+  "slug": "2026-06-13-monitor-buying-guide",
   "status": "published",
   "title": "螢幕選購指南",
   "summary": "使用者提供的摘要",
@@ -163,6 +166,7 @@
 
 | 欄位 | 類型 | 說明 |
 |------|------|------|
+| `slug` | string | 必填，URL slug，kebab-case ASCII；目前一律與 `id` 相同 |
 | `title` | string | 指南標題 |
 | `summary` | string | 由使用者提供 |
 | `source_url` | string | 原始文章 URL（如 Facebook 貼文） |
@@ -179,6 +183,7 @@
 ```json
 {
   "id": "example-link",
+  "slug": "example-link",
   "status": "published",
   "title": "網站名稱",
   "summary": "簡短說明",
@@ -199,6 +204,7 @@
 
 | 欄位 | 類型 | 說明 |
 |------|------|------|
+| `slug` | string | 必填，URL slug，kebab-case ASCII；目前一律與 `id` 相同 |
 | `title` | string | 連結標題 |
 | `summary` | string | 簡短說明 |
 | `url` | string | 目標 URL |

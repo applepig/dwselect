@@ -1,7 +1,12 @@
 name: Deploy
 
+# 只在 Static Generate（test/lint/typecheck/generate quality-gate）於 master 成功後才觸發，
+# 避免 regression 直接 push 到 master 就上線。兩支 workflow 拆開、deploy 串接在 gate 之後。
 on:
-  push:
+  workflow_run:
+    workflows: ["Static Generate"]
+    types:
+      - completed
     branches:
       - master
 
@@ -12,12 +17,16 @@ permissions:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     env:
       APP_URL: dwselect.applepig.net
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          # workflow_run 預設 checkout 預設分支 HEAD；改抓被驗證過的那個 commit，避免 deploy 到未經 gate 的新 commit。
+          ref: ${{ github.event.workflow_run.head_sha }}
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4

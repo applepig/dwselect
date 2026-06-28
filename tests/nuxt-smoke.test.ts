@@ -178,7 +178,10 @@ describe('Nuxt SSG baseline', () => {
     expect(nuxt_config_source).toContain("event: 'dwselect:content-updated'")
     expect(plugin_source).toContain("import.meta.hot.on('dwselect:content-updated'")
     // refreshNuxtData 必須包在 runWithContext 內：hot.on callback 在 Nuxt context 之外觸發。
-    expect(plugin_source).toContain("nuxtApp.runWithContext(() => refreshNuxtData('public-content'))")
+    // 無參數刷全部 cache：028 拆分後詳情頁用 product-detail-${id} / guide-detail-${id} per-id key，
+    // 只刷 'public-content' 會讓開著的詳情頁停在舊值。
+    expect(plugin_source).toContain('nuxtApp.runWithContext(() => refreshNuxtData())')
+    expect(plugin_source).not.toContain("refreshNuxtData('public-content')")
     expect(plugin_source).toContain('resetClientSearchIndex()')
     expect(search_helper_source).toContain('export function resetClientSearchIndex()')
     expect(search_helper_source).toContain('search_index_promise = null')
