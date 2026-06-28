@@ -101,6 +101,15 @@ describe('TaxonomyPage render', () => {
     expect(wrapper.find('.taxonomy-page-title').exists()).toBe(false)
   })
 
+  it('should not render any in-page section-title heading (breadcrumb already describes the page)', () => {
+    // makeData() 預設 products+guides+links 三段皆有，覆蓋所有區段
+    const wrapper = mountTaxonomyPage(makeData())
+
+    expect(wrapper.find('.section-title').exists()).toBe(false)
+    expect(wrapper.find('.taxonomy-section-title').exists()).toBe(false)
+    expect(wrapper.findAll('h2')).toHaveLength(0)
+  })
+
   it('should not render the kind kicker that mislabels brand/channel as 分類 (AC26)', () => {
     const wrapper = mountTaxonomyPage(makeData({ taxonomy_kind: 'channel', id: 'other-channel', label: '其他通路', description: null }))
 

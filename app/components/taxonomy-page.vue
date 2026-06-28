@@ -19,9 +19,6 @@
       class="taxonomy-section taxonomy-products-section"
       aria-label="商品"
     >
-      <h2 class="section-title taxonomy-section-title">
-        商品
-      </h2>
       <div class="product-grid">
         <ProductCard
           v-for="product in data.products"
@@ -36,9 +33,6 @@
       class="taxonomy-section taxonomy-guides-section"
       aria-label="指南"
     >
-      <h2 class="section-title taxonomy-section-title">
-        指南
-      </h2>
       <ResourceList
         :rows="data.guides"
         aria_label="指南列表"
@@ -50,9 +44,6 @@
       class="taxonomy-section taxonomy-links-section"
       aria-label="連結"
     >
-      <h2 class="section-title taxonomy-section-title">
-        連結
-      </h2>
       <ResourceList
         :rows="data.links"
         aria_label="連結列表"

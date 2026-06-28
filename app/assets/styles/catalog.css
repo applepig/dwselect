@@ -50,8 +50,7 @@
   text-transform: uppercase;
 }
 
-.top-bar-title,
-.section-title {
+.top-bar-title {
   margin: 2px 0 0;
   color: var(--dw-text);
   line-height: 1.1;
@@ -80,10 +79,6 @@
 .breadcrumb-separator {
   margin-inline: 0.45em;
   color: var(--dw-muted);
-}
-
-.section-title {
-  font-size: 1.35rem;
 }
 
 .top-bar-actions {
@@ -1238,8 +1233,8 @@
   font-weight: 900;
 }
 
-/* taxonomy 瀏覽頁：沿用 .compact-panel／.section-title／.section-kicker／.product-grid／.resource-list，
-   僅補頁面標題區與各型別區段的版面 gap 與簡介文字色（皆走 --dw-* token）。 */
+/* taxonomy 瀏覽頁：沿用 .compact-panel／.product-grid／.resource-list；頁內不放重複標題
+   （breadcrumb 即頁面標題），僅補頁面標題區與各型別區段的版面 gap 與簡介文字色（皆走 --dw-* token）。 */
 .taxonomy-page-header {
   display: grid;
   gap: 4px;
@@ -1258,11 +1253,6 @@
   display: grid;
   gap: 12px;
   min-width: 0;
-}
-
-.taxonomy-section-title {
-  font-size: 1.1rem;
-  font-weight: 950;
 }
 
 @media (max-width: 767px) {
