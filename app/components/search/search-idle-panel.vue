@@ -35,12 +35,11 @@
         <div class="tag-chip-list">
           <UButton
             v-for="tag in section.tags"
-            :key="`search-${section.id}-${tag.label}`"
-            :to="{ path: '/search', query: { q: tag.label } }"
+            :key="`search-${section.id}-${tag.id}`"
+            :to="`${section.to_prefix}/${tag.id}`"
             class="tag-chip"
             color="neutral"
             variant="subtle"
-            @click="$emit('tag-clicked', tag.label)"
           >
             <span>{{ tag.label }}</span>
             <template #trailing>
@@ -62,18 +61,20 @@ const props = defineProps<{
 }>()
 defineEmits<{
   'history-clicked': [query: string]
-  'tag-clicked': [tag: string]
 }>()
 
+// 熱門標籤深連 /tag/{id}、熱門品牌深連 /brand/{id}（brand 走專屬前綴、單一 canonical，ADR-8）。
 const popular_search_sections = computed(() => [
   {
     id: 'tags',
     title: '熱門標籤',
+    to_prefix: '/tag',
     tags: props.popular_search_tags.tags,
   },
   {
     id: 'brands',
     title: '熱門品牌',
+    to_prefix: '/brand',
     tags: props.popular_search_tags.brands,
   },
 ].filter((section) => section.tags.length > 0))

@@ -4,6 +4,7 @@ const TIMESTAMP_PATTERN = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}[+-]\d{2}:\d{2}$/
 const KEBAB_CASE_ASCII_ID_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/
 
 const content_status_schema = z.enum(['draft', 'published', 'unpublished', 'archived'])
+const content_id_schema = z.string().regex(KEBAB_CASE_ASCII_ID_PATTERN, 'must be a kebab-case ASCII content id')
 const taxonomy_id_schema = z.string().regex(KEBAB_CASE_ASCII_ID_PATTERN, 'must be a kebab-case ASCII taxonomy id')
 const category_id_schema = taxonomy_id_schema
 const channel_id_schema = taxonomy_id_schema
@@ -50,7 +51,8 @@ const product_offer_schema = z.object({
 }).strict()
 
 export const product_schema = z.object({
-  id: z.string().min(1),
+  id: content_id_schema,
+  slug: content_id_schema,
   status: content_status_schema,
   name: z.string().min(1),
   english_name: z.string().min(1),
@@ -75,10 +77,12 @@ export const product_schema = z.object({
 })
 
 export const guide_schema = z.object({
-  id: z.string().min(1),
+  id: content_id_schema,
+  slug: content_id_schema,
   status: content_status_schema,
   title: z.string().min(1),
   summary: z.string(),
+  body: z.string().optional(),
   source_url: http_url_schema,
   image_file: optional_image_file_schema,
   image_url: optional_http_image_url_schema,
@@ -95,7 +99,8 @@ export const guide_schema = z.object({
 })
 
 export const link_schema = z.object({
-  id: z.string().min(1),
+  id: content_id_schema,
+  slug: content_id_schema,
   status: content_status_schema,
   title: z.string().min(1),
   summary: z.string(),
@@ -217,22 +222,24 @@ export type ContentTypeWithTaxonomyReferences = 'product' | 'guide' | 'link'
 export type ContentTaxonomyReferenceViolation = {
   content_type: ContentTypeWithTaxonomyReferences
   content_id: string
-  field: 'category_id' | 'category_ids' | 'tag_ids'
+  field: 'category_id' | 'category_ids' | 'tag_ids' | 'channel_id'
   value: string
 }
 
 export type ContentTaxonomyReferenceInput = {
-  products?: Array<{ id: string, category_id: string, tag_ids: string[] }>
+  products?: Array<{ id: string, category_id: string, tag_ids: string[], offers: Array<{ channel_id: string }> }>
   guides?: Array<{ id: string, category_ids: string[], tag_ids: string[] }>
   links?: Array<{ id: string, category_ids: string[], tag_ids: string[] }>
   categories: Array<Pick<CategoryDefinition, 'id'>>
   tags: Array<Pick<TagDefinition, 'id'>>
+  channels: Array<Pick<ChannelDefinition, 'id'>>
   brands?: Array<Pick<TagDefinition, 'id'>>
 }
 
 export function validateContentTaxonomyReferences(input: ContentTaxonomyReferenceInput): ContentTaxonomyReferenceViolation[] {
   const category_ids = new Set<string>(input.categories.map((category) => category.id))
   const tag_ids = new Set(input.tags.map((tag) => tag.id))
+  const channel_ids = new Set(input.channels.map((channel) => channel.id))
   const product_tag_ids = new Set([
     ...input.tags.map((tag) => tag.id),
     ...(input.brands ?? []).map((brand) => brand.id),
@@ -250,6 +257,19 @@ export function validateContentTaxonomyReferences(input: ContentTaxonomyReferenc
     }
 
     addMissingTaxonomyViolations(violations, 'product', product.id, product.tag_ids, product_tag_ids, 'tag_ids')
+
+    // offers[].channel_id 須 ∈ channels.json：build-channel-routes 會把所有 offer 引用的 channel 變成
+    // /channel/{id} prerender 路由，typo channel 在 generate 時 throw 404 中止整個 build；故在 content gate 攔下。
+    for (const offer of product.offers) {
+      if (!channel_ids.has(offer.channel_id)) {
+        violations.push({
+          content_type: 'product',
+          content_id: product.id,
+          field: 'channel_id',
+          value: offer.channel_id,
+        })
+      }
+    }
   }
 
   for (const guide of input.guides ?? []) {

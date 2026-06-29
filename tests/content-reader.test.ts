@@ -8,6 +8,8 @@ import { readProducts } from '../scripts/content-reader'
 
 function buildProductJson(name: string) {
   return JSON.stringify({
+    // slug 須為 ASCII kebab（AC1c）；name 為顯示字串，兩者刻意不同以反映 schema 契約。
+    slug: name.toLowerCase(),
     status: 'published',
     name,
     english_name: name,

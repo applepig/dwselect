@@ -8,7 +8,7 @@ import { base_guide, test_links, test_taxonomies } from '../published-products/f
 const labels = createTaxonomyLabelResolver(test_taxonomies)
 
 describe('guide and link resource row build mapper', () => {
-  it('should map only published guides to external resource rows with taxonomy labels', () => {
+  it('should map only published guides to internal detail resource rows with taxonomy labels', () => {
     const guides: Guide[] = [
       {
         ...base_guide,
@@ -34,12 +34,14 @@ describe('guide and link resource row build mapper', () => {
         title: '已發布指南',
         subtitle: '指南摘要',
         meta: '電腦',
-        href: 'https://example.com/published-guide',
+        href: '/guide/published-guide',
         image_url: null,
         icon: 'i-lucide-book-open',
-        external: true,
-        target: '_blank',
-        rel: 'noopener noreferrer',
+        external: false,
+        target: null,
+        rel: null,
+        category_ids: ['computer'],
+        tag_ids: ['typing'],
       },
     ])
   })
@@ -54,7 +56,7 @@ describe('guide and link resource row build mapper', () => {
     ])
   })
 
-  it('should ignore external guide image urls for resource rows', () => {
+  it('should fall back to external guide image urls when no local image file exists', () => {
     const guides: Guide[] = [
       {
         ...base_guide,
@@ -66,7 +68,7 @@ describe('guide and link resource row build mapper', () => {
     ]
 
     expect(mapGuideRows(guides, labels)).toEqual([
-      expect.objectContaining({ id: 'external-image-guide', image_url: null }),
+      expect.objectContaining({ id: 'external-image-guide', image_url: 'https://scontent.ftpe8-2.fna.fbcdn.net/example.jpg' }),
     ])
   })
 
@@ -111,6 +113,8 @@ describe('guide and link resource row build mapper', () => {
         external: true,
         target: '_blank',
         rel: 'noopener noreferrer',
+        category_ids: ['other'],
+        tag_ids: [],
       },
     ])
   })

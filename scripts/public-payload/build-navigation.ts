@@ -69,14 +69,16 @@ function getPopularSearchTagGroups(
   const tag_labels = new Map(taxonomies.tags.map((tag) => [tag.id, tag.label]))
   const brand_labels = new Map(taxonomies.brands.map((brand) => [brand.id, brand.label]))
 
+  // Why: 以 tag id（非 label）為計數 key，讓熱門 chip 能攜帶 id 深連 /tag/{id}；
+  // label 可能撞名或非唯一，id 才是 taxonomy 的精準鍵。
   addKnownTagCounts(tag_counts, getPublishedTagIds(content.products), tag_labels)
   addKnownTagCounts(tag_counts, getPublishedTagIds(content.guides), tag_labels)
   addKnownTagCounts(tag_counts, getPublishedTagIds(content.links), tag_labels)
   addKnownTagCounts(brand_counts, getPublishedTagIds(content.products), brand_labels)
 
   return {
-    tags: getSortedPopularChips(tag_counts),
-    brands: getSortedPopularChips(brand_counts),
+    tags: getSortedPopularChips(tag_counts, tag_labels),
+    brands: getSortedPopularChips(brand_counts, brand_labels),
   }
 }
 
@@ -98,16 +100,17 @@ function addKnownTagCounts(
       continue
     }
 
-    tag_counts.set(label, (tag_counts.get(label) ?? 0) + 1)
+    tag_counts.set(tag_id, (tag_counts.get(tag_id) ?? 0) + 1)
   }
 }
 
-function getSortedPopularChips(tag_counts: Map<string, number>): CompactTagChip[] {
-  return Array.from(tag_counts, ([label, count]) => ({
-    label,
+function getSortedPopularChips(tag_counts: Map<string, number>, tag_labels: Map<string, string>): CompactTagChip[] {
+  return Array.from(tag_counts, ([id, count]) => ({
+    id,
+    label: tag_labels.get(id) ?? id,
     count,
     active: false,
-  })).filter((tag) => tag.count > POPULAR_TAG_MIN_COUNT)
+  })).filter((tag) => tag.count >= POPULAR_TAG_MIN_COUNT)
     .toSorted((left_tag, right_tag) => {
       if (left_tag.count !== right_tag.count) {
         return right_tag.count - left_tag.count

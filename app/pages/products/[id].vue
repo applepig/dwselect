@@ -12,7 +12,7 @@
 
 <script setup lang="ts">
 import type { ProductDetailView } from '../../utils/public-content-view-types'
-import { getCanonicalUrl, getSeoDescription, SITE_NAME, SITE_OG_IMAGE } from '../../utils/seo-metadata'
+import { getCanonicalUrl, getOgImageUrl, getSeoDescription, SITE_NAME } from '../../utils/seo-metadata'
 
 const route = useRoute()
 const raw_id = route.params.id
@@ -27,6 +27,8 @@ const product_canonical_url = computed(() => {
 
   return getCanonicalUrl(`/products/${product_detail.value.id}`)
 })
+const product_og_image = computed(() => getOgImageUrl(product_detail.value?.hero_image_url))
+const product_og_image_alt = computed(() => product_detail.value?.hero_alt ?? SITE_NAME)
 
 useHead(() => ({
   title: product_meta_title.value,
@@ -45,11 +47,13 @@ useSeoMeta({
   ogTitle: product_meta_title,
   ogDescription: product_meta_description,
   ogUrl: product_canonical_url,
-  ogImage: SITE_OG_IMAGE,
+  ogImage: product_og_image,
+  ogImageAlt: product_og_image_alt,
   twitterCard: 'summary_large_image',
   twitterTitle: product_meta_title,
   twitterDescription: product_meta_description,
-  twitterImage: SITE_OG_IMAGE,
+  twitterImage: product_og_image,
+  twitterImageAlt: product_og_image_alt,
 })
 
 const product_detail_data = await useProductDetailData(product_id)

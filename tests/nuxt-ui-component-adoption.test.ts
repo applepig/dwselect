@@ -1,9 +1,102 @@
-import { describe, expect, it } from 'vitest'
+// @vitest-environment happy-dom
+
+import { flushPromises, mount } from '@vue/test-utils'
+import { describe, expect, it, afterEach, vi } from 'vitest'
 import { readFileSync } from 'node:fs'
+import { computed, defineComponent, h, ref } from 'vue'
+
+import IndexPage from '../app/pages/index.vue'
+import { buildPublicContentPayload } from '../scripts/public-content'
+import { makeProduct, test_guides, test_links, test_taxonomies } from './published-products/fixtures'
 
 function readSource(relative_path: string) {
   return readFileSync(new URL(relative_path, import.meta.url), 'utf8')
 }
+
+const UButtonStub = defineComponent({
+  name: 'UButton',
+  props: {
+    to: { type: [String, Object], default: null },
+    color: { type: String, default: '' },
+    variant: { type: String, default: '' },
+  },
+  setup(props, { attrs, slots }) {
+    return () => h('a', {
+      ...attrs,
+      href: typeof props.to === 'string' ? props.to : undefined,
+      'data-color': props.color,
+      'data-variant': props.variant,
+    }, [slots.default?.(), slots.trailing?.()])
+  },
+})
+
+const ProductCardStub = defineComponent({
+  name: 'ProductCard',
+  props: {
+    product: { type: Object, required: true },
+  },
+  setup(props) {
+    return () => h('article', { class: 'product-card' }, String((props.product as { name?: string }).name ?? ''))
+  },
+})
+
+// chip 列已抽成共用 CategoryChipBar（B1），首頁僅委派渲染；chip 行為斷言移至 category-chip-bar.test.ts。
+// 此處 stub 元件，只驗首頁有掛載共用 chip bar、不再各寫一份。
+const CategoryChipBarStub = defineComponent({
+  name: 'CategoryChipBar',
+  setup() {
+    return () => h('div', { class: 'category-chip-bar-stub' })
+  },
+})
+
+async function mountIndexPage(options: {
+  route_query?: Record<string, string | string[]>
+  category_ids?: string[]
+} = {}) {
+  const content_payload = ref(buildPublicContentPayload({
+    products: [
+      makeProduct({ id: 'home-product', status: 'published', name: '居家商品', category_id: 'home' }),
+      makeProduct({ id: 'computer-product', status: 'published', name: '電腦商品', category_id: 'computer' }),
+    ],
+    guides: test_guides,
+    links: test_links,
+    taxonomies: test_taxonomies,
+  }))
+  const category_ids = ref(new Set(options.category_ids ?? ['home', 'computer']))
+  const navigate_to = vi.fn()
+
+  vi.stubGlobal('computed', computed)
+  vi.stubGlobal('useRoute', () => ({ path: '/', query: options.route_query ?? {} }))
+  vi.stubGlobal('useCatalogData', async () => ({ content_payload, category_ids }))
+  vi.stubGlobal('useHead', vi.fn())
+  vi.stubGlobal('useSeoMeta', vi.fn())
+  vi.stubGlobal('navigateTo', navigate_to)
+  vi.stubGlobal('useNuxtApp', () => ({
+    runWithContext: (callback: () => unknown) => callback(),
+  }))
+
+  const wrapper = mount(defineComponent({
+    components: { IndexPage },
+    template: '<Suspense><IndexPage /></Suspense>',
+  }), {
+    global: {
+      stubs: {
+        ProductCard: ProductCardStub,
+        CategoryChipBar: CategoryChipBarStub,
+        UButton: UButtonStub,
+        UEmpty: true,
+      },
+    },
+  })
+
+  await flushPromises()
+
+  return { wrapper, navigate_to }
+}
+
+afterEach(() => {
+  vi.unstubAllGlobals()
+})
 
 describe('search input adopts UInput', () => {
   const input_source = readSource('../app/components/search/search-input.vue')
@@ -50,19 +143,40 @@ describe('search input adopts UInput', () => {
 })
 
 describe('clickable chips adopt UButton with variant-based active state', () => {
-  const index_source = readSource('../app/pages/index.vue')
   const tag_explorer_source = readSource('../app/components/tag-explorer.vue')
   const idle_panel_source = readSource('../app/components/search/search-idle-panel.vue')
   const catalog_css = readSource('../app/assets/styles/catalog.css')
 
-  it('should render home category chips as UButton, drop the is-active class hook and keep aria-pressed and count', () => {
-    expect(index_source).toContain('<UButton')
-    expect(index_source).not.toContain('class="category-chip"\n        :class="{ \'is-active\': chip.active }"')
-    expect(index_source).not.toContain('\'is-active\': chip.active')
-    expect(index_source).toContain(':variant="chip.active ? \'solid\' : \'subtle\'"')
-    expect(index_source).toContain(':aria-pressed="chip.active"')
-    expect(index_source).toContain('{{ chip.count }}')
-    expect(index_source).toContain('@click="onCategoryChipClicked(chip.id)"')
+  it('should delegate home category chips to the shared CategoryChipBar instead of inlining its own chip list', async () => {
+    const { wrapper } = await mountIndexPage()
+
+    // chip 列已抽成共用元件（AC6）：首頁掛載 CategoryChipBar，不再各自 inline 一份 chip markup。
+    // chip 的 href／active／aria-pressed／count 行為由 tests/category-chip-bar.test.ts 以 DOM 斷言驗收。
+    expect(wrapper.find('.category-chip-bar-stub').exists()).toBe(true)
+    expect(wrapper.find('.category-chip').exists()).toBe(false)
+  })
+
+  it('should soft redirect a single selectable legacy category query to the category taxonomy page', async () => {
+    const { navigate_to } = await mountIndexPage({
+      route_query: { category: 'computer' },
+      category_ids: ['home', 'computer'],
+    })
+
+    expect(navigate_to).toHaveBeenCalledWith('/category/computer', { replace: true })
+  })
+
+  it.each([
+    ['unknown category id', { category: 'missing' }],
+    ['empty category id', { category: '' }],
+    ['all sentinel', { category: 'all' }],
+    ['array category query', { category: ['home', 'computer'] }],
+  ])('should keep rendering the full home page for an invalid legacy category query: %s', async (_case_name, route_query) => {
+    const { navigate_to } = await mountIndexPage({
+      route_query,
+      category_ids: ['home', 'computer'],
+    })
+
+    expect(navigate_to).not.toHaveBeenCalled()
   })
 
   it('should render tag-explorer tag chips and clear button as UButton with variant active state', () => {
@@ -79,8 +193,11 @@ describe('clickable chips adopt UButton with variant-based active state', () => 
     expect(idle_panel_source).toContain('<UButton')
     expect(idle_panel_source).not.toContain('<button')
     expect(idle_panel_source).toContain('@click="$emit(\'history-clicked\', history_item)"')
-    expect(idle_panel_source).toContain(':to="{ path: \'/search\', query: { q: tag.label } }"')
-    expect(idle_panel_source).toContain('@click="$emit(\'tag-clicked\', tag.label)"')
+    // 熱門 chip 深連 taxonomy 頁（AC16），不再以 label 打文字搜尋；
+    // 標籤走 /tag、品牌走 /brand（AC24），前綴由 section.to_prefix 決定。
+    expect(idle_panel_source).toContain(':to="`${section.to_prefix}/${tag.id}`"')
+    expect(idle_panel_source).toContain("to_prefix: '/tag'")
+    expect(idle_panel_source).toContain("to_prefix: '/brand'")
     expect(idle_panel_source).toContain('{{ tag.count }}')
   })
 

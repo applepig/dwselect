@@ -4,11 +4,17 @@
     class="product-detail-page"
     :data-product-id="detail.id"
   >
+    <span
+      class="product-transition-shell product-vt-card"
+      :style="getProductViewTransitionStyle(detail.id, 'card')"
+      aria-hidden="true"
+    />
+
     <section class="detail-content">
       <div class="detail-hero-layout">
         <div
-          class="detail-hero-tile"
-          :style="{ 'view-transition-name': `product-image-${detail.id}` }"
+          class="detail-hero-tile product-vt-image"
+          :style="getProductViewTransitionStyle(detail.id, 'image')"
         >
           <UButton
             class="detail-back"
@@ -35,7 +41,10 @@
         </div>
 
         <div class="detail-summary-column">
-          <h2 class="detail-title">
+          <h2
+            class="detail-title product-vt-title"
+            :style="getProductViewTransitionStyle(detail.id, 'title')"
+          >
             {{ detail.name }}
           </h2>
 
@@ -44,34 +53,45 @@
             aria-label="商品分類、通路與 tags"
           >
             <CatalogPill
-              :to="{ path: '/', query: { category: detail.category_id } }"
+              :to="`/category/${detail.category_id}`"
             >
               {{ detail.category_label }}
             </CatalogPill>
             <CatalogPill
-              :to="{ path: '/search', query: { q: detail.channel_label } }"
+              :to="`/channel/${detail.channel_id}`"
             >
               {{ detail.channel_label }}
             </CatalogPill>
             <CatalogPill
-              v-for="tag in detail.tag_labels"
-              :key="tag"
-              :to="{ path: '/search', query: { q: tag } }"
+              v-for="brand in detail_brands"
+              :key="`brand-${brand.id}`"
+              :to="`/brand/${brand.id}`"
             >
-              {{ tag }}
+              {{ brand.label }}
+            </CatalogPill>
+            <CatalogPill
+              v-for="tag in detail_tags"
+              :key="`tag-${tag.id}`"
+              :to="`/tag/${tag.id}`"
+            >
+              {{ tag.label }}
             </CatalogPill>
           </div>
 
-          <p class="detail-price">
+          <p
+            class="detail-price product-vt-price"
+            :style="getProductViewTransitionStyle(detail.id, 'price')"
+          >
             {{ detail.price_label }}
           </p>
 
           <UAlert
-            class="detail-dw-says"
+            class="detail-dw-says product-vt-summary"
             color="primary"
             variant="subtle"
             title="DW 怎麼說"
             :description="detail.long_description || detail.summary"
+            :style="getProductViewTransitionStyle(detail.id, 'summary')"
           />
 
           <a
@@ -95,78 +115,7 @@
           AI 怎麼說
         </h3>
         <div class="detail-llm-copy">
-          <template
-            v-for="(block, block_index) in parsed_llm_blocks"
-            :key="block_index"
-          >
-            <h4
-              v-if="block.type === 'heading'"
-              class="detail-llm-heading"
-            >
-              <template
-                v-for="(segment, segment_index) in block.segments"
-                :key="segment_index"
-              >
-                <a
-                  v-if="segment.type === 'link'"
-                  class="detail-llm-link"
-                  :href="segment.href"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >{{ segment.text }}</a>
-                <template v-else>
-                  {{ segment.text }}
-                </template>
-              </template>
-            </h4>
-
-            <ul
-              v-else-if="block.type === 'list'"
-              class="detail-llm-list"
-            >
-              <li
-                v-for="(item, item_index) in block.items"
-                :key="item_index"
-              >
-                <template
-                  v-for="(segment, segment_index) in item"
-                  :key="segment_index"
-                >
-                  <a
-                    v-if="segment.type === 'link'"
-                    class="detail-llm-link"
-                    :href="segment.href"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >{{ segment.text }}</a>
-                  <template v-else>
-                    {{ segment.text }}
-                  </template>
-                </template>
-              </li>
-            </ul>
-
-            <p
-              v-else
-              class="detail-llm-paragraph"
-            >
-              <template
-                v-for="(segment, segment_index) in block.segments"
-                :key="segment_index"
-              >
-                <a
-                  v-if="segment.type === 'link'"
-                  class="detail-llm-link"
-                  :href="segment.href"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >{{ segment.text }}</a>
-                <template v-else>
-                  {{ segment.text }}
-                </template>
-              </template>
-            </p>
-          </template>
+          <ContentMarkdown :source="detail.llm_description" />
         </div>
       </section>
 
@@ -233,7 +182,7 @@
 
 <script setup lang="ts">
 import type { ProductDetailView } from '../utils/public-content-view-types'
-import { parseContentMarkdown } from '../utils/markdown/parse-content-markdown'
+import { getProductViewTransitionStyle } from '../utils/product-view-transition'
 
 const router = useRouter()
 
@@ -245,7 +194,17 @@ const has_detail_image_failed = ref(false)
 const failed_related_image_ids = ref<Set<string>>(new Set())
 const detail_root = ref<HTMLElement | null>(null)
 const displayed_related_products = computed(() => props.detail.related_products)
-const parsed_llm_blocks = computed(() => parseContentMarkdown(props.detail.llm_description))
+// tag_ids 與 tag_labels 為並列陣列、由 mapper 同源同序映射（tag_ids.map(...)），故以 index 配對安全。
+// 配對後 pill 能同時顯示 label 又精準連到對應 tag id。
+const detail_tags = computed(() => props.detail.tag_ids.map((id, index) => ({
+  id,
+  label: props.detail.tag_labels[index] ?? id,
+})))
+// brand pill 深連 /brand/{id}（專屬前綴、單一 canonical，ADR-8）；brand_ids／brand_labels 同源同序。
+const detail_brands = computed(() => props.detail.brand_ids.map((id, index) => ({
+  id,
+  label: props.detail.brand_labels[index] ?? id,
+})))
 
 onMounted(() => {
   const hero_image = detail_root.value?.querySelector<HTMLImageElement>('.detail-hero-image') ?? null

@@ -1,4 +1,3 @@
-import type { Product } from '../product-schema'
 import type { CategoryChipView } from '../public-content-view-types'
 import type { PublicContentPayload } from '../public-content-payload'
 import type {
@@ -9,7 +8,6 @@ import type {
   CompactCategoryChip,
   CompactRouteQueryValue,
   CompactRouteState,
-  CompactRouteStateOptions,
 } from './types'
 
 const COMPACT_APP_TABS: Array<Omit<CompactAppTab, 'active'>> = [
@@ -26,12 +24,8 @@ export function getCompactAppView(
   state: CompactAppState = {},
 ): CompactAppView {
   const active_tab = normalizeCompactTab(state.active_tab)
-  const selected_category_id = state.home_category_id ?? 'all'
   const cards = payload.products.cards
-  const home_products = selected_category_id === 'all'
-    ? cards
-    : cards.filter((card) => card.category_id === selected_category_id)
-  const guide_rows = payload.guides
+  const guide_rows = payload.guides.rows
 
   return {
     tabs: COMPACT_APP_TABS.map((tab) => ({
@@ -40,9 +34,9 @@ export function getCompactAppView(
     })),
     active_tab,
     home: {
-      category_chips: getCategoryChips(payload.navigation.category_chips, selected_category_id),
-      products: home_products,
-      empty_reason: getEmptyReason(cards.length, home_products.length),
+      category_chips: getCategoryChips(payload.navigation.category_chips, 'all'),
+      products: cards,
+      empty_reason: getEmptyReason(cards.length, cards.length),
     },
     guide: {
       guides: guide_rows,
@@ -57,7 +51,7 @@ export function getCompactAppView(
 
 export function getCategoryChips(
   category_chips: CategoryChipView[],
-  active_category_id: Product['category_id'] | 'all',
+  active_category_id: CompactCategoryChip['id'],
 ): CompactCategoryChip[] {
   return category_chips.map((chip) => ({
     ...chip,
@@ -67,7 +61,6 @@ export function getCategoryChips(
 
 export function getCompactAppStateFromRoute(
   route: CompactRouteState,
-  options: CompactRouteStateOptions = {},
 ): CompactAppState {
   if (route.path === '/guide') {
     return {
@@ -90,7 +83,6 @@ export function getCompactAppStateFromRoute(
 
   return {
     active_tab: 'home',
-    home_category_id: parseCategoryId(route.query?.category, options.category_ids),
   }
 }
 
@@ -100,23 +92,6 @@ function normalizeCompactTab(tab: CompactAppState['active_tab']): CompactAppTabI
   }
 
   return 'home'
-}
-
-function parseCategoryId(
-  value: CompactRouteQueryValue,
-  valid_category_ids: CompactRouteStateOptions['category_ids'],
-): Product['category_id'] | 'all' {
-  const category_id = getFirstQueryValue(value).trim()
-
-  if (category_id === '' || category_id === 'all') {
-    return 'all'
-  }
-
-  if (valid_category_ids === undefined || !valid_category_ids.includes(category_id)) {
-    return 'all'
-  }
-
-  return category_id
 }
 
 function getFirstQueryValue(value: CompactRouteQueryValue) {

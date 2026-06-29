@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 
 import { mapProductDetail } from '../../scripts/public-payload/map-product-detail'
 import { getRelatedProductCards } from '../../scripts/public-payload/map-related-product-card'
-import { buildPublicContentPayload } from '../../scripts/public-content'
+import { buildProductDetail } from '../../scripts/public-payload/build-detail-by-id'
 import { createTaxonomyLabelResolver } from '../../app/utils/content/taxonomy-labels'
 import { makeProduct, test_taxonomies } from '../published-products/fixtures'
 
@@ -25,13 +25,16 @@ function makeOffer(channel_id: string) {
   }
 }
 
-function makePayload(products: ReturnType<typeof makeProduct>[]) {
-  return buildPublicContentPayload({
-    products,
-    guides: [],
-    links: [],
-    taxonomies: test_taxonomies,
-  })
+function buildDetail(products: ReturnType<typeof makeProduct>[], id: string) {
+  return buildProductDetail(
+    {
+      products,
+      guides: [],
+      links: [],
+      taxonomies: test_taxonomies,
+    },
+    id,
+  )
 }
 
 describe('product detail build mapper', () => {
@@ -77,7 +80,10 @@ describe('product detail build mapper', () => {
       category_label: '影音',
       channel_id: 'pchome',
       channel_label: 'PChome',
+      tag_ids: product.tag_ids,
       tag_labels: product.tag_ids,
+      brand_ids: [],
+      brand_labels: [],
       price_label: 'NT$ 123,456,789 起',
       buy_url: 'https://24h.pchome.com.tw/prod/detail',
       fine_print: '價格與庫存以通路頁面為準。',
@@ -126,7 +132,7 @@ describe('product detail build mapper', () => {
     expect(() => mapProductDetail(product, [product], makeResolver())).toThrow('Published product image_file is required')
   })
 
-  it('should resolve product detail tag labels from taxonomy tags and brands', () => {
+  it('should split tag_ids into a brand group (→/brand) and a tag group (→/tag) so brand pills never hit dead /tag/{brand} routes', () => {
     const product = makeProduct({
       id: 'brand-detail-product',
       status: 'published',
@@ -140,7 +146,24 @@ describe('product detail build mapper', () => {
       ],
     }
 
-    expect(mapProductDetail(product, [product], makeResolver(taxonomies)).tag_labels).toEqual(['輸入', 'Fixture Brand'])
+    const detail = mapProductDetail(product, [product], makeResolver(taxonomies))
+
+    expect(detail.tag_ids).toEqual(['typing'])
+    expect(detail.tag_labels).toEqual(['輸入'])
+    expect(detail.brand_ids).toEqual(['fixture-brand'])
+    expect(detail.brand_labels).toEqual(['Fixture Brand'])
+    expect(detail.tag_ids).not.toContain('fixture-brand')
+  })
+
+  it('should carry the raw tag ids (not labels) so the detail can deep link to /tag/{id}', () => {
+    const product = makeProduct({
+      id: 'id-carrying-product',
+      status: 'published',
+      name: '帶 id 商品',
+      tag_ids: ['typing', 'wireless'],
+    })
+
+    expect(mapProductDetail(product, [product], makeResolver()).tag_ids).toEqual(['typing', 'wireless'])
   })
 })
 
@@ -314,8 +337,8 @@ describe('related product build mapper', () => {
   })
 })
 
-describe('details_by_id assembly', () => {
-  it('should key details by content id without serializing raw catalog records for other products', () => {
+describe('per-id detail assembly', () => {
+  it('should build the detail by content id without serializing raw catalog records for other products', () => {
     const current_product = makeProduct({
       id: 'current-product',
       status: 'published',
@@ -334,8 +357,7 @@ describe('details_by_id assembly', () => {
       offers: [makeOffer('momo')],
     })
 
-    const payload = makePayload([current_product, related_product])
-    const detail = payload.products.details_by_id['current-product']!
+    const detail = buildDetail([current_product, related_product], 'current-product')!
 
     expect(detail.id).toBe('current-product')
     expect(detail.long_description).toBe('目前商品完整描述')
@@ -361,18 +383,14 @@ describe('details_by_id assembly', () => {
       updated_at: `2026-06-0${index + 1}T00:00:00+08:00`,
     }))
 
-    const payload = makePayload([current_product, ...related_products])
-
-    expect(payload.products.details_by_id['current-product']!.related_products.map((product) => product.id)).toEqual([
+    expect(buildDetail([current_product, ...related_products], 'current-product')!.related_products.map((product) => product.id)).toEqual([
       'related-product-5',
       'related-product-4',
       'related-product-3',
     ])
   })
 
-  it('should not create a detail entry for a missing product id', () => {
-    const payload = makePayload([makeProduct({ id: 'current-product', status: 'published', name: '目前商品' })])
-
-    expect(payload.products.details_by_id['missing-product']).toBeUndefined()
+  it('should not build a detail for a missing product id', () => {
+    expect(buildDetail([makeProduct({ id: 'current-product', status: 'published', name: '目前商品' })], 'missing-product')).toBeNull()
   })
 })

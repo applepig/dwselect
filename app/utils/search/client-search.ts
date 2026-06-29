@@ -138,7 +138,7 @@ export function saveSearchHistoryItem(
     storage?.setItem(SEARCH_HISTORY_STORAGE_KEY, JSON.stringify(next_history))
   }
   catch {
-    return []
+    return next_history
   }
 
   return next_history

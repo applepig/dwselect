@@ -18,7 +18,7 @@ describe('launch SEO static assets', () => {
 describe('launch SEO metadata contract', () => {
   const app_source = readProjectFile('app/app.vue')
   const home_source = readProjectFile('app/pages/index.vue')
-  const guide_source = readProjectFile('app/pages/guide.vue')
+  const guide_source = readProjectFile('app/pages/guide/index.vue')
   const links_source = readProjectFile('app/pages/links.vue')
   const search_source = readProjectFile('app/pages/search.vue')
   const product_source = readProjectFile('app/pages/products/[id].vue')
@@ -69,13 +69,11 @@ describe('launch SEO metadata contract', () => {
     expect(search_source).toContain("getCanonicalUrl('/search')")
   })
 
-  it('should set product-specific metadata with summary fallback and default OG image', () => {
+  it('should set product-specific metadata with summary fallback', () => {
     expect(product_source).toContain('getSeoDescription(product_detail.value?.summary)')
     expect(product_source).toContain('`${product_detail.value.name}｜${SITE_NAME}`')
     expect(product_source).toContain('getCanonicalUrl(`/products/${product_detail.value.id}`)')
     expect(product_source).toContain('useProductDetailData(product_id)')
-    expect(product_source).toContain('ogImage: SITE_OG_IMAGE')
-    expect(product_source).toContain('twitterImage: SITE_OG_IMAGE')
     expect(seo_source).toContain('return trimmed_description.length === 0 ? SITE_DESCRIPTION : trimmed_description')
   })
 })

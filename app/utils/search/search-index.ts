@@ -301,8 +301,8 @@ function mapGuideToSearchDocument(
     tag_ids: [...guide.tag_ids],
     tag_labels: guide.tag_ids.map((tag_id) => labels.getContentTagLabel(tag_id)),
     image_url: resolveGuideSearchImageUrl(guide),
-    href: guide.source_url,
-    external: true,
+    href: `/guide/${guide.id}`,
+    external: false,
     published_at: guide.published_at,
   }
 
@@ -397,7 +397,7 @@ function normalizeSearchContentInput(input: Product[] | SearchContentInput): Sea
 }
 
 function resolveGuideSearchImageUrl(guide: Pick<Guide, 'image_file' | 'image_url'>): string | null {
-  return resolveImageFileUrl(guide.image_file, 'guides')
+  return resolveImageFileUrl(guide.image_file, 'guides') ?? guide.image_url ?? null
 }
 
 function getTagAliases(tag_ids: string[], tag_aliases: ReadonlyMap<string, string[]>) {

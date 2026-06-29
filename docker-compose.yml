@@ -11,12 +11,12 @@ services:
     environment:
       - NUXT_HOST=0.0.0.0
       - NUXT_PORT=3000
+      - NUXT_MODE=${NUXT_MODE:-dev}
       - CHOKIDAR_USEPOLLING=true
     volumes:
       - .:/app
       - /app/node_modules
       - /app/.nuxt
-      - /app/.output
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.dwselect.rule=Host(`${APP_URL:?APP_URL 未設定，請在 .env 設定}`)"

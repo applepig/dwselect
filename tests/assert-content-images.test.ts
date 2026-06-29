@@ -25,6 +25,7 @@ type ProductOverrides = {
 
 function makeProductJson(overrides: ProductOverrides = {}) {
   return {
+    slug: 'sample-product',
     status: overrides.status ?? 'published',
     name: '範例商品',
     english_name: 'Sample Product',

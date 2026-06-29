@@ -54,37 +54,9 @@ jobs:
         run: pnpm typecheck
 
       - name: Generate static site
+        env:
+          DWSELECT_ALLOW_HOST_GENERATE: "1"
         run: pnpm generate
 
       - name: Assert runtime has no Google Sheets TSV references
         run: node scripts/assert-runtime-google-sheet-clean.ts
-
-      - name: Upload static artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: static-site
-          path: .output/public
-          if-no-files-found: error
-
-  deploy:
-    needs: quality-gate
-    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      deployments: write
-
-    steps:
-      - name: Download static artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: static-site
-          path: .output/public
-
-      - name: Deploy to Cloudflare Pages
-        uses: cloudflare/wrangler-action@v3
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
-          command: pages deploy .output/public --project-name=dwselect --branch=master

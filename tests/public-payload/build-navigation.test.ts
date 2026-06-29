@@ -67,10 +67,54 @@ describe('navigation build', () => {
     const navigation = buildNavigation({ products, guides, links }, taxonomies)
 
     expect(navigation.popular_search_tags.tags.map((tag) => tag.label)).toEqual(['標籤 A', '標籤 B', '標籤 C'])
-    expect(navigation.popular_search_tags.tags[0]).toEqual({ label: '標籤 A', count: 5, active: false })
+    expect(navigation.popular_search_tags.tags.map((tag) => tag.id)).toEqual(['tag-a', 'tag-b', 'tag-c'])
+    expect(navigation.popular_search_tags.tags[0]).toEqual({ id: 'tag-a', label: '標籤 A', count: 5, active: false })
     expect(navigation.popular_search_tags.brands).toEqual([
-      { label: 'Brand A', count: 5, active: false },
+      { id: 'brand-a', label: 'Brand A', count: 5, active: false },
+      { id: 'brand-b', label: 'Brand B', count: 3, active: false },
     ])
+  })
+
+  it('should keep tags that appear exactly the minimum popular count', () => {
+    const taxonomies: TaxonomyDefinitions = {
+      ...test_taxonomies,
+      tags: [
+        { id: 'tag-min', label: '剛好門檻', description: '出現剛好門檻次數', aliases: [], nav_visible: true, sort_order: 10 },
+      ],
+    }
+    const products = [
+      makeProduct({ id: 'p1', status: 'published', name: '一號', tag_ids: ['tag-min'] }),
+      makeProduct({ id: 'p2', status: 'published', name: '二號', tag_ids: ['tag-min'] }),
+      makeProduct({ id: 'p3', status: 'published', name: '三號', tag_ids: ['tag-min'] }),
+    ]
+
+    const navigation = buildNavigation({ products, guides: [], links: [] }, taxonomies)
+
+    expect(navigation.popular_search_tags.tags).toEqual([
+      { id: 'tag-min', label: '剛好門檻', count: 3, active: false },
+    ])
+  })
+
+  it('should count popular tags by tag id (not label) so different ids never collapse into one chip', () => {
+    const taxonomies: TaxonomyDefinitions = {
+      ...test_taxonomies,
+      tags: [
+        { id: 'tag-x', label: '同名標籤', description: '描述', aliases: [], nav_visible: true, sort_order: 10 },
+        { id: 'tag-y', label: '同名標籤', description: '描述', aliases: [], nav_visible: true, sort_order: 20 },
+      ],
+    }
+    const products = [
+      makeProduct({ id: 'p1', status: 'published', name: '一號', tag_ids: ['tag-x', 'tag-y'] }),
+      makeProduct({ id: 'p2', status: 'published', name: '二號', tag_ids: ['tag-x', 'tag-y'] }),
+      makeProduct({ id: 'p3', status: 'published', name: '三號', tag_ids: ['tag-x', 'tag-y'] }),
+    ]
+
+    const navigation = buildNavigation({ products, guides: [], links: [] }, taxonomies)
+
+    // Why: 兩個 tag 標籤同名但 id 不同——以 id 計數應產生兩個各 count=3 的 chip，
+    // 若仍以 label 計數會錯誤合併成單一 count=6 的 chip。
+    expect(navigation.popular_search_tags.tags.map((tag) => tag.id).toSorted()).toEqual(['tag-x', 'tag-y'])
+    expect(navigation.popular_search_tags.tags.every((tag) => tag.count === 3)).toBe(true)
   })
 
   it('should not count brand ids towards guide or link popular tags', () => {
@@ -93,7 +137,7 @@ describe('navigation build', () => {
     const navigation = buildNavigation({ products, guides, links: [] }, taxonomies)
 
     expect(navigation.popular_search_tags.brands).toEqual([
-      { label: 'Fixture Brand', count: 4, active: false },
+      { id: 'fixture-brand', label: 'Fixture Brand', count: 4, active: false },
     ])
     expect(navigation.popular_search_tags.tags).toEqual([])
   })

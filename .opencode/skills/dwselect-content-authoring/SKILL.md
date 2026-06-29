@@ -11,7 +11,7 @@ Use this skill for DW嚴選 CMS content work。This project is a public static c
 
 You are a researcher and structured data filler，not a personal-opinion writer。
 
-Division of labor：the subagent does the first-draft writing。When given a target path，research the item and create or update the complete JSON file yourself（the subagent has the Write/Edit tools for exactly its one assigned file），then hand back audit notes。The coordinator's job is audit and editorial（polishing wording、confirming taxonomy、running verification、rebuilding artifacts），not first-draft data entry。Only skip writing when the coordinator explicitly says research-only。
+Division of labor：the subagent does the first-draft writing。When given a target path，research the item and create or update the complete JSON file yourself（the subagent has the Write/Edit tools for exactly its one assigned file），then hand back audit notes。The coordinator's job is audit and editorial（polishing wording、confirming taxonomy、running `pnpm content:check`——not `pnpm generate`），not first-draft data entry。Only skip writing when the coordinator explicitly says research-only。
 
 - Product `summary` and `long_description` are user-authored personal opinions。Do not write or rewrite them unless the user explicitly provides exact text；for new products with no provided opinion，set them to empty string。
 - Guide `title` and `summary` are content-derived，not personal opinion：write a concise `title` and an objective 1-2 sentence `summary` summarizing what the source post covers and its core takeaway。Do not invent opinions or use subjective recommendation words（「便宜」「好用」「剛好」）；the coordinator edits the wording afterward。
@@ -35,6 +35,16 @@ Division of labor：the subagent does the first-draft writing。When given a tar
 - Runtime artifacts：`public/api/content.json`、`public/search-index.json`、`public/rss.xml`、`public/sitemap.xml`、`public/images/**`
 
 Public runtime must not fetch Google Sheets、CMS、or external sources。The source of truth is Git-backed content JSON。
+
+### Taxonomy File Shape（耐久事實，不要每次重新試誤）
+
+All four taxonomy files are objects shaped `{ "items": [ { "id", "label", ... } ] }`——not bare arrays。Do not rediscover this with trial-and-error `jq`。To list every valid id in one go：
+
+```bash
+jq -r '.items[].id' content/taxonomies/{categories,tags,brands,channels}.json
+```
+
+To append an entry：`jq '.items += [ {...} ]' content/taxonomies/<file>.json`。Products reference `category_id`（one of categories）and `tag_ids`（functional tags plus brand ids）；offer `channel_id` references channels。
 
 ## Product Rules
 
@@ -198,18 +208,24 @@ Stay strictly within web research and single-file writing/editing。
 
 ## Verification For Content-Only Tasks
 
-Content-only tasks validate format、schema-readable content、taxonomy references、images、and generated artifacts。Do not validate the current CMS dataset by hard-coded counts or specific product IDs。
+Content-only tasks validate format、schema-readable content、taxonomy references、and images。Do not validate the current CMS dataset by hard-coded counts or specific product IDs。
 
-Run：
+**The single gate is `pnpm content:check`。** Do not hand-roll taxonomy-reference validation in bash, and do not stack a full `pnpm generate` on top to feel safe。`scripts/content-check.mjs` runs both halves of the real gate in one call：JSON syntax validation across all content JSON, then the targeted Vitest suites that read the real `content/` files。It finishes in ~2s。
 
 ```bash
-jq empty content/products/*.json content/taxonomies/*.json
-pnpm generate
+pnpm content:check
 ```
 
-The catalog payload and search index are produced on the fly by a Nuxt server route from `content/`，and images are optimized at runtime by `@nuxt/image` / IPX，so `pnpm generate` is the verification step：it checks that published content local image sources exist，prerenders the server route payload，and emits the optimized images the pages use。`pnpm build:content-images` and `pnpm build:public-artifacts` are optional / legacy CLI and are not required in the authoring flow。
+What it covers：
 
-Only run Vitest when modifying schema、runtime logic、build scripts、or test logic。If an existing test fails because it hard-codes content count、specific content ID、or generated search document count，remove or refactor the bad test。Do not update expected counts to match new CMS data。
+- JSON syntax across `content/{products,guides,links,taxonomies}/*.json`（catches malformed JSON before the schema runs，replacing `jq empty`）。
+- zod schema validation against every published item (required fields、`offers` min length、`image_file` required for published、`image_url: null` for products，timestamp format)。
+- every `category_id` / `tag_ids` (including brand IDs) resolves to an existing taxonomy entry。This is why new brand/tag taxonomy entries must be added before the check passes。
+- every published `image_file` exists and passes the guard (shortest side >= 480px，aspect ratio <= 2:1)。
+
+**`pnpm generate` is not part of the content gate。** The dev server already has content HMR，so adding or editing content JSON reflects live without a generate step，and `pnpm content:check` is the data gate。Only run `pnpm generate` when you have an explicit reason the lightweight check cannot cover（e.g. verifying SSG route output、a build-script change），and state that reason first。Caveat when you do：a host `pnpm generate` collides with a running dev container on the shared `.nuxt` / Vite cache，so stop the dev container or run it in an isolated worktree first——never the mv-the-blocker-aside dance just to make a full build pass。
+
+Run additional Vitest only when modifying schema、runtime logic、build scripts、or test logic。If an existing test fails because it hard-codes content count、specific content ID、or generated search document count，remove or refactor the bad test。Do not update expected counts to match new CMS data。
 
 ## Batch Workflow
 
@@ -219,7 +235,7 @@ For category/tag cleanup or multi-product enrichment，use this coordinator flow
 2. Dispatch one subagent per product。Each subagent gets exactly one target JSON path。
 3. Let each subagent create or update its assigned target JSON file itself when implementation work is requested（the subagent writes the file；the coordinator does not type the data in）。
 4. Coordinator audits all written/changed JSON files (editorial pass)：checks names are concise，checks product `summary` / `long_description` were preserved，checks guide `title` / `summary` read well and stay objective，confirms taxonomy IDs exist，and confirms offers were not replaced。
-5. Coordinator runs content verification and rebuilds public artifacts。
+5. Coordinator adds any confirmed new taxonomy entries，then runs `pnpm content:check`（not `pnpm generate`），then confirms the live page renders。
 
 ## Subagent Dispatch Contract
 
@@ -227,7 +243,7 @@ When delegating content research/update to a subagent，the prompt must explicit
 
 - Read and follow `dwselect-content-authoring`。
 - One subagent handles exactly one target JSON file。
-- If this is implementation work，create or update the assigned target JSON file yourself；write a complete schema-valid file（`id` matching the file stem，required fields，ISO 8601 `+08:00` timestamps，`status: "published"` + `published_at` for new published content）。The coordinator audits、does editorial，and rebuilds artifacts。If this is research-only，do not modify files。
+- If this is implementation work，create or update the assigned target JSON file yourself；write a complete schema-valid file（`id` matching the file stem，required fields，ISO 8601 `+08:00` timestamps，`status: "published"` + `published_at` for new published content）。The coordinator audits、does editorial，and runs `pnpm content:check`（not `pnpm generate`）。If this is research-only，do not modify files。
 - For products，do not write or rewrite `summary` and `long_description`（empty string when no user opinion）。For guides，write a content-derived `title` and an objective 1-2 sentence `summary`。
 - Default to `published` items when the task is about visible website content。
 - Keep `name` concise：prefer 32 visible characters or fewer，hard maximum 45；put full official names in `llm_description`、aliases、or model fields。
@@ -240,7 +256,7 @@ When delegating content research/update to a subagent，the prompt must explicit
 - Add official product/spec pages to `reference_url`，not by replacing the user-provided offer link。
 - Raise missing brand/tag/category/channel needs as `taxonomy_suggestions`；do not edit taxonomy without user confirmation。
 - For any `agent-browser` use，pass `--session <content-id>` on every command so parallel researchers do not collide，and close only that session（never `close --all`）。
-- Stay within research and writing/editing the one assigned JSON file。Do not inspect repo/filesystem state（no `git`、`ls`、`cat`、`find`、build/verify）；the coordinator audits、does editorial，and rebuilds。
+- Stay within research and writing/editing the one assigned JSON file。Do not inspect repo/filesystem state（no `git`、`ls`、`cat`、`find`、build/verify，and never `pnpm generate`）；the coordinator audits、does editorial，and runs `pnpm content:check`。
 
 Suggested one-product implementation prompt shape：
 
@@ -249,7 +265,7 @@ Read and follow `dwselect-content-authoring`。This is implementation work for e
 
 Create or update that JSON file yourself（write the complete schema-valid file）。Do not modify `summary`、`long_description`、`id`、`status`、or user-provided `offers[].url` / `price_text`。Keep `name` concise（prefer <=32 visible characters，hard max 45）；put full official names in `llm_description`、`model_numbers`、or `search_aliases`。Preserve existing taxonomy IDs；if a missing brand/tag is useful，return `taxonomy_suggestions` instead of editing taxonomy。
 
-Research official/spec/store/review sources，then write agent-owned fields：`name`、`english_name`、`model_numbers`、`search_aliases`、`reference_url`、`llm_description`，and clearly missing price currency/unit metadata when verified。For a guide，also write a content-derived `title` and an objective 1-2 sentence `summary`，and keep `source_url` as the post URL。For reviews，if rating/count or a review widget exists，use agent-browser dynamic inspection、review interactions、DOM extraction、and network/API inspection before claiming individual review text is unavailable。If you use agent-browser，pass `--session <content-id>` on every command and close only that session。Do not run `git`、`ls`、`cat`、`find`，or build/verify commands；the coordinator audits、does editorial，and rebuilds。
+Research official/spec/store/review sources，then write agent-owned fields：`name`、`english_name`、`model_numbers`、`search_aliases`、`reference_url`、`llm_description`，and clearly missing price currency/unit metadata when verified。For a guide，also write a content-derived `title` and an objective 1-2 sentence `summary`，and keep `source_url` as the post URL。For reviews，if rating/count or a review widget exists，use agent-browser dynamic inspection、review interactions、DOM extraction、and network/API inspection before claiming individual review text is unavailable。If you use agent-browser，pass `--session <content-id>` on every command and close only that session。Do not run `git`、`ls`、`cat`、`find`，build/verify，or `pnpm generate`；the coordinator audits、does editorial，and runs `pnpm content:check`。
 
 Return：files changed、field summary、sources、confidence、offer_status、image source type、image dimensions、taxonomy_suggestions、unresolved assumptions。
 ```

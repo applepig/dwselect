@@ -11,7 +11,7 @@ Use this skill for DW嚴選 CMS content work。This project is a public static c
 
 You are a researcher and structured data filler，not a personal-opinion writer。
 
-Division of labor：the subagent does the first-draft writing。When given a target path，research the item and create or update the complete JSON file yourself（the subagent has the Write/Edit tools for exactly its one assigned file），then hand back audit notes。The coordinator's job is audit and editorial（polishing wording、confirming taxonomy、collecting finished files from worktrees、running the content check——not `pnpm generate`），not first-draft data entry。Only skip writing when the coordinator explicitly says research-only。
+Division of labor：the subagent does the first-draft writing。When given a target path，research the item and create or update the complete JSON file yourself（the subagent has the Write/Edit tools for exactly its one assigned file），then hand back audit notes。The coordinator's job is audit and editorial（polishing wording、confirming taxonomy、collecting finished files from worktrees、running `pnpm content:check`——not `pnpm generate`），not first-draft data entry。Only skip writing when the coordinator explicitly says research-only。
 
 - Product `summary` and `long_description` are user-authored personal opinions。Do not write or rewrite them unless the user explicitly provides exact text；for new products with no provided opinion，set them to empty string。
 - Guide `title` and `summary` are content-derived，not personal opinion：write a concise `title` and an objective 1-2 sentence `summary` summarizing what the source post covers and its core takeaway。Do not invent opinions or use subjective recommendation words（「便宜」「好用」「剛好」）；the coordinator edits the wording afterward。
@@ -35,6 +35,16 @@ Division of labor：the subagent does the first-draft writing。When given a tar
 - Runtime artifacts：`public/api/content.json`、`public/search-index.json`、`public/rss.xml`、`public/sitemap.xml`、`public/images/**`
 
 Public runtime must not fetch Google Sheets、CMS、or external sources。The source of truth is Git-backed content JSON。
+
+### Taxonomy File Shape（耐久事實，不要每次重新試誤）
+
+All four taxonomy files are objects shaped `{ "items": [ { "id", "label", ... } ] }`——not bare arrays。Do not rediscover this with trial-and-error `jq`。To list every valid id in one go：
+
+```bash
+jq -r '.items[].id' content/taxonomies/{categories,tags,brands,channels}.json
+```
+
+To append an entry：`jq '.items += [ {...} ]' content/taxonomies/<file>.json`。Products reference `category_id`（one of categories）and `tag_ids`（functional tags plus brand ids）；offer `channel_id` references channels。
 
 ## Product Rules
 
@@ -200,19 +210,20 @@ Stay strictly within web research and single-file writing/editing。
 
 Content-only tasks validate format、schema-readable content、taxonomy references、and images。Do not validate the current CMS dataset by hard-coded counts or specific product IDs。
 
-**Do not run `pnpm generate` for content-only changes。** The dev server already has content HMR，so adding or editing content JSON reflects live on the running site without a generate step。A `pnpm generate` (or a second dev instance) run on top of the live dev server collides on the shared `.nuxt` / Vite cache，and a full SSG build is slow overhead that the content authoring flow does not need。Generate is only for an explicit standalone SSG build check unrelated to live authoring。
-
-The real schema gate (the zod `product_schema` / `guide_schema` / `link_schema` validation、taxonomy reference resolution、and the published-image guard) runs as targeted Vitest suites that read the real `content/` files。Run the lightweight check：
+**The single gate is `pnpm content:check`。** Do not hand-roll taxonomy-reference validation in bash, and do not stack a full `pnpm generate` on top to feel safe。`scripts/content-check.mjs` runs both halves of the real gate in one call：JSON syntax validation across all content JSON, then the targeted Vitest suites that read the real `content/` files。It finishes in ~2s。
 
 ```bash
-jq empty content/products/*.json content/guides/*.json content/links/*.json content/taxonomies/*.json
-pnpm vitest run tests/published-products tests/content-taxonomy-references.test.ts tests/product-schema.test.ts tests/assert-content-images.test.ts
+pnpm content:check
 ```
 
-- `jq empty` catches malformed JSON before the schema runs。
+What it covers：
+
+- JSON syntax across `content/{products,guides,links,taxonomies}/*.json`（catches malformed JSON before the schema runs，replacing `jq empty`）。
 - `tests/published-products` + `tests/product-schema.test.ts`：zod schema validation against every published item (required fields、`offers` min length、`image_file` required for published、`image_url: null` for products，timestamp format)。
 - `tests/content-taxonomy-references.test.ts`：every `category_id` / `tag_ids` (including brand IDs) resolves to an existing taxonomy entry。This is why new brand/tag taxonomy entries must be added before the check passes。
 - `tests/assert-content-images.test.ts`：every published `image_file` exists and passes the guard (shortest side >= 480px，aspect ratio <= 2:1)。
+
+**`pnpm generate` is not part of the content gate。** The dev server already has content HMR，so adding or editing content JSON reflects live without a generate step，and `pnpm content:check` is the data gate。Only run `pnpm generate` when you have an explicit reason the lightweight check cannot cover（e.g. verifying SSG route output、a build-script change），and state that reason first。Caveat when you do：a host `pnpm generate` collides with the running dev container on the shared `.nuxt` / Vite cache（see project memory `feedback_no-host-generate-with-dev-container`），so stop the dev container or run it in an isolated worktree first——never the mv-the-blocker-aside dance just to make a full build pass。
 
 After the check passes，confirm the live page actually renders via the running dev server (open `https://${APP_URL}/products/<id>` and verify title、image、price、pills)，per the project Frontend Handoff rule——the check validates data，not the rendered page。
 
@@ -239,7 +250,7 @@ For category/tag cleanup or multi-product enrichment，use this coordinator flow
 2. Dispatch one subagent per product in its own worktree（`Agent({ isolation: "worktree" })`）。Each subagent gets exactly one target JSON path。
 3. Let each subagent create or update its assigned target JSON file itself when implementation work is requested（the subagent writes the file；the coordinator does not type the data in）。
 4. As each subagent returns，collect its finished file (and image) from the worktree into the main tree (see Dispatch In Isolated Worktrees)，then audit it (editorial pass)：checks names are concise，checks product `summary` / `long_description` were preserved，checks guide `title` / `summary` read well and stay objective，confirms taxonomy IDs exist，and confirms offers were not replaced。
-5. Coordinator adds any confirmed new taxonomy entries in the main tree，runs the lightweight content check (not `pnpm generate`)，then confirms the live page renders。
+5. Coordinator adds any confirmed new taxonomy entries in the main tree，runs `pnpm content:check`（not `pnpm generate`），then confirms the live page renders。
 
 ## Subagent Dispatch Contract
 

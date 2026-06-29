@@ -1,35 +1,12 @@
 <template>
-  <section
-    class="compact-panel"
-    aria-label="首頁"
-  >
-    <div
-      class="category-chip-list home-category-chip-list"
-      aria-label="商品分類"
-    >
-      <UButton
-        v-for="chip in compact_view.home.category_chips"
-        :key="chip.id"
-        type="button"
-        class="category-chip"
-        :color="chip.active ? 'primary' : 'neutral'"
-        :variant="chip.active ? 'solid' : 'subtle'"
-        :aria-pressed="chip.active"
-        @click="onCategoryChipClicked(chip.id)"
-      >
-        <span>{{ chip.label }}</span>
-        <template #trailing>
-          <span class="chip-count">{{ chip.count }}</span>
-        </template>
-      </UButton>
-    </div>
+  <div class="compact-page">
+    <CategoryChipBar />
 
-    <Transition
-      name="home-results"
-      mode="out-in"
+    <section
+      class="compact-panel"
+      aria-label="首頁"
     >
       <div
-        :key="active_home_category_key"
         class="home-results"
       >
         <UEmpty
@@ -49,12 +26,13 @@
           />
         </div>
       </div>
-    </Transition>
-  </section>
+    </section>
+  </div>
 </template>
 
 <script setup lang="ts">
-import type { CompactCategoryChip } from '../utils/published-products/types'
+import { onMounted } from 'vue'
+
 import { getCompactAppStateFromRoute, getCompactAppView } from '../utils/published-products/compact-app'
 import { getCanonicalUrl, SITE_DESCRIPTION, SITE_NAME, SITE_OG_IMAGE, SITE_TITLE } from '../utils/seo-metadata'
 
@@ -84,11 +62,27 @@ useSeoMeta({
 })
 
 const route = useRoute()
-const router = useRouter()
-const { content_payload, category_ids } = await useCatalogData()
+const nuxt_app = useNuxtApp()
+const catalog_data = useCatalogData()
+onMounted(() => {
+  void catalog_data.then(({ category_ids }) => {
+    const category_query = route.query.category
+
+    if (typeof category_query !== 'string') {
+      return
+    }
+
+    if (!category_ids.value.has(category_query)) {
+      return
+    }
+
+    void nuxt_app.runWithContext(() => navigateTo(`/category/${category_query}`, { replace: true }))
+  })
+})
+const { content_payload } = await catalog_data
+
 const route_state = computed(() => getCompactAppStateFromRoute(
   { path: route.path, query: route.query },
-  { category_ids: category_ids.value },
 ))
 const compact_view = computed(() => {
   if (content_payload.value === null || content_payload.value === undefined) {
@@ -97,12 +91,4 @@ const compact_view = computed(() => {
 
   return getCompactAppView(content_payload.value, route_state.value)
 })
-const active_home_category_key = computed(() => route_state.value.home_category_id ?? 'all')
-
-function onCategoryChipClicked(category_id: CompactCategoryChip['id']) {
-  router.push({
-    path: '/',
-    query: category_id === 'all' ? {} : { category: category_id },
-  })
-}
 </script>

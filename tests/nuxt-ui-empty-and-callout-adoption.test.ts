@@ -7,7 +7,7 @@ function readSource(relative_path: string) {
 
 describe('empty states adopt UEmpty', () => {
   const index_source = readSource('../app/pages/index.vue')
-  const guide_source = readSource('../app/pages/guide.vue')
+  const guide_source = readSource('../app/pages/guide/index.vue')
   const links_source = readSource('../app/pages/links.vue')
   const search_source = readSource('../app/pages/search.vue')
 

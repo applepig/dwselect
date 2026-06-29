@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { existsSync, readFileSync, readdirSync } from 'node:fs'
+import { fileURLToPath } from 'node:url'
+import { loadNuxt } from 'nuxt'
 
 import nuxt_config from '../nuxt.config'
 import package_json from '../package.json'
@@ -13,7 +15,8 @@ describe('Nuxt SSG baseline', () => {
     expect(nuxt_config.image?.dir).toBe('../content')
     expect(nuxt_config.ui?.fonts).toBe(false)
     expect(nuxt_config.nitro?.preset).toBe('static')
-    expect(nuxt_config.experimental?.viewTransition).toBe(false)
+    // M3 spike：暫時重啟，等待使用者實機 iPad Safari 驗證；未 PASS 前不得 ship true。
+    expect(nuxt_config.experimental?.viewTransition).toBe(true)
     expect(nuxt_config.app?.pageTransition).toMatchObject({
       name: 'compact-page-fade',
       mode: 'out-in',
@@ -22,10 +25,8 @@ describe('Nuxt SSG baseline', () => {
   })
 
   it('should generate static output from prerendered server routes without legacy artifact builds', () => {
-    expect(package_json.scripts.generate).toBe('pnpm build:public-discovery && node scripts/assert-content-images.ts && nuxt generate')
+    expect(package_json.scripts.generate).toBe('./dev.sh generate')
     expect(package_json.scripts.build).toBe('pnpm build:public-discovery && node scripts/assert-content-images.ts && nuxt build')
-    expect(package_json.scripts.generate).not.toContain('build:public-artifacts')
-    expect(package_json.scripts.generate).not.toContain('build:search-index')
   })
 
   it('should fail static generation when any prerendered route errors (spec Case 1)', () => {
@@ -35,7 +36,6 @@ describe('Nuxt SSG baseline', () => {
   it('should keep content image optimization out of the generate prerequisite chain (Nuxt Image owns it)', () => {
     expect(package_json.scripts).toHaveProperty('build:content-images')
     expect(package_json.scripts.build).not.toContain('build:content-images')
-    expect(package_json.scripts.generate).not.toContain('build:content-images')
     expect(package_json.devDependencies).toHaveProperty('@nuxt/image')
   })
 
@@ -178,7 +178,10 @@ describe('Nuxt SSG baseline', () => {
     expect(nuxt_config_source).toContain("event: 'dwselect:content-updated'")
     expect(plugin_source).toContain("import.meta.hot.on('dwselect:content-updated'")
     // refreshNuxtData 必須包在 runWithContext 內：hot.on callback 在 Nuxt context 之外觸發。
-    expect(plugin_source).toContain("nuxtApp.runWithContext(() => refreshNuxtData('public-content'))")
+    // 無參數刷全部 cache：028 拆分後詳情頁用 product-detail-${id} / guide-detail-${id} per-id key，
+    // 只刷 'public-content' 會讓開著的詳情頁停在舊值。
+    expect(plugin_source).toContain('nuxtApp.runWithContext(() => refreshNuxtData())')
+    expect(plugin_source).not.toContain("refreshNuxtData('public-content')")
     expect(plugin_source).toContain('resetClientSearchIndex()')
     expect(search_helper_source).toContain('export function resetClientSearchIndex()')
     expect(search_helper_source).toContain('search_index_promise = null')
@@ -198,14 +201,22 @@ describe('Nuxt SSG baseline', () => {
     expect(detail_page_source).toContain('await useProductDetailData(product_id)')
     expect(detail_page_source).not.toContain('await useCatalogData()')
     expect(detail_page_source).not.toContain('all_products')
-    expect(detail_composable_source).toContain("useAsyncData('public-content'")
-    expect(detail_composable_source).toContain('details_by_id[product_id]')
-    expect(detail_composable_source).toContain('fetchPublicContentPayload')
+    // 028 拆分：詳情頁只 fetch 自己那一筆 detail（per-id key），不再載入整包 content payload。
+    expect(detail_composable_source).toContain('`product-detail-${product_id}`')
+    expect(detail_composable_source).toContain('fetchProductDetail(product_id)')
+    expect(detail_composable_source).not.toContain("useAsyncData('public-content'")
+    expect(detail_composable_source).not.toContain('details_by_id')
+    expect(detail_composable_source).not.toContain('fetchPublicContentPayload')
     expect(detail_composable_source).not.toContain('transform:')
     expect(detail_composable_source).not.toContain('server: false')
     expect(shell_composable_source).toContain("useAsyncData('public-content'")
     expect(shell_composable_source).toContain('desktop_category_items')
-    expect(shell_composable_source).toContain('product_breadcrumb_items_by_id')
+    // 028 拆分：shell 不再傳出全量 detail，麵包屑改用 cards／rows 的精簡欄位 lookup。
+    expect(shell_composable_source).not.toContain('details_by_id')
+    expect(shell_composable_source).toContain('product_breadcrumb_by_id')
+    expect(shell_composable_source).toContain('guide_breadcrumb_by_id')
+    expect(shell_composable_source).toContain('content_payload.value.products.cards')
+    expect(shell_composable_source).toContain('content_payload.value.guides.rows')
     expect(shell_composable_source).toContain('fetchPublicContentPayload')
     expect(shell_composable_source).not.toContain('transform:')
     expect(shell_composable_source).not.toContain('server: false')
@@ -231,7 +242,7 @@ describe('Nuxt SSG baseline', () => {
   it('should expose compact app empty states in the public source', () => {
     const page_source = [
       '../app/pages/index.vue',
-      '../app/pages/guide.vue',
+      '../app/pages/guide/index.vue',
       '../app/pages/search.vue',
       '../app/pages/links.vue',
       '../app/components/search/search-idle-panel.vue',
@@ -295,7 +306,7 @@ describe('Nuxt SSG baseline', () => {
     expect(card_source).toContain('product-card-price')
     expect(card_source.indexOf('product-card-price')).toBeGreaterThan(card_source.indexOf('product-card-body'))
     expect(card_source.indexOf('channel-badge')).toBeGreaterThan(card_source.indexOf('product-card-body'))
-    expect(card_source).toContain(':to="{ path: \'/search\', query: { q: product.channel_label } }"')
+    expect(card_source).toContain(':to="`/channel/${product.channel_id}`"')
     expect(detail_source).toContain('<CatalogPill')
     expect(detail_source).toContain('<UButton')
     expect(catalog_css).toContain('background: var(--dw-bg);')
@@ -314,14 +325,18 @@ describe('Nuxt SSG baseline', () => {
     expect(catalog_css).toContain('border: 0;')
     expect(catalog_css).toContain('box-shadow: none;')
     expect(catalog_css).toContain('padding: 16px 40px 14px;')
-    expect(catalog_css).toContain('padding: 20px 81px 0;')
+    expect(catalog_css).toContain('padding: 20px 40px 0;')
+    expect(catalog_css).toContain('margin-inline: 41px;')
+    expect(catalog_css).toContain('padding: 40px;')
+    expect(catalog_css).toContain('padding: 0 40px 40px;')
     expect(catalog_css).toContain('grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));')
     expect(catalog_css).not.toContain('grid-template-columns: repeat(auto-fill, minmax(240px, 320px));')
     expect(catalog_css).not.toContain('justify-content: start;')
     expect(catalog_css).not.toContain('width: min(100%, 1180px);')
     expect(layout_source).not.toContain('product-count')
     expect(layout_source).not.toContain('compact_view.counts.published')
-    expect(layout_source).toContain('active_home_category_label')
+    // breadcrumb 推導已抽成純函式 resolveBreadcrumbItems（單元測試覆蓋），此處改驗 layout 仍以它供標題列。
+    expect(layout_source).toContain('resolveBreadcrumbItems')
     expect(layout_source).toContain('DW嚴選')
     expect(layout_source).toContain('breadcrumb-separator')
     expect(home_source).not.toContain('section-heading-row')
@@ -330,24 +345,44 @@ describe('Nuxt SSG baseline', () => {
     expect(home_source).not.toContain('最近值得看')
   })
 
-  it('should expose breadcrumb header links and home category result transition in source', () => {
+  it('should expose breadcrumb header links without home category result transition in source', () => {
     const layout_source = readFileSync(new URL('../app/layouts/default.vue', import.meta.url), 'utf8')
     const home_source = readFileSync(new URL('../app/pages/index.vue', import.meta.url), 'utf8')
-    const guide_source = readFileSync(new URL('../app/pages/guide.vue', import.meta.url), 'utf8')
+    const guide_source = readFileSync(new URL('../app/pages/guide/index.vue', import.meta.url), 'utf8')
     const links_source = readFileSync(new URL('../app/pages/links.vue', import.meta.url), 'utf8')
     const search_source = readFileSync(new URL('../app/pages/search.vue', import.meta.url), 'utf8')
     const catalog_css = readFileSync(new URL('../app/assets/styles/catalog.css', import.meta.url), 'utf8')
 
-    expect(nuxt_config.experimental?.viewTransition).toBe(false)
+    const breadcrumb_source = readFileSync(new URL('../app/utils/breadcrumb/resolve-breadcrumb-items.ts', import.meta.url), 'utf8')
+
+    // M3 spike：暫時重啟，等待使用者實機 iPad Safari 驗證；未 PASS 前不得 ship true。
+    expect(nuxt_config.experimental?.viewTransition).toBe(true)
     expect(layout_source).toContain('<NuxtLink')
     expect(layout_source).toContain('to="/"')
     expect(layout_source).toContain('class="breadcrumb-link"')
     expect(layout_source).toContain('current_breadcrumb_items')
-    expect(layout_source).toContain('product_breadcrumb_items_by_id')
-    expect(layout_source).toContain("route.path === '/guide'")
-    expect(layout_source).toContain("route.path === '/links'")
-    expect(layout_source).toContain("route.path === '/search'")
-    expect(layout_source).toContain("route.path.startsWith('/products/')")
+    // breadcrumb 推導抽成純函式（resolveBreadcrumbItems）；輸出契約改驗 helper source。
+    // 028 拆分：resolver 改用 cards／rows 來的精簡 breadcrumb lookup，不再依賴全量 detail map。
+    expect(breadcrumb_source).toContain('product_breadcrumb_by_id[product_id]')
+    expect(breadcrumb_source).not.toContain('product_details_by_id')
+    // breadcrumb 輸出契約：分類連結（category_label → /category/{id}）＋ 商品名。
+    expect(breadcrumb_source).toContain('product_item.category_label')
+    expect(breadcrumb_source).toContain('`/category/${product_item.category_id')
+    expect(breadcrumb_source).toContain('product_item.name')
+    expect(breadcrumb_source).toContain("route_path === '/guide'")
+    expect(breadcrumb_source).toContain("route_path === '/links'")
+    expect(breadcrumb_source).toContain("route_path === '/search'")
+    expect(breadcrumb_source).toContain("route_path.startsWith('/products/')")
+    // 指南詳情 breadcrumb：[指南→/guide, guide.title]，與商品詳情對稱但合理。
+    expect(breadcrumb_source).toContain("route_path.startsWith('/guide/')")
+    expect(breadcrumb_source).toContain('guide_breadcrumb_by_id[guide_id]')
+    expect(breadcrumb_source).toContain("{ label: '指南', to: '/guide' }")
+    expect(breadcrumb_source).toContain('guide_item.title')
+    // AC26：taxonomy 頁標題改用 layout breadcrumb，四種前綴都解析 label。
+    expect(breadcrumb_source).toContain("'/category/'")
+    expect(breadcrumb_source).toContain("'/tag/'")
+    expect(breadcrumb_source).toContain("'/brand/'")
+    expect(breadcrumb_source).toContain("'/channel/'")
 
     expect(guide_source).toContain('aria-label="指南"')
     expect(guide_source).not.toContain('class="section-heading-row"')
@@ -359,9 +394,9 @@ describe('Nuxt SSG baseline', () => {
     expect(search_source).not.toContain('class="section-heading-row"')
     expect(search_source).not.toMatch(/<h2 class="section-title">[\s\S]*搜看看/)
 
-    expect(home_source).toContain('<Transition')
-    expect(home_source).toContain('name="home-results"')
-    expect(home_source).toContain(':key="active_home_category_key"')
+    expect(home_source).not.toContain('<Transition')
+    expect(home_source).not.toContain('name="home-results"')
+    expect(home_source).not.toContain('active_home_category_key')
     expect(catalog_css).toMatch(/\.breadcrumb-separator\s*\{[\s\S]*margin-inline:\s*[^;]+;/)
     expect(catalog_css).toContain('.breadcrumb-link')
     expect(catalog_css).toContain('.breadcrumb-link:focus-visible')
@@ -395,11 +430,20 @@ describe('Nuxt SSG baseline', () => {
     expect(catalog_css).toContain('overflow-x: clip')
   })
 
+  it('should size the app shell with dynamic viewport height for iPad Safari', () => {
+    const catalog_css = readFileSync(new URL('../app/assets/styles/catalog.css', import.meta.url), 'utf8')
+
+    expect(catalog_css).toMatch(/\.compact-app-shell\s*\{[\s\S]*min-height:\s*100dvh;/)
+    expect(catalog_css).toMatch(/\.compact-app-rail\s*\{[\s\S]*min-height:\s*100dvh;/)
+    expect(catalog_css).toMatch(/\.compact-app-sidebar\s*\{[\s\S]*min-height:\s*100dvh;/)
+    expect(catalog_css).not.toContain('min-height: 100vh;')
+  })
+
   it('should split compact app shell into navigation, theme, card, tag and link components', () => {
     const layout_source = readFileSync(new URL('../app/layouts/default.vue', import.meta.url), 'utf8')
     const page_sources = [
       '../app/pages/index.vue',
-      '../app/pages/guide.vue',
+      '../app/pages/guide/index.vue',
       '../app/pages/search.vue',
       '../app/pages/links.vue',
       '../app/pages/products/[id].vue',
@@ -459,20 +503,20 @@ describe('Nuxt SSG baseline', () => {
     const nav_source = readFileSync(new URL('../app/components/app-navigation.vue', import.meta.url), 'utf8')
     const catalog_css = readFileSync(new URL('../app/assets/styles/catalog.css', import.meta.url), 'utf8')
 
-    expect(home_source).toContain('home-category-chip-list')
+    expect(home_source).toContain('<CategoryChipBar')
     expect(nav_source).toContain('desktop-category-items')
     expect(nav_source).toContain('desktop-category-link')
-    expect(nav_source).toContain('category.id === \'all\' ? \'/\' : `/?category=${category.id}`')
+    expect(nav_source).toContain('category.id === \'all\' ? \'/\' : `/category/${category.id}`')
     expect(nav_source).toContain('desktop_category_items')
     expect(catalog_css).toContain('.desktop-category-items')
     expect(catalog_css).toContain('.desktop-category-link')
     expect(catalog_css).toContain('.compact-app-bottom-tabs .app-nav-button')
     expect(catalog_css).toContain('.compact-app-rail .app-nav-button')
-    expect(catalog_css).toContain('.home-category-chip-list {\n    display: none;\n  }')
+    expect(catalog_css).toContain('.category-chip-bar {\n    display: none;\n  }')
   })
 
   it('should render guide, link and mixed search results with external safety attributes in source', () => {
-    const guide_source = readFileSync(new URL('../app/pages/guide.vue', import.meta.url), 'utf8')
+    const guide_source = readFileSync(new URL('../app/pages/guide/index.vue', import.meta.url), 'utf8')
     const links_source = readFileSync(new URL('../app/pages/links.vue', import.meta.url), 'utf8')
     const search_source = readFileSync(new URL('../app/pages/search.vue', import.meta.url), 'utf8')
     const resource_rows_source = readFileSync(new URL('../app/utils/published-products/resource-rows.ts', import.meta.url), 'utf8')
@@ -508,18 +552,27 @@ describe('Nuxt SSG baseline', () => {
     expect(card_source).toContain('詳情')
     expect(card_source).toContain('<NuxtLink')
     expect(card_source).toContain('`/products/${product.id}`')
-    expect(card_source).toContain('view-transition-name')
+    expect(card_source).toContain('getProductViewTransitionStyle')
+    expect(card_source).toContain('product-vt-card')
+    expect(card_source).toContain('product-vt-image')
+    expect(card_source).toContain('product-vt-title')
+    expect(card_source).toContain('product-vt-summary')
+    expect(card_source).toContain('product-vt-price')
     expect(detail_source).not.toContain('<UModal')
     expect(detail_source).toContain('detail-hero-tile')
-    expect(detail_source).toContain('view-transition-name')
+    expect(detail_source).toContain('getProductViewTransitionStyle')
+    expect(detail_source).toContain('product-vt-card')
+    expect(detail_source).toContain('product-vt-image')
+    expect(detail_source).toContain('product-vt-title')
+    expect(detail_source).toContain('product-vt-summary')
+    expect(detail_source).toContain('product-vt-price')
     expect(detail_source).toContain('DW 怎麼說')
     expect(detail_source).toContain('detail.long_description || detail.summary')
     expect(detail_source).toContain('AI 怎麼說')
     expect(detail_source).toContain('v-if="detail.llm_description"')
-    expect(detail_source).toContain('parseContentMarkdown')
+    expect(detail_source).toContain('<ContentMarkdown :source="detail.llm_description" />')
     expect(detail_source).toContain('detail-llm-title')
     expect(detail_source).toContain('detail-llm-copy')
-    expect(detail_source).toContain('detail-llm-link')
     expect(detail_source).toContain('去 {{ detail.channel_label }} 逛逛')
     expect(detail_source).toContain('target="_blank"')
     expect(detail_source).toContain('rel="noopener noreferrer"')
@@ -551,11 +604,11 @@ describe('Nuxt SSG baseline', () => {
     }
 
     expect(detail_source).toContain(':description="detail.long_description || detail.summary"')
-    expect(detail_source).toContain('parsed_llm_blocks')
+    expect(detail_source).toContain(':source="detail.llm_description"')
     expect(detail_source).not.toContain(':description="detail.llm_description"')
     expect(detail_source).toContain('detail.category_label')
     expect(detail_source.indexOf('detail.category_label')).toBeLessThan(detail_source.indexOf('detail.channel_label'))
-    expect(detail_source.indexOf('detail.channel_label')).toBeLessThan(detail_source.indexOf('v-for="tag in detail.tag_labels"'))
+    expect(detail_source.indexOf('detail.channel_label')).toBeLessThan(detail_source.indexOf('v-for="tag in detail_tags"'))
     expect(detail_source).not.toContain('dw_says')
     expect(detail_source).not.toContain('detail.description')
     expect(detail_source).not.toContain(':description="detail.summary"')
@@ -578,9 +631,10 @@ describe('Nuxt SSG baseline', () => {
     expect(chip_source).toContain(':to="to"')
     expect(chip_source).not.toContain("path: '/search'")
     expect(chip_source).not.toContain("path: '/'")
-    expect(detail_source).toContain(':to="{ path: \'/\', query: { category: detail.category_id } }"')
-    expect(detail_source).toContain(':to="{ path: \'/search\', query: { q: detail.channel_label } }"')
-    expect(detail_source).toContain(':to="{ path: \'/search\', query: { q: tag } }"')
+    // category／tag pill 精準導向 taxonomy 頁（AC15）；channel pill 深連 /channel/{id}（AC24，不再文字搜尋）。
+    expect(detail_source).toContain(':to="`/category/${detail.category_id}`"')
+    expect(detail_source).toContain(':to="`/channel/${detail.channel_id}`"')
+    expect(detail_source).toContain(':to="`/tag/${tag.id}`"')
     expect(catalog_css).toContain('.detail-taxonomy-row')
     expect(catalog_css).toContain('.catalog-pill')
     expect(catalog_css).toContain('padding: 0 10px;')
@@ -622,16 +676,16 @@ describe('Nuxt SSG baseline', () => {
   it('should define routed page files and prerender every product detail route', () => {
     const page_files = [
       '../app/pages/index.vue',
-      '../app/pages/guide.vue',
+      '../app/pages/guide/index.vue',
+      '../app/pages/guide/[id].vue',
       '../app/pages/search.vue',
       '../app/pages/links.vue',
       '../app/pages/products/[id].vue',
     ]
-    const product_route_count = readdirSync(new URL('../content/products/', import.meta.url))
-      .filter((file_name) => file_name.endsWith('.json'))
-      .map((file_name) => JSON.parse(readFileSync(new URL(`../content/products/${file_name}`, import.meta.url), 'utf8')))
-      .filter((product) => product.status === 'published')
-      .length
+    const product_route_count = countPublishedContent('../content/products/')
+    const guide_route_count = countPublishedContent('../content/guides/')
+    const first_published_product_id = firstPublishedId('../content/products/')
+    const first_published_guide_id = firstPublishedId('../content/guides/')
     const prerender_routes = nuxt_config.nitro?.prerender?.routes ?? []
 
     for (const file_path of page_files) {
@@ -644,7 +698,38 @@ describe('Nuxt SSG baseline', () => {
     expect(prerender_routes).toContain('/links')
     expect(prerender_routes).toContain('/api/content.json')
     expect(prerender_routes).toContain('/search-index.json')
-    expect(prerender_routes.filter((route) => route.startsWith('/products/'))).toHaveLength(product_route_count)
+    expect(prerender_routes.filter((route) => route.startsWith('/products/') && !route.startsWith('/api/'))).toHaveLength(product_route_count)
+    // /guide 列表本身也以 /guide/ 開頭，故扣掉它才是 detail route 數，須等於 published guide 數（AC13）。
+    expect(prerender_routes.filter((route) => route.startsWith('/guide/') && !route.startsWith('/api/'))).toHaveLength(guide_route_count)
+    // 028 拆分：每筆 published 商品／指南都要 prerender 出 per-id detail JSON，數量與 detail 頁 route 一致，
+    // 否則 generate 會漏產 detail JSON 讓詳情頁載入失敗（failOnError 把缺漏放大為 build 中止）。
+    expect(prerender_routes.filter((route) => route.startsWith('/api/products/'))).toHaveLength(product_route_count)
+    expect(prerender_routes.filter((route) => route.startsWith('/api/guides/'))).toHaveLength(guide_route_count)
+    expect(prerender_routes).toContain(`/api/products/${first_published_product_id}.json`)
+    expect(prerender_routes).toContain(`/api/guides/${first_published_guide_id}.json`)
+  })
+
+  it('should resolve NuxtLink prefetch to interaction-only so the home page does not background prefetch every link (ADR-3)', async () => {
+    expect(nuxt_config.experimental?.defaults?.nuxtLink?.prefetchOn).toEqual({
+      interaction: true,
+      visibility: false,
+    })
+
+    const nuxt = await loadNuxt({
+      cwd: fileURLToPath(new URL('..', import.meta.url)),
+      dev: false,
+      ready: false,
+    })
+
+    try {
+      expect(nuxt.options.experimental.defaults.nuxtLink.prefetchOn).toEqual({
+        interaction: true,
+        visibility: false,
+      })
+    }
+    finally {
+      await nuxt.close()
+    }
   })
 
   it('should define light and dark handoff CSS tokens without a single-hue palette', () => {
@@ -681,6 +766,27 @@ describe('Nuxt SSG baseline', () => {
     expect(readme_source).toContain('@nuxt/image')
   })
 })
+
+function countPublishedContent(relative_dir: string): number {
+  return readdirSync(new URL(relative_dir, import.meta.url))
+    .filter((file_name) => file_name.endsWith('.json'))
+    .map((file_name) => JSON.parse(readFileSync(new URL(`${relative_dir}${file_name}`, import.meta.url), 'utf8')))
+    .filter((content) => content.status === 'published')
+    .length
+}
+
+function firstPublishedId(relative_dir: string): string {
+  const file_name = readdirSync(new URL(relative_dir, import.meta.url))
+    .filter((name) => name.endsWith('.json'))
+    .toSorted((left, right) => left.localeCompare(right))
+    .find((name) => JSON.parse(readFileSync(new URL(`${relative_dir}${name}`, import.meta.url), 'utf8')).status === 'published')
+
+  if (file_name === undefined) {
+    throw new Error(`No published content in ${relative_dir}`)
+  }
+
+  return file_name.replace(/\.json$/, '')
+}
 
 function getContrastRatio(foreground_hex: string, background_hex: string) {
   const foreground = getRelativeLuminance(getRgb(foreground_hex))

@@ -10,15 +10,15 @@
 ## Commands
 
 - 安裝：`pnpm install`；CI 使用 Node 24 與 `pnpm install --frozen-lockfile`。
-- Dev server：`pnpm dev` 等同 `nuxt dev --host ::`；**瀏覽器只能用 `https://${APP_URL}/` 進入**（預設 `dwselect.toybox.local`），禁止使用 `localhost`、`127.0.0.1`、`0.0.0.0` 或任何其他 host——`nuxt.config.ts` 讀取 `APP_URL` 環境變數設定 Vite `allowedHosts`，未設定會直接報錯中斷，其他 host 會被 Vite 擋掉。
+- Dev server：`pnpm dev` 等同 `./dev.sh dev`，host 端會啟動 Docker app service 並追 log；container 內才跑 `pnpm exec nuxt dev`。**瀏覽器只能用 `https://${APP_URL}/` 進入**（預設 `dwselect.toybox.local`），禁止使用 `localhost`、`127.0.0.1`、`0.0.0.0` 或任何其他 host——`nuxt.config.ts` 讀取 `APP_URL` 環境變數設定 Vite `allowedHosts`，未設定會直接報錯中斷，其他 host 會被 Vite 擋掉。
 - Unit／integration：`pnpm test`，會跑 Vitest 並排除 `tests/e2e/**`。
 - 單一 Vitest 檔：`pnpm test tests/product-schema.test.ts`。
-- E2E：`pnpm test:e2e`；Playwright 預設以 `https://dwselect.toybox.local` 為 `baseURL`，必要時自行啟動 `pnpm dev --host ::`，透過 Traefik 實際入口測試，`workers: 1`，projects 是 `phone`、`tablet`、`desktop`。
+- E2E：`pnpm test:e2e`；Playwright 預設以 `https://dwselect.toybox.local` 為 `baseURL`，必要時自行啟動 `pnpm dev`，透過 Traefik 實際入口測試，`workers: 1`，projects 是 `phone`、`tablet`、`desktop`。
 - 單一 E2E project：`pnpm test:e2e --project=desktop tests/e2e/compact-app.spec.ts`。
 - Lint：`pnpm lint` 等同 `eslint . --max-warnings=0`；單檔自動修正用 `pnpm lint:file -- <file>`。
 - Format：`pnpm format` 等同 `eslint . --fix`，使用 ESLint `@stylistic`，不使用 Prettier。
 - Typecheck：`pnpm typecheck` 固定走 `nuxt typecheck`，fresh checkout 先由 `prepare: nuxt prepare` 產生 `.nuxt` types/config。
-- Static generate：`pnpm generate` 會先跑 `pnpm build:public-discovery`（sitemap/rss/robots/llms）與 `node scripts/assert-content-images.ts`，再 `nuxt generate`，輸出到 `.output/public`；catalog payload 與 search index 由 server route 在 prerender 階段產生，圖片由 @nuxt/image ipxStatic 輸出 optimized 圖到 `.output/public/_ipx`。
+- Static generate：本機日常不直接跑 `pnpm generate`；dev mode 走 HMR，build mode 只在 Docker app service 啟動時由 container PID 1 跑一次 `pnpm build:public-discovery`、`node scripts/assert-content-images.ts`、`pnpm exec nuxt generate`，輸出到 `.output/public` 後進入 preview。若要本機 build preview，設定 `NUXT_MODE=build` 後重建 service（例如 `NUXT_MODE=build ./dev.sh restart`）。CI 若需 host runner 直接 generate，必須明確設定 `DWSELECT_ALLOW_HOST_GENERATE=1`。catalog payload 與 search index 由 server route 在 prerender 階段產生，圖片由 @nuxt/image ipxStatic 輸出 optimized 圖到 `.output/public/_ipx`。
 - CI 等級驗證順序：`pnpm test` → `pnpm lint` → `pnpm typecheck` → `pnpm generate` → `node scripts/assert-runtime-google-sheet-clean.ts`。
 
 ## Content Model
@@ -30,7 +30,7 @@
 - Product 使用 `category_id`、`channel_id`、`tag_ids`；Guide／Link 使用 `category_ids`、`tag_ids`；不要新增 legacy `category` 或自由字串 `tags`。
 - `status = "published"` 才能出現在首頁、指南、連結、category counts 與 search index。
 - `content/taxonomies/links.json` 不是 runtime links SSOT；runtime links 來自 `content/links/*.json`。
-- Google Sheets TSV importer `scripts/legacy/migrate-google-sheet-products.ts` 是 deprecated legacy-only，不可用來建立新版內容。
+- 原 Google Sheets TSV importer（`scripts/legacy/migrate-google-sheet-products.ts`）已移除（與 ADR-11 的 content id ASCII kebab 約束不相容）；公開內容一律以 `content/` 的 Git-backed JSON 為 SSOT，不要重新引入 Google Sheets importer。
 
 ## Search And Static Output
 
@@ -38,7 +38,7 @@
 - Search index 由 Nuxt server route `GET /search-index.json`（`server/routes/search-index.json.get.ts`）產生，納入 published products、guides、links；client MiniSearch fetch 同一個 `/search-index.json` URL，`pnpm generate` 一樣 prerender 成 static file。
 - 圖片由 `@nuxt/image` 處理：`nuxt.config.ts` 設 `image.dir = '../content'` 指向專案根的 `content/`，UI 用 `<NuxtImg :src="image_url" format="webp">`（外部 http 連結圖仍用原生 `<img>`）；dev 由 IPX 即時最佳化，`pnpm generate` 用 ipxStatic 輸出 optimized 圖到 `.output/public/_ipx`，不需先跑 `build:content-images`。
 - 內容或 taxonomy 變更後直接跑 `pnpm generate` 即可讓 payload、index、圖片與 SSG 一起更新；`build:content-images`、`build:search-index`、`build:public-artifacts` 是 legacy CLI，不再是 generate 的必要前置步驟。
-- `public/api/content.json`、`public/search-index.json`、`public/images/**` 已 gitignore 並從版控移除；sitemap、rss、robots、llms 等 discovery 檔仍由 `pnpm build:public-discovery` 產生並維持 tracked。
+- `public/api/content.json`、`public/search-index.json`、`public/images/**`，以及 sitemap、rss、robots、llms 等 discovery 檔都已 gitignore 並從版控移除；discovery 檔由 `pnpm build:public-discovery` 在 build／dev 時即時產生，deploy 以 `.output/public` 為準，git 內不保留任何 copy 以免 stale。
 - `node scripts/assert-runtime-google-sheet-clean.ts` 會掃 runtime source 與 `.output/public`，確保公開 runtime 沒有 Google Sheets TSV 指標。
 
 ## Routing And UI

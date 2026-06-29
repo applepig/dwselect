@@ -44,8 +44,10 @@ describe('product card build mapper', () => {
       category_id: 'computer',
       category_label: '電腦',
       channel_id: 'pchome',
+      channel_ids: ['pchome'],
       channel_label: 'PChome',
       price_label: 'NT$ 2,490',
+      tag_ids: ['tag-a'],
       tag_labels: ['標籤 A'],
       published_at: '2026-06-02T00:00:00+08:00',
     })

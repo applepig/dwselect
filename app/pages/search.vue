@@ -20,7 +20,6 @@
       :history_items="history_items"
       :popular_search_tags="popular_search_tags"
       @history-clicked="submitSearch"
-      @tag-clicked="saveSearchHistoryItem"
     />
 
     <SearchSuggestionList
@@ -121,7 +120,6 @@ const {
   retrySearch,
   clearSubmittedSearch,
   submitSearch,
-  saveSearchHistoryItem,
 } = useSearchPage({
   submitted_search_query,
   navigateToSearch,

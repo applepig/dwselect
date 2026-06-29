@@ -16,10 +16,10 @@ describe('lint quality gate config', () => {
 
     expect(package_json.scripts).toMatchObject({
       prepare: 'nuxt prepare',
-      lint: 'eslint . --max-warnings=0',
+      lint: './dev.sh lint',
       'lint:file': 'eslint --fix --max-warnings=0',
       format: 'eslint . --fix',
-      typecheck: 'nuxt typecheck',
+      typecheck: './dev.sh typecheck',
     })
   })
 

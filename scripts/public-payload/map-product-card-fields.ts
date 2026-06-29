@@ -7,7 +7,7 @@ import type { TaxonomyLabelResolver } from '../../app/utils/content/taxonomy-lab
 
 type ProductCardFields = Pick<
   ProductCardView,
-  'id' | 'name' | 'image_url' | 'category_label' | 'channel_id' | 'channel_label' | 'price_label' | 'tag_labels'
+  'id' | 'name' | 'image_url' | 'category_label' | 'channel_id' | 'channel_ids' | 'channel_label' | 'price_label' | 'tag_ids' | 'tag_labels'
 >
 
 export function mapProductCardBase(product: Product, labels: TaxonomyLabelResolver): RelatedProductCardView {
@@ -28,7 +28,10 @@ export function mapProductCardFields(product: Product, labels: TaxonomyLabelReso
   return {
     ...mapProductCardBase(product, labels),
     channel_id: primary_offer.channel_id,
+    // 所有 offer 的 channel_id（去重）：channel alias 頁以「任一 offer 的通路」精準篩卡片（ADR-9）。
+    channel_ids: [...new Set(product.offers.map((offer) => offer.channel_id))],
     price_label: primary_offer.price_text,
+    tag_ids: product.tag_ids,
     tag_labels: product.tag_ids.map((tag_id) => labels.getProductTagLabel(tag_id)),
   }
 }

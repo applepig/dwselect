@@ -1,0 +1,54 @@
+{
+  "id": "2026-06-20-marna-frozen-rice-container",
+  "slug": "2026-06-20-marna-frozen-rice-container",
+  "status": "published",
+  "name": "marna 極 冷凍ごはん容器 大",
+  "english_name": "marna Goku (Kyoku) Frozen Rice Container, Large (K783W)",
+  "summary": "",
+  "long_description": "",
+  "llm_description": "## 快速判斷\n\n- marna（マーナ）「極（きわみ）」系列冷凍白飯保存盒的「大」尺寸，型號 K783W，與米專家共同開發，主打「解凍後接近現煮口感」。\n- 雙層格柵底盤是核心設計：多餘水分會落到底盤下方，避免白飯黏底、解凍後不會濕黏結塊。\n- 微波對應、可蓋著蓋子加熱，可冷凍，可堆疊收納，PP 材質可上洗碗機。\n- 有大／小兩種容量（同系列另有更早的一膳分款）；本品為「大盛」尺寸。\n\n## 重要規格\n\n- 型號：K783W（白色，1 個入）。\n- 容量：約 390 mL，適合冷凍約 250 g 現煮白飯（大盛，適合丼飯／咖哩飯份量）。\n- 尺寸：約 165 × 46 × 114 mm，重量約 0.14 kg。\n- 材質：聚丙烯（Polypropylene）；耐熱約 140℃、耐冷約 -20℃。\n- 微波：可蓋蓋加熱，大盛約 500W 加熱 4 分 30 秒為基準。\n- 結構：可拆式底部格柵（受け台）排出多餘水分、防黏底；零件少、好清洗。\n- 收納：方形簡約造型，可在冷凍庫堆疊；亦可直接當盛飯容器或便當飯盒。\n- 洗碗機：可（底盤可拆下分開清洗）。\n- 產地：日本製。\n\n### 同系列尺寸參考\n\n- 大（本品 K783W）：約 390 mL／約 250 g 白飯。\n- 小（K810W）：約 160 mL／約 100 g 白飯。\n\n## 優點與限制\n\n- 優點：雙層格柵防黏底、解凍後粒粒分明不濕黏；可蓋蓋直接微波；可堆疊收納；零件少易清洗、可上洗碗機；日本製。\n- 限制：屬中高單價的冷凍飯盒（高於超市保鮮膜／百元店容器）；使用者回饋指出蓋子偏薄，從冷凍庫取出時若摔落容易破損；解凍效果受「趁現煮新鮮裝盒並儘快冷凍」「不可過度微波」等使用方式影響。\n\n## 評測與使用者回饋\n\n- 聚合評分：Amazon.co.jp 4.2 / 5（約 5,814 則評價）；marna 官方商店 4.7 / 5（35 則）。\n- 官方商店可讀的個別評論重點（保守整理）：\n  - 多位使用者稱讚雙層底盤／受け台設計讓白飯不黏底、解凍後「ふっくら」蓬鬆、容易取出。\n  - 有評論比較過保鮮膜、百元店容器、Ziplock 飯盒後，認為本品解凍後狀態最佳、接近現煮甜味，雖然單價最高但「為了每天吃到好吃的飯不算貴」，並打算回購。\n  - 主要負評為蓋子較薄、冷凍庫取出時不慎掉落會破裂。\n- 限制說明：Amazon.co.jp 的 `/product-reviews` 個別評論頁需登入（導向 Amazon Sign-In），無法擷取個別評論全文；上述個別評論摘要來自 marna 官方商店頁面，樣本量小（35 則），不代表全部使用者意見。\n\n## 適合誰／不適合誰\n\n- 適合：常備冷凍白飯、希望解凍後口感接近現煮、想要可堆疊收納又能直接微波的人；丼飯／咖哩飯份量選「大」。\n- 不適合：只想要最低價拋棄式飯盒、或需要單份小量（一膳分）者可考慮小尺寸 K810W。\n\n## 參考來源\n\n- [Amazon.co.jp 商品頁（K783W 大）](https://www.amazon.co.jp/dp/B0BV2521FC)\n- [marna 官方商店 K783W 商品頁](https://marna.jp/shop/g/gK783W/)\n- [marna 官方商店 K810W（小）商品頁](https://marna.jp/shop/g/gK810W/)",
+  "search_aliases": [
+    "マーナ 冷凍ごはん容器",
+    "marna 冷凍ごはん容器",
+    "極 冷凍ごはん容器",
+    "きわみ 冷凍ごはん容器",
+    "Marna Kyoku Frozen Rice Container",
+    "Marna Goku Frozen Rice Container",
+    "marna 冷凍白飯保存盒",
+    "marna 冷凍飯盒",
+    "冷凍ごはん容器 大盛",
+    "K783W"
+  ],
+  "model_numbers": [
+    "K783W"
+  ],
+  "offers": [
+    {
+      "channel_id": "amazonjp",
+      "url": "https://www.amazon.co.jp/dp/B0BV2521FC",
+      "price_text": "¥968",
+      "price": {
+        "amount": 968,
+        "currency": "JPY",
+        "unit": "each",
+        "label": "希望小売価格（官方商店售價）"
+      },
+      "checked_at": "2026-06-20T00:00:00+08:00"
+    }
+  ],
+  "image_url": null,
+  "category_id": "household",
+  "tag_ids": [
+    "organizing",
+    "kitchen",
+    "rice",
+    "marna"
+  ],
+  "reference_url": "https://marna.jp/shop/g/gK783W/",
+  "created_at": "2026-06-20T00:00:00+08:00",
+  "updated_at": "2026-06-20T00:00:00+08:00",
+  "published_at": "2026-06-20T00:00:00+08:00",
+  "unpublished_at": null,
+  "archived_at": null,
+  "image_file": "2026-06-20-marna-frozen-rice-container.jpg"
+}

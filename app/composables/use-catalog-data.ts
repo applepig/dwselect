@@ -8,10 +8,10 @@ export async function useCatalogData() {
     const category_chips = content_payload.value?.navigation.category_chips
 
     if (category_chips === undefined) {
-      return []
+      return new Set<string>()
     }
 
-    return getSelectableCategoryIds(category_chips)
+    return new Set(getSelectableCategoryIds(category_chips))
   })
 
   return {

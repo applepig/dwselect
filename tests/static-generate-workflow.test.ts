@@ -2,9 +2,14 @@ import { describe, expect, it } from 'vitest'
 import { readFileSync } from 'node:fs'
 
 const workflow_url = new URL('../.github/workflows/static-generate.yml', import.meta.url)
+const deploy_workflow_url = new URL('../.github/workflows/deploy.yml', import.meta.url)
 
 function readWorkflow() {
   return readFileSync(workflow_url, 'utf8')
+}
+
+function readDeployWorkflow() {
+  return readFileSync(deploy_workflow_url, 'utf8')
 }
 
 describe('static generate workflow', () => {
@@ -58,12 +63,18 @@ describe('static generate workflow', () => {
     expect(workflow_source).toContain('nuxt-build-${{ runner.os }}-')
   })
 
-  it('should deploy generated output to Cloudflare Pages only for master pushes', () => {
-    const workflow_source = readWorkflow()
+  it('should deploy to Cloudflare Pages only after the Static Generate quality gate succeeds on master', () => {
+    const workflow_source = readDeployWorkflow()
 
     expect(workflow_source).toContain('contents: read')
     expect(workflow_source).toContain('deployments: write')
-    expect(workflow_source).toContain("if: github.event_name == 'push' && github.ref == 'refs/heads/master'")
+    // deploy 串接在 Static Generate（quality-gate）成功之後，不再獨立 on push，避免 regression 直接上線。
+    expect(workflow_source).toContain('workflow_run:')
+    expect(workflow_source).toContain('workflows: ["Static Generate"]')
+    expect(workflow_source).toContain("if: ${{ github.event.workflow_run.conclusion == 'success' }}")
+    expect(workflow_source).toContain('ref: ${{ github.event.workflow_run.head_sha }}')
+    expect(workflow_source).toContain('      - master')
+    expect(workflow_source).not.toContain('pull_request:')
     expect(workflow_source).toContain('cloudflare/wrangler-action@v3')
     expect(workflow_source).toContain('command: pages deploy .output/public --project-name=dwselect --branch=master')
     expect(workflow_source).toContain('apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}')

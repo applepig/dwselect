@@ -3,7 +3,7 @@
   --nav-sidebar-width: 232px;
   width: 100%;
   max-width: 100%;
-  min-height: 100vh;
+  min-height: 100dvh;
   overflow-x: clip;
   background: var(--dw-bg);
   color: var(--dw-text);
@@ -50,8 +50,7 @@
   text-transform: uppercase;
 }
 
-.top-bar-title,
-.section-title {
+.top-bar-title {
   margin: 2px 0 0;
   color: var(--dw-text);
   line-height: 1.1;
@@ -82,10 +81,6 @@
   color: var(--dw-muted);
 }
 
-.section-title {
-  font-size: 1.35rem;
-}
-
 .top-bar-actions {
   display: flex;
   gap: 8px;
@@ -99,6 +94,15 @@
   min-height: 44px;
   align-items: center;
   justify-content: center;
+}
+
+/* 首頁／分類頁的頁面 wrapper：垂直堆疊 chip bar 與內容 .compact-panel。
+   顯式宣告 flex column 取代隱性 block 堆疊，讓面板排列是刻意的版面模型、不依賴預設 block flow。
+   gap 維持 0：實測 834px 兩面板 box 間距本就是 0，面板間的視覺間距（18px）全由下方 .compact-panel
+   自身的 padding-top 提供；若在此加正 gap 會與該 padding 疊加成兩倍 → 故 gap 0 才視覺零回歸。 */
+.compact-page {
+  display: flex;
+  flex-direction: column;
 }
 
 .compact-panel {
@@ -186,11 +190,23 @@
 }
 
 .product-card {
+  position: relative;
   min-width: 0;
   overflow: hidden;
 }
 
+.product-transition-shell {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: inherit;
+  background: var(--dw-panel);
+  pointer-events: none;
+}
+
 .product-card-link {
+  position: relative;
+  z-index: 1;
   display: grid;
   grid-template-rows: auto 1fr;
   width: 100%;
@@ -208,7 +224,9 @@
   text-decoration: none;
 }
 
-.product-card-link:hover {
+/* hover 底色掛在整張卡（.product-card），讓兄弟節點 .product-card-meta（價格＋channel badge）也跟著變色；
+   只掛 .product-card-link 會漏掉 meta 區，dark theme 下尤其明顯（AC27）。一律走 --dw-* token 支援 light/dark 反相。 */
+.product-card:hover {
   background: color-mix(in srgb, var(--dw-accent) 5%, transparent);
 }
 
@@ -237,6 +255,8 @@
 }
 
 .product-card-meta {
+  position: relative;
+  z-index: 1;
   display: flex;
   gap: 8px;
   align-items: end;
@@ -565,11 +585,12 @@
 .product-detail-sheet,
 .product-detail-modal {
   position: relative;
+  isolation: isolate;
   display: grid;
   gap: 0;
   min-width: 0;
   overflow: hidden;
-  background: var(--dw-panel);
+  background: transparent;
   color: var(--dw-text);
 }
 
@@ -577,6 +598,10 @@
   border: 1px solid var(--dw-border);
   border-radius: 8px;
   box-shadow: var(--dw-shadow);
+}
+
+.product-detail-page > .product-transition-shell {
+  background: var(--dw-panel);
 }
 
 .product-detail-sheet {
@@ -653,6 +678,8 @@
 }
 
 .detail-content {
+  position: relative;
+  z-index: 1;
   display: grid;
   gap: 14px;
   min-width: 0;
@@ -942,18 +969,28 @@
 }
 
 @media (prefers-reduced-motion: no-preference) {
+  /* 換頁 translate+fade 的共用手感值：Vue compact-page-fade 退化路徑與 VT root keyframes 共讀，
+     避免兩條互斥路徑（VT 接手／VT 不支援）的位移量與 timing drift（AC5）。 */
+  :root {
+    --dw-page-transition-shift: 10px;
+    --dw-page-transition-duration: 320ms;
+    --dw-page-transition-easing: cubic-bezier(0.2, 0.85, 0.3, 1);
+    --dw-view-transition-delay: 0.1s;
+    --dw-view-transition-duration: 0.35s;
+  }
+
   .compact-page-fade-enter-active,
   .compact-page-fade-leave-active {
     transition:
-      opacity 320ms ease,
-      transform 320ms cubic-bezier(0.2, 0.85, 0.3, 1);
+      opacity var(--dw-page-transition-duration) ease,
+      transform var(--dw-page-transition-duration) var(--dw-page-transition-easing);
     will-change: opacity, transform;
   }
 
   .compact-page-fade-enter-from,
   .compact-page-fade-leave-to {
     opacity: 0;
-    transform: translateY(10px);
+    transform: translateY(var(--dw-page-transition-shift));
   }
 
   .compact-page-fade-enter-to,
@@ -986,28 +1023,99 @@
     transform: translateY(0);
   }
 
-  .product-card {
+  .product-vt-card {
     view-transition-class: product-card;
   }
 
-  ::view-transition-old(root),
+  .product-vt-image {
+    view-transition-class: product-image;
+  }
+
+  .product-vt-title {
+    view-transition-class: product-title;
+  }
+
+  .product-vt-summary {
+    view-transition-class: product-summary;
+  }
+
+  .product-vt-price {
+    view-transition-class: product-price;
+  }
+
+  /* VT root 只淡出入，避免重現 Vue fallback 的 translate 手感；商品卡片本體由
+     .product-card group morph 到詳情頁 .product-detail-page。 */
+  @keyframes dw-page-fade-out {
+    from {
+      opacity: 1;
+    }
+
+    to {
+      opacity: 0;
+    }
+  }
+
+  @keyframes dw-page-fade-in {
+    from {
+      opacity: 0;
+    }
+
+    to {
+      opacity: 1;
+    }
+  }
+
+  ::view-transition-old(root) {
+    animation-name: dw-page-fade-out;
+    animation-duration: var(--dw-view-transition-duration);
+    animation-delay: 0s;
+    animation-timing-function: var(--dw-page-transition-easing);
+  }
+
   ::view-transition-new(root) {
-    animation-duration: 180ms;
-    animation-timing-function: ease-out;
+    animation-name: dw-page-fade-in;
+    animation-duration: var(--dw-view-transition-duration);
+    animation-delay: 0s;
+    animation-timing-function: var(--dw-page-transition-easing);
   }
 
   ::view-transition-group(.product-card) {
-    animation-duration: 260ms;
+    animation-duration: var(--dw-view-transition-duration);
+    animation-delay: var(--dw-view-transition-delay);
+    animation-timing-function: ease;
+  }
+
+  ::view-transition-group(.product-image),
+  ::view-transition-group(.product-title),
+  ::view-transition-group(.product-summary),
+  ::view-transition-group(.product-price) {
+    animation-duration: var(--dw-view-transition-duration);
+    animation-delay: var(--dw-view-transition-delay);
     animation-timing-function: ease;
   }
 
   ::view-transition-old(.product-card) {
-    animation-duration: 180ms;
+    animation-duration: var(--dw-view-transition-duration);
+    animation-delay: var(--dw-view-transition-delay);
     animation-timing-function: ease-out;
   }
 
   ::view-transition-new(.product-card) {
-    animation-duration: 220ms;
+    animation-duration: var(--dw-view-transition-duration);
+    animation-delay: var(--dw-view-transition-delay);
+    animation-timing-function: ease-out;
+  }
+
+  ::view-transition-old(.product-image),
+  ::view-transition-new(.product-image),
+  ::view-transition-old(.product-title),
+  ::view-transition-new(.product-title),
+  ::view-transition-old(.product-summary),
+  ::view-transition-new(.product-summary),
+  ::view-transition-old(.product-price),
+  ::view-transition-new(.product-price) {
+    animation-duration: var(--dw-view-transition-duration);
+    animation-delay: var(--dw-view-transition-delay);
     animation-timing-function: ease-out;
   }
 }
@@ -1028,9 +1136,11 @@
     transform: none;
   }
 
-  .product-card,
-  .product-image-tile,
-  .detail-hero-tile {
+  .product-vt-card,
+  .product-vt-image,
+  .product-vt-title,
+  .product-vt-summary,
+  .product-vt-price {
     view-transition-name: none !important;
   }
 
@@ -1123,6 +1233,28 @@
   font-weight: 900;
 }
 
+/* taxonomy 瀏覽頁：沿用 .compact-panel／.product-grid／.resource-list；頁內不放重複標題
+   （breadcrumb 即頁面標題），僅補頁面標題區與各型別區段的版面 gap 與簡介文字色（皆走 --dw-* token）。 */
+.taxonomy-page-header {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+}
+
+.taxonomy-page-description {
+  margin: 6px 0 0;
+  color: var(--dw-muted);
+  font-size: 0.9rem;
+  line-height: 1.55;
+  overflow-wrap: anywhere;
+}
+
+.taxonomy-section {
+  display: grid;
+  gap: 12px;
+  min-width: 0;
+}
+
 @media (max-width: 767px) {
 
   .compact-app-bottom-tabs .app-nav-button {
@@ -1172,7 +1304,7 @@
     align-content: start;
     gap: 10px;
     width: var(--nav-rail-width);
-    min-height: 100vh;
+    min-height: 100dvh;
     padding: 18px 10px;
     border-right: 1px solid var(--dw-border);
     background: color-mix(in srgb, var(--dw-panel) 72%, transparent);
@@ -1226,7 +1358,7 @@
   }
 
   .compact-panel {
-    padding: 20px 81px 0;
+    padding: 20px 40px 0;
   }
 
   .catalog-pill {
@@ -1247,7 +1379,7 @@
     align-content: start;
     gap: 26px;
     width: var(--nav-sidebar-width);
-    min-height: 100vh;
+    min-height: 100dvh;
     padding: 28px 16px;
     border-right: 1px solid var(--dw-border);
     background: color-mix(in srgb, var(--dw-panel) 76%, transparent);
@@ -1263,13 +1395,22 @@
     gap: 10px;
   }
 
-  .home-category-chip-list {
+  .category-chip-bar {
     display: none;
   }
 
   .product-grid {
     grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
     gap: 16px;
+    margin-inline: 41px;
+  }
+
+  .detail-content {
+    padding: 40px;
+  }
+
+  .related-products-section {
+    padding: 0 40px 40px;
   }
 
   .detail-hero-layout {

@@ -21,7 +21,7 @@ pnpm install
 ./dev.sh status     # 看容器狀態
 ```
 
-不要直接在 host 上跑 `pnpm dev`——會與容器共用 Vite cache 造成 chunk hash 衝突。指令細節見 `CLAUDE.md`。
+`pnpm dev` 會委派給 `./dev.sh dev`，host 端自動啟動 Docker dev container 並追 log；容器內才執行真正的 Nuxt dev server，避免 host 與容器共用 Vite cache 造成 chunk hash 衝突。
 
 執行測試與檢查（host，`vitest.config.ts` 已載入 `.env`，不需手動帶 `APP_URL=` 前綴）：
 
@@ -37,7 +37,11 @@ pnpm typecheck
 - `GET /search-index.json`：Nuxt server route，產生 client MiniSearch 需要的 payload。
 - 圖片：`@nuxt/image`（`<NuxtImg format="webp">` + IPX，source dir 指向 `content/`）。dev 即時最佳化來源圖片，不需先跑 `build:content-images`。
 
-`pnpm generate` 會先產生 discovery 檔（sitemap／rss／robots／llms）、檢查 published content 的本地圖片來源是否存在，接著 prerender 頁面與 `/api/content.json`、`/search-index.json` 到 `.output/public`，並輸出頁面實際使用的 optimized images 到 `.output/public/_ipx`，production 不需 server runtime。`build:content-images`、`build:search-index`、`build:public-artifacts` 降為 legacy CLI，已不是 dev／generate 的必要步驟。
+本機日常不需要直接跑 `pnpm generate`：dev mode 走 HMR；build mode 只在 Docker app service 啟動時由 container PID 1 執行一次 generate，接著進入 preview。若要本機啟動 build preview，請以 `NUXT_MODE=build ./dev.sh restart` 重建 service（`./dev.sh restart` 在有設定 `NUXT_MODE` 時會 `--force-recreate` 並套用該 mode；未設定時則為輕量 `docker compose restart`，不套用新的 `NUXT_MODE`）。CI 需要直接產 static artifact 時，會明確設定 `DWSELECT_ALLOW_HOST_GENERATE=1` 再跑 `pnpm generate`。
+
+容器 entrypoint 以 root 起步時，會把 bind-mount 的 `.nuxt`／`.output`／`node_modules` `chown` 給 container 內的 `node` 使用者（uid 1000）後再降權。這隱含假設 host 操作者的 uid 為 1000；若你的 host 或 CI 以非 1000 uid 跑 build mode，工作樹的 owner 會被改成 1000，host 端清除這些目錄時可能需要 `sudo`。
+
+build mode 會產生 discovery 檔（sitemap／rss／robots／llms）、檢查 published content 的本地圖片來源是否存在，接著 prerender 頁面與 `/api/content.json`、`/search-index.json` 到 `.output/public`，輸出頁面實際使用的 optimized images 到 `.output/public/_ipx`。production 不需 server runtime。`build:content-images`、`build:search-index`、`build:public-artifacts` 降為 legacy CLI，已不是 dev／generate 的必要步驟。
 
 `public/api/content.json`、`public/search-index.json`、`public/images/**` 改由上述流程產生，已不再進 Git；正式 static output 以 `pnpm generate` 的 `.output/public` 為準。
 
@@ -45,18 +49,12 @@ pnpm typecheck
 
 Google Sheets TSV 只作為 legacy migration input 或參考來源，不應在公開站 client/runtime fetch。
 
-`scripts/legacy/migrate-google-sheet-products.ts` 已 deprecated，僅保留給 cutover 前 legacy 資料追溯與測試，不是新版 product content importer。008 之後的公開內容以 Git-backed `content/products/*.json`、`content/guides/*.json`、`content/links/*.json` 與 taxonomy files 為 SSOT。
+原 Google Sheets TSV importer（`scripts/legacy/migrate-google-sheet-products.ts`）已移除——它會產生含 CJK 的 slug，與 content id 強制 ASCII kebab（ADR-11）的 schema 不相容；cutover 早已完成，公開內容以 Git-backed `content/products/*.json`、`content/guides/*.json`、`content/links/*.json` 與 taxonomy files 為 SSOT。
 
 如需追溯 cutover 流程，可參考一次性 content domain migration script：
 
 ```bash
 node scripts/legacy/migrate-content-domain-taxonomy.ts
-```
-
-legacy Google Sheets importer 的歷史用法如下；不要用它建立新內容：
-
-```bash
-node scripts/legacy/migrate-google-sheet-products.ts legacy/products.tsv --date 2026-06-02
 ```
 
 ## Static generate

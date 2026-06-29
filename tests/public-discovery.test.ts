@@ -9,12 +9,14 @@ import { afterEach, describe, expect, it } from 'vitest'
 
 import type { CategoryDefinition, ChannelDefinition, Guide, LinkDefinition, Product, TagDefinition } from '../app/utils/product-schema'
 import { buildPublicContentPayload } from '../scripts/public-content'
+import { buildProductDetail } from '../scripts/public-payload/build-detail-by-id'
 import { buildPublicDiscoveryFiles } from '../scripts/build-public-discovery'
 
 const execFileAsync = promisify(execFile)
 
 const base_product: Product = {
   id: '2026-06-02-sample-product',
+  slug: '2026-06-02-sample-product',
   status: 'published',
   name: '機械鍵盤 & <滑鼠>',
   english_name: 'Mechanical Keyboard',
@@ -51,6 +53,7 @@ const base_product: Product = {
 
 const base_guide: Guide = {
   id: '2026-06-03-guide',
+  slug: '2026-06-03-guide',
   status: 'published',
   title: '日本米入門篇',
   summary: '如何挑選日本米',
@@ -68,6 +71,7 @@ const base_guide: Guide = {
 
 const base_link: LinkDefinition = {
   id: 'applepig-home',
+  slug: 'applepig-home',
   status: 'published',
   title: 'applepig.idv.tw',
   summary: 'DW 的主站入口',
@@ -141,8 +145,10 @@ describe('public content payload', () => {
       },
     })
     expect(payload.products.cards.map((card) => card.id)).toEqual(['a-product', 'z-product'])
-    expect(Object.keys(payload.products.details_by_id)).toEqual(['a-product', 'z-product'])
-    expect(payload.guides.map((guide) => guide.id)).toEqual(['2026-06-03-guide'])
+    // 028 拆分：共用 payload 不再內嵌全量 detail，detail 改由 per-id route 取得。
+    expect(payload.products).not.toHaveProperty('details_by_id')
+    expect(payload.guides).not.toHaveProperty('details_by_id')
+    expect(payload.guides.rows.map((guide) => guide.id)).toEqual(['2026-06-03-guide'])
     expect(payload.links.map((link) => link.id)).toEqual(['applepig-home'])
     expect(JSON.stringify(payload)).not.toContain('草稿')
     expect(JSON.stringify(payload)).not.toContain('封存')
@@ -158,8 +164,8 @@ describe('public content payload', () => {
 })
 
 describe('frontend-ready public content payload shape', () => {
-  function buildSamplePayload() {
-    return buildPublicContentPayload({
+  function buildSampleSource() {
+    return {
       products: [
         base_product,
         {
@@ -181,7 +187,16 @@ describe('frontend-ready public content payload shape', () => {
         tags: test_tags,
         brands: test_brands,
       },
-    })
+    }
+  }
+
+  function buildSamplePayload() {
+    return buildPublicContentPayload(buildSampleSource())
+  }
+
+  // 028 拆分：detail 形狀改由 per-id builder（route 用的同一條）產出，不再從共用 payload 取。
+  function buildSampleDetail(id: string) {
+    return buildProductDetail(buildSampleSource(), id)
   }
 
   it('should map product cards to semantic fields without buy url or long description', () => {
@@ -196,8 +211,10 @@ describe('frontend-ready public content payload shape', () => {
       category_id: 'computer-3c',
       category_label: '電腦3C',
       channel_id: 'pchome',
+      channel_ids: ['pchome'],
       channel_label: 'PChome',
       price_label: 'NT$ 1,990',
+      tag_ids: ['keyboard', 'fixture-brand'],
       tag_labels: ['鍵盤', 'Fixture Brand'],
       published_at: '2026-06-02T00:00:00+08:00',
     })
@@ -208,8 +225,7 @@ describe('frontend-ready public content payload shape', () => {
   })
 
   it('should map product detail to content semantics without dw_says or generic description', () => {
-    const payload = buildSamplePayload()
-    const detail = payload.products.details_by_id['2026-06-02-sample-product']!
+    const detail = buildSampleDetail('2026-06-02-sample-product')!
 
     expect(detail).toMatchObject({
       id: '2026-06-02-sample-product',
@@ -223,7 +239,10 @@ describe('frontend-ready public content payload shape', () => {
       category_label: '電腦3C',
       channel_id: 'pchome',
       channel_label: 'PChome',
-      tag_labels: ['鍵盤', 'Fixture Brand'],
+      tag_ids: ['keyboard'],
+      tag_labels: ['鍵盤'],
+      brand_ids: ['fixture-brand'],
+      brand_labels: ['Fixture Brand'],
       price_label: 'NT$ 1,990',
       buy_url: 'https://example.com/product?a=1&b=2',
       fine_print: '價格與庫存以通路頁面為準。',
@@ -236,8 +255,7 @@ describe('frontend-ready public content payload shape', () => {
   })
 
   it('should expose related product cards with only related semantic keys and no placeholders', () => {
-    const payload = buildSamplePayload()
-    const detail = payload.products.details_by_id['2026-06-02-sample-product']!
+    const detail = buildSampleDetail('2026-06-02-sample-product')!
 
     expect(detail.related_products).toEqual([
       {
@@ -324,8 +342,24 @@ describe('public discovery files', () => {
     expect(sitemap).toContain('<loc>https://dwselect.applepig.net/links</loc>')
     expect(sitemap).toContain('<loc>https://dwselect.applepig.net/products/2026-06-02-sample-product</loc>')
     expect(sitemap).toContain('<loc>https://dwselect.applepig.net/products/no-published-at-product</loc>')
+    expect(sitemap).toContain([
+      '<loc>https://dwselect.applepig.net/guide/2026-06-03-guide</loc>',
+      '<lastmod>2026-06-03</lastmod>',
+    ].join('\n    '))
     expect(sitemap).toContain('<lastmod>2026-06-03</lastmod>')
+    // Taxonomy 頁要可索引：非空 category／tag（跨三型別 published 關聯）須進 sitemap。
+    expect(sitemap).toContain('<loc>https://dwselect.applepig.net/category/computer-3c</loc>')
+    expect(sitemap).toContain('<loc>https://dwselect.applepig.net/category/household</loc>')
+    expect(sitemap).toContain('<loc>https://dwselect.applepig.net/category/other</loc>')
+    expect(sitemap).toContain('<loc>https://dwselect.applepig.net/tag/keyboard</loc>')
+    expect(sitemap).toContain('<loc>https://dwselect.applepig.net/tag/food</loc>')
+    // brand id 走專屬 /brand/ 前綴、不再出現於 /tag/（ADR-8 單一 canonical）。
+    expect(sitemap).toContain('<loc>https://dwselect.applepig.net/brand/fixture-brand</loc>')
+    expect(sitemap).not.toContain('<loc>https://dwselect.applepig.net/tag/fixture-brand</loc>')
+    // channel 頁（products-only）：被 published product offer 引用的 channel 須進 sitemap。
+    expect(sitemap).toContain('<loc>https://dwselect.applepig.net/channel/pchome</loc>')
     expect(sitemap).not.toContain('draft-product')
+    expect(sitemap).not.toContain('draft-guide')
     expect(sitemap).not.toContain('dwselect.toybox.local')
     expect(rss.indexOf('<title>日本米入門篇</title>')).toBeLessThan(rss.indexOf('<title>機械鍵盤 &amp; &lt;滑鼠&gt;</title>'))
     expect(rss.indexOf('<title>機械鍵盤 &amp; &lt;滑鼠&gt;</title>')).toBeLessThan(rss.indexOf('<title>applepig.idv.tw</title>'))
@@ -420,7 +454,7 @@ describe('public discovery files', () => {
     expect(package_json.scripts['build:search-index']).toBe('node scripts/build-search-index.ts')
     expect(package_json.scripts['build:public-artifacts']).toBe('node scripts/build-public-artifacts.ts')
     expect(package_json.scripts.build).toBe('pnpm build:public-discovery && node scripts/assert-content-images.ts && nuxt build')
-    expect(package_json.scripts.generate).toBe('pnpm build:public-discovery && node scripts/assert-content-images.ts && nuxt generate')
+    expect(package_json.scripts.generate).toBe('./dev.sh generate')
     expect(artifacts_source.match(/await readPublicContentSource\(/g)).toHaveLength(1)
     expect(artifacts_source).toContain('buildSearchIndexFileFromSource(source')
     expect(artifacts_source).toContain('buildPublicDiscoveryFilesFromSource(source')
@@ -452,6 +486,7 @@ async function makeFixtureProject() {
   await writeFile(join(product_images_dir, '2026-06-02-sample-product.jpg'), createTinySvg())
   await writeFile(join(product_images_dir, 'no-published-at-product.jpg'), createTinySvg())
   await writeFile(join(guides_dir, '2026-06-03-guide.json'), JSON.stringify(base_guide))
+  await writeFile(join(guides_dir, 'draft-guide.json'), JSON.stringify({ ...base_guide, id: 'draft-guide', status: 'draft', title: '草稿指南' }))
   await writeFile(join(links_dir, 'applepig-home.json'), JSON.stringify(base_link))
   await writeTaxonomies(taxonomies_dir)
 

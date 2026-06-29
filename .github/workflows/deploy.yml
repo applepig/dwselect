@@ -1,0 +1,67 @@
+name: Deploy
+
+# 只在 Static Generate（test/lint/typecheck/generate quality-gate）於 master 成功後才觸發，
+# 避免 regression 直接 push 到 master 就上線。兩支 workflow 拆開、deploy 串接在 gate 之後。
+on:
+  workflow_run:
+    workflows: ["Static Generate"]
+    types:
+      - completed
+    branches:
+      - master
+
+permissions:
+  contents: read
+  deployments: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    env:
+      APP_URL: dwselect.applepig.net
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          # workflow_run 預設 checkout 預設分支 HEAD；改抓被驗證過的那個 commit，避免 deploy 到未經 gate 的新 commit。
+          ref: ${{ github.event.workflow_run.head_sha }}
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          run_install: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Restore Nuxt build cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            node_modules/.cache/nuxt
+            .nuxt
+          key: nuxt-build-${{ runner.os }}-node-24-${{ hashFiles('pnpm-lock.yaml', 'nuxt.config.ts', 'app/**', 'scripts/**', 'content/**') }}
+          restore-keys: |
+            nuxt-build-${{ runner.os }}-node-24-
+            nuxt-build-${{ runner.os }}-
+
+      - name: Generate static site
+        env:
+          DWSELECT_ALLOW_HOST_GENERATE: "1"
+        run: pnpm generate
+
+      - name: Deploy to Cloudflare Pages
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+          command: pages deploy .output/public --project-name=dwselect --branch=master
