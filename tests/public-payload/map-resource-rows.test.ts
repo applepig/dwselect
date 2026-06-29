@@ -56,7 +56,7 @@ describe('guide and link resource row build mapper', () => {
     ])
   })
 
-  it('should ignore external guide image urls for resource rows', () => {
+  it('should fall back to external guide image urls when no local image file exists', () => {
     const guides: Guide[] = [
       {
         ...base_guide,
@@ -68,7 +68,7 @@ describe('guide and link resource row build mapper', () => {
     ]
 
     expect(mapGuideRows(guides, labels)).toEqual([
-      expect.objectContaining({ id: 'external-image-guide', image_url: null }),
+      expect.objectContaining({ id: 'external-image-guide', image_url: 'https://scontent.ftpe8-2.fna.fbcdn.net/example.jpg' }),
     ])
   })
 

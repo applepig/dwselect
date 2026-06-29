@@ -111,3 +111,25 @@
 
 - 使用者實機 iPad Safari 全新分頁驗證 hydration 與轉場：尚未執行。
 - `prefers-reduced-motion: reduce` 在實機 iPad Safari 下的無動畫行為：尚未手動驗證；目前僅以 CSS 契約測試確認 fallback 存在。
+
+## Codex PR #10 review 收尾（2026-06-29）
+
+PR #10 的 Codex 自動 review 共留 6 條 P2 finding。前 3 條（content HMR 不刷 per-id detail cache、deploy 未 gate 在 quality workflow 後、slug 變必填但 AGENTS.md 未記）已於 f97efdb 處理。本次收尾剩餘 3 條，並一併修一條同類兄弟缺陷。
+
+### 技術決策
+
+- **Finding 4 — guide `image_url` fallback 在 detail/列表 payload 被丟棄**：`resolveGuideImageUrl()` 只解析 `image_file`，忽略 schema 允許的外部 `image_url` fallback，導致只填 `image_url` 的 guide 在 `/guide/{id}` hero 與列表縮圖退化成 fallback icon。改為 `resolveImageFileUrl(...) ?? guide.image_url ?? null`（本地優先、否則外部、皆無才 null）。
+- **兄弟缺陷 — search index 的 `resolveGuideSearchImageUrl()`**：同一缺陷 class（丟棄 guide external url），雖 search 結果 UI 目前不顯示圖、零可見影響，經使用者裁定比照 Finding 4 一併修，保兩個 guide 圖片 resolver 行為一致。
+- **Finding 5 — discovery 檔契約衝突**：`.gitignore` 已 ignore 並移除追蹤 sitemap/rss/robots/llms（上游 0567da5 刻意，deploy 以 `.output/public` 為準），但 AGENTS.md 仍寫「維持 tracked」。經使用者裁定保留 gitignore 現狀、改 AGENTS.md 對齊（移除會 stale 的 dead copy 描述）。
+- **Finding 6 — guide 圖片檔名與 id 不符**：`2026-06-02-japanese-rice-intro` 的 `image_file` 指向 `2026-06-02-japanese-rice.jpg`（027 CJK guide 遷移遺留），違反 `{id}.{ext}` 慣例。圖檔 git rename 為 `2026-06-02-japanese-rice-intro.jpg` + 同步 `image_file` 欄位。
+
+### 測試結果
+
+- Finding 4 走 TDD：新增 `tests/resolve-guide-image-url.test.ts`（local 優先／external fallback／both 優先 local／皆 null）Red（fallback case 回 null）→ Green。
+- 連帶更正兩個把舊 bug 行為編碼成 spec 的既有測試：`tests/public-payload/map-resource-rows.test.ts`、`tests/search-index.test.ts`（後者三處斷言＋測試名）。
+- `pnpm test` 599 passed、`pnpm lint` 0 error、`pnpm content:check` 143 passed。
+- typecheck / generate：host 限制 deferred，依使用者裁定靠 PR #10 push 後 CI quality-gate 驗。
+
+### 未驗證
+
+- frontend handoff：japanese-rice guide 圖片 rename 後的 hero 圖實機顯示未開頁面確認（host 開不了 toybox.local，使用者選擇靠 CI）。風險低——實體檔存在、`image_file` 指向正確、content:check image guard 通過。

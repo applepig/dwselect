@@ -397,7 +397,7 @@ function normalizeSearchContentInput(input: Product[] | SearchContentInput): Sea
 }
 
 function resolveGuideSearchImageUrl(guide: Pick<Guide, 'image_file' | 'image_url'>): string | null {
-  return resolveImageFileUrl(guide.image_file, 'guides')
+  return resolveImageFileUrl(guide.image_file, 'guides') ?? guide.image_url ?? null
 }
 
 function getTagAliases(tag_ids: string[], tag_aliases: ReadonlyMap<string, string[]>) {

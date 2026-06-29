@@ -6,5 +6,5 @@ type GuideImageSource = {
 }
 
 export function resolveGuideImageUrl(guide: GuideImageSource): string | null {
-  return resolveImageFileUrl(guide.image_file, 'guides')
+  return resolveImageFileUrl(guide.image_file, 'guides') ?? guide.image_url ?? null
 }

@@ -38,7 +38,7 @@
 - Search index 由 Nuxt server route `GET /search-index.json`（`server/routes/search-index.json.get.ts`）產生，納入 published products、guides、links；client MiniSearch fetch 同一個 `/search-index.json` URL，`pnpm generate` 一樣 prerender 成 static file。
 - 圖片由 `@nuxt/image` 處理：`nuxt.config.ts` 設 `image.dir = '../content'` 指向專案根的 `content/`，UI 用 `<NuxtImg :src="image_url" format="webp">`（外部 http 連結圖仍用原生 `<img>`）；dev 由 IPX 即時最佳化，`pnpm generate` 用 ipxStatic 輸出 optimized 圖到 `.output/public/_ipx`，不需先跑 `build:content-images`。
 - 內容或 taxonomy 變更後直接跑 `pnpm generate` 即可讓 payload、index、圖片與 SSG 一起更新；`build:content-images`、`build:search-index`、`build:public-artifacts` 是 legacy CLI，不再是 generate 的必要前置步驟。
-- `public/api/content.json`、`public/search-index.json`、`public/images/**` 已 gitignore 並從版控移除；sitemap、rss、robots、llms 等 discovery 檔仍由 `pnpm build:public-discovery` 產生並維持 tracked。
+- `public/api/content.json`、`public/search-index.json`、`public/images/**`，以及 sitemap、rss、robots、llms 等 discovery 檔都已 gitignore 並從版控移除；discovery 檔由 `pnpm build:public-discovery` 在 build／dev 時即時產生，deploy 以 `.output/public` 為準，git 內不保留任何 copy 以免 stale。
 - `node scripts/assert-runtime-google-sheet-clean.ts` 會掃 runtime source 與 `.output/public`，確保公開 runtime 沒有 Google Sheets TSV 指標。
 
 ## Routing And UI

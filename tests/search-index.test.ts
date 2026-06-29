@@ -242,7 +242,7 @@ describe('search index', () => {
     ])
   })
 
-  it('should ignore external guide image urls in search documents, payload summaries and query results', () => {
+  it('should fall back to external guide image urls in search documents, payload summaries and query results', () => {
     const payload = buildSearchIndexPayload({
       products: [],
       guides: [{
@@ -263,19 +263,19 @@ describe('search index', () => {
     }], links: [] }, test_taxonomies)).toEqual([
       expect.objectContaining({
         document_id: 'guide:2026-06-02-guide',
-        image_url: null,
+        image_url: 'https://scontent.ftpe8-2.fna.fbcdn.net/example.jpg',
       }),
     ])
     expect(payload.documents).toEqual([
       expect.objectContaining({
         document_id: 'guide:2026-06-02-guide',
-        image_url: null,
+        image_url: 'https://scontent.ftpe8-2.fna.fbcdn.net/example.jpg',
       }),
     ])
     expect(querySearchIndex(mini_search, '外部圖片指南')).toEqual([
       expect.objectContaining({
         document_id: 'guide:2026-06-02-guide',
-        image_url: null,
+        image_url: 'https://scontent.ftpe8-2.fna.fbcdn.net/example.jpg',
       }),
     ])
   })
