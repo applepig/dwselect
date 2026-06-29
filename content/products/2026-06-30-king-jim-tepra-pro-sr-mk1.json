@@ -1,0 +1,50 @@
+{
+  "id": "2026-06-30-king-jim-tepra-pro-sr-mk1",
+  "slug": "2026-06-30-king-jim-tepra-pro-sr-mk1",
+  "status": "published",
+  "created_at": "2026-06-30T00:00:00+08:00",
+  "updated_at": "2026-06-30T00:00:00+08:00",
+  "published_at": "2026-06-30T00:00:00+08:00",
+  "name": "King Jim TEPRA SR-MK1",
+  "english_name": "King Jim Label Printer for Smartphones, TEPRA PRO MARK SR-MK1, Beige",
+  "summary": "工程師們對標籤機都有異常的執著",
+  "long_description": "工程師們對標籤機都有異常的執著",
+  "llm_description": "## 快速判斷\n\nKing Jim TEPRA PRO MARK SR-MK1 是一台以手機 App 操作的熱轉印標籤機，Amazon JP 這個品項是 Beige 機身、ASIN B08HLN39HY。它的定位不是帶鍵盤的一體式機型，而是透過 Bluetooth 連接 iOS／Android 的「Hello」或「TEPRA LINK 2」App，適合想把標籤設計、範本與輸入流程集中在手機上的桌面與居家整理情境。\n\n## 重要規格\n\n- 型號：SR-MK1，官方 Beige 品番標示為 SR-MK1ヘー。\n- 列印方式：熱轉印 PRO，360dpi／256 dot thermal head。\n- 對應帶寬：TEPRA PRO tape cartridge 4、6、9、12、18、24mm；最大可列印寬度 18.1mm。\n- 連線方式：Bluetooth。\n- 操作方式：手機 App「Hello」與「TEPRA LINK 2」。\n- 尺寸與重量：官方規格約 55(W) × 133(D) × 146(H)mm，約 470g（不含電池與標籤帶）。\n- 電源：AC adapter AC1116J（另售）、6 顆 AA 鹼性電池（另售），或 6 顆 AA NiMH 充電電池（另售）。\n- 切刀：auto cutter。\n- 內容物：取扱説明書（含保固書）；官方與 Amazon 頁面皆註明 AC adapter、電池與 tape cartridge 另售。\n\n## 使用上的取捨\n\n- 優勢在於外型接近桌面／居家物件，並把標籤內容編輯交給手機 App，能使用 App 內的範本、符號與圖片素材。\n- 需要注意耗材與配件：第一次使用前通常還要另外準備 TEPRA PRO tape cartridge 與電源方案；若固定放在桌上使用，AC adapter 也需另購。\n- 它支援 24mm tape，但官方標示最大列印寬度為 18.1mm；Amazon 製造商資訊也提醒部分 tape 類型（如 transfer tape、cut label、braille cartridge）不在一般相容範圍內。\n- 可見使用者評論中有人提到沒有 half-cut 功能、每次列印會產生餘白，以及 Bluetooth 連線需手動多一步；這些比較影響大量連續列印與節省耗材的需求。\n\n## 評測與使用者回饋\n\n- Amazon JP 商品頁在查證時顯示 4.2／5 星、1,552 筆 global ratings，並在商品頁可讀到日本 top reviews；完整 `/product-reviews/B08HLN39HY` 評論列表嘗試開啟時導向 Amazon Sign-In，因此以下摘要只涵蓋商品頁當下可見的 top reviews。\n- 正面回饋集中在外型、手機操作、列印品質、範本與圖片列印彈性；有使用者指出 App 介面更新後操作問題減少，也有人認為對家用與低頻率標籤列印已足夠。\n- 限制回饋集中在 App 需要適應、Bluetooth 不一定自動連上、沒有 half-cut、列印餘白，以及舊機型或特定舊 tape 不一定能沿用。\n\n## 參考來源\n\n- [King Jim 官方 SR-MK1 PRODUCT／SPECIFICATION](https://www.kingjim.co.jp/sp/sr-mk1/product/)\n- [King Jim 官方 SR-MK1 產品網站](https://www.kingjim.co.jp/sp/sr-mk1/)\n- [Amazon JP 商品頁：ASIN B08HLN39HY](https://www.amazon.co.jp/dp/B08HLN39HY)\n- [使用者提供的 Facebook 參考貼文](https://www.facebook.com/1630614087/posts/pfbid02sEyKQ7Y4KfXS8W5ki3KBuYTzNP97gNaWrMM6bLrkWLtHLxrRDRMzLsjWzYFd6o6ml/)",
+  "category_id": "computer-3c",
+  "tag_ids": [
+    "desk-setup",
+    "hardware-tools"
+  ],
+  "image_url": null,
+  "image_file": "2026-06-30-king-jim-tepra-pro-sr-mk1.jpg",
+  "reference_url": "https://www.kingjim.co.jp/sp/sr-mk1/product/",
+  "offers": [
+    {
+      "channel_id": "amazonjp",
+      "url": "https://amzn.asia/d/09vNsadt",
+      "price_text": "TWD 2,028.44",
+      "price": {
+        "amount": 2028.44,
+        "currency": "TWD",
+        "unit": "each",
+        "label": null
+      },
+      "checked_at": "2026-06-30T00:00:00+08:00"
+    }
+  ],
+  "model_numbers": [
+    "SR-MK1",
+    "SR-MK1ヘー"
+  ],
+  "search_aliases": [
+    "King Jim SR-MK1",
+    "King Jim TEPRA PRO MARK",
+    "TEPRA PRO MARK SR-MK1",
+    "テプラ PRO MARK",
+    "キングジム テプラ SR-MK1",
+    "SR-MK1 Beige",
+    "B08HLN39HY"
+  ],
+  "unpublished_at": null,
+  "archived_at": null
+}

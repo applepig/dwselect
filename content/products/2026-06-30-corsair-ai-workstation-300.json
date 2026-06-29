@@ -1,0 +1,49 @@
+{
+  "id": "2026-06-30-corsair-ai-workstation-300",
+  "slug": "2026-06-30-corsair-ai-workstation-300",
+  "status": "published",
+  "name": "Corsair AI Workstation 300",
+  "english_name": "CORSAIR AI WORKSTATION 300 Desktop PC - AMD Ryzen AI Max 385, Radeon 8050S iGPU, 64GB LPDDR5X, 1TB NVMe SSD",
+  "summary": "有要跑自家llm的同學要把握緣分，這麼經濟實惠的價格以後可能不好找了",
+  "long_description": "有要跑自家llm的同學要把握緣分，這麼經濟實惠的價格以後可能不好找了",
+  "llm_description": "## 快速判斷\n\nCORSAIR AI WORKSTATION 300 是 4.4L 小型桌面 AI workstation；此款 CS-9080001-NA 採 AMD Ryzen AI Max 385、Radeon 8050S iGPU、64GB LPDDR5X-8000 與 1TB NVMe SSD，定位在本機 LLM、AI development 與創作工作負載。它的關鍵是 unified memory 與可分配給 iGPU 的最高 48GB VRAM；限制是 64GB 版本比較適合小到中型模型，若要長時間處理更大的模型或更多 context，需評估 128GB／Ryzen AI Max+ 395 版本或獨立 GPU 工作站。\n\n## 重要規格\n\n- 型號／SKU：CS-9080001-NA；Amazon ASIN：B0GKPJRXW4；Amazon 顯示 UPC：840440411871。\n- 處理器：AMD Ryzen AI Max 385，8 cores／16 threads，base 3.6GHz、boost up to 5GHz；AMD 官方列出 cTDP 45-120W、NPU up to 50 TOPS、overall AI up to 106 TOPS。\n- GPU：AMD Radeon 8050S iGPU，Corsair／Amazon 標示最高 48GB VRAM；AMD 官方規格列出 Radeon 8050S Graphics、32 graphics cores、最高 2800MHz。\n- 記憶體與儲存：64GB LPDDR5X-8000MT/s unified memory、1TB M.2 NVMe SSD。\n- 機身與散熱：4.4L small form factor；官方標示 advanced dual-fan cooling、300W Flex ATX power supply、重量 4.158kg；Amazon 商品資訊列出約 7.42 × 3.8 × 9.74 inches、6.3lb。\n- 連接埠：前方 2× USB 3.2 Gen 2 Type-A、1× USB4 Type-C、SD 4.0 card reader、headphone/mic；後方 2× USB 2.0 Type-A、1× USB 3.2 Gen Type-A、1× USB4 Type-C、HDMI 2.1、DisplayPort 1.4、2.5GbE、headphone/mic。\n- 網路與系統：Wi-Fi 6E、Bluetooth 5.2、Windows 11 Home；官方標示 2 年保固與 lifetime tech support。\n\n## 優點與限制\n\n- 優點：在小型桌面機內整合 Ryzen AI Max 385、Radeon 8050S 與 64GB unified memory，規格明確針對本機 AI／LLM、創作與開發流程。\n- 優點：USB4、2.5GbE、SD 4.0、HDMI 2.1 與 DisplayPort 1.4 同時存在，桌面擴充與外接螢幕彈性比一般入門 mini PC 明確。\n- 限制：此款不是 Ryzen AI Max+ 395／128GB 版本；若工作負載需要更大的 unified memory pool、更多 GPU compute units 或更高模型容量，需比對同系列高階 SKU。\n- 限制：Amazon 頁面部分 product information 把 RAM technology 顯示為 LPDDR4，但官方 Corsair 頁、Amazon 標題與官方規格均標示 LPDDR5X-8000；本檔以官方頁為主。\n\n## 評測與使用者回饋\n\n- Amazon 商品頁可見 4.2／5、6 個 global ratings；星等分布為 5 星 60%、4 星 21%、2 星 19%。完整 `/product-reviews/B0GKPJRXW4` 頁面會導向登入，因此只採用商品頁可見的 top reviews。\n- 可讀到的一則 verified purchase 5 星評論表示已載入數個模型且運作順利，但明確提醒 64GB 版本適合 small-to-mid-sized models，使用者應先確認模型尺寸需求。\n- 其他可見 verified purchase 標題呈現分歧：有「Good for LLM and Gaming」、「Workhorse」等正面標題，也有「Good device. Poor corsair software. Bad SW support」與「Not for AI, not for gaming, not for me」等負面標題；樣本數很小，不宜把這些視為廣泛結論。\n\n## 適合誰／不適合誰\n\n- 適合需要一台小型 Windows 桌面機執行本機 LLM、AI app prototyping、創作工具或一般 development workflow，且模型容量需求可落在 64GB unified memory 範圍內的人。\n- 不適合需要多張獨立 GPU、ECC／server 管理功能、可自行大幅更換記憶體，或主要工作負載已確定需要 128GB unified memory 以上的場景。\n\n## 參考來源\n\n- [Corsair 官方產品頁](https://www.corsair.com/us/en/p/gaming-computers/cs-9080001-na/corsair-ai-workstation-300-amd-ryzen-ai-max-385-processor-amd-radeon-8050s-igpu-up-to-48gb-vram-64gb-lpddr5x-memory-1tb-m2-ssd-win11-home-cs-9080001-na)\n- [Amazon US 商品頁](https://www.amazon.com/Corsair-AI-Workstation-300-Desktop/dp/B0GKPJRXW4)\n- [AMD Ryzen AI Max 385 官方規格](https://www.amd.com/en/products/processors/laptop/ryzen/ai-300-series/amd-ryzen-ai-max-385.html)\n- [Corsair AI Software Stack](https://www.corsair.com/ai-software-stack/index.html)",
+  "category_id": "computer-3c",
+  "tag_ids": [
+    "desk-setup"
+  ],
+  "image_url": null,
+  "image_file": "2026-06-30-corsair-ai-workstation-300.jpg",
+  "reference_url": "https://www.corsair.com/us/en/p/gaming-computers/cs-9080001-na/corsair-ai-workstation-300-amd-ryzen-ai-max-385-processor-amd-radeon-8050s-igpu-up-to-48gb-vram-64gb-lpddr5x-memory-1tb-m2-ssd-win11-home-cs-9080001-na",
+  "model_numbers": [
+    "CS-9080001-NA"
+  ],
+  "search_aliases": [
+    "CORSAIR AI WORKSTATION 300",
+    "Corsair AI Workstation 300 Desktop PC",
+    "CS-9080001-NA",
+    "B0GKPJRXW4",
+    "840440411871",
+    "AMD Ryzen AI Max 385",
+    "AMD Radeon 8050S",
+    "local LLM workstation"
+  ],
+  "offers": [
+    {
+      "channel_id": "amazonus",
+      "url": "https://www.amazon.com/Corsair-AI-Workstation-300-Desktop/dp/B0GKPJRXW4",
+      "price_text": "TWD 54,214.38",
+      "price": {
+        "amount": 54214.38,
+        "currency": "TWD",
+        "unit": "each",
+        "label": null
+      },
+      "checked_at": "2026-06-30T00:00:00+08:00"
+    }
+  ],
+  "created_at": "2026-06-30T00:00:00+08:00",
+  "updated_at": "2026-06-30T00:00:00+08:00",
+  "published_at": "2026-06-30T00:00:00+08:00",
+  "unpublished_at": null,
+  "archived_at": null
+}
