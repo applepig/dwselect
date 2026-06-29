@@ -133,3 +133,13 @@ PR #10 的 Codex 自動 review 共留 6 條 P2 finding。前 3 條（content HMR
 ### 未驗證
 
 - frontend handoff：japanese-rice guide 圖片 rename 後的 hero 圖實機顯示未開頁面確認（host 開不了 toybox.local，使用者選擇靠 CI）。風險低——實體檔存在、`image_file` 指向正確、content:check image guard 通過。
+
+### Follow-up：guide detail hero 補 external 圖分流（482d0cf 後 Codex review）
+
+push 482d0cf 後 Codex 再抓一條 P2：Finding 4 讓 `resolveGuideImageUrl()` 回傳外部 url，列表端 `resource-list.vue` 早有 local/external 分流故已生效，但 `guide-detail.vue` hero 仍無條件走 `<NuxtImg>`，外部 url 經 IPX 會 hit error path → 退化 fallback icon，等於 Finding 4 在 detail hero 只修了一半。
+
+- `app/components/guide-detail.vue`：hero 比照 `resource-list.vue` 分流——本地圖（`/` 開頭）走 `<NuxtImg format="webp">`，外部 http(s) 圖走原生 `<img>`；兩路徑同掛 `@error="onHeroImageError"`、同 `alt`／`class`，fallback 一致。`isLocalImageSource()` inline 一份（僅兩處用、未達抽共用 util 門檻）。`product-detail.vue` 不動（schema 禁 product external image_url）。
+- `tests/guide-detail-render.test.ts`：`NuxtImgStub` 加 `data-component="nuxt-img"` marker，新增兩守護測試（local→NuxtImg、external→原生 img）Red→Green。
+- render 端同類掃查：全 codebase 7 處 `<NuxtImg>`，除已分流的 guide-detail hero 與 resource-list 外，其餘皆餵 product 圖（schema 禁 external、永遠 local），無同類風險。
+- `pnpm test` 601 passed、`pnpm lint` 0 error、`pnpm content:check` 143 passed。typecheck/generate deferred。
+- frontend handoff：可見 UI 渲染路徑變更，但現存無 external-only guide 內容，現有頁面零可見變化；external 分支待未來內容觸發，未實機驗。

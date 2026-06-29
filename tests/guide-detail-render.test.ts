@@ -19,7 +19,7 @@ const CatalogPillStub = {
 
 const NuxtImgStub = {
   props: ['src', 'alt'],
-  template: '<img :src="src" :alt="alt" />',
+  template: '<img data-component="nuxt-img" :src="src" :alt="alt" />',
 }
 
 const UButtonStub = {
@@ -160,6 +160,26 @@ describe('GuideDetail', () => {
 
     expect(wrapper.find('.detail-hero-image').exists()).toBe(false)
     expect(wrapper.find('.detail-image-fallback-icon').exists()).toBe(true)
+  })
+
+  it('should render a local hero image through NuxtImg', () => {
+    const wrapper = mountGuideDetail(makeGuideDetailView({ hero_image_url: '/guides/images/local-hero.jpg', hero_alt: '本地英雄圖' }))
+    const hero_image = wrapper.find('.detail-hero-image')
+
+    expect(hero_image.exists()).toBe(true)
+    expect(hero_image.attributes('data-component')).toBe('nuxt-img')
+    expect(hero_image.attributes('src')).toBe('/guides/images/local-hero.jpg')
+    expect(hero_image.attributes('alt')).toBe('本地英雄圖')
+  })
+
+  it('should render an external hero image through a native img instead of NuxtImg', () => {
+    const wrapper = mountGuideDetail(makeGuideDetailView({ hero_image_url: 'https://example.com/external-hero.jpg', hero_alt: '外部英雄圖' }))
+    const hero_image = wrapper.find('.detail-hero-image')
+
+    expect(hero_image.exists()).toBe(true)
+    expect(hero_image.attributes('data-component')).toBeUndefined()
+    expect(hero_image.attributes('src')).toBe('https://example.com/external-hero.jpg')
+    expect(hero_image.attributes('alt')).toBe('外部英雄圖')
   })
 
   // 守護視覺回歸：catalog.css 把 .product-detail-page 共用選擇器背景改為 transparent，

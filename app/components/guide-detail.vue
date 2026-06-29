@@ -22,13 +22,20 @@
           />
 
           <NuxtImg
-            v-if="has_hero_image"
+            v-if="has_hero_image && isLocalImageSource(detail.hero_image_url)"
             :src="detail.hero_image_url"
             :alt="detail.hero_alt"
             class="detail-hero-image"
             format="webp"
             @error="onHeroImageError"
           />
+          <img
+            v-else-if="has_hero_image"
+            :src="detail.hero_image_url"
+            :alt="detail.hero_alt"
+            class="detail-hero-image"
+            @error="onHeroImageError"
+          >
           <UIcon
             name="i-lucide-image-off"
             class="detail-image-fallback-icon"
@@ -205,6 +212,12 @@ onMounted(() => {
     }
   }
 })
+
+// 本地 content 圖（/guides/images/...）走 <NuxtImg>／IPX；外部 http guide 圖維持原生 <img>。
+// 比照 resource-list.vue 的分流；目前僅兩處用，未達抽共用 util 門檻。
+function isLocalImageSource(image_url: string): boolean {
+  return image_url.startsWith('/')
+}
 
 function onHeroImageError() {
   has_hero_image_failed.value = true
