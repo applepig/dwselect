@@ -5,7 +5,7 @@
 把 031 sprint 期間 reviewer 找出、刻意排除在 031 外的 production code 重複與 magic string，收斂成單一真相，降低公開站最容易出 SEO 回歸的維護負擔。具體交付三條主軸 + 一組低成本 clean-code：
 
 1. **SEO meta 單一真相**：抽 `buildSeoMeta` 純函式，收斂散落 10+ 頁的 `useSeoMeta` 12 欄樣板（含 og/twitter、`summary_large_image`）。
-2. **Taxonomy 種類單一真相**：建 `TAXONOMY_KINDS` 設定表（prefix／404 message／label getter），並抽 `useTaxonomyDetailPage` composable 收斂四個逐行複製的 taxonomy 頁。
+2. **Taxonomy 種類單一真相**：建 `TAXONOMY_KINDS` 設定表（404 message／label getter；url prefix 由 kind 衍生 `/${kind}/`），並抽 `useTaxonomyDetailPage` composable 收斂四個逐行複製的 taxonomy 頁。
 3. **Magic string 收斂**：`'all'` sentinel、導覽分頁設定、外部連結屬性、IME keyCode、search suggestion 上限改為命名常數／單一設定。
 
 完成後 SEO meta／canonical／404／導覽設定改一處不再需要同步改多檔。
@@ -32,9 +32,9 @@
 - [x] AC5：`buildSeoMeta` 有單元測試覆蓋：靜態 image（taxonomy 頁路徑，無 imageAlt）與動態 image+imageAlt（detail 頁路徑）兩種輸入，斷言鋪開後各欄位值正確、`twitterCard` 固定。
 
 **A4-lite — TAXONOMY_KINDS 表**
-- [ ] AC6：新增單一 `TAXONOMY_KINDS` 設定（kind → `{ prefix, notFoundMessage, getLabel }`），涵蓋 `category`/`tag`/`brand`/`channel`。
-- [ ] AC7：`resolve-breadcrumb-items.ts` 的 `resolveTaxonomyLabel`、`build-taxonomy-page-data.ts` 的 `resolveLabel`、四個 taxonomy 頁的 canonical prefix 與 404 message，全部改從 `TAXONOMY_KINDS` 取值，移除各自硬寫的 prefix 字串與 label getter if 鏈。
-- [ ] AC8：`isSelectorIdInNamespace`、`resolveDescription`、`selectPublishedTaxonomyItems` 維持原樣不被表驅動化；既有 `build-taxonomy-page-data` 的 `/tag/{brand-id}`／`/brand/{tag-id}`／未知 id → 404 測試全數維持綠燈。
+- [x] AC6：新增單一 `TAXONOMY_KINDS` 設定（kind → `{ notFoundMessage, getLabel }`），涵蓋 `category`/`tag`/`brand`/`channel`。url prefix **不存表**，由 kind 衍生 `/${kind}/`（kind 即 url segment，由 Nuxt 檔案路由 `app/pages/{kind}/[id].vue` 鎖死，呼應既有 `taxonomy-page-seo.ts` 的 `/${taxonomy_kind}/` canonical 衍生）。
+- [x] AC7：`resolve-breadcrumb-items.ts` 的 `resolveTaxonomyLabel`（改由 route segment 直接取 kind，不再經 prefix→kind 反查）、`build-taxonomy-page-data.ts` 的 `resolveLabel`、四個 taxonomy 頁的 404 message，全部改從 `TAXONOMY_KINDS` 取值，移除各自硬寫的 label getter if 鏈；canonical prefix 改用 `/${kind}/` 衍生。
+- [x] AC8：`isSelectorIdInNamespace`、`resolveDescription`、`selectPublishedTaxonomyItems` 維持原樣不被表驅動化；既有 `build-taxonomy-page-data` 的 `/tag/{brand-id}`／`/brand/{tag-id}`／未知 id → 404 測試全數維持綠燈。
 
 **A1／C1 — taxonomy 頁 composable**
 - [ ] AC9：新增 `useTaxonomyDetailPage(kind)` composable，封裝 route id 正規化（吸收 C1）、canonical 推導、meta title/description computed、`useHead`/`useSeoMeta`、`await useTaxonomyPageData`、404、`watchEffect`，回傳 `{ page_data }`。
@@ -114,12 +114,12 @@ function buildSeoMeta(input: SeoMetaInput): Parameters<typeof useSeoMeta>[0]
 
 // TAXONOMY_KINDS —— kind 為 key 的設定表
 type TaxonomyKindConfig = {
-  prefix: string                  // 例 '/category/'
   notFoundMessage: string         // 例 '找不到分類'
   getLabel: (labels: ReturnType<typeof createTaxonomyLabelResolver>, id: string) => string
 }
 const TAXONOMY_KINDS: Record<TaxonomyKind, TaxonomyKindConfig>
-// breadcrumb 持 prefix → 反查 kind（或表附 prefix→kind map）；build／page 持 kind 直接取
+// prefix 不存表：url segment 即 kind，canonical／breadcrumb 偵測一律用 `/${kind}/` 衍生。
+// breadcrumb 從 route segment 直接取 kind（getRouteId 同源），判 `segment in TAXONOMY_KINDS`，無 prefix↔kind 反查。
 
 // useTaxonomyDetailPage —— 封裝四頁共用 setup
 function useTaxonomyDetailPage(kind: TaxonomyKind): { page_data: ShallowRef<TaxonomyPageData | null> }
@@ -145,8 +145,9 @@ function useTaxonomyDetailPage(kind: TaxonomyKind): { page_data: ShallowRef<Taxo
 - 原因：`tests/nuxt-smoke.test.ts:656` 以 source-grep 斷言 `products/[id].vue` 原始碼含 `useHead(` 且早於 `await ...Data`，守 SSG prerender 時 head（canonical/og）先註冊、prerendered HTML 不漏 meta 的 SEO 不變式。純函式只搬「組 object」邏輯，呼叫字面與順序不變，測試與 prerender 行為皆不受影響。
 - 替代方案：(a) 抽 composable 內部呼 `useHead`——頁面失去 `useHead(` 字面、破測試，且 head 註冊時機移入 composable 較難守 prerender 順序；(b) 抽 `<SeoHead>` Vue 元件——head 註冊移到子元件 setup，prerender 順序保證弱化，SEO 回歸風險最高。皆否決。
 
-### ADR-2：TAXONOMY_KINDS 只收斂 prefix／404／labelGetter，排除 namespace/select/description
-- 決策：表只含 `{ prefix, notFoundMessage, getLabel }`；`isSelectorIdInNamespace`、`resolveDescription`、`selectPublishedTaxonomyItems` 留原處不表驅動化。
+### ADR-2：TAXONOMY_KINDS 只收斂 404／labelGetter，prefix 由 kind 衍生，排除 namespace/select/description
+- 決策：表只含 `{ notFoundMessage, getLabel }`；url prefix 不存表，一律用 `/${kind}/` 衍生（canonical、breadcrumb 偵測皆然），breadcrumb 從 route segment 直接取 kind。`isSelectorIdInNamespace`、`resolveDescription`、`selectPublishedTaxonomyItems` 留原處不表驅動化。
+- 原因（prefix 衍生）：kind 即 url segment，由 Nuxt 檔案路由 `app/pages/{kind}/[id].vue` 鎖死，改 segment 必同改資料夾名與表 key，兩者本就連動。把 prefix 存成字面會製造第三份真相（既有 `taxonomy-page-seo.ts:28` 已用 `/${taxonomy_kind}/` 衍生 canonical、頁面 canonical 亦同），且逼出 prefix→kind 反查函式與結構不可達的 `kind === null` 防呆。衍生消除這一整圈來回換算，讓「單一真相」名實相符。
 - 原因：`isSelectorIdInNamespace`（027 ADR-10 強化）是擋 `/tag/{brand-id}` 跨 namespace 直連的 correctness-critical guard，且各 kind 的 id 欄位（`category_id` 單數 vs `channel_ids`/`tag_ids` 複數）、description 有無（只 tag/brand 有）是真實 domain 差異。硬塞進 flat table 會把這些防呆與差異藏進查表，重構中易弄丟，違反「避免過早抽象」。可安全收斂的只有「一一對應的字串／getter 映射」。
 - 替代方案：全表驅動（backlog 原案）——掩蓋 ADR-10 guard，否決。
 
@@ -167,14 +168,14 @@ function useTaxonomyDetailPage(kind: TaxonomyKind): { page_data: ShallowRef<Taxo
 - [x] Red → Green → Refactor
 
 ### Milestone 2: TAXONOMY_KINDS 設定表（A4-lite）
-> 範圍：新增 `TAXONOMY_KINDS`；`resolve-breadcrumb-items.ts`、`build-taxonomy-page-data.ts` 的 label getter、四 taxonomy 頁的 prefix/404 改從表取
+> 範圍：新增 `TAXONOMY_KINDS`（kind→404/labelGetter）；`resolve-breadcrumb-items.ts` 改由 route segment 取 kind 後從表取 label（移除 prefix→kind 反查與不可達防呆）、`build-taxonomy-page-data.ts` 的 `resolveLabel` 改從表取。四 taxonomy 頁的 404 message 隨 M3 composable 一起從表取（避免頁面被改兩次），M2 不動頁面。
 > 驗證：`build-taxonomy-page-data` 既有 `/tag/{brand}`/`/brand/{tag}`/未知 id → 404 測試維持綠；breadcrumb label 測試維持綠
-> 預期結果：kind→prefix/404/labelGetter 單一真相；`isSelectorIdInNamespace`/`resolveDescription` 原封不動
+> 預期結果：kind→404/labelGetter 單一真相、prefix 由 `/${kind}/` 衍生不分裂；`isSelectorIdInNamespace`/`resolveDescription` 原封不動
 
-- [ ] Red → Green → Refactor
+- [x] Red → Green → Refactor
 
 ### Milestone 3: useTaxonomyDetailPage composable（A1 + C1）
-> 範圍：新增 `useTaxonomyDetailPage` composable + 測試；四 taxonomy 頁改用，吸收 route id 正規化
+> 範圍：新增 `useTaxonomyDetailPage` composable + 測試；四 taxonomy 頁改用，吸收 route id 正規化。composable 內 canonical 用 `/${kind}/` 衍生、404 message 從 `TAXONOMY_KINDS` 取（AC7 頁面部分在此落地）
 > 驗證：composable 新增 head-before-await 等價測試；四頁 404/canonical/meta 行為等價（既有 e2e/單元維持綠）
 > 預期結果：四頁 script 收斂為 kind + composable 呼叫，`category` 頁 template 差異保留
 

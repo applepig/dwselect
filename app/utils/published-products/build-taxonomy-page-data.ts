@@ -5,6 +5,7 @@
 import type { ProductCardView } from '../public-content-view-types'
 import { createTaxonomyLabelResolver, type TaxonomyLabelSource } from '../content/taxonomy-labels'
 import { selectPublishedTaxonomyItems, type TaxonomySelector } from './select-taxonomy-items'
+import { TAXONOMY_KINDS } from './taxonomy-kinds'
 import type { CompactResourceRow, TaxonomyPageData } from './types'
 
 export type TaxonomyPageInput = {
@@ -83,21 +84,13 @@ function toTaxonomyResourceItem(row: CompactResourceRow): CompactResourceRow & {
   }
 }
 
-// label 來源依 kind 映射（ADR-8/9/10）：
-// tag→tags（含 brand fallback）、brand→brands、channel→channels.json、category→categories。
+// label 來源依 kind 映射（ADR-8/9/10），收斂於 TAXONOMY_KINDS 表的 getLabel：
+// tag/brand→tags（含 brand fallback）、channel→channels.json、category→categories。
 function resolveLabel(
   labels: ReturnType<typeof createTaxonomyLabelResolver>,
   selector: TaxonomySelector,
 ): string {
-  if (selector.kind === 'tag' || selector.kind === 'brand') {
-    return labels.getTaxonomyTagLabel(selector.id)
-  }
-
-  if (selector.kind === 'channel') {
-    return labels.getChannelLabel(selector.id)
-  }
-
-  return labels.getCategoryLabel(selector.id)
+  return TAXONOMY_KINDS[selector.kind].getLabel(labels, selector.id)
 }
 
 // description 只有 tag/brand 有（取含 brand fallback 的 getter，ADR-8）；category 與 channel 無 description

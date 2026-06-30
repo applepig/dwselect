@@ -354,6 +354,7 @@ describe('Nuxt SSG baseline', () => {
     const catalog_css = readFileSync(new URL('../app/assets/styles/catalog.css', import.meta.url), 'utf8')
 
     const breadcrumb_source = readFileSync(new URL('../app/utils/breadcrumb/resolve-breadcrumb-items.ts', import.meta.url), 'utf8')
+    const taxonomy_kinds_source = readFileSync(new URL('../app/utils/published-products/taxonomy-kinds.ts', import.meta.url), 'utf8')
 
     // M3 spike：暫時重啟，等待使用者實機 iPad Safari 驗證；未 PASS 前不得 ship true。
     expect(nuxt_config.experimental?.viewTransition).toBe(true)
@@ -378,11 +379,14 @@ describe('Nuxt SSG baseline', () => {
     expect(breadcrumb_source).toContain('guide_breadcrumb_by_id[guide_id]')
     expect(breadcrumb_source).toContain("{ label: '指南', to: '/guide' }")
     expect(breadcrumb_source).toContain('guide_item.title')
-    // AC26：taxonomy 頁標題改用 layout breadcrumb，四種前綴都解析 label。
-    expect(breadcrumb_source).toContain("'/category/'")
-    expect(breadcrumb_source).toContain("'/tag/'")
-    expect(breadcrumb_source).toContain("'/brand/'")
-    expect(breadcrumb_source).toContain("'/channel/'")
+    // AC26：taxonomy 頁標題改用 layout breadcrumb，四種 kind 都解析 label。
+    // 032 M2：四種 kind 的 label 映射收斂到 TAXONOMY_KINDS 單一真相，breadcrumb 改由 route segment
+    // 直接取 kind（segment in 表）後取 label——行為不變，prefix 不再是字面而由 `/${kind}/` 衍生。
+    expect(taxonomy_kinds_source).toContain('category:')
+    expect(taxonomy_kinds_source).toContain('tag:')
+    expect(taxonomy_kinds_source).toContain('brand:')
+    expect(taxonomy_kinds_source).toContain('channel:')
+    expect(breadcrumb_source).toContain('TAXONOMY_KINDS')
 
     expect(guide_source).toContain('aria-label="指南"')
     expect(guide_source).not.toContain('class="section-heading-row"')
