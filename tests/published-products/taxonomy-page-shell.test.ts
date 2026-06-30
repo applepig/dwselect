@@ -37,10 +37,12 @@ describe('taxonomy page shells', () => {
   })
 
   it('should reuse the shared SEO builder and the site default OG image, not bespoke meta', () => {
+    // 032 M1：og/twitter 欄位鋪展與 summary_large_image 收斂進 buildSeoMeta（見 seo-metadata.test.ts）；
+    // 此處只守 taxonomy 頁仍走共用 builder（buildTaxonomyPageSeo 算值 + buildSeoMeta 組 payload）且以站台預設 OG 圖為 image，不另寫 bespoke meta。
     for (const source of [category_source, tag_source]) {
       expect(source).toContain('buildTaxonomyPageSeo')
-      expect(source).toContain('ogImage: SITE_OG_IMAGE')
-      expect(source).toContain("twitterCard: 'summary_large_image'")
+      expect(source).toContain('buildSeoMeta({')
+      expect(source).toContain('image: SITE_OG_IMAGE')
     }
   })
 

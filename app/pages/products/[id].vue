@@ -12,7 +12,7 @@
 
 <script setup lang="ts">
 import type { ProductDetailView } from '../../utils/public-content-view-types'
-import { getCanonicalUrl, getOgImageUrl, getSeoDescription, SITE_NAME } from '../../utils/seo-metadata'
+import { buildSeoMeta, getCanonicalUrl, getOgImageUrl, getSeoDescription, SITE_NAME } from '../../utils/seo-metadata'
 
 const route = useRoute()
 const raw_id = route.params.id
@@ -41,20 +41,13 @@ useHead(() => ({
   ],
 }))
 
-useSeoMeta({
+useSeoMeta(buildSeoMeta({
   title: product_meta_title,
   description: product_meta_description,
-  ogTitle: product_meta_title,
-  ogDescription: product_meta_description,
-  ogUrl: product_canonical_url,
-  ogImage: product_og_image,
-  ogImageAlt: product_og_image_alt,
-  twitterCard: 'summary_large_image',
-  twitterTitle: product_meta_title,
-  twitterDescription: product_meta_description,
-  twitterImage: product_og_image,
-  twitterImageAlt: product_og_image_alt,
-})
+  url: product_canonical_url,
+  image: product_og_image,
+  imageAlt: product_og_image_alt,
+}))
 
 const product_detail_data = await useProductDetailData(product_id)
 

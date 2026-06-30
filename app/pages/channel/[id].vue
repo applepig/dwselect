@@ -8,7 +8,7 @@
 <script setup lang="ts">
 import type { TaxonomyPageData } from '../../utils/published-products/types'
 import { buildTaxonomyPageSeo } from '../../utils/published-products/taxonomy-page-seo'
-import { getCanonicalUrl, SITE_NAME, SITE_OG_IMAGE } from '../../utils/seo-metadata'
+import { buildSeoMeta, getCanonicalUrl, SITE_NAME, SITE_OG_IMAGE } from '../../utils/seo-metadata'
 
 const route = useRoute()
 const raw_id = route.params.id
@@ -43,18 +43,12 @@ useHead(() => ({
   ],
 }))
 
-useSeoMeta({
+useSeoMeta(buildSeoMeta({
   title: meta_title,
   description: meta_description,
-  ogTitle: meta_title,
-  ogDescription: meta_description,
-  ogUrl: canonical_url,
-  ogImage: SITE_OG_IMAGE,
-  twitterCard: 'summary_large_image',
-  twitterTitle: meta_title,
-  twitterDescription: meta_description,
-  twitterImage: SITE_OG_IMAGE,
-})
+  url: canonical_url,
+  image: SITE_OG_IMAGE,
+}))
 
 const taxonomy_page_data = await useTaxonomyPageData('channel', channel_id)
 
