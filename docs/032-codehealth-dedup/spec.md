@@ -42,22 +42,22 @@
 - [x] AC11：新增 composable 的測試守住 head-before-await 不變式（composable 內 `useHead`／`useSeoMeta` 註冊早於 `await`），等價於 detail 頁既有的 source-grep 守門；四個 taxonomy 頁的 404／canonical／meta 行為與重構前等價。
 
 **B1／C4 — ALL_CATEGORIES_ID**
-- [ ] AC12：新增 `ALL_CATEGORIES_ID = 'all'` 常數，所有 runtime 比較與 chip 產生（`build-navigation.ts`、`selectable-category-ids.ts`、`compact-app.ts`、`app-navigation.vue`、`category-chip-bar.vue`）改引用該常數，不再裸寫 `'all'`。
-- [ ] AC13：型別維持 union，但 `'all'` literal 以 `typeof ALL_CATEGORIES_ID` 對齊；`types.ts`／`compact-app.ts` 手寫的 `Product['category_id'] | 'all'` 改引用既有 `CategoryChipView['id']`（C4）。
+- [x] AC12：新增 `ALL_CATEGORIES_ID = 'all'` 常數，所有 runtime 比較與 chip 產生（`build-navigation.ts`、`selectable-category-ids.ts`、`compact-app.ts`、`app-navigation.vue`、`category-chip-bar.vue`）改引用該常數，不再裸寫 `'all'`。
+- [x] AC13：型別維持 union，但 `'all'` literal 以 `typeof ALL_CATEGORIES_ID` 對齊；`types.ts`／`compact-app.ts` 手寫的 `Product['category_id'] | 'all'` 改引用既有 `CategoryChipView['id']`（C4）。
 
 **B2 — 導覽 SSOT**
-- [ ] AC14：建單一導覽 tab 設定為 SSOT，`COMPACT_APP_TABS` 與 `app-navigation.vue` 的 `nav_items` 由它衍生，label／icon／順序不再各寫一份。
-- [ ] AC15：統一順序為 `home / guide / links / search`（桌面導覽為基準）；窄螢幕底部 tab 順序由 `search/links` 改為 `links/search`，此 user-visible 變更經 e2e／視覺確認。
+- [x] AC14：建單一導覽 tab 設定為 SSOT，`COMPACT_APP_TABS` 與 `app-navigation.vue` 的 `nav_items` 由它衍生，label／icon／順序不再各寫一份。（落地：`NAV_TABS` 為單一真相，`COMPACT_APP_TABS` 由它 `.map` 衍生、`nav_items = NAV_TABS`。）
+- [x] AC15：統一順序為 `home / guide / links / search`（桌面導覽為基準）。**校正註記（xreview confirmed，low）**：窄螢幕底部 tab／rail 實際由 `app-navigation.vue` 的 `nav_items` 渲染，而舊版 `nav_items` 順序本即 `links/search`，故本 sprint 對窄螢幕**無實際可見順序變更**（原 spec 誤以 `COMPACT_APP_TABS` 為渲染源）。真正被 M4 統一的是 `COMPACT_APP_TABS`（`search/links` → `links/search`），它僅經 `getCompactAppView().tabs` 暴露而**目前無任何 template 消費**（死資料路徑，源自 031.x，清理屬 032 範圍外）。實質效益是三份 tab 設定收斂為單一 `NAV_TABS`；AC15 的 e2e／視覺風險因此為零（渲染輸出等價）。
 
 **B3 — 外部連結屬性 / row icon**
-- [ ] AC16：新增 `EXTERNAL_LINK_ATTRS`（`{ target: '_blank', rel: 'noopener noreferrer' }`）常數，`resource-rows.ts` 與 `scripts/public-payload/map-resource-rows.ts` 的外部連結屬性改引用；row type→icon（`guide: i-lucide-book-open`、`link: i-lucide-link`）改用單一 map。
+- [x] AC16：新增 `EXTERNAL_LINK_ATTRS`（`{ target: '_blank', rel: 'noopener noreferrer' }`）常數，`resource-rows.ts` 與 `scripts/public-payload/map-resource-rows.ts` 的外部連結屬性改引用；row type→icon（`guide: i-lucide-book-open`、`link: i-lucide-link`）改用單一 map。（含 `resource-rows.ts` 第三處 `mapSearchSuggestionToRow` 一併收斂。）
 
 **C2／C3 — 命名常數**
-- [ ] AC17：`client-search.ts` 的 suggestion 上限 `12` 抽為 `SEARCH_SUGGESTION_LIMIT`（與 `SEARCH_HISTORY_LIMIT` 語意分離）。
-- [ ] AC18：`search-input.vue:74` 的 `event.keyCode === 229` 改用 `IME_COMPOSITION_KEYCODE = 229` 具名常數（或加 why 註解說明 IME 組字）。
+- [x] AC17：`client-search.ts` 的 suggestion 上限 `12` 抽為 `SEARCH_SUGGESTION_LIMIT`（與 `SEARCH_HISTORY_LIMIT` 語意分離）。
+- [x] AC18：`search-input.vue:74` 的 `event.keyCode === 229` 改用 `IME_COMPOSITION_KEYCODE = 229` 具名常數（或加 why 註解說明 IME 組字）。
 
 **整體 quality gate**
-- [ ] AC19：`./dev.sh exec ./dev.sh verify`（test→lint→typecheck→generate）全綠；公開站頁面實際開過，taxonomy 頁、detail 頁、首頁、導覽行為無可見回歸。
+- [ ] AC19：`./dev.sh exec ./dev.sh verify`（test→lint→typecheck→generate）全綠；公開站頁面實際開過，taxonomy 頁、detail 頁、首頁、導覽行為無可見回歸。**部分完成／待使用者收尾**：`pnpm test`（vitest，82 files／629 綠）與 `eslint`（exit 0）已於 host 全綠；`typecheck`／`generate`／實機開頁受限於本機容器未啟動、無法開 `toybox.local`（見 MEMORY），須由使用者以 `./dev.sh exec ./dev.sh verify` 補跑並開頁巡檢。因 AC15 確認無可見變更，導覽視覺回歸風險為零。
 
 ## 相關檔案
 
@@ -155,6 +155,7 @@ function useTaxonomyDetailPage(kind: TaxonomyKind): { page_data: ShallowRef<Taxo
 - 決策：以桌面 `nav_items` 順序為 SSOT，窄螢幕底部 tab 順序隨之由 `search/links` 改為 `links/search`。
 - 原因：兩處順序原本不一致是隱性 drift；統一需擇一基準，桌面導覽已是 `home/guide/links/search`，以其為準改動面最小（只動窄螢幕一處可見順序），使用者已確認接受此 user-visible 變更。
 - 替代方案：以窄螢幕順序為基準（改桌面）／維持兩份不統一——前者改動桌面可見順序、後者放棄 SSOT 收斂，皆否決。
+- **實作後校正（xreview confirmed，low）**：本 ADR 原假設「窄螢幕底部 tab 由 `COMPACT_APP_TABS` 驅動、順序為 `search/links`」，實則窄螢幕底部 tab／rail 由 `app-navigation.vue` 的 `nav_items` 渲染，且舊版 `nav_items` 本即 `links/search`——故統一後**無實際可見變更**（渲染輸出等價）。真正被統一的是 `COMPACT_APP_TABS`（`search/links`→`links/search`），但它只經 `getCompactAppView().tabs` 暴露、目前無 template 消費（死資料路徑，源自 031.x）。ADR 的 SSOT 收斂目標（三份 tab 設定 → 單一 `NAV_TABS`）仍成立且有效；只是「user-visible 變更」的描述與現實不符，特此校正。清理 `.tabs` 死路徑屬 032 範圍外的後續 cleanup。
 
 ## Milestones
 
@@ -186,25 +187,25 @@ function useTaxonomyDetailPage(kind: TaxonomyKind): { page_data: ShallowRef<Taxo
 > 驗證：導覽相關單元測試；e2e/視覺確認窄螢幕底部 tab 順序變更後無錯位、active 正確
 > 預期結果：導覽 label/icon/順序單一真相，窄螢幕 tab 順序改為 links/search
 
-- [ ] Red → Green → Refactor
+- [x] Red → Green → Refactor（見 AC15／ADR-3 校正：渲染源 `nav_items` 本即 links/search，無可見變更）
 
 ### Milestone 5: ALL_CATEGORIES_ID 常數與型別對齊（B1 + C4）
 > 範圍：新增 `ALL_CATEGORIES_ID`；`build-navigation`/`selectable-category-ids`/`compact-app`/`app-navigation.vue`/`category-chip-bar.vue` 改引用；`types.ts`/`compact-app.ts` 的手寫 union 改引用 `CategoryChipView['id']`
 > 驗證：navigation/chip 相關單元測試；首頁 active 判定 e2e/視覺確認
 > 預期結果：`'all'` 不再裸寫，型別 union 以常數 literal 對齊
 
-- [ ] Red → Green → Refactor
+- [x] Red → Green → Refactor
 
 ### Milestone 6: EXTERNAL_LINK_ATTRS 與 row icon map（B3）
 > 範圍：新增 `EXTERNAL_LINK_ATTRS` 常數 + row type→icon map；`resource-rows.ts`、`scripts/public-payload/map-resource-rows.ts` 改引用
 > 驗證：`pnpm content:check`/payload 相關測試維持綠；確認 build-time 與 runtime 輸出的 target/rel/icon 一致
 > 預期結果：外部連結三件組與 icon 字面值單一真相，跨 build/runtime 邊界一致
 
-- [ ] Red → Green → Refactor
+- [x] Red → Green → Refactor
 
 ### Milestone 7: 命名常數收斂（C2 + C3）
 > 範圍：`client-search.ts` 抽 `SEARCH_SUGGESTION_LIMIT`；`search-input.vue` 抽 `IME_COMPOSITION_KEYCODE`（或加 why 註解）
 > 驗證：`pnpm test`/search 相關測試維持綠
 > 預期結果：兩個 magic number 具名，語意與 `SEARCH_HISTORY_LIMIT` 分離
 
-- [ ] Red → Green → Refactor
+- [x] Red → Green → Refactor

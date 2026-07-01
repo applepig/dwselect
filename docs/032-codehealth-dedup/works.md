@@ -43,3 +43,52 @@
 - **測試結果**：`pnpm test`（host）81 test files / 623 passed；`pnpm lint` 綠。
 - **待使用者實機驗證（host 限制無法執行）**：`./dev.sh exec ./dev.sh verify`（typecheck＋generate，特別是 error.vue 套 `<NuxtLayout>` 後 default layout `await useCatalogShellData()` 的 SSG 建置）；開錯誤頁確認三情境——(1) 不存在路徑 `/foobar`、(2) 裸 kind `/category`（breadcrumb 僅 `DW嚴選`）、(3) taxonomy 404 `/brand/不存在`——站台 chrome 正常、內容置中不與 top-bar 疊高、首頁連結可導回。
 - **未收（依指示保留）**：`/category/{壞id}`（route 有配到、composable 丟 404）在新 layout 下 breadcrumb 會顯示 `DW嚴選 > 壞id`（raw-id fallback），本次只處理裸 kind，此案待實機看後由使用者決定。
+
+## Milestone 4: 導覽 SSOT 與順序統一（B2）
+
+- **技術決策**：
+  - 建 `NAV_TABS`（含 `to`）於 `app/utils/published-products/compact-app.ts` 作單一真相；`COMPACT_APP_TABS` 由它 `.map` 省略 `to` 衍生（維持既有 `Array<Omit<CompactAppTab,'active'>>` 型別與 downstream 不變），`app-navigation.vue` 的 `nav_items = NAV_TABS`（顯式 import，不依賴 auto-import）。三份 tab 設定收斂為一，達成 AC14。
+  - 統一順序為 `home/guide/links/search`（桌面為基準，ADR-3）。
+- **問題與解法（分兩段落地）**：
+  - 首個 developer 完成 `compact-app.ts` 的 `NAV_TABS`/`COMPACT_APP_TABS` 衍生後，發現 `nav_items` 若改引用 `NAV_TABS` 會使 `nuxt-smoke.test.ts:483-488` 的 source-grep（斷言 `.vue` 源碼含 `to: '/...'` 字面與 `id: 'links'` 早於 `id: 'search'`）失效——依鐵律在跨 milestone 共用測試檔前停手，交回 coordinator。coordinator 裁示：SSOT 搬家 → 守門重新指向新單一真相（比照 M2/M6）。第二段由 follow-up developer 完成 `nav_items = NAV_TABS` 並把 route/順序守門改對 `compact-app.ts`（`nav_tabs_source`）斷言、`nav_source` 只守消費 `NAV_TABS`。
+  - **AC15 校正（xreview confirmed，low，見下 Cross Review 段）**：窄螢幕底部 tab／rail 實際由 `nav_items`（=`NAV_TABS`）渲染，舊版 `nav_items` 本即 `links/search`，故**無實際可見順序變更**；真正被 M4 統一的是 `COMPACT_APP_TABS`（`search/links`→`links/search`），但它僅經 `getCompactAppView().tabs` 暴露而無 template 消費（死資料路徑，源自 031.x，清理屬 032 範圍外）。spec AC15／ADR-3 已同步校正。
+- **測試結果**：`vitest run --exclude 'tests/e2e/**'`（host）82 files / 629 passed；`eslint` exit 0。`compact-app.test.ts` 新增 NAV_TABS/COMPACT_APP_TABS 順序與衍生斷言。
+
+## Milestone 5: ALL_CATEGORIES_ID 常數與型別對齊（B1 + C4）
+
+- **技術決策**：
+  - 新增 `export const ALL_CATEGORIES_ID = 'all'` 於 `app/utils/public-content-view-types.ts`（與 `CategoryChipView` 同檔，所有消費端已從此 import、零新增 import edge，build-time `build-navigation.ts` 亦可安全 import 純常數）。裸 `'all'` 全數改引用：`build-navigation.ts`、`selectable-category-ids.ts`、`compact-app.ts`、`category-chip-bar.vue`（三處）、`app-navigation.vue`（兩處）。`.vue` 顯式 value import，維持既有慣例。值仍為字串 `'all'`，純具名化、行為等價。
+  - **C4**：`CategoryChipView.id` 的 `'all'` literal 以 `typeof ALL_CATEGORIES_ID` 對齊；`CompactCategoryChip.id` 由手寫 `Product['category_id'] | 'all'` 改引用 `CategoryChipView['id']`，`types.ts` 連帶移除變成未用的 `Product` type import。grep `| 'all'` 確認無其他分類相關手寫 union（未動 `CompactAppTabId` 等無關 union）。
+- **問題與解法**：`nuxt-smoke.test.ts:513` grep `category.id === 'all' ? '/' : ...`（app-navigation 分類導向守門）隨常數化失效，同步為 `category.id === ALL_CATEGORIES_ID ? '/' : ...`，守住的不變式（首頁 chip→'/'、分類 chip→/category/{id}）不變。`category-chip-bar.test.ts` 的 active/href 行為測試 fixture `{ id: 'all' }` 保留（值不變，改引用常數反造無謂耦合，非行為斷言）。
+- **測試結果**：`vitest run --exclude 'tests/e2e/**'`（host）82 files / 629 passed；`eslint`（8 檔）exit 0。
+- **未驗證**：typecheck（容器未啟動）。型別皆等價替換（`typeof ALL_CATEGORIES_ID` 於 const 宣告推為 `'all'` literal；`CategoryChipView['id']` indexed access 取回同一 union），xreview types 維度亦無 finding，風險低。
+
+## Milestone 6: EXTERNAL_LINK_ATTRS 與 row icon map（B3）
+
+- **技術決策**：
+  - 建 `app/utils/published-products/resource-row-attrs.ts`（純資料常數檔，不 import runtime-only 邏輯，build-time 與 runtime 皆可 import——比照 M2 `taxonomy-kinds.ts` 風格）：`EXTERNAL_LINK_ATTRS = { target: '_blank', rel: 'noopener noreferrer' } as const`、`RESOURCE_ROW_ICONS = { guide, link } as const satisfies Partial<Record<CompactResourceRow['type'], string>>`。
+  - `resource-rows.ts`（runtime）三處收斂：`getResourceRowLinkAttributes` external 分支、`mapSearchSuggestionToRow`（`...(result.external ? EXTERNAL_LINK_ATTRS : { target: null, rel: null })`）、`getSearchSuggestionIcon`（guard clause：product→null，其餘→`RESOURCE_ROW_ICONS[type]`）。`map-resource-rows.ts`（build-time）：`mapLinkToRow` spread、`mapGuideToRow` icon 改 map；`mapLinkToRow` 的 `icon: link.icon` 資料驅動維持不動（非 type→icon）。
+- **問題與解法**：主體由平行 developer 完成，但 `mapSearchSuggestionToRow`（plan B3 明列 `resource-rows.ts:48-49`，該字面第三次出現）初版漏收；coordinator 派 follow-up 補齊並同步守門。`nuxt-smoke.test.ts` 兩處守門重新指向：外部安全屬性字面改守 `resource-row-attrs.ts`、並斷言 `resource-rows.ts` 消費 `EXTERNAL_LINK_ATTRS`；`mapSearchSuggestionToRow` 條件式守門改對新形式。行為等價由 `resource-rows.test.ts`／`map-resource-rows.test.ts` 輸出值斷言守住。
+- **測試結果**：`vitest run --exclude 'tests/e2e/**'`（host）82 files / 629 passed；`eslint` exit 0。新增 `resource-row-attrs.test.ts`。
+
+## Milestone 7: 命名常數收斂（C2 + C3）
+
+- **技術決策**：
+  - C2：`client-search.ts` 的 `getClientSearchSuggestions` 預設上限 `12` 抽為 module 私有 `SEARCH_SUGGESTION_LIMIT`，加註解與同檔 `SEARCH_HISTORY_LIMIT`（數值巧合、語意不同）分離。既有 `client-search.test.ts` 透過 default 行為守上限，未 export（YAGNI）。
+  - C3：`search-input.vue` 的 `event.keyCode === 229` 抽為 `<script setup>` 頂層 `IME_COMPOSITION_KEYCODE = 229` 具名常數＋why 註解（IME 組字 legacy keyCode，配合 `event.isComposing` 擋組字中誤送出）；只用一次不跨檔共用。
+- **問題與解法**：keyCode guard 難純行為單測（happy-dom 無法可靠模擬 `event.keyCode`），比照專案既有 source-grep 慣例在 `search-input-component.test.ts` 新增斷言：具名常數存在、guard 引用它、無裸 `229`。
+- **測試結果**：`vitest run --exclude 'tests/e2e/**'`（host）82 files / 629 passed；`eslint` exit 0。
+
+## Cross Review 收斂（M4–M7，ultracode fan-out）
+
+- **流程**：Workflow 5 維度平行審（correctness／types／reuse-ddd／style／test-integrity）× 逐 finding adversarial verify（reviewer 嘗試反駁、預設懷疑），範圍 `e23b91d..HEAD`（M4/M5/M6/M7 四 commit）。types 維度特別補位——本機無法跑 `tsc`，由 reviewer 讀碼推理 `typeof`／`as const` spread／`satisfies` 的健全性。
+- **結論**：5 維度共 1 個 confirmed finding（severity low，**不擋 merge**），其餘無 finding／假陽性。confirmed 非 code bug，是 **spec/docs 認知落差**：AC15/ADR-3 宣稱的「窄螢幕底部 tab 順序 `search/links`→`links/search`」user-visible 變更**實際未發生**——渲染源 `nav_items` 舊版本即 `links/search`；被重排的 `COMPACT_APP_TABS` 經 `getCompactAppView().tabs` 暴露但無 template 消費（死路徑）。coordinator 獨立驗證（`rg` 全 codebase 無 `.tabs` 消費、`git show e23b91d` 確認舊 `nav_items` 順序）後：**不改 production code**（渲染正確等價）、**不清死路徑**（031.x 遺留，屬 032 範圍外），據實校正 spec AC15／ADR-3 與本 works。
+- **測試結果**：`vitest run --exclude 'tests/e2e/**'`（host）82 files / 629 passed；`eslint` exit 0。
+
+## AC19 整體 quality gate — 交接狀態
+
+- **host 已完成**：`pnpm test`（vitest，82 files／629 綠）、`eslint`（exit 0）於各 milestone 與整合後皆全綠。
+- **待使用者以 Docker／CI 收尾（本機容器未啟動、無法開 `toybox.local`，見 MEMORY）**：
+  1. `./dev.sh exec ./dev.sh verify`（補 `typecheck`＋`generate`，涵蓋 M3 error.vue 套 `<NuxtLayout>` 的 SSG 建置，以及 M5/M6 的型別等價替換）。
+  2. 開頁巡檢：taxonomy 頁（四 kind）、detail 頁、首頁分類 active 高亮／導向、導覽列（桌面 sidebar／窄螢幕 rail＋底部 tab）渲染與點擊。**AC15 已確認無可見變更**，導覽視覺回歸風險為零；重點放在 M3 的錯誤頁三情境（見上方 M3 段）與首頁分類 active。
+- **未 push／未開 PR**：所有變更僅 local commit（M3–M7 各一 commit，接續既有 M1/M2），推送與開 PR 留待使用者授權。
