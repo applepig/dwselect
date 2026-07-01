@@ -479,6 +479,7 @@ describe('Nuxt SSG baseline', () => {
     const theme_source = readFileSync(new URL('../app/components/theme-toggle.vue', import.meta.url), 'utf8')
     const link_source = readFileSync(new URL('../app/components/link-panel.vue', import.meta.url), 'utf8')
     const link_rows_source = readFileSync(new URL('../app/utils/published-products/resource-rows.ts', import.meta.url), 'utf8')
+    const resource_row_attrs_source = readFileSync(new URL('../app/utils/published-products/resource-row-attrs.ts', import.meta.url), 'utf8')
 
     expect(nav_source).toContain('<NuxtLink')
     expect(nav_source).toContain("to: '/'")
@@ -498,8 +499,11 @@ describe('Nuxt SSG baseline', () => {
     expect(theme_source).toContain('<UColorModeButton')
     expect(link_source).toContain('<ResourceList')
     expect(link_rows_source).toContain('getResourceRowLinkAttributes')
-    expect(link_rows_source).toContain("target: '_blank'")
-    expect(link_rows_source).toContain("rel: 'noopener noreferrer'")
+    // 外部安全屬性字面已收斂進 resource-row-attrs.ts 的 EXTERNAL_LINK_ATTRS 單一真相；
+    // resource-rows.ts 只消費常數，字面本身守在 attrs 檔。
+    expect(link_rows_source).toContain('EXTERNAL_LINK_ATTRS')
+    expect(resource_row_attrs_source).toContain("target: '_blank'")
+    expect(resource_row_attrs_source).toContain("rel: 'noopener noreferrer'")
   })
 
   it('should expose desktop product category navigation without adding it to mobile or tablet nav', () => {
@@ -538,8 +542,8 @@ describe('Nuxt SSG baseline', () => {
     expect(resource_rows_source).toContain('getSearchSuggestionMeta')
     expect(resource_rows_source).toContain('result.price_text')
     expect(resource_rows_source).toContain('result.channel_label')
-    expect(resource_rows_source).toContain("target: result.external ? '_blank' : null")
-    expect(resource_rows_source).toContain("rel: result.external ? 'noopener noreferrer' : null")
+    // external row 的安全屬性由 EXTERNAL_LINK_ATTRS 單一真相 spread 而來，非外部 row 帶 null target/rel。
+    expect(resource_rows_source).toContain('result.external ? EXTERNAL_LINK_ATTRS')
   })
 
   it('should wire product detail route, buy CTA and view transition contracts in source', () => {
