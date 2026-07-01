@@ -11,7 +11,7 @@
         <NuxtLink
           v-for="category in desktop_category_items"
           :key="`sidebar-category-${category.id}`"
-          :to="category.id === 'all' ? '/' : `/category/${category.id}`"
+          :to="category.id === ALL_CATEGORIES_ID ? '/' : `/category/${category.id}`"
           class="app-nav-button desktop-category-link"
           :class="{ 'is-active': isCategoryActive(category.id) }"
           :aria-current="isCategoryActive(category.id) ? 'page' : undefined"
@@ -77,7 +77,7 @@
 </template>
 
 <script setup lang="ts">
-import type { CategoryChipView } from '../utils/public-content-view-types'
+import { ALL_CATEGORIES_ID, type CategoryChipView } from '../utils/public-content-view-types'
 import { NAV_TABS } from '../utils/published-products/compact-app'
 
 const route = useRoute()
@@ -92,7 +92,7 @@ function isRouteActive(path: string) {
 }
 
 function isCategoryActive(category_id: CategoryChipView['id']) {
-  if (category_id === 'all') {
+  if (category_id === ALL_CATEGORIES_ID) {
     return route.path === '/'
   }
 

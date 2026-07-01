@@ -1,4 +1,4 @@
-import type { CategoryChipView } from '../public-content-view-types'
+import { ALL_CATEGORIES_ID, type CategoryChipView } from '../public-content-view-types'
 import type { PublicContentPayload } from '../public-content-payload'
 import type {
   CompactAppState,
@@ -40,7 +40,7 @@ export function getCompactAppView(
     })),
     active_tab,
     home: {
-      category_chips: getCategoryChips(payload.navigation.category_chips, 'all'),
+      category_chips: getCategoryChips(payload.navigation.category_chips, ALL_CATEGORIES_ID),
       products: cards,
       empty_reason: getEmptyReason(cards.length, cards.length),
     },

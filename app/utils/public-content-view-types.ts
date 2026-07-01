@@ -1,5 +1,9 @@
 import type { Product, ProductOffer } from './product-schema'
 
+// 代表「未篩選分類」的哨兵：全部 chip 的 id、首頁 active 判定、route param fallback 皆用它。
+// 值為字串 'all'（route param 與 payload chip id 靠此字面），具名引用讓拼錯被型別擋。
+export const ALL_CATEGORIES_ID = 'all'
+
 export type ProductCardView = {
   id: string
   name: string
@@ -69,7 +73,7 @@ export type GuideDetailView = {
 }
 
 export type CategoryChipView = {
-  id: Product['category_id'] | 'all'
+  id: Product['category_id'] | typeof ALL_CATEGORIES_ID
   label: string
   count: number
 }

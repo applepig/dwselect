@@ -518,7 +518,9 @@ describe('Nuxt SSG baseline', () => {
     expect(home_source).toContain('<CategoryChipBar')
     expect(nav_source).toContain('desktop-category-items')
     expect(nav_source).toContain('desktop-category-link')
-    expect(nav_source).toContain('category.id === \'all\' ? \'/\' : `/category/${category.id}`')
+    // 032 M5/AC12：裸 'all' 收斂為 ALL_CATEGORIES_ID 常數；守門同步為常數引用，
+    // 但守住的不變式不變——首頁 chip→'/'、分類 chip→/category/{id}。
+    expect(nav_source).toContain('category.id === ALL_CATEGORIES_ID ? \'/\' : `/category/${category.id}`')
     expect(nav_source).toContain('desktop_category_items')
     expect(catalog_css).toContain('.desktop-category-items')
     expect(catalog_css).toContain('.desktop-category-link')

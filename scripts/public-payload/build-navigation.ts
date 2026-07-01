@@ -1,5 +1,5 @@
 import type { Guide, LinkDefinition, Product } from '../../app/utils/product-schema.ts'
-import type { CategoryChipView } from '../../app/utils/public-content-view-types.ts'
+import { ALL_CATEGORIES_ID, type CategoryChipView } from '../../app/utils/public-content-view-types.ts'
 import type { CompactSearchTagGroups, CompactTagChip } from '../../app/utils/published-products/types.ts'
 import { compareText } from '../../app/utils/content/compare-text.ts'
 import type { PublicTaxonomies } from '../../app/utils/public-content-payload.ts'
@@ -46,7 +46,7 @@ function getCategoryChips(published_products: Product[], taxonomies: PublicTaxon
 
   return [
     {
-      id: 'all',
+      id: ALL_CATEGORIES_ID,
       label: '全部',
       count: published_products.length,
     },
