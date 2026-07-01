@@ -24,3 +24,22 @@
   - **notFoundMessage 待 M3 結平**（Reuse F1）：表的 404 文案目前零 production 消費者，四頁仍 inline。M3 composable 接線時四頁改讀 `TAXONOMY_KINDS[kind].notFoundMessage` 並刪 inline literal，否則為永久雙真相。已記入 spec Milestone 3 範圍。
 - **/simplify 結果**：4 角度平行審查 → 採納三 reviewer 收斂的 prefix 衍生深化（已 apply 並更新 spec）；Reuse F2（prefix 可搜性）、Simplification F4（tag/brand getLabel 重複）判定不動。
 - **測試結果**：`pnpm test`（容器內）80 test files / 614 passed；`./dev.sh typecheck` exit 0。
+
+## Milestone 3: useTaxonomyDetailPage composable（A1）
+
+- **技術決策**：
+  - 建 `app/composables/use-taxonomy-detail-page.ts`，收斂四頁（category／tag／brand／channel）逐行複製的 setup：route id 正規化（陣列參數取 `[0]`、`?? ''`）、canonical 由 `/${kind}/${id}` 同步推導、meta computed、`useHead`／`useSeoMeta` 註冊、`await useTaxonomyPageData`、null → 404（文案自 `TAXONOMY_KINDS[kind].notFoundMessage`，結平 M2 的 Reuse F1 雙真相）、`watchEffect` 同步 `page_data`。四頁 `<script setup>` 縮為 `const { page_data } = await useTaxonomyDetailPage(kind)`。
+  - **head-before-await 不變式**：composable 內 `useHead`／`useSeoMeta` 皆在 `await useTaxonomyPageData` 之前呼叫，順序守住（新增 `use-taxonomy-detail-page.test.ts` 以 deferred fetch 斷言 call order `['useHead','useSeoMeta','useTaxonomyPageData']`）。
+  - **template 各自保留**：category 頁多 `compact-page` wrapper ＋ `<CategoryChipBar>`，composable 只吞 script 共用邏輯，不碰 template 組成差異。
+- **問題與解法（測試遷移）**：`taxonomy-page-shell.test.ts` 原本 grep 各頁 source 的 404／canonical／SEO builder 字面，這些邏輯已搬進 composable，改為斷言「四頁各以正確 kind 接線 composable」＋ template 差異（`compact-page`／`<CategoryChipBar>` 僅 category）；被移走的行為守門遷至 `use-taxonomy-detail-page.test.ts`（判準：行為還在，只是單一真相搬家）。
+
+## Code Review 收斂（xhigh recall，M1–M3 全 sprint）
+
+- **流程**：`/code-review` xhigh → 3 finder 角度 + 1 sweep 平行審查 → 逐項 verify。範圍收斂在 `a53401b..working tree` 的程式碼變更（排除跨 sprint 內容資料）。
+- **結論**：重構行為保持，無會 ship 的正確性 bug。3 項低嚴重度 finding，依使用者指示全部收斂：
+  1. **breadcrumb 裸 kind（reachable 化後修正）**：`resolve-breadcrumb-items.ts` 第一段 segment 匹配把裸 `/category`（無 id）誤判為 taxonomy 路由回 `[{label:'category'}]`（舊 `startsWith('/category/')` 會回 `[]`）。原本因 error 頁不套 layout 而不可達；因本次同步讓 **error.vue 套 default layout**（`app/error.vue` 內容包進 `<NuxtLayout>`，錯誤頁提供站台 chrome ＋ 首頁導回），breadcrumb 變 reachable，故加 `segments.length >= 2` guard 讓裸 kind 回 `[]`（等同回首頁）。
+  2. **雙重計算（pre-existing regression）**：`use-taxonomy-detail-page.ts` 的 `meta_title`／`meta_description` 各呼叫一次 `buildTaxonomyPageSeo`，整包每次 recompute 算兩遍。抽單一 `taxonomy_seo` computed，兩者從中取值，null-guard 收一處。
+  3. **測試缺口**：補 `page_data === null` 時 meta 墊 `SITE_NAME` 的 fallback 斷言。
+- **測試結果**：`pnpm test`（host）81 test files / 623 passed；`pnpm lint` 綠。
+- **待使用者實機驗證（host 限制無法執行）**：`./dev.sh exec ./dev.sh verify`（typecheck＋generate，特別是 error.vue 套 `<NuxtLayout>` 後 default layout `await useCatalogShellData()` 的 SSG 建置）；開錯誤頁確認三情境——(1) 不存在路徑 `/foobar`、(2) 裸 kind `/category`（breadcrumb 僅 `DW嚴選`）、(3) taxonomy 404 `/brand/不存在`——站台 chrome 正常、內容置中不與 top-bar 疊高、首頁連結可導回。
+- **未收（依指示保留）**：`/category/{壞id}`（route 有配到、composable 丟 404）在新 layout 下 breadcrumb 會顯示 `DW嚴選 > 壞id`（raw-id fallback），本次只處理裸 kind，此案待實機看後由使用者決定。

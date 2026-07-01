@@ -86,5 +86,7 @@ describe('launch SEO error page', () => {
     expect(error_source).toContain('回首頁')
     expect(error_source).toContain('發生錯誤')
     expect(error_source).toContain('clearError')
+    // 錯誤頁須套 default layout（站台 chrome），使用者才能用首頁連結導回。
+    expect(error_source).toContain('<NuxtLayout')
   })
 })

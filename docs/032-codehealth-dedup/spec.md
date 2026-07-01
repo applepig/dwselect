@@ -37,9 +37,9 @@
 - [x] AC8：`isSelectorIdInNamespace`、`resolveDescription`、`selectPublishedTaxonomyItems` 維持原樣不被表驅動化；既有 `build-taxonomy-page-data` 的 `/tag/{brand-id}`／`/brand/{tag-id}`／未知 id → 404 測試全數維持綠燈。
 
 **A1／C1 — taxonomy 頁 composable**
-- [ ] AC9：新增 `useTaxonomyDetailPage(kind)` composable，封裝 route id 正規化（吸收 C1）、canonical 推導、meta title/description computed、`useHead`/`useSeoMeta`、`await useTaxonomyPageData`、404、`watchEffect`，回傳 `{ page_data }`。
-- [ ] AC10：四個 taxonomy 頁（`category`/`tag`/`brand`/`channel` `[id].vue`）改用該 composable，script 只剩 kind 與 template；`category/[id].vue` 的 `<CategoryChipBar />` + `compact-page` wrapper template 差異保留。
-- [ ] AC11：新增 composable 的測試守住 head-before-await 不變式（composable 內 `useHead`／`useSeoMeta` 註冊早於 `await`），等價於 detail 頁既有的 source-grep 守門；四個 taxonomy 頁的 404／canonical／meta 行為與重構前等價。
+- [x] AC9：新增 `useTaxonomyDetailPage(kind)` composable，封裝 route id 正規化（吸收 C1）、canonical 推導、meta title/description computed、`useHead`/`useSeoMeta`、`await useTaxonomyPageData`、404、`watchEffect`，回傳 `{ page_data }`。
+- [x] AC10：四個 taxonomy 頁（`category`/`tag`/`brand`/`channel` `[id].vue`）改用該 composable，script 只剩 kind 與 template；`category/[id].vue` 的 `<CategoryChipBar />` + `compact-page` wrapper template 差異保留。
+- [x] AC11：新增 composable 的測試守住 head-before-await 不變式（composable 內 `useHead`／`useSeoMeta` 註冊早於 `await`），等價於 detail 頁既有的 source-grep 守門；四個 taxonomy 頁的 404／canonical／meta 行為與重構前等價。
 
 **B1／C4 — ALL_CATEGORIES_ID**
 - [ ] AC12：新增 `ALL_CATEGORIES_ID = 'all'` 常數，所有 runtime 比較與 chip 產生（`build-navigation.ts`、`selectable-category-ids.ts`、`compact-app.ts`、`app-navigation.vue`、`category-chip-bar.vue`）改引用該常數，不再裸寫 `'all'`。
@@ -179,7 +179,7 @@ function useTaxonomyDetailPage(kind: TaxonomyKind): { page_data: ShallowRef<Taxo
 > 驗證：composable 新增 head-before-await 等價測試；四頁 404/canonical/meta 行為等價（既有 e2e/單元維持綠）
 > 預期結果：四頁 script 收斂為 kind + composable 呼叫，`category` 頁 template 差異保留
 
-- [ ] Red → Green → Refactor
+- [x] Red → Green → Refactor
 
 ### Milestone 4: 導覽 SSOT 與順序統一（B2）
 > 範圍：建單一 tab 設定 SSOT，`COMPACT_APP_TABS`/`nav_items` 由它衍生，統一順序 home/guide/links/search

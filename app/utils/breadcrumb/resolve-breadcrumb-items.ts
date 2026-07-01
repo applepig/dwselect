@@ -59,10 +59,12 @@ export function resolveBreadcrumbItems(
   }
 
   // 已排除 /、/guide、/links、/search、/products/、/guide/，第一段 segment 若是 taxonomy kind
-  // 即為 /category|tag|brand|channel/{id} 路由；kind 直接對應 url segment（ADR-2），不再經 prefix 反查。
-  const first_segment = route_path.split('/').filter((segment) => segment !== '')[0]
+  // 且後面確實帶 id segment，才是 /category|tag|brand|channel/{id} 路由；kind 直接對應 url segment
+  // （ADR-2），不再經 prefix 反查。裸 kind（如 /category）沒有詳情頁，不能把 kind 本身當 id。
+  const segments = route_path.split('/').filter((segment) => segment !== '')
+  const first_segment = segments[0]
 
-  if (first_segment !== undefined && isTaxonomyKind(first_segment)) {
+  if (first_segment !== undefined && isTaxonomyKind(first_segment) && segments.length >= 2) {
     return resolveTaxonomyBreadcrumb(first_segment, route_path, shell_data)
   }
 

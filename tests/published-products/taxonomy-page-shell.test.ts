@@ -12,42 +12,20 @@ const tag_source = readPage('app/pages/tag/[id].vue')
 const brand_source = readPage('app/pages/brand/[id].vue')
 const channel_source = readPage('app/pages/channel/[id].vue')
 
+// 032 M3：四頁的 setup 共用邏輯（route id 正規化、canonical、404、useHead／useSeoMeta、fetch）已收進
+// useTaxonomyDetailPage composable。404／canonical／meta／head-before-await 的接線守門遷至
+// tests/use-taxonomy-detail-page.test.ts（行為仍守住，只是單一真相搬到 composable）。
+// 本檔保留各頁自留的職責：以正確 kind 接線 composable，以及 template 組成差異（CategoryChipBar 僅 category 頁）。
 describe('taxonomy page shells', () => {
-  it('should throw a fatal 404 when the taxonomy resolves to no data, matching detail pages', () => {
-    for (const source of [category_source, tag_source]) {
-      expect(source).toContain('=== null')
-      expect(source).toContain('createError({')
-      expect(source).toContain('statusCode: 404')
-      expect(source).toContain('fatal: true')
-    }
-  })
-
-  it('should resolve data through the shared taxonomy page composable with the correct kind', () => {
-    expect(category_source).toContain("useTaxonomyPageData('category'")
-    expect(tag_source).toContain("useTaxonomyPageData('tag'")
-  })
-
-  it('should set the canonical url to the prefixed taxonomy route', () => {
-    expect(category_source).toContain('getCanonicalUrl(`/category/${category_id}`)')
-    expect(tag_source).toContain('getCanonicalUrl(`/tag/${tag_id}`)')
-    for (const source of [category_source, tag_source]) {
-      expect(source).toContain("rel: 'canonical'")
-      expect(source).toContain('href: canonical_url')
-    }
-  })
-
-  it('should reuse the shared SEO builder and the site default OG image, not bespoke meta', () => {
-    // 032 M1：og/twitter 欄位鋪展與 summary_large_image 收斂進 buildSeoMeta（見 seo-metadata.test.ts）；
-    // 此處只守 taxonomy 頁仍走共用 builder（buildTaxonomyPageSeo 算值 + buildSeoMeta 組 payload）且以站台預設 OG 圖為 image，不另寫 bespoke meta。
-    for (const source of [category_source, tag_source]) {
-      expect(source).toContain('buildTaxonomyPageSeo')
-      expect(source).toContain('buildSeoMeta({')
-      expect(source).toContain('image: SITE_OG_IMAGE')
-    }
+  it('should wire each page to the shared composable with its own taxonomy kind', () => {
+    expect(category_source).toContain("useTaxonomyDetailPage('category')")
+    expect(tag_source).toContain("useTaxonomyDetailPage('tag')")
+    expect(brand_source).toContain("useTaxonomyDetailPage('brand')")
+    expect(channel_source).toContain("useTaxonomyDetailPage('channel')")
   })
 
   it('should compose the shared TaxonomyPage component rather than inlining list markup', () => {
-    for (const source of [category_source, tag_source]) {
+    for (const source of [category_source, tag_source, brand_source, channel_source]) {
       expect(source).toContain('<TaxonomyPage')
       expect(source).not.toContain('product-grid')
       expect(source).not.toContain('<ResourceList')
@@ -55,10 +33,11 @@ describe('taxonomy page shells', () => {
   })
 
   it('should mount the shared CategoryChipBar only on the category shell, never on other taxonomy shells', () => {
-    // 031.1 B1（AC6）：分類頁以共用 CategoryChipBar 持久化 chip bar。
+    // 031.1 B1（AC6）：分類頁以共用 CategoryChipBar 持久化 chip bar；wrapper 為 compact-page。
     // Why：鎖住此接線，防 B1 行為被誤移除；並守住非目標邊界——
     // tag/brand/channel 頁不得出現 category chip bar（spec「非目標」第二條），避免 chip bar 外溢其他 taxonomy 頁。
     expect(category_source).toContain('<CategoryChipBar')
+    expect(category_source).toContain('class="compact-page"')
     for (const source of [tag_source, brand_source, channel_source]) {
       expect(source).not.toContain('<CategoryChipBar')
     }
