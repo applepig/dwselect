@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { getCompactAppStateFromRoute, getCompactAppView } from '../../app/utils/published-products/compact-app'
+import { NAV_TABS, getCompactAppStateFromRoute, getCompactAppView } from '../../app/utils/published-products/compact-app'
 import { buildPublicContentPayload } from '../../scripts/public-content'
 import type { CompactAppState, TaxonomyDefinitions } from '../../app/utils/published-products/types'
 import type { Guide, LinkDefinition } from '../../app/utils/product-schema'
@@ -38,8 +38,8 @@ describe('compact app view state', () => {
     expect(compact_view.tabs).toEqual([
       { id: 'home', label: '首頁', icon: 'i-lucide-house', active: true },
       { id: 'guide', label: '指南', icon: 'i-lucide-tags', active: false },
-      { id: 'search', label: '搜尋', icon: 'i-lucide-search', active: false },
       { id: 'links', label: '連結', icon: 'i-lucide-link', active: false },
+      { id: 'search', label: '搜尋', icon: 'i-lucide-search', active: false },
     ])
     expect(compact_view.home.category_chips).toEqual([
       { id: 'all', label: '全部', count: 2, active: true },
@@ -214,6 +214,31 @@ describe('compact app view state', () => {
         tag_ids: [],
       },
     ])
+  })
+})
+
+describe('navigation tab single source of truth', () => {
+  it('should order nav tabs home, guide, links, search with matching routes', () => {
+    expect(NAV_TABS.map((tab) => tab.id)).toEqual(['home', 'guide', 'links', 'search'])
+    expect(NAV_TABS.map((tab) => tab.to)).toEqual(['/', '/guide', '/links', '/search'])
+  })
+
+  it('should place the links tab before the search tab', () => {
+    const link_index = NAV_TABS.findIndex((tab) => tab.id === 'links')
+    const search_index = NAV_TABS.findIndex((tab) => tab.id === 'search')
+
+    expect(link_index).toBeLessThan(search_index)
+  })
+
+  it('should derive compact view tabs from the same order, label and icon as NAV_TABS', () => {
+    const compact_view = getCompactAppView(
+      buildPublicContentPayload({ products: [], guides: [], links: [], taxonomies: test_taxonomies }),
+      { active_tab: 'home' },
+    )
+
+    expect(compact_view.tabs.map(({ id, label, icon }) => ({ id, label, icon }))).toEqual(
+      NAV_TABS.map(({ id, label, icon }) => ({ id, label, icon })),
+    )
   })
 })
 

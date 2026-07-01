@@ -476,17 +476,21 @@ describe('Nuxt SSG baseline', () => {
 
   it('should expose routed compact tabs, theme toggle and external link row in source', () => {
     const nav_source = readFileSync(new URL('../app/components/app-navigation.vue', import.meta.url), 'utf8')
+    const nav_tabs_source = readFileSync(new URL('../app/utils/published-products/compact-app.ts', import.meta.url), 'utf8')
     const theme_source = readFileSync(new URL('../app/components/theme-toggle.vue', import.meta.url), 'utf8')
     const link_source = readFileSync(new URL('../app/components/link-panel.vue', import.meta.url), 'utf8')
     const link_rows_source = readFileSync(new URL('../app/utils/published-products/resource-rows.ts', import.meta.url), 'utf8')
     const resource_row_attrs_source = readFileSync(new URL('../app/utils/published-products/resource-row-attrs.ts', import.meta.url), 'utf8')
 
     expect(nav_source).toContain('<NuxtLink')
-    expect(nav_source).toContain("to: '/'")
-    expect(nav_source).toContain("to: '/guide'")
-    expect(nav_source).toContain("to: '/links'")
-    expect(nav_source).toContain("to: '/search'")
-    expect(nav_source.indexOf("id: 'links'")).toBeLessThan(nav_source.indexOf("id: 'search'"))
+    // 032 M4/AC14：nav_items 由單一真相 NAV_TABS 衍生，route/順序字面搬到 compact-app.ts；
+    // nav_source 只守它確實消費 NAV_TABS，route 與順序不變式改守在 nav_tabs_source。
+    expect(nav_source).toContain('NAV_TABS')
+    expect(nav_tabs_source).toContain("to: '/'")
+    expect(nav_tabs_source).toContain("to: '/guide'")
+    expect(nav_tabs_source).toContain("to: '/links'")
+    expect(nav_tabs_source).toContain("to: '/search'")
+    expect(nav_tabs_source.indexOf("id: 'links'")).toBeLessThan(nav_tabs_source.indexOf("id: 'search'"))
     expect(nav_source).not.toContain('selectTab')
     expect(nav_source).toContain('compact-app-bottom-tabs')
     expect(nav_source).toContain('compact-app-rail')
