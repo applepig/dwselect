@@ -54,6 +54,9 @@ import {
   startSearchInputComposition,
 } from '../../utils/search/search-input-composition'
 
+// 229 是 IME 組字進行中的 legacy keyCode，配合 event.isComposing 擋住組字中誤送出。
+const IME_COMPOSITION_KEYCODE = 229
+
 const props = defineProps<{
   query: string
 }>()
@@ -71,7 +74,7 @@ onMounted(() => {
 })
 
 function submitPendingSearchFromEvent(event: KeyboardEvent) {
-  if (event.isComposing || event.keyCode === 229) {
+  if (event.isComposing || event.keyCode === IME_COMPOSITION_KEYCODE) {
     return
   }
 

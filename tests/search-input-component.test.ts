@@ -3,8 +3,13 @@
 import { mount } from '@vue/test-utils'
 import { defineComponent, h, nextTick } from 'vue'
 import { describe, expect, it } from 'vitest'
+import { readFileSync } from 'node:fs'
 
 import SearchInput from '../app/components/search/search-input.vue'
+
+function readSource(relative_path: string) {
+  return readFileSync(new URL(relative_path, import.meta.url), 'utf8')
+}
 
 const UInputStub = defineComponent({
   name: 'UInput',
@@ -113,6 +118,14 @@ describe('search input component contract', () => {
     await wrapper.find('input').trigger('keydown.enter', { isComposing: true })
 
     expect(wrapper.emitted('submit')).toBeUndefined()
+  })
+
+  it('should guard the IME composition keyCode through a named constant instead of a bare 229', () => {
+    const input_source = readSource('../app/components/search/search-input.vue')
+
+    expect(input_source).toContain('IME_COMPOSITION_KEYCODE = 229')
+    expect(input_source).toContain('event.keyCode === IME_COMPOSITION_KEYCODE')
+    expect(input_source).not.toContain('event.keyCode === 229')
   })
 
   it('should defer input updates during composition and sync when composition ends', async () => {
