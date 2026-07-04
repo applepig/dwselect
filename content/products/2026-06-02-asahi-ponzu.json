@@ -40,7 +40,12 @@
     "food",
     "kitchen"
   ],
-  "reference_url": "https://www.asahi-syokuhin.co.jp/product/ponzu",
+  "reference_links": [
+    {
+      "title": "asahi-syokuhin 參考頁",
+      "url": "https://www.asahi-syokuhin.co.jp/product/ponzu"
+    }
+  ],
   "created_at": "2026-06-02T00:00:00+08:00",
   "updated_at": "2026-06-02T00:00:00+08:00",
   "published_at": "2026-06-02T00:00:00+08:00",

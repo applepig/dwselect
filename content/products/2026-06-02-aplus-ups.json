@@ -39,7 +39,12 @@
     "aplus",
     "power-charging"
   ],
-  "reference_url": "https://www.aplusups.com.tw/tw/product/0/44/14",
+  "reference_links": [
+    {
+      "title": "aplusups 參考頁",
+      "url": "https://www.aplusups.com.tw/tw/product/0/44/14"
+    }
+  ],
   "created_at": "2026-06-02T00:00:00+08:00",
   "updated_at": "2026-06-18T00:00:00+08:00",
   "published_at": "2026-06-02T00:00:00+08:00",

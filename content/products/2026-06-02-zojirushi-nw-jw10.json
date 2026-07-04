@@ -39,7 +39,12 @@
     "kitchen",
     "zojirushi"
   ],
-  "reference_url": "https://www.amazon.co.jp/dp/B089M6CRXJ",
+  "reference_links": [
+    {
+      "title": "Amazon JP 商品頁",
+      "url": "https://www.amazon.co.jp/dp/B089M6CRXJ"
+    }
+  ],
   "created_at": "2026-06-02T00:00:00+08:00",
   "updated_at": "2026-06-19T00:00:00+08:00",
   "published_at": "2026-06-02T00:00:00+08:00",

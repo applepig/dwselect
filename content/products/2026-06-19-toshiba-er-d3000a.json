@@ -42,7 +42,12 @@
     "kitchen",
     "toshiba"
   ],
-  "reference_url": "https://www.toshiba-lifestyle.com/jp/microwaves/er-d3000a",
+  "reference_links": [
+    {
+      "title": "toshiba-lifestyle 參考頁",
+      "url": "https://www.toshiba-lifestyle.com/jp/microwaves/er-d3000a"
+    }
+  ],
   "created_at": "2026-06-19T00:00:00+08:00",
   "updated_at": "2026-06-19T00:00:00+08:00",
   "published_at": "2026-06-19T00:00:00+08:00",

@@ -29,7 +29,12 @@
     "TPE gel pillow",
     "凝膠枕"
   ],
-  "reference_url": "https://www.amazon.co.jp/dp/B09MB3SY8V",
+  "reference_links": [
+    {
+      "title": "Amazon JP 商品頁",
+      "url": "https://www.amazon.co.jp/dp/B09MB3SY8V"
+    }
+  ],
   "image_url": null,
   "image_file": "2026-06-20-dafeel-gel-pillow.jpg",
   "offers": [

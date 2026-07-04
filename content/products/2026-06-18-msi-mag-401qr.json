@@ -42,7 +42,12 @@
     "display",
     "msi"
   ],
-  "reference_url": "https://tw.msi.com/Monitor/MAG401QR/Specification",
+  "reference_links": [
+    {
+      "title": "tw 參考頁",
+      "url": "https://tw.msi.com/Monitor/MAG401QR/Specification"
+    }
+  ],
   "created_at": "2026-06-18T00:00:00+08:00",
   "updated_at": "2026-06-18T00:00:00+08:00",
   "published_at": "2026-06-18T00:00:00+08:00",

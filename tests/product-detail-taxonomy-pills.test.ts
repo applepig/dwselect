@@ -74,6 +74,7 @@ function makeProductDetailView(overrides: Partial<ProductDetailView> = {}): Prod
     price_label: 'NT$1,000',
     buy_url: 'https://example.com/buy',
     fine_print: '',
+    reference_links: [],
     related_products: [],
     ...overrides,
   }
@@ -140,5 +141,29 @@ describe('ProductDetail taxonomy pill routing', () => {
     const channel_pill = wrapper.findAll('.catalog-pill').find((pill) => pill.text() === 'momo')
 
     expect(channel_pill?.attributes('href')).toBe('/channel/momo')
+  })
+
+  it('should render reference links as external resources when product detail has reference links', () => {
+    const wrapper = mountProductDetail(makeProductDetailView({
+      reference_links: [
+        { title: 'PChome 24h 商品頁', url: 'https://24h.pchome.com.tw/prod/DIBMWM-A900HO8OQ' },
+        { title: '台灣虎航行李規定', url: 'https://www.tigerairtw.com/zh-TW/welcome-on-board/baggage' },
+      ],
+    }))
+    const section = wrapper.find('[aria-labelledby="detail-reference-links-title"]')
+    const links = section.findAll('a.detail-reference-link')
+
+    expect(section.text()).toContain('參考資料')
+    expect(links.map((link) => link.text())).toEqual(['PChome 24h 商品頁', '台灣虎航行李規定'])
+    expect(links[0]?.attributes('href')).toBe('https://24h.pchome.com.tw/prod/DIBMWM-A900HO8OQ')
+    expect(links[0]?.attributes('target')).toBe('_blank')
+    expect(links[0]?.attributes('rel')).toBe('noopener noreferrer')
+  })
+
+  it('should not render reference links section when product detail has no reference links', () => {
+    const wrapper = mountProductDetail(makeProductDetailView({ reference_links: [] }))
+
+    expect(wrapper.find('[aria-labelledby="detail-reference-links-title"]').exists()).toBe(false)
+    expect(wrapper.text()).not.toContain('參考資料')
   })
 })

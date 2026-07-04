@@ -39,7 +39,12 @@
   "tag_ids": [
     "network-gear"
   ],
-  "reference_url": "https://buy.hpe.com/us/en/networking/wireless-devices/wlan-access-points/hpe-aruba-networking-campus-access-point-products/hpe-aruba-networking-510-series-campus-access-points/p/q9h63a",
+  "reference_links": [
+    {
+      "title": "buy 參考頁",
+      "url": "https://buy.hpe.com/us/en/networking/wireless-devices/wlan-access-points/hpe-aruba-networking-campus-access-point-products/hpe-aruba-networking-510-series-campus-access-points/p/q9h63a"
+    }
+  ],
   "created_at": "2026-06-18T00:00:00+08:00",
   "updated_at": "2026-06-18T00:00:00+08:00",
   "published_at": "2026-06-18T00:00:00+08:00",

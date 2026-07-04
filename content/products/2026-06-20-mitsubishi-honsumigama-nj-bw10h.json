@@ -44,7 +44,12 @@
     "kitchen",
     "mitsubishi-electric"
   ],
-  "reference_url": "https://www.mitsubishielectric.co.jp/home/suihanki/products/honsumigama_bw10h/",
+  "reference_links": [
+    {
+      "title": "mitsubishielectric 參考頁",
+      "url": "https://www.mitsubishielectric.co.jp/home/suihanki/products/honsumigama_bw10h/"
+    }
+  ],
   "created_at": "2026-06-20T00:00:00+08:00",
   "updated_at": "2026-06-20T00:00:00+08:00",
   "published_at": "2026-06-20T00:00:00+08:00",

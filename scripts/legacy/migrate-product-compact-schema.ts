@@ -3,13 +3,14 @@ import { join } from 'node:path'
 
 import { product_schema, type Product, type ProductOffer } from '../../app/utils/product-schema.ts'
 
-type LegacyProduct = Omit<Product, 'summary' | 'category_id' | 'tag_ids' | 'english_name' | 'long_description' | 'llm_description' | 'search_aliases' | 'model_numbers' | 'offers'> & {
+type LegacyProduct = Omit<Product, 'summary' | 'category_id' | 'tag_ids' | 'english_name' | 'long_description' | 'llm_description' | 'search_aliases' | 'model_numbers' | 'offers' | 'reference_links'> & {
   price_text: string
   description: string
   purchase_url: string
   category: string
   tags?: string[]
   tag_ids?: string[]
+  reference_url: string | null
 }
 
 type MigrationSummary = {
@@ -37,7 +38,7 @@ const CHANNEL_ID_BY_HOST = new Map([
   ['www.costco.com.tw', 'costco'],
 ] as const)
 
-export function inferChannelId(purchase_url: string): Product['channel_id'] {
+export function inferChannelId(purchase_url: string): ProductOffer['channel_id'] {
   try {
     const host = new URL(purchase_url).host.toLocaleLowerCase()
 
@@ -166,6 +167,7 @@ export function getCompactProductMigration(legacy_product: LegacyProduct): Produ
     price_text: _price_text,
     description: _description,
     purchase_url: _purchase_url,
+    reference_url,
     ...product_without_legacy_fields
   } = legacy_product
   const channel_id = inferChannelId(legacy_product.purchase_url)
@@ -195,6 +197,7 @@ export function getCompactProductMigration(legacy_product: LegacyProduct): Produ
     image_url: null,
     category_id: getMigratedCategoryId(category),
     tag_ids: tag_ids ?? [],
+    ...(reference_url === null ? {} : { reference_links: [{ title: '參考來源', url: reference_url }] }),
     published_at: migrated_status === 'published' ? published_at : null,
   }
 

@@ -29,7 +29,12 @@
     "storage-backup",
     "synology"
   ],
-  "reference_url": "https://www.facebook.com/applepig/posts/pfbid0yWM3dPV3ZJMNFVrzBwkSZgkgFhHakf79DAhhFQwd3A1kUgnY23D4Exb5PZS2r9Hvl",
+  "reference_links": [
+    {
+      "title": "Facebook 參考貼文",
+      "url": "https://www.facebook.com/applepig/posts/pfbid0yWM3dPV3ZJMNFVrzBwkSZgkgFhHakf79DAhhFQwd3A1kUgnY23D4Exb5PZS2r9Hvl"
+    }
+  ],
   "created_at": "2026-06-02T00:00:00+08:00",
   "updated_at": "2026-06-18T00:00:00+08:00",
   "published_at": "2026-06-02T00:00:00+08:00",

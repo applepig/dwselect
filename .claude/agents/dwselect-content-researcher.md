@@ -21,11 +21,11 @@ Core constraints：
 - `llm_description` must be an objective blog-style Markdown product decision brief。It should use headings、bullet points、review findings、common user feedback、and verified Markdown reference links when available。Do not paraphrase the user’s subjective recommendation text and do not optimize for a fixed length。
 - Keep front-facing `name` concise：prefer 32 visible characters or fewer，hard maximum 45 visible characters unless the existing product name is already longer。Put full official names、variants、marketing titles、and detailed distinctions in `english_name`、`model_numbers`、`search_aliases`、or `llm_description` instead。
 - Treat user-provided offer URLs and price text as primary editorial input。Do not replace them with other channel prices unless explicitly asked；report price discrepancies separately。
-- Keep user-provided purchase links in `offers[].url`。Official product/spec pages and alternate store pages should be returned as `reference_url` or research notes，not as replacement offers。
+- Keep user-provided purchase links in `offers[].url`。Official product/spec pages、comparison items、and alternate store pages should be returned as optional `reference_links[]`（each `{ title, url }`）or research notes，not as replacement offers。
 - If the original offer is unavailable、deleted、or unverifiable，keep the original offer URL and price text unless explicitly told to replace them。Report `offer_status` and possible replacement candidates instead。
 - When researching a channel price，beware digit obfuscation：momo and similar channels may render the number as sprite images、lazy-loaded nodes，or wrap it with UI heading text like「折扣後價格」「限時折後價」「促銷價」。`price_text` is the only field the frontend displays，so keep it a clean、complete price string（digits with optional currency symbol、thousands separators，or a「起」range suffix）and never copy channel UI heading text into it。`price.label`、`amount`、`currency`、`unit` are metadata only（never displayed）；`label` may optionally record the channel price type（e.g.「折扣價」），but anything that must show has to live in `price_text`。When digits cannot be read reliably or a number looks suspicious，cross-check the plain-text price on BigGo（`https://biggo.com.tw`）or FindPrice（`https://www.findprice.com.tw`）before recording `price.amount`。
 - Process `status: "published"` items by default when the user asks to update visible web content。Only update `draft`、`unpublished`、or `archived` items when they are explicitly assigned。
-- Research store URL、price、model number、official or reliable reference URL、key specs、and image source。
+- Research store URL、price、model number、official or reliable reference links、key specs、and image source。
 - Do not add categories、channels、brands、or tags。If a missing brand/tag is useful，return a `taxonomy_suggestions` section with proposed IDs and rationale，and leave the target JSON using only existing taxonomy IDs。
 - Research category-appropriate decision factors。For 3C this may be ports、protocols、capacity、display specs；for food it may be ingredients、origin、flavor profile、storage；for appliances it may be installation、capacity、noise、maintenance、energy use；for household goods it may be material、size、durability、consumables、safety。
 - For review/user feedback research，do not stop at static fetch or aggregate rating/count。If a source shows a review widget、review tab、rating summary、or review count，use agent-browser dynamic inspection、scroll/click review interactions、show-more/pagination attempts、DOM text extraction、network/API inspection、and embedded script/page-state inspection before claiming individual reviews are unavailable。If blocked，report the concrete blocker（login wall、CAPTCHA、401/403/429/504、empty API body、unstable widget）and the aggregate facts that were still verified。
@@ -45,7 +45,7 @@ When creating or editing a target JSON：
 - You may be running in an isolated git worktree so your in-progress writes never collide with parallel researchers or the live `content/` tree。Just write to the assigned path relative to your working directory and report it；the coordinator collects the finished file from your worktree into the main tree。Do not assume other in-progress content exists in your tree，and do not touch shared taxonomy files——raise taxonomy needs as `taxonomy_suggestions` for the coordinator。
 - For products，preserve `summary`、`long_description`、`offers[].url`、and user-provided `price_text` unless explicitly instructed otherwise；for new products with no user-provided opinion，set `summary` / `long_description` to empty string。
 - For guides，you own `title` and a content-derived `summary`（see above）；keep `source_url` as the post URL（strip a trailing `?`）。
-- Update agent-owned factual fields：`name`、`english_name`、`llm_description`、`search_aliases`、`model_numbers`、`reference_url`，taxonomy IDs from existing taxonomy only，and price currency/unit metadata when it is clearly missing or wrong。
+- Update agent-owned factual fields：`name`、`english_name`、`llm_description`、`search_aliases`、`model_numbers`、`reference_links`，taxonomy IDs from existing taxonomy only，and price currency/unit metadata when it is clearly missing or wrong。
 - Keep `updated_at` unchanged unless the coordinator explicitly asks timestamp maintenance；the coordinator may batch timestamp updates separately。
 - Do not run `pnpm generate`、`nuxt build`，or any build/SSG step——content has dev-server HMR，so a generate is unnecessary overhead and collides with the running dev server's `.nuxt` / Vite cache。The coordinator collects your finished file and runs `pnpm content:check` (zod schema + taxonomy reference + image-guard Vitest suites that read `content/`)，not a full generate。
 - Return concise audit notes：files changed (report the exact path you wrote)、fields changed、sources、confidence、offer_status、taxonomy_suggestions、unresolved assumptions。
@@ -62,7 +62,7 @@ Return format for research-only tasks：
       "decision_factors": ["verified differentiator", "verified caveat", "review/user feedback if found"],
       "model_numbers": ["model"],
       "search_aliases": ["alias"],
-      "reference_url": "https://example.com",
+      "reference_links": [{ "title": "來源名稱", "url": "https://example.com" }],
       "offer_status": "valid | unavailable | unverifiable",
       "offer": {
         "channel_id": "pchome",

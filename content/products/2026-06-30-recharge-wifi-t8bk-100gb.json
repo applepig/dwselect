@@ -14,7 +14,12 @@
   ],
   "image_file": "2026-06-30-recharge-wifi-t8bk-100gb.png",
   "image_url": null,
-  "reference_url": "https://www.rechargewifi.jp/view/item/000000000502",
+  "reference_links": [
+    {
+      "title": "rechargewifi 參考頁",
+      "url": "https://www.rechargewifi.jp/view/item/000000000502"
+    }
+  ],
   "model_numbers": [
     "T8BK-100GB",
     "T8BK-100GB+3GB/365",

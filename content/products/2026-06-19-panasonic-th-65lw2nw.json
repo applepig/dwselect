@@ -23,7 +23,12 @@
     "65LW2",
     "Life Design 無線顯示器"
   ],
-  "reference_url": "https://www.panasonic.com/tw/consumer/digital-av/tv/life-design/th-65lw2nw.html",
+  "reference_links": [
+    {
+      "title": "panasonic 參考頁",
+      "url": "https://www.panasonic.com/tw/consumer/digital-av/tv/life-design/th-65lw2nw.html"
+    }
+  ],
   "image_file": "2026-06-19-panasonic-th-65lw2nw.webp",
   "image_url": null,
   "offers": [

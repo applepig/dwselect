@@ -40,7 +40,12 @@
     "panasonic",
     "refrigeration"
   ],
-  "reference_url": "https://pstw.panasonic.com.tw/Shop/product/detail/GO6SCTS5Z6L6OLEQJFJ9/NR-FZ250A-S",
+  "reference_links": [
+    {
+      "title": "pstw 參考頁",
+      "url": "https://pstw.panasonic.com.tw/Shop/product/detail/GO6SCTS5Z6L6OLEQJFJ9/NR-FZ250A-S"
+    }
+  ],
   "created_at": "2026-06-02T00:00:00+08:00",
   "updated_at": "2026-06-19T00:00:00+08:00",
   "published_at": "2026-06-02T00:00:00+08:00",

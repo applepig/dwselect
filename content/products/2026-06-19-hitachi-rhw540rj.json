@@ -40,7 +40,12 @@
     "hitachi",
     "refrigeration"
   ],
-  "reference_url": "https://24h.pchome.com.tw/prod/DPAC46-A900FN450",
+  "reference_links": [
+    {
+      "title": "PChome 24h 商品頁",
+      "url": "https://24h.pchome.com.tw/prod/DPAC46-A900FN450"
+    }
+  ],
   "created_at": "2026-06-19T00:00:00+08:00",
   "updated_at": "2026-06-19T00:00:00+08:00",
   "published_at": "2026-06-19T00:00:00+08:00",

@@ -35,7 +35,6 @@ function buildProductJson(name: string) {
     image_url: null,
     category_id: 'computer-3c',
     tag_ids: [],
-    reference_url: null,
     created_at: '2026-06-02T00:00:00+08:00',
     updated_at: '2026-06-02T00:00:00+08:00',
     published_at: '2026-06-02T00:00:00+08:00',

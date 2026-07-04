@@ -70,6 +70,7 @@ function makeProductDetailView(overrides: Partial<ProductDetailView> = {}): Prod
     price_label: 'NT$1,000',
     buy_url: 'https://example.com/buy',
     fine_print: '',
+    reference_links: [],
     related_products: [],
     ...overrides,
   }

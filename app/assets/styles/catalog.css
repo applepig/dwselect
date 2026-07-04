@@ -729,7 +729,18 @@
   background: color-mix(in srgb, var(--dw-panel-strong) 72%, var(--dw-panel));
 }
 
-.detail-llm-title {
+.detail-reference-links {
+  display: grid;
+  gap: 10px;
+  min-width: 0;
+  padding: 14px;
+  border: 1px solid color-mix(in srgb, var(--dw-border) 82%, transparent);
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--dw-panel-strong) 72%, var(--dw-panel));
+}
+
+.detail-llm-title,
+.detail-reference-links-title {
   margin: 0;
   color: var(--dw-text);
   font-size: 0.95rem;
@@ -767,7 +778,20 @@
   padding-inline-start: 1.25rem;
 }
 
-.detail-llm-link {
+.detail-reference-list {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding-inline-start: 1.25rem;
+}
+
+.detail-reference-item {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.detail-llm-link,
+.detail-reference-link {
   color: var(--dw-accent);
   font-weight: 850;
   text-decoration: underline;

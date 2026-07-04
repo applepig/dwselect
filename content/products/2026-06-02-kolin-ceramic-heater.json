@@ -36,7 +36,12 @@
     "air-care",
     "kolin"
   ],
-  "reference_url": "https://www.furimori.com/products/%E3%80%90kolin-%E6%AD%8C%E6%9E%97%E3%80%91ptc%E9%99%B6%E7%93%B7%E9%9B%BB%E6%9A%96%E5%99%A8kfh-mn607a",
+  "reference_links": [
+    {
+      "title": "furimori 參考頁",
+      "url": "https://www.furimori.com/products/%E3%80%90kolin-%E6%AD%8C%E6%9E%97%E3%80%91ptc%E9%99%B6%E7%93%B7%E9%9B%BB%E6%9A%96%E5%99%A8kfh-mn607a"
+    }
+  ],
   "created_at": "2026-06-02T00:00:00+08:00",
   "updated_at": "2026-06-19T00:00:00+08:00",
   "published_at": "2026-06-02T00:00:00+08:00",

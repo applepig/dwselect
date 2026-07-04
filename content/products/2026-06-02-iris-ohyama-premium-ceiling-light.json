@@ -40,7 +40,12 @@
     "iris-ohyama",
     "lighting"
   ],
-  "reference_url": "https://www.irisplaza.co.jp/index.php?KB=SHOSAI&SID=110461",
+  "reference_links": [
+    {
+      "title": "irisplaza 參考頁",
+      "url": "https://www.irisplaza.co.jp/index.php?KB=SHOSAI&SID=110461"
+    }
+  ],
   "created_at": "2026-06-02T00:00:00+08:00",
   "updated_at": "2026-06-19T00:00:00+08:00",
   "published_at": "2026-06-02T00:00:00+08:00",

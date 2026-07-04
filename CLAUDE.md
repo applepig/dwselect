@@ -53,7 +53,7 @@
 - `app/utils/content/` — 共用 comparator、id 抽取、taxonomy label 等 helper
 - `scripts/public-payload/` — build-time frontend-ready payload mapper
 - `app/assets/styles/catalog.css` — 公開站主要樣式（`--dw-*` token 定義於 `variables.css`）
-- `content/` — 內容資料 SSOT（JSON + taxonomy files）
+- `content/` — 內容資料 SSOT（JSON + taxonomy files）；Product 購買外部目標用 `offers[]`，非購買參考外部目標用 optional `reference_links: { title, url }[]`，不要再新增 legacy `reference_url`
 
 ## Frontend Handoff
 

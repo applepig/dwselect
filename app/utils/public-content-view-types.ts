@@ -1,4 +1,4 @@
-import type { Product, ProductOffer } from './product-schema'
+import type { Product, ProductOffer, ProductReferenceLink } from './product-schema'
 
 // 代表「未篩選分類」的哨兵：全部 chip 的 id、首頁 active 判定、route param fallback 皆用它。
 // 值為字串 'all'（route param 與 payload chip id 靠此字面），具名引用讓拼錯被型別擋。
@@ -30,6 +30,8 @@ export type RelatedProductCardView = {
   channel_label: string
 }
 
+export type ProductDetailReferenceLink = Pick<ProductReferenceLink, 'title' | 'url'>
+
 export type ProductDetailView = {
   id: string
   name: string
@@ -51,6 +53,7 @@ export type ProductDetailView = {
   price_label: string
   buy_url: string
   fine_print: string
+  reference_links: ProductDetailReferenceLink[]
   related_products: RelatedProductCardView[]
 }
 
