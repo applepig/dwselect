@@ -49,8 +49,8 @@ scope 已確認（見 Decisions 三條 ADR），驗收條件與對應測試如�
 ### 決策（2026-06-18）：公開排序鍵由 `published_at` 改為 `updated_at`
 
 - **背景**：020 sprint 的 ADR（2026-06-16）將 product／guide 的 canonical comparator 統一為 product `category→published_at→name`、guide `published_at→name`，語意是「最新上架優先」。
-- **決策**：本 sprint 把 product／guide 的時間排序鍵改為 `updated_at`（product `category→updated_at→name`、guide `updated_at→name`，tie-break 仍為 `compareText`），語意改為「最近維護優先」。此決策**修訂並取代** 020 ADR（2026-06-16）的時間鍵選擇。
-- **後果（user-visible，刻意變更）**：catalog 列表、搜尋 idle／baseline 順序、guide 列表的時間排序改吃編輯近因。content 維護（補 `llm_description`、修價格／圖片）若更新 `updated_at`，會把該品項往前排。`updated_at` 的維護由 coordinator 控制（content researcher subagent 預設不動 `updated_at`，見 `dwselect-content-authoring`）。
+- **決策**：本 sprint 把 product／guide 的時間排序鍵改為 `updated_at`（product `updated_at→category→name`、guide `updated_at→name`，tie-break 仍為 `compareText`），語意改為「最近維護優先」。此決策**修訂並取代** 020 ADR（2026-06-16）的時間鍵選擇，並於 2026-07-05 修訂 product 全部列表的排序鍵順序，避免 category sort_order 壓過 newest-first 語意。
+- **後果（user-visible，刻意變更）**：catalog 全部列表、搜尋 idle／baseline 順序、guide 列表的時間排序改吃編輯近因。content 維護（補 `llm_description`、修價格／圖片）若更新 `updated_at`，會把該品項往前排；product 同一 `updated_at` 下才用 category sort_order 與名稱穩定排序。`updated_at` 的維護由 coordinator 控制（content researcher subagent 預設不動 `updated_at`，見 `dwselect-content-authoring`）。
 - **影響範圍**：`compare-products.ts`、`compare-guides.ts`、`search-index.ts`、`scripts/public-payload/map-resource-rows.ts`、`scripts/public-payload/map-related-product-card.ts`（相關商品排序一併對齊 `updated_at`，避免同 domain concept 出現兩套規則）。
 
 ### 決策（2026-06-18）：Links 維持人工 `sort_order` 優先
@@ -77,7 +77,7 @@ scope 已確認（見 Decisions 三條 ADR），驗收條件與對應測試如�
 
 ### Milestone 3：Implementation ✅
 
-排序鍵 `published_at`→`updated_at`（`compare-products.ts`、`compare-guides.ts`、`map-related-product-card.ts`）；新增 `app/utils/content/compare-links.ts`，`search-index.ts`／`map-resource-rows.ts` 改用 `compareLinks`。
+排序鍵 `published_at`→`updated_at`（`compare-products.ts`、`compare-guides.ts`、`map-related-product-card.ts`；product 全部列表為 `updated_at→category→name`）；新增 `app/utils/content/compare-links.ts`，`search-index.ts`／`map-resource-rows.ts` 改用 `compareLinks`。
 
 ### Milestone 4：Verification And Documentation ✅
 

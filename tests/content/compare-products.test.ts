@@ -14,9 +14,16 @@ function sortProducts(products: Product[]): string[] {
 }
 
 describe('compareProducts (canonical)', () => {
-  it('should order by category sort_order first', () => {
-    const home_product = makeProduct({ id: 'home-product', status: 'published', name: '商品', category_id: 'home' })
-    const computer_product = makeProduct({ id: 'computer-product', status: 'published', name: '商品', category_id: 'computer' })
+  it('should order by updated_at descending before category sort_order', () => {
+    const older_home_product = makeProduct({ id: 'older-home-product', status: 'published', name: '商品', category_id: 'home', updated_at: '2026-06-01T00:00:00+08:00' })
+    const newer_computer_product = makeProduct({ id: 'newer-computer-product', status: 'published', name: '商品', category_id: 'computer', updated_at: '2026-06-05T00:00:00+08:00' })
+
+    expect(sortProducts([older_home_product, newer_computer_product])).toEqual(['newer-computer-product', 'older-home-product'])
+  })
+
+  it('should order by category sort_order when updated_at matches', () => {
+    const home_product = makeProduct({ id: 'home-product', status: 'published', name: '商品', category_id: 'home', updated_at: '2026-06-01T00:00:00+08:00' })
+    const computer_product = makeProduct({ id: 'computer-product', status: 'published', name: '商品', category_id: 'computer', updated_at: '2026-06-01T00:00:00+08:00' })
 
     expect(sortProducts([computer_product, home_product])).toEqual(['home-product', 'computer-product'])
   })
@@ -49,7 +56,7 @@ describe('compareProducts (canonical)', () => {
     expect(sortProducts([recently_published, recently_updated])).toEqual(['recently-updated', 'recently-published'])
   })
 
-  it('should tie-break by name using compareText when category and updated_at match', () => {
+  it('should tie-break by name using compareText when updated_at and category match', () => {
     const banana = makeProduct({ id: 'banana', status: 'published', name: 'banana', category_id: 'home', updated_at: '2026-06-01T00:00:00+08:00' })
     const apple = makeProduct({ id: 'apple', status: 'published', name: 'apple', category_id: 'home', updated_at: '2026-06-01T00:00:00+08:00' })
 
@@ -63,9 +70,9 @@ describe('compareProducts (canonical)', () => {
     expect(compareProducts(full_width, half_width, taxonomies)).toBe(0)
   })
 
-  it('should treat an unknown category as the largest sort_order so it lands last', () => {
-    const known = makeProduct({ id: 'known', status: 'published', name: '商品', category_id: 'home' })
-    const unknown = makeProduct({ id: 'unknown', status: 'published', name: '商品', category_id: 'no-such-category' })
+  it('should treat an unknown category as the largest sort_order when updated_at matches', () => {
+    const known = makeProduct({ id: 'known', status: 'published', name: '商品', category_id: 'home', updated_at: '2026-06-01T00:00:00+08:00' })
+    const unknown = makeProduct({ id: 'unknown', status: 'published', name: '商品', category_id: 'no-such-category', updated_at: '2026-06-01T00:00:00+08:00' })
 
     expect(sortProducts([unknown, known])).toEqual(['known', 'unknown'])
   })

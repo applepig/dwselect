@@ -532,10 +532,9 @@ describe('search index', () => {
     ]))
   })
 
-  it('should order product documents by canonical category then updated_at then name (catalog-aligned baseline)', () => {
-    // ADR 2026-06-18 (revises 2026-06-16): search documents share the catalog canonical
-    // comparator (category sort_order -> updated_at desc -> compareText name). The time key
-    // was changed from published_at to updated_at. This is a deliberate behaviour change.
+  it('should order product documents by canonical updated_at then category then name (catalog-aligned baseline)', () => {
+    // Product search documents share the catalog canonical comparator
+    // (updated_at desc -> category sort_order -> compareText name).
     const home_old = { ...base_product, id: 'home-old', name: 'home old', category_id: 'home', updated_at: '2026-06-01T00:00:00+08:00' }
     const home_new = { ...base_product, id: 'home-new', name: 'home new', category_id: 'home', updated_at: '2026-06-05T00:00:00+08:00' }
     const computer_new = { ...base_product, id: 'computer-new', name: 'computer new', category_id: 'computer', updated_at: '2026-06-09T00:00:00+08:00' }
@@ -543,9 +542,9 @@ describe('search index', () => {
     const documents = getSearchDocuments({ products: [computer_new, home_old, home_new], guides: [], links: [] }, test_taxonomies)
 
     expect(documents.map((document) => document.document_id)).toEqual([
+      'product:computer-new',
       'product:home-new',
       'product:home-old',
-      'product:computer-new',
     ])
   })
 

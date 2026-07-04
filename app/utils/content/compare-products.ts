@@ -8,17 +8,17 @@ export function compareProducts(
   right_product: Product,
   taxonomies: TaxonomyDefinitions,
 ): number {
+  const updated_at_order = compareNullableTimestampDesc(left_product.updated_at, right_product.updated_at)
+
+  if (updated_at_order !== 0) {
+    return updated_at_order
+  }
+
   const category_order = getCategorySortOrder(left_product.category_id, taxonomies)
     - getCategorySortOrder(right_product.category_id, taxonomies)
 
   if (category_order !== 0) {
     return category_order
-  }
-
-  const updated_at_order = compareNullableTimestampDesc(left_product.updated_at, right_product.updated_at)
-
-  if (updated_at_order !== 0) {
-    return updated_at_order
   }
 
   return compareText(left_product.name, right_product.name)
