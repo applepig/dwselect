@@ -29,7 +29,12 @@
     "j5create",
     "power-charging"
   ],
-  "reference_url": "https://www.facebook.com/applepig/posts/pfbid02GiR12vXf3qXtJAhrEGCXbrMXGkTbKBNLTBPisMyN7QK133jcXHHGMxpbMk2EpzFul",
+  "reference_links": [
+    {
+      "title": "Facebook 參考貼文",
+      "url": "https://www.facebook.com/applepig/posts/pfbid02GiR12vXf3qXtJAhrEGCXbrMXGkTbKBNLTBPisMyN7QK133jcXHHGMxpbMk2EpzFul"
+    }
+  ],
   "created_at": "2026-06-02T00:00:00+08:00",
   "updated_at": "2026-06-18T00:00:00+08:00",
   "published_at": "2026-06-02T00:00:00+08:00",

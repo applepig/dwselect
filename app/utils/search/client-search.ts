@@ -6,6 +6,9 @@ import type { SearchDocument, SearchIndexPayload, SearchSuggestion } from './sea
 import { loadSearchIndex, querySearchIndex } from './search-index'
 
 export const SEARCH_HISTORY_STORAGE_KEY = 'dwselect.search.history.v1'
+// 兩者數值巧合相同但語意不同：SEARCH_SUGGESTION_LIMIT 是 autocomplete 建議顯示上限，
+// SEARCH_HISTORY_LIMIT 是搜尋歷史保存筆數上限，各自獨立可調。
+const SEARCH_SUGGESTION_LIMIT = 12
 const SEARCH_HISTORY_LIMIT = 12
 
 export type SearchPageMode = 'idle' | 'suggesting' | 'searching'
@@ -53,7 +56,7 @@ export async function getClientSearchResults(query: string): Promise<SearchSugge
   return querySearchIndex(search_index, query)
 }
 
-export async function getClientSearchSuggestions(query: string, limit = 12): Promise<SearchSuggestion[]> {
+export async function getClientSearchSuggestions(query: string, limit = SEARCH_SUGGESTION_LIMIT): Promise<SearchSuggestion[]> {
   return (await getClientSearchResults(query)).slice(0, limit)
 }
 

@@ -39,7 +39,12 @@
     "apple",
     "av-source"
   ],
-  "reference_url": "https://www.apple.com/tw/apple-tv-4k/specs/",
+  "reference_links": [
+    {
+      "title": "apple 參考頁",
+      "url": "https://www.apple.com/tw/apple-tv-4k/specs/"
+    }
+  ],
   "created_at": "2026-06-02T00:00:00+08:00",
   "updated_at": "2026-06-19T00:00:00+08:00",
   "published_at": "2026-06-02T00:00:00+08:00",

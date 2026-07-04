@@ -40,7 +40,12 @@
     "aibo",
     "power-charging"
   ],
-  "reference_url": "https://www.aibo-shop.com.tw/products/bpn-txd100k",
+  "reference_links": [
+    {
+      "title": "aibo-shop 參考頁",
+      "url": "https://www.aibo-shop.com.tw/products/bpn-txd100k"
+    }
+  ],
   "created_at": "2026-06-02T00:00:00+08:00",
   "updated_at": "2026-06-18T00:00:00+08:00",
   "published_at": "2026-06-02T00:00:00+08:00",

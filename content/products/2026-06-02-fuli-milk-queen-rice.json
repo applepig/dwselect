@@ -43,7 +43,12 @@
     "fuli",
     "rice"
   ],
-  "reference_url": "https://www.fulifa.com.tw/product_detail.php?category_fid=00001&product_id=655",
+  "reference_links": [
+    {
+      "title": "fulifa 參考頁",
+      "url": "https://www.fulifa.com.tw/product_detail.php?category_fid=00001&product_id=655"
+    }
+  ],
   "created_at": "2026-06-02T00:00:00+08:00",
   "updated_at": "2026-06-02T00:00:00+08:00",
   "published_at": "2026-06-02T00:00:00+08:00",

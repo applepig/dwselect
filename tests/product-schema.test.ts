@@ -42,7 +42,12 @@ const valid_product = {
   image_url: null,
   category_id: 'home',
   tag_ids: ['tag-a', 'tag-b'],
-  reference_url: 'https://example.com/reference',
+  reference_links: [
+    {
+      title: '產品參考頁',
+      url: 'https://example.com/reference',
+    },
+  ],
   created_at: '2026-06-02T00:00:00+08:00',
   updated_at: '2026-06-02T00:00:00+08:00',
   published_at: '2026-06-02T00:00:00+08:00',
@@ -404,18 +409,40 @@ describe('product schema', () => {
     })).toThrow()
   })
 
-  it('should allow empty reference URL as null', () => {
+  it('should accept products without reference links', () => {
+    const { reference_links: _reference_links, ...product_without_reference_links } = valid_product
+
+    expect(() => product_schema.parse(product_without_reference_links)).not.toThrow()
+  })
+
+  it('should accept product reference links with non-empty title and HTTP(S) URL', () => {
     expect(() => product_schema.parse({
       ...valid_product,
-      reference_url: null,
+      reference_links: [
+        { title: '官方規格頁', url: 'https://example.com/spec' },
+        { title: '評測文章', url: 'http://example.com/review' },
+      ],
     })).not.toThrow()
   })
 
-  it('should reject invalid non-empty reference URL', () => {
+  it('should reject legacy single reference URL', () => {
     expect(() => product_schema.parse({
       ...valid_product,
-      reference_url: 'mailto:test@example.com',
+      reference_url: 'https://example.com/legacy-reference',
     })).toThrow()
+  })
+
+  it('should reject reference links without non-empty title or HTTP(S) URL', () => {
+    for (const reference_link of [
+      { title: '', url: 'https://example.com/reference' },
+      { title: 'Email source', url: 'mailto:test@example.com' },
+      { title: 'Relative source', url: '/reference' },
+    ]) {
+      expect(() => product_schema.parse({
+        ...valid_product,
+        reference_links: [reference_link],
+      })).toThrow()
+    }
   })
 
   it('should reject invalid timestamp format', () => {
@@ -674,6 +701,7 @@ describe('product schema', () => {
       expect(entry.content.id).toMatch(/^\d{4}-\d{2}-\d{2}-[a-z0-9]+(?:-[a-z0-9]+)*$/)
       expect(entry.content.image_url === null || isHttpUrl(entry.content.image_url)).toBe(true)
       expectContentImageFileToExist(entry.content.image_file, products_dir_url)
+      expect(entry.content).not.toHaveProperty('reference_url')
       // schema 是 .strict() 且 offers 為 .min(1)：legacy 欄位、offer 數量與必填皆由 parse 涵蓋，
       // 不另外硬鎖 offers 剛好 1 個或 checked_at===updated_at（那是內容慣例，非 schema 契約）。
       expect(() => product_schema.parse(entry.content)).not.toThrow()

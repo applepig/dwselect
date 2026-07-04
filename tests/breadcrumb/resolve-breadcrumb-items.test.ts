@@ -52,6 +52,14 @@ describe('resolveBreadcrumbItems for taxonomy pages', () => {
     // brand id 必須由 /brand 前綴解析到 brand label，不可被 tag getter 的 raw-id fallback 覆蓋
     expect(resolveBreadcrumbItems('/brand/panasonic', {}, shell)[0]?.label).toBe('Panasonic')
   })
+
+  // 裸 kind（無 id segment）不是 taxonomy 詳情路由，不得把 kind 本身當作 id 產生 breadcrumb。
+  it.each(['/category', '/tag', '/brand', '/channel'])(
+    'should return an empty breadcrumb for the bare taxonomy kind %s',
+    (bare_kind_path) => {
+      expect(resolveBreadcrumbItems(bare_kind_path, {}, shell)).toEqual([])
+    },
+  )
 })
 
 describe('resolveBreadcrumbItems for existing routes (regression)', () => {

@@ -3,6 +3,7 @@ import type { CompactResourceRow } from '../../app/utils/published-products/type
 import { compareGuides } from '../../app/utils/content/compare-guides.ts'
 import { compareLinks } from '../../app/utils/content/compare-links.ts'
 import { resolveGuideImageUrl } from '../../app/utils/content-images/resolve-guide-image-url.ts'
+import { EXTERNAL_LINK_ATTRS, RESOURCE_ROW_ICONS } from '../../app/utils/published-products/resource-row-attrs.ts'
 import type { TaxonomyLabelResolver } from '../../app/utils/content/taxonomy-labels.ts'
 
 export function mapGuideRows(guides: Guide[], labels: TaxonomyLabelResolver): CompactResourceRow[] {
@@ -30,7 +31,7 @@ function mapGuideToRow(guide: Guide, labels: TaxonomyLabelResolver): CompactReso
     meta: category_labels.length === 0 ? null : category_labels.join('、'),
     href: `/guide/${guide.id}`,
     image_url: resolveGuideImageUrl(guide),
-    icon: 'i-lucide-book-open',
+    icon: RESOURCE_ROW_ICONS.guide,
     external: false,
     target: null,
     rel: null,
@@ -50,8 +51,7 @@ function mapLinkToRow(link: LinkDefinition): CompactResourceRow {
     image_url: link.image_url ?? null,
     icon: link.icon,
     external: true,
-    target: '_blank',
-    rel: 'noopener noreferrer',
+    ...EXTERNAL_LINK_ATTRS,
     category_ids: link.category_ids,
     tag_ids: link.tag_ids,
   }

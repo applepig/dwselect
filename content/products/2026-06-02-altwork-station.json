@@ -37,7 +37,12 @@
     "altwork",
     "ergonomic"
   ],
-  "reference_url": "https://altwork.com/products/altwork-signature-station",
+  "reference_links": [
+    {
+      "title": "altwork 參考頁",
+      "url": "https://altwork.com/products/altwork-signature-station"
+    }
+  ],
   "created_at": "2026-06-02T00:00:00+08:00",
   "updated_at": "2026-06-20T00:00:00+08:00",
   "published_at": "2026-06-02T00:00:00+08:00",

@@ -73,11 +73,16 @@
       "checked_at": "2026-06-13T00:00:00+08:00"
     }
   ],
+  "reference_links": [
+    {
+      "title": "Samsung 官方產品頁",
+      "url": "https://www.samsung.com/tw/smartphones/galaxy-s25/"
+    }
+  ],
   "image_file": "2026-06-13-samsung-galaxy-s25.jpg",
   "image_url": null,
   "category_id": "computer-3c",
   "tag_ids": ["samsung", "phone"],
-  "reference_url": "https://www.samsung.com/tw/smartphones/galaxy-s25/",
   "created_at": "2026-06-13T00:00:00+08:00",
   "updated_at": "2026-06-13T00:00:00+08:00",
   "published_at": "2026-06-13T00:00:00+08:00",
@@ -100,12 +105,12 @@
 | `llm_description` | string | Agent | 客觀 blog-style Markdown 產品決策 brief，包含段落、bullet points、評測／使用者回饋與 reference links，用於搜尋、LLM 理解與商品詳情頁呈現 |
 | `search_aliases` | string[] | Agent | 替代搜尋詞（中文別名、縮寫等） |
 | `model_numbers` | string[] | Agent | 產品型號 |
-| `offers` | array | Agent | 至少一筆賣場資訊（見下方） |
+| `offers` | array | Agent | 至少一筆賣場資訊（見下方）；購買外部目標的特化，顯示名稱由 `channel_id` 對應 channels taxonomy |
+| `reference_links` | array | Agent | 選填，非購買參考外部目標，每筆為 `{ "title": string, "url": string }`；可放官網、規格頁、評測、比較款或相關規定 |
 | `image_file` | string \| null | Agent | 本地圖片 source 檔名 `{id}.{ext}`。Published Product 必須填 `image_file`；尚未取得本地圖片時維持 draft 且填 `null` |
 | `image_url` | string \| null | Agent | Product 不接受外部圖片 fallback；必須填 `null` 或省略，本地圖片只填 `image_file`，不要手寫 `/products/images/...` 這類公開 path |
 | `category_id` | string | Agent | **單一** category ID（見 Taxonomy） |
 | `tag_ids` | string[] | Agent | tag ID 與 brand ID 混合陣列 |
-| `reference_url` | string \| null | Agent | 產品官網、評測文章等參考連結 |
 | `created_at` | string | Agent | 建立時間 |
 | `updated_at` | string | Agent | 更新時間，每次修改都要更新 |
 | `published_at` | string \| null | Agent | 發布時間，status 為 published 時必填 |
@@ -281,7 +286,7 @@ Products 用 `category_id`（單一值），Guides 和 Links 用 `category_ids`�
 - Amazon 短網址可先直接讀頁面；若頁面資訊不足，再用 agent-browser 確認商品標題、ASIN、型號、圖片與價格
 
 額外研究：
-- 產品官網或評測文章（填入 `reference_url`）
+- 產品官網、規格頁、評測文章、比較款或相關規定（填入 optional `reference_links[]`；每筆含 `title` 與 `url`）
 - 其他賣場的價格（可建立多筆 offer）
 - 完整型號（填入 `model_numbers`）
 

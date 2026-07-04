@@ -49,7 +49,6 @@ function makeProductJson(overrides: { id_name: string, slug: string, status?: st
     image_url: null,
     category_id: 'other',
     tag_ids: [],
-    reference_url: null,
     created_at: '2026-06-02T00:00:00+08:00',
     updated_at: '2026-06-02T00:00:00+08:00',
     published_at: '2026-06-02T00:00:00+08:00',

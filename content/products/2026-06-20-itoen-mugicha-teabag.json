@@ -41,7 +41,12 @@
     "food",
     "itoen"
   ],
-  "reference_url": "https://www.facebook.com/1630614087/posts/pfbid0dnfKWTBJUo6ESRpUr7dsb9W1dJB1aLLNx8Bkk8NbyQ2xY1Zkkw5RW3GKNaaqMWKTl/",
+  "reference_links": [
+    {
+      "title": "Facebook 參考貼文",
+      "url": "https://www.facebook.com/1630614087/posts/pfbid0dnfKWTBJUo6ESRpUr7dsb9W1dJB1aLLNx8Bkk8NbyQ2xY1Zkkw5RW3GKNaaqMWKTl/"
+    }
+  ],
   "created_at": "2026-06-20T00:00:00+08:00",
   "updated_at": "2026-06-20T00:00:00+08:00",
   "published_at": "2026-06-20T00:00:00+08:00",

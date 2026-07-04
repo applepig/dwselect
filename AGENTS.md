@@ -23,11 +23,11 @@
 
 ## Content Model
 
-- Products：`content/products/*.json`；Guides：`content/guides/*.json`；Links：`content/links/*.json`；taxonomy 在 `content/taxonomies/{categories,channels,tags}.json`。
+- Products：`content/products/*.json`；Guides：`content/guides/*.json`；Links：`content/links/*.json`；taxonomy 在 `content/taxonomies/{categories,channels,tags,brands}.json`。
 - Schema 與 taxonomy reference 驗證集中在 `app/utils/product-schema.ts` 與 `tests/product-schema.test.ts`。
 - Content 讀取集中在 `scripts/content-reader.ts`；公開 runtime 不再讀靜態 `public/api/content.json`，而是透過 Nuxt server route `GET /api/content.json`（handler 在 `server/api/content.json.get.ts`）即時從 `content/` 產生，`pnpm generate` 會 prerender 成 static file，app 端 server 與 client 都用 `$fetch('/api/content.json')` 取得。
 - `id` 必須等於 JSON 檔名 stem；timestamps 使用 `YYYY-MM-DDTHH:mm:ss+08:00` 這類含 timezone offset 格式。
-- Product 使用 `category_id`、`channel_id`、`tag_ids`；Guide／Link 使用 `category_ids`、`tag_ids`；不要新增 legacy `category` 或自由字串 `tags`。
+- Product 使用 `category_id`、`tag_ids`（含 brand IDs）、`offers[]`（購買外部目標）與 optional `reference_links[]`（非購買參考外部目標）；Guide／Link 使用 `category_ids`、`tag_ids`；不要新增 legacy `category`、`channel_id`、`reference_url` 或自由字串 `tags`。
 - `status = "published"` 才能出現在首頁、指南、連結、category counts 與 search index。
 - `content/taxonomies/links.json` 不是 runtime links SSOT；runtime links 來自 `content/links/*.json`。
 - 原 Google Sheets TSV importer（`scripts/legacy/migrate-google-sheet-products.ts`）已移除（與 ADR-11 的 content id ASCII kebab 約束不相容）；公開內容一律以 `content/` 的 Git-backed JSON 為 SSOT，不要重新引入 Google Sheets importer。

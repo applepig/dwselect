@@ -11,7 +11,7 @@
         <NuxtLink
           v-for="category in desktop_category_items"
           :key="`sidebar-category-${category.id}`"
-          :to="category.id === 'all' ? '/' : `/category/${category.id}`"
+          :to="category.id === ALL_CATEGORIES_ID ? '/' : `/category/${category.id}`"
           class="app-nav-button desktop-category-link"
           :class="{ 'is-active': isCategoryActive(category.id) }"
           :aria-current="isCategoryActive(category.id) ? 'page' : undefined"
@@ -77,16 +77,13 @@
 </template>
 
 <script setup lang="ts">
-import type { CategoryChipView } from '../utils/public-content-view-types'
+import { ALL_CATEGORIES_ID, type CategoryChipView } from '../utils/public-content-view-types'
+import { NAV_TABS } from '../utils/published-products/compact-app'
 
 const route = useRoute()
 const catalog_shell_data = await useCatalogShellData()
-const nav_items = [
-  { id: 'home', label: '首頁', icon: 'i-lucide-house', to: '/' },
-  { id: 'guide', label: '指南', icon: 'i-lucide-tags', to: '/guide' },
-  { id: 'links', label: '連結', icon: 'i-lucide-link', to: '/links' },
-  { id: 'search', label: '搜尋', icon: 'i-lucide-search', to: '/search' },
-]
+// 導覽 tab 單一真相：label/icon/to/順序皆由 NAV_TABS 衍生（ADR-3），與窄螢幕 COMPACT_APP_TABS 同源。
+const nav_items = NAV_TABS
 const desktop_route_items = nav_items.filter((item) => item.id !== 'home')
 const desktop_category_items = computed(() => catalog_shell_data.value?.desktop_category_items ?? [])
 
@@ -95,7 +92,7 @@ function isRouteActive(path: string) {
 }
 
 function isCategoryActive(category_id: CategoryChipView['id']) {
-  if (category_id === 'all') {
+  if (category_id === ALL_CATEGORIES_ID) {
     return route.path === '/'
   }
 

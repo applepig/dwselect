@@ -38,7 +38,12 @@
     "kitchen",
     "vibo"
   ],
-  "reference_url": "https://www.logobridge.com/product.php?wshop=logobridge&lang=zh-tw&Opt=detailed&type1=201&type2=208&id=120",
+  "reference_links": [
+    {
+      "title": "logobridge 參考頁",
+      "url": "https://www.logobridge.com/product.php?wshop=logobridge&lang=zh-tw&Opt=detailed&type1=201&type2=208&id=120"
+    }
+  ],
   "created_at": "2026-06-02T00:00:00+08:00",
   "updated_at": "2026-06-19T00:00:00+08:00",
   "published_at": "2026-06-02T00:00:00+08:00",

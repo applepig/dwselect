@@ -1,25 +1,27 @@
 <template>
   <UApp>
-    <main class="error-page">
-      <section class="error-card">
-        <p class="error-kicker">
-          DW嚴選
-        </p>
-        <h1 class="error-title">
-          {{ error_title }}
-        </h1>
-        <p class="error-message">
-          {{ error_message }}
-        </p>
-        <NuxtLink
-          to="/"
-          class="error-home-link"
-          @click.prevent="onHomeLinkClicked"
-        >
-          回首頁
-        </NuxtLink>
-      </section>
-    </main>
+    <NuxtLayout>
+      <main class="error-page">
+        <section class="error-card">
+          <p class="error-kicker">
+            DW嚴選
+          </p>
+          <h1 class="error-title">
+            {{ error_title }}
+          </h1>
+          <p class="error-message">
+            {{ error_message }}
+          </p>
+          <NuxtLink
+            to="/"
+            class="error-home-link"
+            @click.prevent="onHomeLinkClicked"
+          >
+            回首頁
+          </NuxtLink>
+        </section>
+      </main>
+    </NuxtLayout>
   </UApp>
 </template>
 
@@ -42,12 +44,13 @@ function onHomeLinkClicked() {
 </script>
 
 <style scoped>
+/* 套進 default layout 的 .compact-main slot：在內容區內置中即可，
+   不再全視窗置中（避免與 shell top-bar 疊高）；bg／文字色由 layout 提供。 */
 .error-page {
-  min-height: 100vh;
   display: grid;
   place-items: center;
-  padding: 32px;
-  background: var(--ui-bg);
+  min-height: 40vh;
+  padding: 32px 0;
   color: var(--ui-text);
 }
 

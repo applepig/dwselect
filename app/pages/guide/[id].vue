@@ -12,7 +12,7 @@
 
 <script setup lang="ts">
 import type { GuideDetailView } from '../../utils/public-content-view-types'
-import { getCanonicalUrl, getOgImageUrl, getSeoDescription, SITE_NAME } from '../../utils/seo-metadata'
+import { buildSeoMeta, getCanonicalUrl, getOgImageUrl, getSeoDescription, SITE_NAME } from '../../utils/seo-metadata'
 
 const route = useRoute()
 const raw_id = route.params.id
@@ -41,20 +41,13 @@ useHead(() => ({
   ],
 }))
 
-useSeoMeta({
+useSeoMeta(buildSeoMeta({
   title: guide_meta_title,
   description: guide_meta_description,
-  ogTitle: guide_meta_title,
-  ogDescription: guide_meta_description,
-  ogUrl: guide_canonical_url,
-  ogImage: guide_og_image,
-  ogImageAlt: guide_og_image_alt,
-  twitterCard: 'summary_large_image',
-  twitterTitle: guide_meta_title,
-  twitterDescription: guide_meta_description,
-  twitterImage: guide_og_image,
-  twitterImageAlt: guide_og_image_alt,
-})
+  url: guide_canonical_url,
+  image: guide_og_image,
+  imageAlt: guide_og_image_alt,
+}))
 
 const guide_detail_data = await useGuideDetailData(guide_id)
 

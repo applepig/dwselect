@@ -13,7 +13,12 @@
   ],
   "image_url": null,
   "image_file": "2026-06-30-corsair-ai-workstation-300.jpg",
-  "reference_url": "https://www.corsair.com/us/en/p/gaming-computers/cs-9080001-na/corsair-ai-workstation-300-amd-ryzen-ai-max-385-processor-amd-radeon-8050s-igpu-up-to-48gb-vram-64gb-lpddr5x-memory-1tb-m2-ssd-win11-home-cs-9080001-na",
+  "reference_links": [
+    {
+      "title": "corsair 參考頁",
+      "url": "https://www.corsair.com/us/en/p/gaming-computers/cs-9080001-na/corsair-ai-workstation-300-amd-ryzen-ai-max-385-processor-amd-radeon-8050s-igpu-up-to-48gb-vram-64gb-lpddr5x-memory-1tb-m2-ssd-win11-home-cs-9080001-na"
+    }
+  ],
   "model_numbers": [
     "CS-9080001-NA"
   ],

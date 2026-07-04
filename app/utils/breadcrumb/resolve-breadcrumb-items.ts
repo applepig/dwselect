@@ -1,6 +1,8 @@
 import type { CategoryChipView } from '../public-content-view-types.ts'
 import type { PublicTaxonomies } from '../public-content-payload.ts'
 import { createTaxonomyLabelResolver } from '../content/taxonomy-labels.ts'
+import { TAXONOMY_KINDS } from '../published-products/taxonomy-kinds.ts'
+import type { TaxonomyKind } from '../published-products/select-taxonomy-items.ts'
 
 // breadcrumb 推導抽成純函式：layout 只負責接 route／shell data，導向規則在此單元測試覆蓋。
 // 與 detail 頁一致——layout breadcrumb 充當 h1，taxonomy／detail 頁本身不再放重複標題（AC26）。
@@ -26,9 +28,6 @@ export type BreadcrumbShellData = {
 }
 
 type RouteQuery = Record<string, string | null | Array<string | null> | undefined>
-
-// 各 taxonomy 前綴對應的 label getter；channel 走 channels.json、brand/tag 走 tags→brands fallback。
-const TAXONOMY_PREFIXES = ['/category/', '/tag/', '/brand/', '/channel/'] as const
 
 export function resolveBreadcrumbItems(
   route_path: string,
@@ -59,13 +58,21 @@ export function resolveBreadcrumbItems(
     return resolveGuideBreadcrumb(route_path, shell_data)
   }
 
-  const taxonomy_prefix = TAXONOMY_PREFIXES.find((prefix) => route_path.startsWith(prefix))
+  // 已排除 /、/guide、/links、/search、/products/、/guide/，第一段 segment 若是 taxonomy kind
+  // 且後面確實帶 id segment，才是 /category|tag|brand|channel/{id} 路由；kind 直接對應 url segment
+  // （ADR-2），不再經 prefix 反查。裸 kind（如 /category）沒有詳情頁，不能把 kind 本身當 id。
+  const segments = route_path.split('/').filter((segment) => segment !== '')
+  const first_segment = segments[0]
 
-  if (taxonomy_prefix !== undefined) {
-    return resolveTaxonomyBreadcrumb(taxonomy_prefix, route_path, shell_data)
+  if (first_segment !== undefined && isTaxonomyKind(first_segment) && segments.length >= 2) {
+    return resolveTaxonomyBreadcrumb(first_segment, route_path, shell_data)
   }
 
   return []
+}
+
+function isTaxonomyKind(segment: string): segment is TaxonomyKind {
+  return Object.hasOwn(TAXONOMY_KINDS, segment)
 }
 
 function resolveProductBreadcrumb(route_path: string, shell_data: BreadcrumbShellData | null): BreadcrumbItem[] {
@@ -100,7 +107,7 @@ function resolveGuideBreadcrumb(route_path: string, shell_data: BreadcrumbShellD
 }
 
 function resolveTaxonomyBreadcrumb(
-  prefix: typeof TAXONOMY_PREFIXES[number],
+  kind: TaxonomyKind,
   route_path: string,
   shell_data: BreadcrumbShellData | null,
 ): BreadcrumbItem[] {
@@ -116,24 +123,7 @@ function resolveTaxonomyBreadcrumb(
 
   const labels = createTaxonomyLabelResolver(shell_data.taxonomies)
 
-  return [{ label: resolveTaxonomyLabel(prefix, taxonomy_id, labels) }]
-}
-
-function resolveTaxonomyLabel(
-  prefix: typeof TAXONOMY_PREFIXES[number],
-  taxonomy_id: string,
-  labels: ReturnType<typeof createTaxonomyLabelResolver>,
-): string {
-  if (prefix === '/category/') {
-    return labels.getCategoryLabel(taxonomy_id)
-  }
-
-  if (prefix === '/channel/') {
-    return labels.getChannelLabel(taxonomy_id)
-  }
-
-  // tag 與 brand 共用 tag_ids namespace（ADR-8），getTaxonomyTagLabel 已含 tags→brands→raw-id fallback。
-  return labels.getTaxonomyTagLabel(taxonomy_id)
+  return [{ label: TAXONOMY_KINDS[kind].getLabel(labels, taxonomy_id) }]
 }
 
 function getRouteId(route_path: string): string | null {

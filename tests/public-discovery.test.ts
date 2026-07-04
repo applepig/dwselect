@@ -43,7 +43,7 @@ const base_product: Product = {
   image_url: null,
   category_id: 'computer-3c',
   tag_ids: ['keyboard', 'fixture-brand'],
-  reference_url: 'https://example.com/reference',
+  reference_links: [{ title: '產品參考頁', url: 'https://example.com/reference' }],
   created_at: '2026-06-02T00:00:00+08:00',
   updated_at: '2026-06-03T00:00:00+08:00',
   published_at: '2026-06-02T00:00:00+08:00',

@@ -64,6 +64,9 @@ describe('product detail build mapper', () => {
       image_url: null,
       category_id: 'av',
       tag_ids: ['超長 tag 名稱'.repeat(6), '影音'],
+      reference_links: [
+        { title: '官方規格頁', url: 'https://example.com/spec' },
+      ],
     })
 
     const detail = mapProductDetail(product, [product], makeResolver())
@@ -87,8 +90,24 @@ describe('product detail build mapper', () => {
       price_label: 'NT$ 123,456,789 起',
       buy_url: 'https://24h.pchome.com.tw/prod/detail',
       fine_print: '價格與庫存以通路頁面為準。',
+      reference_links: [
+        { title: '官方規格頁', url: 'https://example.com/spec' },
+      ],
       related_products: [],
     })
+  })
+
+  it('should normalize missing product reference links to an empty array', () => {
+    const product = makeProduct({
+      id: 'no-reference-links-product',
+      status: 'published',
+      name: '沒有參考連結的商品',
+    })
+    const { reference_links: _reference_links, ...product_without_reference_links } = product
+
+    const detail = mapProductDetail(product_without_reference_links, [product_without_reference_links], makeResolver())
+
+    expect(detail.reference_links).toEqual([])
   })
 
   it('should keep long_description as the original value even when it equals summary', () => {

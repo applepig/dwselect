@@ -15,7 +15,7 @@ Division of labor：the subagent does the first-draft writing。When given a tar
 
 - Product `summary` and `long_description` are user-authored personal opinions。Do not write or rewrite them unless the user explicitly provides exact text；for new products with no provided opinion，set them to empty string。
 - Guide `title` and `summary` are content-derived，not personal opinion：write a concise `title` and an objective 1-2 sentence `summary` summarizing what the source post covers and its core takeaway。Do not invent opinions or use subjective recommendation words（「便宜」「好用」「剛好」）；the coordinator edits the wording afterward。
-- Agent-owned fields include product name、English name、model numbers、reference URL、taxonomy IDs、local image file、search aliases、and `llm_description`；for guides also `title` and the content-derived `summary`。Offers and prices are agent-maintained only when the user has not supplied explicit offer or price text。
+- Agent-owned fields include product name、English name、model numbers、reference links、taxonomy IDs、local image file、search aliases、and `llm_description`；for guides also `title` and the content-derived `summary`。Offers and prices are agent-maintained only when the user has not supplied explicit offer or price text。
 - `llm_description` must be objective、research-backed、and useful for search or LLM understanding。Do not paraphrase the user’s subjective recommendation text。
 
 ## Default Visibility Scope
@@ -112,7 +112,7 @@ For product add/update work，research and return or fill：
 
 - Store URL and price。If the user provided an offer URL or price text，treat it as primary editorial input and preserve it unless explicitly told to update it。
 - Product title and model number。
-- Official product page or reliable reference URL。
+- Official product page or reliable reference links。
 - Key specs。
 - Product image source。
 - `llm_description` with confidence level。
@@ -121,7 +121,7 @@ Offer and price precedence：
 
 - User-provided URL and price text wins over researched prices。
 - User-provided purchase links belong in `offers[].url`。Do not move or replace them with official store、official spec page、or another marketplace URL。
-- Official product pages、review pages、manufacturer spec pages、or alternate source pages belong in `reference_url` or the research report，not in `offers[].url`，unless the user explicitly says to change the purchase link。
+- Official product pages、review pages、manufacturer spec pages、comparison items、or alternate source pages belong in optional `reference_links[]`（each `{ title, url }`）or the research report，not in `offers[].url`，unless the user explicitly says to change the purchase link。
 - If a researched page shows a different price，return it as `observed_price` or `price_discrepancy`，not as a replacement offer。
 - Do not switch channels，for example from Amazon to official store，unless the user asked to replace the offer URL or the original URL is invalid。
 - If the original store page has no current offer but the user provided an approximate price，keep the approximate price and report the uncertainty。
@@ -253,7 +253,7 @@ When delegating content research/update to a subagent，the prompt must explicit
 - For images，prefer contextual/lifestyle or in-use official/store images over isolated product-only renders；the chosen image must pass the guard（shortest side >= 480px，aspect ratio <= 2:1）and the subagent must report dimensions and source type。
 - Preserve user-provided offer URL and price text unless explicitly asked to replace them。
 - If offer is unavailable or unverifiable，keep it and report `offer_status` plus replacement candidates instead of changing it。
-- Add official product/spec pages to `reference_url`，not by replacing the user-provided offer link。
+- Add official product/spec pages to optional `reference_links[]`，not by replacing the user-provided offer link。
 - Raise missing brand/tag/category/channel needs as `taxonomy_suggestions`；do not edit taxonomy without user confirmation。
 - For any `agent-browser` use，pass `--session <content-id>` on every command so parallel researchers do not collide，and close only that session（never `close --all`）。
 - Stay within research and writing/editing the one assigned JSON file。Do not inspect repo/filesystem state（no `git`、`ls`、`cat`、`find`、build/verify，and never `pnpm generate`）；the coordinator audits、does editorial，and runs `pnpm content:check`。
@@ -265,7 +265,7 @@ Read and follow `dwselect-content-authoring`。This is implementation work for e
 
 Create or update that JSON file yourself（write the complete schema-valid file）。Do not modify `summary`、`long_description`、`id`、`status`、or user-provided `offers[].url` / `price_text`。Keep `name` concise（prefer <=32 visible characters，hard max 45）；put full official names in `llm_description`、`model_numbers`、or `search_aliases`。Preserve existing taxonomy IDs；if a missing brand/tag is useful，return `taxonomy_suggestions` instead of editing taxonomy。
 
-Research official/spec/store/review sources，then write agent-owned fields：`name`、`english_name`、`model_numbers`、`search_aliases`、`reference_url`、`llm_description`，and clearly missing price currency/unit metadata when verified。For a guide，also write a content-derived `title` and an objective 1-2 sentence `summary`，and keep `source_url` as the post URL。For reviews，if rating/count or a review widget exists，use agent-browser dynamic inspection、review interactions、DOM extraction、and network/API inspection before claiming individual review text is unavailable。If you use agent-browser，pass `--session <content-id>` on every command and close only that session。Do not run `git`、`ls`、`cat`、`find`，build/verify，or `pnpm generate`；the coordinator audits、does editorial，and runs `pnpm content:check`。
+Research official/spec/store/review sources，then write agent-owned fields：`name`、`english_name`、`model_numbers`、`search_aliases`、`reference_links`、`llm_description`，and clearly missing price currency/unit metadata when verified。For a guide，also write a content-derived `title` and an objective 1-2 sentence `summary`，and keep `source_url` as the post URL。For reviews，if rating/count or a review widget exists，use agent-browser dynamic inspection、review interactions、DOM extraction、and network/API inspection before claiming individual review text is unavailable。If you use agent-browser，pass `--session <content-id>` on every command and close only that session。Do not run `git`、`ls`、`cat`、`find`，build/verify，or `pnpm generate`；the coordinator audits、does editorial，and runs `pnpm content:check`。
 
 Return：files changed、field summary、sources、confidence、offer_status、image source type、image dimensions、taxonomy_suggestions、unresolved assumptions。
 ```

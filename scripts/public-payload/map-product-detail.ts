@@ -32,6 +32,7 @@ export function mapProductDetail(
     brand_labels: taxonomy_tags.brand_labels,
     buy_url: getPrimaryOffer(product).url,
     fine_print: DETAIL_FINE_PRINT,
+    reference_links: product.reference_links ?? [],
     related_products: getRelatedProductCards(product, all_products, labels),
   }
 }

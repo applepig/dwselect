@@ -19,7 +19,7 @@
 
 <script setup lang="ts">
 import { getCompactAppStateFromRoute, getCompactAppView } from '../../utils/published-products/compact-app'
-import { getCanonicalUrl, SITE_NAME, SITE_OG_IMAGE } from '../../utils/seo-metadata'
+import { buildSeoMeta, getCanonicalUrl, SITE_NAME, SITE_OG_IMAGE } from '../../utils/seo-metadata'
 
 const GUIDE_DESCRIPTION = '選物指南、購買筆記與使用心得，幫你快速理解值得買的理由。'
 const guide_canonical_url = getCanonicalUrl('/guide')
@@ -34,18 +34,12 @@ useHead({
   ],
 })
 
-useSeoMeta({
+useSeoMeta(buildSeoMeta({
   title: `指南｜${SITE_NAME}`,
   description: GUIDE_DESCRIPTION,
-  ogTitle: `指南｜${SITE_NAME}`,
-  ogDescription: GUIDE_DESCRIPTION,
-  ogUrl: guide_canonical_url,
-  ogImage: SITE_OG_IMAGE,
-  twitterCard: 'summary_large_image',
-  twitterTitle: `指南｜${SITE_NAME}`,
-  twitterDescription: GUIDE_DESCRIPTION,
-  twitterImage: SITE_OG_IMAGE,
-})
+  url: guide_canonical_url,
+  image: SITE_OG_IMAGE,
+}))
 
 const route = useRoute()
 const { content_payload } = await useCatalogData()

@@ -1,4 +1,4 @@
-import type { CategoryChipView } from '../public-content-view-types'
+import { ALL_CATEGORIES_ID, type CategoryChipView } from '../public-content-view-types'
 import type { PublicContentPayload } from '../public-content-payload'
 import type {
   CompactAppState,
@@ -10,12 +10,18 @@ import type {
   CompactRouteState,
 } from './types'
 
-const COMPACT_APP_TABS: Array<Omit<CompactAppTab, 'active'>> = [
-  { id: 'home', label: '首頁', icon: 'i-lucide-house' },
-  { id: 'guide', label: '指南', icon: 'i-lucide-tags' },
-  { id: 'search', label: '搜尋', icon: 'i-lucide-search' },
-  { id: 'links', label: '連結', icon: 'i-lucide-link' },
+// 導覽 tab 單一真相：桌面 nav_items 與窄螢幕 COMPACT_APP_TABS 皆由此衍生（ADR-3）。
+// 順序 home/guide/links/search 以桌面導覽為基準。to 直接存字面（url segment 即 tab 語意）。
+export const NAV_TABS: Array<Omit<CompactAppTab, 'active'> & { to: string }> = [
+  { id: 'home', label: '首頁', icon: 'i-lucide-house', to: '/' },
+  { id: 'guide', label: '指南', icon: 'i-lucide-tags', to: '/guide' },
+  { id: 'links', label: '連結', icon: 'i-lucide-link', to: '/links' },
+  { id: 'search', label: '搜尋', icon: 'i-lucide-search', to: '/search' },
 ]
+
+const COMPACT_APP_TABS: Array<Omit<CompactAppTab, 'active'>> = NAV_TABS.map(
+  ({ id, label, icon }) => ({ id, label, icon }),
+)
 
 export type CompactAppPayload = Pick<PublicContentPayload, 'products' | 'guides' | 'links' | 'navigation'>
 
@@ -34,7 +40,7 @@ export function getCompactAppView(
     })),
     active_tab,
     home: {
-      category_chips: getCategoryChips(payload.navigation.category_chips, 'all'),
+      category_chips: getCategoryChips(payload.navigation.category_chips, ALL_CATEGORIES_ID),
       products: cards,
       empty_reason: getEmptyReason(cards.length, cards.length),
     },

@@ -42,12 +42,19 @@ const product_price_schema = z.object({
   label: z.string().nullable(),
 }).strict()
 
-const product_offer_schema = z.object({
-  channel_id: channel_id_schema,
+const product_external_target_schema = z.object({
   url: http_url_schema,
+}).strict()
+
+const product_offer_schema = product_external_target_schema.extend({
+  channel_id: channel_id_schema,
   price_text: z.string(),
   price: product_price_schema,
   checked_at: timestamp_schema,
+}).strict()
+
+const product_reference_link_schema = product_external_target_schema.extend({
+  title: z.string().min(1),
 }).strict()
 
 export const product_schema = z.object({
@@ -66,7 +73,7 @@ export const product_schema = z.object({
   image_url: optional_http_image_url_schema,
   category_id: category_id_schema,
   tag_ids: z.array(tag_id_schema),
-  reference_url: http_url_schema.nullable(),
+  reference_links: z.array(product_reference_link_schema).optional(),
   created_at: timestamp_schema,
   updated_at: timestamp_schema,
   published_at: timestamp_schema.nullable(),
@@ -308,7 +315,9 @@ function addMissingTaxonomyViolations(
 }
 
 export type ProductPrice = z.infer<typeof product_price_schema>
+export type ProductExternalTarget = z.infer<typeof product_external_target_schema>
 export type ProductOffer = z.infer<typeof product_offer_schema>
+export type ProductReferenceLink = z.infer<typeof product_reference_link_schema>
 export type Product = z.infer<typeof product_schema>
 export type Guide = z.infer<typeof guide_schema>
 export type Link = z.infer<typeof link_schema>

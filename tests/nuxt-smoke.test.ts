@@ -354,6 +354,7 @@ describe('Nuxt SSG baseline', () => {
     const catalog_css = readFileSync(new URL('../app/assets/styles/catalog.css', import.meta.url), 'utf8')
 
     const breadcrumb_source = readFileSync(new URL('../app/utils/breadcrumb/resolve-breadcrumb-items.ts', import.meta.url), 'utf8')
+    const taxonomy_kinds_source = readFileSync(new URL('../app/utils/published-products/taxonomy-kinds.ts', import.meta.url), 'utf8')
 
     // M3 spike：暫時重啟，等待使用者實機 iPad Safari 驗證；未 PASS 前不得 ship true。
     expect(nuxt_config.experimental?.viewTransition).toBe(true)
@@ -378,11 +379,14 @@ describe('Nuxt SSG baseline', () => {
     expect(breadcrumb_source).toContain('guide_breadcrumb_by_id[guide_id]')
     expect(breadcrumb_source).toContain("{ label: '指南', to: '/guide' }")
     expect(breadcrumb_source).toContain('guide_item.title')
-    // AC26：taxonomy 頁標題改用 layout breadcrumb，四種前綴都解析 label。
-    expect(breadcrumb_source).toContain("'/category/'")
-    expect(breadcrumb_source).toContain("'/tag/'")
-    expect(breadcrumb_source).toContain("'/brand/'")
-    expect(breadcrumb_source).toContain("'/channel/'")
+    // AC26：taxonomy 頁標題改用 layout breadcrumb，四種 kind 都解析 label。
+    // 032 M2：四種 kind 的 label 映射收斂到 TAXONOMY_KINDS 單一真相，breadcrumb 改由 route segment
+    // 直接取 kind（segment in 表）後取 label——行為不變，prefix 不再是字面而由 `/${kind}/` 衍生。
+    expect(taxonomy_kinds_source).toContain('category:')
+    expect(taxonomy_kinds_source).toContain('tag:')
+    expect(taxonomy_kinds_source).toContain('brand:')
+    expect(taxonomy_kinds_source).toContain('channel:')
+    expect(breadcrumb_source).toContain('TAXONOMY_KINDS')
 
     expect(guide_source).toContain('aria-label="指南"')
     expect(guide_source).not.toContain('class="section-heading-row"')
@@ -472,16 +476,21 @@ describe('Nuxt SSG baseline', () => {
 
   it('should expose routed compact tabs, theme toggle and external link row in source', () => {
     const nav_source = readFileSync(new URL('../app/components/app-navigation.vue', import.meta.url), 'utf8')
+    const nav_tabs_source = readFileSync(new URL('../app/utils/published-products/compact-app.ts', import.meta.url), 'utf8')
     const theme_source = readFileSync(new URL('../app/components/theme-toggle.vue', import.meta.url), 'utf8')
     const link_source = readFileSync(new URL('../app/components/link-panel.vue', import.meta.url), 'utf8')
     const link_rows_source = readFileSync(new URL('../app/utils/published-products/resource-rows.ts', import.meta.url), 'utf8')
+    const resource_row_attrs_source = readFileSync(new URL('../app/utils/published-products/resource-row-attrs.ts', import.meta.url), 'utf8')
 
     expect(nav_source).toContain('<NuxtLink')
-    expect(nav_source).toContain("to: '/'")
-    expect(nav_source).toContain("to: '/guide'")
-    expect(nav_source).toContain("to: '/links'")
-    expect(nav_source).toContain("to: '/search'")
-    expect(nav_source.indexOf("id: 'links'")).toBeLessThan(nav_source.indexOf("id: 'search'"))
+    // 032 M4/AC14：nav_items 由單一真相 NAV_TABS 衍生，route/順序字面搬到 compact-app.ts；
+    // nav_source 只守它確實消費 NAV_TABS，route 與順序不變式改守在 nav_tabs_source。
+    expect(nav_source).toContain('NAV_TABS')
+    expect(nav_tabs_source).toContain("to: '/'")
+    expect(nav_tabs_source).toContain("to: '/guide'")
+    expect(nav_tabs_source).toContain("to: '/links'")
+    expect(nav_tabs_source).toContain("to: '/search'")
+    expect(nav_tabs_source.indexOf("id: 'links'")).toBeLessThan(nav_tabs_source.indexOf("id: 'search'"))
     expect(nav_source).not.toContain('selectTab')
     expect(nav_source).toContain('compact-app-bottom-tabs')
     expect(nav_source).toContain('compact-app-rail')
@@ -494,8 +503,11 @@ describe('Nuxt SSG baseline', () => {
     expect(theme_source).toContain('<UColorModeButton')
     expect(link_source).toContain('<ResourceList')
     expect(link_rows_source).toContain('getResourceRowLinkAttributes')
-    expect(link_rows_source).toContain("target: '_blank'")
-    expect(link_rows_source).toContain("rel: 'noopener noreferrer'")
+    // 外部安全屬性字面已收斂進 resource-row-attrs.ts 的 EXTERNAL_LINK_ATTRS 單一真相；
+    // resource-rows.ts 只消費常數，字面本身守在 attrs 檔。
+    expect(link_rows_source).toContain('EXTERNAL_LINK_ATTRS')
+    expect(resource_row_attrs_source).toContain("target: '_blank'")
+    expect(resource_row_attrs_source).toContain("rel: 'noopener noreferrer'")
   })
 
   it('should expose desktop product category navigation without adding it to mobile or tablet nav', () => {
@@ -506,7 +518,9 @@ describe('Nuxt SSG baseline', () => {
     expect(home_source).toContain('<CategoryChipBar')
     expect(nav_source).toContain('desktop-category-items')
     expect(nav_source).toContain('desktop-category-link')
-    expect(nav_source).toContain('category.id === \'all\' ? \'/\' : `/category/${category.id}`')
+    // 032 M5/AC12：裸 'all' 收斂為 ALL_CATEGORIES_ID 常數；守門同步為常數引用，
+    // 但守住的不變式不變——首頁 chip→'/'、分類 chip→/category/{id}。
+    expect(nav_source).toContain('category.id === ALL_CATEGORIES_ID ? \'/\' : `/category/${category.id}`')
     expect(nav_source).toContain('desktop_category_items')
     expect(catalog_css).toContain('.desktop-category-items')
     expect(catalog_css).toContain('.desktop-category-link')
@@ -534,8 +548,8 @@ describe('Nuxt SSG baseline', () => {
     expect(resource_rows_source).toContain('getSearchSuggestionMeta')
     expect(resource_rows_source).toContain('result.price_text')
     expect(resource_rows_source).toContain('result.channel_label')
-    expect(resource_rows_source).toContain("target: result.external ? '_blank' : null")
-    expect(resource_rows_source).toContain("rel: result.external ? 'noopener noreferrer' : null")
+    // external row 的安全屬性由 EXTERNAL_LINK_ATTRS 單一真相 spread 而來，非外部 row 帶 null target/rel。
+    expect(resource_rows_source).toContain('result.external ? EXTERNAL_LINK_ATTRS')
   })
 
   it('should wire product detail route, buy CTA and view transition contracts in source', () => {

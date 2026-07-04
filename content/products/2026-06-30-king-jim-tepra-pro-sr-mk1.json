@@ -17,7 +17,12 @@
   ],
   "image_url": null,
   "image_file": "2026-06-30-king-jim-tepra-pro-sr-mk1.jpg",
-  "reference_url": "https://www.kingjim.co.jp/sp/sr-mk1/product/",
+  "reference_links": [
+    {
+      "title": "kingjim 參考頁",
+      "url": "https://www.kingjim.co.jp/sp/sr-mk1/product/"
+    }
+  ],
   "offers": [
     {
       "channel_id": "amazonjp",

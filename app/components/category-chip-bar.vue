@@ -7,7 +7,7 @@
       <UButton
         v-for="chip in category_chips"
         :key="chip.id"
-        :to="chip.id === 'all' ? '/' : `/category/${chip.id}`"
+        :to="chip.id === ALL_CATEGORIES_ID ? '/' : `/category/${chip.id}`"
         class="category-chip"
         :color="chip.active ? 'primary' : 'neutral'"
         :variant="chip.active ? 'solid' : 'subtle'"
@@ -26,6 +26,7 @@
 // 共用分類 chip bar：首頁與 /category/{id} 共享同一條 pill bar（AC6），
 // 自洽 route-aware（ADR-3，無 props）——chips 來自單一 payload，active 由當前路由解析。
 import { getCategoryChips } from '../utils/published-products/compact-app'
+import { ALL_CATEGORIES_ID } from '../utils/public-content-view-types'
 
 const route = useRoute()
 const catalog_shell_data = await useCatalogShellData()
@@ -35,11 +36,11 @@ const catalog_shell_data = await useCatalogShellData()
 // 對齊 [id].vue 解析慣例的防禦性 fallback，正常路由不會走到。
 const active_category_id = computed(() => {
   if (route.path === '/') {
-    return 'all'
+    return ALL_CATEGORIES_ID
   }
 
   const raw_id = route.params.id
-  return (Array.isArray(raw_id) ? raw_id[0] : raw_id) ?? 'all'
+  return (Array.isArray(raw_id) ? raw_id[0] : raw_id) ?? ALL_CATEGORIES_ID
 })
 
 const category_chips = computed(() => getCategoryChips(

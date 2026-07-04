@@ -133,7 +133,6 @@ describe('compact product migration helpers', () => {
       image_url: null,
       category_id: 'food',
       tag_ids: [],
-      reference_url: null,
       created_at: '2026-06-02T00:00:00+08:00',
       updated_at: '2026-06-02T00:00:00+08:00',
       published_at: null,
@@ -146,6 +145,7 @@ describe('compact product migration helpers', () => {
     expect(migrated_product).not.toHaveProperty('description')
     expect(migrated_product).not.toHaveProperty('purchase_url')
     expect(migrated_product).not.toHaveProperty('channel_id')
+    expect(migrated_product).not.toHaveProperty('reference_url')
   })
 
   it('should migrate unknown categories to the other category', () => {

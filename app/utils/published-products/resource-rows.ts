@@ -1,4 +1,5 @@
 import type { SearchSuggestion } from '../search/search-index'
+import { EXTERNAL_LINK_ATTRS, RESOURCE_ROW_ICONS } from './resource-row-attrs'
 import type { CompactResourceRow, ResourceRowLinkAttributes, SearchResultSection } from './types'
 
 export function getResourceRowLinkAttributes(row: CompactResourceRow): ResourceRowLinkAttributes {
@@ -10,8 +11,7 @@ export function getResourceRowLinkAttributes(row: CompactResourceRow): ResourceR
 
   return {
     href: row.href,
-    target: '_blank',
-    rel: 'noopener noreferrer',
+    ...EXTERNAL_LINK_ATTRS,
   }
 }
 
@@ -45,8 +45,8 @@ function mapSearchSuggestionToRow(result: SearchSuggestion): CompactResourceRow 
     image_url: result.image_url,
     icon: getSearchSuggestionIcon(result.type),
     external: result.external,
-    target: result.external ? '_blank' : null,
-    rel: result.external ? 'noopener noreferrer' : null,
+    // 外部安全屬性走 EXTERNAL_LINK_ATTRS 單一真相；非外部 row 無 target/rel。
+    ...(result.external ? EXTERNAL_LINK_ATTRS : { target: null, rel: null }),
   }
 }
 
@@ -61,13 +61,9 @@ function getSearchSuggestionMeta(result: SearchSuggestion): string | null {
 }
 
 function getSearchSuggestionIcon(type: SearchSuggestion['type']): string | null {
-  if (type === 'guide') {
-    return 'i-lucide-book-open'
+  if (type === 'product') {
+    return null
   }
 
-  if (type === 'link') {
-    return 'i-lucide-link'
-  }
-
-  return null
+  return RESOURCE_ROW_ICONS[type]
 }

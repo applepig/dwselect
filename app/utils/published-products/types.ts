@@ -1,5 +1,5 @@
-import type { CategoryDefinition, ChannelDefinition, Product, TagDefinition } from '../product-schema'
-import type { ProductCardView } from '../public-content-view-types'
+import type { CategoryDefinition, ChannelDefinition, TagDefinition } from '../product-schema'
+import type { CategoryChipView, ProductCardView } from '../public-content-view-types'
 import type { TaxonomyKind } from './select-taxonomy-items'
 
 export type TaxonomyDefinitions = {
@@ -31,7 +31,8 @@ export type CompactAppTab = {
 }
 
 export type CompactCategoryChip = {
-  id: Product['category_id'] | 'all'
+  // C4：引用 CategoryChipView['id'] 取代手寫 `Product['category_id'] | 'all'`，消除同形狀重定義。
+  id: CategoryChipView['id']
   label: string
   count: number
   active: boolean

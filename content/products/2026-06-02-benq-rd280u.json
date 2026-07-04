@@ -39,7 +39,12 @@
     "benq",
     "display"
   ],
-  "reference_url": "https://www.benq.com/zh-tw/monitor/programming/rd280u/spec.html",
+  "reference_links": [
+    {
+      "title": "benq 參考頁",
+      "url": "https://www.benq.com/zh-tw/monitor/programming/rd280u/spec.html"
+    }
+  ],
   "created_at": "2026-06-02T00:00:00+08:00",
   "updated_at": "2026-06-18T00:00:00+08:00",
   "published_at": "2026-06-02T00:00:00+08:00",
