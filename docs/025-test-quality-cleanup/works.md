@@ -58,3 +58,21 @@ M1 與 M2 合併於一次 `ddd-developer` 派工——A/B 兩類在 `nuxt-smoke.
   - `./dev.sh lint`：exit 0。
   - `/simplify`：inline 四角度審查，無須套用修正（DW callout render 複用既有 `renderProductDetail`，未新增第 3 份 harness）。
   - coordinator gate-check：確認改動檔無殘留 source-grep 行為測項（僅 `it #1`、`named constant 229` 兩個既有 grep 依指示續留），新增測項皆為真 render/mount 行為斷言。
+
+## Milestone 5: 釘死 content 資料值清理（E 類）＋ C/B 類 residual sweep
+
+- **決策脈絡**：E 類本體很小（真實 content 值 pin 只命中 nuxt-smoke 兩行）。但 coordinator 做 E 類全套件盤點時，發現 M2（B 類）/M3（C 類）的檔案清單漏掉同類反模式的 straggler（spec inventory 明言非窮舉）。經使用者裁示採「全量 residual sweep」：E 類 ＋ 逐檔判準後清理 C/B 類 straggler。判準延續 ADR-025-1/3，並區分兩種 source-grep 性質——「red≠行為」的實作快照（清）vs「red=真實行為破壞」的 wiring/回歸守門（在無 proportionate 行為替代時保留）。
+- **技術決策（逐檔）**：
+  - `nuxt-smoke.test.ts`（E 類）：taxonomy `it` 移除釘死真實 slug+label 的兩行（`av-theater/影音劇院`、`pchome/PChome`）——新增/改名分類即無關誤紅（ADR-025-3）；改為 category/channel/tag 三者 `items.length > 0` 不變式（對齊既有 tag 那行）。parse JSON（結構有效）與 content.config-absent 保留。prerender count `it` 不動（`countPublishedContent` vs prerender routes 是雙邊同源不變式，新增商品兩邊一起動、不誤紅）。
+  - `public-discovery.test.ts`（C 類 straggler）：移除 5 條 `package.json.scripts` 命令字串字面斷言（`build:public-discovery`/`build:search-index`/`build:public-artifacts`/`build`/`generate`）——與 M3 從 nuxt-smoke/dev-server 移除的同類；連帶刪 unused package.json 讀取。**保留** `readPublicContentSource` 單次讀取 `match(...).toHaveLength(1)`（028 單次讀取 perf 守門）與兩行 composition wiring `toContain`——這三行仍是 source-grep 形式，但屬「無行為替代的 perf/wiring 守門」，列為 documented residual（後續要收斂需另立行為替代）。fixture-based sitemap/rss/robots 測項全留。
+  - `category-chip-bar.test.ts`（B 類 straggler）：刪「desktop css contract」`it`（pin 精確 CSS 宣告文字＋whitespace 的 A/B grep）——桌機隱藏真實行為由 Playwright/agent-browser（AC8/AC9）驗，該 it 註解自承；移除 unused `CATALOG_CSS`/import。5 個 mount render 行為測項不動。
+  - `taxonomy-page-shell.test.ts`（B 類 straggler，rewrite）：3 個 `.vue` source-grep `it` → render 行為測試（四頁可 render，有 proportionate 替代）。mount 各頁、`vi.stubGlobal('useTaxonomyDetailPage', spy)` 攔截，斷言：以正確 kind 接線 composable（`spy` 收到 `'category'|'tag'|'brand'|'channel'`）、組成共用 `TaxonomyPage`（`findComponent` 存在＋不 inline `product-grid`/`ResourceList`）、CategoryChipBar 僅 category 頁（非目標邊界守門）。refactor-immune。
+- **保留不動（判準與理由）**：
+  - `server-content-routes.test.ts`（89–133 route source-grep）、`server/detail-route-id-resolution.test.ts`（it#1 `extractContentId(event.path)` grep）：**wiring/回歸守門**——route 的 null→404 轉譯、h3 event.path 取 id 的回歸點（028 曾因只斷言字串而漏掉的覆蓋洞）只有這裡守；behavior 由 direct-call 測涵蓋，但 handler 本身無 invocation 測。正解是 handler-invocation 改寫，對本測試品質 sprint 不成比例、盲刪違反 AC7 → 保留為 documented residual guard，留待未來 handler-invocation 測試或 035 一併處理。
+  - `guide-detail-back-navigation.test.ts`：兩 it 全 back-nav source-grep、無 CSS → 035 交界（035 AC7 收斂成 composable 後測），整檔不動（比照 product-detail `it #1`）。
+  - `build-content-images`/`search-index`/`product-schema`/`content-taxonomy-references`/`content/extract-content-id`：fixture-based／資料健檢不變式（`=== []`、`length>0`）／純函式合成輸入行為，皆 KEEP。
+- **測試結果**：
+  - `./dev.sh test`（全套件，coordinator 獨立重跑）：79 files / 575 tests passed（M4 後 570 → 575，+5；rewrite 的 it.each 展開 case 淨增）。
+  - `./dev.sh lint`：exit 0。
+  - `/simplify`：inline 四角度審查，無須套用修正（`mountTaxonomyPage` 與既有 mount harness 僅共用薄 Suspense+stubGlobal pattern、元件各異，未達抽象門檻）。
+  - coordinator gate-check：taxonomy-page-shell rewrite 確認為真 render/spy 行為斷言（非 grep 換皮）；保留檔案一律未觸碰。

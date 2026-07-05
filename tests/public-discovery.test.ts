@@ -445,16 +445,9 @@ describe('public discovery files', () => {
     expect(existsSync(join(output_dir, 'sitemap.xml'))).toBe(true)
   })
 
-  it('should keep legacy artifact scripts available while build and generate rely on discovery plus prerendered routes', async () => {
-    const package_source = await readFile(new URL('../package.json', import.meta.url), 'utf8')
-    const package_json = JSON.parse(package_source) as { scripts: Record<string, string> }
+  it('should build public artifacts from a single content source read composed of search index and discovery builders', async () => {
     const artifacts_source = await readFile(new URL('../scripts/build-public-artifacts.ts', import.meta.url), 'utf8')
 
-    expect(package_json.scripts['build:public-discovery']).toBe('node scripts/build-public-discovery.ts')
-    expect(package_json.scripts['build:search-index']).toBe('node scripts/build-search-index.ts')
-    expect(package_json.scripts['build:public-artifacts']).toBe('node scripts/build-public-artifacts.ts')
-    expect(package_json.scripts.build).toBe('pnpm build:public-discovery && node scripts/assert-content-images.ts && nuxt build')
-    expect(package_json.scripts.generate).toBe('./dev.sh generate')
     expect(artifacts_source.match(/await readPublicContentSource\(/g)).toHaveLength(1)
     expect(artifacts_source).toContain('buildSearchIndexFileFromSource(source')
     expect(artifacts_source).toContain('buildPublicDiscoveryFilesFromSource(source')

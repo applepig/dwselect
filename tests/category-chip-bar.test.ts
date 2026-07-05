@@ -2,8 +2,6 @@
 
 import { flushPromises, mount } from '@vue/test-utils'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { readFileSync } from 'node:fs'
-import { resolve } from 'node:path'
 import { computed, defineComponent, h, ref } from 'vue'
 
 import CategoryChipBar from '../app/components/category-chip-bar.vue'
@@ -27,9 +25,6 @@ const UButtonStub = defineComponent({
     }, [slots.default?.(), slots.trailing?.()])
   },
 })
-
-// happy-dom 環境下 import.meta.url 可能非 file scheme，改以 process.cwd()（vitest 在專案根執行）解析。
-const CATALOG_CSS = readFileSync(resolve(process.cwd(), 'app/assets/styles/catalog.css'), 'utf8')
 
 const TEST_CATEGORY_CHIPS: CategoryChipView[] = [
   { id: 'all', label: '全部', count: 3 },
@@ -141,15 +136,6 @@ describe('CategoryChipBar shared component', () => {
       variant: 'subtle',
       count: '3',
     })
-  })
-
-  // happy-dom 無法可靠驗 media query 的真實 display 計算；此處只驗 CSS 契約存在，
-  // 桌機（≥1200px）display:none 的真實渲染由 coordinator 以 Playwright desktop viewport／agent-browser smoke 驗收（AC8/AC9）。
-  it('should hide the shared chip bar at desktop width via catalog css contract', () => {
-    const desktop_block = CATALOG_CSS.slice(CATALOG_CSS.indexOf('@media (min-width: 1200px)'))
-
-    expect(desktop_block).toContain('.category-chip-bar {\n    display: none;\n  }')
-    expect(CATALOG_CSS).not.toContain('.home-category-chip-list')
   })
 
   it('should resolve the active chip from the first value when the route id param is an array', async () => {
