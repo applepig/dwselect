@@ -1,4 +1,4 @@
-import { existsSync } from 'node:fs'
+import { existsSync, readdirSync, readFileSync } from 'node:fs'
 
 import { renderToString } from '@vue/test-utils'
 import { computed } from 'vue'
@@ -16,6 +16,16 @@ import {
 import ErrorPage from '../app/error.vue'
 
 const project_root_url = new URL('../', import.meta.url)
+
+const app_source_url = new URL('app/', project_root_url)
+
+// 掃全 app/ 源碼樹（非列舉頁面清單，新增頁自動納入）串成單一字串供負向 host-leak guard 比對。
+function readPublicAppSources(): string {
+  return readdirSync(app_source_url, { recursive: true, encoding: 'utf8' })
+    .filter((entry) => entry.endsWith('.vue') || entry.endsWith('.ts'))
+    .map((entry) => readFileSync(new URL(entry, app_source_url), 'utf8'))
+    .join('\n')
+}
 
 describe('launch SEO static assets', () => {
   it('should provide local brand assets and remove the Vite template entrypoint', () => {
@@ -35,9 +45,17 @@ describe('launch SEO metadata contract', () => {
   })
 
   it('should never leak the local dev host into the production SEO constants', () => {
-    // 各頁 canonical／og 都改用這些常數，守住常數即守住實際輸出。
+    // 這只保證共用常數本身是正式站；各頁是否真的用常數、有無直接寫死 dev host，
+    // 由下方的 public source host-leak guard 另行覆蓋，兩者合起來才守住實際輸出。
     expect(SITE_URL).not.toContain('toybox.local')
     expect(SITE_OG_IMAGE).not.toContain('toybox.local')
+  })
+
+  it('should never hard-code the local dev host in any public app source', () => {
+    // 負向 invariant（近似 lint rule）：任一頁面／app.vue 若把 dev host 直接寫進
+    // useHead／useSeoMeta，正式站 canonical／og 就會洩漏本機網域，而常數斷言抓不到。
+    // 掃全 app/ 源碼，重構不誤紅，只在寫死已知壞字串時紅——非實作快照。
+    expect(readPublicAppSources()).not.toContain('dwselect.toybox.local')
   })
 
   it('should resolve canonical URLs to absolute production URLs', () => {
