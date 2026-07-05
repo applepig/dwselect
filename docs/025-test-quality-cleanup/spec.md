@@ -115,7 +115,7 @@
 
 - [x] **M1：刪 CSS 數值斷言** — A 類整批清除，保留 token 存在與對比度。（AC1）
 - [x] **M2：grep 原始碼文字／順序／文件斷言** — B 類清除，行為價值者轉 render。（AC2、AC7）
-- [ ] **M3：config/CI 字串改讀值或刪** — C 類處理，保留合理讀值與 hook 行為斷言。（AC3）
+- [x] **M3：config/CI 字串改讀值或刪** — C 類處理，保留合理讀值與 hook 行為斷言。（AC3）
 - [ ] **M4：adoption 測試行為化** — D 類，行為價值者改 render/E2E，純文字者刪。（AC4、AC7）
 - [ ] **M5：釘死 content 資料值清理** — E 類，改對 fixture 或測不變式。（AC5、AC7）
 - [ ] **M6：收尾** — 全套件 `pnpm test`/`lint`/`typecheck`/`./dev.sh verify` 綠，更新 `works.md`。（AC6）

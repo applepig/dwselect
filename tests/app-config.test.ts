@@ -1,21 +1,19 @@
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { readFileSync } from 'node:fs'
+import nuxt_config from '../nuxt.config'
+
+// app.config.ts 用 Nuxt auto-import 的全域 defineAppConfig（identity），
+// bare vitest 無此全域；在模組 import 前 stub 成 identity，讀出的 default export 即 resolved config。
+vi.hoisted(() => {
+  vi.stubGlobal('defineAppConfig', <T>(config: T): T => config)
+})
+
+const app_config = (await import('../app.config')).default
 
 describe('Nuxt UI app.config theme baseline', () => {
-  const app_config_source = readFileSync(
-    new URL('../app.config.ts', import.meta.url),
-    'utf8',
-  )
-
-  it('should centralise Nuxt UI theme via defineAppConfig', () => {
-    expect(app_config_source).toContain('defineAppConfig(')
-    expect(app_config_source).toContain('ui:')
-    expect(app_config_source).toContain('colors:')
-  })
-
   it('should map primary and neutral colour aliases to Tailwind palette names', () => {
-    expect(app_config_source).toMatch(/primary:\s*'orange'/)
-    expect(app_config_source).toMatch(/neutral:\s*'stone'/)
+    expect(app_config.ui?.colors?.primary).toBe('orange')
+    expect(app_config.ui?.colors?.neutral).toBe('stone')
   })
 
   it('should preserve the variables.css --ui-primary override on --dw-accent', () => {
@@ -24,27 +22,26 @@ describe('Nuxt UI app.config theme baseline', () => {
       'utf8',
     )
 
+    // Nuxt UI 的 --ui-primary 一律導向 DW accent token（indirection 契約），
+    // 具體 accent 色值屬視覺數值、改色不算行為變更，不 pin exact hex。
     expect(variables_css).toContain('--ui-primary: var(--dw-accent)')
-    expect(variables_css).toContain('--dw-accent: #ec7a2b')
-    expect(variables_css).toContain('--dw-accent: #ff8a3d')
+    expect(variables_css).toContain('--dw-accent')
   })
 })
 
 describe('Nuxt app head tracking baseline', () => {
-  const nuxt_config_source = readFileSync(
-    new URL('../nuxt.config.ts', import.meta.url),
-    'utf8',
-  )
-
   it('should install the Google Tag Manager head script with the approved container ID', () => {
-    expect(nuxt_config_source).toContain('googletagmanager.com/gtm.js')
-    expect(nuxt_config_source).toContain('GTM-KTZKC8CH')
-    expect(nuxt_config_source).toMatch(/w\[l\]\.push\(\{\s*'gtm.start':\s*new Date\(\)\.getTime\(\),\s*event:\s*'gtm.js'/)
+    const gtm_script = nuxt_config.app?.head?.script?.[0]?.innerHTML ?? ''
+
+    expect(gtm_script).toContain('gtm.start')
+    expect(gtm_script).toContain('googletagmanager.com/gtm.js')
+    expect(gtm_script).toContain('GTM-KTZKC8CH')
   })
 
   it('should install the Google Tag Manager noscript fallback at the start of body', () => {
-    expect(nuxt_config_source).toContain('noscript:')
-    expect(nuxt_config_source).toContain('googletagmanager.com/ns.html?id=GTM-KTZKC8CH')
-    expect(nuxt_config_source).toContain("tagPosition: 'bodyOpen'")
+    const gtm_noscript = nuxt_config.app?.head?.noscript?.[0]
+
+    expect(gtm_noscript?.innerHTML).toContain('googletagmanager.com/ns.html?id=GTM-KTZKC8CH')
+    expect(gtm_noscript?.tagPosition).toBe('bodyOpen')
   })
 })

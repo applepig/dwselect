@@ -24,19 +24,8 @@ describe('Nuxt SSG baseline', () => {
     })
   })
 
-  it('should generate static output from prerendered server routes without legacy artifact builds', () => {
-    expect(package_json.scripts.generate).toBe('./dev.sh generate')
-    expect(package_json.scripts.build).toBe('pnpm build:public-discovery && node scripts/assert-content-images.ts && nuxt build')
-  })
-
   it('should fail static generation when any prerendered route errors (spec Case 1)', () => {
     expect(nuxt_config.nitro?.prerender?.failOnError).toBe(true)
-  })
-
-  it('should keep content image optimization out of the generate prerequisite chain (Nuxt Image owns it)', () => {
-    expect(package_json.scripts).toHaveProperty('build:content-images')
-    expect(package_json.scripts.build).not.toContain('build:content-images')
-    expect(package_json.devDependencies).toHaveProperty('@nuxt/image')
   })
 
   it('should avoid publishing raw content image directories through Nitro publicAssets', () => {
