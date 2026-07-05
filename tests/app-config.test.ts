@@ -25,7 +25,17 @@ describe('Nuxt UI app.config theme baseline', () => {
     // Nuxt UI 的 --ui-primary 一律導向 DW accent token（indirection 契約），
     // 具體 accent 色值屬視覺數值、改色不算行為變更，不 pin exact hex。
     expect(variables_css).toContain('--ui-primary: var(--dw-accent)')
-    expect(variables_css).toContain('--dw-accent')
+
+    // indirection 只有在 --dw-accent 本身有具體色值時才解得到色；
+    // 若 accent 宣告被誤刪只剩 var() 引用，--ui-primary 會落到未定義 token。
+    // 故驗 --dw-accent: 有實際色值宣告（非再次 var indirection），且 light/dark 兩主題各一。
+    const accent_values = [...variables_css.matchAll(/--dw-accent:\s*([^;]+);/g)].map(
+      (match) => match[1].trim(),
+    )
+    expect(accent_values.length).toBeGreaterThanOrEqual(2)
+    for (const value of accent_values) {
+      expect(value).toMatch(/^(#[0-9a-f]{3,8}|(rgb|hsl)a?\([^)]*\))$/i)
+    }
   })
 })
 
