@@ -1,26 +1,35 @@
-import { describe, expect, it } from 'vitest'
-import { readFileSync } from 'node:fs'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 
-// per-id detail fetch helper 走 universal $fetch（與 fetchPublicContentPayload 同模式），
-// route 在 generate 時 prerender 成 static /api/{products|guides}/{id}.json。
+import { fetchProductDetail } from '../app/utils/fetch-product-detail'
+import { fetchGuideDetail } from '../app/utils/fetch-guide-detail'
+
+// per-id detail fetch helper 走 universal $fetch；route 在 generate 時 prerender 成
+// static /api/{products|guides}/{id}.json。此處以 mock $fetch 驗行為契約：helper 打對
+// prerender 端點並原樣回傳其內容——若 client helper 的 URL 與 prerender route 漂移，詳情頁會在 runtime 壞掉。
 describe('per-id detail fetch helpers', () => {
-  it('should fetch a single product detail from the per-id route via universal $fetch', () => {
-    const source = readFileSync(new URL('../app/utils/fetch-product-detail.ts', import.meta.url), 'utf8')
-
-    expect(source).toContain('export async function fetchProductDetail(id: string)')
-    expect(source).toContain('$fetch<ProductDetailView>(`/api/products/${id}.json`)')
-    expect(source).not.toContain('readFile')
-    expect(source).not.toContain('import.meta.server')
-    expect(source).not.toContain('server: false')
+  afterEach(() => {
+    vi.unstubAllGlobals()
   })
 
-  it('should fetch a single guide detail from the per-id route via universal $fetch', () => {
-    const source = readFileSync(new URL('../app/utils/fetch-guide-detail.ts', import.meta.url), 'utf8')
+  it('should fetch a single product detail from its prerendered per-id JSON endpoint', async () => {
+    const product_detail = { id: 'sample-product', name: '示範商品' }
+    const fetch_spy = vi.fn().mockResolvedValue(product_detail)
+    vi.stubGlobal('$fetch', fetch_spy)
 
-    expect(source).toContain('export async function fetchGuideDetail(id: string)')
-    expect(source).toContain('$fetch<GuideDetailView>(`/api/guides/${id}.json`)')
-    expect(source).not.toContain('readFile')
-    expect(source).not.toContain('import.meta.server')
-    expect(source).not.toContain('server: false')
+    const result = await fetchProductDetail('sample-product')
+
+    expect(fetch_spy).toHaveBeenCalledWith('/api/products/sample-product.json')
+    expect(result).toBe(product_detail)
+  })
+
+  it('should fetch a single guide detail from its prerendered per-id JSON endpoint', async () => {
+    const guide_detail = { id: 'sample-guide', title: '示範指南' }
+    const fetch_spy = vi.fn().mockResolvedValue(guide_detail)
+    vi.stubGlobal('$fetch', fetch_spy)
+
+    const result = await fetchGuideDetail('sample-guide')
+
+    expect(fetch_spy).toHaveBeenCalledWith('/api/guides/sample-guide.json')
+    expect(result).toBe(guide_detail)
   })
 })

@@ -113,12 +113,18 @@
 
 ## Milestones
 
-- **M1：刪 CSS 數值斷言** — A 類整批清除，保留 token 存在與對比度。（AC1）
-- **M2：grep 原始碼文字／順序／文件斷言** — B 類清除，行為價值者轉 render。（AC2、AC7）
-- **M3：config/CI 字串改讀值或刪** — C 類處理，保留合理讀值與 hook 行為斷言。（AC3）
-- **M4：adoption 測試行為化** — D 類，行為價值者改 render/E2E，純文字者刪。（AC4、AC7）
-- **M5：釘死 content 資料值清理** — E 類，改對 fixture 或測不變式。（AC5、AC7）
-- **M6：收尾** — 全套件 `pnpm test`/`lint`/`typecheck`/`./dev.sh verify` 綠，更新 `works.md`。（AC6）
+- [x] **M1：刪 CSS 數值斷言** — A 類整批清除，保留 token 存在與對比度。（AC1）
+- [x] **M2：grep 原始碼文字／順序／文件斷言** — B 類清除，行為價值者轉 render。（AC2、AC7）
+- [ ] **M3：config/CI 字串改讀值或刪** — C 類處理，保留合理讀值與 hook 行為斷言。（AC3）
+- [ ] **M4：adoption 測試行為化** — D 類，行為價值者改 render/E2E，純文字者刪。（AC4、AC7）
+- [ ] **M5：釘死 content 資料值清理** — E 類，改對 fixture 或測不變式。（AC5、AC7）
+- [ ] **M6：收尾** — 全套件 `pnpm test`/`lint`/`typecheck`/`./dev.sh verify` 綠，更新 `works.md`。（AC6）
+
+> M1+M2 合併於一次派工（A/B 類在 `nuxt-smoke.test.ts` 同 `it` 交錯，拆開會半殘再重開）。處理檔：`nuxt-smoke`、`product-detail-back-navigation`（僅 CSS 段）、`view-transition`、`fetch-detail-helpers`。
+>
+> 交棒 035 的已知殘留：`product-detail-back-navigation.test.ts` 的 `it #1`（`onBackClicked` 的 same-origin/fallback 邏輯）目前仍是 source-grep，**刻意留給 035**——035 AC7 會把 back-navigation 抽成 composable 並在 composable 層測一份，屆時取代此 grep 版；025 先留作過渡覆蓋，避免 025→035 之間掉 back-nav 覆蓋。
+>
+> defer 至各自 milestone：`nuxt-ui-*-adoption`（含其 CSS 行）整支留 M4；`nuxt-smoke` 的 generate/build script 與 package deps 斷言留 M3；`nuxt-smoke` 的真實 content taxonomy／published count 斷言留 M5。
 
 > 註：原草稿末的「022 review 修正未 commit」註記已過期（022 早已合併），移除。
 </content>

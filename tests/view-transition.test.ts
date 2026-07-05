@@ -1,5 +1,3 @@
-import { readFileSync } from 'node:fs'
-
 import { renderToString } from '@vue/test-utils'
 import { computed, onMounted, ref } from 'vue'
 import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest'
@@ -123,24 +121,6 @@ describe('view transition flag single source of truth (nuxt.config)', () => {
   })
 })
 
-describe('route-driven view transition contract', () => {
-  it('should not use the legacy helper for route or query state changes', () => {
-    const routed_sources = [
-      '../app/pages/index.vue',
-      '../app/pages/guide/index.vue',
-      '../app/pages/search.vue',
-      '../app/pages/links.vue',
-      '../app/pages/products/[id].vue',
-      '../app/components/app-navigation.vue',
-      '../app/components/product-card.vue',
-    ].map((file_path) => readFileSync(new URL(file_path, import.meta.url), 'utf8')).join('\n')
-
-    expect(routed_sources).not.toContain('runViewTransition')
-    expect(routed_sources).not.toContain("from '../utils/view-transition'")
-    expect(routed_sources).not.toContain("from '~/utils/view-transition'")
-  })
-})
-
 describe('shared view-transition-name naming (rendered markup, AC3/AC5a)', () => {
   beforeAll(() => {
     // product-detail.vue 依賴 Nuxt auto-import 的 Vue API；此 bare vitest 環境無 auto-import，需 stub。
@@ -218,63 +198,5 @@ describe('shared view-transition-name naming (rendered markup, AC3/AC5a)', () =>
     ].join('')
 
     expect(getInlineViewTransitionName(html, 'product-card')).toBe('product-card-gamma')
-  })
-})
-
-describe('view transition CSS contract (catalog.css)', () => {
-  const catalog_css = readFileSync(new URL('../app/assets/styles/catalog.css', import.meta.url), 'utf8')
-
-  it('should declare the product-card group, old and new view-transition pseudo-element rules', () => {
-    expect(catalog_css).toContain('view-transition-class: product-card')
-    expect(catalog_css).toContain('::view-transition-group(.product-card)')
-    expect(catalog_css).toContain('::view-transition-old(.product-card)')
-    expect(catalog_css).toContain('::view-transition-new(.product-card)')
-    expect(catalog_css).toContain('::view-transition-group(.product-image)')
-    expect(catalog_css).toContain('::view-transition-group(.product-title)')
-    expect(catalog_css).toContain('::view-transition-group(.product-summary)')
-    expect(catalog_css).toContain('::view-transition-group(.product-price)')
-    expect(catalog_css).toMatch(/@media \(prefers-reduced-motion: no-preference\)[\s\S]*view-transition-class: product-card/)
-  })
-
-  it('should silence morph, root and Vue transitions under prefers-reduced-motion: reduce (AC4)', () => {
-    expect(catalog_css).toContain('@media (prefers-reduced-motion: reduce)')
-    expect(catalog_css).toMatch(/@media \(prefers-reduced-motion: reduce\)[\s\S]*view-transition-name: none !important/)
-    expect(catalog_css).toMatch(/@media \(prefers-reduced-motion: reduce\)[\s\S]*animation: none !important/)
-  })
-
-  it('should keep the Vue compact-page-fade fallback path for browsers without view transitions (AC5)', () => {
-    expect(catalog_css).toContain('.compact-page-fade-enter-active')
-    expect(catalog_css).toContain('.compact-page-fade-leave-active')
-    expect(catalog_css).toContain('.compact-page-fade-enter-from')
-  })
-
-  it('should drive the VT root transition with fade-only keyframes so it does not mimic Vue slide movement', () => {
-    expect(catalog_css).toMatch(/::view-transition-old\(root\)[\s\S]*?animation-name: dw-page-fade-out/)
-    expect(catalog_css).toMatch(/::view-transition-new\(root\)[\s\S]*?animation-name: dw-page-fade-in/)
-    expect(catalog_css).not.toMatch(/@keyframes dw-page-fade-out[\s\S]*?translateY/)
-    expect(catalog_css).not.toMatch(/@keyframes dw-page-fade-in[\s\S]*?translateY/)
-  })
-
-  it('should keep the Vue fallback translate shift isolated from the VT root keyframes', () => {
-    expect(catalog_css).toMatch(/--dw-page-transition-shift:/)
-    expect(catalog_css).toMatch(/\.compact-page-fade-enter-from[\s\S]*?transform: translateY\(var\(--dw-page-transition-shift\)\)/)
-  })
-
-  it('should fade the root immediately and delay only product shared elements', () => {
-    expect(catalog_css).toContain('--dw-view-transition-delay: 0.1s')
-    expect(catalog_css).toContain('--dw-view-transition-duration: 0.35s')
-    expect(catalog_css).toMatch(/::view-transition-old\(root\)[\s\S]*?animation-duration: var\(--dw-view-transition-duration\)/)
-    expect(catalog_css).toMatch(/::view-transition-old\(root\)[\s\S]*?animation-delay: 0s/)
-    expect(catalog_css).toMatch(/::view-transition-new\(root\)[\s\S]*?animation-duration: var\(--dw-view-transition-duration\)/)
-    expect(catalog_css).toMatch(/::view-transition-new\(root\)[\s\S]*?animation-delay: 0s/)
-    expect(catalog_css).toMatch(/::view-transition-group\(\.product-card\)[\s\S]*?animation-duration: var\(--dw-view-transition-duration\)/)
-    expect(catalog_css).toMatch(/::view-transition-group\(\.product-card\)[\s\S]*?animation-delay: var\(--dw-view-transition-delay\)/)
-    expect(catalog_css).toMatch(/::view-transition-group\(\.product-image\)[\s\S]*?animation-duration: var\(--dw-view-transition-duration\)/)
-    expect(catalog_css).toMatch(/::view-transition-group\(\.product-image\)[\s\S]*?animation-delay: var\(--dw-view-transition-delay\)/)
-    expect(catalog_css).toMatch(/::view-transition-group\(\.product-title\)[\s\S]*?animation-duration: var\(--dw-view-transition-duration\)/)
-    expect(catalog_css).toMatch(/::view-transition-group\(\.product-summary\)[\s\S]*?animation-duration: var\(--dw-view-transition-duration\)/)
-    expect(catalog_css).toMatch(/::view-transition-group\(\.product-price\)[\s\S]*?animation-duration: var\(--dw-view-transition-duration\)/)
-    expect(catalog_css).toMatch(/::view-transition-old\(\.product-card\)[\s\S]*?animation-duration: var\(--dw-view-transition-duration\)/)
-    expect(catalog_css).toMatch(/::view-transition-new\(\.product-card\)[\s\S]*?animation-duration: var\(--dw-view-transition-duration\)/)
   })
 })
