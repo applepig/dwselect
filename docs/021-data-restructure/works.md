@@ -149,7 +149,7 @@
 
 ### Changes（production）
 
-- 排序鍵 `published_at` → `updated_at`：`compare-products.ts`（`category→updated_at→name`）、`compare-guides.ts`（`updated_at→title`）、`map-related-product-card.ts`（`score→same_channel→updated_at→name`）。
+- 排序鍵 `published_at` → `updated_at`：`compare-products.ts`（2026-07-05 修訂為 `updated_at→category→name`）、`compare-guides.ts`（`updated_at→title`）、`map-related-product-card.ts`（`score→same_channel→updated_at→name`）。
 - 新增 `app/utils/content/compare-links.ts`：`sort_order` 升序 → `updated_at` desc → `compareText(title)` → `id`。
 - `search-index.ts` 與 `scripts/public-payload/map-resource-rows.ts` 的 links 排序改用 `compareLinks`（取代原本只看 `sort_order`）。
 
