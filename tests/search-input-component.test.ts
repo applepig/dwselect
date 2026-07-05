@@ -3,13 +3,8 @@
 import { mount } from '@vue/test-utils'
 import { defineComponent, h, nextTick } from 'vue'
 import { describe, expect, it } from 'vitest'
-import { readFileSync } from 'node:fs'
 
 import SearchInput from '../app/components/search/search-input.vue'
-
-function readSource(relative_path: string) {
-  return readFileSync(new URL(relative_path, import.meta.url), 'utf8')
-}
 
 const UInputStub = defineComponent({
   name: 'UInput',
@@ -130,12 +125,13 @@ describe('search input component contract', () => {
     expect(wrapper.emitted('submit')).toBeUndefined()
   })
 
-  it('should guard the IME composition keyCode through a named constant instead of a bare 229', () => {
-    const input_source = readSource('../app/components/search/search-input.vue')
+  it('should not emit submit when Enter arrives with the legacy IME keyCode 229', async () => {
+    // 部分瀏覽器組字中的 Enter 只帶 legacy keyCode 229、isComposing 為 false，仍須擋下。
+    const wrapper = await mountSearchInput('鍵')
 
-    expect(input_source).toContain('IME_COMPOSITION_KEYCODE = 229')
-    expect(input_source).toContain('event.keyCode === IME_COMPOSITION_KEYCODE')
-    expect(input_source).not.toContain('event.keyCode === 229')
+    await wrapper.find('input').trigger('keydown.enter', { isComposing: false, keyCode: 229 })
+
+    expect(wrapper.emitted('submit')).toBeUndefined()
   })
 
   it('should defer input updates during composition and sync when composition ends', async () => {

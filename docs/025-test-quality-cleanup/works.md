@@ -28,8 +28,8 @@ M1 與 M2 合併於一次 `ddd-developer` 派工——A/B 兩類在 `nuxt-smoke.
   - 判準延續 ADR-025-1：斷言 config **文字**／CI YAML 字面／命令字串 pin＝反模式；改為讀 **resolved 值**（import 後讀物件）或 render 行為，行為已被別處涵蓋的純字串 grep 直接移除。coordinator 先做完逐檔 keep/remove/rewrite 決策再派工，worker 只執行不重判（避免 M2 那種「誤判佈局行為而留 grep」的來回）。
   - **兩檔整檔刪除**：`static-generate-workflow.test.ts`（100% grep `.github/workflows/*.yml` 文字＋`indexOf` 順序，GitHub Actions 觸發行為非 unit 可測，無 resolved 值路徑，CI 正確性由 CI 執行本身把關）；`agent-quality-gate-config.test.ts`（讀 opencode/codex/claude config JSON 後 `JSON.stringify().toContain()` 文字 grep，hook 真實行為已由 `post-edit-hook.test.ts` 實跑 ESLint 涵蓋）。兩者皆 test-only、git 可回溯，AC3 授權「移除」。
   - **改讀 resolved 值**：`app-config.test.ts` theme baseline 改 `import app.config` 讀 `app_config.ui.colors.primary/neutral`（`vi.hoisted` 把 Nuxt auto-import 全域 `defineAppConfig` stub 成 identity，讀出 default export 即 resolved config——是達成「讀值」判準的必要 harness，非放寬斷言）；GTM 改讀 `nuxt_config.app.head.script[0].innerHTML`／`noscript[0]` resolved 值（重排 nuxt.config source 佈局不再誤紅，只在實際 head 設定改變時紅）。
-  - **改行為測**：`launch-seo.test.ts` metadata contract 由 grep 頁面 `.vue`/`.ts` source 改為 import `seo-metadata.ts` 常數斷值 + `getCanonicalUrl`/`getSeoDescription` 純函式行為斷言；toybox.local 防漏改對 import 進來的常數斷言（各頁都用這些常數，守常數即守輸出）；error page 由 grep `error.vue` source 改 `@vue/test-utils` `renderToString`（404→找不到頁面、500→發生錯誤，皆含回首頁 `href="/"`）。
-  - **精簡命令字串 pin**：`dev-server-script.test.ts` 刪 3 個 `it`（`--host` pin、quality-gate 命令 `toBe` pin、playwright source-order grep），**保留** allowedHosts resolved 讀值 + 全部 15 個 runDevSh 行為測項；`lint-config.test.ts` 4→1（只留實跑 `eslint --version` 斷 v9，stylistic 規則效果由 post-edit-hook fixable.ts 涵蓋）；`nuxt-smoke.test.ts` 刪 2 個 generate/build script 命令字串 pin `it`，**保留** `@nuxt/content`/`better-sqlite3` 缺席的架構守門（SSG「runtime 不依賴外部資料」不變式，refactor-immune）。
+  - **改行為測**：`launch-seo.test.ts` metadata contract 由 grep 頁面 `.vue`/`.ts` source 改為 import `seo-metadata.ts` 常數斷值 + `getCanonicalUrl`/`getSeoDescription` 純函式行為斷言；toybox.local 防漏改對 import 進來的常數斷言（**防線刻意收窄至常數層**：原「grep 全部公開頁 source」可抓到某頁繞過常數硬寫 dev host 的情況，改寫後抓不到；因該情況需同時繞過 `buildSeoMeta`/`getCanonicalUrl`、機率極低，且 render 全公開頁的替代成本不成比例，接受此收窄——xreview Minor #5 揭露）；error page 由 grep `error.vue` source 改 `@vue/test-utils` `renderToString`（404→找不到頁面、500→發生錯誤，皆含回首頁 `href="/"`）。
+  - **精簡命令字串 pin**：`dev-server-script.test.ts` 刪 3 個 `it`（`--host` pin、quality-gate 命令 `toBe` pin、playwright source-order grep），**保留** allowedHosts resolved 讀值 + 全部 15 個 runDevSh 行為測項——其中 `--host` 缺席與「playwright `loadEnvFile()` 早於讀 `APP_URL`」兩守門為**無行為替代的刪除**（真實破壞面窄：改壞會在跑 e2e 時自然暴露，接受此縫隙——xreview Minor #7 揭露）；`lint-config.test.ts` 4→1（只留實跑 `eslint --version` 斷 v9，stylistic 規則效果由 post-edit-hook fixable.ts 涵蓋）；`nuxt-smoke.test.ts` 刪 2 個 generate/build script 命令字串 pin `it`，**保留** `@nuxt/content`/`better-sqlite3` 缺席的架構守門（SSG「runtime 不依賴外部資料」不變式，refactor-immune）。
   - **保留不動**：`post-edit-hook.test.ts`（全為實跑 hook 的行為/執行測項）一行未動。
 
 - **問題與解法**：
@@ -48,7 +48,7 @@ M1 與 M2 合併於一次 `ddd-developer` 派工——A/B 兩類在 `nuxt-smoke.
   - `nuxt-ui-component-adoption.test.ts`（9→7 it）：**保留** `mountIndexPage` + 3 個 mount 行為測項（CategoryChipBar 委派、legacy category 軟導向、it.each 無效 query）。**刪** `search input adopts UInput` describe（5 it 全 grep source，行為已覆蓋）、tag-explorer grep it（035 將整支移除 `tag-explorer.vue`，依交界規則只拔不改寫）、idle-panel grep it（已覆蓋）、3 個 CSS grep it（migration-cleanup `.category-chip.is-active` not.toContain + `min-height:38px` A 類數值 + 與 nuxt-smoke 重複的 `.category-chip:focus-visible` class 存在）。**新增** home 空狀態 render 測項（`mountIndexPage({ products: [] })` 斷言文案「目前沒有已上架商品」；`UEmpty` stub 改為渲染 `title` prop）。
   - `search-input-component.test.ts`（7→8 it）：唯一未被涵蓋、有行為價值者——search-input 顯式轉發的 mobile 鍵盤/autofill 屬性（`enterkeyhint`/`autocomplete`/`autocapitalize`/`autocorrect`/`spellcheck`）——遷到此 canonical 行為檔，以 render 斷言落在實際 `<input>` 上（UInputStub 已把 attrs 展開至內層 input）。
   - `product-detail-back-navigation.test.ts`（3→4 it）：把「DW callout 顯示 long_description/summary」這個有價值且未被別處斷言的行為，遷入此已 render `ProductDetail` 的檔——`UAlertStub` 由 `<div />` 改為渲染 `{{title}}<span>{{description}}</span>`（DW callout 走 `:description` prop），新增測項斷言 html 含「DW 怎麼說」與內文。既有兩個 order 測項（`detail-dw-says` indexOf）確認不受 UAlert 補內容影響、仍綠。`it #1`（back-nav source-grep）依交界續留 035，未動。
-  - `nuxt-ui-empty-and-callout-adoption.test.ts`：**整檔刪**（`git rm`）。逐項去向：home 空狀態行為→遷 component-adoption render；guide/links/search 空狀態為同一 adoption pattern 複本（copy/視覺、E2E 涵蓋頁面），不逐頁重測；product-detail DW callout 內容→遷 back-navigation render；back button 的 `router.back()`/`onBackClicked`→屬 035 back-nav 收斂（結構存在性由 `detail-back` order 測項涵蓋）；catalog.css drop（`.compact-empty-state`/`.detail-callout`/`.empty-title`）→ CSS migration-cleanup grep，無行為。
+  - `nuxt-ui-empty-and-callout-adoption.test.ts`：**整檔刪**（`git rm`）。逐項去向：home 空狀態行為→遷 component-adoption render；guide/links/search 空狀態為同一 adoption pattern 複本，視為 home 空狀態的低價值複本不逐頁重測（共用 `UEmpty` pattern 已由 home render 證明；注意 E2E 跑真實非空 content、不會進空狀態分支，**不構成**空狀態的行為覆蓋——xreview Minor #6 校正原「E2E 涵蓋」措辭）；product-detail DW callout 內容→遷 back-navigation render；back button 的 `router.back()`/`onBackClicked`→屬 035 back-nav 收斂（結構存在性由 `detail-back` order 測項涵蓋）；catalog.css drop（`.compact-empty-state`/`.detail-callout`/`.empty-title`）→ CSS migration-cleanup grep，無行為。
   - **035 交界遵守**：tag-explorer 與 back-nav 行為斷言一律「只拔不改寫」或續留，不投入成本改 render 後被 035 丟棄。
 
 - **問題與解法**：兩處預留 fallback（home 空狀態 render 難觸發、UAlert 內容渲染難處理）皆未觸發——worker 實測 index.vue 空狀態分支可在 mount harness 觸發、DW callout 走 `:description` prop 可由 stub 渲染，兩者皆成功實作為 render 行為測試，無降級成 source-grep。
@@ -76,3 +76,25 @@ M1 與 M2 合併於一次 `ddd-developer` 派工——A/B 兩類在 `nuxt-smoke.
   - `./dev.sh lint`：exit 0。
   - `/simplify`：inline 四角度審查，無須套用修正（`mountTaxonomyPage` 與既有 mount harness 僅共用薄 Suspense+stubGlobal pattern、元件各異，未達抽象門檻）。
   - coordinator gate-check：taxonomy-page-shell rewrite 確認為真 render/spy 行為斷言（非 grep 換皮）；保留檔案一律未觸碰。
+
+## Milestone 6: 收尾（AC6）
+
+- **技術決策**：M6 為 quality-gate 收尾，非程式變更。跑 `./dev.sh verify`（容器內 CI 等價 quality-gate：test→lint→typecheck→generate，固定 production `APP_URL=dwselect.applepig.net`，隔離 buildDir），一輪測完對齊 CI，避免把 typecheck/generate deferred 到 CI 才發現紅。
+- **frontend handoff**：本 sprint 純測試層整理、零 production code 變更（未觸碰任何 `app/` 元件、`content/` 資料或 config），故不需開頁面人工驗收；generate 成功（538 routes prerender）已證明 SSG 產物不受測試改動影響。
+- **測試結果**：`./dev.sh verify` exit 0——
+  - test：79 files / 575 tests passed
+  - lint：exit 0
+  - typecheck：通過（fail-fast 串接下未中止，才進到 generate）
+  - generate：Prerendered 538 routes、Generated public `.output/public`
+- **sprint 總結**：M1–M6 全數完成，AC1–AC7 達成。suite 由起始 82 檔 / 634 案 → 79 檔 / 575 案（-3 檔、-59 案），刪除者皆為無行為價值的 source-grep／CSS 數值／config 字串／釘死 content 值假斷言，有行為價值者改寫成 render/讀 resolved 值/不變式測試（行為覆蓋不退步，AC7）。刻意保留的 documented residual：`server-content-routes`／`detail-route-id-resolution` 的 route wiring/回歸守門（待 handler-invocation 測試或 035）、`product-detail`/`guide-detail` back-nav grep（035 AC7 收斂 composable 後取代）。
+
+### xreview 修正（2026-07-05）
+
+三模型 cross review（codex:gpt-5.5、gemini-3.1-pro、claude:opus-4-8）：0 Critical；2 Important＋數個 Minor 經 coordinator 逐一讀碼驗證後修正；gemini 3 條 findings 判 False Positive 駁回（reduced-motion／agent-quality-gate 刪除係 spec 明文授權、launch-seo 覆蓋真空不成立）。
+
+- **[Important] product detail 頁 head-before-await 守門無等價覆蓋（claude 獨到發現）**：M2 刪掉 nuxt-smoke 的 source-order 守門後，`products/[id].vue` 的 useHead/useSeoMeta 須早於 `await useProductDetailData`（await 後 SSR context 遺失、per-product OG/canonical 靜默退化）全 suite 無測。新增 `tests/product-detail-page-head.test.ts`：deferred promise + `vi.stubGlobal` + Suspense mount，斷言 data promise 仍 pending 時 head/SEO meta 已註冊（比照 `use-taxonomy-detail-page.test.ts` 的 spy pattern）→ 紅→綠驗證通過。
+- **[Important] IME keyCode=229 殘留 source-grep 且 legacy 分支零行為覆蓋（codex 獨到發現）**：`search-input-component.test.ts` 刪讀 `.vue` source 的 grep it（M4 續留無 spec 依據），改行為測試 `keydown.enter { isComposing: false, keyCode: 229 }` 斷言不 submit——`search-input.vue` 守門的兩條分支自此各有一測 → 紅→綠驗證通過（keyCode=13 時確實 fail）。
+- **[Minor] app-config GTM 讀值寫死 `[0]` index**：改 `.find()` 依 `gtm.start`／`ns.html` 內容特徵匹配，斷言語意不變、位置耦合移除。
+- **[Minor] spec 狀態矛盾＋殘留標籤**：`spec.md` 狀態「草稿待確認」改「已完成」、刪檔末孤立 `</content>`。
+- **[Minor] AC7 揭露補完**：launch-seo toybox 防線收窄、dev-server 兩守門無替代刪除、empty-adoption「E2E 涵蓋」措辭校正，均已補記至對應 milestone 段落（見 M3/M4 內文標註）。
+- **測試結果**：`pnpm test` 80 files / 576 tests passed（575 → 576：+1 檔 +1 案）、`pnpm lint` exit 0（coordinator 獨立重跑確認）。

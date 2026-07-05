@@ -30,8 +30,11 @@ describe('Nuxt UI app.config theme baseline', () => {
 })
 
 describe('Nuxt app head tracking baseline', () => {
+  // 以內容特徵 find 對應 entry，不寫死陣列位置——日後 head 前面插入其他 script/noscript 不應誤紅。
   it('should install the Google Tag Manager head script with the approved container ID', () => {
-    const gtm_script = nuxt_config.app?.head?.script?.[0]?.innerHTML ?? ''
+    const gtm_script = nuxt_config.app?.head?.script
+      ?.find((entry) => entry?.innerHTML?.includes('gtm.start'))
+      ?.innerHTML ?? ''
 
     expect(gtm_script).toContain('gtm.start')
     expect(gtm_script).toContain('googletagmanager.com/gtm.js')
@@ -39,7 +42,8 @@ describe('Nuxt app head tracking baseline', () => {
   })
 
   it('should install the Google Tag Manager noscript fallback at the start of body', () => {
-    const gtm_noscript = nuxt_config.app?.head?.noscript?.[0]
+    const gtm_noscript = nuxt_config.app?.head?.noscript
+      ?.find((entry) => entry?.innerHTML?.includes('googletagmanager.com/ns.html'))
 
     expect(gtm_noscript?.innerHTML).toContain('googletagmanager.com/ns.html?id=GTM-KTZKC8CH')
     expect(gtm_noscript?.tagPosition).toBe('bodyOpen')
