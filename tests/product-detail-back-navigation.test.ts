@@ -18,7 +18,7 @@ const NuxtImgStub = { props: ['src', 'alt'], template: '<img :src="src" :alt="al
 const CatalogPillStub = { props: ['to', 'variant'], template: '<span><slot /></span>' }
 const UButtonStub = { props: ['to', 'icon', 'block', 'size', 'color', 'variant'], template: '<button><slot /></button>' }
 const UIconStub = { props: ['name'], template: '<i />' }
-const UAlertStub = { props: ['title', 'description', 'color', 'variant'], template: '<div />' }
+const UAlertStub = { props: ['title', 'description', 'color', 'variant'], template: '<div class="dw-alert-stub">{{ title }}<span>{{ description }}</span></div>' }
 const ContentMarkdownStub = { props: ['source'], template: '<div />' }
 
 function makeProductDetailView(overrides: Partial<ProductDetailView> = {}): ProductDetailView {
@@ -88,6 +88,13 @@ describe('product detail back navigation fallback', () => {
     expect(product_detail_source).toContain('window.location.origin')
     expect(product_detail_source).toContain('router.back()')
     expect(product_detail_source).toContain("router.push('/')")
+  })
+
+  it('should render the DW opinion callout with its title and body copy', async () => {
+    const html = await renderProductDetail(makeProductDetailView({ long_description: 'DW 觀點內文' }))
+
+    expect(html).toContain('DW 怎麼說')
+    expect(html).toContain('DW 觀點內文')
   })
 
   it('should overlay the back button between the hero tile and hero image', async () => {

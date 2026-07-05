@@ -40,3 +40,21 @@ M1 與 M2 合併於一次 `ddd-developer` 派工——A/B 兩類在 `nuxt-smoke.
   - `./dev.sh test`（全套件，coordinator 獨立重跑）：80 files / 587 tests passed（M2 後 604 → 587，-17；含刪 2 整檔）。
   - `./dev.sh lint`：exit 0。
   - `/simplify`：inline 四角度審查，無須套用修正（render harness 同一函式仍僅 2x 重複，未達抽象門檻）。
+
+## Milestone 4: adoption 測試行為化（D 類）
+
+- **技術決策**：
+  - 先做覆蓋比對再動手（AC4 要求「先確認行為是否已被涵蓋，未涵蓋才補 render」）。確認 `search-input-component.test.ts`（render/mount）已涵蓋 search-input 的 emit `update:query`/`submit`/`clear`、clear 鈕只在非空白 query 顯示、Enter 於 IME composition 不 submit、composition defer/sync；`search-idle-panel-component.test.ts` 已涵蓋 idle chip 深連 `/tag/{id}`·`/brand/{id}` 與 count。adoption 檔中重複斷言這些行為的 source-grep 一律刪（行為已在別處以 render 覆蓋）。
+  - `nuxt-ui-component-adoption.test.ts`（9→7 it）：**保留** `mountIndexPage` + 3 個 mount 行為測項（CategoryChipBar 委派、legacy category 軟導向、it.each 無效 query）。**刪** `search input adopts UInput` describe（5 it 全 grep source，行為已覆蓋）、tag-explorer grep it（035 將整支移除 `tag-explorer.vue`，依交界規則只拔不改寫）、idle-panel grep it（已覆蓋）、3 個 CSS grep it（migration-cleanup `.category-chip.is-active` not.toContain + `min-height:38px` A 類數值 + 與 nuxt-smoke 重複的 `.category-chip:focus-visible` class 存在）。**新增** home 空狀態 render 測項（`mountIndexPage({ products: [] })` 斷言文案「目前沒有已上架商品」；`UEmpty` stub 改為渲染 `title` prop）。
+  - `search-input-component.test.ts`（7→8 it）：唯一未被涵蓋、有行為價值者——search-input 顯式轉發的 mobile 鍵盤/autofill 屬性（`enterkeyhint`/`autocomplete`/`autocapitalize`/`autocorrect`/`spellcheck`）——遷到此 canonical 行為檔，以 render 斷言落在實際 `<input>` 上（UInputStub 已把 attrs 展開至內層 input）。
+  - `product-detail-back-navigation.test.ts`（3→4 it）：把「DW callout 顯示 long_description/summary」這個有價值且未被別處斷言的行為，遷入此已 render `ProductDetail` 的檔——`UAlertStub` 由 `<div />` 改為渲染 `{{title}}<span>{{description}}</span>`（DW callout 走 `:description` prop），新增測項斷言 html 含「DW 怎麼說」與內文。既有兩個 order 測項（`detail-dw-says` indexOf）確認不受 UAlert 補內容影響、仍綠。`it #1`（back-nav source-grep）依交界續留 035，未動。
+  - `nuxt-ui-empty-and-callout-adoption.test.ts`：**整檔刪**（`git rm`）。逐項去向：home 空狀態行為→遷 component-adoption render；guide/links/search 空狀態為同一 adoption pattern 複本（copy/視覺、E2E 涵蓋頁面），不逐頁重測；product-detail DW callout 內容→遷 back-navigation render；back button 的 `router.back()`/`onBackClicked`→屬 035 back-nav 收斂（結構存在性由 `detail-back` order 測項涵蓋）；catalog.css drop（`.compact-empty-state`/`.detail-callout`/`.empty-title`）→ CSS migration-cleanup grep，無行為。
+  - **035 交界遵守**：tag-explorer 與 back-nav 行為斷言一律「只拔不改寫」或續留，不投入成本改 render 後被 035 丟棄。
+
+- **問題與解法**：兩處預留 fallback（home 空狀態 render 難觸發、UAlert 內容渲染難處理）皆未觸發——worker 實測 index.vue 空狀態分支可在 mount harness 觸發、DW callout 走 `:description` prop 可由 stub 渲染，兩者皆成功實作為 render 行為測試，無降級成 source-grep。
+
+- **測試結果**：
+  - `./dev.sh test`（全套件，coordinator 獨立重跑）：79 files / 570 tests passed（M3 後 587 → 570，-17；含刪 1 整檔 + 淨刪多個 grep it、新增 3 個 render it）。
+  - `./dev.sh lint`：exit 0。
+  - `/simplify`：inline 四角度審查，無須套用修正（DW callout render 複用既有 `renderProductDetail`，未新增第 3 份 harness）。
+  - coordinator gate-check：確認改動檔無殘留 source-grep 行為測項（僅 `it #1`、`named constant 229` 兩個既有 grep 依指示續留），新增測項皆為真 render/mount 行為斷言。

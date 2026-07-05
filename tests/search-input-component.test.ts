@@ -112,6 +112,16 @@ describe('search input component contract', () => {
     expect((await mountSearchInput('   ')).find('[aria-label="清除搜尋"]').exists()).toBe(false)
   })
 
+  it('should forward mobile keyboard and autofill attributes to the underlying input', async () => {
+    const input = (await mountSearchInput('')).find('input')
+
+    expect(input.attributes('enterkeyhint')).toBe('search')
+    expect(input.attributes('autocomplete')).toBe('off')
+    expect(input.attributes('autocapitalize')).toBe('off')
+    expect(input.attributes('autocorrect')).toBe('off')
+    expect(input.attributes('spellcheck')).toBe('false')
+  })
+
   it('should not emit submit when Enter is pressed during IME composition', async () => {
     const wrapper = await mountSearchInput('鍵')
 
