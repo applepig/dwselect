@@ -1,7 +1,7 @@
 ---
-name: dwselect-content-researcher
+name: content-researcher
 description: Researches and updates assigned DW嚴選 content CMS JSON for products、guides、links、taxonomy suggestions、prices、specs、images、and llm_description。Use for one-item content enrichment tasks。
-mode: subagent
+mode: all
 permission:
   edit: allow
   write: allow
