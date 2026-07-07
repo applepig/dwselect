@@ -12,7 +12,8 @@
 
 <script setup lang="ts">
 import type { ProductDetailView } from '../../utils/public-content-view-types'
-import { buildSeoMeta, getCanonicalUrl, getOgImageUrl, getSeoDescription, SITE_NAME } from '../../utils/seo-metadata'
+import { buildSeoMeta, getCanonicalUrl, getOgImageUrl, getSeoDescription } from '../../utils/seo-metadata'
+import { SITE_NAME } from '../../utils/site-name'
 
 const route = useRoute()
 const raw_id = route.params.id

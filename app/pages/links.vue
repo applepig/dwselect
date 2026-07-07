@@ -18,7 +18,8 @@
 
 <script setup lang="ts">
 import { getCompactAppView } from '../utils/published-products/compact-app'
-import { buildSeoMeta, getCanonicalUrl, SITE_NAME, SITE_OG_IMAGE } from '../utils/seo-metadata'
+import { buildSeoMeta, getCanonicalUrl, SITE_OG_IMAGE } from '../utils/seo-metadata'
+import { SITE_NAME } from '../utils/site-name'
 
 const LINKS_DESCRIPTION = '整理 DW嚴選相關入口與延伸資源。'
 const links_canonical_url = getCanonicalUrl('/links')

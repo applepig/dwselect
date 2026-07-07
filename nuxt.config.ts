@@ -7,12 +7,17 @@ import { buildChannelRoutes } from './scripts/build-channel-routes'
 import { buildGuideRoutes } from './scripts/build-guide-routes'
 import { buildProductRoutes } from './scripts/build-product-routes'
 import { buildTagRoutes } from './scripts/build-tag-routes'
+import { getSiteUrl } from './scripts/site-url'
 
+// APP_URL 一律必填（含裸跑 generate/build）：缺 env 硬失敗，不再豁免 generate/build、
+// 也不 fallback 到寫死的 toybox host，避免靜默產出錯誤 host 的 SEO/canonical/discovery 產物（ADR-035-5）。
 const app_url = process.env.APP_URL
-if (!app_url && !process.argv.some((a) => a === 'generate' || a === 'build')) {
+if (!app_url) {
   throw new Error('APP_URL 環境變數未設定——請在 .env 設定，例如 APP_URL=dwselect.toybox.local')
 }
-const vite_host = app_url ?? 'dwselect.toybox.local'
+const vite_host = app_url
+// SITE_URL 由 APP_URL 導出並於 build 時烤入 client/SSR bundle 的 __DW_SITE_URL__（見 seo-metadata.ts）。
+const site_url = getSiteUrl()
 
 // 029：buildDir / Vite cacheDir 可由環境變數覆寫，讓本機/容器的一次性 build（typecheck/generate/build）
 // 與常駐 dev 的 .nuxt 隔離、互不踩 chunk hash；未設時維持 Nuxt 預設，dev 行為零影響。
@@ -128,6 +133,11 @@ export default defineNuxtConfig({
   },
   vite: {
     cacheDir: vite_cache_dir,
+    // 站台 URL build-time 烤入：seo-metadata 讀 __DW_SITE_URL__，值於此由 APP_URL 導出後固定，
+    // generate 時 canonical／og/og-image 全部跟著環境走（AC4），無殘留寫死網域。
+    define: {
+      __DW_SITE_URL__: JSON.stringify(site_url),
+    },
     plugins: [
       {
         name: 'dwselect-content-hmr',

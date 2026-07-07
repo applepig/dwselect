@@ -72,3 +72,25 @@
   - 測試設計 gate：AC2b `content-route-handler.test.ts`（真 invoke handler 斷 payload 觀測欄位）、AC1 `draft-published-artifact-consistency.test.ts`（id 集合相等＋動態算 EXPECTED＋xml 解析）皆為行為測試，無 source-grep／snapshot-as-spec／硬編 fixture 數量反模式。
   - 預期值對帳：AC1 EXPECTED_*_IDS 對映 fixture 的 published spec（各型 2 published、draft 缺席）；AC2b payload `version===1`、cards/documents non-empty 對映真實 content。
   - **未驗證**：generate 全綠（環境限制，交棒 CI/使用者，行為不變證據為全套件 554 綠＋typecheck 0）；`build-content-images.ts:220` inline ENOENT（M6 對帳）。
+
+## Milestone 3: 站台 URL/名稱 env 化
+
+- **技術決策**：
+  - `getSiteUrl()` 放 `scripts/site-url.ts`（Node-only，讀 `process.env.APP_URL` 回 `https://${APP_URL}/`，**缺 env 於呼叫時 throw、無 module top-level eager throw**——避免 vitest/consumer import 即炸）。`SITE_NAME` 放 `app/utils/site-name.ts`（browser-safe 單一來源，無 env 依賴）。
+  - **app 端 SITE_URL 烤入機制擇定：Vite `define`**（非 runtimeConfig，ADR-035-2）。nuxt.config guard 通過後 `const site_url = getSiteUrl()`，`vite.define.__DW_SITE_URL__ = JSON.stringify(site_url)`；`seo-metadata.ts` `declare const __DW_SITE_URL__; export const SITE_URL = __DW_SITE_URL__`。`vitest.config.ts` 同源 define（自 `getSiteUrl()`，已 loadEnvFile），測試與真實 build 同機制。**理由**：seo-metadata 純函式被 9 處（app.vue、5 pages、2 composable/util）＋tests 直接 import；runtimeConfig 方案會令 `getCanonicalUrl` 變 composable-only、侵入所有呼叫端並炸掉直接 import 的測試。define 保純函式、呼叫端零改動（除 SITE_NAME import 路徑）、head-before-await 不變式（ADR-1）未動、`product-detail-page-head.test.ts` 續綠。`SITE_OG_IMAGE` 隨 SITE_URL 導出（`${SITE_URL}og-image.png`）。
+  - `nuxt.config.ts` guard（ADR-035-5 行為變更）：移除 `generate`/`build` 豁免（缺 APP_URL 一律 throw，含裸跑 generate）、移除 `?? 'dwselect.toybox.local'` fallback（`vite_host = app_url`）。
+  - `build-public-discovery.ts`：原 module-level `const SITE_URL` 改成 `buildPublicDiscoveryFilesFromSource` 入口一次 `const site_url = getSiteUrl()`（fail-loud 在 build 進入點、非 import 時），thread 進 robots/llms/sitemap/rss/getProductUrl/getGuideUrl 全部 builder（保 helper 純函式、可測）。
+  - `public-content-payload.ts` literal type `site.name`/`site.url` 由字面量放寬為 `string`（消除與 SITE_NAME/APP_URL 導出值的第二處平行定義）。SITE_NAME 9 個 app 消費端 + scripts（payload/discovery）全改 import `site-name.ts`（單一 auto-import 來源，消除 Nuxt「Duplicated imports」警告——seo-metadata 只 import 自用不 re-export）。
+
+- **測試同步**：seo-metadata／launch-seo／taxonomy-page-seo／use-taxonomy-detail-page／public-discovery 的硬編 `dwselect.applepig.net` 期望值改為 domain-agnostic（由 `SITE_URL`/`getSiteUrl()` 導出，仍驗 canonical 拼接與 sitemap URL 結構，非套套邏輯）。刪 launch-seo 的「SITE_URL 不得含 toybox」不變式與 public-discovery 兩處 `not.toContain('dwselect.toybox.local')`——ADR-035-5/AC4 推翻「SITE_URL 永遠正式站」的行為，該行為從 spec 移除故連帶刪正確；**保留**改名後的「源碼不得寫死 site host」invariant（掃 app/ 源碼），守護「頁面不硬編 host」的行為仍在，覆蓋無真空。新增 `tests/site-url.test.ts`（env 注入 example.test/applepig.net、缺 env throw、SITE_NAME 同源）。
+
+- **/simplify 四角度審查（workflow fan-out＋對抗 verify）**：9 found → 7 deduped → **0 survivor**（全部對抗 verify 拒絕，理由紮實）：`build-public-discovery` 的 site_url threading 是「入口 fail-loud + helper 純函式」慣用最小做法（inline 會違反 DRY／純函式）；define 兩處屬 trivial 重複（YAGNI，第三次才抽）；inline getSiteUrl 屬單次使用 inline-first；playwright.config 改接屬 scope 越界。無 finding 套用。
+
+- **兩個 latent trap（經 verify 判定非缺陷、現況正確；記為未來風險供後續知悉）**：
+  1. `__DW_SITE_URL__` 是 bespoke ambient global（`declare const`），非 Nuxt-native surface。若未來有**非 Vite bundler**（Nitro server route、plain node script）import `seo-metadata`，token 不會被替換 → bare `ReferenceError`（非 ADR-035-5 的可辨識訊息）。**目前無此 importer**（grep 確認只 app pages/composables + vitest + 兩處 config 注入，全 Vite 驅動），correct-as-shipped。加 Nitro/node importer 前需知悉此邊界。
+  2. `buildPublicContentPayload` 執行時呼叫 `getSiteUrl()`（讀 env）——本專案 SSG（`nitro preset:'static'` + `/api/content.json` 於 prerender.routes + `failOnError`）無 live server，preview 也是送 prerender 好的靜態檔，無 request-time 問題；三路徑（.env/dev.sh/CI）單一 process 單一 APP_URL 無法 diverge。**未來若改 live server 部署**且 APP_URL 缺/異，content.json 可能 500 或 site.url 與 HTML canonical 分歧——屆時需留意。
+
+- **測試結果**（coordinator 獨立重跑）：`pnpm test` **81 files / 557 passed**（M2 554 → +3：site-url 3 tests、SITE_NAME 同源等，減去部分整併）exit 0；`pnpm lint` exit 0；`CI=true ./dev.sh typecheck` exit 0（**無 Duplicated imports 警告**、volar noise 已濾）。
+  - 測試設計 gate：`site-url.test.ts` 行為測試（env 注入 + throw）；改動測試改 domain-agnostic 仍驗拼接/結構行為，刪除為 ADR-035-5 推翻行為的正確同步。
+  - 預期值對帳：`getSiteUrl()` example.test→`https://example.test/`、缺 env throw；canonical/og/sitemap/payload 全隨 SITE_URL 導出（測試環境 APP_URL=toybox，無殘留 applepig.net）；SITE_NAME 單一 `'DW嚴選'`。
+  - **未驗證（交棒 CI）**：AC4 generate SSR prerender 端到端輸出比對、AC5 generate 缺 env 非零碼中止——此環境無 generate，`failOnError:true` 會在 CI 立即暴露 define 未觸達 SSR 的情況。人工開頁（環境限制，SEO meta 為不可見輸出，UI render 不變證據為既有 render 測試全綠）。

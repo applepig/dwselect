@@ -6,13 +6,13 @@ import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest'
 
 import {
   SITE_DESCRIPTION,
-  SITE_NAME,
   SITE_OG_IMAGE,
   SITE_TITLE,
   SITE_URL,
   getCanonicalUrl,
   getSeoDescription,
 } from '../app/utils/seo-metadata'
+import { SITE_NAME } from '../app/utils/site-name'
 import ErrorPage from '../app/error.vue'
 
 const project_root_url = new URL('../', import.meta.url)
@@ -36,33 +36,27 @@ describe('launch SEO static assets', () => {
 })
 
 describe('launch SEO metadata contract', () => {
-  it('should define the approved site-level SEO constants with the production URL', () => {
-    expect(SITE_URL).toBe('https://dwselect.applepig.net/')
+  it('should derive the site URL constants from APP_URL and keep the static copy fixed', () => {
+    // SITE_URL／SITE_OG_IMAGE 跟著 APP_URL 環境走（AC4、ADR-035-2）；SITE_NAME 等文案常數無 env 依賴。
+    expect(SITE_URL).toBe(`https://${process.env.APP_URL}/`)
+    expect(SITE_OG_IMAGE).toBe(`${SITE_URL}og-image.png`)
     expect(SITE_NAME).toBe('DW嚴選')
     expect(SITE_DESCRIPTION).toBe('值得買、值得看、值得收藏的選物清單。')
     expect(SITE_TITLE).toBe('DW嚴選｜值得買、值得看、值得收藏的選物清單')
-    expect(SITE_OG_IMAGE).toBe('https://dwselect.applepig.net/og-image.png')
   })
 
-  it('should never leak the local dev host into the production SEO constants', () => {
-    // 這只保證共用常數本身是正式站；各頁是否真的用常數、有無直接寫死 dev host，
-    // 由下方的 public source host-leak guard 另行覆蓋，兩者合起來才守住實際輸出。
-    expect(SITE_URL).not.toContain('toybox.local')
-    expect(SITE_OG_IMAGE).not.toContain('toybox.local')
-  })
-
-  it('should never hard-code the local dev host in any public app source', () => {
+  it('should never hard-code a site host in any public app source', () => {
     // 負向 invariant（近似 lint rule）：任一頁面／app.vue 若把 dev host 直接寫進
     // useHead／useSeoMeta，正式站 canonical／og 就會洩漏本機網域，而常數斷言抓不到。
     // 掃全 app/ 源碼，重構不誤紅，只在寫死已知壞字串時紅——非實作快照。
     expect(readPublicAppSources()).not.toContain('dwselect.toybox.local')
   })
 
-  it('should resolve canonical URLs to absolute production URLs', () => {
+  it('should resolve canonical URLs to absolute site URLs derived from SITE_URL', () => {
     expect(getCanonicalUrl('')).toBe(SITE_URL)
     expect(getCanonicalUrl('/')).toBe(SITE_URL)
-    expect(getCanonicalUrl('/products/foo')).toBe('https://dwselect.applepig.net/products/foo')
-    expect(getCanonicalUrl('/guide')).toBe('https://dwselect.applepig.net/guide')
+    expect(getCanonicalUrl('/products/foo')).toBe(`${SITE_URL}products/foo`)
+    expect(getCanonicalUrl('/guide')).toBe(`${SITE_URL}guide`)
   })
 
   it('should fall back to the site description only when the input is blank', () => {

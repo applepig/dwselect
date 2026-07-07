@@ -3,7 +3,8 @@ import type { TaxonomyKind } from '../utils/published-products/select-taxonomy-i
 import type { TaxonomyPageData } from '../utils/published-products/types'
 import { TAXONOMY_KINDS } from '../utils/published-products/taxonomy-kinds'
 import { buildTaxonomyPageSeo } from '../utils/published-products/taxonomy-page-seo'
-import { buildSeoMeta, getCanonicalUrl, SITE_NAME, SITE_OG_IMAGE } from '../utils/seo-metadata'
+import { buildSeoMeta, getCanonicalUrl, SITE_OG_IMAGE } from '../utils/seo-metadata'
+import { SITE_NAME } from '../utils/site-name'
 
 // 收斂四個 taxonomy 頁（category／tag／brand／channel）逐行複製的 setup：route id 正規化（C1）、
 // canonical 推導、meta computed、useHead／useSeoMeta 註冊、await fetch、404、watchEffect。

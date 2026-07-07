@@ -34,7 +34,8 @@
 import { onMounted } from 'vue'
 
 import { getCompactAppView } from '../utils/published-products/compact-app'
-import { getCanonicalUrl, SITE_DESCRIPTION, SITE_NAME, SITE_OG_IMAGE, SITE_TITLE } from '../utils/seo-metadata'
+import { getCanonicalUrl, SITE_DESCRIPTION, SITE_OG_IMAGE, SITE_TITLE } from '../utils/seo-metadata'
+import { SITE_NAME } from '../utils/site-name'
 
 const home_canonical_url = getCanonicalUrl('/')
 

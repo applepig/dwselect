@@ -71,7 +71,8 @@ import SearchSuggestionList from '../components/search/search-suggestion-list.vu
 import { useSearchPage } from '../composables/use-search-page'
 import { getCompactAppStateFromRoute } from '../utils/published-products/compact-app'
 import { getSearchResultSections } from '../utils/published-products/resource-rows'
-import { buildSeoMeta, getCanonicalUrl, SITE_NAME, SITE_OG_IMAGE } from '../utils/seo-metadata'
+import { buildSeoMeta, getCanonicalUrl, SITE_OG_IMAGE } from '../utils/seo-metadata'
+import { SITE_NAME } from '../utils/site-name'
 import type { SearchSuggestion } from '../utils/search/search-index'
 
 const SEARCH_DESCRIPTION = '搜尋 DW嚴選的商品、指南與連結，快速找到值得買、值得看、值得收藏的內容。'

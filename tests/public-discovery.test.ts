@@ -11,8 +11,12 @@ import type { CategoryDefinition, ChannelDefinition, Guide, LinkDefinition, Prod
 import { buildPublicContentPayload } from '../scripts/public-content'
 import { buildProductDetail } from '../scripts/public-payload/build-detail-by-id'
 import { buildPublicDiscoveryFiles } from '../scripts/build-public-discovery'
+import { getSiteUrl } from '../scripts/site-url'
+import { SITE_NAME } from '../app/utils/site-name'
 
 const execFileAsync = promisify(execFile)
+// 站台 URL 跟著 APP_URL 環境走（AC4）；期望值由 getSiteUrl() 導出，不寫死網域。
+const site_url = getSiteUrl()
 
 const base_product: Product = {
   id: '2026-06-02-sample-product',
@@ -140,8 +144,8 @@ describe('public content payload', () => {
     expect(payload).toMatchObject({
       version: 1,
       site: {
-        name: 'DW嚴選',
-        url: 'https://dwselect.applepig.net/',
+        name: SITE_NAME,
+        url: site_url,
       },
     })
     expect(payload.products.cards.map((card) => card.id)).toEqual(['a-product', 'z-product'])
@@ -331,36 +335,34 @@ describe('public discovery files', () => {
       guide_count: 1,
       link_count: 1,
     })
-    expect(robots).toBe('User-agent: *\nAllow: /\n\nSitemap: https://dwselect.applepig.net/sitemap.xml\n')
+    expect(robots).toBe(`User-agent: *\nAllow: /\n\nSitemap: ${site_url}sitemap.xml\n`)
     expect(llms).toContain('# DW嚴選')
-    expect(llms).toContain('https://dwselect.applepig.net/api/content.json')
+    expect(llms).toContain(`${site_url}api/content.json`)
     expect(llms).toContain('Do not attempt write actions')
-    expect(llms).not.toContain('dwselect.toybox.local')
-    expect(sitemap).toContain('<loc>https://dwselect.applepig.net/</loc>')
-    expect(sitemap).toContain('<loc>https://dwselect.applepig.net/guide</loc>')
-    expect(sitemap).toContain('<loc>https://dwselect.applepig.net/search</loc>')
-    expect(sitemap).toContain('<loc>https://dwselect.applepig.net/links</loc>')
-    expect(sitemap).toContain('<loc>https://dwselect.applepig.net/products/2026-06-02-sample-product</loc>')
-    expect(sitemap).toContain('<loc>https://dwselect.applepig.net/products/no-published-at-product</loc>')
+    expect(sitemap).toContain(`<loc>${site_url}</loc>`)
+    expect(sitemap).toContain(`<loc>${site_url}guide</loc>`)
+    expect(sitemap).toContain(`<loc>${site_url}search</loc>`)
+    expect(sitemap).toContain(`<loc>${site_url}links</loc>`)
+    expect(sitemap).toContain(`<loc>${site_url}products/2026-06-02-sample-product</loc>`)
+    expect(sitemap).toContain(`<loc>${site_url}products/no-published-at-product</loc>`)
     expect(sitemap).toContain([
-      '<loc>https://dwselect.applepig.net/guide/2026-06-03-guide</loc>',
+      `<loc>${site_url}guide/2026-06-03-guide</loc>`,
       '<lastmod>2026-06-03</lastmod>',
     ].join('\n    '))
     expect(sitemap).toContain('<lastmod>2026-06-03</lastmod>')
     // Taxonomy 頁要可索引：非空 category／tag（跨三型別 published 關聯）須進 sitemap。
-    expect(sitemap).toContain('<loc>https://dwselect.applepig.net/category/computer-3c</loc>')
-    expect(sitemap).toContain('<loc>https://dwselect.applepig.net/category/household</loc>')
-    expect(sitemap).toContain('<loc>https://dwselect.applepig.net/category/other</loc>')
-    expect(sitemap).toContain('<loc>https://dwselect.applepig.net/tag/keyboard</loc>')
-    expect(sitemap).toContain('<loc>https://dwselect.applepig.net/tag/food</loc>')
+    expect(sitemap).toContain(`<loc>${site_url}category/computer-3c</loc>`)
+    expect(sitemap).toContain(`<loc>${site_url}category/household</loc>`)
+    expect(sitemap).toContain(`<loc>${site_url}category/other</loc>`)
+    expect(sitemap).toContain(`<loc>${site_url}tag/keyboard</loc>`)
+    expect(sitemap).toContain(`<loc>${site_url}tag/food</loc>`)
     // brand id 走專屬 /brand/ 前綴、不再出現於 /tag/（ADR-8 單一 canonical）。
-    expect(sitemap).toContain('<loc>https://dwselect.applepig.net/brand/fixture-brand</loc>')
-    expect(sitemap).not.toContain('<loc>https://dwselect.applepig.net/tag/fixture-brand</loc>')
+    expect(sitemap).toContain(`<loc>${site_url}brand/fixture-brand</loc>`)
+    expect(sitemap).not.toContain(`<loc>${site_url}tag/fixture-brand</loc>`)
     // channel 頁（products-only）：被 published product offer 引用的 channel 須進 sitemap。
-    expect(sitemap).toContain('<loc>https://dwselect.applepig.net/channel/pchome</loc>')
+    expect(sitemap).toContain(`<loc>${site_url}channel/pchome</loc>`)
     expect(sitemap).not.toContain('draft-product')
     expect(sitemap).not.toContain('draft-guide')
-    expect(sitemap).not.toContain('dwselect.toybox.local')
     expect(rss.indexOf('<title>日本米入門篇</title>')).toBeLessThan(rss.indexOf('<title>機械鍵盤 &amp; &lt;滑鼠&gt;</title>'))
     expect(rss.indexOf('<title>機械鍵盤 &amp; &lt;滑鼠&gt;</title>')).toBeLessThan(rss.indexOf('<title>applepig.idv.tw</title>'))
     expect(rss.indexOf('<title>applepig.idv.tw</title>')).toBeLessThan(rss.indexOf('<title>No Published At</title>'))

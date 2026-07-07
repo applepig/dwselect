@@ -19,8 +19,10 @@ export type PublicTaxonomies = {
 export type PublicContentPayload = {
   version: 1
   site: {
-    name: 'DW嚴選'
-    url: 'https://dwselect.applepig.net/'
+    // name／url 值來自單一來源（SITE_NAME 常數與 getSiteUrl()）；型別不再重複釘死字面，
+    // 避免與 SITE_NAME／APP_URL 導出值形成第二處平行定義（AC6、ADR-035-2）。
+    name: string
+    url: string
   }
   products: {
     cards: ProductCardView[]

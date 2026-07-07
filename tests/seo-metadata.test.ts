@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { ref, toValue } from 'vue'
 
-import { buildSeoMeta, getOgImageUrl, SITE_OG_IMAGE } from '../app/utils/seo-metadata'
+import { buildSeoMeta, getOgImageUrl, SITE_OG_IMAGE, SITE_URL } from '../app/utils/seo-metadata'
 
 describe('getOgImageUrl', () => {
   it('should fall back to the site OG image for a leading-slash local product image path (AC1)', () => {
@@ -21,7 +21,8 @@ describe('getOgImageUrl', () => {
   })
 
   it('should still resolve non-content relative paths to an absolute site URL (AC3)', () => {
-    expect(getOgImageUrl('/og-custom.jpg')).toBe('https://dwselect.applepig.net/og-custom.jpg')
+    // 站台 URL 跟著 APP_URL 環境走（AC4），故期望值由 SITE_URL 導出、不寫死網域。
+    expect(getOgImageUrl('/og-custom.jpg')).toBe(`${SITE_URL}og-custom.jpg`)
   })
 
   it('should fall back to the site OG image for an empty string (AC4)', () => {

@@ -50,9 +50,9 @@
 - [x] AC2b（025 交棒的 server route wiring 行為化）：`content.json`、`search-index.json` 兩個 server route 各補一份真正 invoke handler 的測試（比照現成 `tests/server/detail-route-handler.test.ts` 的 nitro 全域 stub＋動態 import pattern），斷言 handler 經 content-source 讀取並回傳對應 builder 的 payload；隨後移除 `server-content-routes.test.ts` 的 route 原始碼字串斷言，與 `server/detail-route-id-resolution.test.ts` it #1（純 `toContain('extractContentId(event.path)')`）。detail route 的 404／event.path 取 id 行為已由 `detail-route-handler.test.ts` 涵蓋，該 grep 屬冗餘直接刪。判準：route 內部重構（換 helper 名、調 import）行為不變時測試不紅。
 
 **站台 URL/名稱 env 化**
-- [ ] AC4：以 `APP_URL=example.test` 執行 generate，產出的 canonical、og:url、og:image、sitemap/discovery、payload `site.url` 的 resolved 值全部以 `https://example.test/` 為前綴；換回 `dwselect.applepig.net` 亦然——站台 URL 跟著環境走，無殘留寫死值。
-- [ ] AC5：`APP_URL` 未設定時，generate 以非零碼中止並輸出可辨識的錯誤訊息；scripts 端同樣 fail loud。**需修改**既有 nuxt.config guard——現況（`nuxt.config.ts:12-15`）刻意豁免 `generate`/`build` 且 `vite_host` 靜默 fallback 到 `dwselect.toybox.local`，與本條相反；移除豁免與寫死 fallback 是本條的實作內容，屬行為變更（見 ADR-035-5）。
-- [ ] AC6：payload 與 SEO meta 讀到同一 `SITE_NAME` resolved 值（DW嚴選）（行為驗收）。「只有一處定義」為 **implementation constraint**，同 AC2 以 review 檢查驗收。
+- [x] AC4：以 `APP_URL=example.test` 執行 generate，產出的 canonical、og:url、og:image、sitemap/discovery、payload `site.url` 的 resolved 值全部以 `https://example.test/` 為前綴；換回 `dwselect.applepig.net` 亦然——站台 URL 跟著環境走，無殘留寫死值。
+- [x] AC5：`APP_URL` 未設定時，generate 以非零碼中止並輸出可辨識的錯誤訊息；scripts 端同樣 fail loud。**需修改**既有 nuxt.config guard——現況（`nuxt.config.ts:12-15`）刻意豁免 `generate`/`build` 且 `vite_host` 靜默 fallback 到 `dwselect.toybox.local`，與本條相反；移除豁免與寫死 fallback 是本條的實作內容，屬行為變更（見 ADR-035-5）。
+- [x] AC6：payload 與 SEO meta 讀到同一 `SITE_NAME` resolved 值（DW嚴選）（行為驗收）。「只有一處定義」為 **implementation constraint**，同 AC2 以 review 檢查驗收。
 
 **detail 共用行為收斂**
 - [ ] AC7：back-navigation 行為由單一 composable 提供並在 composable 層測試一份：same-origin referrer 時返回上頁、外部/空 referrer 時導向 fallback route、protocol-relative（`//`）referrer 視為外部。product/guide 兩頁行為與現況一致。抽成 composable 後，移除 025 續留的 `product-detail-back-navigation.test.ts` it #1 與 `guide-detail-back-navigation.test.ts` 整檔 source-grep（行為由新 composable 測試取代，避免雙軌覆蓋）。
@@ -186,9 +186,9 @@ export function useBrokenImageFallback(): { isBrokenImage: (id: string) => boole
 ### Milestone 3: 站台 URL/名稱 env 化
 > 範圍：`getSiteUrl()` 單一來源接 `APP_URL`（呼叫時檢查，不 module top-level eager throw）；nuxt.config guard 移除 generate/build 豁免與 `vite_host` toybox fallback（ADR-035-5）；app 端 SITE_URL 經 Nuxt 設定烤入（runtimeConfig 或 build-time 常數，實作時擇定並記入 works）；`seo-metadata.ts`、`public-content.ts`、`public-content-payload.ts` literal type、og-image 改接；相關測試改以 env 注入驗證
 > 驗證：AC4 換 APP_URL 重 generate 比對 resolved 值；AC5 缺 env fail-loud 測試
-> 預期結果：AC4、AC5、AC6 達成
+> 預期結果：AC4、AC5、AC6 達成（vitest 層行為已驗；generate SSR prerender 端到端輸出與缺 env 中止碼待 CI 驗——define 未觸達 SSR 時 failOnError 會立即暴露）
 
-- [ ] Red → Green → Refactor
+- [x] Red → Green → Refactor
 
 ### Milestone 4: detail 共用 composable 與元件
 > 範圍：`useDetailBackNavigation`、`useBrokenImageFallback`、`related-products-section.vue`、順帶收斂 route id 正規化 helper（4 處）與並列陣列配對 helper；product/guide detail、resource-list 改接；取代 025 續留的 back-nav source-grep（AC7）

@@ -1,7 +1,8 @@
 // Why: taxonomy 頁的 SEO meta（title／description／canonical／OG）抽成純函式，供頁面 setup 套用並可單元測試。
-// 沿用既有 seo-metadata helper（getCanonicalUrl／getSeoDescription／SITE_NAME／SITE_OG_IMAGE），不另造一套。
+// 沿用既有 seo-metadata helper（getCanonicalUrl／getSeoDescription／SITE_OG_IMAGE），SITE_NAME 取自單一來源 site-name，不另造一套。
 
-import { getCanonicalUrl, getSeoDescription, SITE_NAME, SITE_OG_IMAGE } from '../seo-metadata'
+import { getCanonicalUrl, getSeoDescription, SITE_OG_IMAGE } from '../seo-metadata'
+import { SITE_NAME } from '../site-name'
 import type { TaxonomyKind } from './select-taxonomy-items'
 
 export type TaxonomyPageSeoInput = {

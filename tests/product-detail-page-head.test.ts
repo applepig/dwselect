@@ -11,8 +11,8 @@ import {
   getCanonicalUrl,
   getOgImageUrl,
   getSeoDescription,
-  SITE_NAME,
 } from '../app/utils/seo-metadata'
+import { SITE_NAME } from '../app/utils/site-name'
 
 function makeProductDetailView(overrides: Partial<ProductDetailView> = {}): ProductDetailView {
   return {

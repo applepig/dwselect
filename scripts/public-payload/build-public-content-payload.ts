@@ -2,7 +2,9 @@ import type { PublicContentPayload } from '../../app/utils/public-content-payloa
 import { compareProducts } from '../../app/utils/content/compare-products.ts'
 import { isPublished } from '../../app/utils/content/is-published.ts'
 import type { PublicContentSource } from '../content-source/read-public-content-source.ts'
-import { PUBLIC_CONTENT_VERSION, SITE_NAME, SITE_URL } from '../public-content.ts'
+import { PUBLIC_CONTENT_VERSION } from '../public-content.ts'
+import { SITE_NAME } from '../../app/utils/site-name.ts'
+import { getSiteUrl } from '../site-url.ts'
 import { buildNavigation } from './build-navigation.ts'
 import { mapGuideRows, mapLinkRows } from './map-resource-rows.ts'
 import { mapProductCard } from './map-product-card.ts'
@@ -21,7 +23,7 @@ export function buildPublicContentPayload(source: PublicContentSource): PublicCo
     version: PUBLIC_CONTENT_VERSION,
     site: {
       name: SITE_NAME,
-      url: SITE_URL,
+      url: getSiteUrl(),
     },
     products: {
       cards: sorted_products.map((product) => mapProductCard(product, labels)),
