@@ -1,11 +1,14 @@
 // @vitest-environment happy-dom
 
 import { mount } from '@vue/test-utils'
+import { computed, onMounted, ref } from 'vue'
 import { afterAll, beforeEach, describe, expect, it, vi } from 'vitest'
 
+import { useBrokenImageFallback } from '../app/composables/use-broken-image-fallback'
 import { useDetailBackNavigation } from '../app/composables/use-detail-back-navigation'
 import GuideDetail from '../app/components/guide-detail.vue'
 import ContentMarkdown from '../app/components/content-markdown.vue'
+import RelatedProductsSection from '../app/components/related-products-section.vue'
 import type { GuideDetailView } from '../app/utils/public-content-view-types'
 
 const NuxtLinkStub = {
@@ -34,7 +37,7 @@ function mountGuideDetail(detail: GuideDetailView) {
   return mount(GuideDetail, {
     props: { detail },
     global: {
-      components: { ContentMarkdown },
+      components: { ContentMarkdown, RelatedProductsSection },
       stubs: {
         NuxtLink: NuxtLinkStub,
         CatalogPill: CatalogPillStub,
@@ -69,8 +72,12 @@ function makeGuideDetailView(overrides: Partial<GuideDetailView> = {}): GuideDet
 describe('GuideDetail', () => {
   // GuideDetail 在 setup 頂層呼叫 useRouter()，此測試環境無 Nuxt auto-import，需 stub。
   beforeEach(() => {
+    vi.stubGlobal('ref', ref)
+    vi.stubGlobal('computed', computed)
+    vi.stubGlobal('onMounted', onMounted)
     vi.stubGlobal('useRouter', () => ({ back: vi.fn(), push: vi.fn() }))
     vi.stubGlobal('useDetailBackNavigation', useDetailBackNavigation)
+    vi.stubGlobal('useBrokenImageFallback', useBrokenImageFallback)
   })
 
   afterAll(() => {

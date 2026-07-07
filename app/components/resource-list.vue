@@ -21,7 +21,7 @@
           class="resource-row-image"
           loading="lazy"
           format="webp"
-          @error="onResourceImageError(row.id)"
+          @error="onImageError(row.id)"
         />
         <img
           v-else-if="hasVisibleImage(row)"
@@ -29,7 +29,7 @@
           alt=""
           class="resource-row-image"
           loading="lazy"
-          @error="onResourceImageError(row.id)"
+          @error="onImageError(row.id)"
         >
         <UIcon
           v-else
@@ -70,24 +70,20 @@ withDefaults(defineProps<{
   aria_label: '資源列表',
 })
 
-const failed_image_ids = ref<Set<string>>(new Set())
 const nuxt_link = resolveComponent('NuxtLink')
+const { isBrokenImage, onImageError } = useBrokenImageFallback()
 
 function getRowComponent(row: CompactResourceRow): string | Component {
   return row.external ? 'a' : nuxt_link
 }
 
 function hasVisibleImage(row: CompactResourceRow): boolean {
-  return row.image_url !== null && !failed_image_ids.value.has(row.id)
+  return row.image_url !== null && !isBrokenImage(row.id)
 }
 
 // 本地 content 圖（/products|guides/images/...）走 <NuxtImg>／IPX；外部 http 連結圖維持原生 <img>。
 function isLocalImageSource(image_url: string | null): boolean {
   return image_url !== null && image_url.startsWith('/')
-}
-
-function onResourceImageError(row_id: string) {
-  failed_image_ids.value = new Set([...failed_image_ids.value, row_id])
 }
 
 function getFallbackIcon(row: CompactResourceRow): string {

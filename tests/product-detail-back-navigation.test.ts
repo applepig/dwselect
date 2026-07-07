@@ -2,8 +2,10 @@ import { renderToString } from '@vue/test-utils'
 import { computed, onMounted, ref } from 'vue'
 import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest'
 
+import { useBrokenImageFallback } from '../app/composables/use-broken-image-fallback'
 import { useDetailBackNavigation } from '../app/composables/use-detail-back-navigation'
 import ProductDetail from '../app/components/product-detail.vue'
+import RelatedProductsSection from '../app/components/related-products-section.vue'
 import type { ProductDetailView } from '../app/utils/public-content-view-types'
 
 const NuxtLinkStub = { props: ['to'], template: '<a :href="to"><slot /></a>' }
@@ -44,6 +46,7 @@ function renderProductDetail(detail: ProductDetailView) {
   return renderToString(ProductDetail, {
     props: { detail },
     global: {
+      components: { RelatedProductsSection },
       stubs: {
         NuxtLink: NuxtLinkStub,
         NuxtImg: NuxtImgStub,
@@ -65,6 +68,7 @@ describe('product detail hero opinion and layout ordering', () => {
     vi.stubGlobal('onMounted', onMounted)
     vi.stubGlobal('useRouter', () => ({ back: vi.fn(), push: vi.fn() }))
     vi.stubGlobal('useDetailBackNavigation', useDetailBackNavigation)
+    vi.stubGlobal('useBrokenImageFallback', useBrokenImageFallback)
   })
 
   afterAll(() => {

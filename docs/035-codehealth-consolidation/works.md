@@ -109,3 +109,30 @@
 
 - **測試結果**（coordinator 獨立重跑）：`pnpm test` **565 passed**（M3 557 → +11 composable −3 淨：移除 product it #1、刪 guide 整檔、新增 11 案例）exit 0；`pnpm lint` 0；`CI=true ./dev.sh typecheck` 0。測試設計 gate：composable 行為測試（spy router.back/push），無 source-grep／snapshot，Case 3 fall-through 完整。元件改接 diff 確認只動 back-nav、未牽動破圖/related（M4-B 範圍）。
 - **未驗證**：頁面實開返回行為（環境限制，交棒 CI/使用者；行為由 composable 11 案例覆蓋）。
+
+### M4-B: 破圖 composable（AC8）＋related 元件（AC9）＋route id／zip helper 收斂
+
+- **技術決策**：
+  - **AC8 `useBrokenImageFallback(): { isBrokenImage(id), onImageError(id) }`**（`app/composables/use-broken-image-fallback.ts`）：Set-based 失敗 id 狀態，`onImageError` 以不可變 `new Set([...prev, id])` 累加。三處消費端統一經此 composable——product/guide 的 hero 單圖 bool 改為以固定 key `'hero'` 走同一 Set；related／resource 直接以 product/row id 走 Set。用 Nuxt 全域 `ref`（不 import，讓測試 stubGlobal 攔截，比照 use-taxonomy-detail-page 慣例）。
+  - **onMounted 破圖補偵測掃描擇定：留在消費端 inline，不進 composable**（偏離派工的「composable 可選提供掃描能力」草案，理由如下）。初版曾把 `scanForBrokenImages(root, selector, resolveId)` 收進 composable，但 `CI=true ./dev.sh typecheck` 對三個 SFC 皆報 TS2345——vue-tsc 為原生元素 template ref／`querySelectorAll` 合成的 DOM 元素型別（含 view-transition 增強）跨 composable 邊界傳 `HTMLElement`／`ParentNode` 參數時不可指派（放寬到 `ParentNode` 仍紅）。原始碼從未跨此邊界（inline `.querySelector`）。故掃描維持 inline（product/guide hero 各一段、related 一段在共用元件內），composable 只收斂**狀態**（原本三份 Set＋handler → 一份）——主要重複已消除，且 composable 介面正好落在 spec 草案的 `{ isBrokenImage, onImageError }`，無介面偏離。related 掃描原本 product/guide 各一份、現收斂進共用元件一份（淨改善）；hero 掃描維持兩份（本就兩份，未回歸）。
+  - `isLocalImageSource`（local/external 圖分流）為正交關注點，未混入破圖 composable（維持 guide/resource-list 各自現況）；placeholder icon 差異（detail 固定 `i-lucide-image-off` vs resource-list `getFallbackIcon` 動態）留消費端。resource-list 維持不掃描（全 lazy image，現況行為）。
+  - **AC9 `related-products-section.vue`**（`app/components/related-products-section.vue`）：props `products: RelatedProductCardView[]`、`title: string`（同時餵 `<h3>` 與 section `aria-label`）；product 傳 `"You may also like"`、guide 傳 `"相關商品"`。empty-guard `v-if="products.length > 0"` 內聚於元件（單一處），parent 移除 `displayed_related_products` 中介 computed、直接傳 `detail.related_products`。破圖狀態內聚（元件內自持一份 `useBrokenImageFallback`）。CSS class 名全部不變（catalog.css:860+ 共用，未搬移）。
+  - **helper1 `resolveRouteId(raw, fallback = '')`**（`app/utils/resolve-route-id.ts`）：收斂 4 處 `(Array.isArray(raw) ? raw[0] : raw) ?? fallback`——products/[id].vue、guide/[id].vue、use-taxonomy-detail-page.ts（fallback `''`）、category-chip-bar.vue（fallback `ALL_CATEGORIES_ID`，經可選第二參數吞入）。products/[id].vue 只換 route id 那行，未動 useHead/useSeoMeta/await 順序（head-before-await 不變式）。未混併 server 端 `extractContentId`。
+  - **helper2 `zipTaxonomyPills(ids, labels)`**（`app/utils/content/zip-taxonomy-pills.ts`）：`ids.map((id, i) => ({ id, label: labels[i] ?? id }))`，收斂 5 處並列陣列配對（guide category/tag/brand 3 處、product tag/brand 2 處）。
+
+- **測試（TDD，皆 red-on-assertion→green）**：
+  - 新增 `tests/use-broken-image-fallback.test.ts`（4 案例：初始未破、onImageError 標記且不影響他者、累加多 id、冪等重複標記）。破圖掃描 inline 於 SFC 且屬 browser-quirk（`naturalWidth` 唯讀、happy-dom 不可設）——與原始 inline 掃描同為未單元測（無回歸）。
+  - 新增 `tests/related-products-section.test.ts`（AC9 具體結構斷言、非 snapshot：卡片數==products.length、每張 href==/products/{id}、name/meta 文字、title 同餵標題與 aria-label、empty→無 section、破圖 @error→隱藏 img 露出 fallback icon）。
+  - 新增 `tests/resolve-route-id.test.ts`（5 案例：string 原樣、string[] 取首、undefined→''、undefined→fallback、[]→fallback）與 `tests/zip-taxonomy-pills.test.ts`（3 案例：配對、空陣列、label 缺漏 fallback 為 id）。
+  - product-detail-taxonomy-pills.test.ts 新增 product related section 整合測試（section 出現、title「You may also like」、卡片數與 href）；guide-detail-render.test.ts 既有 related 契約（L128-149）續綠、指向新元件。
+  - 5 個 mount/renderToString product/guide 元件的測試（view-transition、product-detail-back-navigation、product-detail-taxonomy-pills、guide-detail-render、guide-detail-taxonomy-pills）新增 `vi.stubGlobal('useBrokenImageFallback', 真 composable)` 並 `global.components` 註冊真 `RelatedProductsSection`（走真實 wiring，非假物件）；guide 兩測試補 `ref`/`onMounted` 全域 stub（composable 與新元件用全域）。taxonomy-page-render.test.ts（render resource-list）補 `useBrokenImageFallback` stub。
+
+- **測試結果**：`pnpm test` **584 passed / 85 files** exit 0；`pnpm lint` exit 0；`CI=true ./dev.sh typecheck` exit 0。（M4-A 565 → 584：新增 composable 4＋related 6＋resolve-route-id 5＋zip 3＋product related 2＝+20，減去 composable 由收斂掃描到只測狀態時移除的初版掃描 3 案 → 淨 +19；掃描案例併回 inline 後不再於 composable 層測。）測試設計 gate：AC9 斷具體結構非 snapshot；helper 為純函式行為測試；破圖為 Set 累加行為測試；無 source-grep／硬編 fixture 數量／over-mock。
+- **未驗證**：破圖 fallback 與 related 卡片的頁面實開視覺（環境限制：此環境無 Docker/generate；行為不變證據為全套件 584 綠＋typecheck 0，破圖 class 契約與 related 渲染契約由 render 測試守護）。
+
+- **M4-B /simplify 收尾（3 survivor）**：
+  1. **hero 掃描收斂進 composable**（推翻上方「掃描留 inline」決策）：先前判「跨 composable 邊界傳 DOM 元素撞 vue-tsc TS2345」——root cause 經 verify 復現為：TS2345 只發生在 param 是 **nominal** DOM 型別（`HTMLElement`/`ParentNode`）時，因 vue-tsc 把 template ref 讀取合成為被 view-transition DOM augmentation 撐大的巨大 structural 型別、對 nominal param 不可指派；inline `.querySelector` 能過只因 method access 不需 assignment。**解法：param 用 structural type `Pick<ParentNode, 'querySelector'>`**（非 `as` cast），structural-to-structural 只需 member 匹配即通過。新增 `scanForBrokenImage(root, selector, id)` 至 composable，product/guide hero onMounted 各改為單行呼叫；composable header 註解已更正（移除錯誤的 nominal 邊界斷言）。hero 掃描由兩份 inline 收斂為一份。predicate `complete && naturalWidth===0` 剩兩處（composable scanForBrokenImage＋related 元件多圖掃描），屬可接受殘留（YAGNI，不再抽）。
+  2. **刪 guide-detail.vue 冗餘 `import { computed, onMounted, ref } from 'vue'`**：與 sibling product-detail.vue（無此行）一致，改走 Nuxt auto-import。連帶 guide 兩測試（render／taxonomy-pills）補 `vi.stubGlobal('computed', computed)`（元件改用全域 computed）。
+  3. **`onImageError` 改 reactive Set `.add(id)`**（原不可變 `new Set([...prev, id])`）：Vue 3.5 instrument 集合方法，`.add` 以 O(1) 觸發相同 `.has(id)` 依賴更新。**驗證通過**：`related-products-section.test.ts` 破圖案例（@error→`v-if` 重新求值→img 消失露 fallback icon）仍綠，證明 `.add` 確實觸發 reactivity；composable 註解已更新。
+  - 未套用（rejected）：related 多圖掃描抽出（單 caller 無 dedup 效益）、`has_hero_image` 命名、leaf predicate 抽出（收益低）。
+- **收尾測試結果**：`pnpm test` **587 passed / 85 files** exit 0（+3 為 composable scanForBrokenImage 三案例）；`pnpm lint` exit 0；`CI=true ./dev.sh typecheck` exit 0（survivor 1 structural param 型別通過）。

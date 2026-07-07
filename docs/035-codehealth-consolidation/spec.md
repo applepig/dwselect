@@ -55,9 +55,9 @@
 - [x] AC6：payload 與 SEO meta 讀到同一 `SITE_NAME` resolved 值（DW嚴選）（行為驗收）。「只有一處定義」為 **implementation constraint**，同 AC2 以 review 檢查驗收。
 
 **detail 共用行為收斂**
-- [ ] AC7：back-navigation 行為由單一 composable 提供並在 composable 層測試一份：same-origin referrer 時返回上頁、外部/空 referrer 時導向 fallback route、protocol-relative（`//`）referrer 視為外部。product/guide 兩頁行為與現況一致。抽成 composable 後，移除 025 續留的 `product-detail-back-navigation.test.ts` it #1 與 `guide-detail-back-navigation.test.ts` 整檔 source-grep（行為由新 composable 測試取代，避免雙軌覆蓋）。
-- [ ] AC8：破圖偵測與 fallback（載入失敗顯示 placeholder）由單一 composable 提供；product detail、guide detail、resource-list 三處行為與現況一致。
-- [ ] AC9：related-products 卡片區塊由共用元件渲染，product/guide detail 頁斷言具體不變結構——卡片數量、每張卡的連結 href 與標題文字與現況一致；不以整段 DOM snapshot 貼回當 expected（snapshot 反模式）。
+- [x] AC7：back-navigation 行為由單一 composable 提供並在 composable 層測試一份：same-origin referrer 時返回上頁、外部/空 referrer 時導向 fallback route、protocol-relative（`//`）referrer 視為外部。product/guide 兩頁行為與現況一致。抽成 composable 後，移除 025 續留的 `product-detail-back-navigation.test.ts` it #1 與 `guide-detail-back-navigation.test.ts` 整檔 source-grep（行為由新 composable 測試取代，避免雙軌覆蓋）。
+- [x] AC8：破圖偵測與 fallback（載入失敗顯示 placeholder）由單一 composable 提供；product detail、guide detail、resource-list 三處行為與現況一致。
+- [x] AC9：related-products 卡片區塊由共用元件渲染，product/guide detail 頁斷言具體不變結構——卡片數量、每張卡的連結 href 與標題文字與現況一致；不以整段 DOM snapshot 貼回當 expected（snapshot 反模式）。
 
 **化石清運＋knip**
 - [x] AC10：`TagExplorer` 元件、其專屬 CSS、`format-published-date` util、search-index 的 `Product[]` legacy union 入參、搜尋歷史直寫軌 API、compact-app view 的 `tabs`/`active_tab`/`counts`/`'no-results'` 分支移除後，`pnpm test` 全綠且首頁/guide/links/search 頁 render 輸出不變。（M1 達成；`active_tab` route-state 側孤兒經 /simplify 收尾清乾淨。**首頁/guide/links/search 人工開頁待驗**——此 session 容器 crash loop，render 不變證據為既有 render 行為測試全綠。）
@@ -195,7 +195,7 @@ export function useBrokenImageFallback(): { isBrokenImage: (id: string) => boole
 > 驗證：composable 層行為測試（含 Case 3）；既有 back-navigation 測試收斂為一份；頁面實開確認返回行為與破圖 fallback；**保持 025 新增的 `product-detail-page-head.test.ts`（useHead 早於 await 守門）續綠**——抽 composable 若動 `products/[id].vue` setup 結構，head/SEO meta 註冊須仍早於資料 await
 > 預期結果：AC7、AC8、AC9 達成
 
-- [ ] Red → Green → Refactor
+- [x] Red → Green → Refactor
 
 ### Milestone 5: knip 導入
 > 範圍：knip devDependency＋設定（Nuxt entry 宣告）、`pnpm knip` script、接入 `dev.sh verify` 鏈與 CI
