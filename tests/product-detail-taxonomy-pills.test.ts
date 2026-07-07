@@ -4,6 +4,7 @@ import { mount } from '@vue/test-utils'
 import { computed, onMounted, ref } from 'vue'
 import { afterAll, beforeEach, describe, expect, it, vi } from 'vitest'
 
+import { useDetailBackNavigation } from '../app/composables/use-detail-back-navigation'
 import ProductDetail from '../app/components/product-detail.vue'
 import type { ProductDetailView } from '../app/utils/public-content-view-types'
 
@@ -87,6 +88,7 @@ describe('ProductDetail taxonomy pill routing', () => {
     vi.stubGlobal('computed', computed)
     vi.stubGlobal('onMounted', onMounted)
     vi.stubGlobal('useRouter', () => ({ back: vi.fn(), push: vi.fn() }))
+    vi.stubGlobal('useDetailBackNavigation', useDetailBackNavigation)
   })
 
   afterAll(() => {

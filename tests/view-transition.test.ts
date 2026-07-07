@@ -3,6 +3,7 @@ import { computed, onMounted, ref } from 'vue'
 import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest'
 
 import nuxt_config from '../nuxt.config'
+import { useDetailBackNavigation } from '../app/composables/use-detail-back-navigation'
 import ProductCard from '../app/components/product-card.vue'
 import ProductDetail from '../app/components/product-detail.vue'
 import type { ProductCardView, ProductDetailView } from '../app/utils/public-content-view-types'
@@ -128,6 +129,7 @@ describe('shared view-transition-name naming (rendered markup, AC3/AC5a)', () =>
     vi.stubGlobal('computed', computed)
     vi.stubGlobal('onMounted', onMounted)
     vi.stubGlobal('useRouter', () => ({ back: vi.fn(), push: vi.fn() }))
+    vi.stubGlobal('useDetailBackNavigation', useDetailBackNavigation)
   })
 
   afterAll(() => {

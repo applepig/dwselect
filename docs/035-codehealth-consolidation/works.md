@@ -94,3 +94,18 @@
   - 測試設計 gate：`site-url.test.ts` 行為測試（env 注入 + throw）；改動測試改 domain-agnostic 仍驗拼接/結構行為，刪除為 ADR-035-5 推翻行為的正確同步。
   - 預期值對帳：`getSiteUrl()` example.test→`https://example.test/`、缺 env throw；canonical/og/sitemap/payload 全隨 SITE_URL 導出（測試環境 APP_URL=toybox，無殘留 applepig.net）；SITE_NAME 單一 `'DW嚴選'`。
   - **未驗證（交棒 CI）**：AC4 generate SSR prerender 端到端輸出比對、AC5 generate 缺 env 非零碼中止——此環境無 generate，`failOnError:true` 會在 CI 立即暴露 define 未觸達 SSR 的情況。人工開頁（環境限制，SEO meta 為不可見輸出，UI render 不變證據為既有 render 測試全綠）。
+
+## Milestone 4: detail 共用 composable 與元件
+
+> M4 面積大（3 composable/元件＋2 helper 收斂＋三頁改接＋測試行為化），依「可獨立綠燈、切面內聚」拆兩序列 sub-task：A＝back-navigation（AC7，護欄最脆弱處）；B＝破圖 composable（AC8）＋related 元件（AC9）＋route id／zip helper 收斂。前置 workflow 五角度偵察定位複製點與 10 個護欄不變式。
+
+### M4-A: back-navigation composable（AC7）
+
+- **技術決策**：
+  - 抽 `useDetailBackNavigation(fallback_route): { goBack }`（`app/composables/use-detail-back-navigation.ts`），內聚 `canReturnToSameOriginPage` 全判定（history.state.back 優先於 document.referrer、protocol-relative `//` 視為外部、referrer origin `new URL` try/catch）。用 Nuxt 全域 `useRouter()`（不 import，讓測試 stubGlobal 攔截）。product fallback `/`、guide `/guide`。兩元件各移除 26 行逐字複製的 inline 判定＋`onBackClicked`＋top-level `useRouter()`（各 -41 行）。
+  - **SSR guard 偏離（刻意，行為等價，已對帳接受）**：原元件用 `import.meta.client`（Nuxt 編譯期常數，bare vitest 恆 falsy 且 per-module 不可跨檔操控 → 所有 client-path 測試測不到）；抽出後改 runtime `typeof window === 'undefined' || typeof document === 'undefined'`。production 行為完全一致（window/document 存在 ⟺ client），`goBack` 僅 click 觸發（client-only）guard 純防禦，且使 composable 可單元測試——非遷就測試改行為。
+
+- **測試（AC7 行為化）**：新增 `tests/use-detail-back-navigation.test.ts`（11 行為案例：SSR guard／history.length≤1／站內 history.state.back→back／**protocol-relative `//` 兩案：外部 referrer→fallback、同源 referrer→back（fall-through 驗證）**／referrer 空・同源・外部・非法 URL／fallback 參數化 `/` vs `/guide`）。移除 `product-detail-back-navigation.test.ts` it #1（8 個 source-grep `toContain`）＋專屬 readFileSync helper，保留 it #2-#4（render 斷言），describe 改名 `product detail hero opinion and layout ordering`；刪 `guide-detail-back-navigation.test.ts` 整檔（兩 it 皆 source-grep）。5 個 mount product/guide 元件的測試新增 `vi.stubGlobal('useDetailBackNavigation', 真 composable)`（auto-import 相容，import 真 composable 走真實 wiring，非假物件）。
+
+- **測試結果**（coordinator 獨立重跑）：`pnpm test` **565 passed**（M3 557 → +11 composable −3 淨：移除 product it #1、刪 guide 整檔、新增 11 案例）exit 0；`pnpm lint` 0；`CI=true ./dev.sh typecheck` 0。測試設計 gate：composable 行為測試（spy router.back/push），無 source-grep／snapshot，Case 3 fall-through 完整。元件改接 diff 確認只動 back-nav、未牽動破圖/related（M4-B 範圍）。
+- **未驗證**：頁面實開返回行為（環境限制，交棒 CI/使用者；行為由 composable 11 案例覆蓋）。

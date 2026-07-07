@@ -18,7 +18,7 @@
             color="neutral"
             variant="ghost"
             aria-label="返回"
-            @click="onBackClicked"
+            @click="goBack"
           />
 
           <NuxtImg
@@ -169,7 +169,7 @@
 import { computed, onMounted, ref } from 'vue'
 import type { GuideDetailView } from '../utils/public-content-view-types'
 
-const router = useRouter()
+const { goBack } = useDetailBackNavigation('/guide')
 
 const props = defineProps<{
   detail: GuideDetailView
@@ -229,42 +229,5 @@ function onRelatedImageError(product_id: string) {
 
 function isBrokenImage(image: HTMLImageElement | null): boolean {
   return image !== null && image.complete && image.naturalWidth === 0
-}
-
-function onBackClicked() {
-  if (canReturnToSameOriginPage()) {
-    router.back()
-
-    return
-  }
-
-  router.push('/guide')
-}
-
-function canReturnToSameOriginPage(): boolean {
-  if (!import.meta.client) {
-    return false
-  }
-
-  if (window.history.length <= 1) {
-    return false
-  }
-
-  const previous_route = window.history.state?.back
-
-  if (typeof previous_route === 'string' && previous_route.startsWith('/') && !previous_route.startsWith('//')) {
-    return true
-  }
-
-  if (document.referrer === '') {
-    return false
-  }
-
-  try {
-    return new URL(document.referrer).origin === window.location.origin
-  }
-  catch {
-    return false
-  }
 }
 </script>

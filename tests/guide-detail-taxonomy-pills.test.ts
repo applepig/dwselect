@@ -3,6 +3,7 @@
 import { mount } from '@vue/test-utils'
 import { afterAll, beforeEach, describe, expect, it, vi } from 'vitest'
 
+import { useDetailBackNavigation } from '../app/composables/use-detail-back-navigation'
 import GuideDetail from '../app/components/guide-detail.vue'
 import ContentMarkdown from '../app/components/content-markdown.vue'
 import type { GuideDetailView } from '../app/utils/public-content-view-types'
@@ -74,6 +75,7 @@ function makeGuideDetailView(overrides: Partial<GuideDetailView> = {}): GuideDet
 describe('GuideDetail taxonomy pill routing', () => {
   beforeEach(() => {
     vi.stubGlobal('useRouter', () => ({ back: vi.fn(), push: vi.fn() }))
+    vi.stubGlobal('useDetailBackNavigation', useDetailBackNavigation)
   })
 
   afterAll(() => {
