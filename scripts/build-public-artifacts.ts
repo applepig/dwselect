@@ -1,6 +1,6 @@
 import { join } from 'node:path'
 
-import { DEFAULT_PRODUCTS_DIR, DEFAULT_TAXONOMIES_DIR, readPublicContentSource } from './content-reader.ts'
+import { DEFAULT_PRODUCTS_DIR, DEFAULT_TAXONOMIES_DIR, readPublicContentSource } from './content-source/read-public-content-source.ts'
 import { DEFAULT_PUBLIC_DIR, buildPublicDiscoveryFilesFromSource } from './build-public-discovery.ts'
 import { buildSearchIndexFileFromSource } from './build-search-index.ts'
 

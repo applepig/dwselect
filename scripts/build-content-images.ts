@@ -4,7 +4,7 @@ import { mkdir, readFile, readdir, rm } from 'node:fs/promises'
 import { dirname, join, parse } from 'node:path'
 
 import { isPublished } from '../app/utils/content/is-published.ts'
-import { DEFAULT_PRODUCTS_DIR } from './content-reader.ts'
+import { DEFAULT_PRODUCTS_DIR } from './content-source/read-public-content-source.ts'
 
 type ContentImageDomain = 'products' | 'guides'
 

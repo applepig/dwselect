@@ -72,7 +72,7 @@ describe('Nuxt SSG baseline', () => {
 
   it('should keep the Git-backed content reader as the content source guard', () => {
     const query_helper_path = new URL('../app/utils/get-published-products-query.ts', import.meta.url)
-    const content_reader_path = new URL('../scripts/content-reader.ts', import.meta.url)
+    const content_reader_path = new URL('../scripts/content-source/read-public-content-source.ts', import.meta.url)
 
     expect(existsSync(query_helper_path)).toBe(false)
     expect(existsSync(content_reader_path)).toBe(true)

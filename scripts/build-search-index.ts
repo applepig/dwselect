@@ -2,7 +2,7 @@ import { mkdir, writeFile } from 'node:fs/promises'
 import { dirname, join } from 'node:path'
 
 import { buildSearchIndexPayload } from '../app/utils/search/search-index.ts'
-import { DEFAULT_PRODUCTS_DIR, DEFAULT_TAXONOMIES_DIR, readPublicContentSource, type PublicContentSource } from './content-reader.ts'
+import { DEFAULT_PRODUCTS_DIR, DEFAULT_TAXONOMIES_DIR, readPublicContentSource, type PublicContentSource } from './content-source/read-public-content-source.ts'
 
 type BuildSearchIndexSummary = {
   output_path: string

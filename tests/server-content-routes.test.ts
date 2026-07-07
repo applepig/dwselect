@@ -4,12 +4,10 @@ import { mkdir } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 
-import { readPublicContentSource } from '../scripts/content-reader'
+import { readPublicContentSource } from '../scripts/content-source/read-public-content-source'
 import { buildPublicContentPayload } from '../scripts/public-content'
 import { buildSearchIndexPayload } from '../app/utils/search/search-index'
 
-const content_route_url = new URL('../server/api/content.json.get.ts', import.meta.url)
-const search_route_url = new URL('../server/routes/search-index.json.get.ts', import.meta.url)
 const product_detail_route_url = new URL('../server/api/products/[id].json.get.ts', import.meta.url)
 const guide_detail_route_url = new URL('../server/api/guides/[id].json.get.ts', import.meta.url)
 
@@ -86,16 +84,6 @@ function readerOptions(fixture: Awaited<ReturnType<typeof makeContentFixture>>) 
 }
 
 describe('public content server routes', () => {
-  it('should expose /api/content.json from a Nuxt server route using the shared content reader and payload mapper', () => {
-    expect(existsSync(content_route_url)).toBe(true)
-
-    const route_source = readFileSync(content_route_url, 'utf8')
-
-    expect(route_source).toContain('defineEventHandler')
-    expect(route_source).toContain('readPublicContentSource')
-    expect(route_source).toContain('buildPublicContentPayload')
-  })
-
   it('should expose /api/products/{id}.json from a per-id route reusing the shared reader and product detail builder', () => {
     expect(existsSync(product_detail_route_url)).toBe(true)
 
@@ -120,16 +108,6 @@ describe('public content server routes', () => {
     expect(route_source).toContain('buildGuideDetail')
     expect(route_source).toContain('extractContentId(event.path)')
     expect(route_source).toContain('statusCode: 404')
-  })
-
-  it('should expose /search-index.json from a Nuxt server route using the shared content reader and search mapper', () => {
-    expect(existsSync(search_route_url)).toBe(true)
-
-    const route_source = readFileSync(search_route_url, 'utf8')
-
-    expect(route_source).toContain('defineEventHandler')
-    expect(route_source).toContain('readPublicContentSource')
-    expect(route_source).toContain('buildSearchIndexPayload')
   })
 
   it('should build a published content payload from the Git-backed content source the route reads', async () => {

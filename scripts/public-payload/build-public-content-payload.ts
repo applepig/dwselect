@@ -1,7 +1,7 @@
 import type { PublicContentPayload } from '../../app/utils/public-content-payload.ts'
 import { compareProducts } from '../../app/utils/content/compare-products.ts'
 import { isPublished } from '../../app/utils/content/is-published.ts'
-import type { PublicContentSource } from '../content-reader.ts'
+import type { PublicContentSource } from '../content-source/read-public-content-source.ts'
 import { PUBLIC_CONTENT_VERSION, SITE_NAME, SITE_URL } from '../public-content.ts'
 import { buildNavigation } from './build-navigation.ts'
 import { mapGuideRows, mapLinkRows } from './map-resource-rows.ts'

@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 
-import { readPublicContentSource } from '../../scripts/content-reader'
+import { readPublicContentSource } from '../../scripts/content-source/read-public-content-source'
 import { extractContentId } from '../../app/utils/content/extract-content-id'
 import { isPublished } from '../../app/utils/content/is-published'
 

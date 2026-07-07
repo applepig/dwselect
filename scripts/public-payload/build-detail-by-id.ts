@@ -1,7 +1,7 @@
 import type { GuideDetailView, ProductDetailView } from '../../app/utils/public-content-view-types.ts'
 import { extractContentId } from '../../app/utils/content/extract-content-id.ts'
 import { isPublished } from '../../app/utils/content/is-published.ts'
-import type { PublicContentSource } from '../content-reader.ts'
+import type { PublicContentSource } from '../content-source/read-public-content-source.ts'
 import { mapGuideDetail } from './map-guide-detail.ts'
 import { mapProductDetail } from './map-product-detail.ts'
 import { createTaxonomyLabelResolver } from '../../app/utils/content/taxonomy-labels.ts'

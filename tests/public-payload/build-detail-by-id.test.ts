@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 
 import { buildGuideDetail, buildProductDetail } from '../../scripts/public-payload/build-detail-by-id'
 import type { Guide } from '../../app/utils/product-schema'
-import type { PublicContentSource } from '../../scripts/content-reader'
+import type { PublicContentSource } from '../../scripts/content-source/read-public-content-source'
 import { base_guide, makeProduct, test_taxonomies } from '../published-products/fixtures'
 
 function makeOffer(channel_id: string) {

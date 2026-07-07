@@ -1,7 +1,9 @@
-import { readFileSync, readdirSync } from 'node:fs'
+import { readFileSync } from 'node:fs'
 import { join } from 'node:path'
 
-import type { TaxonomyItemsSource } from '../app/utils/published-products/select-taxonomy-items.ts'
+import type { TaxonomyItemsSource } from '../../app/utils/published-products/select-taxonomy-items.ts'
+import { isMissingFileError } from './is-missing-file-error.ts'
+import { readPublishedJsonEntries } from './read-published-json-entries.ts'
 
 export type TaxonomyContentDirs = {
   products_dir: string
@@ -15,7 +17,7 @@ type RawOffer = { channel_id?: string }
 type RawProduct = { status?: string, category_id?: string, tag_ids?: string[], offers?: RawOffer[] | null }
 type RawResource = { status?: string, category_ids?: string[], tag_ids?: string[] }
 
-// Why: route builder 在 nuxt.config 同步執行（無 async），故沿用 build-product-routes 的 sync 讀檔風格，
+// Why: route builder 在 nuxt.config 同步執行（無 async），故用 content-source 的 sync 讀取，
 // 只讀「決定非空 taxonomy 所需」的最小欄位（status + taxonomy ids + offers 的 channel_id），不過 schema parse。
 // channel_ids 取自 product offers（所有 offer 的 channel_id，products-only，ADR-9）。
 export function readPublishedTaxonomyItems(dirs: TaxonomyContentDirs): TaxonomyItemsSource {
@@ -75,28 +77,5 @@ function extractChannelIds(offers: RawOffer[] | null | undefined): string[] {
 }
 
 function readPublished<T extends { status?: string }>(dir: string): T[] {
-  return readJsonFiles<T>(dir).filter((item) => item.status === 'published')
-}
-
-function readJsonFiles<T>(dir: string): T[] {
-  let file_names: string[]
-
-  try {
-    file_names = readdirSync(dir)
-  }
-  catch (error) {
-    if (isMissingFileError(error)) {
-      return []
-    }
-
-    throw error
-  }
-
-  return file_names
-    .filter((file_name) => file_name.endsWith('.json'))
-    .map((file_name) => JSON.parse(readFileSync(join(dir, file_name), 'utf8')) as T)
-}
-
-function isMissingFileError(error: unknown) {
-  return error instanceof Error && (error as { code?: unknown }).code === 'ENOENT'
+  return readPublishedJsonEntries(dir).map((entry) => entry.data as T)
 }

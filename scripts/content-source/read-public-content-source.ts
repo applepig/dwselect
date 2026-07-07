@@ -1,6 +1,7 @@
-import { readFile, readdir } from 'node:fs/promises'
+import { readFile } from 'node:fs/promises'
 import { dirname, join, parse } from 'node:path'
 
+import type { PublicTaxonomies } from '../../app/utils/public-content-payload.ts'
 import {
   brand_taxonomy_schema,
   category_taxonomy_schema,
@@ -9,20 +10,11 @@ import {
   link_schema,
   product_schema,
   tag_taxonomy_schema,
-  type CategoryDefinition,
-  type ChannelDefinition,
   type Guide,
   type LinkDefinition,
   type Product,
-  type TagDefinition,
-} from '../app/utils/product-schema.ts'
-
-export type PublicTaxonomies = {
-  categories: CategoryDefinition[]
-  channels: ChannelDefinition[]
-  tags: TagDefinition[]
-  brands: TagDefinition[]
-}
+} from '../../app/utils/product-schema.ts'
+import { listJsonDirents } from './list-json-files.ts'
 
 export type PublicContentSource = {
   products: Product[]
@@ -99,28 +91,9 @@ export async function readTaxonomies(taxonomies_dir: string): Promise<PublicTaxo
 }
 
 async function readContentFiles<T>(content_dir: string, parseContent: (raw_content: string, file_name: string) => T): Promise<T[]> {
-  let entries
+  const entries = await listJsonDirents(content_dir)
 
-  try {
-    entries = await readdir(content_dir, { withFileTypes: true })
-  }
-  catch (error) {
-    if (isMissingFileError(error)) {
-      return []
-    }
-
-    throw error
-  }
-
-  const json_entries = entries
-    .filter((entry) => entry.isFile() && entry.name.endsWith('.json'))
-    .toSorted((left_entry, right_entry) => left_entry.name.localeCompare(right_entry.name))
-
-  return Promise.all(json_entries.map(async (entry) =>
+  return Promise.all(entries.map(async (entry) =>
     parseContent(await readFile(join(content_dir, entry.name), 'utf8'), entry.name),
   ))
-}
-
-function isMissingFileError(error: unknown) {
-  return error instanceof Error && (error as { code?: unknown }).code === 'ENOENT'
 }

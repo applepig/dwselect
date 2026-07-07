@@ -4,7 +4,7 @@ import { join } from 'node:path'
 
 import { afterEach, describe, expect, it } from 'vitest'
 
-import { readProducts } from '../scripts/content-reader'
+import { readProducts } from '../../scripts/content-source/read-public-content-source'
 
 function buildProductJson(name: string) {
   return JSON.stringify({
@@ -54,7 +54,7 @@ describe('readContentFiles (via readProducts)', () => {
   })
 
   async function makeTempDir() {
-    const dir = await mkdtemp(join(tmpdir(), 'dwselect-content-reader-'))
+    const dir = await mkdtemp(join(tmpdir(), 'dwselect-content-source-'))
     temp_dirs.push(dir)
     return dir
   }

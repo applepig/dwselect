@@ -2,7 +2,7 @@
 
 ## Repo Facts
 
-- 單一 Nuxt 4 SSG app，不是 monorepo；主要 app entrypoint 在 `app/`，內容由 `scripts/content-reader.ts` 讀取 Git-backed JSON 並產生 public payload。
+- 單一 Nuxt 4 SSG app，不是 monorepo；主要 app entrypoint 在 `app/`，內容由 `scripts/content-source/` 讀取 Git-backed JSON 並產生 public payload。
 - 公開 runtime 不應 fetch Google Sheets、CMS 或外部資料來源；內容 SSOT 是 Git-backed `content/` JSON 與 taxonomy files。
 - Sprint 規格 SSOT 是 `docs/<編號>-<名稱>/spec.md`，完成紀錄在同資料夾 `works.md`；改 production code 前先補或更新測試。
 - 可見 UI、navigation、routing、layout、generate 相關變更交還前，除了測試外也要實際打開頁面確認可載入。
@@ -25,7 +25,7 @@
 
 - Products：`content/products/*.json`；Guides：`content/guides/*.json`；Links：`content/links/*.json`；taxonomy 在 `content/taxonomies/{categories,channels,tags,brands}.json`。
 - Schema 與 taxonomy reference 驗證集中在 `app/utils/product-schema.ts` 與 `tests/product-schema.test.ts`。
-- Content 讀取集中在 `scripts/content-reader.ts`；公開 runtime 不再讀靜態 `public/api/content.json`，而是透過 Nuxt server route `GET /api/content.json`（handler 在 `server/api/content.json.get.ts`）即時從 `content/` 產生，`pnpm generate` 會 prerender 成 static file，app 端 server 與 client 都用 `$fetch('/api/content.json')` 取得。
+- Content 讀取集中在 `scripts/content-source/`（async 全讀 `read-public-content-source.ts`、sync 最小讀 `read-taxonomy-items.ts`／`read-published-content-stems.ts`）；公開 runtime 不再讀靜態 `public/api/content.json`，而是透過 Nuxt server route `GET /api/content.json`（handler 在 `server/api/content.json.get.ts`）即時從 `content/` 產生，`pnpm generate` 會 prerender 成 static file，app 端 server 與 client 都用 `$fetch('/api/content.json')` 取得。
 - `id` 必須等於 JSON 檔名 stem；timestamps 使用 `YYYY-MM-DDTHH:mm:ss+08:00` 這類含 timezone offset 格式。
 - Product 使用 `category_id`、`tag_ids`（含 brand IDs）、`offers[]`（購買外部目標）與 optional `reference_links[]`（非購買參考外部目標）；Guide／Link 使用 `category_ids`、`tag_ids`；不要新增 legacy `category`、`channel_id`、`reference_url` 或自由字串 `tags`。
 - `status = "published"` 才能出現在首頁、指南、連結、category counts 與 search index。

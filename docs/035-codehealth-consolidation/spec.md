@@ -41,13 +41,13 @@
 （AC 除明確標註「implementation constraint」的條款外，均為可觀測行為：輸入→輸出、render 結果、讀 resolved 值；不以原始碼字面為斷言對象。implementation constraint 是行為測試原理上測不到的結構性約束——兩份結果一致的平行實作會讓所有行為測試全綠——故誠實標註為 review 檢查項，不硬湊字串斷言充數。）
 
 **content-source 單一真相**
-- [ ] AC1：給一組含 `draft` 與 `published` 的 content fixture，各 artifact 的「適用集合」收錄 id 一致且 draft 一律缺席，依內容類型分列（links 本無 detail route，不能要求四類產物集合齊一）：
+- [x] AC1：給一組含 `draft` 與 `published` 的 content fixture，各 artifact 的「適用集合」收錄 id 一致且 draft 一律缺席，依內容類型分列（links 本無 detail route，不能要求四類產物集合齊一）：
   - products／guides：prerender routes、public payload、search index、sitemap、RSS 五處 id 集合完全一致。
   - links：public payload、search index、RSS 三處 id 集合完全一致（不進 prerender routes 與 sitemap detail URL，維持現況）。
   - taxonomy sitemap 收錄集合＝non-empty taxonomy id 集合（與 route builder 同源，現況已共用 `collectNonEmptyTaxonomyIds`）。
-- [ ] AC2：同一 draft/published fixture 經 build scripts、server routes、search index builder 讀取，resolved output 一致（行為驗收：module 單元測試＋各消費端行為測試）。「published 判定只存在一個 exported function、所有消費端讀取經由 content-source module」為 **implementation constraint**——以 M2 完工時的 review 檢查驗收（比照 AC17 的驗收限制標註），不以 grep 斷言、也不假裝行為測試能守住它。
-- [ ] AC3：guide 搜尋結果的縮圖 URL 與 guide 頁面縮圖 URL 對同一筆 fixture 解析結果相同（同一 resolver）。
-- [ ] AC2b（025 交棒的 server route wiring 行為化）：`content.json`、`search-index.json` 兩個 server route 各補一份真正 invoke handler 的測試（比照現成 `tests/server/detail-route-handler.test.ts` 的 nitro 全域 stub＋動態 import pattern），斷言 handler 經 content-source 讀取並回傳對應 builder 的 payload；隨後移除 `server-content-routes.test.ts` 的 route 原始碼字串斷言，與 `server/detail-route-id-resolution.test.ts` it #1（純 `toContain('extractContentId(event.path)')`）。detail route 的 404／event.path 取 id 行為已由 `detail-route-handler.test.ts` 涵蓋，該 grep 屬冗餘直接刪。判準：route 內部重構（換 helper 名、調 import）行為不變時測試不紅。
+- [x] AC2：同一 draft/published fixture 經 build scripts、server routes、search index builder 讀取，resolved output 一致（行為驗收：module 單元測試＋各消費端行為測試）。「published 判定只存在一個 exported function、所有消費端讀取經由 content-source module」為 **implementation constraint**——以 M2 完工時的 review 檢查驗收（比照 AC17 的驗收限制標註），不以 grep 斷言、也不假裝行為測試能守住它。
+- [x] AC3：guide 搜尋結果的縮圖 URL 與 guide 頁面縮圖 URL 對同一筆 fixture 解析結果相同（同一 resolver）。
+- [x] AC2b（025 交棒的 server route wiring 行為化）：`content.json`、`search-index.json` 兩個 server route 各補一份真正 invoke handler 的測試（比照現成 `tests/server/detail-route-handler.test.ts` 的 nitro 全域 stub＋動態 import pattern），斷言 handler 經 content-source 讀取並回傳對應 builder 的 payload；隨後移除 `server-content-routes.test.ts` 的 route 原始碼字串斷言，與 `server/detail-route-id-resolution.test.ts` it #1（純 `toContain('extractContentId(event.path)')`）。detail route 的 404／event.path 取 id 行為已由 `detail-route-handler.test.ts` 涵蓋，該 grep 屬冗餘直接刪。判準：route 內部重構（換 helper 名、調 import）行為不變時測試不紅。
 
 **站台 URL/名稱 env 化**
 - [ ] AC4：以 `APP_URL=example.test` 執行 generate，產出的 canonical、og:url、og:image、sitemap/discovery、payload `site.url` 的 resolved 值全部以 `https://example.test/` 為前綴；換回 `dwselect.applepig.net` 亦然——站台 URL 跟著環境走，無殘留寫死值。
@@ -181,7 +181,7 @@ export function useBrokenImageFallback(): { isBrokenImage: (id: string) => boole
 > 驗證：AC1 的 draft/published fixture 行為測試；AC2b handler 測試紅→綠；`pnpm test`＋`pnpm generate` 全綠
 > 預期結果：AC1、AC2、AC2b、AC3 達成
 
-- [ ] Red → Green → Refactor
+- [x] Red → Green → Refactor
 
 ### Milestone 3: 站台 URL/名稱 env 化
 > 範圍：`getSiteUrl()` 單一來源接 `APP_URL`（呼叫時檢查，不 module top-level eager throw）；nuxt.config guard 移除 generate/build 豁免與 `vite_host` toybox fallback（ADR-035-5）；app 端 SITE_URL 經 Nuxt 設定烤入（runtimeConfig 或 build-time 常數，實作時擇定並記入 works）；`seo-metadata.ts`、`public-content.ts`、`public-content-payload.ts` literal type、og-image 改接；相關測試改以 env 注入驗證

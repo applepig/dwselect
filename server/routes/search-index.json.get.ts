@@ -1,4 +1,4 @@
-import { readPublicContentSource } from '../../scripts/content-reader.ts'
+import { readPublicContentSource } from '../../scripts/content-source/read-public-content-source.ts'
 import { buildSearchIndexPayload } from '../../app/utils/search/search-index.ts'
 
 // Search index route：維持既有 /search-index.json URL，client MiniSearch 仍 lazy fetch 同一路徑。
