@@ -2,16 +2,11 @@
 
 import { flushPromises, mount } from '@vue/test-utils'
 import { describe, expect, it, afterEach, vi } from 'vitest'
-import { readFileSync } from 'node:fs'
 import { computed, defineComponent, h, ref } from 'vue'
 
 import IndexPage from '../app/pages/index.vue'
 import { buildPublicContentPayload } from '../scripts/public-content'
 import { makeProduct, test_guides, test_links, test_taxonomies } from './published-products/fixtures'
-
-function readSource(relative_path: string) {
-  return readFileSync(new URL(relative_path, import.meta.url), 'utf8')
-}
 
 const UButtonStub = defineComponent({
   name: 'UButton',
@@ -49,15 +44,26 @@ const CategoryChipBarStub = defineComponent({
   },
 })
 
+// UEmpty stub 渲染 title prop，讓空狀態文案能以 render 行為斷言（而非 grep 頁面原始碼）。
+const UEmptyStub = defineComponent({
+  name: 'UEmpty',
+  props: { title: { type: String, default: '' } },
+  setup(props) {
+    return () => h('div', { class: 'u-empty-stub' }, props.title)
+  },
+})
+
 async function mountIndexPage(options: {
   route_query?: Record<string, string | string[]>
   category_ids?: string[]
+  products?: ReturnType<typeof makeProduct>[]
 } = {}) {
+  const products = options.products ?? [
+    makeProduct({ id: 'home-product', status: 'published', name: '居家商品', category_id: 'home' }),
+    makeProduct({ id: 'computer-product', status: 'published', name: '電腦商品', category_id: 'computer' }),
+  ]
   const content_payload = ref(buildPublicContentPayload({
-    products: [
-      makeProduct({ id: 'home-product', status: 'published', name: '居家商品', category_id: 'home' }),
-      makeProduct({ id: 'computer-product', status: 'published', name: '電腦商品', category_id: 'computer' }),
-    ],
+    products,
     guides: test_guides,
     links: test_links,
     taxonomies: test_taxonomies,
@@ -84,7 +90,7 @@ async function mountIndexPage(options: {
         ProductCard: ProductCardStub,
         CategoryChipBar: CategoryChipBarStub,
         UButton: UButtonStub,
-        UEmpty: true,
+        UEmpty: UEmptyStub,
       },
     },
   })
@@ -98,55 +104,7 @@ afterEach(() => {
   vi.unstubAllGlobals()
 })
 
-describe('search input adopts UInput', () => {
-  const input_source = readSource('../app/components/search/search-input.vue')
-
-  it('should render the search field as a UInput with a leading search icon', () => {
-    expect(input_source).toContain('<UInput')
-    expect(input_source).toContain('icon="i-lucide-search"')
-    expect(input_source).toContain('type="text"')
-    expect(input_source).not.toContain('class="search-input-shell"')
-    expect(input_source).not.toContain('class="search-input-icon"')
-  })
-
-  it('should explicitly forward mobile keyboard and autofill attributes that UInput does not default', () => {
-    expect(input_source).toContain('enterkeyhint="search"')
-    expect(input_source).toContain('autocomplete="off"')
-    expect(input_source).toContain('autocapitalize="off"')
-    expect(input_source).toContain('autocorrect="off"')
-    expect(input_source).toContain('spellcheck="false"')
-  })
-
-  it('should keep the IME composition guard so Enter during composition does not submit', () => {
-    expect(input_source).toContain('@compositionstart="startPendingSearchComposition"')
-    expect(input_source).toContain('@compositionend="endPendingSearchComposition"')
-    expect(input_source).toContain('@keydown.enter="submitPendingSearchFromEvent"')
-    expect(input_source).toContain('event.isComposing')
-    expect(input_source).toContain('event.preventDefault()')
-  })
-
-  it('should preserve the unchanged outward contract of query, submit and clear', () => {
-    expect(input_source).toContain('\'update:query\': [query: string]')
-    expect(input_source).toContain('submit: [query: string]')
-    expect(input_source).toContain('clear: []')
-    expect(input_source).toContain(':model-value="query"')
-    expect(input_source).toContain('@update:model-value="syncPendingSearchInputValue"')
-  })
-
-  it('should show the clear button only when there is a query and emit clear on click', () => {
-    expect(input_source).toContain('v-if="has_query"')
-    expect(input_source).toContain('@click="clearPendingSearch"')
-    expect(input_source).toContain('@click="submitPendingSearch()"')
-    expect(input_source).toContain('emit(\'clear\')')
-    expect(input_source).toContain('emit(\'submit\', query)')
-  })
-})
-
-describe('clickable chips adopt UButton with variant-based active state', () => {
-  const tag_explorer_source = readSource('../app/components/tag-explorer.vue')
-  const idle_panel_source = readSource('../app/components/search/search-idle-panel.vue')
-  const catalog_css = readSource('../app/assets/styles/catalog.css')
-
+describe('home page category chip delegation and legacy query handling', () => {
   it('should delegate home category chips to the shared CategoryChipBar instead of inlining its own chip list', async () => {
     const { wrapper } = await mountIndexPage()
 
@@ -178,48 +136,12 @@ describe('clickable chips adopt UButton with variant-based active state', () => 
 
     expect(navigate_to).not.toHaveBeenCalled()
   })
+})
 
-  it('should render tag-explorer tag chips and clear button as UButton with variant active state', () => {
-    expect(tag_explorer_source).toContain('<UButton')
-    expect(tag_explorer_source).not.toContain('\'is-active\': tag.active')
-    expect(tag_explorer_source).toContain(':variant="tag.active ? \'solid\' : \'subtle\'"')
-    expect(tag_explorer_source).toContain(':aria-pressed="tag.active"')
-    expect(tag_explorer_source).toContain('{{ tag.count }}')
-    expect(tag_explorer_source).toContain('@click="emit(\'toggleTag\', tag.label)"')
-    expect(tag_explorer_source).toContain('@click="emit(\'clearTags\')"')
-  })
+describe('home empty state', () => {
+  it('should render the home empty state wording when no products are published', async () => {
+    const { wrapper } = await mountIndexPage({ products: [] })
 
-  it('should render search idle history and popular chips as UButton while keeping navigation and counts', () => {
-    expect(idle_panel_source).toContain('<UButton')
-    expect(idle_panel_source).not.toContain('<button')
-    expect(idle_panel_source).toContain('@click="$emit(\'history-clicked\', history_item)"')
-    // 熱門 chip 深連 taxonomy 頁（AC16），不再以 label 打文字搜尋；
-    // 標籤走 /tag、品牌走 /brand（AC24），前綴由 section.to_prefix 決定。
-    expect(idle_panel_source).toContain(':to="`${section.to_prefix}/${tag.id}`"')
-    expect(idle_panel_source).toContain("to_prefix: '/tag'")
-    expect(idle_panel_source).toContain("to_prefix: '/brand'")
-    expect(idle_panel_source).toContain('{{ tag.count }}')
-  })
-
-  it('should drop the removed chip and clear-button base styling from catalog css', () => {
-    expect(catalog_css).not.toContain('.category-chip.is-active')
-    expect(catalog_css).not.toContain('.tag-chip.is-active')
-    expect(catalog_css).not.toContain('.search-input-shell')
-    expect(catalog_css).not.toContain('.search-input-icon')
-  })
-
-  it('should keep chip layout containers and focus-visible affordances', () => {
-    expect(catalog_css).toContain('.category-chip-list')
-    expect(catalog_css).toContain('.tag-chip-list')
-    expect(catalog_css).toContain('.category-chip:focus-visible')
-    expect(catalog_css).toContain('.tag-chip:focus-visible')
-  })
-
-  it('should keep shared chips compact without shrinking the touch target too far', () => {
-    expect(catalog_css).toContain('min-height: 38px')
-    expect(catalog_css).toContain('padding-block: 0')
-    expect(catalog_css).toContain('padding-inline: 20px')
-    expect(catalog_css).toContain('white-space: nowrap')
-    expect(catalog_css).toContain('word-break: keep-all')
+    expect(wrapper.text()).toContain('目前沒有已上架商品')
   })
 })

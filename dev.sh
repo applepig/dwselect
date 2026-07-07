@@ -39,6 +39,7 @@ Commands:
   test        Run unit tests (vitest)
   lint        Run ESLint
   content-check  Validate content/ data
+  content-schema Regenerate content/.schema/*.json from the zod SSOT
   preview     Preview the generated static output
   start       Start development container in background
   stop        Stop development container
@@ -215,6 +216,10 @@ cmd_content_check() {
     node scripts/content-check.mjs
 }
 
+cmd_content_schema() {
+    node scripts/emit-content-schema.ts
+}
+
 cmd_preview() {
     pnpm exec nuxt preview
 }
@@ -328,6 +333,7 @@ case "${1:-}" in
     test)      shift; cmd_test "$@" ;;
     lint)      cmd_lint ;;
     content-check) cmd_content_check ;;
+    content-schema) cmd_content_schema ;;
     preview)   cmd_preview ;;
     entrypoint) shift; cmd_entrypoint "$@" ;;
     start)    cmd_start ;;

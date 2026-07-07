@@ -1,10 +1,30 @@
-import { describe, expect, it } from 'vitest'
-import { existsSync, readFileSync } from 'node:fs'
+import { existsSync, readdirSync, readFileSync } from 'node:fs'
+
+import { renderToString } from '@vue/test-utils'
+import { computed } from 'vue'
+import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest'
+
+import {
+  SITE_DESCRIPTION,
+  SITE_NAME,
+  SITE_OG_IMAGE,
+  SITE_TITLE,
+  SITE_URL,
+  getCanonicalUrl,
+  getSeoDescription,
+} from '../app/utils/seo-metadata'
+import ErrorPage from '../app/error.vue'
 
 const project_root_url = new URL('../', import.meta.url)
 
-function readProjectFile(file_path: string): string {
-  return readFileSync(new URL(file_path, project_root_url), 'utf8')
+const app_source_url = new URL('app/', project_root_url)
+
+// 掃全 app/ 源碼樹（非列舉頁面清單，新增頁自動納入）串成單一字串供負向 host-leak guard 比對。
+function readPublicAppSources(): string {
+  return readdirSync(app_source_url, { recursive: true, encoding: 'utf8' })
+    .filter((entry) => entry.endsWith('.vue') || entry.endsWith('.ts'))
+    .map((entry) => readFileSync(new URL(entry, app_source_url), 'utf8'))
+    .join('\n')
 }
 
 describe('launch SEO static assets', () => {
@@ -16,77 +36,78 @@ describe('launch SEO static assets', () => {
 })
 
 describe('launch SEO metadata contract', () => {
-  const app_source = readProjectFile('app/app.vue')
-  const home_source = readProjectFile('app/pages/index.vue')
-  const guide_source = readProjectFile('app/pages/guide/index.vue')
-  const links_source = readProjectFile('app/pages/links.vue')
-  const search_source = readProjectFile('app/pages/search.vue')
-  const product_source = readProjectFile('app/pages/products/[id].vue')
-  const seo_source = readProjectFile('app/utils/seo-metadata.ts')
-  const combined_public_source = [app_source, home_source, guide_source, links_source, search_source, product_source, seo_source].join('\n')
-
   it('should define the approved site-level SEO constants with the production URL', () => {
-    expect(seo_source).toContain("export const SITE_URL = 'https://dwselect.applepig.net/'")
-    expect(seo_source).toContain("export const SITE_NAME = 'DW嚴選'")
-    expect(seo_source).toContain("export const SITE_DESCRIPTION = '值得買、值得看、值得收藏的選物清單。'")
-    expect(seo_source).toContain("export const SITE_OG_IMAGE = 'https://dwselect.applepig.net/og-image.png'")
-    expect(combined_public_source).not.toContain('dwselect.toybox.local')
+    expect(SITE_URL).toBe('https://dwselect.applepig.net/')
+    expect(SITE_NAME).toBe('DW嚴選')
+    expect(SITE_DESCRIPTION).toBe('值得買、值得看、值得收藏的選物清單。')
+    expect(SITE_TITLE).toBe('DW嚴選｜值得買、值得看、值得收藏的選物清單')
+    expect(SITE_OG_IMAGE).toBe('https://dwselect.applepig.net/og-image.png')
   })
 
-  it('should set the global language, favicon, canonical and default social metadata', () => {
-    expect(app_source).toContain("lang: 'zh-Hant'")
-    expect(app_source).toContain("rel: 'icon'")
-    expect(app_source).toContain("href: '/favicon.ico'")
-    expect(app_source).toContain("rel: 'canonical'")
-    expect(app_source).toContain('href: SITE_URL')
-    expect(app_source).toContain('useSeoMeta({')
-    expect(app_source).toContain('description: SITE_DESCRIPTION')
-    expect(app_source).toContain('ogImage: SITE_OG_IMAGE')
-    expect(app_source).toContain("twitterCard: 'summary_large_image'")
+  it('should never leak the local dev host into the production SEO constants', () => {
+    // 這只保證共用常數本身是正式站；各頁是否真的用常數、有無直接寫死 dev host，
+    // 由下方的 public source host-leak guard 另行覆蓋，兩者合起來才守住實際輸出。
+    expect(SITE_URL).not.toContain('toybox.local')
+    expect(SITE_OG_IMAGE).not.toContain('toybox.local')
   })
 
-  it('should set homepage metadata from the approved site copy and default OG image', () => {
-    expect(home_source).toContain('title: SITE_TITLE')
-    expect(home_source).toContain('description: SITE_DESCRIPTION')
-    expect(home_source).toContain('ogTitle: SITE_NAME')
-    expect(home_source).toContain('ogDescription: SITE_DESCRIPTION')
-    expect(home_source).toContain('ogImage: SITE_OG_IMAGE')
-    expect(home_source).toContain("twitterCard: 'summary_large_image'")
-    expect(home_source).toContain("getCanonicalUrl('/')")
+  it('should never hard-code the local dev host in any public app source', () => {
+    // 負向 invariant（近似 lint rule）：任一頁面／app.vue 若把 dev host 直接寫進
+    // useHead／useSeoMeta，正式站 canonical／og 就會洩漏本機網域，而常數斷言抓不到。
+    // 掃全 app/ 源碼，重構不誤紅，只在寫死已知壞字串時紅——非實作快照。
+    expect(readPublicAppSources()).not.toContain('dwselect.toybox.local')
   })
 
-  it('should set page-specific metadata and canonical URLs for guide, links and search pages', () => {
-    expect(guide_source).toContain('title: `指南｜${SITE_NAME}`')
-    expect(guide_source).toContain('GUIDE_DESCRIPTION')
-    expect(guide_source).toContain("getCanonicalUrl('/guide')")
-
-    expect(links_source).toContain('title: `連結｜${SITE_NAME}`')
-    expect(links_source).toContain('LINKS_DESCRIPTION')
-    expect(links_source).toContain("getCanonicalUrl('/links')")
-
-    expect(search_source).toContain('title: `搜尋｜${SITE_NAME}`')
-    expect(search_source).toContain('SEARCH_DESCRIPTION')
-    expect(search_source).toContain("getCanonicalUrl('/search')")
+  it('should resolve canonical URLs to absolute production URLs', () => {
+    expect(getCanonicalUrl('')).toBe(SITE_URL)
+    expect(getCanonicalUrl('/')).toBe(SITE_URL)
+    expect(getCanonicalUrl('/products/foo')).toBe('https://dwselect.applepig.net/products/foo')
+    expect(getCanonicalUrl('/guide')).toBe('https://dwselect.applepig.net/guide')
   })
 
-  it('should set product-specific metadata with summary fallback', () => {
-    expect(product_source).toContain('getSeoDescription(product_detail.value?.summary)')
-    expect(product_source).toContain('`${product_detail.value.name}｜${SITE_NAME}`')
-    expect(product_source).toContain('getCanonicalUrl(`/products/${product_detail.value.id}`)')
-    expect(product_source).toContain('useProductDetailData(product_id)')
-    expect(seo_source).toContain('return trimmed_description.length === 0 ? SITE_DESCRIPTION : trimmed_description')
+  it('should fall back to the site description only when the input is blank', () => {
+    expect(getSeoDescription('')).toBe(SITE_DESCRIPTION)
+    expect(getSeoDescription('   ')).toBe(SITE_DESCRIPTION)
+    expect(getSeoDescription('  摘要  ')).toBe('摘要')
   })
 })
 
 describe('launch SEO error page', () => {
-  it('should provide a friendly not found page and a home action', () => {
-    const error_source = readProjectFile('app/error.vue')
+  beforeAll(() => {
+    // error.vue 依賴 Nuxt auto-import 的 computed 與 clearError；bare vitest 無 auto-import，需 stub。
+    vi.stubGlobal('computed', computed)
+    vi.stubGlobal('clearError', vi.fn())
+  })
 
-    expect(error_source).toContain('找不到頁面')
-    expect(error_source).toContain('回首頁')
-    expect(error_source).toContain('發生錯誤')
-    expect(error_source).toContain('clearError')
-    // 錯誤頁須套 default layout（站台 chrome），使用者才能用首頁連結導回。
-    expect(error_source).toContain('<NuxtLayout')
+  afterAll(() => {
+    vi.unstubAllGlobals()
+  })
+
+  function renderErrorPage(status_code: number) {
+    return renderToString(ErrorPage, {
+      props: { error: { statusCode: status_code } as never },
+      global: {
+        stubs: {
+          UApp: { template: '<div><slot /></div>' },
+          NuxtLayout: { template: '<div><slot /></div>' },
+          NuxtLink: { props: ['to'], template: '<a :href="to"><slot /></a>' },
+        },
+      },
+    })
+  }
+
+  it('should show a friendly not-found title and a home action for 404', async () => {
+    const html = await renderErrorPage(404)
+
+    expect(html).toContain('找不到頁面')
+    expect(html).toContain('回首頁')
+    expect(html).toContain('href="/"')
+  })
+
+  it('should show a generic error title for non-404 status codes', async () => {
+    const html = await renderErrorPage(500)
+
+    expect(html).toContain('發生錯誤')
+    expect(html).toContain('回首頁')
   })
 })

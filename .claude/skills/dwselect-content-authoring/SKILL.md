@@ -54,9 +54,22 @@ To append an entry：`jq '.items += [ {...} ]' content/taxonomies/<file>.json`�
 - Keep front-facing `name` concise：prefer 32 visible characters or fewer，hard maximum 45 visible characters unless the existing name is already longer。Put full official product names、long marketing names、variant details、and disambiguation in `english_name`、`model_numbers`、`search_aliases`、or `llm_description`。
 - Products use a single `category_id`。
 - Products use `tag_ids` containing both functional tags and brand IDs。
-- Published products must use local `image_file` and `image_url: null`。
+- Products must never set `image_url`；use a local `image_file` and keep `image_url: null`。This holds for every status including `draft`——the rule lives in a zod refine，so it is not visible in the JSON Schema「required」list but still fails the content gate。Published products additionally require a real `image_file`；non-published items may keep `image_file: null` but must still keep `image_url: null`。
 - Do not add new categories or channels。If needed，ask the user。
 - Taxonomy additions require user confirmation before editing taxonomy files。If a missing brand or tag is useful，raise it as a `taxonomy_suggestions` item with proposed ID、label、description、aliases、and rationale；do not add it silently。
+- Never invent a taxonomy id。Every `category_id`、`tag_ids[]`，and `offers[].channel_id` must be copied verbatim from `jq -r '.items[].id' content/taxonomies/{categories,tags,brands,channels}.json`。An id absent from those files（e.g. a guessed `electronics`／`official`／`monitor`）fails the content gate。
+
+### 完整必填欄位以 generated JSON Schema 為準（不要手抄）
+
+The authoritative required-field set is generated from the zod SSOT（`app/utils/product-schema.ts`）into `content/.schema/`。Do not hand-maintain a field checklist in prose——read it directly before writing：
+
+```bash
+jq '{required, offers_required: .properties.offers.items.required}' content/.schema/product.schema.json
+jq '.required' content/.schema/guide.schema.json
+jq '.required' content/.schema/link.schema.json
+```
+
+Every key in the schema's `required` array must be present in the file you write。Easy-to-miss product fields that are NOT optional：`slug`、`published_at`、`unpublished_at`、`archived_at`（nullable where noted），and each offer's `checked_at`。When the zod schema changes，regenerate with `pnpm content:schema`；`tests/content-schema-artifact.test.ts` fails the gate if the committed artifact drifts from zod。
 
 ## llm_description Quality
 
@@ -222,6 +235,7 @@ What it covers：
 - `tests/published-products` + `tests/product-schema.test.ts`：zod schema validation against every published item (required fields、`offers` min length、`image_file` required for published、`image_url: null` for products，timestamp format)。
 - `tests/content-taxonomy-references.test.ts`：every `category_id` / `tag_ids` (including brand IDs) resolves to an existing taxonomy entry。This is why new brand/tag taxonomy entries must be added before the check passes。
 - `tests/assert-content-images.test.ts`：every published `image_file` exists and passes the guard (shortest side >= 480px，aspect ratio <= 2:1)。
+- `tests/content-schema-artifact.test.ts`：the committed `content/.schema/*.json` still matches `z.toJSONSchema` of the zod SSOT (drift-guard；regenerate with `pnpm content:schema`)。
 
 **`pnpm generate` is not part of the content gate。** The dev server already has content HMR，so adding or editing content JSON reflects live without a generate step，and `pnpm content:check` is the data gate。Only run `pnpm generate` when you have an explicit reason the lightweight check cannot cover（e.g. verifying SSG route output、a build-script change），and state that reason first。Caveat when you do：a host `pnpm generate` collides with the running dev container on the shared `.nuxt` / Vite cache（see project memory `feedback_no-host-generate-with-dev-container`），so stop the dev container or run it in an isolated worktree first——never the mv-the-blocker-aside dance just to make a full build pass。
 
