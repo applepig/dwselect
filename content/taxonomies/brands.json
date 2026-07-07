@@ -601,6 +601,16 @@
       ],
       "nav_visible": true,
       "sort_order": 600
+    },
+    {
+      "id": "ag-neovo",
+      "label": "AG Neovo",
+      "description": "AG Neovo 品牌商品",
+      "aliases": [
+        "偉聯"
+      ],
+      "nav_visible": true,
+      "sort_order": 610
     }
   ]
 }
