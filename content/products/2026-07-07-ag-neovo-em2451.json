@@ -1,7 +1,7 @@
 {
   "id": "2026-07-07-ag-neovo-em2451",
   "slug": "2026-07-07-ag-neovo-em2451",
-  "status": "draft",
+  "status": "published",
   "name": "AG Neovo EM2451 24 吋 4K",
   "english_name": "AG Neovo EM2451 24-inch 4K USB-C Wide Color Gamut Professional Graphic Design Pivot Monitor",
   "summary": "",
@@ -13,7 +13,7 @@
     "ag-neovo"
   ],
   "image_url": null,
-  "image_file": null,
+  "image_file": "2026-07-07-ag-neovo-em2451.jpg",
   "offers": [
     {
       "channel_id": "other",
@@ -63,7 +63,7 @@
   ],
   "created_at": "2026-07-07T09:00:00+08:00",
   "updated_at": "2026-07-07T09:00:00+08:00",
-  "published_at": null,
+  "published_at": "2026-07-07T09:00:00+08:00",
   "unpublished_at": null,
   "archived_at": null
 }
