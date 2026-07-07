@@ -18,6 +18,7 @@
     "test:e2e": "playwright test",
     "test": "./dev.sh test",
     "content:check": "./dev.sh content-check",
+    "content:schema": "./dev.sh content-schema",
     "lint": "./dev.sh lint",
     "lint:file": "eslint --fix --max-warnings=0",
     "format": "eslint . --fix",

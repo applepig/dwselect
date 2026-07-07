@@ -21,6 +21,8 @@ const VITEST_SUITES = [
   'tests/content-taxonomy-references.test.ts',
   'tests/product-schema.test.ts',
   'tests/assert-content-images.test.ts',
+  // generated content/.schema/*.json 與 zod SSOT 的 drift-guard；脫鉤時逼回重跑 pnpm content:schema。
+  'tests/content-schema-artifact.test.ts',
 ]
 
 function collectJsonFiles() {
