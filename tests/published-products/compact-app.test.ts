@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 
 import { NAV_TABS, getCompactAppStateFromRoute, getCompactAppView } from '../../app/utils/published-products/compact-app'
 import { buildPublicContentPayload } from '../../scripts/public-content'
-import type { CompactAppState, TaxonomyDefinitions } from '../../app/utils/published-products/types'
+import type { TaxonomyDefinitions } from '../../app/utils/published-products/types'
 import type { Guide, LinkDefinition } from '../../app/utils/product-schema'
 import { base_guide, makeProduct, test_guides, test_links, test_taxonomies } from './fixtures'
 
@@ -18,29 +18,22 @@ describe('compact app view state', () => {
 
   function getCompactView(
     products: ReturnType<typeof makeProduct>[],
-    state: CompactAppState = {},
     links = test_links,
     guides = test_guides,
     taxonomies = test_taxonomies,
   ) {
-    return getCompactAppView(buildPayload(products, links, guides, taxonomies), state)
+    return getCompactAppView(buildPayload(products, links, guides, taxonomies))
   }
 
-  it('should expose four compact tabs, category chips, and all home products', () => {
+  it('should expose category chips and all home products', () => {
     const products = [
       makeProduct({ id: 'home-product', status: 'published', name: '居家商品', category_id: 'home' }),
       makeProduct({ id: 'computer-product', status: 'published', name: '電腦商品', category_id: 'computer' }),
       makeProduct({ id: 'draft-product', status: 'draft', name: '草稿商品', category_id: 'home' }),
     ]
 
-    const compact_view = getCompactView(products, { active_tab: 'home' })
+    const compact_view = getCompactView(products)
 
-    expect(compact_view.tabs).toEqual([
-      { id: 'home', label: '首頁', icon: 'i-lucide-house', active: true },
-      { id: 'guide', label: '指南', icon: 'i-lucide-tags', active: false },
-      { id: 'links', label: '連結', icon: 'i-lucide-link', active: false },
-      { id: 'search', label: '搜尋', icon: 'i-lucide-search', active: false },
-    ])
     expect(compact_view.home.category_chips).toEqual([
       { id: 'all', label: '全部', count: 2, active: true },
       { id: 'home', label: '居家', count: 1, active: false },
@@ -56,7 +49,7 @@ describe('compact app view state', () => {
       makeProduct({ id: 'computer-product', status: 'published', name: '電腦商品', category_id: 'computer' }),
     ]
 
-    const compact_view = getCompactView(products, { active_tab: 'home' })
+    const compact_view = getCompactView(products)
 
     expect(compact_view.home.category_chips).toEqual([
       { id: 'all', label: '全部', count: 2, active: true },
@@ -85,7 +78,7 @@ describe('compact app view state', () => {
       },
     ]
 
-    const compact_view = getCompactView([], { active_tab: 'guide' }, test_links, guides)
+    const compact_view = getCompactView([], test_links, guides)
 
     expect(compact_view.guide.guides).toEqual([
       {
@@ -105,19 +98,6 @@ describe('compact app view state', () => {
       },
     ])
     expect(compact_view.guide.empty_reason).toBeNull()
-  })
-
-  it('should expose published card count via navigation counts', () => {
-    const products = [
-      makeProduct({ id: 'one', status: 'published', name: '一號' }),
-      makeProduct({ id: 'two', status: 'published', name: '二號' }),
-      makeProduct({ id: 'draft', status: 'draft', name: '草稿' }),
-    ]
-
-    const compact_view = getCompactView(products)
-
-    expect(compact_view.counts.published).toBe(2)
-    expect(compact_view.home.products).toHaveLength(2)
   })
 
   it('should expose the empty home reason only when no published products exist', () => {
@@ -165,9 +145,7 @@ describe('compact app view state', () => {
         tag_ids: ['fixture-brand'],
       }),
     ]
-    const route_state = getCompactAppStateFromRoute({ path: '/', query: { category: 'audio-gear' } })
-
-    const compact_view = getCompactView(products, route_state, test_links, test_guides, taxonomies)
+    const compact_view = getCompactView(products, test_links, test_guides, taxonomies)
 
     expect(compact_view.home.category_chips).toEqual([
       { id: 'all', label: '全部', count: 1, active: true },
@@ -195,7 +173,7 @@ describe('compact app view state', () => {
       },
     ]
 
-    const compact_view = getCompactView([], {}, links)
+    const compact_view = getCompactView([], links)
 
     expect(compact_view.links).toEqual([
       {
@@ -229,96 +207,33 @@ describe('navigation tab single source of truth', () => {
 
     expect(link_index).toBeLessThan(search_index)
   })
-
-  it('should derive compact view tabs from the same order, label and icon as NAV_TABS', () => {
-    const compact_view = getCompactAppView(
-      buildPublicContentPayload({ products: [], guides: [], links: [], taxonomies: test_taxonomies }),
-      { active_tab: 'home' },
-    )
-
-    expect(compact_view.tabs.map(({ id, label, icon }) => ({ id, label, icon }))).toEqual(
-      NAV_TABS.map(({ id, label, icon }) => ({ id, label, icon })),
-    )
-  })
 })
 
 describe('route-driven compact app state', () => {
-  it('should derive active compact tab from route path', () => {
-    expect(getCompactAppStateFromRoute({ path: '/', query: {} })).toEqual({
-      active_tab: 'home',
-    })
-    expect(getCompactAppStateFromRoute({ path: '/guide', query: {} })).toEqual({
-      active_tab: 'guide',
-    })
-    expect(getCompactAppStateFromRoute({ path: '/search', query: {} })).toEqual({
-      active_tab: 'search',
-      search_query: '',
-    })
-    expect(getCompactAppStateFromRoute({ path: '/links', query: {} })).toEqual({
-      active_tab: 'links',
-    })
+  it('should return empty state for non-search routes', () => {
+    expect(getCompactAppStateFromRoute({ path: '/', query: {} })).toEqual({})
+    expect(getCompactAppStateFromRoute({ path: '/guide', query: {} })).toEqual({})
+    expect(getCompactAppStateFromRoute({ path: '/links', query: {} })).toEqual({})
   })
 
-  it('should parse search query values from route query', () => {
-    expect(getCompactAppStateFromRoute({ path: '/search', query: { q: '  機械鍵盤  ' } })).toEqual({
-      active_tab: 'search',
-      search_query: '機械鍵盤',
-    })
+  it('should derive the trimmed search query from the search route query', () => {
+    expect(getCompactAppStateFromRoute({ path: '/search', query: {} })).toEqual({ search_query: '' })
+    expect(getCompactAppStateFromRoute({ path: '/search', query: { q: '  機械鍵盤  ' } })).toEqual({ search_query: '機械鍵盤' })
+    expect(getCompactAppStateFromRoute({ path: '/search', query: { q: ['  ', 'ignored'] } })).toEqual({ search_query: '' })
   })
 
-  it('should ignore category query values on the home route', () => {
-    expect(getCompactAppStateFromRoute(
-      { path: '/', query: { category: 'audio-gear' } },
-    )).toEqual({
-      active_tab: 'home',
-    })
-
-    expect(getCompactAppStateFromRoute(
-      { path: '/', query: { category: 'audio-gear' } },
-    )).toEqual({
-      active_tab: 'home',
-    })
-  })
-
-  it('should fallback invalid or empty query values to the route defaults', () => {
-    expect(getCompactAppStateFromRoute(
-      { path: '/', query: { category: 'missing' } },
-    )).toEqual({
-      active_tab: 'home',
-    })
-    expect(getCompactAppStateFromRoute(
-      { path: '/guide', query: { tags: ['不存在', '影音'] } },
-    )).toEqual({ active_tab: 'guide' })
-    expect(getCompactAppStateFromRoute({ path: '/search', query: { q: ['  ', 'ignored'] } })).toEqual({
-      active_tab: 'search',
-      search_query: '',
-    })
-  })
-
-  it('should ignore a single guide tag delivered as a Vue Router string query', () => {
-    expect(getCompactAppStateFromRoute(
-      { path: '/guide', query: { tags: '工作' } },
-    )).toEqual({
-      active_tab: 'guide',
-    })
-  })
-
-  it('should ignore multiple guide tags delivered as a Vue Router array query', () => {
-    expect(getCompactAppStateFromRoute(
-      { path: '/guide', query: { tags: ['工作', '輸入'] } },
-    )).toEqual({
-      active_tab: 'guide',
-    })
+  it('should ignore category and tag query values on non-search routes', () => {
+    expect(getCompactAppStateFromRoute({ path: '/', query: { category: 'audio-gear' } })).toEqual({})
+    expect(getCompactAppStateFromRoute({ path: '/', query: { category: 'missing' } })).toEqual({})
+    expect(getCompactAppStateFromRoute({ path: '/guide', query: { tags: ['不存在', '影音'] } })).toEqual({})
+    expect(getCompactAppStateFromRoute({ path: '/guide', query: { tags: '工作' } })).toEqual({})
+    expect(getCompactAppStateFromRoute({ path: '/guide', query: { tags: ['工作', '輸入'] } })).toEqual({})
   })
 
   it('should not create a guide tag URL contract for labels containing commas', () => {
     const selected_tags = ['a,b', 'c']
     const round_tripped_query = { tags: selected_tags }
 
-    expect(getCompactAppStateFromRoute(
-      { path: '/guide', query: round_tripped_query },
-    )).toEqual({
-      active_tab: 'guide',
-    })
+    expect(getCompactAppStateFromRoute({ path: '/guide', query: round_tripped_query })).toEqual({})
   })
 })

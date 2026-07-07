@@ -17,7 +17,7 @@
 </template>
 
 <script setup lang="ts">
-import { getCompactAppStateFromRoute, getCompactAppView } from '../utils/published-products/compact-app'
+import { getCompactAppView } from '../utils/published-products/compact-app'
 import { buildSeoMeta, getCanonicalUrl, SITE_NAME, SITE_OG_IMAGE } from '../utils/seo-metadata'
 
 const LINKS_DESCRIPTION = '整理 DW嚴選相關入口與延伸資源。'
@@ -40,14 +40,12 @@ useSeoMeta(buildSeoMeta({
   image: SITE_OG_IMAGE,
 }))
 
-const route = useRoute()
 const { content_payload } = await useCatalogData()
-const route_state = computed(() => getCompactAppStateFromRoute({ path: route.path, query: route.query }))
 const compact_view = computed(() => {
   if (content_payload.value === null || content_payload.value === undefined) {
     throw new Error('Catalog runtime data is not available')
   }
 
-  return getCompactAppView(content_payload.value, route_state.value)
+  return getCompactAppView(content_payload.value)
 })
 </script>

@@ -82,7 +82,7 @@ import { NAV_TABS } from '../utils/published-products/compact-app'
 
 const route = useRoute()
 const catalog_shell_data = await useCatalogShellData()
-// 導覽 tab 單一真相：label/icon/to/順序皆由 NAV_TABS 衍生（ADR-3），與窄螢幕 COMPACT_APP_TABS 同源。
+// 導覽 tab 單一真相：label/icon/to/順序皆由 NAV_TABS 衍生（ADR-3）。
 const nav_items = NAV_TABS
 const desktop_route_items = nav_items.filter((item) => item.id !== 'home')
 const desktop_category_items = computed(() => catalog_shell_data.value?.desktop_category_items ?? [])

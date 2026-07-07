@@ -8,7 +8,7 @@ import {
   getImageExtension,
   localizeContentImages,
   type LocalizedImageSummary,
-} from '../scripts/localize-content-images'
+} from '../../scripts/legacy/localize-content-images'
 
 function createFixtureDirs() {
   const root = mkdtempSync(join(tmpdir(), 'dwselect-localize-content-images-'))

@@ -12,7 +12,6 @@ export type TaxonomyDefinitions = {
 export type CompactAppTabId = 'home' | 'guide' | 'search' | 'links'
 
 export type CompactAppState = {
-  active_tab?: CompactAppTabId
   search_query?: string
 }
 
@@ -27,7 +26,6 @@ export type CompactAppTab = {
   id: CompactAppTabId
   label: string
   icon: string
-  active: boolean
 }
 
 export type CompactCategoryChip = {
@@ -101,19 +99,14 @@ export type ResourceRowLinkAttributes
   }
 
 export type CompactAppView = {
-  tabs: CompactAppTab[]
-  active_tab: CompactAppTabId
   home: {
     category_chips: CompactCategoryChip[]
     products: ProductCardView[]
-    empty_reason: 'no-products' | 'no-results' | null
+    empty_reason: 'no-products' | null
   }
   guide: {
     guides: CompactResourceRow[]
-    empty_reason: 'no-products' | 'no-results' | null
+    empty_reason: 'no-products' | null
   }
   links: CompactResourceRow[]
-  counts: {
-    published: number
-  }
 }

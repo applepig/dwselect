@@ -3,12 +3,10 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import type { CategoryDefinition, ChannelDefinition, Product, TagDefinition } from '../app/utils/product-schema'
 import { buildSearchIndexPayload } from '../app/utils/search/search-index'
 import {
+  appendSearchHistoryItem,
   createLatestSearchRequestRunner,
   getSafeBrowserLocalStorage,
   getSearchPageMode,
-  readSearchHistory,
-  saveSearchHistoryItem,
-  SEARCH_HISTORY_STORAGE_KEY,
 } from '../app/utils/search/client-search'
 
 const base_product: Product = {
@@ -152,18 +150,11 @@ describe('client search lazy loader', () => {
     expect(getSearchPageMode({ pending_query: '滑鼠', submitted_query: '滑鼠' })).toBe('searching')
   })
 
-  it('should serialize search history with exact dedupe, latest first and a 12 item limit', () => {
-    const storage = new Map<string, string>()
+  it('should append search history with exact dedupe, latest first and a 12 item limit', () => {
+    const history = ['Sharp', '咖啡', '機械鍵盤', '耳機', '螢幕', '椅子', '日本米', '收納', '喇叭', '滑鼠', '螢幕架', '桌燈', 'Sharp']
+      .reduce<string[]>((items, query) => appendSearchHistoryItem(query, items), [])
 
-    for (const query of ['Sharp', '咖啡', '機械鍵盤', '耳機', '螢幕', '椅子', '日本米', '收納', '喇叭', '滑鼠', '螢幕架', '桌燈', 'Sharp']) {
-      saveSearchHistoryItem(query, {
-        getItem: (key) => storage.get(key) ?? null,
-        setItem: (key, value) => storage.set(key, value),
-        removeItem: (key) => storage.delete(key),
-      })
-    }
-
-    expect(JSON.parse(storage.get(SEARCH_HISTORY_STORAGE_KEY) ?? '[]')).toEqual([
+    expect(history).toEqual([
       'Sharp',
       '桌燈',
       '螢幕架',
@@ -179,70 +170,9 @@ describe('client search lazy loader', () => {
     ])
   })
 
-  it('should trim parsed history and cap persisted values to 12 items', () => {
-    const stored_history = JSON.stringify([
-      '  Sharp  ',
-      '咖啡',
-      '',
-      '機械鍵盤',
-      '耳機',
-      '螢幕',
-      '椅子',
-      '日本米',
-      '收納',
-      '喇叭',
-      '滑鼠',
-      '螢幕架',
-      '桌燈',
-      '多出的第十三筆',
-    ])
-
-    expect(readSearchHistory({
-      getItem: () => stored_history,
-      setItem: vi.fn(),
-      removeItem: vi.fn(),
-    })).toEqual([
-      'Sharp',
-      '咖啡',
-      '機械鍵盤',
-      '耳機',
-      '螢幕',
-      '椅子',
-      '日本米',
-      '收納',
-      '喇叭',
-      '滑鼠',
-      '螢幕架',
-      '桌燈',
-    ])
-  })
-
-  it('should fallback to empty history when localStorage is unavailable or corrupted', () => {
-    expect(readSearchHistory({
-      getItem: () => '{broken-json',
-      setItem: vi.fn(),
-      removeItem: vi.fn(),
-    })).toEqual([])
-
-    expect(saveSearchHistoryItem('鍵盤', {
-      getItem: () => {
-        throw new Error('localStorage unavailable')
-      },
-      setItem: () => {
-        throw new Error('localStorage unavailable')
-      },
-      removeItem: vi.fn(),
-    })).toEqual(['鍵盤'])
-  })
-
-  it('should keep the in-memory history when localStorage write fails on quota', () => {
-    expect(saveSearchHistoryItem('滑鼠', {
-      getItem: () => JSON.stringify(['鍵盤']),
-      setItem: () => {
-        throw new Error('QuotaExceededError')
-      },
-      removeItem: vi.fn(),
-    })).toEqual(['滑鼠', '鍵盤'])
+  it('should trim the appended query and drop blank existing history entries', () => {
+    expect(appendSearchHistoryItem('  機械鍵盤  ', ['  舊鍵盤  ', '', '滑鼠'])).toEqual(['機械鍵盤', '舊鍵盤', '滑鼠'])
+    expect(appendSearchHistoryItem('   ', ['鍵盤'])).toEqual(['鍵盤'])
   })
 
   it('should return null when the browser localStorage getter throws', () => {

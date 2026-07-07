@@ -10,7 +10,6 @@
   "scripts": {
     "prepare": "nuxt prepare",
     "dev": "./dev.sh dev",
-    "build": "pnpm build:public-discovery && node scripts/assert-content-images.ts && nuxt build",
     "build:content-images": "node scripts/build-content-images.ts",
     "build:search-index": "node scripts/build-search-index.ts",
     "build:public-discovery": "node scripts/build-public-discovery.ts",

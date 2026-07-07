@@ -43,9 +43,7 @@ describe('selectable category ids no longer drive home route filtering', () => {
     expect(category_ids).toEqual(['home'])
     expect(getCompactAppStateFromRoute(
       { path: '/', query: { category: 'home' } },
-    )).toEqual({
-      active_tab: 'home',
-    })
+    )).toEqual({})
   })
 
   it('should ignore a category that exists in taxonomies but has no published products', () => {
@@ -57,9 +55,7 @@ describe('selectable category ids no longer drive home route filtering', () => {
     expect(category_ids).not.toContain('computer')
     expect(getCompactAppStateFromRoute(
       { path: '/', query: { category: 'computer' } },
-    )).toEqual({
-      active_tab: 'home',
-    })
+    )).toEqual({})
   })
 
   it('should ignore a category that exists in taxonomies but is not nav visible', () => {
@@ -78,9 +74,7 @@ describe('selectable category ids no longer drive home route filtering', () => {
     expect(category_ids).not.toContain('hidden-cat')
     expect(getCompactAppStateFromRoute(
       { path: '/', query: { category: 'hidden-cat' } },
-    )).toEqual({
-      active_tab: 'home',
-    })
+    )).toEqual({})
   })
 
   it('should ignore a category id that does not exist at all', () => {
@@ -92,26 +86,18 @@ describe('selectable category ids no longer drive home route filtering', () => {
     expect(category_ids).not.toContain('does-not-exist')
     expect(getCompactAppStateFromRoute(
       { path: '/', query: { category: 'does-not-exist' } },
-    )).toEqual({
-      active_tab: 'home',
-    })
+    )).toEqual({})
   })
 
   it('should ignore all, empty and array category query values', () => {
     expect(getCompactAppStateFromRoute(
       { path: '/', query: { category: 'all' } },
-    )).toEqual({
-      active_tab: 'home',
-    })
+    )).toEqual({})
     expect(getCompactAppStateFromRoute(
       { path: '/', query: { category: '' } },
-    )).toEqual({
-      active_tab: 'home',
-    })
+    )).toEqual({})
     expect(getCompactAppStateFromRoute(
       { path: '/', query: { category: ['home', 'computer'] } },
-    )).toEqual({
-      active_tab: 'home',
-    })
+    )).toEqual({})
   })
 })

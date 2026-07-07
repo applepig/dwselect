@@ -20,6 +20,9 @@ tests/post-edit-hook-fixture-*/
 *.local
 .env
 
+# 本機 Traefik/toybox 開發用 root CA，不進 Git
+toybox-local-root-ca.crt
+
 # Git worktrees（專案約定路徑 .worktree/<branch-name>/）
 .worktree/
 

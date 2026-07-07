@@ -33,7 +33,7 @@
 <script setup lang="ts">
 import { onMounted } from 'vue'
 
-import { getCompactAppStateFromRoute, getCompactAppView } from '../utils/published-products/compact-app'
+import { getCompactAppView } from '../utils/published-products/compact-app'
 import { getCanonicalUrl, SITE_DESCRIPTION, SITE_NAME, SITE_OG_IMAGE, SITE_TITLE } from '../utils/seo-metadata'
 
 const home_canonical_url = getCanonicalUrl('/')
@@ -81,14 +81,11 @@ onMounted(() => {
 })
 const { content_payload } = await catalog_data
 
-const route_state = computed(() => getCompactAppStateFromRoute(
-  { path: route.path, query: route.query },
-))
 const compact_view = computed(() => {
   if (content_payload.value === null || content_payload.value === undefined) {
     throw new Error('Catalog runtime data is not available')
   }
 
-  return getCompactAppView(content_payload.value, route_state.value)
+  return getCompactAppView(content_payload.value)
 })
 </script>

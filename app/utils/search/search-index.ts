@@ -141,10 +141,9 @@ const SEARCH_STORE_FIELDS: Array<keyof SearchDocument> = [
 ]
 
 export function getSearchDocuments(
-  input: Product[] | SearchContentInput,
+  content: SearchContentInput,
   options: Pick<BuildSearchIndexOptions, 'categories' | 'channels' | 'tags' | 'brands'>,
 ): SearchDocument[] {
-  const content = normalizeSearchContentInput(input)
   const taxonomies: TaxonomyDefinitions = {
     categories: options.categories,
     channels: options.channels,
@@ -172,10 +171,10 @@ export function getSearchDocuments(
 }
 
 export function buildSearchIndexPayload(
-  input: Product[] | SearchContentInput,
+  content: SearchContentInput,
   options: BuildSearchIndexOptions,
 ): SearchIndexPayload {
-  const documents = getSearchDocuments(input, options)
+  const documents = getSearchDocuments(content, options)
   const mini_search = createSearchIndex()
 
   mini_search.addAll(documents)
@@ -386,14 +385,6 @@ function mapSearchResultToSuggestion(result: SearchResult): SearchSuggestion {
     channel_label: result.channel_label === undefined ? undefined : String(result.channel_label),
     score: result.score,
   }
-}
-
-function normalizeSearchContentInput(input: Product[] | SearchContentInput): SearchContentInput {
-  if (Array.isArray(input)) {
-    return { products: input, guides: [], links: [] }
-  }
-
-  return input
 }
 
 function resolveGuideSearchImageUrl(guide: Pick<Guide, 'image_file' | 'image_url'>): string | null {
