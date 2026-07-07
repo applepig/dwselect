@@ -24,6 +24,7 @@ export default defineConfig({
     environment: 'node',
     // 排除 git worktree（.worktree/<branch>/）下的測試副本，避免 vitest 撈到其他分支的完整測試集造成雜訊。
     // tests/legacy/** 是已完成 migration 的測試，隨對應 script 移入 scripts/legacy/ 一併退出預設集（可手動指定路徑復活）。
-    exclude: [...configDefaults.exclude, '.worktree/**', 'tests/legacy/**'],
+    // tests/e2e/** 是 Playwright spec，由 `pnpm test:e2e` 執行，vitest 不應撿到（AC14）。
+    exclude: [...configDefaults.exclude, '.worktree/**', 'tests/legacy/**', 'tests/e2e/**'],
   },
 })

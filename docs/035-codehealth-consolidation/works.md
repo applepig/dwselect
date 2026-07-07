@@ -136,3 +136,20 @@
   3. **`onImageError` 改 reactive Set `.add(id)`**（原不可變 `new Set([...prev, id])`）：Vue 3.5 instrument 集合方法，`.add` 以 O(1) 觸發相同 `.has(id)` 依賴更新。**驗證通過**：`related-products-section.test.ts` 破圖案例（@error→`v-if` 重新求值→img 消失露 fallback icon）仍綠，證明 `.add` 確實觸發 reactivity；composable 註解已更新。
   - 未套用（rejected）：related 多圖掃描抽出（單 caller 無 dedup 效益）、`has_hero_image` 命名、leaf predicate 抽出（收益低）。
 - **收尾測試結果**：`pnpm test` **587 passed / 85 files** exit 0（+3 為 composable scanForBrokenImage 三案例）；`pnpm lint` exit 0；`CI=true ./dev.sh typecheck` exit 0（survivor 1 structural param 型別通過）。
+
+## Milestone 6: 環境一致性與小項
+
+- **技術決策**：
+  - **AC14**：`vitest.config.ts` exclude 加 `'tests/e2e/**'`；裸跑 `pnpm exec vitest run` 不再撿 `tests/e2e/*.spec.ts`（vitest list 對 e2e 收錄數 0）。
+  - **AC17／AC13 config**：`package.json` name `temp_init` → `dwselect`；`Dockerfile` `FROM node:22-alpine` → `node:24-alpine`（AC13 node 24）＋build `pnpm install --frozen-lockfile`（AC17）。toybox crt 已於 M1 進 .gitignore。
+  - **AC15**：`parse-content-markdown.ts` 原本就帶 heading `level: 2|3|4`（parser 未動）；`content-markdown.vue` heading 由寫死 `<h4>` 改 `<component :is="\`h${block.level}\`">`，render 測試驗 `##/###/####` → H2/H3/H4。
+  - **AC16**：`variables.css` `:root` 新增 `--dw-on-accent: #fffaf1`（**只定義於 :root、.dark 不覆蓋**——CTA 兩主題皆 accent 橘底、文字恆淺色不反相，理由寫進註解）；`catalog.css:823` `color: #fffaf1` → `var(--dw-on-accent)`。`variables.css:5 --dw-panel` 未動（token 定義本體，合法保留）。
+  - **scripts 小重複收 `scripts/cli-helpers.ts`**（實際活躍數 > spec 估的 ×3）：`getOptionValue` 5 個活躍 script（build-public-discovery/build-public-artifacts/assert-content-images/build-search-index/build-content-images）收斂；`isDirectRun(module_url, entry_path = process.argv[1])` 取代 5 處 `process.argv[1]?.endsWith(...)`（用 `fileURLToPath(module_url) === entry_path`，比 endsWith 更精確、行為等價，entry_path 注入為測試便利）。`isMissingFileError`：M2-B 已收進 `content-source/is-missing-file-error.ts`，僅 `build-content-images.ts:220` inline 改 import 既有版（未在 cli-helpers 造第二份）。**legacy/ 一律未動**。`cli-helpers.test.ts` 單元測試（getOptionValue 取值/缺省、isDirectRun 相符/不符/無 entry）。
+  - **DWSELECT_ALLOW_HOST_GENERATE 收斂**：依 029 交棒「保留相容或同步調整，二擇一」——選**保留相容**：`can_run_build_here`（`is_container || CI=true || DWSELECT_ALLOW_HOST_GENERATE=1`）邏輯不動、CI workflow（static-generate.yml/deploy.yml）**未碰**（此 session 無法驗 CI 行為，避免未驗風險）；僅更新 `dev.sh:176` 的 stale log 文字（原稱「CI 必須設 DWSELECT_ALLOW_HOST_GENERATE」，改為「CI（CI=true）自動放行；純 host 強制直跑才設」），純文字零邏輯變更。
+
+- **/simplify 四角度審查（workflow fan-out＋對抗 verify）**：6 found → 5 deduped → **0 survivor**（全拒，理由紮實：`getOptionValue` 改 node:util `parseArgs` 會改行為（strict throw、`--opt=value` 語義）＋超範圍；legacy migrate 的 isMissingFileError 重複屬凍結 legacy、scope 外；content-markdown inline-segment 三重複製是 pre-existing、抽子元件屬獨立重構；dynamic `<component :is>` 微最佳化無收益）。
+
+- **揭露的潛在視覺一致性項（rejected finding，非 M6 缺陷，記為後續 scoped bugfix 候選）**：`catalog.css` 的 `.catalog-pill--accent`（`product-card.vue` 使用，同為 accent 橘底）目前用 Nuxt UI `--ui-text-inverted`，而 `--ui-primary` 在 light/dark 皆 = `--dw-accent`（恆橘底）、`--ui-text-inverted` 卻**會反相**（light `#fff`、dark 深色 neutral-900），與 M6 新增 `--dw-on-accent`「恆淺色」意圖矛盾——疑似 dark-mode 對比 bug，且符合 CLAUDE.md「改視覺缺陷時掃同類」的同類。verify 判定：套用會改變 dark 模式 pill 文字色（深→近白），屬**視覺變更／bugfix 而非純 simplify**，需使用者簽核＋淺/深開頁驗證，故未自動套用。**建議另開 scoped 視覺 bugfix 任務**（或併 036 E2E gate 截圖驗證）。
+
+- **測試結果**（coordinator 獨立重跑）：`pnpm test` **594 passed / 86 files** exit 0；`pnpm lint` exit 0；`CI=true ./dev.sh typecheck` exit 0。測試設計 gate：`cli-helpers.test.ts` 純函式行為測試；`content-markdown-render.test.ts` 驗 h2/h3/h4 依 level；**AC16 CTA 色未寫 unit test**——happy-dom 不載外部 stylesheet、無法讀 CSS 級聯 computed style，寫「CSS 含 `var(--dw-…)`」屬 source-grep／斷言 CSS 數值反模式，故不硬湊假測試，交 036 E2E 截圖／人眼（符合測試品質教義：不硬湊反模式測試充數）。
+- **未驗證（交棒 CI/使用者）**：AC13 容器 rebuild（node 22→24 image）＋`./dev.sh exec ./dev.sh verify` 全綠、node 24 lockfile／native 相容（spec Case 5，Alpine 24 sharp/native 若不相容須回報而非硬上）；AC16 淺/深開頁驗 CTA 文字色；AC17 `--frozen-lockfile` 實際 build。

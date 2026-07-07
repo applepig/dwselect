@@ -5,6 +5,8 @@ import { dirname, join, parse } from 'node:path'
 
 import { isPublished } from '../app/utils/content/is-published.ts'
 import { DEFAULT_PRODUCTS_DIR } from './content-source/read-public-content-source.ts'
+import { isMissingFileError } from './content-source/is-missing-file-error.ts'
+import { getOptionValue, isDirectRun } from './cli-helpers.ts'
 
 type ContentImageDomain = 'products' | 'guides'
 
@@ -217,7 +219,7 @@ async function readContentEntries(content_dir: string) {
     entries = await readdir(content_dir, { withFileTypes: true })
   }
   catch (error) {
-    if (error instanceof Error && (error as { code?: unknown }).code === 'ENOENT') {
+    if (isMissingFileError(error)) {
       return []
     }
 
@@ -258,16 +260,6 @@ async function runCli() {
   process.stdout.write(`Failed: ${summary.failed}\n`)
 }
 
-function getOptionValue(args: string[], option: string) {
-  const option_index = args.indexOf(option)
-
-  if (option_index === -1) {
-    return undefined
-  }
-
-  return args[option_index + 1]
-}
-
 function getNumberOptionValue(args: string[], option: string) {
   const value = getOptionValue(args, option)
 
@@ -278,7 +270,7 @@ function getNumberOptionValue(args: string[], option: string) {
   return Number(value)
 }
 
-if (process.argv[1]?.endsWith('build-content-images.ts')) {
+if (isDirectRun(import.meta.url)) {
   runCli().catch((error: unknown) => {
     console.error(error instanceof Error ? error.message : error)
     process.exitCode = 1

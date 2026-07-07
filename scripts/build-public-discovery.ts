@@ -8,6 +8,7 @@ import { isPublished } from '../app/utils/content/is-published.ts'
 import { readPublicContentSource, type ContentReaderOptions, type PublicContentSource } from './content-source/read-public-content-source.ts'
 import { SITE_NAME } from '../app/utils/site-name.ts'
 import { getSiteUrl } from './site-url.ts'
+import { getOptionValue, isDirectRun } from './cli-helpers.ts'
 
 type BuildPublicDiscoveryOptions = ContentReaderOptions & {
   public_dir?: string
@@ -249,17 +250,7 @@ async function runCli() {
   process.stdout.write(`Links: ${summary.link_count}\n`)
 }
 
-function getOptionValue(args: string[], option: string) {
-  const option_index = args.indexOf(option)
-
-  if (option_index === -1) {
-    return undefined
-  }
-
-  return args[option_index + 1]
-}
-
-if (process.argv[1]?.endsWith('build-public-discovery.ts')) {
+if (isDirectRun(import.meta.url)) {
   runCli().catch((error: unknown) => {
     console.error(error)
     process.exitCode = 1

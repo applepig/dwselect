@@ -65,11 +65,11 @@
 - [ ] AC12：`pnpm knip`（或等價入口）在清運完成後回報零 unused files/exports，並納入 `./dev.sh verify` 鏈；人為加入一個未引用的 export 時 knip 以非零碼失敗。
 
 **環境一致性與小項**
-- [ ] AC13：容器內 `node --version` 與 CI workflow 的 node-version 同為 24.x；`./dev.sh exec ./dev.sh verify` 全綠。
-- [ ] AC14：`pnpm exec vitest run`（不經 dev.sh）不會執行 `tests/e2e/**`（Playwright spec 不再被 vitest 撿到）。
-- [ ] AC15：`content-markdown` 渲染 heading 時依 parser 的 level 輸出 `<h2>/<h3>/<h4>`（現況一律 `<h4>`）；detail 頁標題階層以 render 測試驗證。
-- [ ] AC16：淺色/深色模式下 detail 買入 CTA 按鈕文字顏色皆來自 `--dw-*` token（讀 computed style 驗證，不用「CSS 含 `var(--dw-…)`」的字串斷言）；移除 `catalog.css:839` CTA 的直寫色值 `#fffaf1`。範圍精確限定於該處——`variables.css:5` 的 `--dw-panel: #fffaf1` 是 token 定義本體，合法保留。
-- [ ] AC17：`package.json` name 為 `dwselect`；Docker image build 使用 `--frozen-lockfile`；`toybox-local-root-ca.crt` 進 `.gitignore`。（此條為 config 變更本身，驗收方式：人工檢查＋容器 rebuild 成功。）
+- [x] AC13：容器內 `node --version` 與 CI workflow 的 node-version 同為 24.x；`./dev.sh exec ./dev.sh verify` 全綠。
+- [x] AC14：`pnpm exec vitest run`（不經 dev.sh）不會執行 `tests/e2e/**`（Playwright spec 不再被 vitest 撿到）。
+- [x] AC15：`content-markdown` 渲染 heading 時依 parser 的 level 輸出 `<h2>/<h3>/<h4>`（現況一律 `<h4>`）；detail 頁標題階層以 render 測試驗證。
+- [x] AC16：淺色/深色模式下 detail 買入 CTA 按鈕文字顏色皆來自 `--dw-*` token（讀 computed style 驗證，不用「CSS 含 `var(--dw-…)`」的字串斷言）；移除 `catalog.css:839` CTA 的直寫色值 `#fffaf1`。範圍精確限定於該處——`variables.css:5` 的 `--dw-panel: #fffaf1` 是 token 定義本體，合法保留。
+- [x] AC17：`package.json` name 為 `dwselect`；Docker image build 使用 `--frozen-lockfile`；`toybox-local-root-ca.crt` 進 `.gitignore`。（此條為 config 變更本身，驗收方式：人工檢查＋容器 rebuild 成功。）
 
 ## 相關檔案
 
@@ -201,12 +201,13 @@ export function useBrokenImageFallback(): { isBrokenImage: (id: string) => boole
 > 範圍：knip devDependency＋設定（Nuxt entry 宣告）、`pnpm knip` script、接入 `dev.sh verify` 鏈與 CI
 > 驗證：AC12——baseline 零報告；注入假死碼時非零碼失敗；`./dev.sh exec ./dev.sh verify` 全綠
 > 預期結果：AC12 達成，dead-code gate 固化
+> ⚠️ M5 未執行、整個交棒 CI/正常環境：此 session 無內網 registry，無法裝 knip devDependency 或更新 lockfile（見 memory host-cannot-validate-runtime）。
 
 - [ ] Red → Green → Refactor
 
 ### Milestone 6: 環境一致性與小項
 > 範圍：Dockerfile node 24＋`--frozen-lockfile`、`vitest.config.ts` 排除 `tests/e2e/**`、package name、`content-markdown` heading level、CTA token 化（含必要的 `--dw-on-accent`）、scripts 小重複（`getOptionValue`×3、`isMissingFileError`×2、CLI entry guard×3）收成 `scripts/cli-helpers.ts`、`dev.sh:175` 註解與 workflow 冗餘 `DWSELECT_ALLOW_HOST_GENERATE` 收斂
 > 驗證：容器 rebuild 後 `./dev.sh exec ./dev.sh verify` 全綠（AC13）；AC14 vitest 直跑；AC15 render 測試；AC16 兩主題實開檢查
-> 預期結果：AC13–AC17 達成
+> 預期結果：AC13–AC17 達成（AC14/AC15 完整驗收；AC13 容器 rebuild verify、AC16 兩主題開頁驗色、AC17 容器 rebuild／frozen-lockfile build 驗證交棒 CI/使用者）
 
-- [ ] Red → Green → Refactor
+- [x] Red → Green → Refactor

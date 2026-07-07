@@ -173,7 +173,7 @@ cmd_generate() {
     echo ""
     echo "    NUXT_MODE=build ./dev.sh restart"
     echo ""
-    log_info "CI 若需直接產 static artifact，必須明確設定 DWSELECT_ALLOW_HOST_GENERATE=1。"
+    log_info "CI（CI=true）會自動放行；若要在純 host 強制直跑 generate，設定 DWSELECT_ALLOW_HOST_GENERATE=1。"
     exit 1
 }
 

@@ -55,6 +55,21 @@ describe('ContentMarkdown', () => {
     expect(paragraph.text()).toBe('只有一段純文字。')
   })
 
+  it('renders heading blocks at the level implied by the markdown # depth', () => {
+    const source = `## 第二層標題
+
+### 第三層標題
+
+#### 第四層標題`
+    const wrapper = mount(ContentMarkdown, { props: { source } })
+    const headings = wrapper.findAll('.detail-llm-heading')
+
+    expect(headings).toHaveLength(3)
+    expect(headings[0]!.element.tagName).toBe('H2')
+    expect(headings[1]!.element.tagName).toBe('H3')
+    expect(headings[2]!.element.tagName).toBe('H4')
+  })
+
   it('should render nothing when the source is empty', () => {
     const wrapper = mount(ContentMarkdown, { props: { source: '' } })
 

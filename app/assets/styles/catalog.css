@@ -820,7 +820,7 @@
   min-height: 48px;
   border-radius: 8px;
   background: var(--dw-accent);
-  color: #fffaf1;
+  color: var(--dw-on-accent);
   font-weight: 950;
   line-height: 1.2;
   text-align: center;
