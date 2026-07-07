@@ -6,7 +6,7 @@
   "formatter": {
     "dwselect_lint_file": {
       "command": ["bash", "scripts/post-edit-hook.sh", "$FILE"],
-      "extensions": [".vue", ".ts", ".js", ".mjs"]
+      "extensions": [".vue", ".ts", ".js", ".mjs", ".json"]
     }
   }
 }
