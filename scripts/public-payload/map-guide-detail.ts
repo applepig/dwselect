@@ -1,6 +1,7 @@
 import type { Guide, Product } from '../../app/utils/product-schema.ts'
 import type { GuideDetailView, RelatedProductCardView } from '../../app/utils/public-content-view-types.ts'
 import { extractContentId } from '../../app/utils/content/extract-content-id.ts'
+import { isPublished } from '../../app/utils/content/is-published.ts'
 import { splitDetailTaxonomyTags } from '../../app/utils/content/split-detail-taxonomy-tags.ts'
 import { resolveGuideImageUrl } from '../../app/utils/content-images/resolve-guide-image-url.ts'
 import { mapProductCardBase } from './map-product-card-fields.ts'
@@ -39,7 +40,7 @@ function getGuideRelatedProductCards(
 ): RelatedProductCardView[] {
   const published_products_by_id = new Map(
     all_products
-      .filter((product) => product.status === 'published')
+      .filter(isPublished)
       .map((product) => [extractContentId(product.id), product]),
   )
 

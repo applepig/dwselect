@@ -3,8 +3,8 @@ import { dirname, join } from 'node:path'
 
 import sharp from 'sharp'
 
+import { isPublished } from '../app/utils/content/is-published.ts'
 import { DEFAULT_PRODUCTS_DIR, readPublicContentSource, type ContentReaderOptions } from './content-reader.ts'
-import { isPublished } from './public-content.ts'
 
 const MIN_CONTENT_IMAGE_SIDE_PX = 480
 const MAX_CONTENT_IMAGE_ASPECT_RATIO = 2

@@ -4,7 +4,7 @@ import { readFileSync } from 'node:fs'
 import { readPublicContentSource } from '../../scripts/content-reader'
 import { buildGuideDetail, buildProductDetail } from '../../scripts/public-payload/build-detail-by-id'
 import { extractContentId } from '../../app/utils/content/extract-content-id'
-import { isPublished } from '../../scripts/public-content'
+import { isPublished } from '../../app/utils/content/is-published'
 
 // 堵住 028 第一版的覆蓋漏洞：route 用 getRouterParam(event, 'id') 取 id，但 h3 (rou3) 把檔名 token
 // [id].json 整段解析成單一 param（key 'id.json'），getRouterParam(event, 'id') 回 undefined → 全部

@@ -3,6 +3,7 @@ import type { RelatedProductCardView } from '../../app/utils/public-content-view
 import { compareNullableTimestampDesc } from '../../app/utils/content/compare-nullable-timestamp-desc.ts'
 import { compareText } from '../../app/utils/content/compare-text.ts'
 import { extractContentId } from '../../app/utils/content/extract-content-id.ts'
+import { isPublished } from '../../app/utils/content/is-published.ts'
 import { getPrimaryOffer } from '../../app/utils/content/primary-offer.ts'
 import { mapProductCardBase } from './map-product-card-fields.ts'
 import type { TaxonomyLabelResolver } from '../../app/utils/content/taxonomy-labels.ts'
@@ -24,7 +25,7 @@ export function getRelatedProductCards(
   const current_invariants = getCurrentProductInvariants(current_product)
 
   return products
-    .filter((product) => product.status === 'published')
+    .filter(isPublished)
     .filter((product) => extractContentId(product.id) !== current_product_id)
     .toSorted((left_product, right_product) => compareRelatedProducts(current_invariants, left_product, right_product))
     .slice(0, RELATED_PRODUCT_LIMIT)

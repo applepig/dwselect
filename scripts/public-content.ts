@@ -6,8 +6,4 @@ export const SITE_URL = 'https://dwselect.applepig.net/'
 
 export type { PublicContentPayload, PublicTaxonomies }
 
-export function isPublished(content: { status: string }) {
-  return content.status === 'published'
-}
-
 export { buildPublicContentPayload } from './public-payload/build-public-content-payload.ts'

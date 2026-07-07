@@ -4,9 +4,10 @@ import { compareGuides } from '../content/compare-guides.ts'
 import { compareLinks } from '../content/compare-links.ts'
 import { compareProducts } from '../content/compare-products.ts'
 import { extractContentId } from '../content/extract-content-id.ts'
+import { isPublished } from '../content/is-published.ts'
 import { getPrimaryOffer } from '../content/primary-offer.ts'
 import { createTaxonomyLabelResolver, type TaxonomyLabelResolver } from '../content/taxonomy-labels.ts'
-import { resolveImageFileUrl } from '../content-images/resolve-image-file-url.ts'
+import { resolveGuideImageUrl } from '../content-images/resolve-guide-image-url.ts'
 import { resolveProductImageUrl } from '../content-images/resolve-product-image-url.ts'
 import type { CategoryDefinition, ChannelDefinition, Guide, LinkDefinition, Product, TagDefinition } from '../product-schema.ts'
 import type { TaxonomyDefinitions } from '../published-products/types.ts'
@@ -156,15 +157,15 @@ export function getSearchDocuments(
 
   return [
     ...content.products
-      .filter((product) => product.status === 'published')
+      .filter(isPublished)
       .toSorted((left_product, right_product) => compareProducts(left_product, right_product, taxonomies))
       .map((product) => mapProductToSearchDocument(product, labels, product_tag_aliases)),
     ...content.guides
-      .filter((guide) => guide.status === 'published')
+      .filter(isPublished)
       .toSorted(compareGuides)
       .map((guide) => mapGuideToSearchDocument(guide, labels, tag_aliases)),
     ...content.links
-      .filter((link) => link.status === 'published')
+      .filter(isPublished)
       .toSorted(compareLinks)
       .map((link) => mapLinkToSearchDocument(link, labels, tag_aliases)),
   ]
@@ -299,7 +300,7 @@ function mapGuideToSearchDocument(
     category_labels: guide.category_ids.map((category_id) => labels.getCategoryLabel(category_id)),
     tag_ids: [...guide.tag_ids],
     tag_labels: guide.tag_ids.map((tag_id) => labels.getContentTagLabel(tag_id)),
-    image_url: resolveGuideSearchImageUrl(guide),
+    image_url: resolveGuideImageUrl(guide),
     href: `/guide/${guide.id}`,
     external: false,
     published_at: guide.published_at,
@@ -385,10 +386,6 @@ function mapSearchResultToSuggestion(result: SearchResult): SearchSuggestion {
     channel_label: result.channel_label === undefined ? undefined : String(result.channel_label),
     score: result.score,
   }
-}
-
-function resolveGuideSearchImageUrl(guide: Pick<Guide, 'image_file' | 'image_url'>): string | null {
-  return resolveImageFileUrl(guide.image_file, 'guides') ?? guide.image_url ?? null
 }
 
 function getTagAliases(tag_ids: string[], tag_aliases: ReadonlyMap<string, string[]>) {

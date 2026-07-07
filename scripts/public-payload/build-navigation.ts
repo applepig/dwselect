@@ -2,6 +2,7 @@ import type { Guide, LinkDefinition, Product } from '../../app/utils/product-sch
 import { ALL_CATEGORIES_ID, type CategoryChipView } from '../../app/utils/public-content-view-types.ts'
 import type { CompactSearchTagGroups, CompactTagChip } from '../../app/utils/published-products/types.ts'
 import { compareText } from '../../app/utils/content/compare-text.ts'
+import { isPublished } from '../../app/utils/content/is-published.ts'
 import type { PublicTaxonomies } from '../../app/utils/public-content-payload.ts'
 
 const POPULAR_TAG_MIN_COUNT = 3
@@ -20,7 +21,7 @@ export function buildNavigation(
   content: { products: Product[], guides: Guide[], links: LinkDefinition[] },
   taxonomies: PublicTaxonomies,
 ): NavigationPayload {
-  const published_products = content.products.filter((product) => product.status === 'published')
+  const published_products = content.products.filter(isPublished)
   const category_chips = getCategoryChips(published_products, taxonomies)
 
   return {
@@ -84,7 +85,7 @@ function getPopularSearchTagGroups(
 
 function getPublishedTagIds(items: Array<{ status: string, tag_ids: string[] }>) {
   return items
-    .filter((item) => item.status === 'published')
+    .filter(isPublished)
     .flatMap((item) => item.tag_ids)
 }
 

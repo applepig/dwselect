@@ -32,3 +32,24 @@
 - **未驗證 / 待人工**：
   - 首頁／guide／links／search 頁人工開頁確認 render 不變（host 無法開 toybox.local，AC10 render 不變證據為既有 render 行為測試全綠）。
   - AC11「可隨時復活」的操作方式：因 vitest `exclude` 優先於顯式路徑，復活 legacy 測試需暫時移除 exclude 的 `tests/legacy/**` 一行（非用路徑覆蓋）。
+
+## Milestone 2: content-source module
+
+> M2 面積大，依「可獨立綠燈、檔案不重疊」拆兩個序列 sub-task（B 依賴 A）：A＝isPublished 收斂＋消費端改接＋guide resolver 去重；B＝content-source module／reader 整併／PublicTaxonomies 收斂／AC2b／AC1 fixture。各自 commit。
+
+### M2-A: isPublished 單一化＋消費端全改接＋guide resolver 去重（AC3、AC2 骨架）
+
+- **前置偵察（workflow 五角度 fan-out）**：spec 明示 published 消費端清單「起點非全集，動工前全域掃補全」——偵察補到 **5 處漏網 inline**（spec 未列）：`map-related-product-card.ts:27`、`map-guide-detail.ts:42`、`map-resource-rows.ts:11/:18`、`build-content-images.ts:174`（反向式 `!== 'published'`）。另確認 `product-schema.ts:159`（`status === 'published' && !has_image_file`）語意是 schema 驗證規則（published 商品必須有圖），非 published 過濾，**排除於收斂之外**。
+
+- **技術決策**：
+  - `isPublished` 抽 `app/utils/content/is-published.ts`——browser-safe 純 predicate，**零 import、獨立單檔、不經 barrel/re-export**。刻意如此：search-index 經 client-search 進 browser bundle，若 predicate 依賴鏈碰到含 `node:fs` 的 reader（如 public-content.ts 尾端 re-export 的 `buildPublicContentPayload` → content-reader.ts）會炸 client bundle（xreview finding）。移除 `public-content.ts:9` 的 seed 定義（該檔保留 SITE_* 常數與 payload re-export，屬 M3/其他範圍）。
+  - 全 15 個消費端改接：4 處原已呼叫 seed 改 import 來源；`build-navigation.ts:23/:87`、`search-index.ts:159/:163/:167` inline → `.filter(isPublished)` point-free；5 處漏網 inline 改呼叫；`build-content-images.ts:174` 反向式改 `!isPublished(...)`。
+  - `build-content-images.ts:174` 用 localized `entry as { status: string }` cast（entry 來自 defensive JSON parse、status 型別 unknown）＋Why 註解，而非放寬共用 predicate signature 到 `{ status: unknown }`——後者會弱化其餘 15 處 call site 的型別保護。排除語意與原 `!== 'published'` 完全一致。
+  - guide image resolver 去重（AC3）：刪 `search-index.ts:390-392` 的 `resolveGuideSearchImageUrl`（與 canonical `resolveGuideImageUrl` 函式體完全等價），`:302` 改呼叫 canonical，檔頭改 import；連帶移除 `resolveImageFileUrl` import（該檔內已無其他用途，grep＋typecheck 雙證無殘留 reference）。detail 頁本已用 canonical（`map-guide-detail.ts:22`），故收斂後搜尋結果與 guide 頁縮圖共用同一 resolver。
+
+- **問題與解法**：
+  - worker 另修 `tests/server/detail-route-handler.test.ts:5`、`tests/server/detail-route-id-resolution.test.ts:7` 的 `isPublished` import（原自 public-content）——移除 seed 定義後這兩檔會編譯失敗的必要連帶修正，只改 import 行、未動 it 內容；後者是 AC2b 的 it #1 刪除對象，同分支順序作業不衝突（M2-B 知悉此 import 已指向新模組）。
+
+- **測試結果**（coordinator 獨立重跑）：`pnpm test` **78 files / 551 passed**（M1 收尾 547 → +4 為 is-published 單元測試）；`pnpm lint` exit 0；`CI=true ./dev.sh typecheck` exit 0（volar noise 已濾，真實碼 0）。isPublished 單元測試斷言值對映 `product-schema.ts:6` 的 status enum（published→true，draft/unpublished/archived→false），worker 以 mutation probe（翻 `===`→`!==`）驗證 4 tests 全紅→還原。
+  - 測試設計 gate：`is-published.test.ts` 為行為測試（斷言回傳值），無 source-grep／snapshot 反模式。
+  - **未驗證**：generate／開頁（環境限制），行為不變證據為既有全套件綠。

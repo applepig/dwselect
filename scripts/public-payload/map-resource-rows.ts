@@ -2,20 +2,21 @@ import type { Guide, LinkDefinition } from '../../app/utils/product-schema.ts'
 import type { CompactResourceRow } from '../../app/utils/published-products/types.ts'
 import { compareGuides } from '../../app/utils/content/compare-guides.ts'
 import { compareLinks } from '../../app/utils/content/compare-links.ts'
+import { isPublished } from '../../app/utils/content/is-published.ts'
 import { resolveGuideImageUrl } from '../../app/utils/content-images/resolve-guide-image-url.ts'
 import { EXTERNAL_LINK_ATTRS, RESOURCE_ROW_ICONS } from '../../app/utils/published-products/resource-row-attrs.ts'
 import type { TaxonomyLabelResolver } from '../../app/utils/content/taxonomy-labels.ts'
 
 export function mapGuideRows(guides: Guide[], labels: TaxonomyLabelResolver): CompactResourceRow[] {
   return guides
-    .filter((guide) => guide.status === 'published')
+    .filter(isPublished)
     .toSorted(compareGuides)
     .map((guide) => mapGuideToRow(guide, labels))
 }
 
 export function mapLinkRows(links: LinkDefinition[]): CompactResourceRow[] {
   return links
-    .filter((link) => link.status === 'published')
+    .filter(isPublished)
     .toSorted(compareLinks)
     .map(mapLinkToRow)
 }

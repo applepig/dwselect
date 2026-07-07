@@ -4,8 +4,9 @@ import { join } from 'node:path'
 import type { Guide, LinkDefinition, Product } from '../app/utils/product-schema.ts'
 import { compareProducts } from '../app/utils/content/compare-products.ts'
 import { collectNonEmptyTaxonomyIds } from '../app/utils/published-products/non-empty-taxonomy-ids.ts'
+import { isPublished } from '../app/utils/content/is-published.ts'
 import { readPublicContentSource, type ContentReaderOptions, type PublicContentSource } from './content-reader.ts'
-import { SITE_NAME, SITE_URL, isPublished } from './public-content.ts'
+import { SITE_NAME, SITE_URL } from './public-content.ts'
 
 type BuildPublicDiscoveryOptions = ContentReaderOptions & {
   public_dir?: string

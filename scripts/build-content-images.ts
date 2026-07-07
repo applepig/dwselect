@@ -3,6 +3,7 @@ import { existsSync } from 'node:fs'
 import { mkdir, readFile, readdir, rm } from 'node:fs/promises'
 import { dirname, join, parse } from 'node:path'
 
+import { isPublished } from '../app/utils/content/is-published.ts'
 import { DEFAULT_PRODUCTS_DIR } from './content-reader.ts'
 
 type ContentImageDomain = 'products' | 'guides'
@@ -171,7 +172,8 @@ async function getContentImageReferences(
     const entries = await readContentEntries(content_dir)
 
     for (const entry of entries) {
-      if (entry.status !== 'published' || typeof entry.image_file !== 'string') {
+      // entry 來自 defensive JSON parse（status 型別 unknown）；cast 對接共用 predicate 的 string 契約，排除語意不變。
+      if (!isPublished(entry as { status: string }) || typeof entry.image_file !== 'string') {
         continue
       }
 

@@ -2,7 +2,7 @@ import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 
 import { readPublicContentSource } from '../../scripts/content-reader'
 import { extractContentId } from '../../app/utils/content/extract-content-id'
-import { isPublished } from '../../scripts/public-content'
+import { isPublished } from '../../app/utils/content/is-published'
 
 // 堵住 028 第一版的覆蓋漏洞（detail-route-id-resolution.test 只測「複製出來的」id 還原邏輯與原始碼字串）：
 // 這裡真正 invoke route 的 default export handler，餵入 nitro 會給的 event.path，斷言整條
