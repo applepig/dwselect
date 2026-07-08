@@ -4,7 +4,7 @@
   "status": "published",
   "name": "AG Neovo EM2451 24 吋 4K",
   "english_name": "AG Neovo EM2451 24-inch 4K USB-C Wide Color Gamut Professional Graphic Design Pivot Monitor",
-  "summary": "",
+  "summary": "市面上少見的24\" 4K螢幕，開200%的字體大小很剛好",
   "long_description": "",
   "llm_description": "## 快速判斷\n\nAG Neovo EM2451 是 24 吋級 4K UHD 螢幕，官方標示 3840 × 2160、185 PPI、IPS 面板、100% sRGB、93% DCI-P3、10-bit 色彩與 USB-C 65W 供電。它的收錄重點在於把 4K 高像素密度放進較小桌面尺寸，適合桌面深度或寬度有限、但希望文字與圖像更細緻的工作環境。\n\n## 重要規格\n\n- 尺寸與解析度：24 吋，3840 × 2160 UHD，官方標示 185 PPI。\n- 面板與色彩：IPS，100% sRGB、93% DCI-P3，支援 10-bit 色彩深度。\n- 連接埠：USB-C（支援影像、資料傳輸與 65W 供電）、DisplayPort、雙 HDMI。\n- 支架：支援高度調整、旋轉與傾斜，適合需要直向顯示或調整視角的桌面。\n- 護眼與影像：官方標示不閃爍技術、藍光過濾、HDR10 與多種色彩模式。\n- 保固與配送：官方商城頁標示三年免付費維修與更換新機服務、全館免運約 3 個工作天到貨。\n\n## 為什麼值得收錄\n\n- 24 吋級 4K 的像素密度高於常見 27 吋 4K；官方頁也以「較 27 吋 4K 螢幕提升約 13%」作為細緻度賣點。\n- 對 macOS HiDPI 工作流有明確 FAQ：Apple Silicon Mac 與 2018–2020 T2 Intel Mac 可使用 Retina 縮放；舊款 2012–2017 Intel Mac 可能無法完整支援高解析縮放。\n- 2026-07 查到的官方商城、Yahoo 購物中心、BigGo 與 FindPrice 價格皆可見 NT$6,498；價格會隨檔期變動，購買前仍需以通路頁為準。\n\n## 適合誰／不適合誰\n\n適合：\n\n- 桌面空間有限，但需要 4K 細緻文字、圖片或影片預覽的使用者。\n- 想用 USB-C 一線連接筆電並同時取得 65W 供電的桌面工作者。\n- 需要 sRGB 與 DCI-P3 廣色域覆蓋、但不一定需要專業硬體校色或大型螢幕的內容工作者。\n\n不適合：\n\n- 主要需求是高刷新率競技遊戲；官方頁重點是 4K、廣色域與 USB-C，未把高刷新率作為賣點。\n- 希望在原生 3840 × 2160 下使用大字體與大介面的使用者；24 吋 4K 若不使用 HiDPI 縮放，文字與圖示會偏小。\n- 使用舊款 Intel Mac 且依賴 macOS Retina 縮放的人，購買前需確認輸出與縮放相容性。\n\n## 評測與使用者回饋\n\n- 官方頁與 Yahoo 購物中心頁未提供可讀個別評論；Yahoo 頁面標示「尚無任何評價」。\n- 目前可驗證資訊主要來自官方規格、官方 FAQ、官方商城價格與比價站價格；缺少獨立媒體評測與長期使用者回饋。\n\n## 參考來源\n\n- [AG Neovo 台灣官方產品頁](https://www.agneovo.com/tw/products/em2451)\n- [AG Neovo EM2451 Datasheet](https://www.agneovo.com/wp-content/uploads/2024/12/EM2451_DS_V013_20250902.pdf)\n- [Yahoo 購物中心商品頁](https://tw.buy.yahoo.com/gdsale/AG-Neovo-EM2451-24%E5%90%8B-%E5%BB%A3%E8%89%B2%E5%9F%9F%E5%B0%88%E6%A5%AD%E7%B9%AA%E5%9C%96%E6%97%8B%E8%BD%89%E8%9E%A2%E5%B9%95-24%E5%90%8B-4K-USB-C-12122901.html)\n- [BigGo 價格搜尋](https://biggo.com.tw/s/AG+Neovo+EM2451/)\n- [FindPrice 價格搜尋](https://www.findprice.com.tw/g/AG%20Neovo%20EM2451/)",
   "category_id": "computer-3c",
@@ -62,7 +62,7 @@
     "AG Neovo 24吋 4K 螢幕"
   ],
   "created_at": "2026-07-07T09:00:00+08:00",
-  "updated_at": "2026-07-07T09:00:00+08:00",
+  "updated_at": "2026-07-08T00:00:00+08:00",
   "published_at": "2026-07-07T09:00:00+08:00",
   "unpublished_at": null,
   "archived_at": null
