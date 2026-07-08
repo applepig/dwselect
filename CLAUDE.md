@@ -32,7 +32,7 @@
 - Host 分工：`dwselect.toybox.local` 是本機／開發站入口；`dwselect.applepig.net` 是正式站入口。CI、production build、deploy、SEO canonical 或任何公開正式環境設定，不要使用 `dwselect.toybox.local`。
 - 環境設定集中在 `.env`（不進 git）：`APP_URL` 控制 Traefik 路由與 Vite allowedHosts；`NUXT_MODE=dev` 跑 dev server（含 HMR），未設定或其他值則跑 `nuxt generate` + `nuxt preview`。
 - 容器管理用 `./dev.sh`（start/stop/restart/build/rebuild/logs/exec/shell/install/status/clean）；開發／建置子命令有 `dev`/`generate`/`typecheck`/`verify`/`test`/`lint`/`content-check`/`preview`。不要直接在 host 上跑 `pnpm dev`——應透過 Docker 容器（例外：Playwright e2e 在 host 跑 browser、連容器 dev server，那不是在 host 跑 dev server，見 Commands）。
-- 一次性 build（`typecheck`/`generate`/`verify`）在容器內自動用隔離 buildDir（`.nuxt-build`）＋ Vite cacheDir，與常駐 dev 的 `.nuxt` 分離，可在 dev server 跑著時安全執行；`./dev.sh` 三態：容器內隔離、`CI=true` 用預設 `.nuxt`、純 host 引導進容器。隔離只在本機／容器生效，CI workflow 不需改。
+- 一次性 build（`typecheck`/`generate`/`verify`）在容器內自動用隔離 buildDir（`.nuxt-build`）＋ Vite cacheDir，與常駐 dev 的 `.nuxt` 分離，可在 dev server 跑著時安全執行；`./dev.sh` 三態：容器內隔離、`CI=true` 用預設 `.nuxt`、純 host 引導進容器。隔離只在本機／容器生效，CI workflow 不需改。**唯一例外**：`verify` 鏈的 `knip` 步驟因 knip 只讀「預設」`.nuxt`（無視 `NUXT_BUILD_DIR`），會在容器內對預設 `.nuxt` 補一次 `nuxt prepare`——若 verify 在常駐 `nuxt dev` 容器內跑，這步與 live dev 輕度並行寫 `.nuxt`（prepare 冪等、不啟 Vite，最壞觸發一次 dev reload，非 chunk hash 毀損），故 knip 步驟的隔離保證不完全成立（見 `dev.sh` `cmd_knip` 註解）。
 - 除錯 `toybox.local` 壞掉時，先用 `./dev.sh status` 確認容器狀態，再看 `./dev.sh logs` 查 Nuxt log；接著檢查 Traefik route/service 與 container 的 network 連線。
 - `package.json` 的依賴更新後，用 `./dev.sh install`（container 內 `pnpm install`）同步；若 native module 版本不對，用 `./dev.sh rebuild` 重建 image 和 volumes。
 - 不要在同一專案目錄同時跑兩個 Nuxt dev 實例（host + container），會共用 Vite cache 導致 chunk hash 衝突。

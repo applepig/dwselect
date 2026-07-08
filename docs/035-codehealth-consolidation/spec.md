@@ -60,9 +60,9 @@
 - [x] AC9：related-products 卡片區塊由共用元件渲染，product/guide detail 頁斷言具體不變結構——卡片數量、每張卡的連結 href 與標題文字與現況一致；不以整段 DOM snapshot 貼回當 expected（snapshot 反模式）。
 
 **化石清運＋knip**
-- [x] AC10：`TagExplorer` 元件、其專屬 CSS、`format-published-date` util、search-index 的 `Product[]` legacy union 入參、搜尋歷史直寫軌 API、compact-app view 的 `tabs`/`active_tab`/`counts`/`'no-results'` 分支移除後，`pnpm test` 全綠且首頁/guide/links/search 頁 render 輸出不變。（M1 達成；`active_tab` route-state 側孤兒經 /simplify 收尾清乾淨。**首頁/guide/links/search 人工開頁待驗**——此 session 容器 crash loop，render 不變證據為既有 render 行為測試全綠。）
+- [x] AC10：`TagExplorer` 元件、其專屬 CSS、`format-published-date` util、search-index 的 `Product[]` legacy union 入參、搜尋歷史直寫軌 API、compact-app view 的 `tabs`/`active_tab`/`counts`/`'no-results'` 分支移除後，`pnpm test` 全綠且首頁/guide/links/search 頁 render 輸出不變。（M1 達成；`active_tab` route-state 側孤兒經 /simplify 收尾清乾淨。**四頁人工開頁已驗**——容器 rebuild 後經 agent-browser 開 `dwselect.toybox.local` 四頁：首頁 76 cards＋分類 nav、guide 指南列表、links、search 熱門標籤/品牌 pills，render 結構完整無破。）
 - [x] AC11：已完成的 migration scripts（`migrate-content-slug`、`legacy/*`、`localize-content-images`）移入 `scripts/legacy/` 且不在預設測試集內；`pnpm test` 不再執行其測試。（`localize-content-images` 退役依據：authoring 文件 CONTENT.md/AGENTS.md 均未提及、現有 content `image_url` 全為 null；留在 legacy/ 可隨時復活。）
-- [ ] AC12：`pnpm knip`（或等價入口）在清運完成後回報零 unused files/exports，並納入 `./dev.sh verify` 鏈；人為加入一個未引用的 export 時 knip 以非零碼失敗。
+- [x] AC12：`pnpm knip`（knip 6.25.0，`knip.json` 用內建 nuxt plugin 載 nuxt.config 取 Nuxt 慣例 entry、避開 Case 4 誤報）在清運完成後回報零 unused files/exports，並納入 `./dev.sh verify` 鏈（test→lint→knip→typecheck→generate）與 CI；人為加入未引用 export 時以非零碼失敗（probe 實測攔截）。**三環境零報告**：host、CI（prepare hook 生成完整 `.nuxt`）、容器（`cmd_knip` 於 `is_container` 分支先對預設 `.nuxt` 補冪等 `nuxt prepare` 補全 auto-import manifest——knip nuxt plugin 寫死讀 `.nuxt/components.d.ts`、無視 `NUXT_BUILD_DIR` 隔離，而容器 build-mode 的 manifest 由 `nuxt generate` 產出、不含 component 註冊致誤報）。清運同時刪 `CompactLinkRow`/`CompactGuideRow` 死型別、移除從未接線的 `postcss-nesting` devDependency。
 
 **環境一致性與小項**
 - [x] AC13：容器內 `node --version` 與 CI workflow 的 node-version 同為 24.x；`./dev.sh exec ./dev.sh verify` 全綠。
@@ -201,9 +201,9 @@ export function useBrokenImageFallback(): { isBrokenImage: (id: string) => boole
 > 範圍：knip devDependency＋設定（Nuxt entry 宣告）、`pnpm knip` script、接入 `dev.sh verify` 鏈與 CI
 > 驗證：AC12——baseline 零報告；注入假死碼時非零碼失敗；`./dev.sh exec ./dev.sh verify` 全綠
 > 預期結果：AC12 達成，dead-code gate 固化
-> ⚠️ M5 未執行、整個交棒 CI/正常環境：此 session 無內網 registry，無法裝 knip devDependency 或更新 lockfile（見 memory host-cannot-validate-runtime）。
+> ✅ M5 完成（可跑容器＋knip 的環境）：knip 6.25.0 裝妥、`knip.json`＋`cmd_knip`＋verify 鏈＋CI 齊備、host/CI/容器三環境零報告、probe 攔截驗證通過。容器缺口（Case 4 誤報）根因為 knip 寫死讀 `.nuxt` manifest、build-mode 產出不含 component 註冊，以 `cmd_knip` 容器分支補 `nuxt prepare` 解決。
 
-- [ ] Red → Green → Refactor
+- [x] Red → Green → Refactor
 
 ### Milestone 6: 環境一致性與小項
 > 範圍：Dockerfile node 24＋`--frozen-lockfile`、`vitest.config.ts` 排除 `tests/e2e/**`、package name、`content-markdown` heading level、CTA token 化（含必要的 `--dw-on-accent`）、scripts 小重複（`getOptionValue`×3、`isMissingFileError`×2、CLI entry guard×3）收成 `scripts/cli-helpers.ts`、`dev.sh:175` 註解與 workflow 冗餘 `DWSELECT_ALLOW_HOST_GENERATE` 收斂

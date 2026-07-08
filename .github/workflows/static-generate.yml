@@ -30,9 +30,11 @@ jobs:
           node-version: 24
           cache: pnpm
 
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
+      # Cache 必須在 install 之前 restore：install 的 prepare hook（nuxt prepare）會用當前 commit 重新
+      # 生成 .nuxt/components.d.ts 等 auto-import manifest，覆蓋掉 restore 的舊 .nuxt。若 restore 在 install
+      # 之後，restore-keys fallback 撈到的舊 .nuxt 會覆寫掉新 manifest，令 knip/typecheck 讀 stale 定義而
+      # 對慣例引用（<AppNavigation> 等）誤報 unused（Case 4 在 CI 復活）。node_modules/.cache/nuxt（Vite
+      # cache）不受 prepare 影響、續享加速。
       - name: Restore Nuxt build cache
         uses: actions/cache@v4
         with:
@@ -44,11 +46,17 @@ jobs:
             nuxt-build-${{ runner.os }}-node-24-
             nuxt-build-${{ runner.os }}-
 
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
       - name: Run tests
         run: pnpm test
 
       - name: Run lint
         run: pnpm lint
+
+      - name: Run knip
+        run: pnpm knip
 
       - name: Run typecheck
         run: pnpm typecheck

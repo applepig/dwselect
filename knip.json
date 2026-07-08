@@ -1,0 +1,17 @@
+{
+  "$schema": "https://unpkg.com/knip@6/schema.json",
+  "entry": [
+    "scripts/content-check.mjs"
+  ],
+  "ignore": [
+    "docs/**",
+    "scripts/legacy/**"
+  ],
+  "ignoreDependencies": [
+    "vue-tsc"
+  ],
+  "ignoreExportsUsedInFile": true,
+  "exclude": [
+    "duplicates"
+  ]
+}

@@ -38,6 +38,7 @@ Commands:
   verify      Run the CI-equivalent quality gate: test -> lint -> typecheck -> generate
   test        Run unit tests (vitest)
   lint        Run ESLint
+  knip        Run knip dead-code gate (unused files/exports/dependencies)
   content-check  Validate content/ data
   content-schema Regenerate content/.schema/*.json from the zod SSOT
   preview     Preview the generated static output
@@ -187,13 +188,14 @@ cmd_typecheck() {
     docker compose exec "$SERVICE" ./dev.sh typecheck
 }
 
-# 對齊 CI quality-gate 的本機一鍵驗證：固定 production APP_URL，依序跑 test→lint→typecheck→generate。
+# 對齊 CI quality-gate 的本機一鍵驗證：固定 production APP_URL，依序跑 test→lint→knip→typecheck→generate。
 # set -e 讓任一步紅就中止，配合隔離 buildDir 即可在常駐 dev 旁邊「一輪修完再推」。
 cmd_verify() {
     if can_run_build_here; then
         export APP_URL=dwselect.applepig.net
         pnpm test
         pnpm lint
+        cmd_knip
         run_nuxt_isolated typecheck
         cmd_generate_inner
         return
@@ -210,6 +212,30 @@ cmd_test() {
 
 cmd_lint() {
     pnpm exec eslint . --max-warnings=0
+}
+
+# dead-code gate（ADR-035-3）：knip 一次覆蓋 unused files/exports/dependencies。
+# knip 直接載入 nuxt.config.ts 取得 Nuxt 慣例 entry（pages/components/composables/server），
+# 而 nuxt.config 缺 APP_URL 會 throw；verify 鏈已 export production APP_URL，
+# standalone 執行時由 .env 補上（CI 由 job env 提供，無 .env 時沿用既有 process.env）。
+cmd_knip() {
+    if [ -z "${APP_URL:-}" ] && [ -f ".env" ]; then
+        # shellcheck source=/dev/null
+        source ".env"
+        export APP_URL
+    fi
+    # knip 的 nuxt plugin 寫死讀「預設」.nuxt/components.d.ts 來辨識 <AppNavigation> 等 Nuxt auto-import
+    # 慣例引用（無視 NUXT_BUILD_DIR 隔離、讀不到 .nuxt-build）。容器 build-mode 的 .nuxt manifest 由
+    # nuxt generate 產出、不含 component 註冊，會令 knip 對慣例引用誤報 unused（Case 4）。故容器內先對
+    # 「預設」.nuxt 補一次冪等 prepare 補全 auto-import manifest（顯式鎖 .nuxt，因 knip 只讀它）。
+    # host/CI 靠 pnpm install 的 prepare hook 已有完整 .nuxt，不重補以免無謂開銷與回歸。
+    # ⚠️ caveat：此 prepare 寫「預設」.nuxt（非隔離 .nuxt-build，因 knip 只讀 .nuxt）——若 verify 在常駐
+    # nuxt dev 容器內跑，knip 步驟會與 live dev 輕度並行寫 .nuxt（prepare 冪等、不啟 Vite，最壞觸發一次 dev
+    # reload，非雙 Vite chunk hash 毀損）。故 verify 對常駐 dev 的隔離保證，在 knip 這步不完全成立。
+    if is_container; then
+        NUXT_BUILD_DIR=.nuxt pnpm exec nuxt prepare
+    fi
+    pnpm exec knip
 }
 
 cmd_content_check() {
@@ -332,6 +358,7 @@ case "${1:-}" in
     verify)    cmd_verify ;;
     test)      shift; cmd_test "$@" ;;
     lint)      cmd_lint ;;
+    knip)      cmd_knip ;;
     content-check) cmd_content_check ;;
     content-schema) cmd_content_schema ;;
     preview)   cmd_preview ;;

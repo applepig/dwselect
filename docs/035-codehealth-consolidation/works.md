@@ -152,4 +152,42 @@
 - **揭露的潛在視覺一致性項（rejected finding，非 M6 缺陷，記為後續 scoped bugfix 候選）**：`catalog.css` 的 `.catalog-pill--accent`（`product-card.vue` 使用，同為 accent 橘底）目前用 Nuxt UI `--ui-text-inverted`，而 `--ui-primary` 在 light/dark 皆 = `--dw-accent`（恆橘底）、`--ui-text-inverted` 卻**會反相**（light `#fff`、dark 深色 neutral-900），與 M6 新增 `--dw-on-accent`「恆淺色」意圖矛盾——疑似 dark-mode 對比 bug，且符合 CLAUDE.md「改視覺缺陷時掃同類」的同類。verify 判定：套用會改變 dark 模式 pill 文字色（深→近白），屬**視覺變更／bugfix 而非純 simplify**，需使用者簽核＋淺/深開頁驗證，故未自動套用。**建議另開 scoped 視覺 bugfix 任務**（或併 036 E2E gate 截圖驗證）。
 
 - **測試結果**（coordinator 獨立重跑）：`pnpm test` **594 passed / 86 files** exit 0；`pnpm lint` exit 0；`CI=true ./dev.sh typecheck` exit 0。測試設計 gate：`cli-helpers.test.ts` 純函式行為測試；`content-markdown-render.test.ts` 驗 h2/h3/h4 依 level；**AC16 CTA 色未寫 unit test**——happy-dom 不載外部 stylesheet、無法讀 CSS 級聯 computed style，寫「CSS 含 `var(--dw-…)`」屬 source-grep／斷言 CSS 數值反模式，故不硬湊假測試，交 036 E2E 截圖／人眼（符合測試品質教義：不硬湊反模式測試充數）。
-- **未驗證（交棒 CI/使用者）**：AC13 容器 rebuild（node 22→24 image）＋`./dev.sh exec ./dev.sh verify` 全綠、node 24 lockfile／native 相容（spec Case 5，Alpine 24 sharp/native 若不相容須回報而非硬上）；AC16 淺/深開頁驗 CTA 文字色；AC17 `--frozen-lockfile` 實際 build。
+- **未驗證（交棒 CI/使用者）**：AC13 容器 rebuild（node 22→24 image）＋`./dev.sh exec ./dev.sh verify` 全綠、node 24 lockfile／native 相容（spec Case 5，Alpine 24 sharp/native 若不相容須回報而非硬上）；AC16 淺/深開頁驗 CTA 文字色；AC17 `--frozen-lockfile` 實際 build。 **← 以下 M5＋收尾 session 全數解除交棒。**
+
+## Milestone 5: knip 導入（時序上最後執行——待「可跑容器＋knip」的環境）
+
+> M6 works 標「M5 未執行、交棒 CI/正常環境」的三項（AC13/AC16/AC17）與 M5 本體（AC12），在具備容器＋knip registry 的環境一次收尾。coordinator 派 `ddd-developer` 實作 M5 程式面，自行執行容器 rebuild／verify／開頁驗收。
+
+### M5-A: knip 導入本體（AC12，developer）
+
+- **技術決策**：
+  - **knip 6.25.0** devDependency（host `pnpm add -D knip`，lockfile 更新）。`knip.json`：內建 **nuxt plugin** 載 `nuxt.config.ts` 取 Nuxt 慣例 entry（pages/components/composables/server/app.vue）——**這是避開 Case 4 誤報的核心機制**（實測：缺 `APP_URL` 時 nuxt.config throw、plugin 失效 → 誤報 21 files；設 APP_URL → pages/components 零誤報，無需任何 ignore）。非預設設定逐條有據：`entry` 補 `content-check.mjs`（CLI 無 import 鏈）、`ignore` 排 `docs/**`＋`scripts/legacy/**`（設計交付檔／AC11 凍結 legacy，scope 邊界非壓平）、`ignoreDependencies: vue-tsc`（typecheck 工具鏈無 JS import）、`ignoreExportsUsedInFile`（僅檔內引用的多餘 export，非 mass-ignore）、`exclude: duplicates`（brand/tag 同形 schema 刻意共用、且非 ADR-035-3 gate 範圍）。
+  - **接入**：`package.json` `"knip": "./dev.sh knip"`；`dev.sh` `cmd_knip()`＋case＋usage；`cmd_verify` 鏈 test→lint→**knip**→typecheck→generate；CI `static-generate.yml` lint 後加 `Run knip`。
+- **AC12 gate 驗證（非 unit test）**：baseline host `pnpm exec knip` exit 0 零報告；注入 `__knip_probe__` unused export → exit 1 攔截、`git checkout` 移除後回零（grep 確認 0 筆）。`tests/dev-server-script.test.ts` verify 鏈序列契約同步加入 knip 行。
+- **coordinator 裁示的死碼清除**（baseline 首輪殘留 3 項真死碼，非誤報）：`CompactLinkRow`/`CompactGuideRow`（`published-products/types.ts` 零引用型別別名，AC10 化石清運同域漏網）刪除；`postcss-nesting` devDependency（無 postcss config／wiring、CSS 無巢狀，從未接線）`pnpm remove`。清後 baseline exit 0。**判準**：三項落在 035「化石清運＋knip」宗旨、低風險，且 coordinator 以 rebuild 後 generate 當安全網（postcss 移除若影響 generate 則回退改 ignore——實測 generate 正常，未回退）。
+- **測試結果**（coordinator 獨立重跑）：`pnpm test` 594 passed、`pnpm lint` 0、`CI=true ./dev.sh typecheck` 0、host `pnpm exec knip` exit 0。
+
+### M5-B: 容器 knip Case 4 缺口修復（developer）
+
+- **根因**（coordinator 診斷、developer 修）：容器 rebuild 後 `./dev.sh exec ./dev.sh verify` 的 knip 步驟誤報 10 unused files＋4 exports（全為 Nuxt auto-import 的 components/composables，`rg` 確認皆真有引用）。knip nuxt plugin 的 entry **寫死** `.nuxt/nuxt.d.ts`→`.nuxt/components.d.ts`、**無視 `NUXT_BUILD_DIR`**（設 `.nuxt-build` 仍讀空的 `.nuxt`）；容器 entrypoint 用 `NUXT_MODE=build`（`nuxt generate`）生成的 `.nuxt/components.d.ts` 不含 component 註冊（`grep -c AppNavigation`＝0），host/CI 靠 `pnpm install` prepare hook 生成完整版（＝2）→ 三環境分歧。
+- **修法**：`cmd_knip` 加 `is_container` 分支，跑 knip 前 `NUXT_BUILD_DIR=.nuxt pnpm exec nuxt prepare`（顯式鎖預設 `.nuxt`、補全 auto-import manifest）；host/CI 走 false 分支不重補（已有 prepare hook）。註解記根因。`dev-server-script.test.ts` 鏈序列同步（prepare + knip，容器路徑 `DWSELECT_IN_CONTAINER=1`）。
+- **權衡**：prepare 寫預設 `.nuxt`（常駐 dev buildDir，非隔離 `.nuxt-build`，因 knip 讀不到後者）——可接受：verify/knip 是 pre-PR gate、實務跑 build-mode 容器/CI（preview 讀 `.output` 不受影響）、prepare 冪等；上游若支援自訂 buildDir 可根除。
+- **驗收**（coordinator 獨立重跑）：`./dev.sh exec ./dev.sh verify` **exit 0**（test 594、knip 零報告、prepare「Types generated in .nuxt」、generate 544 routes → `.output/public`）；host knip 仍 exit 0；容器 probe 仍 exit 1 攔截；`dev-server-script.test.ts` 14 passed。
+
+### 收尾：容器 rebuild 與人工驗收（coordinator）
+
+- **Dockerfile blocker 修復（coordinator 直接修）**：首輪 rebuild 失敗 `ERR_PNPM_LOCKFILE_CONFIG_MISMATCH`（`settings.autoInstallPeers` 不符）。根因：Dockerfile `COPY package.json pnpm-lock.yaml ./` **未 COPY `.npmrc`**（含 `auto-install-peers=false`），容器內 pnpm 用預設 `true` 與 lockfile 的 `false` 衝突。**這是 M6 AC17 改用 `--frozen-lockfile` 才暴露的缺漏**（舊非 frozen install 不做 settings 嚴格比對）。修 `COPY package.json pnpm-lock.yaml .npmrc ./`（一行 config、fixbug 性質、spec AC17 已確認）→ rebuild 通過。
+- **AC13／AC17 達成**：rebuild `--no-cache` 成功、frozen-lockfile install 無 mismatch、容器 **node v24.18.0**、`./dev.sh exec ./dev.sh verify` exit 0。Alpine 24 native 依賴無不相容（generate 544 routes 正常，Case 5 未觸發）。
+- **AC16 達成（agent-browser 讀 computed style，非字串斷言）**：detail 頁 `.detail-buy-cta` 買入 CTA——淺模式 `color: rgb(255,250,241)`（＝#fffaf1）／底 `rgb(236,122,43)`；深模式（`.dark` class）`color: rgb(255,250,241)`／底 `rgb(254,137,60)`。文字色淺深恆 `#fffaf1`＝`--dw-on-accent` token、不反相（底恆橘），符合 M6「`--dw-on-accent` 只定義於 :root、.dark 不覆蓋」意圖。M6 works 標「交 036 E2E／人眼」的 AC16 於此以 computed style 直驗解除。
+- **AC10 達成**：agent-browser 開 `dwselect.toybox.local` 四頁——首頁（76 product cards＋分類 nav＋price/通路 pills）、guide（指南列表：iRobot 品牌選擇／家庭劇院採購指南…）、links、search（熱門標籤/品牌 pills），render 結構完整無破。M1 化石清運（TagExplorer 等）後四頁渲染不變經人工開頁確認，解除 M1 交棒的「容器 crash loop 未開頁」。
+- **未解項（非本 sprint）**：M6 揭露的 `.catalog-pill--accent` dark-mode 對比疑慮（`--ui-text-inverted` 會反相）仍列後續 scoped 視覺 bugfix 候選，本 session 未動（超出 035 範圍）。
+
+### xreview 修正（三模型 cross review：claude:opus／codex:gpt-5.5／agy:gemini-3.1-pro，全成功）
+
+三方共 3 個 issue，使用者裁示全修。coordinator 驗證後（因 developer session 額度耗盡、使用者要求繼續，coordinator 說明理由後直接執行三處明確修改並自驗）：
+
+- **Issue #1（三方共識・本次真缺陷）｜CI cache 覆寫 prepare 的 `.nuxt` → knip 讀 stale manifest**：`static-generate.yml` 原順序 `Install`（prepare 生成新 `.nuxt`）→ `Restore Nuxt build cache`（restore-keys fallback 撈舊 `.nuxt` 覆寫）→ `Run knip`，令增刪 component 的 PR 讓 knip 讀 stale `components.d.ts` 誤報 unused（Case 4 在 CI 復活）、typecheck/generate 同吃 stale。**修法**：`Restore Nuxt build cache` step 移到 `Install dependencies` **之前**——install 的 prepare hook 用當前 commit 覆蓋 restore 的舊 `.nuxt`，一次修好 knip＋typecheck＋generate 全下游，`node_modules/.cache/nuxt`（Vite cache）續享加速。加註解說明順序約束。→ 容器 verify exit 0（含 knip 零報告）、594 passed。**codex 建議補 CI 路徑 dev-server-script 測試未採納**：CI 正確性在 workflow YAML step 順序（非 dev.sh runtime 行為），要測只能 parse YAML 斷言 step 次序，屬 config 結構快照反模式、無真實 runtime 行為可行為化——不硬湊反模式測試充數（測試品質教義），CI 正確性靠 workflow 順序＋註解保證。
+- **Issue #3（gemini 標 Critical・pre-existing M3・使用者要順手修）｜fresh clone `pnpm install` 因 APP_URL guard 崩**：`prepare: nuxt prepare` hook 載入 `nuxt.config.ts` 的 `APP_URL` guard（M3 ADR-035-5），fresh clone 無 `.env` 時 install 崩。**根因補充**（coordinator 診斷）：`getSiteUrl()`（`site-url.ts:7`）也讀 `process.env.APP_URL` 且無值即 throw，故單純排除 guard 不足、`nuxt.config:20` 會二次崩。**修法**：prepare 情境（`process.argv.includes('prepare')`）且無 APP_URL 時設 placeholder `app-url.invalid` 到 `process.env.APP_URL`，一次餵給 guard＋getSiteUrl＋vite_host（僅供該次 typegen process，真 build 一定另帶 APP_URL）；非 prepare 缺 APP_URL 仍硬失敗。**行為分界實測**（容器內暫移 `.env`＋隔離 buildDir，trap 復原）：`nuxt prepare` 無 APP_URL → exit 0「Types generated」；`nuxt generate` 無 APP_URL → exit 1「APP_URL 環境變數未設定」（ADR-035-5 意圖不變）。
+- **Issue #2（claude 單方・已書面接受・低優先）｜容器 `cmd_knip` prepare 破壞隔離宣稱**：純文件——`dev.sh` `cmd_knip` 補 caveat 註解（此 prepare 寫預設 `.nuxt`、與 live dev 輕度並行、prepare 冪等最壞觸發一次 reload 非 chunk hash 毀損），`CLAUDE.md` 隔離段補「knip 步驟為隔離例外」。無行為變更。
+- **駁回（不改）**：knip.json `exclude: ["duplicates"]` 範圍略大於單一案例但與 ADR-035-3 gate 範圍一致、可接受（claude 低優先項）。Security lens 無 finding（`.npmrc` 無 secret、Dockerfile COPY 無其他遺漏、刪型別/postcss-nesting 移除安全）。
+- **修正後全驗收**：`./dev.sh exec ./dev.sh verify` exit 0（test 594、knip 零報告、generate 544 routes）；host knip exit 0；Issue#3 行為分界實測如上。

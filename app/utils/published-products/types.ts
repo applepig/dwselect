@@ -67,9 +67,6 @@ export type CompactResourceRow = {
   tag_ids?: string[]
 }
 
-export type CompactLinkRow = CompactResourceRow
-export type CompactGuideRow = CompactResourceRow
-
 // taxonomy 瀏覽頁（/category/{id}、/tag/{id}、/brand/{id}、/channel/{id}）的渲染資料。
 // products 用 ProductCard grid，guides／links 用 ResourceList；空陣列代表該型別區段不渲染。
 export type TaxonomyPageData = {

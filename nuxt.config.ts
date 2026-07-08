@@ -11,6 +11,13 @@ import { getSiteUrl } from './scripts/site-url'
 
 // APP_URL 一律必填（含裸跑 generate/build）：缺 env 硬失敗，不再豁免 generate/build、
 // 也不 fallback 到寫死的 toybox host，避免靜默產出錯誤 host 的 SEO/canonical/discovery 產物（ADR-035-5）。
+// 唯一例外：`nuxt prepare`（pnpm install 的 prepare hook）只做 typegen、不烤入任何 host 值；fresh clone
+// 尚無 .env 時 install 仍須能跑，故 prepare 情境無 APP_URL 時填一個明顯非真 host 的 placeholder（僅供
+// 這次 typegen process，真 generate/build 一定另帶 APP_URL）。generate/build/dev 缺 APP_URL 仍硬失敗，
+// ADR-035-5 意圖不變。placeholder 也餵給下游 getSiteUrl()（同讀 process.env.APP_URL），避免 line 20 二次崩。
+if (!process.env.APP_URL && process.argv.includes('prepare')) {
+  process.env.APP_URL = 'app-url.invalid'
+}
 const app_url = process.env.APP_URL
 if (!app_url) {
   throw new Error('APP_URL 環境變數未設定——請在 .env 設定，例如 APP_URL=dwselect.toybox.local')

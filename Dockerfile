@@ -9,7 +9,7 @@ RUN corepack enable && corepack prepare pnpm@10.20.0 --activate
 WORKDIR /app
 
 # Install dependencies first (layer cache)
-COPY package.json pnpm-lock.yaml ./
+COPY package.json pnpm-lock.yaml .npmrc ./
 RUN pnpm install --frozen-lockfile
 
 EXPOSE 3000
