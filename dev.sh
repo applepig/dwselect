@@ -159,6 +159,9 @@ cmd_dev() {
 cmd_generate_inner() {
     pnpm build:public-discovery
     node scripts/assert-content-images.ts
+    # og:image 指向 public/images/{domain}/{stem}.webp（ADR-036-1）：generate 前先產最佳化圖，
+    # 順序在 assert 之後——缺圖／壞圖由 assert 先以精確訊息中止。
+    pnpm build:content-images
     run_nuxt_isolated generate
 }
 

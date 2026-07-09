@@ -1,5 +1,6 @@
 import type { MaybeRefOrGetter } from 'vue'
 
+import { getContentImageWebpName } from './content-images/content-image-webp-name'
 import { SITE_NAME } from './site-name'
 
 // SITE_URL 跟著 APP_URL 環境走（ADR-035-2）：值於 build/generate 時由 Vite `define` 從
@@ -34,8 +35,13 @@ export function getOgImageUrl(image_url: string | null | undefined): string {
     return trimmed
   }
 
-  if (/^\/?(?:products|guides)\/images\//.test(trimmed)) {
-    return SITE_OG_IMAGE
+  // 本地 content 圖片對映到 build-content-images 的最佳化產物（ADR-036-1）：
+  // /{domain}/images/{file} → images/{domain}/{stem}.webp，檔名規則與該 script 共用同一 helper，
+  // og 指到哪、generate 產物就在哪。
+  const content_image_match = /^\/?(products|guides)\/images\/([^/]+)$/.exec(trimmed)
+
+  if (content_image_match !== null) {
+    return getCanonicalUrl(`images/${content_image_match[1]}/${getContentImageWebpName(content_image_match[2]!)}`)
   }
 
   return getCanonicalUrl(trimmed)
