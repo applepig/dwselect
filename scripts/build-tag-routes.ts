@@ -1,5 +1,5 @@
 import { collectNonEmptyTaxonomyIds } from '../app/utils/published-products/non-empty-taxonomy-ids.ts'
-import { readBrandIds, readPublishedTaxonomyItems, type TaxonomyContentDirs } from './read-published-taxonomy-items.ts'
+import { readBrandIds, readPublishedTaxonomyItems, type TaxonomyContentDirs } from './content-source/read-taxonomy-items.ts'
 
 // Why: 對「至少 1 筆 published 關聯項目」的 tag 產生 /tag/{id} prerender 路由——三型別皆以 tag_ids 關聯。
 // 與 build-category-routes 共用 collectNonEmptyTaxonomyIds，使路由與 sitemap 的非空判定不漂移。

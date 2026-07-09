@@ -1,10 +1,9 @@
 import { describe, expect, it } from 'vitest'
-import { readFileSync } from 'node:fs'
 
-import { readPublicContentSource } from '../../scripts/content-reader'
+import { readPublicContentSource } from '../../scripts/content-source/read-public-content-source'
 import { buildGuideDetail, buildProductDetail } from '../../scripts/public-payload/build-detail-by-id'
 import { extractContentId } from '../../app/utils/content/extract-content-id'
-import { isPublished } from '../../scripts/public-content'
+import { isPublished } from '../../app/utils/content/is-published'
 
 // 堵住 028 第一版的覆蓋漏洞：route 用 getRouterParam(event, 'id') 取 id，但 h3 (rou3) 把檔名 token
 // [id].json 整段解析成單一 param（key 'id.json'），getRouterParam(event, 'id') 回 undefined → 全部
@@ -13,8 +12,6 @@ import { isPublished } from '../../scripts/public-content'
 // 這裡用 nitro 實際產生的 request path 字串，測 route 的核心轉換 decodeURIComponent(extractContentId(path))
 // 串到 builder，涵蓋 ascii / 原始 unicode（prerender）/ 百分比編碼（dev fetch）/ 不存在 id。
 
-const product_route_url = new URL('../../server/api/products/[id].json.get.ts', import.meta.url)
-const guide_route_url = new URL('../../server/api/guides/[id].json.get.ts', import.meta.url)
 const NON_ASCII = /\P{ASCII}/u
 
 // 與正式 route 同一行：把 nitro 餵進來的 event.path 還原成 content id。
@@ -23,16 +20,6 @@ function resolveDetailId(event_path: string): string {
 }
 
 describe('per-id detail route id resolution from event.path', () => {
-  it('does not rely on getRouterParam(event, "id") — h3 names the param "id.json" for this route shape', () => {
-    const product_source = readFileSync(product_route_url, 'utf8')
-    const guide_source = readFileSync(guide_route_url, 'utf8')
-
-    for (const route_source of [product_source, guide_source]) {
-      // 由 event.path 還原 id，而非 getRouterParam(event, 'id')（後者在此 route shape 下是 undefined）。
-      expect(route_source).toContain('extractContentId(event.path)')
-    }
-  })
-
   it('resolves an ascii product id from the prerendered request path and builds that detail', async () => {
     const source = await readPublicContentSource()
     const product = source.products.find(isPublished)

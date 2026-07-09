@@ -65,15 +65,11 @@ node scripts/legacy/migrate-content-domain-taxonomy.ts
 pnpm generate
 ```
 
-輸出位置是 `.output/public`。產生後可檢查公開 runtime 是否仍包含 Google Sheets TSV 指標：
-
-```bash
-node scripts/assert-runtime-google-sheet-clean.ts
-```
+輸出位置是 `.output/public`。
 
 ## Production deploy / Cloudflare Pages
 
-正式站部署由 GitHub Actions direct upload 到 Cloudflare Pages。push 到 `master` 會先執行 `pnpm test`、`pnpm lint`、`pnpm typecheck`、`pnpm generate` 與 runtime Google Sheets 檢查，全部通過後才部署；pull request 只跑驗證，不會部署。
+正式站部署由 GitHub Actions direct upload 到 Cloudflare Pages。push 到 `master` 會先執行 `pnpm test`、`pnpm lint`、`pnpm typecheck` 與 `pnpm generate`，全部通過後才部署；pull request 只跑驗證，不會部署。
 
 - Cloudflare Pages project：`dwselect`
 - Build output：`.output/public`

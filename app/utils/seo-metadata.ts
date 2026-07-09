@@ -1,10 +1,16 @@
 import type { MaybeRefOrGetter } from 'vue'
 
-export const SITE_URL = 'https://dwselect.applepig.net/'
-export const SITE_NAME = 'DW嚴選'
+import { SITE_NAME } from './site-name'
+
+// SITE_URL 跟著 APP_URL 環境走（ADR-035-2）：值於 build/generate 時由 Vite `define` 從
+// process.env.APP_URL 烤入（nuxt.config／vitest.config 皆注入 __DW_SITE_URL__），
+// seo-metadata 維持純函式讀常數、不需 Nuxt setup context，故各頁與工具的呼叫端零改動。
+declare const __DW_SITE_URL__: string
+
+export const SITE_URL = __DW_SITE_URL__
 export const SITE_DESCRIPTION = '值得買、值得看、值得收藏的選物清單。'
 export const SITE_TITLE = `${SITE_NAME}｜值得買、值得看、值得收藏的選物清單`
-export const SITE_OG_IMAGE = 'https://dwselect.applepig.net/og-image.png'
+export const SITE_OG_IMAGE = `${SITE_URL}og-image.png`
 
 export function getCanonicalUrl(path: string): string {
   const normalized_path = path.trim()

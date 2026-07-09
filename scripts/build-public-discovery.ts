@@ -4,8 +4,11 @@ import { join } from 'node:path'
 import type { Guide, LinkDefinition, Product } from '../app/utils/product-schema.ts'
 import { compareProducts } from '../app/utils/content/compare-products.ts'
 import { collectNonEmptyTaxonomyIds } from '../app/utils/published-products/non-empty-taxonomy-ids.ts'
-import { readPublicContentSource, type ContentReaderOptions, type PublicContentSource } from './content-reader.ts'
-import { SITE_NAME, SITE_URL, isPublished } from './public-content.ts'
+import { isPublished } from '../app/utils/content/is-published.ts'
+import { readPublicContentSource, type ContentReaderOptions, type PublicContentSource } from './content-source/read-public-content-source.ts'
+import { SITE_NAME } from '../app/utils/site-name.ts'
+import { getSiteUrl } from './site-url.ts'
+import { getOptionValue, isDirectRun } from './cli-helpers.ts'
 
 type BuildPublicDiscoveryOptions = ContentReaderOptions & {
   public_dir?: string
@@ -43,6 +46,8 @@ export async function buildPublicDiscoveryFilesFromSource(
   options: Pick<BuildPublicDiscoveryOptions, 'public_dir'> = {},
 ): Promise<BuildPublicDiscoverySummary> {
   const public_dir = options.public_dir ?? DEFAULT_PUBLIC_DIR
+  // 站台 URL 於此一次導出（缺 APP_URL 在此 fail-loud），再 thread 進各 builder，避免 module 載入即 throw。
+  const site_url = getSiteUrl()
   const published_products = source.products
     .filter(isPublished)
     .toSorted((left_product, right_product) => compareProducts(left_product, right_product, source.taxonomies))
@@ -57,15 +62,15 @@ export async function buildPublicDiscoveryFilesFromSource(
 
   await mkdir(public_dir, { recursive: true })
   await Promise.all([
-    writeFile(output_paths[0], buildRobotsTxt()),
-    writeFile(output_paths[1], buildLlmsTxt()),
+    writeFile(output_paths[0], buildRobotsTxt(site_url)),
+    writeFile(output_paths[1], buildLlmsTxt(site_url)),
     writeFile(output_paths[2], buildSitemapXml(published_products, {
       products: published_products,
       guides: published_guides,
       links: published_links,
       brand_ids: new Set(source.taxonomies.brands.map((brand) => brand.id)),
-    })),
-    writeFile(output_paths[3], buildRssXml(published_products, published_guides, published_links)),
+    }, site_url)),
+    writeFile(output_paths[3], buildRssXml(published_products, published_guides, published_links, site_url)),
   ])
 
   return {
@@ -76,12 +81,12 @@ export async function buildPublicDiscoveryFilesFromSource(
   }
 }
 
-function buildRobotsTxt() {
-  return `User-agent: *\nAllow: /\n\nSitemap: ${SITE_URL}sitemap.xml\n`
+function buildRobotsTxt(site_url: string) {
+  return `User-agent: *\nAllow: /\n\nSitemap: ${site_url}sitemap.xml\n`
 }
 
-function buildLlmsTxt() {
-  return `# ${SITE_NAME}\n\n> ${SITE_NAME}是個人選物網站，整理商品、指南與實用連結。\n\n## Public Data\n\n- [All content JSON](${SITE_URL}api/content.json): Published products, guides, links, and taxonomies.\n- [Search index](${SITE_URL}search-index.json): Lightweight searchable document index.\n- [Sitemap](${SITE_URL}sitemap.xml): Canonical public URLs.\n- [RSS](${SITE_URL}rss.xml): Recent published updates.\n\n## Usage Notes\n\nPublic agents may read and summarize public content. Do not attempt write actions, checkout automation, account actions, or content mutation from the public site.\n`
+function buildLlmsTxt(site_url: string) {
+  return `# ${SITE_NAME}\n\n> ${SITE_NAME}是個人選物網站，整理商品、指南與實用連結。\n\n## Public Data\n\n- [All content JSON](${site_url}api/content.json): Published products, guides, links, and taxonomies.\n- [Search index](${site_url}search-index.json): Lightweight searchable document index.\n- [Sitemap](${site_url}sitemap.xml): Canonical public URLs.\n- [RSS](${site_url}rss.xml): Recent published updates.\n\n## Usage Notes\n\nPublic agents may read and summarize public content. Do not attempt write actions, checkout automation, account actions, or content mutation from the public site.\n`
 }
 
 type TaxonomySitemapSource = {
@@ -94,11 +99,12 @@ type TaxonomySitemapSource = {
 function buildSitemapXml(
   products: Product[],
   taxonomy_source: TaxonomySitemapSource,
+  site_url: string,
 ) {
-  const route_entries = ROOT_ROUTES.map((route) => buildSitemapUrlEntry(`${SITE_URL}${route.slice(1)}`))
-  const product_entries = products.map((product) => buildSitemapUrlEntry(getProductUrl(product.id), getDateText(product.updated_at)))
-  const guide_entries = taxonomy_source.guides.map((guide) => buildSitemapUrlEntry(getGuideUrl(guide.id), getDateText(guide.updated_at)))
-  const taxonomy_entries = buildTaxonomySitemapEntries(taxonomy_source)
+  const route_entries = ROOT_ROUTES.map((route) => buildSitemapUrlEntry(`${site_url}${route.slice(1)}`))
+  const product_entries = products.map((product) => buildSitemapUrlEntry(getProductUrl(product.id, site_url), getDateText(product.updated_at)))
+  const guide_entries = taxonomy_source.guides.map((guide) => buildSitemapUrlEntry(getGuideUrl(guide.id, site_url), getDateText(guide.updated_at)))
+  const taxonomy_entries = buildTaxonomySitemapEntries(taxonomy_source, site_url)
 
   return `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${[...route_entries, ...product_entries, ...guide_entries, ...taxonomy_entries].join('\n')}\n</urlset>\n`
 }
@@ -106,7 +112,7 @@ function buildSitemapXml(
 // Why: 非空 category／tag／brand／channel 與 route builder 共用 collectNonEmptyTaxonomyIds，使 sitemap 收錄的
 // taxonomy 頁集合與 prerender 路由集合完全一致，不漂移。taxonomy id 為 ASCII kebab-case，無需 encodeURIComponent。
 // brand id 走 /brand/（不出現於 /tag/，ADR-8）；channel id 來自 product offers（products-only，ADR-9）。
-function buildTaxonomySitemapEntries(source: TaxonomySitemapSource) {
+function buildTaxonomySitemapEntries(source: TaxonomySitemapSource, site_url: string) {
   const { category_ids, tag_ids, brand_ids, channel_ids } = collectNonEmptyTaxonomyIds(
     {
       products: source.products.map((product) => ({
@@ -121,10 +127,10 @@ function buildTaxonomySitemapEntries(source: TaxonomySitemapSource) {
   )
 
   return [
-    ...Array.from(category_ids, (category_id) => buildSitemapUrlEntry(`${SITE_URL}category/${category_id}`)),
-    ...Array.from(tag_ids, (tag_id) => buildSitemapUrlEntry(`${SITE_URL}tag/${tag_id}`)),
-    ...Array.from(brand_ids, (brand_id) => buildSitemapUrlEntry(`${SITE_URL}brand/${brand_id}`)),
-    ...Array.from(channel_ids, (channel_id) => buildSitemapUrlEntry(`${SITE_URL}channel/${channel_id}`)),
+    ...Array.from(category_ids, (category_id) => buildSitemapUrlEntry(`${site_url}category/${category_id}`)),
+    ...Array.from(tag_ids, (tag_id) => buildSitemapUrlEntry(`${site_url}tag/${tag_id}`)),
+    ...Array.from(brand_ids, (brand_id) => buildSitemapUrlEntry(`${site_url}brand/${brand_id}`)),
+    ...Array.from(channel_ids, (channel_id) => buildSitemapUrlEntry(`${site_url}channel/${channel_id}`)),
   ]
 }
 
@@ -136,13 +142,13 @@ function buildSitemapUrlEntry(url: string, lastmod?: string) {
   return `  <url>\n    <loc>${escapeXml(url)}</loc>\n    <lastmod>${escapeXml(lastmod)}</lastmod>\n  </url>`
 }
 
-function buildRssXml(products: Product[], guides: Guide[], links: LinkDefinition[]) {
+function buildRssXml(products: Product[], guides: Guide[], links: LinkDefinition[], site_url: string) {
   const items = [
     ...products.map((product) => ({
       id: `product:${product.id}`,
       title: product.name,
       summary: product.summary,
-      url: getProductUrl(product.id),
+      url: getProductUrl(product.id, site_url),
       published_at: product.published_at,
       updated_at: product.updated_at,
     })),
@@ -165,7 +171,7 @@ function buildRssXml(products: Product[], guides: Guide[], links: LinkDefinition
   ].toSorted(compareRssItems)
   const item_xml = items.map(buildRssItemXml).join('\n')
 
-  return `<?xml version="1.0" encoding="UTF-8"?>\n<rss version="2.0">\n  <channel>\n    <title>${escapeXml(SITE_NAME)}</title>\n    <link>${escapeXml(SITE_URL)}</link>\n    <description>${escapeXml(`${SITE_NAME}的商品、指南與實用連結更新`)}</description>\n${item_xml}\n  </channel>\n</rss>\n`
+  return `<?xml version="1.0" encoding="UTF-8"?>\n<rss version="2.0">\n  <channel>\n    <title>${escapeXml(SITE_NAME)}</title>\n    <link>${escapeXml(site_url)}</link>\n    <description>${escapeXml(`${SITE_NAME}的商品、指南與實用連結更新`)}</description>\n${item_xml}\n  </channel>\n</rss>\n`
 }
 
 function buildRssItemXml(item: RssItem) {
@@ -192,12 +198,12 @@ function compareRssItems(left_item: RssItem, right_item: RssItem) {
   return left_item.id.localeCompare(right_item.id)
 }
 
-function getProductUrl(product_id: string) {
-  return `${SITE_URL}products/${encodeURIComponent(product_id)}`
+function getProductUrl(product_id: string, site_url: string) {
+  return `${site_url}products/${encodeURIComponent(product_id)}`
 }
 
-function getGuideUrl(guide_id: string) {
-  return `${SITE_URL}guide/${encodeURIComponent(guide_id)}`
+function getGuideUrl(guide_id: string, site_url: string) {
+  return `${site_url}guide/${encodeURIComponent(guide_id)}`
 }
 
 function getDateText(timestamp: string) {
@@ -244,17 +250,7 @@ async function runCli() {
   process.stdout.write(`Links: ${summary.link_count}\n`)
 }
 
-function getOptionValue(args: string[], option: string) {
-  const option_index = args.indexOf(option)
-
-  if (option_index === -1) {
-    return undefined
-  }
-
-  return args[option_index + 1]
-}
-
-if (process.argv[1]?.endsWith('build-public-discovery.ts')) {
+if (isDirectRun(import.meta.url)) {
   runCli().catch((error: unknown) => {
     console.error(error)
     process.exitCode = 1

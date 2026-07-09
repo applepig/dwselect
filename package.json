@@ -1,5 +1,5 @@
 {
-  "name": "temp_init",
+  "name": "dwselect",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -10,7 +10,6 @@
   "scripts": {
     "prepare": "nuxt prepare",
     "dev": "./dev.sh dev",
-    "build": "pnpm build:public-discovery && node scripts/assert-content-images.ts && nuxt build",
     "build:content-images": "node scripts/build-content-images.ts",
     "build:search-index": "node scripts/build-search-index.ts",
     "build:public-discovery": "node scripts/build-public-discovery.ts",
@@ -21,6 +20,7 @@
     "content:schema": "./dev.sh content-schema",
     "lint": "./dev.sh lint",
     "lint:file": "eslint --fix --max-warnings=0",
+    "knip": "./dev.sh knip",
     "format": "eslint . --fix",
     "typecheck": "./dev.sh typecheck",
     "generate": "./dev.sh generate",
@@ -43,7 +43,7 @@
     "@vue/test-utils": "^2.4.11",
     "eslint": "^9.39.4",
     "happy-dom": "^20.10.3",
-    "postcss-nesting": "^13.0.2",
+    "knip": "^6.25.0",
     "sharp": "^0.35.1",
     "typescript": "^6.0.3",
     "vitest": "^4.0.14",

@@ -2,7 +2,8 @@ import { mkdir, writeFile } from 'node:fs/promises'
 import { dirname, join } from 'node:path'
 
 import { buildSearchIndexPayload } from '../app/utils/search/search-index.ts'
-import { DEFAULT_PRODUCTS_DIR, DEFAULT_TAXONOMIES_DIR, readPublicContentSource, type PublicContentSource } from './content-reader.ts'
+import { DEFAULT_PRODUCTS_DIR, DEFAULT_TAXONOMIES_DIR, readPublicContentSource, type PublicContentSource } from './content-source/read-public-content-source.ts'
+import { getOptionValue, isDirectRun } from './cli-helpers.ts'
 
 type BuildSearchIndexSummary = {
   output_path: string
@@ -67,17 +68,7 @@ async function runCli() {
   process.stdout.write(`Documents: ${summary.document_count}\n`)
 }
 
-function getOptionValue(args: string[], option: string) {
-  const option_index = args.indexOf(option)
-
-  if (option_index === -1) {
-    return undefined
-  }
-
-  return args[option_index + 1]
-}
-
-if (process.argv[1]?.endsWith('build-search-index.ts')) {
+if (isDirectRun(import.meta.url)) {
   runCli().catch((error: unknown) => {
     console.error(error)
     process.exitCode = 1

@@ -192,6 +192,8 @@ describe('dev server script', () => {
     expect(readFileSync(fixture.log_path, 'utf8')).toBe([
       'pnpm test APP_URL=dwselect.applepig.net NUXT_BUILD_DIR=',
       'pnpm lint APP_URL=dwselect.applepig.net NUXT_BUILD_DIR=',
+      'pnpm exec nuxt prepare APP_URL=dwselect.applepig.net NUXT_BUILD_DIR=.nuxt',
+      'pnpm exec knip APP_URL=dwselect.applepig.net NUXT_BUILD_DIR=',
       'pnpm exec nuxt typecheck APP_URL=dwselect.applepig.net NUXT_BUILD_DIR=.nuxt-build',
       'pnpm build:public-discovery APP_URL=dwselect.applepig.net NUXT_BUILD_DIR=',
       'node scripts/assert-content-images.ts APP_URL=dwselect.applepig.net',

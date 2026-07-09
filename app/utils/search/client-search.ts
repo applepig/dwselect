@@ -75,25 +75,6 @@ export function getSearchPageMode(input: SearchPageModeInput): SearchPageMode {
   return 'idle'
 }
 
-export function readSearchHistory(storage: SearchHistoryStorage | null | undefined): string[] {
-  if (storage === null || storage === undefined) {
-    return []
-  }
-
-  try {
-    const raw_history = storage.getItem(SEARCH_HISTORY_STORAGE_KEY)
-
-    if (raw_history === null) {
-      return []
-    }
-
-    return parseSearchHistory(raw_history)
-  }
-  catch {
-    return []
-  }
-}
-
 export function useSearchHistoryItems() {
   const storage = getSafeBrowserLocalStorage()
 
@@ -125,28 +106,6 @@ export function appendSearchHistoryItem(query: string, history_items: string[]):
   ].slice(0, SEARCH_HISTORY_LIMIT)
 }
 
-export function saveSearchHistoryItem(
-  query: string,
-  storage: SearchHistoryStorage | null | undefined,
-): string[] {
-  const normalized_query = query.trim()
-
-  if (normalized_query === '') {
-    return readSearchHistory(storage)
-  }
-
-  const next_history = appendSearchHistoryItem(normalized_query, readSearchHistory(storage))
-
-  try {
-    storage?.setItem(SEARCH_HISTORY_STORAGE_KEY, JSON.stringify(next_history))
-  }
-  catch {
-    return next_history
-  }
-
-  return next_history
-}
-
 export function clearSearchHistory(storage: SearchHistoryStorage | null | undefined): string[] {
   try {
     storage?.removeItem(SEARCH_HISTORY_STORAGE_KEY)
@@ -156,10 +115,6 @@ export function clearSearchHistory(storage: SearchHistoryStorage | null | undefi
   }
 
   return []
-}
-
-export function clearStoredSearchHistory(): string[] {
-  return clearSearchHistory(getSafeBrowserLocalStorage())
 }
 
 export function createLatestSearchRequestRunner<T>() {

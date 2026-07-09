@@ -3,7 +3,9 @@ import type { TaxonomyKind } from '../utils/published-products/select-taxonomy-i
 import type { TaxonomyPageData } from '../utils/published-products/types'
 import { TAXONOMY_KINDS } from '../utils/published-products/taxonomy-kinds'
 import { buildTaxonomyPageSeo } from '../utils/published-products/taxonomy-page-seo'
-import { buildSeoMeta, getCanonicalUrl, SITE_NAME, SITE_OG_IMAGE } from '../utils/seo-metadata'
+import { resolveRouteId } from '../utils/resolve-route-id'
+import { buildSeoMeta, getCanonicalUrl, SITE_OG_IMAGE } from '../utils/seo-metadata'
+import { SITE_NAME } from '../utils/site-name'
 
 // 收斂四個 taxonomy 頁（category／tag／brand／channel）逐行複製的 setup：route id 正規化（C1）、
 // canonical 推導、meta computed、useHead／useSeoMeta 註冊、await fetch、404、watchEffect。
@@ -14,8 +16,7 @@ export async function useTaxonomyDetailPage(kind: TaxonomyKind): Promise<{
   page_data: ShallowRef<TaxonomyPageData | null>
 }> {
   const route = useRoute()
-  const raw_id = route.params.id
-  const taxonomy_id = (Array.isArray(raw_id) ? raw_id[0] : raw_id) ?? ''
+  const taxonomy_id = resolveRouteId(route.params.id)
   const page_data = shallowRef<TaxonomyPageData | null>(null)
 
   // canonical 由 route id 同步推導（不需等 fetch）；title／description 等 fetch 解析 label 後才有意義，

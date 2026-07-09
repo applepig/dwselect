@@ -18,8 +18,9 @@
 </template>
 
 <script setup lang="ts">
-import { getCompactAppStateFromRoute, getCompactAppView } from '../../utils/published-products/compact-app'
-import { buildSeoMeta, getCanonicalUrl, SITE_NAME, SITE_OG_IMAGE } from '../../utils/seo-metadata'
+import { getCompactAppView } from '../../utils/published-products/compact-app'
+import { buildSeoMeta, getCanonicalUrl, SITE_OG_IMAGE } from '../../utils/seo-metadata'
+import { SITE_NAME } from '../../utils/site-name'
 
 const GUIDE_DESCRIPTION = '選物指南、購買筆記與使用心得，幫你快速理解值得買的理由。'
 const guide_canonical_url = getCanonicalUrl('/guide')
@@ -41,14 +42,12 @@ useSeoMeta(buildSeoMeta({
   image: SITE_OG_IMAGE,
 }))
 
-const route = useRoute()
 const { content_payload } = await useCatalogData()
-const route_state = computed(() => getCompactAppStateFromRoute({ path: route.path, query: route.query }))
 const compact_view = computed(() => {
   if (content_payload.value === null || content_payload.value === undefined) {
     throw new Error('Catalog runtime data is not available')
   }
 
-  return getCompactAppView(content_payload.value, route_state.value)
+  return getCompactAppView(content_payload.value)
 })
 </script>

@@ -4,7 +4,10 @@ import { mount } from '@vue/test-utils'
 import { computed, onMounted, ref } from 'vue'
 import { afterAll, beforeEach, describe, expect, it, vi } from 'vitest'
 
+import { useBrokenImageFallback } from '../app/composables/use-broken-image-fallback'
+import { useDetailBackNavigation } from '../app/composables/use-detail-back-navigation'
 import ProductDetail from '../app/components/product-detail.vue'
+import RelatedProductsSection from '../app/components/related-products-section.vue'
 import type { ProductDetailView } from '../app/utils/public-content-view-types'
 
 // CatalogPill 以 NuxtLink 渲染，stub 後把 `to`（{ path, query }）序列化到 href 上方便斷言。
@@ -41,6 +44,7 @@ function mountProductDetail(detail: ProductDetailView) {
   return mount(ProductDetail, {
     props: { detail },
     global: {
+      components: { RelatedProductsSection },
       stubs: {
         NuxtLink: NuxtLinkStub,
         CatalogPill: CatalogPillStub,
@@ -87,6 +91,8 @@ describe('ProductDetail taxonomy pill routing', () => {
     vi.stubGlobal('computed', computed)
     vi.stubGlobal('onMounted', onMounted)
     vi.stubGlobal('useRouter', () => ({ back: vi.fn(), push: vi.fn() }))
+    vi.stubGlobal('useDetailBackNavigation', useDetailBackNavigation)
+    vi.stubGlobal('useBrokenImageFallback', useBrokenImageFallback)
   })
 
   afterAll(() => {
@@ -165,5 +171,42 @@ describe('ProductDetail taxonomy pill routing', () => {
 
     expect(wrapper.find('[aria-labelledby="detail-reference-links-title"]').exists()).toBe(false)
     expect(wrapper.text()).not.toContain('參考資料')
+  })
+})
+
+describe('ProductDetail related products section', () => {
+  beforeEach(() => {
+    vi.stubGlobal('ref', ref)
+    vi.stubGlobal('computed', computed)
+    vi.stubGlobal('onMounted', onMounted)
+    vi.stubGlobal('useRouter', () => ({ back: vi.fn(), push: vi.fn() }))
+    vi.stubGlobal('useDetailBackNavigation', useDetailBackNavigation)
+    vi.stubGlobal('useBrokenImageFallback', useBrokenImageFallback)
+  })
+
+  afterAll(() => {
+    vi.unstubAllGlobals()
+  })
+
+  it('should render the "You may also like" related section with one card per related product linking to its detail', () => {
+    const wrapper = mountProductDetail(makeProductDetailView({
+      related_products: [
+        { id: 'product-a', name: '商品 A', image_url: '/products/images/a.jpg', category_label: '電腦', channel_label: 'PChome' },
+        { id: 'product-b', name: '商品 B', image_url: '/products/images/b.jpg', category_label: '居家', channel_label: 'momo' },
+      ],
+    }))
+    const related_section = wrapper.find('.related-products-section')
+    const cards = related_section.findAll('.related-product-card')
+
+    expect(related_section.attributes('aria-label')).toBe('You may also like')
+    expect(wrapper.find('.related-products-title').text()).toBe('You may also like')
+    expect(cards).toHaveLength(2)
+    expect(cards.map((card) => card.attributes('href'))).toEqual(['/products/product-a', '/products/product-b'])
+  })
+
+  it('should not render the related products section when there are no related products', () => {
+    const wrapper = mountProductDetail(makeProductDetailView({ related_products: [] }))
+
+    expect(wrapper.find('.related-products-section').exists()).toBe(false)
   })
 })

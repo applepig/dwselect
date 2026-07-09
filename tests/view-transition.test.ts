@@ -3,8 +3,11 @@ import { computed, onMounted, ref } from 'vue'
 import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest'
 
 import nuxt_config from '../nuxt.config'
+import { useBrokenImageFallback } from '../app/composables/use-broken-image-fallback'
+import { useDetailBackNavigation } from '../app/composables/use-detail-back-navigation'
 import ProductCard from '../app/components/product-card.vue'
 import ProductDetail from '../app/components/product-detail.vue'
+import RelatedProductsSection from '../app/components/related-products-section.vue'
 import type { ProductCardView, ProductDetailView } from '../app/utils/public-content-view-types'
 
 // renderToString 把 inline style 直接序列化成字串（不經 happy-dom CSSOM，後者會丟棄 view-transition-name），
@@ -92,6 +95,7 @@ function renderProductDetail(detail: ProductDetailView) {
   return renderToString(ProductDetail, {
     props: { detail },
     global: {
+      components: { RelatedProductsSection },
       stubs: {
         NuxtLink: NuxtLinkStub,
         NuxtImg: NuxtImgStub,
@@ -128,6 +132,8 @@ describe('shared view-transition-name naming (rendered markup, AC3/AC5a)', () =>
     vi.stubGlobal('computed', computed)
     vi.stubGlobal('onMounted', onMounted)
     vi.stubGlobal('useRouter', () => ({ back: vi.fn(), push: vi.fn() }))
+    vi.stubGlobal('useDetailBackNavigation', useDetailBackNavigation)
+    vi.stubGlobal('useBrokenImageFallback', useBrokenImageFallback)
   })
 
   afterAll(() => {

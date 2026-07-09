@@ -1,8 +1,9 @@
 import { join } from 'node:path'
 
-import { DEFAULT_PRODUCTS_DIR, DEFAULT_TAXONOMIES_DIR, readPublicContentSource } from './content-reader.ts'
+import { DEFAULT_PRODUCTS_DIR, DEFAULT_TAXONOMIES_DIR, readPublicContentSource } from './content-source/read-public-content-source.ts'
 import { DEFAULT_PUBLIC_DIR, buildPublicDiscoveryFilesFromSource } from './build-public-discovery.ts'
 import { buildSearchIndexFileFromSource } from './build-search-index.ts'
+import { getOptionValue, isDirectRun } from './cli-helpers.ts'
 
 async function buildPublicArtifactsFiles(options: {
   products_dir?: string
@@ -55,17 +56,7 @@ async function runCli() {
   process.stdout.write(`Links: ${summary.link_count}\n`)
 }
 
-function getOptionValue(args: string[], option: string) {
-  const option_index = args.indexOf(option)
-
-  if (option_index === -1) {
-    return undefined
-  }
-
-  return args[option_index + 1]
-}
-
-if (process.argv[1]?.endsWith('build-public-artifacts.ts')) {
+if (isDirectRun(import.meta.url)) {
   runCli().catch((error: unknown) => {
     console.error(error)
     process.exitCode = 1

@@ -5,7 +5,8 @@ import { computed, nextTick, ref, shallowRef, toValue, watchEffect } from 'vue'
 import { useTaxonomyDetailPage } from '../app/composables/use-taxonomy-detail-page'
 import type { TaxonomyKind } from '../app/utils/published-products/select-taxonomy-items'
 import type { TaxonomyPageData } from '../app/utils/published-products/types'
-import { SITE_NAME, SITE_OG_IMAGE } from '../app/utils/seo-metadata'
+import { SITE_OG_IMAGE, SITE_URL } from '../app/utils/seo-metadata'
+import { SITE_NAME } from '../app/utils/site-name'
 
 type HeadLink = {
   key: string
@@ -197,7 +198,7 @@ describe('useTaxonomyDetailPage composable', () => {
       description: 'Fellow 咖啡器具選物。',
     })
     const runtime = stubTaxonomyComposableRuntime({ route_id: 'fellow', data: taxonomy_data })
-    const canonical_url = 'https://dwselect.applepig.net/brand/fellow'
+    const canonical_url = `${SITE_URL}brand/fellow`
 
     await useTaxonomyDetailPage('brand')
 

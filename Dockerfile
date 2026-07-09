@@ -1,4 +1,4 @@
-FROM node:22-alpine
+FROM node:24-alpine
 
 # Install build tools for native module compilation, bash for dev.sh, and su-exec for dropping root in the entrypoint.
 RUN apk add --no-cache python3 make g++ bash su-exec
@@ -9,8 +9,8 @@ RUN corepack enable && corepack prepare pnpm@10.20.0 --activate
 WORKDIR /app
 
 # Install dependencies first (layer cache)
-COPY package.json pnpm-lock.yaml ./
-RUN pnpm install
+COPY package.json pnpm-lock.yaml .npmrc ./
+RUN pnpm install --frozen-lockfile
 
 EXPOSE 3000
 

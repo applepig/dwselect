@@ -2,7 +2,7 @@
 
 ## Repo Facts
 
-- 單一 Nuxt 4 SSG app，不是 monorepo；主要 app entrypoint 在 `app/`，內容由 `scripts/content-reader.ts` 讀取 Git-backed JSON 並產生 public payload。
+- 單一 Nuxt 4 SSG app，不是 monorepo；主要 app entrypoint 在 `app/`，內容由 `scripts/content-source/` 讀取 Git-backed JSON 並產生 public payload。
 - 公開 runtime 不應 fetch Google Sheets、CMS 或外部資料來源；內容 SSOT 是 Git-backed `content/` JSON 與 taxonomy files。
 - Sprint 規格 SSOT 是 `docs/<編號>-<名稱>/spec.md`，完成紀錄在同資料夾 `works.md`；改 production code 前先補或更新測試。
 - 可見 UI、navigation、routing、layout、generate 相關變更交還前，除了測試外也要實際打開頁面確認可載入。
@@ -19,13 +19,13 @@
 - Format：`pnpm format` 等同 `eslint . --fix`，使用 ESLint `@stylistic`，不使用 Prettier。
 - Typecheck：`pnpm typecheck` 固定走 `nuxt typecheck`，fresh checkout 先由 `prepare: nuxt prepare` 產生 `.nuxt` types/config。
 - Static generate：本機日常不直接跑 `pnpm generate`；dev mode 走 HMR，build mode 只在 Docker app service 啟動時由 container PID 1 跑一次 `pnpm build:public-discovery`、`node scripts/assert-content-images.ts`、`pnpm exec nuxt generate`，輸出到 `.output/public` 後進入 preview。若要本機 build preview，設定 `NUXT_MODE=build` 後重建 service（例如 `NUXT_MODE=build ./dev.sh restart`）。CI 若需 host runner 直接 generate，必須明確設定 `DWSELECT_ALLOW_HOST_GENERATE=1`。catalog payload 與 search index 由 server route 在 prerender 階段產生，圖片由 @nuxt/image ipxStatic 輸出 optimized 圖到 `.output/public/_ipx`。
-- CI 等級驗證順序：`pnpm test` → `pnpm lint` → `pnpm typecheck` → `pnpm generate` → `node scripts/assert-runtime-google-sheet-clean.ts`。
+- CI 等級驗證順序：`pnpm test` → `pnpm lint` → `pnpm typecheck` → `pnpm generate`。
 
 ## Content Model
 
 - Products：`content/products/*.json`；Guides：`content/guides/*.json`；Links：`content/links/*.json`；taxonomy 在 `content/taxonomies/{categories,channels,tags,brands}.json`。
 - Schema 與 taxonomy reference 驗證集中在 `app/utils/product-schema.ts` 與 `tests/product-schema.test.ts`。
-- Content 讀取集中在 `scripts/content-reader.ts`；公開 runtime 不再讀靜態 `public/api/content.json`，而是透過 Nuxt server route `GET /api/content.json`（handler 在 `server/api/content.json.get.ts`）即時從 `content/` 產生，`pnpm generate` 會 prerender 成 static file，app 端 server 與 client 都用 `$fetch('/api/content.json')` 取得。
+- Content 讀取集中在 `scripts/content-source/`（async 全讀 `read-public-content-source.ts`、sync 最小讀 `read-taxonomy-items.ts`／`read-published-content-stems.ts`）；公開 runtime 不再讀靜態 `public/api/content.json`，而是透過 Nuxt server route `GET /api/content.json`（handler 在 `server/api/content.json.get.ts`）即時從 `content/` 產生，`pnpm generate` 會 prerender 成 static file，app 端 server 與 client 都用 `$fetch('/api/content.json')` 取得。
 - `id` 必須等於 JSON 檔名 stem；timestamps 使用 `YYYY-MM-DDTHH:mm:ss+08:00` 這類含 timezone offset 格式。
 - Product 使用 `category_id`、`tag_ids`（含 brand IDs）、`offers[]`（購買外部目標）與 optional `reference_links[]`（非購買參考外部目標）；Guide／Link 使用 `category_ids`、`tag_ids`；不要新增 legacy `category`、`channel_id`、`reference_url` 或自由字串 `tags`。
 - `status = "published"` 才能出現在首頁、指南、連結、category counts 與 search index。
@@ -39,7 +39,6 @@
 - 圖片由 `@nuxt/image` 處理：`nuxt.config.ts` 設 `image.dir = '../content'` 指向專案根的 `content/`，UI 用 `<NuxtImg :src="image_url" format="webp">`（外部 http 連結圖仍用原生 `<img>`）；dev 由 IPX 即時最佳化，`pnpm generate` 用 ipxStatic 輸出 optimized 圖到 `.output/public/_ipx`，不需先跑 `build:content-images`。
 - 內容或 taxonomy 變更後直接跑 `pnpm generate` 即可讓 payload、index、圖片與 SSG 一起更新；`build:content-images`、`build:search-index`、`build:public-artifacts` 是 legacy CLI，不再是 generate 的必要前置步驟。
 - `public/api/content.json`、`public/search-index.json`、`public/images/**`，以及 sitemap、rss、robots、llms 等 discovery 檔都已 gitignore 並從版控移除；discovery 檔由 `pnpm build:public-discovery` 在 build／dev 時即時產生，deploy 以 `.output/public` 為準，git 內不保留任何 copy 以免 stale。
-- `node scripts/assert-runtime-google-sheet-clean.ts` 會掃 runtime source 與 `.output/public`，確保公開 runtime 沒有 Google Sheets TSV 指標。
 
 ## Routing And UI
 

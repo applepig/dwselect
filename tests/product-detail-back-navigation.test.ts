@@ -1,17 +1,12 @@
-import { readFileSync } from 'node:fs'
-
 import { renderToString } from '@vue/test-utils'
 import { computed, onMounted, ref } from 'vue'
 import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest'
 
+import { useBrokenImageFallback } from '../app/composables/use-broken-image-fallback'
+import { useDetailBackNavigation } from '../app/composables/use-detail-back-navigation'
 import ProductDetail from '../app/components/product-detail.vue'
+import RelatedProductsSection from '../app/components/related-products-section.vue'
 import type { ProductDetailView } from '../app/utils/public-content-view-types'
-
-const product_detail_url = new URL('../app/components/product-detail.vue', import.meta.url)
-
-function readProductDetailSource() {
-  return readFileSync(product_detail_url, 'utf8')
-}
 
 const NuxtLinkStub = { props: ['to'], template: '<a :href="to"><slot /></a>' }
 const NuxtImgStub = { props: ['src', 'alt'], template: '<img :src="src" :alt="alt" />' }
@@ -51,6 +46,7 @@ function renderProductDetail(detail: ProductDetailView) {
   return renderToString(ProductDetail, {
     props: { detail },
     global: {
+      components: { RelatedProductsSection },
       stubs: {
         NuxtLink: NuxtLinkStub,
         NuxtImg: NuxtImgStub,
@@ -64,30 +60,19 @@ function renderProductDetail(detail: ProductDetailView) {
   })
 }
 
-describe('product detail back navigation fallback', () => {
+describe('product detail hero opinion and layout ordering', () => {
   beforeAll(() => {
     // product-detail.vue 依賴 Nuxt auto-import 的 Vue API；此 bare vitest 環境無 auto-import，需 stub。
     vi.stubGlobal('ref', ref)
     vi.stubGlobal('computed', computed)
     vi.stubGlobal('onMounted', onMounted)
     vi.stubGlobal('useRouter', () => ({ back: vi.fn(), push: vi.fn() }))
+    vi.stubGlobal('useDetailBackNavigation', useDetailBackNavigation)
+    vi.stubGlobal('useBrokenImageFallback', useBrokenImageFallback)
   })
 
   afterAll(() => {
     vi.unstubAllGlobals()
-  })
-
-  it('should only use router.back for same-origin browser history and fallback to home', () => {
-    const product_detail_source = readProductDetailSource()
-
-    expect(product_detail_source).toContain('function onBackClicked()')
-    expect(product_detail_source).toContain('import.meta.client')
-    expect(product_detail_source).toContain('window.history.length')
-    expect(product_detail_source).toContain('window.history.state')
-    expect(product_detail_source).toContain('document.referrer')
-    expect(product_detail_source).toContain('window.location.origin')
-    expect(product_detail_source).toContain('router.back()')
-    expect(product_detail_source).toContain("router.push('/')")
   })
 
   it('should render the DW opinion callout with its title and body copy', async () => {

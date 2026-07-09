@@ -3,8 +3,9 @@ import { dirname, join } from 'node:path'
 
 import sharp from 'sharp'
 
-import { DEFAULT_PRODUCTS_DIR, readPublicContentSource, type ContentReaderOptions } from './content-reader.ts'
-import { isPublished } from './public-content.ts'
+import { isPublished } from '../app/utils/content/is-published.ts'
+import { DEFAULT_PRODUCTS_DIR, readPublicContentSource, type ContentReaderOptions } from './content-source/read-public-content-source.ts'
+import { getOptionValue, isDirectRun } from './cli-helpers.ts'
 
 const MIN_CONTENT_IMAGE_SIDE_PX = 480
 const MAX_CONTENT_IMAGE_ASPECT_RATIO = 2
@@ -125,17 +126,7 @@ async function runCli() {
   process.stdout.write(`Content image source files OK: ${summary.checked} checked, 0 missing, 0 invalid dimensions\n`)
 }
 
-function getOptionValue(args: string[], option: string) {
-  const option_index = args.indexOf(option)
-
-  if (option_index === -1) {
-    return undefined
-  }
-
-  return args[option_index + 1]
-}
-
-if (process.argv[1]?.endsWith('assert-content-images.ts')) {
+if (isDirectRun(import.meta.url)) {
   runCli().catch((error: unknown) => {
     console.error(error instanceof Error ? error.message : error)
     process.exitCode = 1

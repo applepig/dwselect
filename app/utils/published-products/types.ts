@@ -12,7 +12,6 @@ export type TaxonomyDefinitions = {
 export type CompactAppTabId = 'home' | 'guide' | 'search' | 'links'
 
 export type CompactAppState = {
-  active_tab?: CompactAppTabId
   search_query?: string
 }
 
@@ -27,7 +26,6 @@ export type CompactAppTab = {
   id: CompactAppTabId
   label: string
   icon: string
-  active: boolean
 }
 
 export type CompactCategoryChip = {
@@ -69,9 +67,6 @@ export type CompactResourceRow = {
   tag_ids?: string[]
 }
 
-export type CompactLinkRow = CompactResourceRow
-export type CompactGuideRow = CompactResourceRow
-
 // taxonomy 瀏覽頁（/category/{id}、/tag/{id}、/brand/{id}、/channel/{id}）的渲染資料。
 // products 用 ProductCard grid，guides／links 用 ResourceList；空陣列代表該型別區段不渲染。
 export type TaxonomyPageData = {
@@ -101,19 +96,14 @@ export type ResourceRowLinkAttributes
   }
 
 export type CompactAppView = {
-  tabs: CompactAppTab[]
-  active_tab: CompactAppTabId
   home: {
     category_chips: CompactCategoryChip[]
     products: ProductCardView[]
-    empty_reason: 'no-products' | 'no-results' | null
+    empty_reason: 'no-products' | null
   }
   guide: {
     guides: CompactResourceRow[]
-    empty_reason: 'no-products' | 'no-results' | null
+    empty_reason: 'no-products' | null
   }
   links: CompactResourceRow[]
-  counts: {
-    published: number
-  }
 }

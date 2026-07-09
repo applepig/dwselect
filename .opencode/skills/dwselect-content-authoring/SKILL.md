@@ -23,6 +23,7 @@ Division of labor：the subagent does the first-draft writing。When given a tar
 - When the user asks to update the visible website or「網頁」，default to `status: "published"` content only。
 - Do not spend research/update effort on `draft`、`unpublished`、or `archived` content unless the user or coordinator explicitly assigns those items。
 - Coordinator should filter batch work by content type、status、category/tag、and completed IDs before dispatching subagents。
+- New site-bound content is created publish-ready：`status: "published"` + `published_at` + a downloaded local `image_file` that passes the guard。Create a `draft` ONLY when a draft is explicitly requested——a `draft` is invisible on the public site（filtered by `isPublished`），so it delivers nothing in a go-live PR。Never downgrade to `draft` just to skip the image or empty-opinion fields；if a guard-passing local image cannot be obtained or another hard blocker appears，report it as blocked instead of committing a half-finished draft。Legitimate drafts（genuine WIP kept in the repo for a while）are fine——just make them a deliberate choice, not a fallback for incomplete work。
 
 ## Files And Sources
 

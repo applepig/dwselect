@@ -1,5 +1,5 @@
 import { collectNonEmptyTaxonomyIds } from '../app/utils/published-products/non-empty-taxonomy-ids.ts'
-import { readPublishedTaxonomyItems, type TaxonomyContentDirs } from './read-published-taxonomy-items.ts'
+import { readPublishedTaxonomyItems, type TaxonomyContentDirs } from './content-source/read-taxonomy-items.ts'
 
 // Why: channel 成員來自 published product offers 的 channel_id（products-only，ADR-9）；guide/link 無購買連結
 // 不貢獻 channel。對「被 ≥1 published product offer 引用」的 channel 產生 /channel/{id}。

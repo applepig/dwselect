@@ -4,6 +4,7 @@ import { mount } from '@vue/test-utils'
 import { ref } from 'vue'
 import { beforeAll, afterAll, describe, expect, it, vi } from 'vitest'
 
+import { useBrokenImageFallback } from '../../app/composables/use-broken-image-fallback'
 import TaxonomyPage from '../../app/components/taxonomy-page.vue'
 import ResourceList from '../../app/components/resource-list.vue'
 import ProductCard from '../../app/components/product-card.vue'
@@ -85,9 +86,10 @@ function mountTaxonomyPage(data: TaxonomyPageData) {
 }
 
 describe('TaxonomyPage render', () => {
-  // ResourceList 在 setup 用 Nuxt auto-import 的 ref，此測試環境無 auto-import，需 stub。
+  // ResourceList 在 setup 用 Nuxt auto-import 的 ref 與 useBrokenImageFallback，此測試環境無 auto-import，需 stub。
   beforeAll(() => {
     vi.stubGlobal('ref', ref)
+    vi.stubGlobal('useBrokenImageFallback', useBrokenImageFallback)
   })
 
   afterAll(() => {

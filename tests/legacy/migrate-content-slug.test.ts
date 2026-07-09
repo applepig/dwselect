@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { applySlugToContentJson } from '../scripts/migrate-content-slug.ts'
+import { applySlugToContentJson } from '../../scripts/legacy/migrate-content-slug.ts'
 
 const content_without_slug = [
   '{',

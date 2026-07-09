@@ -7,7 +7,8 @@
 </template>
 
 <script setup lang="ts">
-import { SITE_DESCRIPTION, SITE_NAME, SITE_OG_IMAGE, SITE_TITLE, SITE_URL } from './utils/seo-metadata'
+import { SITE_DESCRIPTION, SITE_OG_IMAGE, SITE_TITLE, SITE_URL } from './utils/seo-metadata'
+import { SITE_NAME } from './utils/site-name'
 
 useHead({
   title: SITE_TITLE,

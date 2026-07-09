@@ -9,6 +9,8 @@
   --dw-border: #ded2bd;
   --dw-accent: #ec7a2b;
   --dw-accent-strong: #dd6915;
+  /* accent 底色上的文字：兩種主題都是 accent 橘底，故文字恆為淺色、不隨主題反相（只定義於 :root，.dark 不覆蓋）。 */
+  --dw-on-accent: #fffaf1;
   --dw-teal: #21756d;
   --dw-rose: #b44c67;
   --dw-amber: #c28522;

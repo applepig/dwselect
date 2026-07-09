@@ -12,11 +12,12 @@
 
 <script setup lang="ts">
 import type { ProductDetailView } from '../../utils/public-content-view-types'
-import { buildSeoMeta, getCanonicalUrl, getOgImageUrl, getSeoDescription, SITE_NAME } from '../../utils/seo-metadata'
+import { resolveRouteId } from '../../utils/resolve-route-id'
+import { buildSeoMeta, getCanonicalUrl, getOgImageUrl, getSeoDescription } from '../../utils/seo-metadata'
+import { SITE_NAME } from '../../utils/site-name'
 
 const route = useRoute()
-const raw_id = route.params.id
-const product_id = (Array.isArray(raw_id) ? raw_id[0] : raw_id) ?? ''
+const product_id = resolveRouteId(route.params.id)
 const product_detail = shallowRef<ProductDetailView | null>(null)
 const product_meta_title = computed(() => product_detail.value === null ? SITE_NAME : `${product_detail.value.name}｜${SITE_NAME}`)
 const product_meta_description = computed(() => getSeoDescription(product_detail.value?.summary))

@@ -1,4 +1,4 @@
-import { readPublicContentSource } from '../../scripts/content-reader.ts'
+import { readPublicContentSource } from '../../scripts/content-source/read-public-content-source.ts'
 import { buildPublicContentPayload } from '../../scripts/public-content.ts'
 
 // Public content API：dev、generate（prerender）與 production static 同源。

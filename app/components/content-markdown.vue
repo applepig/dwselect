@@ -3,7 +3,8 @@
     v-for="(block, block_index) in blocks"
     :key="block_index"
   >
-    <h4
+    <component
+      :is="`h${block.level}`"
       v-if="block.type === 'heading'"
       class="detail-llm-heading"
     >
@@ -22,7 +23,7 @@
           {{ segment.text }}
         </template>
       </template>
-    </h4>
+    </component>
 
     <ul
       v-else-if="block.type === 'list'"

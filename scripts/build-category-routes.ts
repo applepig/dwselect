@@ -1,5 +1,5 @@
 import { collectNonEmptyTaxonomyIds } from '../app/utils/published-products/non-empty-taxonomy-ids.ts'
-import { readPublishedTaxonomyItems, type TaxonomyContentDirs } from './read-published-taxonomy-items.ts'
+import { readPublishedTaxonomyItems, type TaxonomyContentDirs } from './content-source/read-taxonomy-items.ts'
 
 // Why: 對「至少 1 筆 published 關聯項目」的 category 產生 /category/{id} prerender 路由——
 // 與 build-product-routes 同源（published-only），避免空 taxonomy 排進 prerender 撞 404。

@@ -128,8 +128,7 @@
 }
 
 .category-chip,
-.tag-chip,
-.clear-tags-button {
+.tag-chip {
   width: fit-content;
   max-width: 100%;
   min-height: 38px;
@@ -356,8 +355,6 @@
   line-height: 1.55;
 }
 
-.tag-explorer,
-.tag-toolbar,
 .search-idle-container,
 .search-empty-panel,
 .search-error-panel,
@@ -366,19 +363,6 @@
   display: grid;
   gap: 12px;
   min-width: 0;
-}
-
-.tag-toolbar {
-  grid-template-columns: minmax(0, 1fr);
-}
-
-.selected-tags-note {
-  margin: 0;
-  color: var(--dw-muted);
-  font-size: 0.9rem;
-  line-height: 1.6;
-  overflow-wrap: anywhere;
-  word-break: break-word;
 }
 
 .search-input {
@@ -836,7 +820,7 @@
   min-height: 48px;
   border-radius: 8px;
   background: var(--dw-accent);
-  color: #fffaf1;
+  color: var(--dw-on-accent);
   font-weight: 950;
   line-height: 1.2;
   text-align: center;
@@ -978,7 +962,6 @@
 .catalog-pill:focus-visible,
 .category-chip:focus-visible,
 .tag-chip:focus-visible,
-.clear-tags-button:focus-visible,
 .search-action-button:focus-visible,
 .search-clear-button:focus-visible,
 .search-suggestion-item:focus-visible,

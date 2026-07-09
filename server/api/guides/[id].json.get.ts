@@ -1,4 +1,4 @@
-import { readPublicContentSource } from '../../../scripts/content-reader.ts'
+import { readPublicContentSource } from '../../../scripts/content-source/read-public-content-source.ts'
 import { buildGuideDetail } from '../../../scripts/public-payload/build-detail-by-id.ts'
 import { extractContentId } from '../../../app/utils/content/extract-content-id.ts'
 

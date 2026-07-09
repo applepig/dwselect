@@ -12,11 +12,12 @@
 
 <script setup lang="ts">
 import type { GuideDetailView } from '../../utils/public-content-view-types'
-import { buildSeoMeta, getCanonicalUrl, getOgImageUrl, getSeoDescription, SITE_NAME } from '../../utils/seo-metadata'
+import { resolveRouteId } from '../../utils/resolve-route-id'
+import { buildSeoMeta, getCanonicalUrl, getOgImageUrl, getSeoDescription } from '../../utils/seo-metadata'
+import { SITE_NAME } from '../../utils/site-name'
 
 const route = useRoute()
-const raw_id = route.params.id
-const guide_id = (Array.isArray(raw_id) ? raw_id[0] : raw_id) ?? ''
+const guide_id = resolveRouteId(route.params.id)
 const guide_detail = shallowRef<GuideDetailView | null>(null)
 const guide_meta_title = computed(() => guide_detail.value === null ? SITE_NAME : `${guide_detail.value.title}｜${SITE_NAME}`)
 const guide_meta_description = computed(() => getSeoDescription(guide_detail.value?.summary))
