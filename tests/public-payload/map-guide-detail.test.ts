@@ -124,9 +124,38 @@ describe('guide detail build mapper', () => {
 
     const detail = mapGuideDetail(guide, products, labels)
 
+    // AC6／AC8：guide 的 related 卡與 product 頁同一 mapper（ADR-036-6），欄位即 ProductCardView 全集。
     expect(detail.related_products).toEqual([
-      { id: 'second-product', name: '第二個商品', image_url: '/products/images/sample-product.jpg', category_label: '居家', channel_label: 'momo' },
-      { id: 'first-product', name: '第一個商品', image_url: '/products/images/sample-product.jpg', category_label: '電腦', channel_label: 'PChome' },
+      {
+        id: 'second-product',
+        name: '第二個商品',
+        summary: '推薦短評',
+        image_url: '/products/images/sample-product.jpg',
+        category_id: 'home',
+        category_label: '居家',
+        channel_id: 'momo',
+        channel_ids: ['momo'],
+        channel_label: 'momo',
+        price_label: 'NT$ 1,990',
+        tag_ids: ['tag-a'],
+        tag_labels: ['標籤 A'],
+        published_at: '2026-06-02T00:00:00+08:00',
+      },
+      {
+        id: 'first-product',
+        name: '第一個商品',
+        summary: '推薦短評',
+        image_url: '/products/images/sample-product.jpg',
+        category_id: 'computer',
+        category_label: '電腦',
+        channel_id: 'pchome',
+        channel_ids: ['pchome'],
+        channel_label: 'PChome',
+        price_label: 'NT$ 1,990',
+        tag_ids: ['tag-a'],
+        tag_labels: ['標籤 A'],
+        published_at: '2026-06-02T00:00:00+08:00',
+      },
     ])
   })
 

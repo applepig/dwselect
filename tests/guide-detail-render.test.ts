@@ -8,8 +8,9 @@ import { useBrokenImageFallback } from '../app/composables/use-broken-image-fall
 import { useDetailBackNavigation } from '../app/composables/use-detail-back-navigation'
 import GuideDetail from '../app/components/guide-detail.vue'
 import ContentMarkdown from '../app/components/content-markdown.vue'
+import ProductCard from '../app/components/product-card.vue'
 import RelatedProductsSection from '../app/components/related-products-section.vue'
-import type { GuideDetailView } from '../app/utils/public-content-view-types'
+import type { GuideDetailView, ProductCardView } from '../app/utils/public-content-view-types'
 
 const NuxtLinkStub = {
   props: ['to'],
@@ -33,20 +34,42 @@ const UButtonStub = {
 
 const UIconStub = { props: ['name'], template: '<i />' }
 
+const UCardStub = { props: ['ui'], template: '<div><slot /></div>' }
+
 function mountGuideDetail(detail: GuideDetailView) {
   return mount(GuideDetail, {
     props: { detail },
     global: {
-      components: { ContentMarkdown, RelatedProductsSection },
+      components: { ContentMarkdown, RelatedProductsSection, ProductCard },
       stubs: {
         NuxtLink: NuxtLinkStub,
         CatalogPill: CatalogPillStub,
         NuxtImg: NuxtImgStub,
         UButton: UButtonStub,
         UIcon: UIconStub,
+        UCard: UCardStub,
       },
     },
   })
+}
+
+function makeRelatedProductCard(overrides: Partial<ProductCardView> = {}): ProductCardView {
+  return {
+    id: 'product-a',
+    name: '商品 A',
+    summary: '推薦短評',
+    image_url: '/products/images/a.jpg',
+    category_id: 'computer',
+    category_label: '電腦',
+    channel_id: 'pchome',
+    channel_ids: ['pchome'],
+    channel_label: 'PChome',
+    price_label: 'NT$ 1,990',
+    tag_ids: [],
+    tag_labels: [],
+    published_at: '2026-06-02T00:00:00+08:00',
+    ...overrides,
+  }
 }
 
 function makeGuideDetailView(overrides: Partial<GuideDetailView> = {}): GuideDetailView {
@@ -135,8 +158,8 @@ describe('GuideDetail', () => {
   it('should render related product cards linking to each product detail when related products exist', () => {
     const wrapper = mountGuideDetail(makeGuideDetailView({
       related_products: [
-        { id: 'product-a', name: '商品 A', image_url: '/products/images/a.jpg', category_label: '電腦', channel_label: 'PChome' },
-        { id: 'product-b', name: '商品 B', image_url: '/products/images/b.jpg', category_label: '居家', channel_label: 'momo' },
+        makeRelatedProductCard({ id: 'product-a', name: '商品 A' }),
+        makeRelatedProductCard({ id: 'product-b', name: '商品 B', channel_id: 'momo', channel_ids: ['momo'], channel_label: 'momo' }),
       ],
     }))
     const related_section = wrapper.find('.related-products-section')

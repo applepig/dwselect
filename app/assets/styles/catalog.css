@@ -194,6 +194,10 @@
   overflow: hidden;
 }
 
+/* 契約：本層以 absolute + z-index:0 蓋滿整個卡片／detail root，會壓過所有「未抬升」的
+   內容 sibling——root 的直接內容 sibling 必須 position:relative; z-index:1 才不會沉到
+   本層之下（見 .product-card-link、.detail-content、.related-products-section）；漏抬的
+   section 只剩自帶 z-index 的子元素（如卡片圖）可見，文字整段消失。 */
 .product-transition-shell {
   position: absolute;
   inset: 0;
@@ -247,16 +251,30 @@
   object-fit: cover;
 }
 
+/* 破圖 fallback icon：置中於方形 tile（tile 為 position:relative），與圖片互斥顯示。 */
+.product-image-fallback-icon {
+  position: absolute;
+  inset: 0;
+  width: 24px;
+  height: 24px;
+  margin: auto;
+  color: var(--dw-teal);
+}
+
 .product-card-body {
   display: grid;
   gap: 5px;
   padding: 10px;
 }
 
+/* pill 內容過長時折行優先於縮小（AC6c、ADR-036-8）：wrap 讓 channel pill 在同列塞不下時
+   落到第二列完整顯示，兩 pill 不互擠截字；單一 pill 自身超過卡寬的極端情況仍由
+   .catalog-pill 的 max-width + ellipsis 防線兜底。 */
 .product-card-meta {
   position: relative;
   z-index: 1;
   display: flex;
+  flex-wrap: wrap;
   gap: 8px;
   align-items: end;
   justify-content: space-between;
@@ -317,14 +335,10 @@
   background: var(--dw-rose);
 }
 
-.product-card-price {
-  flex: 0 1 auto;
-  min-width: 0;
-}
-
+/* 不縮小（shrink 0）：塞不下交給 .product-card-meta 的 flex-wrap 折行處理（AC6c）。 */
+.product-card-price,
 .product-card-meta .channel-badge {
-  flex: 0 1 auto;
-  min-width: 0;
+  flex: 0 0 auto;
 }
 
 .product-name,
@@ -857,7 +871,11 @@
   font-size: 0.8rem;
 }
 
+/* 與 .detail-content 同樣抬到 .product-transition-shell（absolute z-index:0）之上：
+   沒抬的話 section 內文字沉在 shell 底下不可見，只剩帶 z-index 的圖浮出（正式站既有缺陷）。 */
 .related-products-section {
+  position: relative;
+  z-index: 1;
   display: grid;
   gap: 12px;
   min-width: 0;
@@ -872,89 +890,14 @@
   line-height: 1.3;
 }
 
+/* 固定欄數（非 auto-fill）：product 恆 3 筆恰好滿列（AC5），1～2 筆時卡寬不變（AC7），
+   guide curated 超過一列自然換行。<744px 單欄（橫式卡，AC6b），744px（iPad mini 直向）
+   起 3 欄與首頁 auto-fill 對齊（AC5b、ADR-036-7）；欄數宣告見 responsive 區段。 */
 .related-products-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(min(100%, 150px), 1fr));
+  grid-template-columns: minmax(0, 1fr);
   gap: 10px;
   min-width: 0;
-}
-
-.related-product-card {
-  display: grid;
-  grid-template-columns: 64px minmax(0, 1fr);
-  gap: 10px;
-  min-width: 0;
-  min-height: 44px;
-  align-items: center;
-  padding: 8px;
-  border: 1px solid var(--dw-border);
-  border-radius: 8px;
-  background: color-mix(in srgb, var(--dw-panel-strong) 54%, var(--dw-panel));
-  color: inherit;
-  text-decoration: none;
-}
-
-.related-product-card:hover {
-  background: color-mix(in srgb, var(--dw-accent) 7%, var(--dw-panel));
-}
-
-.related-product-image-tile {
-  display: grid;
-  place-items: center;
-  aspect-ratio: 1 / 1;
-  min-width: 0;
-  overflow: hidden;
-  border-radius: 6px;
-  background: var(--dw-panel-strong);
-}
-
-.related-product-image {
-  z-index: 1;
-  grid-area: 1 / 1;
-  width: 100%;
-  height: 100%;
-  background: var(--dw-panel-strong);
-  object-fit: contain;
-}
-
-.related-product-fallback-icon {
-  grid-area: 1 / 1;
-  width: 24px;
-  height: 24px;
-  color: var(--dw-teal);
-}
-
-.related-product-body {
-  display: grid;
-  gap: 4px;
-  min-width: 0;
-}
-
-.related-product-name,
-.related-product-meta {
-  display: -webkit-box;
-  min-width: 0;
-  overflow: hidden;
-  -webkit-box-orient: vertical;
-  overflow-wrap: anywhere;
-  text-overflow: ellipsis;
-  word-break: break-word;
-}
-
-.related-product-name {
-  -webkit-line-clamp: 2;
-  color: var(--dw-text);
-  font-size: 0.88rem;
-  font-weight: 900;
-  line-height: 1.25;
-}
-
-.related-product-meta {
-  -webkit-line-clamp: 1;
-  color: var(--dw-muted);
-  font-size: 0.76rem;
-  font-weight: 800;
-  line-height: 1.25;
 }
 
 .app-nav-button:focus-visible,
@@ -966,7 +909,6 @@
 .search-clear-button:focus-visible,
 .search-suggestion-item:focus-visible,
 .product-card-link:focus-visible,
-.related-product-card:focus-visible,
 .link-row:focus-visible,
 .resource-row:focus-visible,
 .detail-summary-buy-link:focus-visible,
@@ -1262,10 +1204,56 @@
   min-width: 0;
 }
 
+/* 手機橫式 related 卡（AC6b、ADR-036-7）：單欄下方形縮圖靠左、名稱／summary／pills 靠右直排，
+   視覺密度參照 link 卡列表（.resource-row）。規則全部 scoped 在 .related-products-grid 之下——
+   首頁／taxonomy 的 product 卡版型不動（使用者拍板範圍）；不加 variant props，元件維持單一來源。 */
+@media (max-width: 743px) {
+  .related-products-grid {
+    /* 縮圖固定寬：link 的 grid 欄寬與 meta 的左緣對位共用同一值。 */
+    --dw-related-thumb-size: 96px;
+  }
+
+  .related-products-grid .product-card-link {
+    grid-template-columns: var(--dw-related-thumb-size) minmax(0, 1fr);
+    grid-template-rows: auto;
+    gap: 10px;
+    align-items: start;
+    padding: 10px 10px 0;
+  }
+
+  /* 小圖不再貼卡緣，四角改自帶圓角（直式時上兩角 inherit 卡緣）。 */
+  .related-products-grid .product-image-tile {
+    border-radius: 6px;
+  }
+
+  .related-products-grid .product-card-body {
+    padding: 0;
+  }
+
+  /* 單欄無等高需求：解除直式卡為對齊而固定的 summary 高度，並收為 2 行密度。 */
+  .related-products-grid .product-summary {
+    -webkit-line-clamp: 2;
+    block-size: auto;
+    max-block-size: 3.1em;
+  }
+
+  /* pills 左緣對齊內容欄（link padding＋縮圖寬＋gap），落在名稱／summary 下方。 */
+  .related-products-grid .product-card-meta {
+    padding: 8px 10px 10px calc(10px + var(--dw-related-thumb-size) + 10px);
+  }
+}
+
 @media (max-width: 767px) {
 
   .compact-app-bottom-tabs .app-nav-button {
     flex-direction: column;
+  }
+}
+
+@media (min-width: 744px) {
+  /* related grid 的 3 欄門檻獨立於全站 768/1200 斷點：對齊 iPad mini 直向（AC5b、ADR-036-7）。 */
+  .related-products-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
 
@@ -1418,6 +1406,11 @@
 
   .related-products-section {
     padding: 0 40px 40px;
+  }
+
+  /* 欄數宣告集中在 744px 斷點塊（ADR-036-7），此處只放大 gap。 */
+  .related-products-grid {
+    gap: 16px;
   }
 
   .detail-hero-layout {

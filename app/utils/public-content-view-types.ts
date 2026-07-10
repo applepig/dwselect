@@ -22,14 +22,6 @@ export type ProductCardView = {
   published_at: string | null
 }
 
-export type RelatedProductCardView = {
-  id: string
-  name: string
-  image_url: string
-  category_label: string
-  channel_label: string
-}
-
 export type ProductDetailReferenceLink = Pick<ProductReferenceLink, 'title' | 'url'>
 
 export type ProductDetailView = {
@@ -54,7 +46,8 @@ export type ProductDetailView = {
   buy_url: string
   fine_print: string
   reference_links: ProductDetailReferenceLink[]
-  related_products: RelatedProductCardView[]
+  // related 卡與首頁卡同一 mapper 與元件（ADR-036-6），欄位即完整卡型，不另設瘦身型別。
+  related_products: ProductCardView[]
 }
 
 export type GuideDetailView = {
@@ -72,7 +65,7 @@ export type GuideDetailView = {
   brand_ids: string[]
   brand_labels: string[]
   source_url: string
-  related_products: RelatedProductCardView[]
+  related_products: ProductCardView[]
 }
 
 export type CategoryChipView = {

@@ -6,16 +6,22 @@ import { afterAll, beforeEach, describe, expect, it, vi } from 'vitest'
 
 import { useBrokenImageFallback } from '../app/composables/use-broken-image-fallback'
 import { useDetailBackNavigation } from '../app/composables/use-detail-back-navigation'
+import ProductCard from '../app/components/product-card.vue'
 import ProductDetail from '../app/components/product-detail.vue'
 import RelatedProductsSection from '../app/components/related-products-section.vue'
-import type { ProductDetailView } from '../app/utils/public-content-view-types'
+import type { ProductCardView, ProductDetailView } from '../app/utils/public-content-view-types'
 
 // CatalogPill 以 NuxtLink 渲染，stub 後把 `to`（{ path, query }）序列化到 href 上方便斷言。
+// `to` 可缺席：ProductCard 的 price pill 是純顯示、不帶連結。
 const CatalogPillStub = {
   props: ['to', 'variant'],
   template: '<a class="catalog-pill" :href="serializeTo(to)"><slot /></a>',
   methods: {
     serializeTo(to: unknown) {
+      if (to == null) {
+        return undefined
+      }
+
       if (typeof to === 'string') {
         return to
       }
@@ -37,6 +43,7 @@ const NuxtLinkStub = {
 const NuxtImgStub = { props: ['src', 'alt'], template: '<img :src="src" :alt="alt" />' }
 const UButtonStub = { props: ['to', 'icon', 'block', 'size', 'color', 'variant'], template: '<button><slot /></button>' }
 const UIconStub = { props: ['name'], template: '<i />' }
+const UCardStub = { props: ['ui'], template: '<div><slot /></div>' }
 const UAlertStub = { props: ['title', 'description', 'color', 'variant'], template: '<div />' }
 const ContentMarkdownStub = { props: ['source'], template: '<div />' }
 
@@ -44,18 +51,38 @@ function mountProductDetail(detail: ProductDetailView) {
   return mount(ProductDetail, {
     props: { detail },
     global: {
-      components: { RelatedProductsSection },
+      components: { RelatedProductsSection, ProductCard },
       stubs: {
         NuxtLink: NuxtLinkStub,
         CatalogPill: CatalogPillStub,
         NuxtImg: NuxtImgStub,
         UButton: UButtonStub,
         UIcon: UIconStub,
+        UCard: UCardStub,
         UAlert: UAlertStub,
         ContentMarkdown: ContentMarkdownStub,
       },
     },
   })
+}
+
+function makeRelatedProductCard(overrides: Partial<ProductCardView> = {}): ProductCardView {
+  return {
+    id: 'product-a',
+    name: '商品 A',
+    summary: '推薦短評',
+    image_url: '/products/images/a.jpg',
+    category_id: 'computer',
+    category_label: '電腦',
+    channel_id: 'pchome',
+    channel_ids: ['pchome'],
+    channel_label: 'PChome',
+    price_label: 'NT$ 1,990',
+    tag_ids: [],
+    tag_labels: [],
+    published_at: '2026-06-02T00:00:00+08:00',
+    ...overrides,
+  }
 }
 
 function makeProductDetailView(overrides: Partial<ProductDetailView> = {}): ProductDetailView {
@@ -188,20 +215,21 @@ describe('ProductDetail related products section', () => {
     vi.unstubAllGlobals()
   })
 
-  it('should render the "You may also like" related section with one card per related product linking to its detail', () => {
+  it('should render the "You may also like" related section with one product card per related product linking to its detail', () => {
     const wrapper = mountProductDetail(makeProductDetailView({
       related_products: [
-        { id: 'product-a', name: '商品 A', image_url: '/products/images/a.jpg', category_label: '電腦', channel_label: 'PChome' },
-        { id: 'product-b', name: '商品 B', image_url: '/products/images/b.jpg', category_label: '居家', channel_label: 'momo' },
+        makeRelatedProductCard({ id: 'product-a', name: '商品 A' }),
+        makeRelatedProductCard({ id: 'product-b', name: '商品 B', channel_id: 'momo', channel_ids: ['momo'], channel_label: 'momo' }),
       ],
     }))
     const related_section = wrapper.find('.related-products-section')
-    const cards = related_section.findAll('.related-product-card')
+    const cards = related_section.findAll('.product-card')
+    const hrefs = related_section.findAll('.product-card-link').map((link) => link.attributes('href'))
 
     expect(related_section.attributes('aria-label')).toBe('You may also like')
     expect(wrapper.find('.related-products-title').text()).toBe('You may also like')
     expect(cards).toHaveLength(2)
-    expect(cards.map((card) => card.attributes('href'))).toEqual(['/products/product-a', '/products/product-b'])
+    expect(hrefs).toEqual(['/products/product-a', '/products/product-b'])
   })
 
   it('should not render the related products section when there are no related products', () => {

@@ -32,10 +32,17 @@
 
 #### M2 related 版面
 
-- [ ] AC5：桌面寬度（≥1024px）下 related 區塊的卡片鋪滿整列可用寬度，卡片右側不留空欄軌（現況 5 欄軌只填 3 卡、右留白 358px 的行為消失）；窄螢幕依寬度降欄不橫向溢出。空欄軌回歸需有自動守門：Playwright 對 related 區塊斷言 first-row right gap ≤ 1px（沿 `tests/e2e/compact-app.spec.ts` product-grid 的既有寫法），不得只靠人工截圖。
-- [ ] AC6：卡片為圖上文下直式版型，縮圖為方形且寬度等於卡片內容寬（現況 64×64 小圖行為消失）；商品名與 category／channel meta 仍完整顯示。驗收方式：E2E 截圖＋人工檢視（桌面／平板／手機三檔 viewport）。
-- [ ] AC7：related 為 0 筆時區塊不 render（既有行為不回歸）；1～2 筆時卡片維持與 3 筆時相同的單卡寬度，不放大爆版。注意：1～2 筆情境現有內容**無樣本**（product 側經 `RELATED_PRODUCT_LIMIT=3` 恆為 3 筆；全站 guide 的 `related_product_ids` 目前皆為空陣列），驗收以測試 fixture 或臨時 content 樣本重現，不得因找無頁面而跳過。guide curated 筆數不設上限：超過一列時 grid 自然換行多列、不橫向溢出、不裁切。
-- [ ] AC8：product 頁「You may also like」與 guide 頁「相關商品」同步套用新版型（共用元件單一來源，不許兩頁分岔）。
+- [x] AC5：桌面寬度（≥1024px）下 related 區塊的卡片鋪滿整列可用寬度，卡片右側不留空欄軌（現況 5 欄軌只填 3 卡、右留白 358px 的行為消失）；窄螢幕依寬度降欄不橫向溢出。空欄軌回歸需有自動守門：Playwright 對 related 區塊斷言 first-row right gap ≤ 1px（沿 `tests/e2e/compact-app.spec.ts` product-grid 的既有寫法），不得只靠人工截圖。
+- [x] AC6：related 卡片直接重用 `product-card.vue`（圖上文下直式、方形縮圖，非另刻版型），顯示欄位與首頁卡一致：商品名、summary、price pill、channel pill（不再另示 category meta）；related 區塊既有破圖 fallback 行為（`useBrokenImageFallback`，含 SSR 已載入即失敗圖的補偵測）不回歸。驗收方式：unit 行為測試＋E2E 截圖＋人工檢視（桌面／平板／手機三檔 viewport）。
+- [x] AC7：related 為 0 筆時區塊不 render（既有行為不回歸）；1～2 筆時卡片維持與 3 筆時相同的單卡寬度，不放大爆版。注意：1～2 筆情境現有內容**無樣本**（product 側經 `RELATED_PRODUCT_LIMIT=3` 恆為 3 筆；全站 guide 的 `related_product_ids` 目前皆為空陣列），驗收以測試 fixture 或臨時 content 樣本重現，不得因找無頁面而跳過。guide curated 筆數不設上限：超過一列時 grid 自然換行多列、不橫向溢出、不裁切。
+- [x] AC8：product 頁「You may also like」與 guide 頁「相關商品」同步套用新版型（共用元件單一來源，不許兩頁分岔）。
+
+> M2 初版（純 CSS 對齊 product-card 版型）經使用者檢視後作廢改重做：卡片改直接重用 `product-card.vue` 元件本身（見 ADR-036-6），AC5–AC8 取消勾選待重驗。
+> M2 rework 驗收後使用者實機（iPad）回饋追加 RWD 調整（AC5b／AC6b，見 ADR-036-7）：
+
+- [x] AC5b：related grid 斷點對齊 iPad mini——viewport ≥744px 時 3 欄（消除現況 744–767px 區間「首頁 auto-fill 3 欄、related 固定 2 欄」的不一致），<744px 時單欄；原 2 欄檔位取消。E2E 於 744px 與 767px viewport 斷言 3 欄滿列（right-gap ≤ 1px 契約沿用）。
+- [x] AC6c：product 卡 meta 列的 price pill 與 channel pill 內容過長時（如 Amazon JP＋TWD 長價格）不互擠截字——兩 pill 同列塞不下時 channel pill 折行到第二列，各自完整顯示；塞得下時維持同列左右分佈。適用所有 product 卡出現處（首頁／taxonomy／related，共用元件掃同類）；單一 pill 自身超過卡寬的極端情況保留 ellipsis 防線。E2E 以 DOM 注入長字樣驗證折行契約，不依賴特定 content 樣本。
+- [x] AC6b：<744px 時 related 卡改橫式版型：方形縮圖靠左、名稱／summary／price／channel pill 靠右（視覺密度參照 link 卡列表）；顯示欄位不變。僅 related 區塊適用——首頁與 taxonomy 頁的 product 卡版型不動（使用者拍板範圍）。實作為 scoped CSS（`.related-products-grid` 之下的 media query），不加 variant props；AC6 的「方圖寬＝卡內容寬」E2E 契約改為僅 ≥744px 適用，<744px 另立橫式契約（圖在左、文在右、單欄不溢出）。
 
 #### M3 share buttons
 
@@ -65,8 +72,10 @@
 - `app/utils/seo-metadata.ts` — `getOgImageUrl` 的 fallback regex（`:37-38`）是 M1 根因所在
 - `scripts/build-content-images.ts` — 既有 sharp 最佳化輸出 `public/images/{products,guides}/{name}.webp`，M1 只差接線
 - `dev.sh` `cmd_generate_inner()`（`:159-163`）— pre-generate chain，M1 接線點
-- `app/components/related-products-section.vue` — M2 元件（035 收斂後單一來源）
-- `app/assets/styles/catalog.css` `.related-*`（`:860-958`、`:1419-1421`）— M2 版面根因（`auto-fill minmax(150px)` ＋ 64px 橫式卡）
+- `app/components/related-products-section.vue` — M2 元件（035 收斂後單一來源）；rework 後退為薄容器（標題＋grid），卡片重用 `product-card.vue`
+- `app/components/product-card.vue` — M2 rework 卡片單一來源；破圖 fallback 移入此處
+- `scripts/public-payload/map-related-product-card.ts`、`map-product-card.ts` — M2 rework：related payload 改產完整 `ProductCardView`（與首頁卡同 mapper）
+- `app/assets/styles/catalog.css` `.related-*`（`:860-958`、`:1419-1421`）— M2 版面根因（`auto-fill minmax(150px)` ＋ 64px 橫式卡）；rework 後 `.related-product-*` 卡片規則刪除、grid 容器規則保留
 - `app/components/product-detail.vue`、`app/components/guide-detail.vue` — M3／M4 區塊掛載點
 - `.github/workflows/static-generate.yml`、`.github/workflows/deploy.yml` — M5 就地改
 - `playwright.config.ts`、`tests/e2e/compact-app.spec.ts` — M5 E2E 重用（`APP_URL` 注入 preview host）
@@ -79,9 +88,10 @@
 | `getCanonicalUrl`／`SITE_URL`／`SITE_OG_IMAGE` | `app/utils/seo-metadata.ts` | M1 og URL 組裝、M3 分享 URL 單一來源 |
 | `buildSeoMeta` | `app/utils/seo-metadata.ts` | og/twitter 鋪版不動，M1 只改 `getOgImageUrl` 的輸出 |
 | `resolveImageFileUrl` 的檔名規則（`IMAGE_FILE_PATTERN`） | `app/utils/content-images/resolve-image-file-url.ts` | M1 對映 `/products/images/x.jpg` → `images/products/x.webp` 時同步其副檔名→`.webp` 轉換規則（與 build-content-images `parse(name).webp` 一致） |
-| `related-products-section.vue`＋`useBrokenImageFallback` | `app/components/`、`app/composables/` | M2 就地改版型，破圖 fallback 沿用 |
-| `.related-*` class 與 `--dw-*` token | `app/assets/styles/catalog.css` | M2 只改既有 class 規則；顏色一律 token，不寫死色值 |
-| `product-card` 直式卡版型（圖上文下、方圖） | `app/components/product-card.vue`＋`catalog.css` | M2 版型參照既有 card 視覺語彙，不新開第二套 card 樣式系統 |
+| `related-products-section.vue`＋`useBrokenImageFallback` | `app/components/`、`app/composables/` | M2 rework：section 退為薄容器；破圖 fallback 移入 product-card（首頁 grid 同步受惠） |
+| `.related-*` class 與 `--dw-*` token | `app/assets/styles/catalog.css` | M2 rework：grid 容器規則保留（固定 2／3 欄）；`.related-product-*` 卡片規則刪除 |
+| `product-card.vue` 元件本身 | `app/components/product-card.vue`＋`catalog.css` | M2 rework：related 卡直接 render 此元件（欄位原樣），card 視覺單一來源（ADR-036-6） |
+| `mapProductCard`（首頁卡完整 mapper） | `scripts/public-payload/map-product-card.ts` | M2 rework：related payload 換接同一 mapper，`RelatedProductCardView` 瘦身型別退場 |
 | Vite define 烤入 pattern（`__DW_SITE_URL__`，035 M3） | `nuxt.config.ts`／`vitest.config.ts` | M4 Disqus shortname 沿同一 pattern 烤入 |
 | `useSeoMeta` head-before-await 不變式 | `app/pages/products/[id].vue`、`guide/[id].vue` | M3/M4 新區塊為 body 元件，不動 head 註冊時機 |
 | quality gate workflow 的 generate step | `.github/workflows/static-generate.yml` | M5 在其後加 artifact upload，不另開第三支 workflow |
@@ -183,6 +193,24 @@ deploy.yml:           permissions 需含 actions: read（跨 run 下載 artifact
 - 原因：與 Nuxt UI 既有 iconify 機制同軌，零 runtime 成本（build 時內聯）；手刻 SVG 要自維護品牌圖形更新。
 - 替代方案：手刻 inline SVG（備援：若 simple-icons 缺 LINE 等特定品牌圖或授權疑慮，實作時改走此路並於 works.md 記錄）。
 
+### ADR-036-6：related 卡直接重用 `product-card.vue`（M2 rework）
+
+- 決策：`related-products-section.vue` 退為薄容器（標題＋grid＋空列不 render），卡片改 render 既有 `product-card.vue`，顯示欄位原樣（商品名＋summary＋price pill＋channel pill）；related payload 改用首頁卡同一 mapper（`mapProductCard`）產出完整 `ProductCardView`，`RelatedProductCardView` 瘦身型別退場；`catalog.css` 的 `.related-product-*` 卡片規則刪除，`.related-products-grid` 固定欄數容器規則保留。破圖 fallback（`useBrokenImageFallback`）移入 product-card，首頁 grid 同步受惠。
+- 原因：M2 初版以 `.related-*` CSS「版型語彙對齊」product-card，實質仍是第二套 card 樣式的變形，會持續漂移，違反 Styling SSOT；直接重用元件讓 card 視覺只有一份程式碼。payload 增量僅每 detail 頁 3 筆卡的 summary／price／tag 欄位（約數百 bytes），不觸 028 拆 payload 的痛點。
+- 替代方案：product-card 加 variant props 隱藏 summary／price、改顯示 category meta（拒：多模式元件增條件複雜度，使用者已拍板原樣欄位）；維持 M2 初版獨立 `.related-*` CSS（拒：平行樣式系統，本 ADR 的根因）。
+
+### ADR-036-7：related grid 斷點對齊 iPad mini，手機橫式卡以 scoped CSS 實作（M2.1）
+
+- 決策：related grid 的 3 欄門檻由 768px 降至 744px（iPad mini 直向 viewport），<744px 由 2 欄改單欄；單欄時 related 內的 product-card 以 scoped CSS（`.related-products-grid` 之下的 media query）切換橫式版型（方圖左、內容右），不加 variant props、不動元件 template。適用範圍僅 related 區塊，首頁／taxonomy 的 product 卡不動（使用者拍板）。
+- 原因：使用者 iPad mini 實機驗收發現首頁（auto-fill，744px 塞得下 3×220px）與 related（固定欄數、768px 起 3 欄）在 744–767px 區間分岔；手機窄卡直式資訊密度低且 pill 截字，橫式單欄較合閱讀（視覺參照既有 link 卡列表）。scoped CSS 讓元件維持單一來源，版型純屬容器上下文的 responsive 行為，與 ADR-036-6「不加 variant props」一致。
+- 替代方案：variant props（拒：ADR-036-6 已拒，且此為純版面關切，CSS 可完整表達）；全站手機卡都改橫式（拒：使用者拍板僅 related，首頁觀感改動過大）；斷點沿用 768（拒：744px 的 iPad mini 直向正是回報裝置，會留在 2 欄檔）。
+
+### ADR-036-8：pill 互擠以 flex-wrap 折行解，不用 container query（M2.2）
+
+- 決策：`.product-card-meta` 加 `flex-wrap: wrap`，兩 pill 改 `flex-shrink: 0`（取消 channel badge 的 `flex: 0 1 auto; min-width: 0` 縮小行為）；pill 既有 `max-width: 100%`＋ellipsis 保留，作為單一 pill 自身超過卡寬時的最後防線。
+- 原因：擠壓根因是「縮小優先於折行」的 flex 設定。使用者提議 container query 偵測折行，但 CQ 只回應容器寬度、偵測不到內容長度——同一卡寬下長短字樣需要不同行為，寬度閾值無法表達；flex-wrap 是內容感知的折行原語，恰在塞不下時觸發，無需猜閾值。
+- 替代方案：container query 寬度閾值切直排（拒：如上，內容長度不可偵測，會提前折或漏折）；縮 pill 字級（拒：治標且傷可讀性）。
+
 ## Milestones
 
 ### Milestone 1: og image 修復
@@ -193,13 +221,30 @@ deploy.yml:           permissions 需含 actions: read（跨 run 下載 artifact
 
 - [x] Red → Green → Refactor
 
-### Milestone 2: related 版面重做
+### Milestone 2: related 版面重做（rework：改重用 product-card，初版純 CSS 版型作廢，見 ADR-036-6）
 
-> 範圍：`app/assets/styles/catalog.css` `.related-*` 規則、`app/components/related-products-section.vue`（必要時的結構微調）、`tests/e2e/` related 版面契約斷言
-> 驗證：`pnpm test`（既有 related-products-section 行為測試不紅）；Playwright related 區塊 right-gap ≤ 1px 自動斷言（AC5，沿 `compact-app.spec.ts` product-grid 既有寫法）；AC7 稀疏（1～2 筆）情境以測試 fixture 重現（現有內容無樣本，見 AC7 註記）；三檔 viewport 截圖人工驗收（AC5–AC7）；product 與 guide 兩頁皆看
-> 預期結果：直式方圖卡鋪滿版面，1～3 筆皆不爆版，兩 detail 頁同步生效
+> 範圍：`app/components/related-products-section.vue`（退為薄容器，卡片 render `product-card.vue`）、`app/components/product-card.vue`（破圖 fallback 移入）、`scripts/public-payload/map-related-product-card.ts`（換接 `mapProductCard`）、`app/utils/public-content-view-types.ts`（`RelatedProductCardView` 退場，`related_products` 改 `ProductCardView[]`）、`app/assets/styles/catalog.css`（刪 `.related-product-*` 卡片規則、grid 容器規則保留）、`tests/` 對應改寫（unit＋`tests/e2e/related-products-layout.spec.ts` selector 改指 product-card）
+> 驗證：`pnpm test`（related-products-section 行為測試改寫後不紅、payload mapper 測試同步）；Playwright related 區塊 right-gap ≤ 1px 自動斷言（AC5）；AC7 稀疏（1～2 筆）情境以測試 fixture 重現（現有內容無樣本，見 AC7 註記）；三檔 viewport 截圖人工驗收（AC5–AC7）；product 與 guide 兩頁皆看
+> 預期結果：related 卡與首頁卡同一元件、同一欄位，1～3 筆皆不爆版，兩 detail 頁同步生效
+> 實作注意：M2 初版的 `.related-products-section` paint 修復（`position:relative; z-index:1`，壓制 `.product-transition-shell` 疊層缺陷）需保留——product-card 自帶 shell，related 區塊內每張卡都會再引入一個 shell，疊層契約以初版註解為準
 
-- [ ] Red → Green → Refactor
+- [x] Red → Green → Refactor（rework）
+
+### Milestone 2.1: related grid RWD 斷點與手機橫式卡（使用者 iPad 實機驗收回饋，見 ADR-036-7）
+
+> 範圍：`app/assets/styles/catalog.css`（related grid 斷點 768→744、<744 單欄＋scoped 橫式卡規則）、`tests/e2e/related-products-layout.spec.ts` 斷言更新；**不動**元件 template、payload、首頁／taxonomy grid
+> 驗證：`pnpm test`（應無涉、不許紅）；E2E——744px／767px 斷言 3 欄滿列 right-gap ≤1px（AC5b）、<744px 斷言單欄橫式（圖左文右、不橫向溢出，AC6b）、方圖寬＝卡內容寬契約改僅 ≥744px 適用；四檔 viewport 截圖（1280／768／744／375）人工驗收
+> 預期結果：iPad mini 直向 related 3 欄與首頁一致；手機 related 單欄橫式卡，欄位不變
+
+- [x] Red → Green → Refactor
+
+### Milestone 2.2: pill 折行（使用者實機驗收回饋，見 ADR-036-8）
+
+> 範圍：`app/assets/styles/catalog.css`（`.product-card-meta` wrap＋pill flex-shrink 調整）、`tests/e2e/` 折行契約斷言；不動元件 template
+> 驗證：`pnpm test`（應無涉、不許紅）；E2E——DOM 注入長字樣（Amazon JP／TWD 長價格級別）斷言兩 pill 各自無截字、塞不下時折兩列、塞得下時同列；首頁與 related（含 <744 橫式）兩種卡上下文都驗；截圖人工驗收
+> 預期結果：長字樣 pill 折行完整顯示，短字樣行為不變，全站 product 卡同步生效
+
+- [x] Red → Green → Refactor
 
 ### Milestone 3: share buttons
 
