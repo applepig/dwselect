@@ -1,5 +1,12 @@
 # Works: 036 detail page fixes
 
+## Milestone 3: share buttons
+
+- **技術決策**：新增 `share-buttons.vue`，分享 URL 唯一由 `getCanonicalUrl(route.path)` 組成，不讀 `window.location`。SSR 恆輸出平台 fallback；只在 `onMounted` 偵測 `navigator.share` 後切換為原生分享主鈕，避免 hydration mismatch。copy 成功顯示「已複製」2 秒，重複點擊會重設 timer；clipboard 缺席或拒絕時顯示可手動選取的 canonical URL。
+- **掛載與樣式**：product／guide detail 都掛載分享區塊，置於主內容與 related products 間；LINE／Facebook／X／Threads 使用 `@iconify-json/simple-icons`，樣式沿用 detail 的 z-index 契約，避免被 transition shell 覆蓋。
+- **測試結果**：`pnpm test` 89 files、620 tests passed；`pnpm lint`、`pnpm typecheck` passed；static generate 成功（548 routes）。實際 static preview 確認 product 與 guide 都 render fallback 四平台按鈕及 icon。Playwright browser integration 對生成網站注入 Web Share API，確認主鈕傳入 title＋canonical URL；另在無 Web Share、授權 clipboard 的 context 確認 copy 後「已複製」回饋與 clipboard canonical URL。
+- **待部署驗收**：AC12 的 production host 值待 M5 將正式 `APP_URL=dwselect.applepig.net` 烤入 quality-gate generate 後驗證；本機 build 已確認分享連結使用 build-time `dwselect.toybox.local` canonical host，而非瀏覽當下的其他 host。
+
 ## Milestone 2.2: pill 折行修互擠（ADR-036-8）
 
 - **技術決策**：

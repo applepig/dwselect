@@ -871,6 +871,81 @@
   font-size: 0.8rem;
 }
 
+/* 與 .detail-content／.related-products-section 同樣抬到 .product-transition-shell
+   （absolute z-index:0）之上，否則整段文字沉在 shell 底下不可見。 */
+.share-section {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: 12px;
+  min-width: 0;
+  padding: 0 18px 18px;
+}
+
+.share-title {
+  margin: 0;
+  color: var(--dw-text);
+  font-size: 1rem;
+  font-weight: 950;
+  line-height: 1.3;
+}
+
+.share-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  min-width: 0;
+}
+
+.share-main-button,
+.share-platform-link,
+.share-copy-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 42px;
+  padding: 0 14px;
+  border: 1px solid var(--dw-border);
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--dw-accent) 6%, var(--dw-panel));
+  color: var(--dw-text);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.9rem;
+  font-weight: 900;
+  line-height: 1.2;
+  text-decoration: none;
+}
+
+.share-main-button:hover,
+.share-platform-link:hover,
+.share-copy-button:hover {
+  background: color-mix(in srgb, var(--dw-accent) 10%, var(--dw-panel));
+}
+
+.share-button-icon {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  color: var(--dw-accent);
+}
+
+.share-copy-fallback {
+  margin: 0;
+  color: var(--dw-muted);
+  font-size: 0.85rem;
+  line-height: 1.65;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+/* user-select: all 讓單擊即整段選取，剪貼簿不可用時的手動複製 fallback（Case 4）。 */
+.share-copy-fallback-url {
+  color: var(--dw-accent);
+  font-weight: 850;
+  user-select: all;
+}
+
 /* 與 .detail-content 同樣抬到 .product-transition-shell（absolute z-index:0）之上：
    沒抬的話 section 內文字沉在 shell 底下不可見，只剩帶 z-index 的圖浮出（正式站既有缺陷）。 */
 .related-products-section {
@@ -909,6 +984,9 @@
 .search-clear-button:focus-visible,
 .search-suggestion-item:focus-visible,
 .product-card-link:focus-visible,
+.share-main-button:focus-visible,
+.share-platform-link:focus-visible,
+.share-copy-button:focus-visible,
 .link-row:focus-visible,
 .resource-row:focus-visible,
 .detail-summary-buy-link:focus-visible,
@@ -1402,6 +1480,10 @@
 
   .detail-content {
     padding: 40px;
+  }
+
+  .share-section {
+    padding: 0 40px 40px;
   }
 
   .related-products-section {

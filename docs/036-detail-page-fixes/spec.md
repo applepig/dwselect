@@ -46,9 +46,9 @@
 
 #### M3 share buttons
 
-- [ ] AC9：detail 頁（product 與 guide）render 分享區塊；在支援 `navigator.share` 的環境點擊主分享鈕會以 canonical URL（`getCanonicalUrl` 結果，非 `window.location`）與頁面標題呼叫 Web Share API。
-- [ ] AC10：在不支援 `navigator.share` 的環境，分享區塊顯示 LINE、Facebook、X、Threads 四個平台鈕與 copy link 鈕；各平台鈕 href 為該平台 share intent URL 且帶 URL-encoded canonical URL。
-- [ ] AC11：點擊 copy link 後剪貼簿內容為 canonical URL，且按鈕出現短暫的「已複製」回饋（約 2 秒後復原）；clipboard API 不可用時顯示可手動選取的 URL 作為 fallback。
+- [x] AC9：detail 頁（product 與 guide）render 分享區塊；在支援 `navigator.share` 的環境點擊主分享鈕會以 canonical URL（`getCanonicalUrl` 結果，非 `window.location`）與頁面標題呼叫 Web Share API。
+- [x] AC10：在不支援 `navigator.share` 的環境，分享區塊顯示 LINE、Facebook、X、Threads 四個平台鈕與 copy link 鈕；各平台鈕 href 為該平台 share intent URL 且帶 URL-encoded canonical URL。
+- [x] AC11：點擊 copy link 後剪貼簿內容為 canonical URL，且按鈕出現短暫的「已複製」回饋（約 2 秒後復原）；clipboard API 不可用時顯示可手動選取的 URL 作為 fallback。
 - [ ] AC12：分享 URL 一律為 build 時烤入的 canonical host（正式站 build 即 `dwselect.applepig.net`），不受瀏覽當下 host 影響。
 
 #### M4 Disqus

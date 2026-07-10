@@ -38,12 +38,14 @@ const NuxtLinkStub = {
 const NuxtImgStub = { props: ['src', 'alt'], template: '<img :src="src" :alt="alt" />' }
 const UButtonStub = { props: ['to', 'icon', 'block', 'size', 'color', 'variant'], template: '<button><slot /></button>' }
 const UIconStub = { props: ['name'], template: '<i />' }
+// share-buttons 非本 suite 關注點，掛淺 stub 隔離其 useRoute／navigator 依賴。
+const ShareButtonsStub = { props: ['title'], template: '<section class="share-section" />' }
 
 function mountGuideDetail(detail: GuideDetailView) {
   return mount(GuideDetail, {
     props: { detail },
     global: {
-      components: { ContentMarkdown, RelatedProductsSection },
+      components: { ContentMarkdown, RelatedProductsSection, ShareButtons: ShareButtonsStub },
       stubs: {
         NuxtLink: NuxtLinkStub,
         CatalogPill: CatalogPillStub,

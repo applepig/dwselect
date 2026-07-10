@@ -120,6 +120,8 @@
       </UButton>
     </section>
 
+    <ShareButtons :title="detail.title" />
+
     <RelatedProductsSection
       :products="detail.related_products"
       title="相關商品"

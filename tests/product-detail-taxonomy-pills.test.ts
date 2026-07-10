@@ -1,7 +1,7 @@
 // @vitest-environment happy-dom
 
 import { mount } from '@vue/test-utils'
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { afterAll, beforeEach, describe, expect, it, vi } from 'vitest'
 
 import { useBrokenImageFallback } from '../app/composables/use-broken-image-fallback'
@@ -9,6 +9,7 @@ import { useDetailBackNavigation } from '../app/composables/use-detail-back-navi
 import ProductCard from '../app/components/product-card.vue'
 import ProductDetail from '../app/components/product-detail.vue'
 import RelatedProductsSection from '../app/components/related-products-section.vue'
+import ShareButtons from '../app/components/share-buttons.vue'
 import type { ProductCardView, ProductDetailView } from '../app/utils/public-content-view-types'
 
 // CatalogPill 以 NuxtLink 渲染，stub 後把 `to`（{ path, query }）序列化到 href 上方便斷言。
@@ -51,7 +52,7 @@ function mountProductDetail(detail: ProductDetailView) {
   return mount(ProductDetail, {
     props: { detail },
     global: {
-      components: { RelatedProductsSection, ProductCard },
+      components: { RelatedProductsSection, ProductCard, ShareButtons },
       stubs: {
         NuxtLink: NuxtLinkStub,
         CatalogPill: CatalogPillStub,
@@ -117,6 +118,8 @@ describe('ProductDetail taxonomy pill routing', () => {
     vi.stubGlobal('ref', ref)
     vi.stubGlobal('computed', computed)
     vi.stubGlobal('onMounted', onMounted)
+    vi.stubGlobal('onUnmounted', onUnmounted)
+    vi.stubGlobal('useRoute', () => ({ path: '/products/sample-product' }))
     vi.stubGlobal('useRouter', () => ({ back: vi.fn(), push: vi.fn() }))
     vi.stubGlobal('useDetailBackNavigation', useDetailBackNavigation)
     vi.stubGlobal('useBrokenImageFallback', useBrokenImageFallback)
@@ -206,6 +209,8 @@ describe('ProductDetail related products section', () => {
     vi.stubGlobal('ref', ref)
     vi.stubGlobal('computed', computed)
     vi.stubGlobal('onMounted', onMounted)
+    vi.stubGlobal('onUnmounted', onUnmounted)
+    vi.stubGlobal('useRoute', () => ({ path: '/products/sample-product' }))
     vi.stubGlobal('useRouter', () => ({ back: vi.fn(), push: vi.fn() }))
     vi.stubGlobal('useDetailBackNavigation', useDetailBackNavigation)
     vi.stubGlobal('useBrokenImageFallback', useBrokenImageFallback)
@@ -236,5 +241,31 @@ describe('ProductDetail related products section', () => {
     const wrapper = mountProductDetail(makeProductDetailView({ related_products: [] }))
 
     expect(wrapper.find('.related-products-section').exists()).toBe(false)
+  })
+})
+
+describe('ProductDetail share buttons', () => {
+  beforeEach(() => {
+    vi.stubGlobal('ref', ref)
+    vi.stubGlobal('computed', computed)
+    vi.stubGlobal('onMounted', onMounted)
+    vi.stubGlobal('onUnmounted', onUnmounted)
+    vi.stubGlobal('useRoute', () => ({ path: '/products/sample-product' }))
+    vi.stubGlobal('useRouter', () => ({ back: vi.fn(), push: vi.fn() }))
+    vi.stubGlobal('useDetailBackNavigation', useDetailBackNavigation)
+    vi.stubGlobal('useBrokenImageFallback', useBrokenImageFallback)
+  })
+
+  afterAll(() => {
+    vi.unstubAllGlobals()
+  })
+
+  it('should render the share block wired with the product name as share title (AC9)', () => {
+    const wrapper = mountProductDetail(makeProductDetailView({ name: '好物商品' }))
+    const share_section = wrapper.find('.share-section')
+    const x_link = share_section.find('.share-platform-link[data-platform="x"]')
+
+    expect(share_section.exists()).toBe(true)
+    expect(x_link.attributes('href')).toContain(`text=${encodeURIComponent('好物商品')}`)
   })
 })

@@ -163,6 +163,8 @@
       </section>
     </section>
 
+    <ShareButtons :title="detail.name" />
+
     <RelatedProductsSection
       :products="detail.related_products"
       title="You may also like"

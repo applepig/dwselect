@@ -1,7 +1,7 @@
 // @vitest-environment happy-dom
 
 import { mount } from '@vue/test-utils'
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { afterAll, beforeEach, describe, expect, it, vi } from 'vitest'
 
 import { useBrokenImageFallback } from '../app/composables/use-broken-image-fallback'
@@ -10,6 +10,7 @@ import GuideDetail from '../app/components/guide-detail.vue'
 import ContentMarkdown from '../app/components/content-markdown.vue'
 import ProductCard from '../app/components/product-card.vue'
 import RelatedProductsSection from '../app/components/related-products-section.vue'
+import ShareButtons from '../app/components/share-buttons.vue'
 import type { GuideDetailView, ProductCardView } from '../app/utils/public-content-view-types'
 
 const NuxtLinkStub = {
@@ -40,7 +41,7 @@ function mountGuideDetail(detail: GuideDetailView) {
   return mount(GuideDetail, {
     props: { detail },
     global: {
-      components: { ContentMarkdown, RelatedProductsSection, ProductCard },
+      components: { ContentMarkdown, RelatedProductsSection, ProductCard, ShareButtons },
       stubs: {
         NuxtLink: NuxtLinkStub,
         CatalogPill: CatalogPillStub,
@@ -98,6 +99,8 @@ describe('GuideDetail', () => {
     vi.stubGlobal('ref', ref)
     vi.stubGlobal('computed', computed)
     vi.stubGlobal('onMounted', onMounted)
+    vi.stubGlobal('onUnmounted', onUnmounted)
+    vi.stubGlobal('useRoute', () => ({ path: '/guide/sample-guide' }))
     vi.stubGlobal('useRouter', () => ({ back: vi.fn(), push: vi.fn() }))
     vi.stubGlobal('useDetailBackNavigation', useDetailBackNavigation)
     vi.stubGlobal('useBrokenImageFallback', useBrokenImageFallback)
@@ -233,5 +236,14 @@ describe('GuideDetail', () => {
 
     expect(shell.exists()).toBe(true)
     expect(shell.classes()).not.toContain('product-vt-card')
+  })
+
+  it('should render the share block wired with the guide title as share title (AC9)', () => {
+    const wrapper = mountGuideDetail(makeGuideDetailView({ title: '好物指南' }))
+    const share_section = wrapper.find('.share-section')
+    const x_link = share_section.find('.share-platform-link[data-platform="x"]')
+
+    expect(share_section.exists()).toBe(true)
+    expect(x_link.attributes('href')).toContain(`text=${encodeURIComponent('好物指南')}`)
   })
 })
