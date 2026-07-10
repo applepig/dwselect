@@ -10,7 +10,13 @@ on:
     branches:
       - master
 
+# 同一時間只允許最新的 master deploy lifecycle 繼續，避免較舊 preview/E2E 完成後覆寫 production。
+concurrency:
+  group: production-deploy
+  cancel-in-progress: true
+
 permissions:
+  actions: read
   contents: read
   deployments: write
 
@@ -18,15 +24,23 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
-    env:
-      APP_URL: dwselect.applepig.net
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
           # workflow_run 預設 checkout 預設分支 HEAD；改抓被驗證過的那個 commit，避免 deploy 到未經 gate 的新 commit。
           ref: ${{ github.event.workflow_run.head_sha }}
+
+      - name: Log artifact source run
+        run: printf 'Downloading static-site artifact from workflow run %s\n' '${{ github.event.workflow_run.id }}'
+
+      - name: Download static site artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: static-site
+          path: .output/public
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
@@ -42,26 +56,92 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Restore Nuxt build cache
-        uses: actions/cache@v4
-        with:
-          path: |
-            node_modules/.cache/nuxt
-            .nuxt
-          key: nuxt-build-${{ runner.os }}-node-24-${{ hashFiles('pnpm-lock.yaml', 'nuxt.config.ts', 'app/**', 'scripts/**', 'content/**') }}
-          restore-keys: |
-            nuxt-build-${{ runner.os }}-node-24-
-            nuxt-build-${{ runner.os }}-
-
-      - name: Generate static site
-        env:
-          DWSELECT_ALLOW_HOST_GENERATE: "1"
-        run: pnpm generate
-
-      - name: Deploy to Cloudflare Pages
+      - name: Deploy preview to Cloudflare Pages
+        id: preview_deploy
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+          command: pages deploy .output/public --project-name=dwselect --branch=preview-${{ github.event.workflow_run.head_sha }}
+
+      - name: Resolve preview URL
+        id: preview_url
+        env:
+          WRANGLER_OUTPUT: ${{ steps.preview_deploy.outputs.command-output }}
+        run: |
+          node --input-type=module <<'NODE'
+          import { appendFileSync } from 'node:fs'
+
+          const preview_urls = process.env.WRANGLER_OUTPUT?.match(/https:\/\/[a-z0-9][a-z0-9.-]*\.pages\.dev\/?/gi) ?? []
+          const preview_url = preview_urls.at(-1)
+          if (!preview_url) {
+            throw new Error('Wrangler did not report a Cloudflare Pages preview URL')
+          }
+
+          const preview_host = new URL(preview_url).host
+          console.log(`Cloudflare preview is live at ${preview_url}`)
+          appendFileSync(process.env.GITHUB_OUTPUT, `url=${preview_url}\nhost=${preview_host}\n`)
+          NODE
+
+      - name: Wait for preview readiness
+        env:
+          PREVIEW_URL: ${{ steps.preview_url.outputs.url }}
+        run: |
+          node --input-type=module <<'NODE'
+          const preview_url = process.env.PREVIEW_URL
+          const max_attempts = 30
+
+          for (let attempt = 1; attempt <= max_attempts; attempt += 1) {
+            try {
+              const response = await fetch(preview_url, { redirect: 'follow' })
+              if (response.ok) {
+                console.log(`Preview responded with ${response.status} on attempt ${attempt}`)
+                process.exit(0)
+              }
+              console.log(`Preview responded with ${response.status} on attempt ${attempt}`)
+            }
+            catch (error) {
+              console.log(`Preview was not reachable on attempt ${attempt}: ${error.message}`)
+            }
+
+            await new Promise((resolve) => setTimeout(resolve, 2_000))
+          }
+
+          throw new Error(`Preview did not become ready after ${max_attempts} attempts: ${preview_url}`)
+          NODE
+
+      - name: Install Chromium for preview E2E
+        run: pnpm exec playwright install --with-deps chromium
+
+      - name: Run preview E2E
+        env:
+          APP_URL: ${{ steps.preview_url.outputs.host }}
+          PLAYWRIGHT_EXTERNAL_SERVER: "1"
+        run: pnpm test:e2e
+
+      - name: Verify artifact commit is still current master
+        env:
+          ARTIFACT_SHA: ${{ github.event.workflow_run.head_sha }}
+        run: |
+          remote_master_ref="$(git ls-remote --refs origin refs/heads/master)" || {
+            printf 'Unable to read origin/master; refusing production deploy.\n' >&2
+            exit 1
+          }
+          remote_master_sha="${remote_master_ref%%$'\t'*}"
+
+          if [[ ! "$remote_master_sha" =~ ^[0-9a-f]{40}$ ]]; then
+            printf 'origin/master returned an invalid SHA; refusing production deploy.\n' >&2
+            exit 1
+          fi
+
+          if [ "$remote_master_sha" != "$ARTIFACT_SHA" ]; then
+            printf 'Artifact SHA %s is no longer origin/master (%s); refusing production deploy.\n' "$ARTIFACT_SHA" "$remote_master_sha" >&2
+            exit 1
+          fi
+
+      - name: Deploy verified artifact to production
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           command: pages deploy .output/public --project-name=dwselect --branch=master

@@ -1,11 +1,26 @@
 # Works: 036 detail page fixes
 
+## Milestone 5: artifact promotion and preview E2E gate
+
+- **技術決策**：quality gate 是唯一 `generate` 點，注入 `APP_URL=dwselect.applepig.net` 與 `DISQUS_SHORTNAME=dwselect` 後上傳 `.output/public` 為 `static-site` artifact。deploy workflow 以觸發 run id 跨 run 下載同一 artifact，preview branch 部署、解析 Pages URL、等待可用、安裝 Chromium、以 `PLAYWRIGHT_EXTERNAL_SERVER=1` 對 preview 跑 E2E，通過後才部署 `master`；deploy 不再 generate。
+- **race 防護**：獨立審查發現連續 master push 可讓慢的舊 run 在較新 deploy 後覆蓋 production。workflow-level `production-deploy` concurrency 會取消舊 lifecycle，production 前另以 `git ls-remote origin/master` 比對 artifact SHA；取值失敗、格式錯誤或 SHA 過期都 fail-closed，不部署。
+- **static E2E 前置修復**：舊 category query redirect 位於 `index.vue` 的 `onMounted`，在 static hydration 後會被 router 還原而留在首頁。改為 client-only global middleware initial navigation，server 直接跳過以維持 non-3xx 契約；移除 index 的重複 reader。合法單值仍以 replace soft redirect 到 taxonomy，invalid／empty／`all`／array 維持首頁。031 spec 已經使用者確認同步，並新增該入口的行為測試。
+- **測試結果**：YAML parser、`git diff --check`、`pnpm lint`、`pnpm typecheck`、`pnpm test`（93 files、631 tests）通過；`pnpm generate` 成功，548 routes。`PLAYWRIGHT_EXTERNAL_SERVER=1 pnpm test:e2e` 對 static output 完整執行為 85 passed、29 skipped、0 failed（4.2 分鐘）。review 修正 race 與 static redirect 後皆無 code finding。
+- **待部署驗收**：GitHub artifact promotion、Cloudflare preview E2E gate、production promotion 需 workflow 實際觸發後驗收。
+
+## Milestone 4: Disqus 留言
+
+- **技術決策**：新增 `disqus-thread.vue` 隔離第三方行為，`DISQUS_SHORTNAME` 以 Vite define 在 build 時烤入；缺席時元件直接不 render。IntersectionObserver 進 viewport 才注入 embed script；已有 `window.DISQUS` 時以 `reset({ reload: true })` 重設 thread，避免 SPA navigation 殘留前一篇內容或重複 script。identifier 固定為 `{products|guides}/{id}`，URL 固定走 canonical URL；script error 顯示靜態 fallback。
+- **測試結果**：新增 shortname、lazy、canonical／identifier、reset re-entrancy、error fallback 與兩 detail 掛載的行為測試；完整 `pnpm test` 92 files、629 tests passed，`pnpm lint`、`pnpm typecheck` passed。
+- **static browser 驗收**：production-configured static output 的 product detail 初載只 render 留言容器；捲至留言區後 `https://dwselect.disqus.com/embed.js` 與 iframe 皆成功載入。related card client-side navigation 到另一商品後，第二個 Disqus request 帶新 `products/{id}` 與 canonical `dwselect.applepig.net` URL，文件內 embed script 仍為一支。這同時驗證 M3 AC12。
+- **待部署驗收**：AC16b 仍需正式站部署後人工確認；本機 static build 僅驗證 build-time env 已正確烤入。
+
 ## Milestone 3: share buttons
 
 - **技術決策**：新增 `share-buttons.vue`，分享 URL 唯一由 `getCanonicalUrl(route.path)` 組成，不讀 `window.location`。SSR 恆輸出平台 fallback；只在 `onMounted` 偵測 `navigator.share` 後切換為原生分享主鈕，避免 hydration mismatch。copy 成功顯示「已複製」2 秒，重複點擊會重設 timer；clipboard 缺席或拒絕時顯示可手動選取的 canonical URL。
 - **掛載與樣式**：product／guide detail 都掛載分享區塊，置於主內容與 related products 間；LINE／Facebook／X／Threads 使用 `@iconify-json/simple-icons`，樣式沿用 detail 的 z-index 契約，避免被 transition shell 覆蓋。
 - **測試結果**：`pnpm test` 89 files、620 tests passed；`pnpm lint`、`pnpm typecheck` passed；static generate 成功（548 routes）。實際 static preview 確認 product 與 guide 都 render fallback 四平台按鈕及 icon。Playwright browser integration 對生成網站注入 Web Share API，確認主鈕傳入 title＋canonical URL；另在無 Web Share、授權 clipboard 的 context 確認 copy 後「已複製」回饋與 clipboard canonical URL。
-- **待部署驗收**：AC12 的 production host 值待 M5 將正式 `APP_URL=dwselect.applepig.net` 烤入 quality-gate generate 後驗證；本機 build 已確認分享連結使用 build-time `dwselect.toybox.local` canonical host，而非瀏覽當下的其他 host。
+- **驗收更新**：AC12 已由 production-configured static output 驗證，分享與 Disqus canonical URL 都是 build-time `dwselect.applepig.net`，而非瀏覽中的 `dwselect.toybox.local`。
 
 ## Milestone 2.2: pill 折行修互擠（ADR-036-8）
 

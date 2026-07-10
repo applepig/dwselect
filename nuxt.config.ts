@@ -25,6 +25,7 @@ if (!app_url) {
 const vite_host = app_url
 // SITE_URL 由 APP_URL 導出並於 build 時烤入 client/SSR bundle 的 __DW_SITE_URL__（見 seo-metadata.ts）。
 const site_url = getSiteUrl()
+const disqus_shortname = process.env.DISQUS_SHORTNAME?.trim() ?? ''
 
 // 029：buildDir / Vite cacheDir 可由環境變數覆寫，讓本機/容器的一次性 build（typecheck/generate/build）
 // 與常駐 dev 的 .nuxt 隔離、互不踩 chunk hash；未設時維持 Nuxt 預設，dev 行為零影響。
@@ -144,6 +145,7 @@ export default defineNuxtConfig({
     // generate 時 canonical／og/og-image 全部跟著環境走（AC4），無殘留寫死網域。
     define: {
       __DW_SITE_URL__: JSON.stringify(site_url),
+      __DW_DISQUS_SHORTNAME__: JSON.stringify(disqus_shortname),
     },
     plugins: [
       {

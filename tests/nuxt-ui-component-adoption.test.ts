@@ -54,8 +54,6 @@ const UEmptyStub = defineComponent({
 })
 
 async function mountIndexPage(options: {
-  route_query?: Record<string, string | string[]>
-  category_ids?: string[]
   products?: ReturnType<typeof makeProduct>[]
 } = {}) {
   const products = options.products ?? [
@@ -68,18 +66,11 @@ async function mountIndexPage(options: {
     links: test_links,
     taxonomies: test_taxonomies,
   }))
-  const category_ids = ref(new Set(options.category_ids ?? ['home', 'computer']))
-  const navigate_to = vi.fn()
-
   vi.stubGlobal('computed', computed)
-  vi.stubGlobal('useRoute', () => ({ path: '/', query: options.route_query ?? {} }))
-  vi.stubGlobal('useCatalogData', async () => ({ content_payload, category_ids }))
+  vi.stubGlobal('useRoute', () => ({ path: '/', query: {} }))
+  vi.stubGlobal('useCatalogData', async () => ({ content_payload }))
   vi.stubGlobal('useHead', vi.fn())
   vi.stubGlobal('useSeoMeta', vi.fn())
-  vi.stubGlobal('navigateTo', navigate_to)
-  vi.stubGlobal('useNuxtApp', () => ({
-    runWithContext: (callback: () => unknown) => callback(),
-  }))
 
   const wrapper = mount(defineComponent({
     components: { IndexPage },
@@ -97,14 +88,14 @@ async function mountIndexPage(options: {
 
   await flushPromises()
 
-  return { wrapper, navigate_to }
+  return { wrapper }
 }
 
 afterEach(() => {
   vi.unstubAllGlobals()
 })
 
-describe('home page category chip delegation and legacy query handling', () => {
+describe('home page category chip delegation', () => {
   it('should delegate home category chips to the shared CategoryChipBar instead of inlining its own chip list', async () => {
     const { wrapper } = await mountIndexPage()
 
@@ -112,29 +103,6 @@ describe('home page category chip delegation and legacy query handling', () => {
     // chip 的 href／active／aria-pressed／count 行為由 tests/category-chip-bar.test.ts 以 DOM 斷言驗收。
     expect(wrapper.find('.category-chip-bar-stub').exists()).toBe(true)
     expect(wrapper.find('.category-chip').exists()).toBe(false)
-  })
-
-  it('should soft redirect a single selectable legacy category query to the category taxonomy page', async () => {
-    const { navigate_to } = await mountIndexPage({
-      route_query: { category: 'computer' },
-      category_ids: ['home', 'computer'],
-    })
-
-    expect(navigate_to).toHaveBeenCalledWith('/category/computer', { replace: true })
-  })
-
-  it.each([
-    ['unknown category id', { category: 'missing' }],
-    ['empty category id', { category: '' }],
-    ['all sentinel', { category: 'all' }],
-    ['array category query', { category: ['home', 'computer'] }],
-  ])('should keep rendering the full home page for an invalid legacy category query: %s', async (_case_name, route_query) => {
-    const { navigate_to } = await mountIndexPage({
-      route_query,
-      category_ids: ['home', 'computer'],
-    })
-
-    expect(navigate_to).not.toHaveBeenCalled()
   })
 })
 

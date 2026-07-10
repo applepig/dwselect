@@ -47,12 +47,16 @@ const UIconStub = { props: ['name'], template: '<i />' }
 const UCardStub = { props: ['ui'], template: '<div><slot /></div>' }
 const UAlertStub = { props: ['title', 'description', 'color', 'variant'], template: '<div />' }
 const ContentMarkdownStub = { props: ['source'], template: '<div />' }
+const DisqusThreadStub = {
+  props: ['contentType', 'contentId'],
+  template: '<div class="disqus-thread-stub" :data-content-type="contentType" :data-content-id="contentId" />',
+}
 
 function mountProductDetail(detail: ProductDetailView) {
   return mount(ProductDetail, {
     props: { detail },
     global: {
-      components: { RelatedProductsSection, ProductCard, ShareButtons },
+      components: { RelatedProductsSection, ProductCard, ShareButtons, DisqusThread: DisqusThreadStub },
       stubs: {
         NuxtLink: NuxtLinkStub,
         CatalogPill: CatalogPillStub,
@@ -267,5 +271,30 @@ describe('ProductDetail share buttons', () => {
 
     expect(share_section.exists()).toBe(true)
     expect(x_link.attributes('href')).toContain(`text=${encodeURIComponent('好物商品')}`)
+  })
+})
+
+describe('ProductDetail Disqus thread', () => {
+  beforeEach(() => {
+    vi.stubGlobal('ref', ref)
+    vi.stubGlobal('computed', computed)
+    vi.stubGlobal('onMounted', onMounted)
+    vi.stubGlobal('onUnmounted', onUnmounted)
+    vi.stubGlobal('useRoute', () => ({ path: '/products/sample-product' }))
+    vi.stubGlobal('useRouter', () => ({ back: vi.fn(), push: vi.fn() }))
+    vi.stubGlobal('useDetailBackNavigation', useDetailBackNavigation)
+    vi.stubGlobal('useBrokenImageFallback', useBrokenImageFallback)
+  })
+
+  afterAll(() => {
+    vi.unstubAllGlobals()
+  })
+
+  it('將 product type 與 id 掛給 Disqus thread，讓 thread identity 不依賴標題（AC14）', () => {
+    const wrapper = mountProductDetail(makeProductDetailView({ id: 'product-a', name: '可改名商品' }))
+    const thread = wrapper.find('.disqus-thread-stub')
+
+    expect(thread.attributes('data-content-type')).toBe('products')
+    expect(thread.attributes('data-content-id')).toBe('product-a')
   })
 })

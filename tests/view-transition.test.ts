@@ -31,6 +31,7 @@ const UButtonStub = { props: ['to', 'icon', 'block', 'size', 'color', 'variant']
 const UIconStub = { props: ['name'], template: '<i />' }
 // share-buttons 非本 suite 關注點，掛淺 stub 隔離其 useRoute／navigator 依賴。
 const ShareButtonsStub = { props: ['title'], template: '<section class="share-section" />' }
+const DisqusThreadStub = { props: ['contentType', 'contentId'], template: '<section class="disqus-thread" />' }
 const UAlertStub = { props: ['title', 'description', 'color', 'variant'], template: '<div />' }
 const ContentMarkdownStub = { props: ['source'], template: '<div />' }
 
@@ -97,7 +98,7 @@ function renderProductDetail(detail: ProductDetailView) {
   return renderToString(ProductDetail, {
     props: { detail },
     global: {
-      components: { RelatedProductsSection, ShareButtons: ShareButtonsStub },
+      components: { RelatedProductsSection, ShareButtons: ShareButtonsStub, DisqusThread: DisqusThreadStub },
       stubs: {
         NuxtLink: NuxtLinkStub,
         NuxtImg: NuxtImgStub,

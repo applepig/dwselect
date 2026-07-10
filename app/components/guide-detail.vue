@@ -122,6 +122,11 @@
 
     <ShareButtons :title="detail.title" />
 
+    <DisqusThread
+      content-type="guides"
+      :content-id="detail.id"
+    />
+
     <RelatedProductsSection
       :products="detail.related_products"
       title="相關商品"

@@ -36,12 +36,16 @@ const UButtonStub = {
 const UIconStub = { props: ['name'], template: '<i />' }
 
 const UCardStub = { props: ['ui'], template: '<div><slot /></div>' }
+const DisqusThreadStub = {
+  props: ['contentType', 'contentId'],
+  template: '<div class="disqus-thread-stub" :data-content-type="contentType" :data-content-id="contentId" />',
+}
 
 function mountGuideDetail(detail: GuideDetailView) {
   return mount(GuideDetail, {
     props: { detail },
     global: {
-      components: { ContentMarkdown, RelatedProductsSection, ProductCard, ShareButtons },
+      components: { ContentMarkdown, RelatedProductsSection, ProductCard, ShareButtons, DisqusThread: DisqusThreadStub },
       stubs: {
         NuxtLink: NuxtLinkStub,
         CatalogPill: CatalogPillStub,
@@ -245,5 +249,13 @@ describe('GuideDetail', () => {
 
     expect(share_section.exists()).toBe(true)
     expect(x_link.attributes('href')).toContain(`text=${encodeURIComponent('好物指南')}`)
+  })
+
+  it('將 guide type 與 id 掛給 Disqus thread，讓 thread identity 不依賴標題（AC14）', () => {
+    const wrapper = mountGuideDetail(makeGuideDetailView({ id: 'guide-a', title: '可改名指南' }))
+    const thread = wrapper.find('.disqus-thread-stub')
+
+    expect(thread.attributes('data-content-type')).toBe('guides')
+    expect(thread.attributes('data-content-id')).toBe('guide-a')
   })
 })

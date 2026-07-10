@@ -946,6 +946,35 @@
   user-select: all;
 }
 
+/* 留言與分享／related 同層，必須高於 detail 的 transition shell。 */
+.disqus-thread {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: 12px;
+  min-width: 0;
+  padding: 0 18px 18px;
+}
+
+.disqus-thread-title {
+  margin: 0;
+  color: var(--dw-text);
+  font-size: 1rem;
+  font-weight: 950;
+  line-height: 1.3;
+}
+
+.disqus-thread-fallback {
+  margin: 0;
+  padding: 14px;
+  border: 1px solid color-mix(in srgb, var(--dw-border) 82%, transparent);
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--dw-panel-strong) 72%, var(--dw-panel));
+  color: var(--dw-muted);
+  font-size: 0.9rem;
+  line-height: 1.65;
+}
+
 /* 與 .detail-content 同樣抬到 .product-transition-shell（absolute z-index:0）之上：
    沒抬的話 section 內文字沉在 shell 底下不可見，只剩帶 z-index 的圖浮出（正式站既有缺陷）。 */
 .related-products-section {

@@ -49,15 +49,15 @@
 - [x] AC9：detail 頁（product 與 guide）render 分享區塊；在支援 `navigator.share` 的環境點擊主分享鈕會以 canonical URL（`getCanonicalUrl` 結果，非 `window.location`）與頁面標題呼叫 Web Share API。
 - [x] AC10：在不支援 `navigator.share` 的環境，分享區塊顯示 LINE、Facebook、X、Threads 四個平台鈕與 copy link 鈕；各平台鈕 href 為該平台 share intent URL 且帶 URL-encoded canonical URL。
 - [x] AC11：點擊 copy link 後剪貼簿內容為 canonical URL，且按鈕出現短暫的「已複製」回饋（約 2 秒後復原）；clipboard API 不可用時顯示可手動選取的 URL 作為 fallback。
-- [ ] AC12：分享 URL 一律為 build 時烤入的 canonical host（正式站 build 即 `dwselect.applepig.net`），不受瀏覽當下 host 影響。
+- [x] AC12：分享 URL 一律為 build 時烤入的 canonical host（正式站 build 即 `dwselect.applepig.net`），不受瀏覽當下 host 影響。
 
 #### M4 Disqus
 
-- [ ] AC13：Disqus shortname 已設定的 build，product 與 guide detail 頁在留言區塊捲入 viewport 後才載入 Disqus embed script（lazy load，不隨頁面初載）；載入後留言區可見。
-- [ ] AC14：thread identifier 為 content 型別＋id（如 `products/2026-06-02-adata-power-bank`），與頁面標題、URL 顯示文字無關——改標題不會產生新 thread。`page.url` 設為 canonical URL。
-- [ ] AC14b：同一瀏覽 session 以 client-side navigation（如點 related 卡的 `NuxtLink`）從 detail A 切到 detail B 並捲至留言區時，Disqus 以 B 的 identifier 與 canonical URL 重新載入（`window.DISQUS` 已存在時走 `DISQUS.reset({ reload: true })`，不重複注入 script），不殘留 A 的 thread。
-- [ ] AC15：shortname 未設定的 build（dev 預設），留言區塊整段不 render、不載入任何 Disqus script。
-- [ ] AC16：Disqus script 載入失敗（斷網／adblock）時，detail 頁主內容 render 與互動不受影響，留言區顯示靜態提示文字而非破版（實作需同時註冊 script 的 `onerror`，不得只處理 `onload` 而卡在永久 loading）。
+- [x] AC13：Disqus shortname 已設定的 build，product 與 guide detail 頁在留言區塊捲入 viewport 後才載入 Disqus embed script（lazy load，不隨頁面初載）；載入後留言區可見。
+- [x] AC14：thread identifier 為 content 型別＋id（如 `products/2026-06-02-adata-power-bank`），與頁面標題、URL 顯示文字無關——改標題不會產生新 thread。`page.url` 設為 canonical URL。
+- [x] AC14b：同一瀏覽 session 以 client-side navigation（如點 related 卡的 `NuxtLink`）從 detail A 切到 detail B 並捲至留言區時，Disqus 以 B 的 identifier 與 canonical URL 重新載入（`window.DISQUS` 已存在時走 `DISQUS.reset({ reload: true })`，不重複注入 script），不殘留 A 的 thread。
+- [x] AC15：shortname 未設定的 build（dev 預設），留言區塊整段不 render、不載入任何 Disqus script。
+- [x] AC16：Disqus script 載入失敗（斷網／adblock）時，detail 頁主內容 render 與互動不受影響，留言區顯示靜態提示文字而非破版（實作需同時註冊 script 的 `onerror`，不得只處理 `onload` 而卡在永久 loading）。
 - [ ] AC16b：正式站部署後，人工開一個 detail 頁捲至留言區，確認 Disqus 留言區實際載入（lazy 注入故不可用 curl 靜態 HTML 驗）——此為 build-time env 注入點的正向驗收，防 shortname 未烤入造成整段靜默不 render（見 ADR-036-2 與 ADR-036-4 的耦合）。
 
 #### M5 deploy pipeline
@@ -253,7 +253,7 @@ deploy.yml:           permissions 需含 actions: read（跨 run 下載 artifact
 > 預期結果：AC9–AC12 全數可觀測通過
 > 實作注意：detail 頁為 prerender，`navigator.share` 偵測不得直接影響 SSR 輸出結構（於 `onMounted` 後切換或 `<ClientOnly>`，避免 hydration mismatch）；`navigator.share()` 需 catch 並忽略 `AbortError`（使用者取消分享面板非錯誤）；copy 回饋計時器重複點擊時先 `clearTimeout` 舊計時器再重啟
 
-- [ ] Red → Green → Refactor
+- [x] Red → Green → Refactor
 
 ### Milestone 4: Disqus 留言
 
@@ -262,7 +262,7 @@ deploy.yml:           permissions 需含 actions: read（跨 run 下載 artifact
 > 預期結果：AC13–AC16b 全數通過（AC16b 於 M5 上線後的 production 部署驗收）；dev 預設完全無 Disqus 蹤跡
 > 實作注意：production 的 `DISQUS_SHORTNAME` 加在 `static-generate.yml` job env（不是 deploy.yml，見 ADR-036-2）；動態注入的 script 需同時掛 `onload` 與 `onerror`
 
-- [ ] Red → Green → Refactor
+- [x] Red → Green → Refactor
 
 ### Milestone 5: deploy pipeline（🔀 與 M1–M4 平行，獨立工作線）
 
@@ -271,7 +271,7 @@ deploy.yml:           permissions 需含 actions: read（跨 run 下載 artifact
 > 驗證：PR 觸發 gate 確認 artifact 上傳；merge 後觀察 deploy run——artifact download（log 可見來源 run id）→preview 部署→E2E→production 三段依序；刻意觀察一次 E2E 失敗路徑（或以 dry-run 分支演練）確認 production 不部署
 > 預期結果：AC17–AC20 通過；deploy log 可見同一 artifact 兩段部署、無第二次 generate
 
-- [ ] Red → Green → Refactor
+- [x] Red → Green → Refactor
 
 ## Open Questions
 
