@@ -79,6 +79,7 @@
 - `app/components/product-detail.vue`、`app/components/guide-detail.vue` — M3／M4 區塊掛載點
 - `.github/workflows/static-generate.yml`、`.github/workflows/deploy.yml` — M5 就地改
 - `playwright.config.ts`、`tests/e2e/compact-app.spec.ts` — M5 E2E 重用（`APP_URL` 注入 preview host）
+- `app/middleware/legacy-category-redirect.global.ts`、`app/pages/index.vue` — M5 static E2E 前置修復：維持 client-only legacy category redirect 契約，避免 static hydration 覆寫導向
 
 ## 既有資產盤點 / Reuse Map
 
@@ -211,6 +212,13 @@ deploy.yml:           permissions 需含 actions: read（跨 run 下載 artifact
 - 原因：擠壓根因是「縮小優先於折行」的 flex 設定。使用者提議 container query 偵測折行，但 CQ 只回應容器寬度、偵測不到內容長度——同一卡寬下長短字樣需要不同行為，寬度閾值無法表達；flex-wrap 是內容感知的折行原語，恰在塞不下時觸發，無需猜閾值。
 - 替代方案：container query 寬度閾值切直排（拒：如上，內容長度不可偵測，會提前折或漏折）；縮 pill 字級（拒：治標且傷可讀性）。
 
+### ADR-036-9：static E2E 前置以 client-only middleware 修復 legacy category redirect
+
+- 決策：M5 的 static E2E 前置揭露 legacy `/?category=` redirect 原本放在 `index.vue` 的 `onMounted`，會在 static hydration 被 router 還原。redirect 移至 client-only global middleware；server 直接跳過，合法單值仍以 replace soft redirect 至 `/category/{id}`，invalid／empty／`all`／array 維持首頁。
+- 原因：M5 的 preview gate 必須先證明既有 suite 能打 static artifact；修正只恢復 031 已定義的 client soft redirect 行為，不改 URL 契約或 server response。middleware 在 client initial navigation 早於 hydration route restore 執行，消除 onMounted 的時序競態。
+- 範圍例外：M5 原則上不動應用程式碼；此項是 static E2E 前置無法通過時唯一必要的 app-code 修復，且其契約以 `docs/031-taxonomy-nav-single-source/spec.md` AC8／Case 1–3 為準。
+- 替代方案：保留 `onMounted` 並調整 E2E（拒：缺陷在實際 static user navigation 同樣存在，不能以弱化測試掩蓋）；改 server redirect（拒：違反 031 client-only、非 3xx 的既有契約）。
+
 ## Milestones
 
 ### Milestone 1: og image 修復
@@ -266,7 +274,7 @@ deploy.yml:           permissions 需含 actions: read（跨 run 下載 artifact
 
 ### Milestone 5: deploy pipeline（🔀 與 M1–M4 平行，獨立工作線）
 
-> 範圍：`.github/workflows/static-generate.yml`（artifact upload＋build-time env 注入點）、`.github/workflows/deploy.yml`（permissions `actions: read`、artifact download、playwright install、preview E2E、兩段部署）；必要時允許 preview 專用的 Playwright config／env 開關（停用 webServer），除此之外不動應用程式碼
+> 範圍：`.github/workflows/static-generate.yml`（artifact upload＋build-time env 注入點）、`.github/workflows/deploy.yml`（permissions `actions: read`、artifact download、playwright install、preview E2E、兩段部署）；必要時允許 preview 專用的 Playwright config／env 開關（停用 webServer）。除 ADR-036-9 的 static E2E 前置修復外，不動應用程式碼
 > 前置：先在本機對 `pnpm generate` 產物跑既有 E2E suite 確認綠燈（suite 從未打過 static 產物，見 ADR-036-4），再接 preview
 > 驗證：PR 觸發 gate 確認 artifact 上傳；merge 後觀察 deploy run——artifact download（log 可見來源 run id）→preview 部署→E2E→production 三段依序；刻意觀察一次 E2E 失敗路徑（或以 dry-run 分支演練）確認 production 不部署
 > 預期結果：AC17–AC20 通過；deploy log 可見同一 artifact 兩段部署、無第二次 generate

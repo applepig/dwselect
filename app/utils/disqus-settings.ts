@@ -2,6 +2,10 @@
 // preview 預設不載第三方 script（ADR-036-2）。
 declare const __DW_DISQUS_SHORTNAME__: string
 
+export function parseDisqusShortname(value: string): string {
+  return value.trim()
+}
+
 export function getDisqusShortname(): string {
-  return __DW_DISQUS_SHORTNAME__.trim()
+  return parseDisqusShortname(__DW_DISQUS_SHORTNAME__)
 }

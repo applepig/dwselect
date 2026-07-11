@@ -1,5 +1,19 @@
 # Works: 036 detail page fixes
 
+### xreview 修正（第二輪）
+
+- **[deploy SHA 驗證帶認證]**：兩處 `git ls-remote` 由匿名 HTTPS 改帶 `GITHUB_TOKEN`（`x-access-token`），消除 runner 共用 IP secondary rate limit 的間歇失敗與 repo 轉 private 時 pipeline brick 的風險；token 不出現在任何輸出 → YAML parse、`git diff --check` passed。
+- **[loadThread owner 哨兵]**：`await nextTick()` 後補 `owner?.token !== thread_owner.token` 哨兵，前次載入失敗後於 await 窗口內連續切頁時，滯後的 loadThread 不再以舊 owner config reset 錯置 thread → 新增行為測試（移除哨兵 red、加回 green）。
+- **[reset-throw recovery 保守化]**（取代第一輪「reset 拋錯也清 runtime 重注入」的做法）：以 `window.DISQUS` 存在與否區分失敗類別——embed.js 已執行過的失敗（fast path 或 onload 內 reset throw）只顯示 fallback、不清 runtime、retry 不重注入第二份 embed.js（第三方對雙重執行容忍度未知）；onerror（adblock／斷網，script 未執行）維持清理＋重注入的既有 recovery → 改寫兩個對應行為測試。
+- **驗證**：`pnpm test` 93 files、641 tests passed；`pnpm lint`、`pnpm typecheck` passed。
+
+### xreview 修正
+
+- **[workflow_run trust boundary 與 preview URL]**：deploy job 現只接受同 repository 的 master `push` 成功 run，且在 checkout／install 前以遠端 master SHA fail-closed 驗證 artifact。preview 改取 wrangler action 的 deployment URL output，拒絕 production alias 與非 preview host；production 前保留 SHA 複驗防 race。
+- **[Disqus thread ownership／recovery]**：以 ESM singleton loader 共用 pending embed promise，A 頁 script pending 時 B remount／進 viewport 不重複注入；最新 mount 立即擁有 global config，script resolve 後會 reset B thread。failure retry 先恢復 target、移除 dead script；無論第三方 reset 在 `onload` callback 或既有 runtime fast path 拋錯，都清除 runtime、singleton 與 script，顯示 fallback 並讓下一次 retry 正常注入。shortname parsing 改為受控純函式測試，避免 tautology。
+- **[M5 scope SSOT]**：新增 ADR-036-9，記錄 static E2E 前置的 legacy category client-only middleware 例外及其 031 契約來源。
+- **驗證**：`pnpm test` 93 files、638 tests passed；`pnpm lint`、`pnpm typecheck`、YAML parser、`git diff --check` passed。workflow 的 GitHub／Cloudflare 實際觸發仍待 CI 驗收。
+
 ## Milestone 5: artifact promotion and preview E2E gate
 
 - **技術決策**：quality gate 是唯一 `generate` 點，注入 `APP_URL=dwselect.applepig.net` 與 `DISQUS_SHORTNAME=dwselect` 後上傳 `.output/public` 為 `static-site` artifact。deploy workflow 以觸發 run id 跨 run 下載同一 artifact，preview branch 部署、解析 Pages URL、等待可用、安裝 Chromium、以 `PLAYWRIGHT_EXTERNAL_SERVER=1` 對 preview 跑 E2E，通過後才部署 `master`；deploy 不再 generate。

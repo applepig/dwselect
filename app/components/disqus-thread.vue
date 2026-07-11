@@ -25,6 +25,9 @@
 </template>
 
 <script setup lang="ts">
+import { nextTick } from 'vue'
+
+import { invalidateDisqusEmbed, loadDisqusEmbed } from '../utils/disqus-embed-loader'
 import { getCanonicalUrl } from '../utils/seo-metadata'
 import { getDisqusShortname } from '../utils/disqus-settings'
 
@@ -41,14 +44,15 @@ type DisqusApi = {
   reset: (options: { reload: true, config: DisqusConfig }) => void
 }
 
-declare global {
-  interface Window {
-    DISQUS?: DisqusApi
-    disqus_config?: DisqusConfig
-  }
+type DisqusWindow = Window & {
+  DISQUS?: DisqusApi
+  disqus_config?: DisqusConfig
 }
 
-let script_load_promise: Promise<void> | null = null
+type ThreadOwner = {
+  token: symbol
+  config: DisqusConfig
+}
 
 const props = defineProps<{
   contentType: 'products' | 'guides'
@@ -63,6 +67,7 @@ const load_failed = ref(false)
 const thread_key = computed(() => `${props.contentType}/${props.contentId}:${route.path}`)
 let observer: IntersectionObserver | null = null
 let is_in_viewport = false
+let owner: ThreadOwner | null = null
 
 function createDisqusConfig(): DisqusConfig {
   const page_url = getCanonicalUrl(route.path)
@@ -74,65 +79,95 @@ function createDisqusConfig(): DisqusConfig {
   }
 }
 
-function loadDisqusEmbed(): Promise<void> {
-  const existing_script = document.querySelector<HTMLScriptElement>('script[data-disqus-embed="true"]')
-
-  if (existing_script !== null && script_load_promise !== null) {
-    return script_load_promise
-  }
-
-  const script = document.createElement('script')
-  script.async = true
-  script.src = `https://${shortname}.disqus.com/embed.js`
-  script.dataset.disqusEmbed = 'true'
-  const load_promise = new Promise<void>((resolve, reject) => {
-    script.onload = () => resolve()
-    script.onerror = () => {
-      script_load_promise = null
-      reject(new Error('Disqus embed script failed to load'))
-    }
-  })
-  script_load_promise = load_promise
-  document.head.append(script)
-
-  return load_promise
+function getDisqusWindow(): DisqusWindow {
+  return window as DisqusWindow
 }
 
-async function loadThread() {
-  if (!is_enabled) {
-    return
+function claimThreadConfig(): ThreadOwner {
+  const owner = {
+    token: Symbol('disqus-thread-owner'),
+    config: createDisqusConfig(),
+  }
+  getDisqusWindow().disqus_config = owner.config
+
+  return owner
+}
+
+function createEmbedLoadHandler() {
+  const config_at_load_start = getDisqusWindow().disqus_config
+
+  return () => {
+    const disqus_window = getDisqusWindow()
+    if (disqus_window.disqus_config !== config_at_load_start && disqus_window.disqus_config !== undefined && disqus_window.DISQUS !== undefined) {
+      disqus_window.DISQUS.reset({ reload: true, config: disqus_window.disqus_config })
+    }
+  }
+}
+
+function handleThreadLoadFailure(thread_owner: ThreadOwner, embed_already_executed: boolean) {
+  // embed.js 已執行過的失敗（DISQUS.reset throw）：其 iframe／listener／DISQUSWIDGETS 等全域副作用
+  // 不會因移除 script tag 消失，重注入第二份 embed.js 對第三方是未知風險。只顯示 fallback，不重載 runtime。
+  if (!embed_already_executed) {
+    const disqus_window = getDisqusWindow()
+    delete disqus_window.DISQUS
+    invalidateDisqusEmbed()
   }
 
-  const config = createDisqusConfig()
-
-  if (window.DISQUS !== undefined) {
-    window.DISQUS.reset({ reload: true, config })
-
-    return
-  }
-
-  window.disqus_config = config
-
-  try {
-    await loadDisqusEmbed()
-  }
-  catch {
+  if (owner?.token === thread_owner.token) {
     load_failed.value = true
   }
 }
 
+async function loadThread(thread_owner: ThreadOwner) {
+  if (!is_enabled) {
+    return
+  }
+
+  const target_was_removed = load_failed.value
+  load_failed.value = false
+
+  if (target_was_removed) {
+    await nextTick()
+  }
+
+  // await 窗口內 owner 可能已換手（連續切頁）；滯後的 loadThread 不得再以舊 config 動作。
+  if (owner?.token !== thread_owner.token) {
+    return
+  }
+
+  try {
+    const disqus_window = getDisqusWindow()
+    if (disqus_window.DISQUS !== undefined) {
+      disqus_window.DISQUS.reset({ reload: true, config: thread_owner.config })
+
+      return
+    }
+
+    await loadDisqusEmbed(shortname, createEmbedLoadHandler())
+  }
+  catch {
+    // embed.js 執行過 ⟺ window.DISQUS 存在：fast-path reset throw 與 loader onload 內 reset throw 皆屬此類；
+    // loadDisqusEmbed 的 onerror（adblock／斷網，script 未執行）則 DISQUS 仍不存在。
+    handleThreadLoadFailure(thread_owner, getDisqusWindow().DISQUS !== undefined)
+  }
+}
+
 watch(thread_key, () => {
+  owner = claimThreadConfig()
+
   if (!is_in_viewport) {
     return
   }
 
-  void loadThread()
+  void loadThread(owner)
 })
 
 onMounted(() => {
   if (!is_enabled || thread_root.value === null) {
     return
   }
+
+  owner = claimThreadConfig()
 
   observer = new IntersectionObserver((entries) => {
     if (!entries.some((entry) => entry.isIntersecting)) {
@@ -141,7 +176,9 @@ onMounted(() => {
 
     is_in_viewport = true
     observer?.unobserve(thread_root.value!)
-    void loadThread()
+    if (owner !== null) {
+      void loadThread(owner)
+    }
   })
   observer.observe(thread_root.value)
 })
