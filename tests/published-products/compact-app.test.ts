@@ -219,6 +219,7 @@ describe('route-driven compact app state', () => {
   it('should derive the trimmed search query from the search route query', () => {
     expect(getCompactAppStateFromRoute({ path: '/search', query: {} })).toEqual({ search_query: '' })
     expect(getCompactAppStateFromRoute({ path: '/search', query: { q: '  機械鍵盤  ' } })).toEqual({ search_query: '機械鍵盤' })
+    expect(getCompactAppStateFromRoute({ path: '/search/', query: { q: '  機械鍵盤  ' } })).toEqual({ search_query: '機械鍵盤' })
     expect(getCompactAppStateFromRoute({ path: '/search', query: { q: ['  ', 'ignored'] } })).toEqual({ search_query: '' })
   })
 

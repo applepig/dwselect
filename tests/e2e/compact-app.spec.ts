@@ -1,6 +1,7 @@
 import { expect, test } from '@playwright/test'
 
 const SEARCH_RESULT_TIMEOUT_MS = 15_000
+const SEARCH_URL_PATTERN = /\/search\/?$/
 
 function getNavRoot(page, project_name) {
   if (project_name === 'phone') {
@@ -209,7 +210,7 @@ test('switches tabs without navigation reload and exposes search and link contra
   await expect(page.getByRole('heading', { name: '指南列表' })).toHaveCount(0)
 
   await nav_root.getByRole('link', { name: '搜尋' }).click()
-  await expect(page).toHaveURL('/search')
+  await expect(page).toHaveURL(SEARCH_URL_PATTERN)
   await expect(page.locator('.compact-top-bar .top-bar-title')).toHaveText(getBreadcrumbTextPattern('搜尋'))
   await expect(page.getByRole('heading', { name: '搜看看' })).toHaveCount(0)
   await expect(page.getByPlaceholder('在找什麼嗎？™')).toBeVisible()
@@ -222,7 +223,7 @@ test('switches tabs without navigation reload and exposes search and link contra
   await expect(page.getByRole('link', { name: /applepig\.idv\.tw/ })).toHaveAttribute('href', 'https://applepig.idv.tw')
 
   await page.goBack()
-  await expect(page).toHaveURL('/search')
+  await expect(page).toHaveURL(SEARCH_URL_PATTERN)
 })
 
 test('renders guide and links with the shared resource row contract', async ({ page }) => {
@@ -480,7 +481,7 @@ test('hydrates direct search query routes without mismatch warnings', async ({ p
 test('separates search typing, autocomplete and submitted query state', async ({ page }) => {
   await page.goto('/search', { waitUntil: 'domcontentloaded' })
   await expect(page.locator('vite-error-overlay')).toHaveCount(0)
-  await expect(page).toHaveURL('/search')
+  await expect(page).toHaveURL(SEARCH_URL_PATTERN)
   await expect(page.locator('.search-result-section')).toHaveCount(0)
   const popular_tag_section = page.locator('.search-popular-panel[data-section-id="tags"]')
   const popular_brand_section = page.locator('.search-popular-panel[data-section-id="brands"]')
@@ -501,7 +502,7 @@ test('separates search typing, autocomplete and submitted query state', async ({
   const search_input = page.getByPlaceholder('在找什麼嗎？™')
   await search_input.fill('Sharp')
   await page.waitForTimeout(400)
-  await expect(page).toHaveURL('/search')
+  await expect(page).toHaveURL(SEARCH_URL_PATTERN)
   await expect(page.locator('.search-history-panel')).toHaveCount(0)
   await expect(page.locator('.search-suggestion-list')).toBeVisible()
   await expect(page.locator('.search-suggestion-item').first()).toContainText(/產品|指南|連結/)
@@ -545,7 +546,7 @@ test('does not submit search or write history when IME composition confirms with
   })
 
   await page.waitForTimeout(100)
-  await expect(page).toHaveURL('/search')
+  await expect(page).toHaveURL(SEARCH_URL_PATTERN)
   await expect(page.locator('.search-suggestion-panel')).toBeVisible()
 
   const history_items = await page.evaluate(() => JSON.parse(localStorage.getItem('dwselect.search.history.v1') ?? '[]'))
@@ -581,7 +582,7 @@ test('keeps search usable when search history storage contains corrupted JSON', 
   await page.reload({ waitUntil: 'networkidle' })
 
   await expect(page.locator('vite-error-overlay')).toHaveCount(0)
-  await expect(page).toHaveURL('/search')
+  await expect(page).toHaveURL(SEARCH_URL_PATTERN)
 
   await expect(page.locator('.search-popular-panel[data-section-id="tags"]')).toBeVisible()
 

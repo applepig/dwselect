@@ -67,6 +67,33 @@ jobs:
           DWSELECT_ALLOW_HOST_GENERATE: "1"
         run: pnpm generate
 
+      - name: Install Chromium for static preview E2E
+        run: pnpm exec playwright install --with-deps chromium
+
+      - name: Run static preview E2E
+        env:
+          PLAYWRIGHT_EXTERNAL_SERVER: "1"
+          PLAYWRIGHT_BASE_URL: http://127.0.0.1:4173
+        run: |
+          node --experimental-strip-types scripts/serve-static-output.ts &
+          static_preview_pid=$!
+          trap 'kill "$static_preview_pid"' EXIT
+
+          for attempt in {1..30}; do
+            if curl --fail --silent http://127.0.0.1:4173/ > /dev/null; then
+              break
+            fi
+
+            if [ "$attempt" -eq 30 ]; then
+              printf 'Static preview did not become ready.\n' >&2
+              exit 1
+            fi
+
+            sleep 1
+          done
+
+          pnpm test:e2e
+
       - name: Upload static site artifact
         uses: actions/upload-artifact@v4
         with:
