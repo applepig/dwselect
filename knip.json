@@ -8,6 +8,7 @@
     "scripts/legacy/**"
   ],
   "ignoreDependencies": [
+    "@iconify-json/simple-icons",
     "vue-tsc"
   ],
   "ignoreExportsUsedInFile": true,

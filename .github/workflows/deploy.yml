@@ -1,7 +1,7 @@
 name: Deploy
 
-# 只在 Static Generate（test/lint/typecheck/generate quality-gate）於 master 成功後才觸發，
-# 避免 regression 直接 push 到 master 就上線。兩支 workflow 拆開、deploy 串接在 gate 之後。
+# 只在本 repository 的 master push 觸發之 Static Generate（test/lint/typecheck/generate quality-gate）
+# 成功後才部署，避免 pull_request workflow_run 取得 privileged deploy context。兩支 workflow 拆開、deploy 串接在 gate 之後。
 on:
   workflow_run:
     workflows: ["Static Generate"]
@@ -10,23 +10,65 @@ on:
     branches:
       - master
 
+# 同一時間只允許最新的 master deploy lifecycle 繼續，避免較舊 preview/E2E 完成後覆寫 production。
+concurrency:
+  group: production-deploy
+  cancel-in-progress: true
+
 permissions:
+  actions: read
   contents: read
   deployments: write
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
-    env:
-      APP_URL: dwselect.applepig.net
-
+    if: >-
+      ${{ github.event.workflow_run.conclusion == 'success' &&
+          github.event.workflow_run.event == 'push' &&
+          github.event.workflow_run.head_branch == 'master' &&
+          github.event.workflow_run.head_repository.full_name == github.repository }}
     steps:
+      - name: Verify artifact commit is current master
+        env:
+          ARTIFACT_SHA: ${{ github.event.workflow_run.head_sha }}
+          REPOSITORY: ${{ github.repository }}
+          # 匿名 ls-remote 會撞 runner 共用 IP 的 secondary rate limit，且 repo 轉 private 會 brick pipeline；
+          # job 已有 contents: read，改帶 token 認證。token 不得出現在任何 echo/printf 輸出。
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          remote_master_ref="$(git ls-remote --refs "https://x-access-token:${GITHUB_TOKEN}@github.com/${REPOSITORY}.git" refs/heads/master)" || {
+            printf 'Unable to read origin/master; refusing deploy.\n' >&2
+            exit 1
+          }
+          remote_master_sha="${remote_master_ref%%$'\t'*}"
+
+          if [[ ! "$remote_master_sha" =~ ^[0-9a-f]{40}$ ]]; then
+            printf 'origin/master returned an invalid SHA; refusing deploy.\n' >&2
+            exit 1
+          fi
+
+          if [ "$remote_master_sha" != "$ARTIFACT_SHA" ]; then
+            printf 'Artifact SHA %s is no longer origin/master (%s); refusing deploy.\n' "$ARTIFACT_SHA" "$remote_master_sha" >&2
+            exit 1
+          fi
+
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
           # workflow_run 預設 checkout 預設分支 HEAD；改抓被驗證過的那個 commit，避免 deploy 到未經 gate 的新 commit。
           ref: ${{ github.event.workflow_run.head_sha }}
+
+      - name: Log artifact source run
+        run: printf 'Downloading static-site artifact from workflow run %s\n' '${{ github.event.workflow_run.id }}'
+
+      - name: Download static site artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: static-site
+          path: .output/public
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
@@ -42,26 +84,119 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Restore Nuxt build cache
-        uses: actions/cache@v4
-        with:
-          path: |
-            node_modules/.cache/nuxt
-            .nuxt
-          key: nuxt-build-${{ runner.os }}-node-24-${{ hashFiles('pnpm-lock.yaml', 'nuxt.config.ts', 'app/**', 'scripts/**', 'content/**') }}
-          restore-keys: |
-            nuxt-build-${{ runner.os }}-node-24-
-            nuxt-build-${{ runner.os }}-
-
-      - name: Generate static site
-        env:
-          DWSELECT_ALLOW_HOST_GENERATE: "1"
-        run: pnpm generate
-
-      - name: Deploy to Cloudflare Pages
+      - name: Deploy preview to Cloudflare Pages
+        id: preview_deploy
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+          command: pages deploy .output/public --project-name=dwselect --branch=preview-${{ github.event.workflow_run.head_sha }}
+
+      - name: Resolve preview URL
+        id: preview_url
+        env:
+          DEPLOYMENT_URL: ${{ steps.preview_deploy.outputs.deployment-url }}
+        run: |
+          node --input-type=module <<'NODE'
+          import { appendFileSync } from 'node:fs'
+
+          const deployment_url = process.env.DEPLOYMENT_URL
+          if (!deployment_url) {
+            throw new Error('Wrangler did not provide a deployment URL')
+          }
+
+          let preview_url
+          try {
+            preview_url = new URL(deployment_url)
+          }
+          catch {
+            throw new Error('Wrangler returned an invalid deployment URL')
+          }
+
+          const preview_host = preview_url.hostname.toLowerCase()
+          const pages_project_suffix = '.dwselect.pages.dev'
+          const is_preview_or_deployment_url = preview_host.endsWith(pages_project_suffix)
+            && preview_host.length > pages_project_suffix.length
+          const prohibited_hosts = new Set(['dwselect.pages.dev', 'dwselect.applepig.net'])
+
+          if (
+            preview_url.protocol !== 'https:'
+            || preview_url.username
+            || preview_url.password
+            || preview_url.port
+            || prohibited_hosts.has(preview_host)
+            || !is_preview_or_deployment_url
+          ) {
+            throw new Error(`Wrangler returned a non-preview deployment URL: ${deployment_url}`)
+          }
+
+          console.log(`Cloudflare preview is live at ${preview_url.origin}`)
+          appendFileSync(process.env.GITHUB_OUTPUT, `url=${preview_url.origin}\nhost=${preview_host}\n`)
+          NODE
+
+      - name: Wait for preview readiness
+        env:
+          PREVIEW_URL: ${{ steps.preview_url.outputs.url }}
+        run: |
+          node --input-type=module <<'NODE'
+          const preview_url = process.env.PREVIEW_URL
+          const max_attempts = 30
+
+          for (let attempt = 1; attempt <= max_attempts; attempt += 1) {
+            try {
+              const response = await fetch(preview_url, { redirect: 'follow' })
+              if (response.ok) {
+                console.log(`Preview responded with ${response.status} on attempt ${attempt}`)
+                process.exit(0)
+              }
+              console.log(`Preview responded with ${response.status} on attempt ${attempt}`)
+            }
+            catch (error) {
+              console.log(`Preview was not reachable on attempt ${attempt}: ${error.message}`)
+            }
+
+            await new Promise((resolve) => setTimeout(resolve, 2_000))
+          }
+
+          throw new Error(`Preview did not become ready after ${max_attempts} attempts: ${preview_url}`)
+          NODE
+
+      - name: Install Chromium for preview E2E
+        run: pnpm exec playwright install --with-deps chromium
+
+      - name: Run preview E2E
+        env:
+          APP_URL: ${{ steps.preview_url.outputs.host }}
+          PLAYWRIGHT_EXTERNAL_SERVER: "1"
+        run: pnpm test:e2e
+
+      - name: Verify artifact commit is still current master before production deploy
+        env:
+          ARTIFACT_SHA: ${{ github.event.workflow_run.head_sha }}
+          REPOSITORY: ${{ github.repository }}
+          # 匿名 ls-remote 會撞 runner 共用 IP 的 secondary rate limit，且 repo 轉 private 會 brick pipeline；
+          # job 已有 contents: read，改帶 token 認證。token 不得出現在任何 echo/printf 輸出。
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          remote_master_ref="$(git ls-remote --refs "https://x-access-token:${GITHUB_TOKEN}@github.com/${REPOSITORY}.git" refs/heads/master)" || {
+            printf 'Unable to read origin/master; refusing production deploy.\n' >&2
+            exit 1
+          }
+          remote_master_sha="${remote_master_ref%%$'\t'*}"
+
+          if [[ ! "$remote_master_sha" =~ ^[0-9a-f]{40}$ ]]; then
+            printf 'origin/master returned an invalid SHA; refusing production deploy.\n' >&2
+            exit 1
+          fi
+
+          if [ "$remote_master_sha" != "$ARTIFACT_SHA" ]; then
+            printf 'Artifact SHA %s is no longer origin/master (%s); refusing production deploy.\n' "$ARTIFACT_SHA" "$remote_master_sha" >&2
+            exit 1
+          fi
+
+      - name: Deploy verified artifact to production
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           command: pages deploy .output/public --project-name=dwselect --branch=master

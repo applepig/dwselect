@@ -1,10 +1,10 @@
 import type { Guide, Product } from '../../app/utils/product-schema.ts'
-import type { GuideDetailView, RelatedProductCardView } from '../../app/utils/public-content-view-types.ts'
+import type { GuideDetailView, ProductCardView } from '../../app/utils/public-content-view-types.ts'
 import { extractContentId } from '../../app/utils/content/extract-content-id.ts'
 import { isPublished } from '../../app/utils/content/is-published.ts'
 import { splitDetailTaxonomyTags } from '../../app/utils/content/split-detail-taxonomy-tags.ts'
 import { resolveGuideImageUrl } from '../../app/utils/content-images/resolve-guide-image-url.ts'
-import { mapProductCardBase } from './map-product-card-fields.ts'
+import { mapProductCard } from './map-product-card.ts'
 import type { TaxonomyLabelResolver } from '../../app/utils/content/taxonomy-labels.ts'
 
 export function mapGuideDetail(
@@ -37,7 +37,7 @@ function getGuideRelatedProductCards(
   guide: Guide,
   all_products: Product[],
   labels: TaxonomyLabelResolver,
-): RelatedProductCardView[] {
+): ProductCardView[] {
   const published_products_by_id = new Map(
     all_products
       .filter(isPublished)
@@ -45,8 +45,9 @@ function getGuideRelatedProductCards(
   )
 
   // Why: 依 related_product_ids 的撰寫順序輸出，讓站長在 JSON 裡的排序就是頁面呈現順序。
+  // 卡片欄位與首頁卡同一 mapper（ADR-036-6），product／guide 兩頁 related 卡不分岔。
   return guide.related_product_ids
     .map((related_id) => published_products_by_id.get(extractContentId(related_id)))
     .filter((product): product is Product => product !== undefined)
-    .map((product) => mapProductCardBase(product, labels))
+    .map((product) => mapProductCard(product, labels))
 }

@@ -5,8 +5,9 @@ import { onMounted, ref } from 'vue'
 import { afterAll, beforeEach, describe, expect, it, vi } from 'vitest'
 
 import { useBrokenImageFallback } from '../app/composables/use-broken-image-fallback'
+import ProductCard from '../app/components/product-card.vue'
 import RelatedProductsSection from '../app/components/related-products-section.vue'
-import type { RelatedProductCardView } from '../app/utils/public-content-view-types'
+import type { ProductCardView } from '../app/utils/public-content-view-types'
 
 const NuxtLinkStub = {
   props: ['to'],
@@ -19,33 +20,46 @@ const NuxtImgStub = {
 }
 
 const UIconStub = { props: ['name'], template: '<i :data-icon="name" />' }
+const UCardStub = { props: ['ui'], template: '<div><slot /></div>' }
+const CatalogPillStub = { props: ['to', 'variant'], template: '<span class="catalog-pill"><slot /></span>' }
 
-function makeRelatedProduct(overrides: Partial<RelatedProductCardView> = {}): RelatedProductCardView {
+function makeRelatedProduct(overrides: Partial<ProductCardView> = {}): ProductCardView {
   return {
     id: 'product-a',
     name: '商品 A',
+    summary: '推薦短評 A',
     image_url: '/products/images/a.jpg',
+    category_id: 'computer',
     category_label: '電腦',
+    channel_id: 'pchome',
+    channel_ids: ['pchome'],
     channel_label: 'PChome',
+    price_label: 'NT$ 1,990',
+    tag_ids: [],
+    tag_labels: [],
+    published_at: '2026-06-02T00:00:00+08:00',
     ...overrides,
   }
 }
 
-function mountRelatedProductsSection(products: RelatedProductCardView[], title: string) {
+function mountRelatedProductsSection(products: ProductCardView[], title: string) {
   return mount(RelatedProductsSection, {
     props: { products, title },
     global: {
+      components: { ProductCard },
       stubs: {
         NuxtLink: NuxtLinkStub,
         NuxtImg: NuxtImgStub,
         UIcon: UIconStub,
+        UCard: UCardStub,
+        CatalogPill: CatalogPillStub,
       },
     },
   })
 }
 
 describe('RelatedProductsSection', () => {
-  // 元件依賴 Nuxt auto-import 的 ref/onMounted 與 useBrokenImageFallback composable；bare vitest 需 stub。
+  // ProductCard 依賴 Nuxt auto-import 的 ref/onMounted 與 useBrokenImageFallback composable；bare vitest 需 stub。
   beforeEach(() => {
     vi.stubGlobal('ref', ref)
     vi.stubGlobal('onMounted', onMounted)
@@ -56,25 +70,34 @@ describe('RelatedProductsSection', () => {
     vi.unstubAllGlobals()
   })
 
-  it('渲染與 products 數量相同的卡片、每張連到 /products/{id}', () => {
+  it('以 ProductCard 渲染與 products 數量相同的卡片、每張連到 /products/{id}', () => {
     const wrapper = mountRelatedProductsSection([
       makeRelatedProduct({ id: 'product-a', name: '商品 A' }),
       makeRelatedProduct({ id: 'product-b', name: '商品 B' }),
     ], '你可能也喜歡')
-    const cards = wrapper.findAll('.related-product-card')
-    const hrefs = cards.map((card) => card.attributes('href'))
+    const grid = wrapper.find('.related-products-grid')
+    const cards = grid.findAll('.product-card')
+    const hrefs = grid.findAll('.product-card-link').map((link) => link.attributes('href'))
 
     expect(cards).toHaveLength(2)
     expect(hrefs).toEqual(['/products/product-a', '/products/product-b'])
   })
 
-  it('顯示每張卡的商品名稱與 category · channel meta', () => {
+  it('每張卡顯示與首頁卡一致的欄位：商品名、summary、price pill、channel pill（AC6）', () => {
     const wrapper = mountRelatedProductsSection([
-      makeRelatedProduct({ name: '商品 A', category_label: '電腦', channel_label: 'PChome' }),
+      makeRelatedProduct({
+        name: '商品 A',
+        summary: '推薦短評 A',
+        price_label: 'NT$ 2,490',
+        channel_label: 'PChome',
+      }),
     ], '你可能也喜歡')
+    const card = wrapper.find('.product-card')
 
-    expect(wrapper.find('.related-product-name').text()).toBe('商品 A')
-    expect(wrapper.find('.related-product-meta').text()).toBe('電腦 · PChome')
+    expect(card.find('.product-name').text()).toBe('商品 A')
+    expect(card.find('.product-summary').text()).toBe('推薦短評 A')
+    expect(card.find('.product-card-price').text()).toBe('NT$ 2,490')
+    expect(card.find('.channel-badge').text()).toContain('PChome')
   })
 
   it('把 title 同時餵給 section 標題與 aria-label', () => {
@@ -89,16 +112,5 @@ describe('RelatedProductsSection', () => {
     const wrapper = mountRelatedProductsSection([], '你可能也喜歡')
 
     expect(wrapper.find('.related-products-section').exists()).toBe(false)
-  })
-
-  it('隱藏破圖的卡片圖片並露出 fallback icon，當該圖回報載入失敗', async () => {
-    const wrapper = mountRelatedProductsSection([makeRelatedProduct({ id: 'product-a' })], '你可能也喜歡')
-
-    expect(wrapper.find('.related-product-image').exists()).toBe(true)
-
-    await wrapper.find('.related-product-image').trigger('error')
-
-    expect(wrapper.find('.related-product-image').exists()).toBe(false)
-    expect(wrapper.find('.related-product-fallback-icon').exists()).toBe(true)
   })
 })

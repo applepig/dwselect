@@ -19,6 +19,7 @@ export default defineConfig({
   // 讓 canonical／og 的行為測試跟著 env 走（AC4），不寫死網域。
   define: {
     __DW_SITE_URL__: JSON.stringify(getSiteUrl()),
+    __DW_DISQUS_SHORTNAME__: JSON.stringify(process.env.DISQUS_SHORTNAME?.trim() ?? ''),
   },
   test: {
     environment: 'node',

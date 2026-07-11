@@ -1,7 +1,7 @@
 // @vitest-environment happy-dom
 
 import { mount } from '@vue/test-utils'
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { beforeAll, afterAll, describe, expect, it, vi } from 'vitest'
 
 import { useBrokenImageFallback } from '../../app/composables/use-broken-image-fallback'
@@ -86,9 +86,11 @@ function mountTaxonomyPage(data: TaxonomyPageData) {
 }
 
 describe('TaxonomyPage render', () => {
-  // ResourceList 在 setup 用 Nuxt auto-import 的 ref 與 useBrokenImageFallback，此測試環境無 auto-import，需 stub。
+  // ResourceList／ProductCard 在 setup 用 Nuxt auto-import 的 ref/onMounted 與 useBrokenImageFallback，
+  // 此測試環境無 auto-import，需 stub。
   beforeAll(() => {
     vi.stubGlobal('ref', ref)
+    vi.stubGlobal('onMounted', onMounted)
     vi.stubGlobal('useBrokenImageFallback', useBrokenImageFallback)
   })
 

@@ -4,52 +4,64 @@ import { ref, toValue } from 'vue'
 import { buildSeoMeta, getOgImageUrl, SITE_OG_IMAGE, SITE_URL } from '../app/utils/seo-metadata'
 
 describe('getOgImageUrl', () => {
-  it('should fall back to the site OG image for a leading-slash local product image path (AC1)', () => {
-    expect(getOgImageUrl('/products/images/x.jpg')).toBe(SITE_OG_IMAGE)
+  // 期望值一律由 SITE_URL 導出、不寫死網域：站台 URL 跟著 APP_URL 環境走（ADR-035-2）。
+  it('should map a leading-slash local product image path to the optimized webp URL (036 AC1)', () => {
+    expect(getOgImageUrl('/products/images/x.jpg')).toBe(`${SITE_URL}images/products/x.webp`)
   })
 
-  it('should fall back to the site OG image for a local guide image path (AC1)', () => {
-    expect(getOgImageUrl('/guides/images/x.jpg')).toBe(SITE_OG_IMAGE)
+  it('should map a local guide image path to the optimized webp URL (036 AC1)', () => {
+    expect(getOgImageUrl('/guides/images/x.jpg')).toBe(`${SITE_URL}images/guides/x.webp`)
   })
 
-  it('should fall back to the site OG image for a local content image path without a leading slash (AC2)', () => {
-    expect(getOgImageUrl('products/images/x.jpg')).toBe(SITE_OG_IMAGE)
+  it('should map a local content image path without a leading slash the same way (036 AC1)', () => {
+    expect(getOgImageUrl('products/images/x.jpg')).toBe(`${SITE_URL}images/products/x.webp`)
   })
 
-  it('should trim surrounding whitespace before detecting local content image paths (AC3)', () => {
-    expect(getOgImageUrl('  /products/images/x.jpg  ')).toBe(SITE_OG_IMAGE)
+  it('should trim surrounding whitespace before mapping local content image paths (036 AC1)', () => {
+    expect(getOgImageUrl('  /products/images/x.jpg  ')).toBe(`${SITE_URL}images/products/x.webp`)
   })
 
-  it('should still resolve non-content relative paths to an absolute site URL (AC3)', () => {
-    // 站台 URL 跟著 APP_URL 環境走（AC4），故期望值由 SITE_URL 導出、不寫死網域。
+  it.each(['png', 'jpeg', 'gif', 'avif', 'webp'])(
+    'should always emit a .webp og URL for a .%s image_file (036 Case 2)',
+    (extension) => {
+      expect(getOgImageUrl(`/products/images/hero.${extension}`)).toBe(`${SITE_URL}images/products/hero.webp`)
+    },
+  )
+
+  it('should keep interior dots and only replace the final extension, matching the build stem rule (036 Case 2)', () => {
+    // build-content-images 以 parse(name).name 決定輸出檔名，stem 保留中間的點。
+    expect(getOgImageUrl('/guides/images/photo.v2.jpg')).toBe(`${SITE_URL}images/guides/photo.v2.webp`)
+  })
+
+  it('should still resolve non-content relative paths to an absolute site URL', () => {
     expect(getOgImageUrl('/og-custom.jpg')).toBe(`${SITE_URL}og-custom.jpg`)
   })
 
-  it('should fall back to the site OG image for an empty string (AC4)', () => {
+  it('should fall back to the site OG image for an empty string (036 AC3)', () => {
     expect(getOgImageUrl('')).toBe(SITE_OG_IMAGE)
   })
 
-  it('should fall back to the site OG image for a whitespace-only string (AC4)', () => {
+  it('should fall back to the site OG image for a whitespace-only string (036 AC3)', () => {
     expect(getOgImageUrl('   ')).toBe(SITE_OG_IMAGE)
   })
 
-  it('should fall back to the site OG image for null (AC4)', () => {
+  it('should fall back to the site OG image for null (036 AC3)', () => {
     expect(getOgImageUrl(null)).toBe(SITE_OG_IMAGE)
   })
 
-  it('should fall back to the site OG image for undefined (AC4)', () => {
+  it('should fall back to the site OG image for undefined (036 AC3)', () => {
     expect(getOgImageUrl(undefined)).toBe(SITE_OG_IMAGE)
   })
 
-  it('should return an https absolute URL unchanged (AC5)', () => {
+  it('should return an https absolute URL unchanged (036 AC3)', () => {
     expect(getOgImageUrl('https://example.com/a.jpg')).toBe('https://example.com/a.jpg')
   })
 
-  it('should return an http absolute URL unchanged (AC5)', () => {
+  it('should return an http absolute URL unchanged (036 AC3)', () => {
     expect(getOgImageUrl('http://example.com/a.jpg')).toBe('http://example.com/a.jpg')
   })
 
-  it('should treat the absolute-URL scheme case-insensitively and return it trimmed (AC5)', () => {
+  it('should treat the absolute-URL scheme case-insensitively and return it trimmed (036 AC3)', () => {
     expect(getOgImageUrl('  HTTPS://example.com/a.jpg  ')).toBe('HTTPS://example.com/a.jpg')
   })
 })

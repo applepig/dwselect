@@ -12,6 +12,8 @@ if (!app_url) {
   throw new Error('APP_URL 環境變數未設定——請在 .env 設定，例如 APP_URL=dwselect.toybox.local')
 }
 
+const external_server = process.env.PLAYWRIGHT_EXTERNAL_SERVER === '1'
+
 export default defineConfig({
   testDir: './tests/e2e',
   fullyParallel: false,
@@ -22,13 +24,16 @@ export default defineConfig({
     ignoreHTTPSErrors: true,
     trace: 'on-first-retry',
   },
-  webServer: {
-    command: 'pnpm dev',
-    url: `https://${app_url}`,
-    ignoreHTTPSErrors: true,
-    reuseExistingServer: true,
-    timeout: 120_000,
-  },
+  // Cloudflare preview 已是外部部署；不可在暫時不可達時退回啟動本機 Docker dev server。
+  webServer: external_server
+    ? undefined
+    : {
+      command: 'pnpm dev',
+      url: `https://${app_url}`,
+      ignoreHTTPSErrors: true,
+      reuseExistingServer: true,
+      timeout: 120_000,
+    },
   projects: [
     {
       name: 'phone',

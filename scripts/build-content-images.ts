@@ -1,8 +1,9 @@
 import sharp from 'sharp'
 import { existsSync } from 'node:fs'
 import { mkdir, readFile, readdir, rm } from 'node:fs/promises'
-import { dirname, join, parse } from 'node:path'
+import { dirname, join } from 'node:path'
 
+import { getContentImageWebpName } from '../app/utils/content-images/content-image-webp-name.ts'
 import { isPublished } from '../app/utils/content/is-published.ts'
 import { DEFAULT_PRODUCTS_DIR } from './content-source/read-public-content-source.ts'
 import { isMissingFileError } from './content-source/is-missing-file-error.ts'
@@ -183,7 +184,7 @@ async function getContentImageReferences(
         continue
       }
 
-      const output_path = join(output_dir, `${parse(entry.image_file).name}.webp`)
+      const output_path = join(output_dir, getContentImageWebpName(entry.image_file))
       const reference = {
         domain,
         file_path: `${domain}/${entry.file_name}`,

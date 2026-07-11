@@ -1,15 +1,17 @@
 // @vitest-environment happy-dom
 
 import { mount } from '@vue/test-utils'
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { afterAll, beforeEach, describe, expect, it, vi } from 'vitest'
 
 import { useBrokenImageFallback } from '../app/composables/use-broken-image-fallback'
 import { useDetailBackNavigation } from '../app/composables/use-detail-back-navigation'
 import GuideDetail from '../app/components/guide-detail.vue'
 import ContentMarkdown from '../app/components/content-markdown.vue'
+import ProductCard from '../app/components/product-card.vue'
 import RelatedProductsSection from '../app/components/related-products-section.vue'
-import type { GuideDetailView } from '../app/utils/public-content-view-types'
+import ShareButtons from '../app/components/share-buttons.vue'
+import type { GuideDetailView, ProductCardView } from '../app/utils/public-content-view-types'
 
 const NuxtLinkStub = {
   props: ['to'],
@@ -33,20 +35,46 @@ const UButtonStub = {
 
 const UIconStub = { props: ['name'], template: '<i />' }
 
+const UCardStub = { props: ['ui'], template: '<div><slot /></div>' }
+const DisqusThreadStub = {
+  props: ['contentType', 'contentId'],
+  template: '<div class="disqus-thread-stub" :data-content-type="contentType" :data-content-id="contentId" />',
+}
+
 function mountGuideDetail(detail: GuideDetailView) {
   return mount(GuideDetail, {
     props: { detail },
     global: {
-      components: { ContentMarkdown, RelatedProductsSection },
+      components: { ContentMarkdown, RelatedProductsSection, ProductCard, ShareButtons, DisqusThread: DisqusThreadStub },
       stubs: {
         NuxtLink: NuxtLinkStub,
         CatalogPill: CatalogPillStub,
         NuxtImg: NuxtImgStub,
         UButton: UButtonStub,
         UIcon: UIconStub,
+        UCard: UCardStub,
       },
     },
   })
+}
+
+function makeRelatedProductCard(overrides: Partial<ProductCardView> = {}): ProductCardView {
+  return {
+    id: 'product-a',
+    name: '商品 A',
+    summary: '推薦短評',
+    image_url: '/products/images/a.jpg',
+    category_id: 'computer',
+    category_label: '電腦',
+    channel_id: 'pchome',
+    channel_ids: ['pchome'],
+    channel_label: 'PChome',
+    price_label: 'NT$ 1,990',
+    tag_ids: [],
+    tag_labels: [],
+    published_at: '2026-06-02T00:00:00+08:00',
+    ...overrides,
+  }
 }
 
 function makeGuideDetailView(overrides: Partial<GuideDetailView> = {}): GuideDetailView {
@@ -75,6 +103,8 @@ describe('GuideDetail', () => {
     vi.stubGlobal('ref', ref)
     vi.stubGlobal('computed', computed)
     vi.stubGlobal('onMounted', onMounted)
+    vi.stubGlobal('onUnmounted', onUnmounted)
+    vi.stubGlobal('useRoute', () => ({ path: '/guide/sample-guide' }))
     vi.stubGlobal('useRouter', () => ({ back: vi.fn(), push: vi.fn() }))
     vi.stubGlobal('useDetailBackNavigation', useDetailBackNavigation)
     vi.stubGlobal('useBrokenImageFallback', useBrokenImageFallback)
@@ -135,8 +165,8 @@ describe('GuideDetail', () => {
   it('should render related product cards linking to each product detail when related products exist', () => {
     const wrapper = mountGuideDetail(makeGuideDetailView({
       related_products: [
-        { id: 'product-a', name: '商品 A', image_url: '/products/images/a.jpg', category_label: '電腦', channel_label: 'PChome' },
-        { id: 'product-b', name: '商品 B', image_url: '/products/images/b.jpg', category_label: '居家', channel_label: 'momo' },
+        makeRelatedProductCard({ id: 'product-a', name: '商品 A' }),
+        makeRelatedProductCard({ id: 'product-b', name: '商品 B', channel_id: 'momo', channel_ids: ['momo'], channel_label: 'momo' }),
       ],
     }))
     const related_section = wrapper.find('.related-products-section')
@@ -210,5 +240,22 @@ describe('GuideDetail', () => {
 
     expect(shell.exists()).toBe(true)
     expect(shell.classes()).not.toContain('product-vt-card')
+  })
+
+  it('should render the share block wired with the guide title as share title (AC9)', () => {
+    const wrapper = mountGuideDetail(makeGuideDetailView({ title: '好物指南' }))
+    const share_section = wrapper.find('.share-section')
+    const x_link = share_section.find('.share-platform-link[data-platform="x"]')
+
+    expect(share_section.exists()).toBe(true)
+    expect(x_link.attributes('href')).toContain(`text=${encodeURIComponent('好物指南')}`)
+  })
+
+  it('將 guide type 與 id 掛給 Disqus thread，讓 thread identity 不依賴標題（AC14）', () => {
+    const wrapper = mountGuideDetail(makeGuideDetailView({ id: 'guide-a', title: '可改名指南' }))
+    const thread = wrapper.find('.disqus-thread-stub')
+
+    expect(thread.attributes('data-content-type')).toBe('guides')
+    expect(thread.attributes('data-content-id')).toBe('guide-a')
   })
 })

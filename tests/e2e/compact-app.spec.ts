@@ -300,8 +300,8 @@ test('navigates to product detail route with a safe buy CTA', async ({ page }) =
 
   const related_section = detail.locator('.related-products-section')
   await expect(related_section.getByRole('heading', { name: 'You may also like' })).toBeVisible()
-  await expect(related_section.locator('.related-product-card')).toHaveCount(3)
-  await expect(related_section.locator('.related-product-card').first()).toHaveAttribute('href', /\/products\/.+/)
+  await expect(related_section.locator('.product-card')).toHaveCount(3)
+  await expect(related_section.locator('.product-card-link').first()).toHaveAttribute('href', /\/products\/.+/)
 })
 
 test('fetches a single product detail json on navigation without prefetching details on home (028 split)', async ({ page }) => {
@@ -363,16 +363,16 @@ test('keeps product detail and related image slots stable when images fail to lo
   })
   await expect(hero_tile.locator('.detail-image-fallback-icon')).toBeVisible()
 
-  const related_tile = page.locator('.related-product-image-tile').first()
+  const related_tile = page.locator('.related-products-section .product-image-tile').first()
   await expect(related_tile).toBeVisible()
-  await related_tile.locator('.related-product-image').evaluate((image) => {
+  await related_tile.locator('.product-image').evaluate((image) => {
     image.dispatchEvent(new Event('error'))
   })
-  await expect(related_tile.locator('.related-product-fallback-icon')).toBeVisible()
+  await expect(related_tile.locator('.product-image-fallback-icon')).toBeVisible()
 
   const media_contract = await page.evaluate(() => {
     const hero = document.querySelector('.detail-hero-tile')?.getBoundingClientRect()
-    const related = document.querySelector('.related-product-image-tile')?.getBoundingClientRect()
+    const related = document.querySelector('.related-products-section .product-image-tile')?.getBoundingClientRect()
 
     return {
       hero_width: hero?.width ?? 0,

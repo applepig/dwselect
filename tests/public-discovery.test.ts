@@ -258,22 +258,32 @@ describe('frontend-ready public content payload shape', () => {
     expect(detail).not.toHaveProperty('buy_cta')
   })
 
-  it('should expose related product cards with only related semantic keys and no placeholders', () => {
+  it('should expose related products as full home-card views without raw record placeholders', () => {
     const detail = buildSampleDetail('2026-06-02-sample-product')!
 
+    // AC6／ADR-036-6：related 卡與首頁卡同一 mapper，欄位即 ProductCardView 全集。
     expect(detail.related_products).toEqual([
       {
         id: 'related-product',
         name: '相關商品',
+        summary: '相關短評',
         image_url: '/products/images/related-product.jpg',
+        category_id: 'computer-3c',
         category_label: '電腦3C',
+        channel_id: 'pchome',
+        channel_ids: ['pchome'],
         channel_label: 'PChome',
+        price_label: 'NT$ 1,990',
+        tag_ids: ['keyboard'],
+        tag_labels: ['鍵盤'],
+        published_at: '2026-06-02T00:00:00+08:00',
       },
     ])
 
     for (const related of detail.related_products) {
-      expect(Object.keys(related).toSorted()).toEqual(['category_label', 'channel_label', 'id', 'image_url', 'name'])
       expect(related).not.toHaveProperty('description')
+      expect(related).not.toHaveProperty('long_description')
+      expect(related).not.toHaveProperty('offers')
       expect(related).not.toHaveProperty('purchase_link')
     }
   })

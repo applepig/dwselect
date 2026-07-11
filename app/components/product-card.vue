@@ -16,15 +16,24 @@
       :aria-label="`查看 ${product.name} 詳情`"
     >
       <span
+        ref="image_tile"
         class="product-image-tile product-vt-image"
         :style="getProductViewTransitionStyle(product.id, 'image')"
       >
         <NuxtImg
+          v-if="!isBrokenImage(product.id)"
           :src="product.image_url"
           :alt="product.name"
           class="product-image"
           loading="lazy"
           format="webp"
+          @error="onImageError(product.id)"
+        />
+        <UIcon
+          v-else
+          name="i-lucide-image-off"
+          class="product-image-fallback-icon"
+          aria-hidden="true"
         />
       </span>
 
@@ -65,7 +74,15 @@
 import type { ProductCardView } from '../utils/public-content-view-types'
 import { getProductViewTransitionStyle } from '../utils/product-view-transition'
 
-defineProps<{
+const props = defineProps<{
   product: ProductCardView
 }>()
+
+const image_tile = ref<HTMLElement | null>(null)
+const { isBrokenImage, onImageError, scanForBrokenImage } = useBrokenImageFallback()
+
+onMounted(() => {
+  // SSR／快取已載入即失敗的圖，其 <img @error> 掛載後不會再觸發，掛載時補掃一次。
+  scanForBrokenImage(image_tile.value, '.product-image', props.product.id)
+})
 </script>

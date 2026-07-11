@@ -1,11 +1,11 @@
 import type { Product } from '../../app/utils/product-schema.ts'
-import type { RelatedProductCardView } from '../../app/utils/public-content-view-types.ts'
+import type { ProductCardView } from '../../app/utils/public-content-view-types.ts'
 import { compareNullableTimestampDesc } from '../../app/utils/content/compare-nullable-timestamp-desc.ts'
 import { compareText } from '../../app/utils/content/compare-text.ts'
 import { extractContentId } from '../../app/utils/content/extract-content-id.ts'
 import { isPublished } from '../../app/utils/content/is-published.ts'
 import { getPrimaryOffer } from '../../app/utils/content/primary-offer.ts'
-import { mapProductCardBase } from './map-product-card-fields.ts'
+import { mapProductCard } from './map-product-card.ts'
 import type { TaxonomyLabelResolver } from '../../app/utils/content/taxonomy-labels.ts'
 
 const RELATED_PRODUCT_LIMIT = 3
@@ -20,16 +20,17 @@ export function getRelatedProductCards(
   current_product: Product,
   products: Product[],
   labels: TaxonomyLabelResolver,
-): RelatedProductCardView[] {
+): ProductCardView[] {
   const current_product_id = extractContentId(current_product.id)
   const current_invariants = getCurrentProductInvariants(current_product)
 
+  // related 卡與首頁卡同一 mapper（ADR-036-6），確保兩處卡片欄位不分岔。
   return products
     .filter(isPublished)
     .filter((product) => extractContentId(product.id) !== current_product_id)
     .toSorted((left_product, right_product) => compareRelatedProducts(current_invariants, left_product, right_product))
     .slice(0, RELATED_PRODUCT_LIMIT)
-    .map((product) => mapProductCardBase(product, labels))
+    .map((product) => mapProductCard(product, labels))
 }
 
 function getCurrentProductInvariants(current_product: Product): CurrentProductInvariants {

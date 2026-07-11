@@ -311,7 +311,7 @@ describe('related product build mapper', () => {
     expect(related.map((product) => product.id)).toEqual(['recently-updated', 'recently-published'])
   })
 
-  it('should expose related product cards with only the related semantic keys', () => {
+  it('should expose related products as full product card views identical to the home card shape', () => {
     const current_product = makeProduct({
       id: 'current-product',
       status: 'published',
@@ -323,20 +323,31 @@ describe('related product build mapper', () => {
       id: 'related-product',
       status: 'published',
       name: '相關商品',
+      summary: '相關商品短評',
       category_id: 'computer',
       tag_ids: ['typing'],
       offers: [makeOffer('momo')],
+      published_at: '2026-06-03T00:00:00+08:00',
     })
 
     const related = getRelatedProductCards(current_product, [current_product, related_product], createTaxonomyLabelResolver(test_taxonomies))
 
+    // AC6：related 卡與首頁卡同一 mapper（ADR-036-6），欄位即 ProductCardView 全集。
     expect(related).toEqual([
       {
         id: 'related-product',
         name: '相關商品',
+        summary: '相關商品短評',
         image_url: '/products/images/sample-product.jpg',
+        category_id: 'computer',
         category_label: '電腦',
+        channel_id: 'momo',
+        channel_ids: ['momo'],
         channel_label: 'momo',
+        price_label: 'NT$ 1,990',
+        tag_ids: ['typing'],
+        tag_labels: ['輸入'],
+        published_at: '2026-06-03T00:00:00+08:00',
       },
     ])
   })

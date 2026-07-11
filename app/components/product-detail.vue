@@ -163,6 +163,13 @@
       </section>
     </section>
 
+    <ShareButtons :title="detail.name" />
+
+    <DisqusThread
+      content-type="products"
+      :content-id="detail.id"
+    />
+
     <RelatedProductsSection
       :products="detail.related_products"
       title="You may also like"

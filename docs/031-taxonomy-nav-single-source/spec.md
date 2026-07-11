@@ -26,7 +26,7 @@
 - [ ] AC5：移除三份重複的 `?category=` 讀取邏輯：`compact-app.ts` 的 `parseCategoryId`、`app-navigation.vue` 的 `getActiveCategoryId`、`resolve-breadcrumb-items.ts` 的 `resolveActiveHomeCategoryLabel`，且 `getCompactAppStateFromRoute` 不再 parse `query.category`。
 - [ ] AC6：sidebar 分類 active 態改判 `route.path === '/category/' + id`（在 `/category/{id}` 頁高亮對應項），不再依賴 `route.query`；`all` 項在 `route.path === '/'`（首頁）時 active，避免首頁無任何分類高亮。
 - [ ] AC7：首頁 breadcrumb 不再顯示分類標題（`resolveBreadcrumbItems('/')` 回 `[]`）。
-- [ ] AC8：舊連結相容——直接造訪 `/?category={valid-id}` 時，index.vue 掛載時 `navigateTo('/category/{id}')`；`/?category={invalid}` 則落到首頁全部（見 邊界案例）。此 redirect 的「單一合法 id」判定**重用單一受控來源**（`useCatalogData` 的 `category_ids` set + 一個 array→單值 guard），是過渡期刻意保留、集中於 index.vue mount 的**唯一** category-query reader，不得在他處再長一份（見 ADR-1）。
+- [ ] AC8：舊連結相容——直接造訪 `/?category={valid-id}` 時，client-only global middleware initial navigation 會 `navigateTo('/category/{id}')`；`/?category={invalid}` 則落到首頁全部（見 邊界案例）。此 redirect 的「單一合法 id」判定**重用單一受控來源**（`useCatalogData` 的 `category_ids` set + 一個 array→單值 guard），是過渡期刻意保留、集中於 global middleware 的**唯一** category-query reader，不得在他處再長一份（見 ADR-1）。
 - [ ] AC9：全站 grep 不再有 `?category=` 形式的組 URL（`router.push`/`:to`/`navigateTo`），搜尋的 `?q=` 不在此限。
 - [ ] AC10：View Transition flag 在乾淨冷啟動環境下重啟後，由使用者實機 iPad Safari 驗證，產出二元結果：**PASS → 保留 `viewTransition: true` 並記錄通過環境**；**FAIL 或未完成實機驗證 → merge／上線前必須維持或 revert 回 `false`，並記錄 crash／未驗證狀態與 cross-document VT fallback 評估**。（M3 為 spike；不得讓未驗證的 `viewTransition: true` 隨 M1–M2 上線，見 ADR-3。）
 - [ ] AC11：`prefers-reduced-motion: reduce` 時不套用轉場動畫。
@@ -38,7 +38,8 @@
 
 - `app/components/app-navigation.vue` — sidebar 分類 `:to` 與 active 判定；刪 `getActiveCategoryId`
 - `app/utils/published-products/compact-app.ts` — 移除 home category filter 與 `parseCategoryId`；`getCompactAppStateFromRoute` 去除 category 分支
-- `app/pages/index.vue` — chip 改 anchor 連結至 `/category/{id}`；移除 `onCategoryChipClicked` 的 query push 與 home_category 狀態；移除恆 `'all'` 的 vestigial `<Transition>`（AC14）；舊 `?category=` redirect（重用 `useCatalogData` 的 `category_ids`，AC8）
+- `app/pages/index.vue` — chip 改 anchor 連結至 `/category/{id}`；移除 `onCategoryChipClicked` 的 query push 與 home_category 狀態；移除恆 `'all'` 的 vestigial `<Transition>`（AC14）
+- `app/middleware/legacy-category-redirect.global.ts` — 唯一 legacy `?category=` reader；僅 client initial navigation 執行，重用 `useCatalogData` 的 `category_ids`（AC8）
 - `app/utils/breadcrumb/resolve-breadcrumb-items.ts` — 商品 breadcrumb `to` 改 `/category/{id}`；刪 `resolveActiveHomeCategoryLabel` 與 home `/` category 分支
 - `app/utils/published-products/types.ts` — `CompactAppState.home_category_id`、`CompactRouteStateOptions.category_ids` 等隨之收斂
 - `nuxt.config.ts` — `experimental.viewTransition` flag
@@ -76,14 +77,14 @@ export type CompactAppState = {
 舊連結相容（client 端，非伺服器 redirect；靜態站無 server route）：
 
 ```
-GET /?category=computer-3c   → index.vue 掛載時 navigateTo('/category/computer-3c')（client soft redirect）
+GET /?category=computer-3c   → client-only global middleware initial navigation 時 navigateTo('/category/computer-3c')（client soft redirect）
 GET /?category=not-a-real    → 留在 /，顯示全部（不 redirect、不報錯）
 ```
-> 註：靜態站無 server，此為 client mount 的 soft redirect，crawler 看到的不是真 302。判定來源見 AC8（重用 `category_ids`）。
+> 註：middleware 必須跳過 server，此為 client initial navigation 的 soft redirect，crawler 看到的不是真 302。判定來源見 AC8（重用 `category_ids`）。
 
 ## 邊界案例
 
-- **Case 1：舊 `/?category={valid}`**（既有書籤／已分享連結）→ index.vue 掛載時偵測到合法 category id（重用 `category_ids`），`navigateTo('/category/{id}')` soft redirect，維持書籤連續性。
+- **Case 1：舊 `/?category={valid}`**（既有書籤／已分享連結）→ client-only global middleware initial navigation 時偵測到合法 category id（重用 `category_ids`），`navigateTo('/category/{id}')` soft redirect，維持書籤連續性。
 - **Case 2：`/?category={invalid}` 或 `?category=`/`?category=all`** → 不 redirect、不報錯，正常顯示首頁全部。
 - **Case 3：array query `?category=a&category=b`** → 視為無效（取不到單一合法 id），留在首頁全部。此處正是舊三 reader 分歧的來源，統一為「非單一合法 id 即全部」。
 - **Case 4：`/category/{invalid}`** → 既有 404 行為不變（`taxonomy_page_data === null` → `createError(404)`）。
@@ -98,7 +99,7 @@ GET /?category=not-a-real    → 留在 /，顯示全部（不 redirect、不報
 - **替代方案**：Design B（首頁保留就地篩 local state + History API、其餘走專屬頁）。不選——桌機（專屬頁含 products+guides+links）與手機（首頁篩只 products）會看到不同分類內容（viewport-split），且 `history.replaceState` 不更新 `route.query`，breadcrumb 需把 page local state plumb 進 layout，耦合更醜。
 
 ### ADR-2：舊 `?category=` 以 client soft redirect 相容
-- **決策**：index.vue 掛載時，若 `?category=` 是合法 id（判定重用 `category_ids` 單一來源，AC8）就 `navigateTo('/category/{id}')`。
+- **決策**：client-only global middleware initial navigation 時，若 `?category=` 是合法 id（判定重用 `category_ids` 單一來源，AC8）就 `navigateTo('/category/{id}')`。
 - **原因**：**UX／書籤連續性**——`/?category=X` 是既有使用者可能存的書籤／已分享的連結，soft redirect 把它無痛導到單一真相頁。註：home canonical 一律指向 `/`（`getCanonicalUrl('/')`），`?category=X` 從未作為獨立 URL 被索引，故**非** SEO 流量理由（修正初稿誇大）。
 - **替代方案**：直接忽略 query（顯示全部）會默默吃掉舊連結意圖，不選；靜態站無 server，無法做真 301，故為 client soft redirect。
 
@@ -119,7 +120,7 @@ GET /?category=not-a-real    → 留在 /，顯示全部（不 redirect、不報
 - [x] Red → Green → Refactor
 
 ### Milestone 2: 舊連結相容 + E2E 遷移（非 URL find-replace）
-> 範圍：`index.vue`（redirect）、`tests/e2e/compact-app.spec.ts` 及其他壓在 `?category=` 的 e2e
+> 範圍：`app/middleware/legacy-category-redirect.global.ts`（redirect）、`index.vue`（移除舊 reader）、`tests/e2e/compact-app.spec.ts` 及其他壓在 `?category=` 的 e2e
 > ⚠️ 注意：多數受影響 e2e 測的是「home 在 `?category=` 下的 grid／transition」——這是 AC4 整個刪掉的行為，**不是改 URL 字串**。`/?category=X` 之後會 redirect 到 `/category/X`（另一個頁面、另一套 DOM），需逐條判斷遷移／刪除：
 > - L105-159「sparse category tablet 3-col」：goto `/?category=network` 量 home grid → **遷到 `/category/network` 量該頁 grid**
 > - L161-188「category-keyed result transition contract」：前提是 home-results transition + sidebar 點回 `/?category=` → **刪除**（home transition 已隨 AC14 移除）
