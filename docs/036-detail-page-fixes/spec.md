@@ -66,6 +66,7 @@
 - [ ] AC18：deploy workflow 先以非 production branch 部署取得 Cloudflare Pages preview URL，對 preview URL 跑 Playwright E2E；E2E 失敗則 job 失敗且不執行 production 部署。
 - [ ] AC19：E2E 通過後，同一份 artifact 以 `--branch=master` 部署為 production。
 - [ ] AC20：E2E 對 preview URL 執行時不驗 canonical／og host（產物烤的是正式站 host，preview host 不同屬預期）。
+- [ ] AC21：`Static Generate` 在每個 PR 與 master push 的 quality gate 中，必須以 `CI=true` 生成的 `.output/public` 啟動 local static-preview endpoint 並跑完整 Playwright suite；endpoint 必須模擬 Cloudflare Pages 的 directory route 正規化（例如 `/search` 重導至 `/search/`）。E2E 失敗不得上傳可供 deploy 使用的 artifact，讓 static runtime 回歸在 merge 前被攔下。
 
 ## 相關檔案
 
@@ -78,7 +79,7 @@
 - `app/assets/styles/catalog.css` `.related-*`（`:860-958`、`:1419-1421`）— M2 版面根因（`auto-fill minmax(150px)` ＋ 64px 橫式卡）；rework 後 `.related-product-*` 卡片規則刪除、grid 容器規則保留
 - `app/components/product-detail.vue`、`app/components/guide-detail.vue` — M3／M4 區塊掛載點
 - `.github/workflows/static-generate.yml`、`.github/workflows/deploy.yml` — M5 就地改
-- `playwright.config.ts`、`tests/e2e/compact-app.spec.ts` — M5 E2E 重用（`APP_URL` 注入 preview host）
+- `playwright.config.ts`、`scripts/serve-static-output.ts`、`tests/e2e/compact-app.spec.ts` — M5 E2E：`APP_URL` 注入 Cloudflare preview host；quality gate 以 static-preview endpoint 重用同一 suite
 - `app/middleware/legacy-category-redirect.global.ts`、`app/pages/index.vue` — M5 static E2E 前置修復：維持 client-only legacy category redirect 契約，避免 static hydration 覆寫導向
 
 ## 既有資產盤點 / Reuse Map
@@ -194,6 +195,12 @@ deploy.yml:           permissions 需含 actions: read（跨 run 下載 artifact
 - 原因：與 Nuxt UI 既有 iconify 機制同軌，零 runtime 成本（build 時內聯）；手刻 SVG 要自維護品牌圖形更新。
 - 替代方案：手刻 inline SVG（備援：若 simple-icons 缺 LINE 等特定品牌圖或授權疑慮，實作時改走此路並於 works.md 記錄）。
 
+### ADR-036-10：PR quality gate 以 local static-preview 跑完整 E2E
+
+- 決策：`Static Generate` 在 `pnpm generate` 後，以 CI runner 的 `CI=true` 直接啟動 `.output/public` static-preview server，對它跑完整 Playwright suite；server 依 Cloudflare Pages 的 directory route 慣例將無尾斜線的目錄 URL 正規化為尾斜線 URL。artifact 僅在此 E2E 通過後上傳。merge 後仍保留真正 Cloudflare preview 的 E2E，作為 provider 層的第二道 gate。
+- 原因：原流程只在 merge 後才首次對 static output 跑 E2E，造成 PR checks 全綠、合併後才發現 Pages route 正規化與 app route parser 不相容。`CI=true` 已是 `dev.sh` 對 host build 的既有放行契約，CI runner 可直接使用，不需 Docker 或 Cloudflare credentials。
+- 替代方案：只放寬 E2E URL 斷言（拒：會掩蓋 `/search/?q=` 實際丟失 query 的 runtime bug）；只保留 merge 後 Cloudflare preview gate（拒：回饋太晚，已造成正式版停在舊 artifact）；PR 直接部署 Cloudflare preview（拒：需要讓 PR workflow 取得 deploy secrets，擴大 untrusted workflow 的權限邊界）。
+
 ### ADR-036-6：related 卡直接重用 `product-card.vue`（M2 rework）
 
 - 決策：`related-products-section.vue` 退為薄容器（標題＋grid＋空列不 render），卡片改 render 既有 `product-card.vue`，顯示欄位原樣（商品名＋summary＋price pill＋channel pill）；related payload 改用首頁卡同一 mapper（`mapProductCard`）產出完整 `ProductCardView`，`RelatedProductCardView` 瘦身型別退場；`catalog.css` 的 `.related-product-*` 卡片規則刪除，`.related-products-grid` 固定欄數容器規則保留。破圖 fallback（`useBrokenImageFallback`）移入 product-card，首頁 grid 同步受惠。
@@ -274,9 +281,9 @@ deploy.yml:           permissions 需含 actions: read（跨 run 下載 artifact
 
 ### Milestone 5: deploy pipeline（🔀 與 M1–M4 平行，獨立工作線）
 
-> 範圍：`.github/workflows/static-generate.yml`（artifact upload＋build-time env 注入點）、`.github/workflows/deploy.yml`（permissions `actions: read`、artifact download、playwright install、preview E2E、兩段部署）；必要時允許 preview 專用的 Playwright config／env 開關（停用 webServer）。除 ADR-036-9 的 static E2E 前置修復外，不動應用程式碼
+> 範圍：`.github/workflows/static-generate.yml`（artifact upload＋build-time env 注入點＋PR static-preview E2E）、`.github/workflows/deploy.yml`（permissions `actions: read`、artifact download、playwright install、preview E2E、兩段部署）、`playwright.config.ts`／`scripts/serve-static-output.ts`（local static-preview endpoint）；必要時允許 preview 專用的 Playwright config／env 開關（停用 webServer）。除 ADR-036-9 與 ADR-036-10 的 static E2E 前置修復外，不動應用程式碼
 > 前置：先在本機對 `pnpm generate` 產物跑既有 E2E suite 確認綠燈（suite 從未打過 static 產物，見 ADR-036-4），再接 preview
-> 驗證：PR 觸發 gate 確認 artifact 上傳；merge 後觀察 deploy run——artifact download（log 可見來源 run id）→preview 部署→E2E→production 三段依序；刻意觀察一次 E2E 失敗路徑（或以 dry-run 分支演練）確認 production 不部署
+> 驗證：PR 觸發 gate 確認 generate 後經 static-preview E2E 才上傳 artifact，並涵蓋 Cloudflare Pages directory trailing slash 行為；merge 後觀察 deploy run——artifact download（log 可見來源 run id）→preview 部署→E2E→production 三段依序；刻意觀察一次 E2E 失敗路徑（或以 dry-run 分支演練）確認 production 不部署
 > 預期結果：AC17–AC20 通過；deploy log 可見同一 artifact 兩段部署、無第二次 generate
 
 - [x] Red → Green → Refactor

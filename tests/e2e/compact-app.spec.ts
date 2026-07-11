@@ -1,6 +1,7 @@
 import { expect, test } from '@playwright/test'
 
 const SEARCH_RESULT_TIMEOUT_MS = 15_000
+const SEARCH_URL_PATTERN = /\/search\/?$/
 
 function getNavRoot(page, project_name) {
   if (project_name === 'phone') {
@@ -209,7 +210,7 @@ test('switches tabs without navigation reload and exposes search and link contra
   await expect(page.getByRole('heading', { name: '指南列表' })).toHaveCount(0)
 
   await nav_root.getByRole('link', { name: '搜尋' }).click()
-  await expect(page).toHaveURL('/search')
+  await expect(page).toHaveURL(SEARCH_URL_PATTERN)
   await expect(page.locator('.compact-top-bar .top-bar-title')).toHaveText(getBreadcrumbTextPattern('搜尋'))
   await expect(page.getByRole('heading', { name: '搜看看' })).toHaveCount(0)
   await expect(page.getByPlaceholder('在找什麼嗎？™')).toBeVisible()
@@ -222,7 +223,7 @@ test('switches tabs without navigation reload and exposes search and link contra
   await expect(page.getByRole('link', { name: /applepig\.idv\.tw/ })).toHaveAttribute('href', 'https://applepig.idv.tw')
 
   await page.goBack()
-  await expect(page).toHaveURL('/search')
+  await expect(page).toHaveURL(SEARCH_URL_PATTERN)
 })
 
 test('renders guide and links with the shared resource row contract', async ({ page }) => {
@@ -480,7 +481,7 @@ test('hydrates direct search query routes without mismatch warnings', async ({ p
 test('separates search typing, autocomplete and submitted query state', async ({ page }) => {
   await page.goto('/search', { waitUntil: 'domcontentloaded' })
   await expect(page.locator('vite-error-overlay')).toHaveCount(0)
-  await expect(page).toHaveURL('/search')
+  await expect(page).toHaveURL(SEARCH_URL_PATTERN)
   await expect(page.locator('.search-result-section')).toHaveCount(0)
   const popular_tag_section = page.locator('.search-popular-panel[data-section-id="tags"]')
   const popular_brand_section = page.locator('.search-popular-panel[data-section-id="brands"]')

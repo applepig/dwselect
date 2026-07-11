@@ -1,5 +1,13 @@
 # Works: 036 detail page fixes
 
+### deploy preview E2E regression hotfix
+
+- **問題描述**：PR #17 合併後，`Static Generate` 成功但 `Deploy` 的 Cloudflare Pages preview E2E 有 18 個失敗，production promotion 因而跳過，正式站停在 PR #16 artifact。PR quality gate 原本只跑 unit／lint／knip／typecheck／generate，沒有 E2E，故靜態輸出問題在 merge 後才第一次被攔下。
+- **根因**：Cloudflare Pages 將 directory route `/search?q=Sharp` 正規化為 `/search/?q=Sharp`；`getCompactAppStateFromRoute()` 只接受精確 `/search`，使 query 被丟棄，搜尋 input 與結果皆為空。同一 provider 行為也使 E2E 中寫死 `/search` 的 URL assertion 失真。
+- **修復內容**：route parser 接受 `/search/`；E2E 的無 query 搜尋 URL 契約接受 Pages 的 trailing slash。新增 `scripts/serve-static-output.ts`，以 308 directory redirect（保留 query）與 index file serving 模擬 Pages static endpoint；Playwright 新增 `PLAYWRIGHT_BASE_URL` full URL 注入點。`Static Generate` 在 generate 後啟動此 endpoint、安裝 Chromium、跑完整 E2E，只有通過才上傳 `static-site` artifact；merge 後 Cloudflare preview E2E 保留為 provider 層第二道 gate（ADR-036-10、AC21）。
+- **測試**：新增 `/search/` query parser unit case、Playwright CI static-preview config case、static server 的 redirect／index integration cases；Red state 已確認 parser 回 `{}`、server module 不存在，實作後指定測試 17 passed，完整 `pnpm test` 94 files／644 tests passed，`pnpm lint` 與 `git diff --check` passed。
+- **驗證限制**：本機 `pnpm generate` 被既有 root-owned `public/images/products/*.webp` 擋在 `build:content-images`（EACCES）；直接 Nuxt generate 亦被既有 root-owned `.output/nitro.json` 擋住。未變更或刪除這些既有 artifacts。完整 static-preview E2E 必須由乾淨的 GitHub Actions runner 執行。`pnpm typecheck` 另有既有 `app/components/disqus-thread.vue:178,183` DOM type incompatibility 而失敗，與此 hotfix 無關。
+
 ### xreview 修正（第二輪）
 
 - **[deploy SHA 驗證帶認證]**：兩處 `git ls-remote` 由匿名 HTTPS 改帶 `GITHUB_TOKEN`（`x-access-token`），消除 runner 共用 IP secondary rate limit 的間歇失敗與 repo 轉 private 時 pipeline brick 的風險；token 不出現在任何輸出 → YAML parse、`git diff --check` passed。

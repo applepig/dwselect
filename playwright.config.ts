@@ -13,6 +13,7 @@ if (!app_url) {
 }
 
 const external_server = process.env.PLAYWRIGHT_EXTERNAL_SERVER === '1'
+const base_url = process.env.PLAYWRIGHT_BASE_URL ?? `https://${app_url}`
 
 export default defineConfig({
   testDir: './tests/e2e',
@@ -20,7 +21,7 @@ export default defineConfig({
   workers: 1,
   reporter: 'list',
   use: {
-    baseURL: `https://${app_url}`,
+    baseURL: base_url,
     ignoreHTTPSErrors: true,
     trace: 'on-first-retry',
   },

@@ -53,7 +53,7 @@ export function getCategoryChips(
 export function getCompactAppStateFromRoute(
   route: CompactRouteState,
 ): CompactAppState {
-  if (route.path === '/search') {
+  if (route.path === '/search' || route.path === '/search/') {
     return {
       search_query: getFirstQueryValue(route.query?.q).trim(),
     }
