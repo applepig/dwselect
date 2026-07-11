@@ -6,10 +6,11 @@ import { pathToFileURL } from 'node:url'
 
 export function createStaticPreviewServer(root_dir: string): Server {
   const resolved_root_dir = resolve(root_dir)
+  const not_found_page_path = resolve(resolved_root_dir, '404.html')
 
   return createServer(async (request, response) => {
     if (!request.url) {
-      writeNotFound(response)
+      await serveNotFound(not_found_page_path, response)
       return
     }
 
@@ -20,13 +21,13 @@ export function createStaticPreviewServer(root_dir: string): Server {
       pathname = decodeURIComponent(request_url.pathname)
     }
     catch {
-      writeNotFound(response)
+      await serveNotFound(not_found_page_path, response)
       return
     }
 
     const target_path = resolve(resolved_root_dir, `.${pathname}`)
     if (relative(resolved_root_dir, target_path).startsWith('..')) {
-      writeNotFound(response)
+      await serveNotFound(not_found_page_path, response)
       return
     }
 
@@ -35,7 +36,7 @@ export function createStaticPreviewServer(root_dir: string): Server {
       target_stat = await stat(target_path)
     }
     catch {
-      writeNotFound(response)
+      await serveNotFound(not_found_page_path, response)
       return
     }
 
@@ -51,7 +52,7 @@ export function createStaticPreviewServer(root_dir: string): Server {
     }
 
     if (!target_stat.isFile()) {
-      writeNotFound(response)
+      await serveNotFound(not_found_page_path, response)
       return
     }
 
@@ -59,12 +60,29 @@ export function createStaticPreviewServer(root_dir: string): Server {
   })
 }
 
-function serveFile(file_path: string, response: import('node:http').ServerResponse) {
+function serveFile(file_path: string, response: import('node:http').ServerResponse, status = 200) {
   const stream = createReadStream(file_path)
 
   stream.once('error', () => writeNotFound(response))
-  response.writeHead(200, { 'content-type': getContentType(file_path) })
+  response.writeHead(status, { 'content-type': getContentType(file_path) })
   stream.pipe(response)
+}
+
+// 對齊正式 static host（GitHub Pages / Cloudflare Pages）的行為：未知路由回傳 generate
+// 產出的 404.html，讓 preview E2E 能看到與正式站相同的 not-found 頁。
+async function serveNotFound(not_found_page_path: string, response: import('node:http').ServerResponse) {
+  try {
+    const page_stat = await stat(not_found_page_path)
+    if (page_stat.isFile()) {
+      serveFile(not_found_page_path, response, 404)
+      return
+    }
+  }
+  catch {
+    // 404.html 不存在（尚未 generate）時退回純文字。
+  }
+
+  writeNotFound(response)
 }
 
 function writeNotFound(response: import('node:http').ServerResponse) {

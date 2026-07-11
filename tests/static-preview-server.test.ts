@@ -41,6 +41,19 @@ describe('static preview server', () => {
     expect(response.status).toBe(200)
     await expect(response.text()).resolves.toContain('Search page')
   })
+
+  it('serves the generated 404 page for an unknown route', async () => {
+    const root = await createStaticOutput()
+    const server = createStaticPreviewServer(root)
+    servers.push(server)
+    await listen(server)
+    const port = getPort(server)
+
+    const response = await fetch(`http://127.0.0.1:${port}/products/not-a-real-product`)
+
+    expect(response.status).toBe(404)
+    await expect(response.text()).resolves.toContain('Not found page')
+  })
 })
 
 async function createStaticOutput() {
@@ -48,6 +61,7 @@ async function createStaticOutput() {
   server_roots.push(root)
   await mkdir(join(root, 'search'))
   await writeFile(join(root, 'search', 'index.html'), '<main>Search page</main>')
+  await writeFile(join(root, '404.html'), '<main>Not found page</main>')
   return root
 }
 

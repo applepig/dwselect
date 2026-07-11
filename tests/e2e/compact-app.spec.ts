@@ -502,7 +502,7 @@ test('separates search typing, autocomplete and submitted query state', async ({
   const search_input = page.getByPlaceholder('在找什麼嗎？™')
   await search_input.fill('Sharp')
   await page.waitForTimeout(400)
-  await expect(page).toHaveURL('/search')
+  await expect(page).toHaveURL(SEARCH_URL_PATTERN)
   await expect(page.locator('.search-history-panel')).toHaveCount(0)
   await expect(page.locator('.search-suggestion-list')).toBeVisible()
   await expect(page.locator('.search-suggestion-item').first()).toContainText(/產品|指南|連結/)
@@ -546,7 +546,7 @@ test('does not submit search or write history when IME composition confirms with
   })
 
   await page.waitForTimeout(100)
-  await expect(page).toHaveURL('/search')
+  await expect(page).toHaveURL(SEARCH_URL_PATTERN)
   await expect(page.locator('.search-suggestion-panel')).toBeVisible()
 
   const history_items = await page.evaluate(() => JSON.parse(localStorage.getItem('dwselect.search.history.v1') ?? '[]'))
@@ -582,7 +582,7 @@ test('keeps search usable when search history storage contains corrupted JSON', 
   await page.reload({ waitUntil: 'networkidle' })
 
   await expect(page.locator('vite-error-overlay')).toHaveCount(0)
-  await expect(page).toHaveURL('/search')
+  await expect(page).toHaveURL(SEARCH_URL_PATTERN)
 
   await expect(page.locator('.search-popular-panel[data-section-id="tags"]')).toBeVisible()
 

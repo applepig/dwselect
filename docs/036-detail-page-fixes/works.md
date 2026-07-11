@@ -1,5 +1,12 @@
 # Works: 036 detail page fixes
 
+### static preview E2E gate 補完（PR #18 第一輪 CI 紅修正）
+
+- **問題描述**：PR #18 的 `Static Generate` quality gate 首輪 E2E 12 個失敗（4 tests × 3 viewports），比 PR #17 merge 後的 deploy 失敗還多——preview endpoint 模擬 Pages 行為時，兩處與 dev server 的差異未同步到測試與 server。
+- **根因**：（1）trailing slash——static host 對 `/search` 做 canonical redirect 到 `/search/`，六處 `toHaveURL('/search')` 斷言只改了三處；（2）404 頁——`serve-static-output.ts` 對未知路由回純文字 `Not Found`，未像 Pages 回傳 generate 產出的 `404.html`，`/products/not-a-real-product` 渲染不出「找不到頁面」。
+- **修復內容**：其餘三處 URL 斷言改用 `SEARCH_URL_PATTERN`（`/\/search\/?$/`，dev 與 static 皆接受）；server 新增 `serveNotFound()`——未知路由回傳根目錄 `404.html`（status 404），檔案不存在（尚未 generate）時退回純文字。
+- **測試**：新增 static server 的 404.html serving unit case；`pnpm test` 94 files／645 tests passed；本機忠實重現 CI（容器 `./dev.sh exec ./dev.sh generate` → host 起 preview server → `PLAYWRIGHT_EXTERNAL_SERVER=1 PLAYWRIGHT_BASE_URL=http://127.0.0.1:4173` 全套 E2E）85 passed／0 failed，CI 上失敗的 12 個全數轉綠；lint、容器 typecheck passed。前一輪「完整 static-preview E2E 只能在 CI 跑」的驗證限制已解除。
+
 ### deploy preview E2E regression hotfix
 
 - **問題描述**：PR #17 合併後，`Static Generate` 成功但 `Deploy` 的 Cloudflare Pages preview E2E 有 18 個失敗，production promotion 因而跳過，正式站停在 PR #16 artifact。PR quality gate 原本只跑 unit／lint／knip／typecheck／generate，沒有 E2E，故靜態輸出問題在 merge 後才第一次被攔下。
