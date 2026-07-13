@@ -19,7 +19,7 @@
 <script setup lang="ts">
 withDefaults(defineProps<{
   to?: string | { path: string, query?: Record<string, string> }
-  variant?: 'default' | 'accent' | 'dark'
+  variant?: 'default' | 'price'
 }>(), {
   variant: 'default',
 })

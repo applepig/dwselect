@@ -1,4 +1,4 @@
-export type ProductViewTransitionPart = 'card' | 'image' | 'title' | 'summary' | 'price'
+export type ProductViewTransitionPart = 'card' | 'image' | 'title' | 'summary' | 'price' | 'channel'
 
 const PRODUCT_VIEW_TRANSITION_PREFIX_BY_PART = {
   card: 'product-card',
@@ -6,6 +6,7 @@ const PRODUCT_VIEW_TRANSITION_PREFIX_BY_PART = {
   title: 'product-title',
   summary: 'product-summary',
   price: 'product-price',
+  channel: 'product-channel',
 } satisfies Record<ProductViewTransitionPart, string>
 
 export function getProductViewTransitionName(product_id: string, part: ProductViewTransitionPart): string {

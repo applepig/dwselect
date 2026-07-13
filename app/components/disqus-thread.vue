@@ -36,6 +36,7 @@ type DisqusPageConfig = {
     url: string
     identifier: string
   }
+  language: string
 }
 
 type DisqusConfig = (this: DisqusPageConfig) => void
@@ -76,6 +77,7 @@ function createDisqusConfig(): DisqusConfig {
   return function configureDisqus() {
     this.page.url = page_url
     this.page.identifier = identifier
+    this.language = 'zh_TW'
   }
 }
 

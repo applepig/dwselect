@@ -167,6 +167,14 @@ describe('shared view-transition-name naming (rendered markup, AC3/AC5a)', () =>
     expect(getInlineViewTransitionName(detail_html, 'detail-price')).toBe('product-price-alpha')
   })
 
+  it('should name the channel badge so it morphs with the card on category switch instead of fading with root', async () => {
+    // 分類切換（home↔home）時整張卡的具名部件會 morph（整塊滑動）；channel badge 若沒具名會落入
+    // root snapshot 被 fade 掉（消失再 fade in）。給它 product-channel-{id} 名讓它一起 morph。
+    const html = await renderProductCard(makeProductCardView({ id: 'alpha' }))
+
+    expect(getInlineViewTransitionName(html, 'product-vt-channel')).toBe('product-channel-alpha')
+  })
+
   it('should keep the card shell name separate from nested shared element names', async () => {
     const html = await renderProductCard(makeProductCardView({ id: 'alpha' }))
 
