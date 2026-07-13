@@ -92,6 +92,7 @@ function makeGuideDetailView(overrides: Partial<GuideDetailView> = {}): GuideDet
     brand_ids: [],
     brand_labels: [],
     source_url: 'https://example.com/sample-guide',
+    reference_links: [],
     related_products: [],
     ...overrides,
   }
@@ -160,6 +161,27 @@ describe('GuideDetail', () => {
     expect(source_link.attributes('href')).toBe('https://example.com/original-post')
     expect(source_link.attributes('target')).toBe('_blank')
     expect(source_link.attributes('rel')).toBe('noopener noreferrer')
+  })
+
+  it('should render supplied reference links with their labels and safe external link attributes', () => {
+    const wrapper = mountGuideDetail(makeGuideDetailView({
+      reference_links: [{ title: 'Facebook 參考貼文', url: 'https://example.com/reference-post' }],
+    }))
+    const section = wrapper.find('.detail-reference-links')
+
+    expect(section.exists()).toBe(true)
+    const reference_link = section.find('.detail-reference-link')
+    expect(section.find('.detail-reference-links-title').text()).toBe('參考資料')
+    expect(reference_link.text()).toBe('Facebook 參考貼文')
+    expect(reference_link.attributes('href')).toBe('https://example.com/reference-post')
+    expect(reference_link.attributes('target')).toBe('_blank')
+    expect(reference_link.attributes('rel')).toBe('noopener noreferrer')
+  })
+
+  it('should not render a reference section when the guide has no reference links', () => {
+    const wrapper = mountGuideDetail(makeGuideDetailView({ reference_links: [] }))
+
+    expect(wrapper.find('.detail-reference-links').exists()).toBe(false)
   })
 
   it('should render related product cards linking to each product detail when related products exist', () => {

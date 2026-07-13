@@ -91,6 +91,7 @@ export const base_guide = {
   title: '指南文章',
   summary: '指南摘要',
   source_url: 'https://example.com/guide',
+  reference_links: [],
   image_url: null,
   category_ids: ['computer'],
   tag_ids: ['typing'],

@@ -123,6 +123,34 @@
       >
         看原文
       </UButton>
+
+      <section
+        v-if="detail.reference_links.length > 0"
+        class="detail-reference-links"
+        aria-labelledby="detail-reference-links-title"
+      >
+        <h3
+          id="detail-reference-links-title"
+          class="detail-reference-links-title"
+        >
+          參考資料
+        </h3>
+
+        <ul class="detail-reference-list">
+          <li
+            v-for="reference_link in detail.reference_links"
+            :key="reference_link.url"
+            class="detail-reference-item"
+          >
+            <a
+              class="detail-reference-link"
+              :href="reference_link.url"
+              target="_blank"
+              rel="noopener noreferrer"
+            >{{ reference_link.title }}</a>
+          </li>
+        </ul>
+      </section>
     </section>
 
     <ShareButtons :title="detail.title" />

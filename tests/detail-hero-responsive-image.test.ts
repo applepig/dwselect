@@ -128,6 +128,7 @@ function makeGuideDetailView(overrides: Partial<GuideDetailView> = {}): GuideDet
     brand_ids: [],
     brand_labels: [],
     source_url: 'https://example.com/sample-guide',
+    reference_links: [],
     related_products: [],
     ...overrides,
   }
