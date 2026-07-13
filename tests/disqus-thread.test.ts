@@ -146,7 +146,7 @@ describe('DisqusThread', () => {
     enterViewport()
 
     const script = appended_scripts[0]
-    const page = { page: { url: '', identifier: '' } }
+    const page = { page: { url: '', identifier: '' }, language: '' }
 
     const disqus_window = window as Window & { disqus_config?: (this: typeof page) => void }
     disqus_window.disqus_config?.call(page)
@@ -156,6 +156,7 @@ describe('DisqusThread', () => {
       url: getCanonicalUrl(PRODUCT_A_PATH),
       identifier: 'products/product-a',
     })
+    expect(page.language).toBe('zh_TW')
   })
 
   it('script 載入失敗時顯示靜態 fallback，且不拋出主頁錯誤（AC16）', async () => {
@@ -416,7 +417,7 @@ describe('DisqusThread', () => {
     expect(appended_scripts).toEqual([])
 
     const reset_options = reset.mock.calls[1]?.[0]
-    const page = { page: { url: '', identifier: '' } }
+    const page = { page: { url: '', identifier: '' }, language: '' }
     reset_options.config.call(page)
 
     expect(reset_options.reload).toBe(true)
@@ -424,5 +425,6 @@ describe('DisqusThread', () => {
       url: getCanonicalUrl(PRODUCT_B_PATH),
       identifier: 'products/product-b',
     })
+    expect(page.language).toBe('zh_TW')
   })
 })

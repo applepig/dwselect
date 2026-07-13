@@ -309,22 +309,14 @@
   background: color-mix(in srgb, var(--dw-amber) 24%, var(--dw-panel));
 }
 
-.catalog-pill--dark {
-  background: color-mix(in srgb, var(--dw-text) 82%, var(--dw-panel));
-  color: var(--dw-bg);
+/* 價錢 pill：與詳情頁 .detail-price 共用 --dw-rose 語彙，讓首頁→詳情價錢 morph 顏色連續（035.1 issue 4）。 */
+.catalog-pill--price {
+  background: color-mix(in srgb, var(--dw-rose) 16%, var(--dw-panel));
+  color: var(--dw-rose);
 }
 
-.catalog-pill--dark:hover {
-  background: color-mix(in srgb, var(--dw-text) 88%, var(--dw-panel));
-}
-
-.catalog-pill--accent {
-  background: var(--ui-primary);
-  color: var(--ui-text-inverted);
-}
-
-.catalog-pill--accent:hover {
-  background: var(--ui-primary);
+.catalog-pill--price:hover {
+  background: color-mix(in srgb, var(--dw-rose) 24%, var(--dw-panel));
 }
 
 .channel-dot {
@@ -497,12 +489,12 @@
 .link-row,
 .resource-row {
   display: grid;
-  grid-template-columns: 44px minmax(0, 1fr) 32px;
-  gap: 12px;
-  align-items: center;
+  grid-template-columns: 88px minmax(0, 1fr) 32px;
+  gap: 14px;
+  align-items: start;
   min-height: 64px;
   min-width: 0;
-  padding: 12px;
+  padding: 14px;
   border: 1px solid var(--dw-border);
   border-radius: 8px;
   background: var(--dw-panel);
@@ -513,8 +505,8 @@
 
 .resource-row-media {
   display: inline-flex;
-  width: 44px;
-  height: 44px;
+  width: 88px;
+  height: 88px;
   align-items: center;
   justify-content: center;
   border: 1px solid color-mix(in srgb, var(--dw-border) 70%, transparent);
@@ -531,8 +523,8 @@
 }
 
 .resource-row-fallback-icon {
-  width: 24px;
-  height: 24px;
+  width: 32px;
+  height: 32px;
   color: var(--dw-teal);
 }
 
@@ -551,19 +543,40 @@
 .link-row-action,
 .resource-row-action {
   justify-self: center;
+  align-self: center;
 }
 
+/* body 三段（title／subtitle／meta）縱向堆疊，對齊放大後的方形圖高（035.1 issue 2）。 */
+.resource-row-body,
+.link-row-body {
+  display: grid;
+  gap: 5px;
+  align-content: start;
+}
+
+/* 標題與 meta 維持單行截斷；subtitle 折 2 行、預留 2 行高、不截斷成 ...（035.1 issue 2）。 */
 .link-row-title,
-.link-row-subtitle,
 .link-row-url,
 .resource-row-title,
-.resource-row-subtitle,
 .resource-row-meta {
   display: block;
   min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.link-row-subtitle,
+.resource-row-subtitle {
+  display: -webkit-box;
+  min-width: 0;
+  min-height: 2.9em;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 .link-row-title,
@@ -1099,6 +1112,12 @@
     view-transition-class: product-price;
   }
 
+  /* channel badge 具名才不會在分類切換時落入 root snapshot 被 fade（消失再 fade in）；
+     具名後與卡片其他部件一起 morph，達成「整塊滑動」（035.1 issue 3）。 */
+  .product-vt-channel {
+    view-transition-class: product-channel;
+  }
+
   /* VT root 只淡出入，避免重現 Vue fallback 的 translate 手感；商品卡片本體由
      .product-card group morph 到詳情頁 .product-detail-page。 */
   @keyframes dw-page-fade-out {
@@ -1144,7 +1163,8 @@
   ::view-transition-group(.product-image),
   ::view-transition-group(.product-title),
   ::view-transition-group(.product-summary),
-  ::view-transition-group(.product-price) {
+  ::view-transition-group(.product-price),
+  ::view-transition-group(.product-channel) {
     animation-duration: var(--dw-view-transition-duration);
     animation-delay: var(--dw-view-transition-delay);
     animation-timing-function: ease;
@@ -1169,7 +1189,9 @@
   ::view-transition-old(.product-summary),
   ::view-transition-new(.product-summary),
   ::view-transition-old(.product-price),
-  ::view-transition-new(.product-price) {
+  ::view-transition-new(.product-price),
+  ::view-transition-old(.product-channel),
+  ::view-transition-new(.product-channel) {
     animation-duration: var(--dw-view-transition-duration);
     animation-delay: var(--dw-view-transition-delay);
     animation-timing-function: ease-out;
@@ -1196,7 +1218,8 @@
   .product-vt-image,
   .product-vt-title,
   .product-vt-summary,
-  .product-vt-price {
+  .product-vt-price,
+  .product-vt-channel {
     view-transition-name: none !important;
   }
 
@@ -1459,8 +1482,11 @@
     backdrop-filter: blur(18px);
   }
 
+  /* padding-inline 對齊 header 卡片外緣 inset（margin 40 + border 1 + padding 40 = 81），
+     讓 panel 內文欄寬＝header 內文欄寬（035.1 issue 1）。與 768–1199 同模型：panel padding 收
+     inset、product grid 不再另加 margin，product card／link rows 一致對齊。 */
   .compact-panel {
-    padding: 20px 40px 0;
+    padding: 20px 81px 0;
   }
 
   .catalog-pill {
@@ -1504,7 +1530,6 @@
   .product-grid {
     grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
     gap: 16px;
-    margin-inline: 41px;
   }
 
   .detail-content {

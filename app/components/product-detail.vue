@@ -25,12 +25,20 @@
             @click="goBack"
           />
 
+          <!-- sizes 對應 .detail-hero-layout 斷點顯示寬（@nuxt/image 會把每個 key 的 media 位移到
+               下一個 key，故以位移後區間宣告）：≤768 單欄 hero=100vw−70px，92vw 上包；>768 兩欄
+               0.95fr hero≈47.5vw−124px（rail）／−194px（sidebar，無封頂），40vw 上包至 ~2560 視窗。
+               候選 {307,614,706,1412} 覆蓋手機全寬 DPR3（~1187）與桌機兩欄 DPR2（~1229）。
+               hero 是詳情頁 LCP 且唯一：維持預設 eager 並以 fetchpriority=high 提前抓取。 -->
           <NuxtImg
             v-if="!isBrokenImage('hero')"
             :src="detail.hero_image_url"
             :alt="detail.hero_alt"
             class="detail-hero-image"
+            sizes="767:92vw 768:40vw"
+            :quality="75"
             format="webp"
+            fetchpriority="high"
             @error="onImageError('hero')"
           />
           <UIcon

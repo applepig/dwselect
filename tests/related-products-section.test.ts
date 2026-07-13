@@ -4,6 +4,7 @@ import { mount } from '@vue/test-utils'
 import { onMounted, ref } from 'vue'
 import { afterAll, beforeEach, describe, expect, it, vi } from 'vitest'
 
+import { resolveSrcset } from './helpers/resolve-srcset'
 import { useBrokenImageFallback } from '../app/composables/use-broken-image-fallback'
 import ProductCard from '../app/components/product-card.vue'
 import RelatedProductsSection from '../app/components/related-products-section.vue'
@@ -14,9 +15,10 @@ const NuxtLinkStub = {
   template: '<a :href="typeof to === \'string\' ? to : to.path"><slot /></a>',
 }
 
+// 透傳 sizes，讓測試能觀察 related 版型對 image 層宣告的顯示尺寸。
 const NuxtImgStub = {
-  props: ['src', 'alt'],
-  template: '<img data-component="nuxt-img" :src="src" :alt="alt" />',
+  props: ['src', 'alt', 'sizes'],
+  template: '<img data-component="nuxt-img" :src="src" :alt="alt" :sizes="sizes" />',
 }
 
 const UIconStub = { props: ['name'], template: '<i :data-icon="name" />' }
@@ -112,5 +114,17 @@ describe('RelatedProductsSection', () => {
     const wrapper = mountRelatedProductsSection([], '你可能也喜歡')
 
     expect(wrapper.find('.related-products-section').exists()).toBe(false)
+  })
+
+  it('對 related 96px 縮圖版型宣告專屬 sizes：手機縮圖挑到小候選、不沿用首頁全寬提示過抓', () => {
+    const wrapper = mountRelatedProductsSection([makeRelatedProduct()], '你可能也喜歡')
+    const sizes = wrapper.find('.product-image').attributes('sizes') ?? ''
+
+    const { sizesVal, widths } = resolveSrcset(sizes)
+
+    // ≤743px（related 固定 96px 橫式縮圖區間）套用縮圖級尺寸，而非首頁卡的全寬提示。
+    expect(sizesVal.startsWith('(max-width: 743px) 96px')).toBe(true)
+    // 因此手機縮圖能挑到 ~96–192w 的小候選，不再為 96px 格位下載 ~600–864w 的過大圖。
+    expect(Math.min(...widths)).toBeLessThanOrEqual(200)
   })
 })

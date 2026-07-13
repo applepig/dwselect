@@ -21,12 +21,17 @@
             @click="goBack"
           />
 
+          <!-- sizes／quality／fetchpriority 與 product-detail hero 同契約（共用 .detail-hero-layout
+               版型與 LCP 地位），推導見 product-detail.vue hero 註解；外部圖走下方原生 <img>，不沾 IPX 屬性。 -->
           <NuxtImg
             v-if="has_hero_image && isLocalImageSource(detail.hero_image_url)"
             :src="detail.hero_image_url"
             :alt="detail.hero_alt"
             class="detail-hero-image"
+            sizes="767:92vw 768:40vw"
+            :quality="75"
             format="webp"
+            fetchpriority="high"
             @error="onImageError('hero')"
           />
           <img
