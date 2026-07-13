@@ -220,6 +220,7 @@ describe('詳情頁 hero 響應式圖（M3b 擴充）', () => {
 
     expect(wrapper.find('.detail-hero-tile').exists()).toBe(false)
     expect(wrapper.find('.detail-image-fallback-icon').exists()).toBe(false)
+    expect(wrapper.find('.detail-hero-layout').classes()).toContain('detail-hero-layout-without-image')
     expect(wrapper.find('.detail-summary-column .detail-back').exists()).toBe(true)
   })
 
@@ -228,6 +229,7 @@ describe('詳情頁 hero 響應式圖（M3b 擴充）', () => {
 
     expect(wrapper.find('.detail-hero-tile').exists()).toBe(false)
     expect(wrapper.find('.detail-image-fallback-icon').exists()).toBe(false)
+    expect(wrapper.find('.detail-hero-layout').classes()).toContain('detail-hero-layout-without-image')
     expect(wrapper.find('.detail-summary-column .detail-back').exists()).toBe(true)
   })
 

@@ -10,7 +10,10 @@
     />
 
     <section class="detail-content">
-      <div class="detail-hero-layout">
+      <div
+        class="detail-hero-layout"
+        :class="{ 'detail-hero-layout-without-image': !detail.hero_image_url }"
+      >
         <div
           v-if="detail.hero_image_url"
           class="detail-hero-tile"

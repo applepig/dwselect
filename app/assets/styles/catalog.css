@@ -715,6 +715,10 @@
   min-width: 0;
 }
 
+.detail-hero-layout-without-image .detail-summary-column {
+  grid-column: 1 / -1;
+}
+
 .detail-taxonomy-row {
   display: flex;
   flex-wrap: wrap;

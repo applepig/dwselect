@@ -17,3 +17,7 @@
 - **修了什麼**：僅在 hero URL 非空時渲染 tile；空 URL 時將返回按鈕移至 summary 欄的正常流動位置。具有 URL 但載入失敗時維持既有 fallback icon。
 - **測試**：新增 Product／Guide 空 URL 不渲染 tile、fallback icon 且仍有返回操作的行為測試；更新既有 Guide 無圖測試。
 - **驗證結果**：Red 為 2 個測試檔、3 個預期失敗；Green 為 2 個測試檔、25 tests passed。`pnpm test` 在獨立重跑後通過（97 個測試檔、675 tests）；`pnpm lint`、`pnpm typecheck` 通過。實際開啟 `https://dwselect.toybox.local/guide/2026-06-19-dishwasher-buying-guide`，確認 `hero_tile: false`、`fallback: false`、`back_button: true`。
+
+### Codex review 修正
+
+- **[無圖 Guide 在 tablet／desktop 留下空白 grid column]**：無圖 detail layout 加上狀態 class，讓 summary column 跨滿所有 grid columns。1024px 實測 summary 775.98px／layout 776px；1440px 為 963.98px／964px。相關 4 個測試檔、38 tests passed；完整 `pnpm test`（97 個測試檔、675 tests）、`pnpm lint` 與 `pnpm typecheck` 通過。
