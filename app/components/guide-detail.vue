@@ -11,7 +11,10 @@
 
     <section class="detail-content">
       <div class="detail-hero-layout">
-        <div class="detail-hero-tile">
+        <div
+          v-if="detail.hero_image_url"
+          class="detail-hero-tile"
+        >
           <UButton
             class="detail-back"
             icon="i-lucide-arrow-left"
@@ -49,6 +52,15 @@
         </div>
 
         <div class="detail-summary-column">
+          <UButton
+            v-if="!detail.hero_image_url"
+            class="detail-back detail-back-without-image"
+            icon="i-lucide-arrow-left"
+            color="neutral"
+            variant="ghost"
+            aria-label="返回"
+            @click="goBack"
+          />
           <h2 class="detail-title">
             {{ detail.title }}
           </h2>

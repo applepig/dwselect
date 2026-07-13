@@ -216,11 +216,13 @@ describe('GuideDetail', () => {
     expect(hero_image.attributes('alt')).toBe('英雄圖替代文字')
   })
 
-  it('should not render a hero image element when the guide has no hero image url', () => {
+  it('should not render an empty hero tile when the guide has no hero image url', () => {
     const wrapper = mountGuideDetail(makeGuideDetailView({ hero_image_url: '' }))
 
+    expect(wrapper.find('.detail-hero-tile').exists()).toBe(false)
     expect(wrapper.find('.detail-hero-image').exists()).toBe(false)
-    expect(wrapper.find('.detail-image-fallback-icon').exists()).toBe(true)
+    expect(wrapper.find('.detail-image-fallback-icon').exists()).toBe(false)
+    expect(wrapper.find('.detail-summary-column .detail-back').exists()).toBe(true)
   })
 
   it('should render a local hero image through NuxtImg', () => {

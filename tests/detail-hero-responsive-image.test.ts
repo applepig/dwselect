@@ -215,6 +215,22 @@ describe('詳情頁 hero 響應式圖（M3b 擴充）', () => {
     expect(hero.attributes('fetchpriority')).toBeUndefined()
   })
 
+  it('product 沒有 hero image url 時不渲染空白 hero tile，但保留返回操作', () => {
+    const wrapper = mountProductDetail(makeProductDetailView({ hero_image_url: '' }))
+
+    expect(wrapper.find('.detail-hero-tile').exists()).toBe(false)
+    expect(wrapper.find('.detail-image-fallback-icon').exists()).toBe(false)
+    expect(wrapper.find('.detail-summary-column .detail-back').exists()).toBe(true)
+  })
+
+  it('guide 沒有 hero image url 時不渲染空白 hero tile，但保留返回操作', () => {
+    const wrapper = mountGuideDetail(makeGuideDetailView({ hero_image_url: '' }))
+
+    expect(wrapper.find('.detail-hero-tile').exists()).toBe(false)
+    expect(wrapper.find('.detail-image-fallback-icon').exists()).toBe(false)
+    expect(wrapper.find('.detail-summary-column .detail-back').exists()).toBe(true)
+  })
+
   it('product hero 破圖時仍露出 fallback icon，不因新屬性回歸', async () => {
     const wrapper = mountProductDetail(makeProductDetailView(), PreloadedBrokenNuxtImgStub)
     await nextTick()
