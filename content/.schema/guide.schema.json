@@ -32,6 +32,26 @@
     "source_url": {
       "type": "string"
     },
+    "reference_links": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "url",
+          "title"
+        ],
+        "additionalProperties": false
+      }
+    },
     "image_file": {
       "anyOf": [
         {

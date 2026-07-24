@@ -10,8 +10,14 @@
     />
 
     <section class="detail-content">
-      <div class="detail-hero-layout">
-        <div class="detail-hero-tile">
+      <div
+        class="detail-hero-layout"
+        :class="{ 'detail-hero-layout-without-image': !detail.hero_image_url }"
+      >
+        <div
+          v-if="detail.hero_image_url"
+          class="detail-hero-tile"
+        >
           <UButton
             class="detail-back"
             icon="i-lucide-arrow-left"
@@ -49,6 +55,15 @@
         </div>
 
         <div class="detail-summary-column">
+          <UButton
+            v-if="!detail.hero_image_url"
+            class="detail-back detail-back-without-image"
+            icon="i-lucide-arrow-left"
+            color="neutral"
+            variant="ghost"
+            aria-label="返回"
+            @click="goBack"
+          />
           <h2 class="detail-title">
             {{ detail.title }}
           </h2>
@@ -123,6 +138,34 @@
       >
         看原文
       </UButton>
+
+      <section
+        v-if="detail.reference_links.length > 0"
+        class="detail-reference-links"
+        aria-labelledby="detail-reference-links-title"
+      >
+        <h3
+          id="detail-reference-links-title"
+          class="detail-reference-links-title"
+        >
+          參考資料
+        </h3>
+
+        <ul class="detail-reference-list">
+          <li
+            v-for="reference_link in detail.reference_links"
+            :key="reference_link.url"
+            class="detail-reference-item"
+          >
+            <a
+              class="detail-reference-link"
+              :href="reference_link.url"
+              target="_blank"
+              rel="noopener noreferrer"
+            >{{ reference_link.title }}</a>
+          </li>
+        </ul>
+      </section>
     </section>
 
     <ShareButtons :title="detail.title" />

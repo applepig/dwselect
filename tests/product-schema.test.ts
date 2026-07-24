@@ -445,6 +445,40 @@ describe('product schema', () => {
     }
   })
 
+  it('should accept guide reference links with non-empty title and HTTP(S) URL', () => {
+    expect(() => guide_schema.parse({
+      ...valid_guide,
+      reference_links: [
+        { title: 'Facebook 參考貼文', url: 'https://example.com/reference' },
+        { title: '規格頁', url: 'http://example.com/spec' },
+      ],
+    })).not.toThrow()
+  })
+
+  it('should allow guides to omit reference links', () => {
+    expect(() => guide_schema.parse(valid_guide)).not.toThrow()
+  })
+
+  it('should reject legacy single guide reference URL', () => {
+    expect(() => guide_schema.parse({
+      ...valid_guide,
+      reference_url: 'https://example.com/legacy-reference',
+    })).toThrow()
+  })
+
+  it('should reject guide reference links without a non-empty title or HTTP(S) URL', () => {
+    for (const reference_link of [
+      { title: '', url: 'https://example.com/reference' },
+      { title: 'Email source', url: 'mailto:test@example.com' },
+      { title: 'Relative source', url: '/reference' },
+    ]) {
+      expect(() => guide_schema.parse({
+        ...valid_guide,
+        reference_links: [reference_link],
+      })).toThrow()
+    }
+  })
+
   it('should reject invalid timestamp format', () => {
     expect(() => product_schema.parse({
       ...valid_product,

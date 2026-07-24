@@ -86,7 +86,13 @@ describe('per-id product detail builder', () => {
 describe('per-id guide detail builder', () => {
   it('should build a single GuideDetailView keyed by content id', () => {
     const source = makeSource({
-      guides: [makeGuide({ id: 'wanted-guide', status: 'published', title: '想要的指南', body: '內文' })],
+      guides: [makeGuide({
+        id: 'wanted-guide',
+        status: 'published',
+        title: '想要的指南',
+        body: '內文',
+        reference_links: [{ title: '參考文章', url: 'https://example.com/reference' }],
+      })],
     })
 
     const detail = buildGuideDetail(source, 'wanted-guide')
@@ -94,6 +100,15 @@ describe('per-id guide detail builder', () => {
     expect(detail).not.toBeNull()
     expect(detail?.id).toBe('wanted-guide')
     expect(detail?.body).toBe('內文')
+    expect(detail?.reference_links).toEqual([{ title: '參考文章', url: 'https://example.com/reference' }])
+  })
+
+  it('should expose an empty reference link array for a guide that omits it', () => {
+    const source = makeSource({
+      guides: [makeGuide({ id: 'no-reference-links-guide', status: 'published' })],
+    })
+
+    expect(buildGuideDetail(source, 'no-reference-links-guide')?.reference_links).toEqual([])
   })
 
   it('should compute guide related products from published products in reference order', () => {

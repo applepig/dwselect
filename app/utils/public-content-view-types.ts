@@ -1,4 +1,4 @@
-import type { Product, ProductOffer, ProductReferenceLink } from './product-schema'
+import type { Product, ProductOffer, ReferenceLink } from './product-schema'
 
 // 代表「未篩選分類」的哨兵：全部 chip 的 id、首頁 active 判定、route param fallback 皆用它。
 // 值為字串 'all'（route param 與 payload chip id 靠此字面），具名引用讓拼錯被型別擋。
@@ -22,8 +22,6 @@ export type ProductCardView = {
   published_at: string | null
 }
 
-export type ProductDetailReferenceLink = Pick<ProductReferenceLink, 'title' | 'url'>
-
 export type ProductDetailView = {
   id: string
   name: string
@@ -45,7 +43,7 @@ export type ProductDetailView = {
   price_label: string
   buy_url: string
   fine_print: string
-  reference_links: ProductDetailReferenceLink[]
+  reference_links: ReferenceLink[]
   // related 卡與首頁卡同一 mapper 與元件（ADR-036-6），欄位即完整卡型，不另設瘦身型別。
   related_products: ProductCardView[]
 }
@@ -65,6 +63,7 @@ export type GuideDetailView = {
   brand_ids: string[]
   brand_labels: string[]
   source_url: string
+  reference_links: ReferenceLink[]
   related_products: ProductCardView[]
 }
 

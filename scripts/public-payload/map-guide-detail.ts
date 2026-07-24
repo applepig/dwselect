@@ -29,6 +29,7 @@ export function mapGuideDetail(
     brand_ids: taxonomy_tags.brand_ids,
     brand_labels: taxonomy_tags.brand_labels,
     source_url: guide.source_url,
+    reference_links: guide.reference_links ?? [],
     related_products: getGuideRelatedProductCards(guide, all_products, labels),
   }
 }

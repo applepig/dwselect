@@ -641,6 +641,10 @@
   backdrop-filter: blur(12px);
 }
 
+.detail-back-without-image {
+  position: static;
+}
+
 .detail-close-button {
   position: absolute;
   top: 12px;
@@ -709,6 +713,10 @@
   grid-template-columns: minmax(0, 1fr);
   gap: 14px;
   min-width: 0;
+}
+
+.detail-hero-layout-without-image .detail-summary-column {
+  grid-column: 1 / -1;
 }
 
 .detail-taxonomy-row {

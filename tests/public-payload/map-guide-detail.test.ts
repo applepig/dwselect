@@ -27,6 +27,9 @@ describe('guide detail build mapper', () => {
       category_ids: ['computer'],
       tag_ids: ['typing'],
       related_product_ids: [],
+      reference_links: [
+        { title: '鍵盤參考文章', url: 'https://example.com/keyboard-reference' },
+      ],
     })
 
     expect(mapGuideDetail(guide, [], labels)).toEqual({
@@ -43,8 +46,17 @@ describe('guide detail build mapper', () => {
       brand_ids: [],
       brand_labels: [],
       source_url: 'https://example.com/keyboard-guide',
+      reference_links: [
+        { title: '鍵盤參考文章', url: 'https://example.com/keyboard-reference' },
+      ],
       related_products: [],
     })
+  })
+
+  it('should normalize omitted guide reference links to an empty array', () => {
+    const guide = makeGuide({ id: 'no-reference-links-guide', reference_links: undefined })
+
+    expect(mapGuideDetail(guide, [], labels).reference_links).toEqual([])
   })
 
   it('should split brand ids out of tag_ids into a brand group so brand pills route to /brand (not dead /tag/{brand})', () => {
