@@ -106,6 +106,13 @@
             {{ detail.price_label }}
           </p>
 
+          <a
+            class="product-detail-upper-cta"
+            :href="detail.buy_url"
+            target="_blank"
+            rel="noopener noreferrer"
+          >前往 {{ detail.channel_label }} 查看現價</a>
+
           <UAlert
             class="detail-dw-says product-vt-summary"
             color="primary"
@@ -114,13 +121,6 @@
             :description="detail.long_description || detail.summary"
             :style="getProductViewTransitionStyle(detail.id, 'summary')"
           />
-
-          <a
-            class="detail-summary-buy-link"
-            :href="detail.buy_url"
-            target="_blank"
-            rel="noopener noreferrer"
-          >去 {{ detail.channel_label }} 逛逛</a>
         </div>
       </div>
 
@@ -140,20 +140,28 @@
         </div>
       </section>
 
-      <UButton
-        class="detail-buy-cta"
-        :to="detail.buy_url"
-        target="_blank"
-        rel="noopener noreferrer"
-        block
-        size="xl"
+      <section
+        class="product-purchase-summary"
+        aria-labelledby="product-purchase-summary-title"
       >
-        去 {{ detail.channel_label }} 逛逛
-      </UButton>
-
-      <p class="detail-fine-print">
-        {{ detail.fine_print || '價格與庫存以通路頁面為準。' }}
-      </p>
+        <div class="product-purchase-summary-content">
+          <h3
+            id="product-purchase-summary-title"
+            class="product-purchase-summary-label"
+          >
+            目前參考價
+          </h3>
+          <p class="product-purchase-summary-price">
+            {{ detail.price_label }} · {{ detail.channel_label }}
+          </p>
+        </div>
+        <a
+          class="product-purchase-summary-cta"
+          :href="detail.buy_url"
+          target="_blank"
+          rel="noopener noreferrer"
+        >前往 {{ detail.channel_label }} 查看現價</a>
+      </section>
 
       <section
         v-if="detail.reference_links.length > 0"

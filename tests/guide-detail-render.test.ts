@@ -30,7 +30,7 @@ const NuxtImgStub = {
 
 const UButtonStub = {
   props: ['to', 'icon', 'block', 'size', 'color', 'variant'],
-  template: '<button><slot /></button>',
+  template: '<a :href="to" target="_blank" rel="noopener noreferrer"><slot /></a>',
 }
 
 const UIconStub = { props: ['name'], template: '<i />' }
@@ -161,6 +161,19 @@ describe('GuideDetail', () => {
     expect(source_link.attributes('href')).toBe('https://example.com/original-post')
     expect(source_link.attributes('target')).toBe('_blank')
     expect(source_link.attributes('rel')).toBe('noopener noreferrer')
+  })
+
+  it('keeps both read-original calls to action pointed at the guide source url', () => {
+    const source_url = 'https://example.com/original-post'
+    const wrapper = mountGuideDetail(makeGuideDetailView({ source_url }))
+    const source_links = wrapper.findAll('a').filter((link) => link.text() === '看原文')
+
+    expect(source_links).toHaveLength(2)
+    for (const source_link of source_links) {
+      expect(source_link.attributes('href')).toBe(source_url)
+      expect(source_link.attributes('target')).toBe('_blank')
+      expect(source_link.attributes('rel')).toBe('noopener noreferrer')
+    }
   })
 
   it('should render supplied reference links with their labels and safe external link attributes', () => {

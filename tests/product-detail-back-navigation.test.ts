@@ -96,8 +96,13 @@ describe('product detail hero opinion and layout ordering', () => {
     expect(back_button_index).toBeLessThan(hero_image_index)
   })
 
-  it('should keep AI copy and purchase actions below the desktop hero layout', async () => {
-    const html = await renderProductDetail(makeProductDetailView({ llm_description: 'AI 觀點說明' }))
+  it('places matching primary purchase calls to action after the price and after AI copy', async () => {
+    const detail = makeProductDetailView({
+      llm_description: 'AI 觀點說明',
+      fine_print: '實際售價以通路頁面為準。',
+      reference_links: [{ title: '產品規格', url: 'https://example.com/reference' }],
+    })
+    const html = await renderProductDetail(detail)
     const hero_layout_index = html.indexOf('detail-hero-layout')
     const hero_tile_index = html.indexOf('detail-hero-tile')
     const summary_column_index = html.indexOf('detail-summary-column')
@@ -105,23 +110,66 @@ describe('product detail hero opinion and layout ordering', () => {
     const taxonomy_index = html.indexOf('detail-taxonomy-row')
     const price_index = html.indexOf('detail-price')
     const dw_says_index = html.indexOf('detail-dw-says')
-    const summary_buy_link_index = html.indexOf('detail-summary-buy-link')
+    const upper_cta_index = html.indexOf('product-detail-upper-cta')
     const llm_says_index = html.indexOf('detail-llm-says')
-    const buy_cta_index = html.indexOf('detail-buy-cta')
-    const fine_print_index = html.indexOf('detail-fine-print')
+    const purchase_summary_index = html.indexOf('product-purchase-summary')
+    const reference_links_index = html.indexOf('detail-reference-links')
+    const price_close_index = html.indexOf('</p>', price_index)
+    const next_element_after_price = html.slice(price_close_index + '</p>'.length).trimStart()
+    const purchase_summary_html = html.slice(purchase_summary_index, html.indexOf('</section>', purchase_summary_index))
 
-    // summary column 內部順序：標題 → 分類列 → 價格 → DW 觀點 → 購買連結。
+    // summary column 內部順序：標題 → 分類列 → 價格 → 主購買 CTA → DW 觀點。
     expect(hero_layout_index).toBeGreaterThanOrEqual(0)
     expect(hero_tile_index).toBeGreaterThan(hero_layout_index)
     expect(summary_column_index).toBeGreaterThan(hero_tile_index)
     expect(title_index).toBeGreaterThan(summary_column_index)
     expect(taxonomy_index).toBeGreaterThan(title_index)
     expect(price_index).toBeGreaterThan(taxonomy_index)
-    expect(dw_says_index).toBeGreaterThan(price_index)
-    expect(summary_buy_link_index).toBeGreaterThan(dw_says_index)
-    // AI copy 與購買動作、細則落在 hero layout 之後的全寬區段。
-    expect(llm_says_index).toBeGreaterThan(summary_buy_link_index)
-    expect(buy_cta_index).toBeGreaterThan(llm_says_index)
-    expect(fine_print_index).toBeGreaterThan(buy_cta_index)
+    expect(upper_cta_index).toBeGreaterThan(price_index)
+    expect(next_element_after_price).toMatch(/^<a class="product-detail-upper-cta"/)
+    expect(dw_says_index).toBeGreaterThan(upper_cta_index)
+    // AI copy、語意化購買摘要與參考資料都落在 hero layout 後的全寬區段。
+    expect(llm_says_index).toBeGreaterThan(dw_says_index)
+    expect(purchase_summary_index).toBeGreaterThan(llm_says_index)
+    expect(reference_links_index).toBeGreaterThan(purchase_summary_index)
+
+    const expected_cta_label = '前往 PChome 查看現價'
+    const upper_cta_html = html.slice(upper_cta_index, html.indexOf('</a>', upper_cta_index))
+
+    expect(upper_cta_html).toContain(expected_cta_label)
+    expect(upper_cta_html).toContain('href="https://example.com/buy"')
+    expect(upper_cta_html).toContain('target="_blank"')
+    expect(upper_cta_html).toContain('rel="noopener noreferrer"')
+    expect(purchase_summary_html).toContain('目前參考價')
+    expect(purchase_summary_html).toContain('NT$1,000 · PChome')
+    expect(purchase_summary_html).toContain(expected_cta_label)
+    expect(purchase_summary_html).toContain('href="https://example.com/buy"')
+    expect(purchase_summary_html).toContain('target="_blank"')
+    expect(purchase_summary_html).toContain('rel="noopener noreferrer"')
+    expect(purchase_summary_html).not.toContain(detail.name)
+    expect(purchase_summary_html).not.toContain(detail.fine_print)
+    expect(purchase_summary_html).not.toContain('product-purchase-summary-fine-print')
+  })
+
+  it('keeps the purchase summary before reference links when AI copy is absent', async () => {
+    const html = await renderProductDetail(makeProductDetailView({
+      llm_description: '',
+      reference_links: [{ title: '產品規格', url: 'https://example.com/reference' }],
+    }))
+
+    expect(html.indexOf('detail-llm-says')).toBe(-1)
+    expect(html.indexOf('product-purchase-summary')).toBeGreaterThanOrEqual(0)
+    expect(html.indexOf('product-purchase-summary')).toBeLessThan(html.indexOf('detail-reference-links'))
+  })
+
+  it('does not render fine print in the purchase summary', async () => {
+    const html = await renderProductDetail(makeProductDetailView({
+      fine_print: '實際售價以通路頁面為準。',
+    }))
+    const purchase_summary_index = html.indexOf('product-purchase-summary')
+    const purchase_summary_html = html.slice(purchase_summary_index, html.indexOf('</section>', purchase_summary_index))
+
+    expect(purchase_summary_html).not.toContain('實際售價以通路頁面為準。')
+    expect(purchase_summary_html).not.toContain('product-purchase-summary-fine-print')
   })
 })

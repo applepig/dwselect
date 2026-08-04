@@ -288,16 +288,77 @@ test('renders guide and links with the shared resource row contract', async ({ p
   expect(link_layout).toEqual(guide_layout)
 })
 
-test('navigates to product detail route with a safe buy CTA', async ({ page }) => {
+test('renders safe product purchase CTAs with a responsive purchase summary', async ({ page }, test_info) => {
   const detail = await openFirstProductDetail(page)
 
   await expect(page.locator('.compact-top-bar .top-bar-title')).toContainText('DW嚴選')
   await expect(page.locator('.compact-top-bar .top-bar-title')).toContainText(await detail.locator('.detail-title').textContent() ?? '')
   await expect(page.locator('.compact-top-bar .breadcrumb-link').nth(1)).toHaveAttribute('href', /\/category\/.+/)
   await expect(detail.getByText('DW 怎麼說')).toBeVisible()
-  await expect(detail.locator('.detail-buy-cta')).toHaveAttribute('target', '_blank')
-  await expect(detail.locator('.detail-buy-cta')).toHaveAttribute('rel', 'noopener noreferrer')
-  await expect(detail.locator('.detail-buy-cta')).toHaveAttribute('href', /https?:\/\//)
+  const upper_cta = detail.locator('.product-detail-upper-cta')
+  const purchase_summary = detail.locator('.product-purchase-summary')
+  const summary_cta = purchase_summary.locator('.product-purchase-summary-cta')
+  await expect(upper_cta).toBeVisible()
+  await expect(upper_cta).toHaveAttribute('target', '_blank')
+  await expect(upper_cta).toHaveAttribute('rel', 'noopener noreferrer')
+  await expect(upper_cta).toHaveAttribute('href', /https?:\/\//)
+  await expect.soft(upper_cta).toHaveAccessibleName(/前往 .+ 查看現價/)
+  await expect(purchase_summary.getByRole('heading', { name: '目前參考價' })).toBeVisible()
+  await expect(purchase_summary).toContainText('·')
+  await expect(summary_cta).toHaveAccessibleName(/前往 .+ 查看現價/)
+  await expect(summary_cta).toHaveAttribute('target', '_blank')
+  await expect(summary_cta).toHaveAttribute('rel', 'noopener noreferrer')
+  await expect(summary_cta).toHaveAttribute('href', /https?:\/\//)
+
+  expect.soft(await upper_cta.textContent()).toBe(await summary_cta.textContent())
+
+  const responsive_contract = await detail.evaluate((element) => {
+    const summary = element.querySelector<HTMLElement>('.product-purchase-summary')
+    const summary_content = element.querySelector<HTMLElement>('.product-purchase-summary-content')
+    const upper_cta = element.querySelector<HTMLElement>('.product-detail-upper-cta')
+    const summary_cta = element.querySelector<HTMLElement>('.product-purchase-summary-cta')
+    const document_element = document.documentElement
+
+    if (summary === null || summary_content === null || upper_cta === null || summary_cta === null) {
+      throw new Error('Expected product purchase summary and both primary CTAs')
+    }
+
+    const summary_style = window.getComputedStyle(summary)
+    const upper_cta_style = window.getComputedStyle(upper_cta)
+    const cta_style = window.getComputedStyle(summary_cta)
+
+    return {
+      document_overflows: document_element.scrollWidth > document_element.clientWidth,
+      summary_display: summary_style.display,
+      summary_columns: summary_style.gridTemplateColumns.split(' ').length,
+      cta_width: summary_cta.getBoundingClientRect().width,
+      summary_content_width: summary_content.getBoundingClientRect().width,
+      upper_cta_background: upper_cta_style.backgroundColor,
+      upper_cta_color: upper_cta_style.color,
+      summary_cta_background: cta_style.backgroundColor,
+      summary_cta_color: cta_style.color,
+      focus_outline_style: cta_style.outlineStyle,
+      focus_outline_width: cta_style.outlineWidth,
+    }
+  })
+
+  expect(responsive_contract.document_overflows).toBe(false)
+  expect(responsive_contract.summary_display).toBe('grid')
+  expect(responsive_contract.upper_cta_background).toBe(responsive_contract.summary_cta_background)
+  expect(responsive_contract.upper_cta_color).toBe(responsive_contract.summary_cta_color)
+  if (test_info.project.name === 'phone') {
+    expect(responsive_contract.summary_columns).toBe(1)
+    expect(responsive_contract.cta_width).toBeCloseTo(responsive_contract.summary_content_width, 0)
+  }
+
+  await summary_cta.focus()
+  await expect(summary_cta).toBeFocused()
+  const focus_style = await summary_cta.evaluate((cta) => {
+    const style = window.getComputedStyle(cta)
+    return { outline_style: style.outlineStyle, outline_width: style.outlineWidth }
+  })
+  expect(focus_style.outline_style).not.toBe('none')
+  expect(Number.parseFloat(focus_style.outline_width)).toBeGreaterThan(0)
 
   const related_section = detail.locator('.related-products-section')
   await expect(related_section.getByRole('heading', { name: 'You may also like' })).toBeVisible()
