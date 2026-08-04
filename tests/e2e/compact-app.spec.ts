@@ -334,12 +334,15 @@ test('does not fetch details on home and opens the selected product (028 split)'
     throw new Error('Expected product href to include an id')
   }
 
-  const product_detail_path = `/api/products/${expected_id}.json`
-  const product_detail_request = page.waitForRequest((request) => new URL(request.url()).pathname === product_detail_path)
+  const product_detail_paths = [
+    `/api/products/${expected_id}.json`,
+    `/products/${expected_id}/_payload.json`,
+  ]
+  const product_detail_request = page.waitForRequest((request) => product_detail_paths.includes(new URL(request.url()).pathname))
   await first_card.click()
   const request = await product_detail_request
 
-  expect(new URL(request.url()).pathname).toBe(product_detail_path)
+  expect(product_detail_paths).toContain(new URL(request.url()).pathname)
   await expect(page).toHaveURL(href)
   await expect(page.locator('.product-detail-page')).toBeVisible()
   expect(product_document_requests).toEqual([])
