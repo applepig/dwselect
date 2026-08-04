@@ -307,9 +307,14 @@ test('navigates to product detail route with a safe buy CTA', async ({ page }) =
 
 test('does not fetch details on home and opens the selected product (028 split)', async ({ page }) => {
   const detail_requests: string[] = []
+  const product_document_requests: string[] = []
   page.on('request', (request) => {
     if (/\/(products|guide)\/[^/]+\/_payload\.json/.test(request.url()) || /\/api\/(products|guides)\/[^/]+\.json/.test(request.url())) {
       detail_requests.push(request.url())
+    }
+
+    if (request.isNavigationRequest() && request.resourceType() === 'document' && /\/products\/[^/?#]+/.test(new URL(request.url()).pathname)) {
+      product_document_requests.push(request.url())
     }
   })
 
@@ -324,10 +329,20 @@ test('does not fetch details on home and opens the selected product (028 split)'
   const href = await first_card.getAttribute('href')
   expect(href).toMatch(/\/products\/.+/)
 
-  await first_card.click()
+  const expected_id = href?.split('/').at(-1)
+  if (href === null || expected_id === undefined) {
+    throw new Error('Expected product href to include an id')
+  }
 
+  const product_detail_path = `/api/products/${expected_id}.json`
+  const product_detail_request = page.waitForRequest((request) => new URL(request.url()).pathname === product_detail_path)
+  await first_card.click()
+  const request = await product_detail_request
+
+  expect(new URL(request.url()).pathname).toBe(product_detail_path)
   await expect(page).toHaveURL(href)
   await expect(page.locator('.product-detail-page')).toBeVisible()
+  expect(product_document_requests).toEqual([])
 })
 
 test('fetches a single guide detail json on navigation into a guide (028 split)', async ({ page }) => {

@@ -247,6 +247,19 @@ async function measurePillWrap(card) {
       - Number.parseFloat(meta_style.paddingLeft) - Number.parseFloat(meta_style.paddingRight)
     const gap = Number.parseFloat(meta_style.columnGap) || 0
 
+    // NT$99 + PChome（含 channel dot）在各受測卡的最窄 meta row 都可容納，
+    // 先釘住 AC6c 的「塞得下」分支，再以後面的長字樣釘住折行分支。
+    price.textContent = 'NT$99'
+    for (const node of Array.from(badge.childNodes)) {
+      if (node.nodeType === Node.TEXT_NODE) {
+        node.textContent = ''
+      }
+    }
+    badge.append(document.createTextNode('PChome'))
+
+    const short_price_rect = price.getBoundingClientRect()
+    const short_badge_rect = badge.getBoundingClientRect()
+
     price.textContent = 'TWD 16,888'
     for (const node of Array.from(badge.childNodes)) {
       if (node.nodeType === Node.TEXT_NODE) {
@@ -280,6 +293,13 @@ async function measurePillWrap(card) {
     return {
       price_clipped: price.scrollWidth > price.clientWidth + 1,
       badge_clipped: badge.scrollWidth > badge.clientWidth + 1,
+      short_pills_share_row: Math.abs(short_price_rect.top - short_badge_rect.top) <= 2,
+      short_price_before_badge: short_price_rect.left < short_badge_rect.left,
+      short_pills_fit: short_price_rect.width + gap + short_badge_rect.width <= content_width,
+      short_price_width: short_price_rect.width,
+      short_badge_width: short_badge_rect.width,
+      meta_content_width: content_width,
+      meta_gap: gap,
       price_top: price_rect.top,
       badge_top: badge_rect.top,
       price_right: price_rect.right,
@@ -290,6 +310,10 @@ async function measurePillWrap(card) {
 }
 
 function assertPillWrapContract(metrics) {
+  // 注入的短字樣必須維持同列且由 price 在前、channel 在後。
+  expect(metrics.short_pills_fit, JSON.stringify(metrics)).toBe(true)
+  expect(metrics.short_pills_share_row, JSON.stringify(metrics)).toBe(true)
+  expect(metrics.short_price_before_badge).toBe(true)
   // 注入的長字樣：兩 pill 各自完整顯示（無 ellipsis 截字），塞不下時 channel 折到第二列，仍在卡內。
   expect(metrics.price_clipped).toBe(false)
   expect(metrics.badge_clipped).toBe(false)
