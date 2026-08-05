@@ -30,7 +30,9 @@ const NuxtImgStub = {
 
 const UButtonStub = {
   props: ['to', 'icon', 'block', 'size', 'color', 'variant'],
-  template: '<button><slot /></button>',
+  // 只宣告自身 props；target／rel 交給呼叫端 fallthrough 到單一 root anchor，
+  // 這樣元件真的漏掉安全外連屬性時測試才會紅。
+  template: '<a :href="to"><slot /></a>',
 }
 
 const UIconStub = { props: ['name'], template: '<i />' }
@@ -161,6 +163,19 @@ describe('GuideDetail', () => {
     expect(source_link.attributes('href')).toBe('https://example.com/original-post')
     expect(source_link.attributes('target')).toBe('_blank')
     expect(source_link.attributes('rel')).toBe('noopener noreferrer')
+  })
+
+  it('keeps both read-original calls to action pointed at the guide source url', () => {
+    const source_url = 'https://example.com/original-post'
+    const wrapper = mountGuideDetail(makeGuideDetailView({ source_url }))
+    const source_links = wrapper.findAll('a').filter((link) => link.text() === '看原文')
+
+    expect(source_links).toHaveLength(2)
+    for (const source_link of source_links) {
+      expect(source_link.attributes('href')).toBe(source_url)
+      expect(source_link.attributes('target')).toBe('_blank')
+      expect(source_link.attributes('rel')).toBe('noopener noreferrer')
+    }
   })
 
   it('should render supplied reference links with their labels and safe external link attributes', () => {
