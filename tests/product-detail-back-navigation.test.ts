@@ -162,14 +162,18 @@ describe('product detail hero opinion and layout ordering', () => {
     expect(html.indexOf('product-purchase-summary')).toBeLessThan(html.indexOf('detail-reference-links'))
   })
 
-  it('does not render fine print in the purchase summary', async () => {
-    const html = await renderProductDetail(makeProductDetailView({
+  // 價格免責文字是刻意從 Product detail 整頁移除的（spec 非目標），不只是排除在摘要卡外，
+  // 故斷言範圍是整份 HTML：payload 仍供應 fine_print，但頁面不得再顯示它或任何 fallback 文案。
+  it('does not render fine print anywhere on the product detail page', async () => {
+    const detail = makeProductDetailView({
       fine_print: '實際售價以通路頁面為準。',
-    }))
-    const purchase_summary_index = html.indexOf('product-purchase-summary')
-    const purchase_summary_html = html.slice(purchase_summary_index, html.indexOf('</section>', purchase_summary_index))
+      reference_links: [{ title: '產品規格', url: 'https://example.com/reference' }],
+    })
+    const html = await renderProductDetail(detail)
 
-    expect(purchase_summary_html).not.toContain('實際售價以通路頁面為準。')
-    expect(purchase_summary_html).not.toContain('product-purchase-summary-fine-print')
+    expect(html).not.toContain(detail.fine_print)
+    expect(html).not.toContain('價格與庫存以通路頁面為準。')
+    expect(html).not.toContain('detail-fine-print')
+    expect(html).not.toContain('product-purchase-summary-fine-print')
   })
 })

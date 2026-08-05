@@ -819,8 +819,7 @@
 
 .detail-title,
 .detail-price,
-.detail-description,
-.detail-fine-print {
+.detail-description {
   min-width: 0;
   overflow-wrap: anywhere;
   word-break: break-word;
@@ -927,8 +926,7 @@
   background: var(--dw-accent-strong);
 }
 
-.detail-description,
-.detail-fine-print {
+.detail-description {
   margin: 0;
   color: var(--dw-muted);
   font-size: 0.95rem;
@@ -971,10 +969,6 @@
 
 .detail-summary-buy-link:hover {
   background: color-mix(in srgb, var(--dw-accent) 10%, var(--dw-panel));
-}
-
-.detail-fine-print {
-  font-size: 0.8rem;
 }
 
 /* 與 .detail-content／.related-products-section 同樣抬到 .product-transition-shell

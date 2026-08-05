@@ -30,7 +30,9 @@ const NuxtImgStub = {
 
 const UButtonStub = {
   props: ['to', 'icon', 'block', 'size', 'color', 'variant'],
-  template: '<a :href="to" target="_blank" rel="noopener noreferrer"><slot /></a>',
+  // 只宣告自身 props；target／rel 交給呼叫端 fallthrough 到單一 root anchor，
+  // 這樣元件真的漏掉安全外連屬性時測試才會紅。
+  template: '<a :href="to"><slot /></a>',
 }
 
 const UIconStub = { props: ['name'], template: '<i />' }

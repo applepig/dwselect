@@ -9,6 +9,7 @@
 - 不修改 Product schema、detail payload、API、offer 選擇規則或搜尋 index。
 - 不顯示 offer 查價時間或新增「最低價」語意。
 - 不重複顯示產品名稱。
+- 不在 Product detail 任何位置保留價格免責文字。
 - 不改變 Guide 的上下「看原文」CTA 或 `source_url` 行為。
 - 不新增 mobile sticky CTA。
 
@@ -21,6 +22,7 @@
 - [x] Product 的上方主 CTA 位於 `price_label` 後，所有 viewport 顯示，文案為「前往 {channel_label} 查看現價」，使用 primary `buy_url`、`target="_blank"` 與 `rel="noopener noreferrer"`。
 - [x] Product 的下方主 CTA 改為 purchase summary，放在 AI 說明後、參考資料前；不再有獨立且缺乏價格脈絡的下方 CTA。
 - [x] purchase summary 顯示「目前參考價」、既有 `price_label`、既有 `channel_label` 與 primary CTA；不顯示 `detail.name` 或 `fine_print`。
+- [x] Product detail 整頁不再顯示 `fine_print` 或其 fallback 文案「價格與庫存以通路頁面為準。」——不只是排除在摘要卡外（見 ADR-3）。
 - [x] purchase summary 的主 CTA 與上方 CTA 使用相同文案「前往 {channel_label} 查看現價」，維持 primary `buy_url`、安全外連屬性與清楚 keyboard focus。
 - [x] Desktop 的 purchase summary 價格資訊與 CTA 可並排；mobile 垂直排列且 CTA 可用全寬，沒有水平溢出。
 - [x] Guide detail 的上／下「看原文」CTA 與 `source_url` 不變。
@@ -71,9 +73,16 @@ Purchase summary 顯示文案：
 
 ### ADR-2：不在摘要卡重複產品名稱
 
-- 決策：摘要卡僅顯示價格、通路、免責與 CTA。
+- 決策：摘要卡僅顯示價格、通路與 CTA。
 - 原因：產品名稱已在 detail 頂端；重複名稱會使摘要卡看似第二張商品卡，增加視覺雜訊。
 - 替代方案：加入淡色產品名稱作為 context。排除原因是目前資訊不足以證明讀者會失去頁面脈絡。
+
+### ADR-3：價格免責文字整頁移除，而非搬到摘要卡外
+
+- 決策：Product detail 不再顯示 `fine_print`（含 fallback 文案），舊有 `.detail-fine-print` 段落隨下方 CTA 一併移除。摘要卡標題已寫明「目前參考價」，「參考」本身即表達價格非即時。
+- 原因：使用者要求移除該行免責文字。原本它是為缺乏脈絡的下方 CTA 補說明，而摘要卡已直接呈現價格＋通路，額外一行灰字只增加頁尾雜訊。
+- 替代方案：保留在摘要卡外的獨立段落（PR #22 review 建議）。排除原因是需求為整頁移除，不是換位置。
+- 影響：`mapProductDetail` 仍供應 `fine_print`，該欄位在公開站成為未使用資料；本 sprint 非目標不動 payload，是否清除留待後續 sprint 決定。
 
 ## Milestones
 
