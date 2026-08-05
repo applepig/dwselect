@@ -231,9 +231,8 @@ test('wraps an over-long curated related list to extra rows without horizontal o
   expect(wrap_metrics.document_scroll_width).toBeLessThanOrEqual(wrap_metrics.document_client_width)
 })
 
-// AC6c（M2.2）：meta 列 pill 折行契約的注入＋量測 helper。不依賴特定 content 樣本——
-// 先量現有（短）字樣的同列狀態，再注入實例級長字樣（TWD 價格＋Amazon JP）並按容器實寬
-// 加長 price，構造「兩 pill 同列必塞不下、單 pill 不超過容器寬（不觸 ellipsis 防線）」的狀態。
+// AC6c（M2.2）：注入長 price／channel pill，按容器實寬構造「兩 pill 同列必塞不下、
+// 單 pill 不超過容器寬（不觸 ellipsis 防線）」的狀態，驗證兩 pill 不截字、折到兩列且仍在卡內。
 async function measurePillWrap(card) {
   return card.evaluate((card_el) => {
     const meta = card_el.querySelector('.product-card-meta')
@@ -248,12 +247,18 @@ async function measurePillWrap(card) {
       - Number.parseFloat(meta_style.paddingLeft) - Number.parseFloat(meta_style.paddingRight)
     const gap = Number.parseFloat(meta_style.columnGap) || 0
 
+    // NT$99 + PChome（含 channel dot）在各受測卡的最窄 meta row 都可容納，
+    // 先釘住 AC6c 的「塞得下」分支，再以後面的長字樣釘住折行分支。
+    price.textContent = 'NT$99'
+    for (const node of Array.from(badge.childNodes)) {
+      if (node.nodeType === Node.TEXT_NODE) {
+        node.textContent = ''
+      }
+    }
+    badge.append(document.createTextNode('PChome'))
+
     const short_price_rect = price.getBoundingClientRect()
     const short_badge_rect = badge.getBoundingClientRect()
-    const short_sample = {
-      same_row: Math.abs(short_price_rect.top - short_badge_rect.top) < 2,
-      badge_after_price: short_badge_rect.left >= short_price_rect.right - 1,
-    }
 
     price.textContent = 'TWD 16,888'
     for (const node of Array.from(badge.childNodes)) {
@@ -286,9 +291,15 @@ async function measurePillWrap(card) {
     const card_rect = card_el.getBoundingClientRect()
 
     return {
-      short_sample,
       price_clipped: price.scrollWidth > price.clientWidth + 1,
       badge_clipped: badge.scrollWidth > badge.clientWidth + 1,
+      short_pills_share_row: Math.abs(short_price_rect.top - short_badge_rect.top) <= 2,
+      short_price_before_badge: short_price_rect.left < short_badge_rect.left,
+      short_pills_fit: short_price_rect.width + gap + short_badge_rect.width <= content_width,
+      short_price_width: short_price_rect.width,
+      short_badge_width: short_badge_rect.width,
+      meta_content_width: content_width,
+      meta_gap: gap,
       price_top: price_rect.top,
       badge_top: badge_rect.top,
       price_right: price_rect.right,
@@ -299,11 +310,11 @@ async function measurePillWrap(card) {
 }
 
 function assertPillWrapContract(metrics) {
-  // 短字樣（現有 content）行為不變：同列、channel 在 price 右側。
-  expect(metrics.short_sample.same_row).toBe(true)
-  expect(metrics.short_sample.badge_after_price).toBe(true)
-
-  // 長字樣：兩 pill 各自完整顯示（無 ellipsis 截字），塞不下時 channel 折到第二列，仍在卡內。
+  // 注入的短字樣必須維持同列且由 price 在前、channel 在後。
+  expect(metrics.short_pills_fit, JSON.stringify(metrics)).toBe(true)
+  expect(metrics.short_pills_share_row, JSON.stringify(metrics)).toBe(true)
+  expect(metrics.short_price_before_badge).toBe(true)
+  // 注入的長字樣：兩 pill 各自完整顯示（無 ellipsis 截字），塞不下時 channel 折到第二列，仍在卡內。
   expect(metrics.price_clipped).toBe(false)
   expect(metrics.badge_clipped).toBe(false)
   expect(metrics.badge_top).toBeGreaterThan(metrics.price_top + 2)

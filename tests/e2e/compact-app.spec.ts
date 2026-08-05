@@ -305,35 +305,47 @@ test('navigates to product detail route with a safe buy CTA', async ({ page }) =
   await expect(related_section.locator('.product-card-link').first()).toHaveAttribute('href', /\/products\/.+/)
 })
 
-test('fetches a single product detail json on navigation without prefetching details on home (028 split)', async ({ page }) => {
+test('does not fetch details on home and opens the selected product (028 split)', async ({ page }) => {
   const detail_requests: string[] = []
+  const product_document_requests: string[] = []
   page.on('request', (request) => {
     if (/\/(products|guide)\/[^/]+\/_payload\.json/.test(request.url()) || /\/api\/(products|guides)\/[^/]+\.json/.test(request.url())) {
       detail_requests.push(request.url())
+    }
+
+    if (request.isNavigationRequest() && request.resourceType() === 'document' && /\/products\/[^/?#]+/.test(new URL(request.url()).pathname)) {
+      product_document_requests.push(request.url())
     }
   })
 
   await page.goto('/', { waitUntil: 'networkidle' })
   await expect(page.locator('vite-error-overlay')).toHaveCount(0)
 
-  // 028 + ADR-3：首頁初載走共用 /api/content.json，prefetchOn interaction(visibility:false) 下
-  // 不應背景 prefetch 任何商品／指南 detail route payload 或 API JSON。
+  // 首頁載入時，訪客尚未選擇內容，不應取得任何單一商品或指南的 detail 資料。
   expect(detail_requests).toEqual([])
 
   const first_card = page.locator('.product-card-link').first()
   await expect(first_card).toBeVisible()
   const href = await first_card.getAttribute('href')
-  const expected_id = href?.split('/').at(-1) ?? ''
-  expect(expected_id).not.toBe('')
+  expect(href).toMatch(/\/products\/.+/)
 
-  // Nuxt client-side 導航會先抓該 route 的 payload；payload 內的 async data 仍由
-  // per-id detail route 產生，不應在首頁背景預抓整批 detail。
-  const detail_request = page.waitForRequest(new RegExp(`/products/${expected_id}/_payload\\.json`))
+  const expected_id = href?.split('/').at(-1)
+  if (href === null || expected_id === undefined) {
+    throw new Error('Expected product href to include an id')
+  }
+
+  const product_detail_paths = [
+    `/api/products/${expected_id}.json`,
+    `/products/${expected_id}/_payload.json`,
+  ]
+  const product_detail_request = page.waitForRequest((request) => product_detail_paths.includes(new URL(request.url()).pathname))
   await first_card.click()
-  const request = await detail_request
+  const request = await product_detail_request
 
+  expect(product_detail_paths).toContain(new URL(request.url()).pathname)
+  await expect(page).toHaveURL(href)
   await expect(page.locator('.product-detail-page')).toBeVisible()
-  expect(request.url()).toContain(`/products/${expected_id}/_payload.json`)
+  expect(product_document_requests).toEqual([])
 })
 
 test('fetches a single guide detail json on navigation into a guide (028 split)', async ({ page }) => {
