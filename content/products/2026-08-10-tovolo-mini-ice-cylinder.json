@@ -1,0 +1,62 @@
+{
+  "id": "2026-08-10-tovolo-mini-ice-cylinder",
+  "slug": "2026-08-10-tovolo-mini-ice-cylinder",
+  "status": "published",
+  "name": "Tovolo 迷你冰塊製冰筒組",
+  "english_name": "Tovolo Squeeze & Release Mini Ice Cylinders - Set of 2",
+  "summary": "適合放在辦公室用的製冰盒，他做出來的冰塊小小顆的，製冰速度很快、融合速度也很快。",
+  "long_description": "喜歡吃冰塊的人應該可以自己抓時間做成nugget ice",
+  "llm_description": "## 快速判斷\n\n這是 Tovolo 的兩入矽膠迷你冰塊製冰筒（SKU 1000422；Amazon ASIN B0CRT9VTGM）。使用時加水至水位線、冷凍後以溫水沖一下筒身再擠壓釋冰；成品是許多小型獨立冰塊，不是商用製冰機壓製的 nugget ice，因此冰塊的口感與形狀不等同於餐飲店的 nugget ice。\n\n## 重要規格與使用方式\n\n- 兩支一組；每支可製 200 顆迷你冰塊，合計 400 顆。\n- 材質為矽膠與 BPA-free nylon（塑膠）；官方標示 BPA-free、可使用洗碗機清洗。\n- 官方建議的流程是加水、冷凍、以溫水短暫沖洗後擠壓釋出；零售商列出的冷凍時間為 4–6 小時。\n- Amazon 商品資料列出的尺寸為 3.5 × 7.25 × 6.5 英吋；Tovolo 官方則標示每支本體為 3.5 × 3.5 × 7 英吋，選購前應確認前者是否為包裝尺寸。\n- 緊密上蓋與水位線是為了減少加水溢出並隔絕冷凍庫氣味；筒狀設計比一般小冰格需要不同的釋冰步驟。\n\n## 使用情境與限制\n\n- 適用於冰咖啡、果昔、調酒與水壺等需要大量小冰塊的飲品；小顆冰塊與飲料接觸面積較大，會較快帶走飲料熱量，也會較快融化。\n- 不適合將它當成連續出冰的電動製冰機，也不應預期得到商用 nugget ice 的壓實、可咀嚼質地。\n- 一次要處理大量冰塊時，須先讓筒身回溫／沖溫水再擠壓；冷凍時間也會受冰箱溫度與裝水量影響。\n\n## 評測與使用者回饋\n\n- Tovolo 官方評論 widget 為 4.7／5（33 則評論，91% 表示願意推薦）。可見的近期評論多提到小冰塊尺寸、操作容易，以及有人固定在冷凍庫保留一支備用；這是官方商店的有限樣本，不能代表所有使用者。\n- Amazon 商品頁顯示的彙總為 4.0／5、2,238 個 ratings。研究時 Amazon 商品頁被「Continue shopping」反自動化頁攔截，`/product-reviews/B0CRT9VTGM` 請求亦逾時，因此未將 Amazon 個別評論文字納入摘要。\n\n## 參考來源\n\n- [Tovolo 官方產品頁](https://www.tovolo.com/products/squeeze-and-release-mini-ice)\n- [Amazon US 商品頁（ASIN B0CRT9VTGM）](https://www.amazon.com/Tovolo-Mini-Cylinder-Squeeze-Release/dp/B0CRT9VTGM)\n- [Kitchen Clique 商品說明（4–6 小時冷凍流程）](https://shopkitchenclique.com/products/tovolo-mini-ice-sylinders-squeeze-and-release-set-of-2)",
+  "search_aliases": [
+    "Tovolo Mini Ice Squeeze & Release Cylinder",
+    "Tovolo Mini Ice Cylinder",
+    "Squeeze & Release Mini Ice Cylinders",
+    "Tovolo 1000422",
+    "B0CRT9VTGM",
+    "迷你冰塊製冰筒",
+    "mini ice cube maker"
+  ],
+  "model_numbers": [
+    "1000422",
+    "B0CRT9VTGM"
+  ],
+  "offers": [
+    {
+      "url": "https://a.co/d/05N1qxwF",
+      "channel_id": "amazonus",
+      "price_text": "TWD 522.33",
+      "price": {
+        "amount": 522.33,
+        "currency": "TWD",
+        "unit": "each",
+        "label": null
+      },
+      "checked_at": "2026-08-10T00:00:00+08:00"
+    }
+  ],
+  "image_file": "2026-08-10-tovolo-mini-ice-cylinder.jpg",
+  "image_url": null,
+  "category_id": "household",
+  "tag_ids": [
+    "kitchen"
+  ],
+  "reference_links": [
+    {
+      "title": "Tovolo 官方產品頁：Squeeze & Release Mini Ice Cylinders - Set of 2",
+      "url": "https://www.tovolo.com/products/squeeze-and-release-mini-ice"
+    },
+    {
+      "title": "Amazon US 商品頁：Tovolo Mini Ice Squeeze & Release Cylinder（ASIN B0CRT9VTGM）",
+      "url": "https://www.amazon.com/Tovolo-Mini-Cylinder-Squeeze-Release/dp/B0CRT9VTGM"
+    },
+    {
+      "title": "Kitchen Clique 商品說明：冷凍與釋冰流程",
+      "url": "https://shopkitchenclique.com/products/tovolo-mini-ice-sylinders-squeeze-and-release-set-of-2"
+    }
+  ],
+  "created_at": "2026-08-10T00:00:00+08:00",
+  "updated_at": "2026-08-10T00:00:00+08:00",
+  "published_at": "2026-08-10T00:00:00+08:00",
+  "unpublished_at": null,
+  "archived_at": null
+}
