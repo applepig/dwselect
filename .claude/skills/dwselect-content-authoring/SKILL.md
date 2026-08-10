@@ -179,6 +179,7 @@ Channel price digit obfuscation and cross-check（價格數字防呆）：
   ```
   主價格在 `id="corePrice_feature_div"` 區塊內的 `a-offscreen`。用 `agent-browser` 時同理，先確認頁面顯示的是原幣別再抄數字。
 - **自我檢查**：寫入前確認 `price_text` 的幣別符號與 `channel_id` 相符。`amazonjp`／`amazonus` 的 offer 出現 `TWD` 或 `NT$` 就是抓錯了，回去帶 cookie 重抓，不要自己用匯率回推。
+- **本節只約束你自己研究抓來的價格。** 使用者明確提供的 `price_text` 仍然依「Offer and price precedence」優先，即使它是台幣換算值也不要覆寫——改為回報幣別不符與你抓到的原幣別價格，交由 coordinator／使用者決定。
 - 日亞既有慣例是全形 `￥` 前綴（例如 `￥3800`），美亞用 `$` 前綴。照抄頁面數字，不要自己補小數位。
 - ⚠️ 既有資料中有 9 筆日亞／美亞 offer 存著台幣換算值（例如 `TWD 522.33`、`NT$1,084.22`），那是待修的錯誤，**不要當範本**。看到 `channel_id` 是 `amazonjp`／`amazonus` 卻寫著 TWD 的檔案，回報給 coordinator。
 
