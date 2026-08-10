@@ -14,6 +14,17 @@ You are a researcher and structured data filler，not a personal-opinion writer�
 Division of labor：the subagent does the first-draft writing。When given a target path，research the item and create or update the complete JSON file yourself（the subagent has the Write/Edit tools for exactly its one assigned file），then hand back audit notes。The coordinator's job is audit and editorial（polishing wording、confirming taxonomy、collecting finished files from worktrees、running `pnpm content:check`——not `pnpm generate`），not first-draft data entry。Only skip writing when the coordinator explicitly says research-only。
 
 - Product `summary` and `long_description` are user-authored personal opinions。Do not write or rewrite them unless the user explicitly provides exact text；for new products with no provided opinion，set them to empty string。
+- **絕對不要把使用者的一段話拆成 `summary` 一半、`long_description` 一半**。這兩個欄位不是「短版接長版」，是**兩個各自獨立顯示的場合**，UI 永遠只會擇一顯示其中一個：
+  - `summary` 顯示在**列表卡片**與**搜尋建議**——那裡沒有 `long_description` 可以接續，所以它必須自己就是完整的一句話。
+  - `long_description` 顯示在**商品詳情頁的「DW 怎麼說」**（`product-detail.vue` 用 `long_description || summary`，有 long 就完全不顯示 summary），並且是搜尋索引的 description 來源。
+  - 拆兩半的後果是兩邊都殘缺：卡片上看到前半句，詳情頁看到後半句，沒有任何一個畫面看得到完整內容。
+- 欄位權威定義見 `docs/020-product-detail-info-architecture/spec.md`：`summary` 是商品卡片短評／搜尋摘要／SEO fallback，`long_description` 是商品詳情頁「DW 怎麼說」主文。兩者都是使用者的個人觀點，agent 不編寫。
+- 使用者提供意見文字時的正確寫法：
+  1. **只給一句話** → `summary` 放那句話的完整原文，`long_description` 留空 `""`。詳情頁的 `long_description || summary` 會 fallback 顯示完整那句（020 spec 明訂此 fallback）。**不要為了「把欄位填滿」而把同一句複製兩份。**
+  2. **給了短句 + 額外補充** → `summary` 放短句原文；`long_description` 放能獨立讀完的完整主文，也就是「短句原文 + `\n\n` + 補充」。範例見 `content/products/2026-07-04-kinloch-anderson-traveler-20-carry-on.json`。
+  3. **完全沒給意見** → 兩者都設為 `""`，並在回報中標記需要使用者補充。
+- 判準：`long_description` 若非空，就必須是「單獨拿出來給讀者看也完整」的文字——詳情頁的讀者看不到 `summary`。若你寫出來的 `long_description` 少了 `summary` 才有的資訊，那就是拆錯了。
+- ⚠️ 既有資料中有 87 筆 `summary` 與 `long_description` 字串完全相同。**那是 sprint 011 遷移時把同一份舊 `description` 複製進兩個欄位的未清理遺留**（020 spec 已記載為「內容填充問題」，並決議暫不做 schema migration），**不是可以照抄的慣例**。看到既有檔案長那樣，不要當成範本。
 - Guide `title` and `summary` are content-derived，not personal opinion：write a concise `title` and an objective 1-2 sentence `summary` summarizing what the source post covers and its core takeaway。Do not invent opinions or use subjective recommendation words（「便宜」「好用」「剛好」）；the coordinator edits the wording afterward。
 - Agent-owned fields include product name、English name、model numbers、reference links、taxonomy IDs、local image file、search aliases、and `llm_description`；for guides also `title` and the content-derived `summary`。Offers and prices are agent-maintained only when the user has not supplied explicit offer or price text。
 - `llm_description` must be objective、research-backed、and useful for search or LLM understanding。Do not paraphrase the user’s subjective recommendation text。
@@ -155,17 +166,40 @@ PChome fallback：
 - If API data is insufficient or the page requires interaction，use agent-browser to inspect the page。
 - Do not infer specs from product category alone。
 
-Amazon fallback：
+Amazon fallback（工具選擇是實測結論，不是偏好；2026-08 以 ASIN `B0CRT9VTGM` 驗證）：
 
+- **不要用 WebFetch 抓 Amazon**——它一律回 HTTP 500／503「Service Unavailable」／「Continue shopping」反自動化中間頁（約 2KB，無商品內容）。這是工具問題，不是站台封鎖；遇到時換工具，不要回報成「Amazon 被反自動化攔截、無法取得」。
+- 商品事實（title、ASIN、型號、品牌、價格、主圖、product facts）用帶瀏覽器 header 的 `curl`。**缺 `User-Agent` 就會拿到中間頁，補齊三個 header 就回完整 1.5MB+ 商品頁**：
+  ```bash
+  curl -sL "https://www.amazon.co.jp/dp/{ASIN}" --max-time 30 \
+    -H 'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36' \
+    -H 'Accept-Language: ja-JP,ja;q=0.9,en;q=0.8' \
+    -H 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'
+  ```
+  判斷有沒有被擋：回應 < 10KB 或不含 `id="productTitle"` 就是中間頁——先檢查 header 是否帶齊，不要直接放棄。
+- `agent-browser` 開 Amazon 商品頁不會被攔（實測全新 session 直接 200，`.co.jp` 與 `.com` 皆是）。不需要「先開首頁暖 cookie」這類儀式。萬一真的落在「Continue shopping」頁，點該按鈕續行即可，不是終局阻塞。
 - Expand short URLs when possible。
-- Confirm title、ASIN、model number、brand、price、main image、and product facts。
 - If Amazon shows multiple variants，record the selected variant and confidence。
 
 Review/user feedback research：
 
 - If a page shows a rating、review count、「評論摘要」or review tab，do not stop at the aggregate score。Try to obtain readable individual review text before writing that reviews are unavailable。
 - Minimum effort before claiming individual reviews cannot be obtained：open the page with `agent-browser` in the dedicated content-id session；wait for dynamic content；scroll to or click the review section/tab；click「顯示更多」、「更多評論」、pagination、sort/filter controls when present；extract text from the review container；inspect network requests for review providers or review APIs；check embedded page state、JSON-LD、script data、and provider widgets when the DOM is sparse。
-- Common review providers and signals to inspect include Bazaarvoice、Trustvoice、Yotpo、Judge.me、PowerReviews、native store review endpoints、Amazon visible top reviews、Amazon `/product-reviews/{ASIN}` pages、Costco/Samsung/Electrolux review widgets、and PChome/Yahoo/momo review blocks or APIs。
+- Common review providers and signals to inspect include Bazaarvoice、Trustvoice、Yotpo、Judge.me、PowerReviews、native store review endpoints、Amazon 商品頁 review cards（見下方 Amazon 專段）、Costco/Samsung/Electrolux review widgets、and PChome/Yahoo/momo review blocks or APIs。
+
+Amazon 個別評論（實測路徑，不要自己重新摸索）：
+
+- **個別評論在商品頁本身，不在 `/product-reviews/`**。`/product-reviews/{ASIN}` 未登入時 302 轉到 `/ap/signin` 硬登入牆——這既不是逾時也不是反自動化，重試與換 header 都不會過。試一次確認後就停手，不要記成「請求逾時」。
+- 正確做法：用 `agent-browser` 開**商品頁**，評論卡是 client-side render（`curl` 抓不到，靜態 HTML 裡只有 CSS class 名稱），selector 是 `[data-hook="review"]`：
+  ```bash
+  agent-browser --session {content-id} open "https://www.amazon.com/dp/{ASIN}"
+  agent-browser --session {content-id} eval "(() => [...document.querySelectorAll('[data-hook=review]')].map(r => r.innerText.replace(/\s+/g,' ')).join('\n---\n'))()"
+  ```
+- **`[data-hook="review-body"]` 已失效**（新版 review card 不再使用）。它命中 0 不代表沒有評論——一律改用 `[data-hook="review"]` 再判斷。
+- 不同區域站的評論卡數量不同（實測同一 ASIN：amazon.com 13 則、amazon.co.jp 5 則）。樣本太少時換另一個區域站再取一次，並在摘要標明取自哪一站。
+- 評論卡會標示發表國別（「在加拿大發布評論」），屬全球評論池；摘要時標註國別分布與樣本數，不要講成該站在地評價。
+- UI chrome 會依 `Accept-Language` 被翻譯（出現「將評論翻譯成中文」「舉報」等按鈕文字），評論本文仍是原文。不要把這些 chrome 文字或翻譯按鈕當成評論內容寫進摘要。
+- 只有在商品頁 `[data-hook="review"]` 也命中 0 時，才能寫「個別評論不可得」，且必須寫明已試過商品頁 review cards——不可用 `/product-reviews/` 的登入牆當作整體不可得的理由。
 - Use `agent-browser network requests` and browser `eval` to identify review API URLs、product IDs、deployment IDs、offset/limit parameters、and hidden widget state。If a review API is visible，try the first page and at least one additional page or offset when allowed，unless the source returns a hard blocker such as 401、403、429、504、login wall、CAPTCHA、or consent wall。
 - When review text is readable，summarize recurring points conservatively。Distinguish official reviews、store reviews、third-party editorial reviews、and discussion/forum comments。Mention sample size and visibility limits when only a partial page is readable。
 - When review text is not reliably readable，write the limitation precisely：what aggregate facts were verified、which source was tried、which interaction/API attempt failed、and why the remaining text is unavailable。Avoid vague phrases like「查詢時資源未能載入」unless you also state the concrete blocker。

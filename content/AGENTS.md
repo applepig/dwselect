@@ -100,8 +100,8 @@
 | `status` | enum | Agent | 預設 `"published"` |
 | `name` | string | Agent | 中文產品名稱 |
 | `english_name` | string | Agent | 英文品牌 + 型號 |
-| `summary` | string | **使用者** | 個人觀點與推薦理由。使用者沒提供時填空字串，在 PR 中標記需補充 |
-| `long_description` | string | **使用者** | 詳細說明。同上 |
+| `summary` | string | **使用者** | 個人觀點與推薦理由，顯示在**商品卡片、搜尋摘要、SEO fallback**。必須自己就是完整一句話。沒提供時填空字串，在 PR 中標記需補充 |
+| `long_description` | string | **使用者** | 商品**詳情頁「DW 怎麼說」主文**。詳情頁只顯示這欄（`long_description \|\| summary`），所以它非空時必須能獨立讀完。沒有額外補充內容時就留空字串讓它 fallback，不要複製 `summary` |
 | `llm_description` | string | Agent | 客觀 blog-style Markdown 產品決策 brief，包含段落、bullet points、評測／使用者回饋與 reference links，用於搜尋、LLM 理解與商品詳情頁呈現 |
 | `search_aliases` | string[] | Agent | 替代搜尋詞（中文別名、縮寫等） |
 | `model_numbers` | string[] | Agent | 產品型號 |
@@ -329,9 +329,10 @@ Taxonomy item 結構：
 
 1. 建立 `content/products/{id}.json`
 2. 填入所有結構化欄位
-3. `summary` 和 `long_description`：
-   - 如果使用者已提供文字，直接填入
-   - 如果使用者沒提供，填空字串 `""`
+3. `summary` 和 `long_description`（**不要把使用者的一段話拆成兩半各放一邊**——卡片只讀 `summary`、詳情頁只讀 `long_description`，拆兩半會讓兩個畫面都殘缺）：
+   - 使用者只給一句話 → `summary` 放完整原文，`long_description` 填 `""` 讓詳情頁 fallback
+   - 使用者給了短句 + 額外補充 → `summary` 放短句，`long_description` 放「短句原文 + 空行 + 補充」的完整主文
+   - 使用者沒提供 → 兩者都填空字串 `""`，並標記需補充
 4. `llm_description`：你撰寫的客觀 blog-style Markdown 產品決策 brief；能用 bullet point 就不要寫成一大段，並把已查證的官方頁、評測頁、使用者評論或討論連結直接寫成 Markdown links
 5. 所有 timestamp 設為當天日期 + `T00:00:00+08:00`
 6. `status` 設為 `"published"`，`published_at` 設為 `created_at` 的值
@@ -453,10 +454,10 @@ content: add Dyson brand to taxonomy
 
 ## 約束
 
-1. **不要自己編寫 `summary` 和 `long_description`**——這是使用者的個人觀點。使用者沒提供時留空字串
+1. **不要自己編寫 `summary` 和 `long_description`**——這是使用者的個人觀點。使用者沒提供時留空字串。**也不要把使用者給的一段話拆成 `summary` 一半、`long_description` 一半**：兩欄是兩個獨立顯示場合、UI 擇一顯示，拆開會讓卡片與詳情頁都只看得到半句
 2. **不要新增 category 或 channel**——這些很少變動，需要時請使用者手動處理
 3. **不要修改 schema 或程式碼**——你只操作 `content/` 目錄下的 JSON 和圖片檔案，以及 `content/taxonomies/` 下的 taxonomy 檔案
 4. **Taxonomy 新增必須先取得使用者確認**——先提議，確認後才寫入
-5. **所有 JSON 必須通過格式與 artifact 驗證**——跑 `jq empty content/products/*.json content/taxonomies/*.json` 確認格式，再以 `pnpm generate` 確認 server route payload 與圖片可產生（`build:content-images`、`build:public-artifacts` 為 optional / legacy）
+5. **所有 JSON 必須通過 content gate**——跑 `pnpm content:check`（約 4.5 秒），它一次涵蓋 JSON 語法、zod schema、taxonomy 參照與 published image guard。這是 content-only 改動的唯一驗證入口；**不需要跑 `pnpm generate`**（full SSG build 對純內容改動抓不到額外的錯，還會和容器 dev server 共用的 `.nuxt` / Vite cache 相撞）
 6. **一個任務一個 PR**——不要把不相關的變更混在一起
 7. **圖片先下載到本地**——不要用遠端 URL。如果下載失敗，可以暫時用遠端 URL，但在 PR 中說明
