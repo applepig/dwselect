@@ -344,11 +344,14 @@ Content-only 任務只驗證格式、schema 可讀、taxonomy reference、圖片
 如果遇到既有測試因為 hard-coded content count、特定商品存在與否、或 search document count 失敗，正確處理是移除或重構該 bad test，不是把 expected count 改成新的資料筆數。
 
 ```bash
-jq empty content/products/*.json content/taxonomies/*.json
-pnpm generate
+pnpm content:check
 ```
 
-catalog payload 與 search index 由 Nuxt server route 即時從 `content/` 產生，圖片由 `@nuxt/image` / IPX 在 runtime 最佳化，因此驗證圖片與 artifact 時直接跑 `pnpm generate` 即可——它會先檢查 published content 的本地圖片來源是否存在，再 prerender server route payload，並輸出頁面用到的 optimized 圖。`build:content-images`、`build:public-artifacts` 是 optional / legacy CLI，dev 已可直接用 `<NuxtImg>` 看圖，不需要在 authoring 流程預先跑。若變更會影響公開內容、taxonomy、圖片或路由，交付前以 `pnpm generate` 確認 static output 可產生。
+這是 content-only 改動的**唯一**驗證入口（約 4.5 秒），一次涵蓋 JSON 語法、zod schema、taxonomy 參照與 published image guard——不需要另外跑 `jq empty`，也**不要**跑 `pnpm generate`。
+
+`pnpm generate` 對純內容改動抓不到 `content:check` 以外的錯，卻要 2 分鐘，還會和容器 dev server 共用的 `.nuxt` / Vite cache 相撞；prerender 會不會被這筆資料弄炸，交由 CI 的 generate step 擋（見 `.github/workflows/static-generate.yml`，該 step 一律執行、不受 scope 條件影響）。
+
+catalog payload 與 search index 由 Nuxt server route 即時從 `content/` 產生，圖片由 `@nuxt/image` / IPX 在 runtime 最佳化，因此 authoring 流程不需要預先產圖；`build:content-images`、`build:public-artifacts` 是 optional / legacy CLI，dev 已可直接用 `<NuxtImg>` 看圖。
 
 只有修改 schema、runtime logic、build script 或測試邏輯時，才跑相關 Vitest 測試；單純 CMS content 變更不要跑 full `pnpm test` 作為主要驗證，也不要為了 content 筆數變化修改測試基準。
 

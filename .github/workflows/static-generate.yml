@@ -53,12 +53,16 @@ jobs:
           changed="$(git diff --name-only "$BASE_SHA" "$HEAD_SHA")" || run_all 'git diff failed'
           printf 'Changed files:\n%s\n\n' "$changed"
 
-          # code：會進 build、改變測試行為，或改變 gate 本身的路徑 → 需要 lint/knip/typecheck/E2E。
-          code_pattern='^(app/|server/|scripts/|tests/|public/|eslint|\.github/workflows/|nuxt\.config\.ts|app\.config\.ts|package\.json|pnpm-lock\.yaml|playwright\.config\.ts|vitest\.config\.ts|knip\.json)'
+          # 白名單會 fail-open：漏列的 build 設定（tsconfig.json、Dockerfile、dev.sh）
+          # 會被判成 code=false 而跳過 typecheck。改用黑名單——只有確定不進 build
+          # 的路徑算安全，其餘一律當 code，未知檔案因此 fail-safe 走全套 gate。
+          safe_pattern='(^docs/|^\.claude/|^\.opencode/|^content/|\.md$|^LICENSE$|^\.gitignore$)'
 
           code=false
           content=false
-          printf '%s\n' "$changed" | grep -qE "$code_pattern" && code=true
+          printf '%s\n' "$changed" | grep -qvE "$safe_pattern" && code=true
+          # content/ 底下除了 JSON 還有 101 個圖片檔，published image guard 在 vitest content
+          # suites 裡，所以整個 content/ 都要觸發 tests，不能只認 *.json。
           printf '%s\n' "$changed" | grep -qE '^content/' && content=true
 
           printf 'code=%s\n' "$code" >> "$GITHUB_OUTPUT"
