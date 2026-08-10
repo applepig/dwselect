@@ -20,6 +20,10 @@
 - Typecheck：`pnpm typecheck` 固定走 `nuxt typecheck`，fresh checkout 先由 `prepare: nuxt prepare` 產生 `.nuxt` types/config。
 - Static generate：本機日常不直接跑 `pnpm generate`；dev mode 走 HMR，build mode 只在 Docker app service 啟動時由 container PID 1 跑一次 `pnpm build:public-discovery`、`node scripts/assert-content-images.ts`、`pnpm exec nuxt generate`，輸出到 `.output/public` 後進入 preview。若要本機 build preview，設定 `NUXT_MODE=build` 後重建 service（例如 `NUXT_MODE=build ./dev.sh restart`）。CI 若需 host runner 直接 generate，必須明確設定 `DWSELECT_ALLOW_HOST_GENERATE=1`。catalog payload 與 search index 由 server route 在 prerender 階段產生，圖片由 @nuxt/image ipxStatic 輸出 optimized 圖到 `.output/public/_ipx`。
 - CI 等級驗證順序：`pnpm test` → `pnpm lint` → `pnpm typecheck` → `pnpm generate`。
+- **Quality gate 依改動範圍分級，不要一律跑全套**。全套 `./dev.sh exec ./dev.sh verify` 熱快取約 3 分鐘（實測：`test` 27.6s、`lint` 11.4s、`knip` 9.1s、`typecheck` 21.0s、`generate` 112.7s），冷快取或與常駐 dev 併行會到 5 分鐘以上。挑最小足夠的 gate：
+  - 只改 `content/**` JSON／taxonomy／content 圖片 → 只跑 `pnpm content:check`（~4.5s）。它已覆蓋 JSON 合法性、zod schema、taxonomy 參照與 published image guard（見 `scripts/content-check.mjs` 檔頭），`generate` 對純內容改動抓不到額外的錯。
+  - 只改 `docs/**`／`*.md`／註解 → 不需要 gate。
+  - 動到 `app/`、`server/`、`scripts/`、`tests/`、`nuxt.config.ts`、依賴或 CI 設定 → 跑全套 verify，不要用「改很小」當理由跳過。
 
 ## Content Model
 
