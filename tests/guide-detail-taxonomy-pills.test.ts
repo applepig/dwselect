@@ -62,7 +62,7 @@ function makeGuideDetailView(overrides: Partial<GuideDetailView> = {}): GuideDet
   return {
     id: 'sample-guide',
     title: '示範指南',
-    summary: '這是指南摘要。',
+    short_description: '這是指南摘要。',
     body: '',
     hero_image_url: '',
     hero_alt: '示範指南',

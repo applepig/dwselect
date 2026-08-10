@@ -14,7 +14,7 @@ const base_product: Product = {
   status: 'published',
   name: '機械鍵盤',
   english_name: 'Mechanical Keyboard',
-  summary: '熱插拔小尺寸鍵盤',
+  short_description: '熱插拔小尺寸鍵盤',
   long_description: '適合長時間寫程式的繁中鍵盤',
   llm_description: '',
   search_aliases: [],

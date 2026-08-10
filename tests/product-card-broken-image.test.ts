@@ -42,7 +42,7 @@ function makeProductCardView(overrides: Partial<ProductCardView> = {}): ProductC
   return {
     id: 'sample-product',
     name: '示範商品',
-    summary: '推薦短評',
+    short_description: '推薦短評',
     image_url: '/products/images/sample.jpg',
     category_id: 'computer',
     category_label: '電腦',

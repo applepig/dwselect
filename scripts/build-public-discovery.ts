@@ -147,7 +147,7 @@ function buildRssXml(products: Product[], guides: Guide[], links: LinkDefinition
     ...products.map((product) => ({
       id: `product:${product.id}`,
       title: product.name,
-      summary: product.summary,
+      summary: product.short_description,
       url: getProductUrl(product.id, site_url),
       published_at: product.published_at,
       updated_at: product.updated_at,
@@ -155,7 +155,7 @@ function buildRssXml(products: Product[], guides: Guide[], links: LinkDefinition
     ...guides.map((guide) => ({
       id: `guide:${guide.id}`,
       title: guide.title,
-      summary: guide.summary,
+      summary: guide.short_description,
       url: guide.source_url,
       published_at: guide.published_at,
       updated_at: guide.updated_at,
@@ -163,7 +163,7 @@ function buildRssXml(products: Product[], guides: Guide[], links: LinkDefinition
     ...links.map((link) => ({
       id: `link:${link.id}`,
       title: link.title,
-      summary: link.summary,
+      summary: link.short_description,
       url: link.url,
       published_at: link.published_at,
       updated_at: link.updated_at,

@@ -6,7 +6,7 @@ import type { TaxonomyLabelResolver } from '../../app/utils/content/taxonomy-lab
 export function mapProductCard(product: Product, labels: TaxonomyLabelResolver): ProductCardView {
   return {
     ...mapProductCardFields(product, labels),
-    summary: product.summary,
+    short_description: product.short_description,
     category_id: product.category_id,
     published_at: product.published_at,
   }

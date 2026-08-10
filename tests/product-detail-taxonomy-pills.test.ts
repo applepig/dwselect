@@ -75,7 +75,7 @@ function makeRelatedProductCard(overrides: Partial<ProductCardView> = {}): Produ
   return {
     id: 'product-a',
     name: '商品 A',
-    summary: '推薦短評',
+    short_description: '推薦短評',
     image_url: '/products/images/a.jpg',
     category_id: 'computer',
     category_label: '電腦',
@@ -94,7 +94,7 @@ function makeProductDetailView(overrides: Partial<ProductDetailView> = {}): Prod
   return {
     id: 'sample-product',
     name: '示範商品',
-    summary: '摘要',
+    short_description: '摘要',
     long_description: '長描述',
     llm_description: '',
     hero_image_url: '/products/images/sample.jpg',

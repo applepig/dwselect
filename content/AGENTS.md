@@ -8,7 +8,7 @@
 
 你是**研究員 + 結構化資料填充者**，不是內容撰寫者。
 
-- `summary` 和 `long_description` 欄位由使用者提供——這是使用者的個人觀點與推薦理由，你不要自己編寫
+- `short_description` 和 `long_description` 欄位由使用者提供——這是使用者的個人觀點與推薦理由，你不要自己編寫
 - 你負責的是：找賣場連結、價格、規格、型號、產品官網、評測文章，然後正確填入結構化欄位
 - `llm_description` 由你撰寫——這是客觀的 blog-style Markdown 產品決策 brief，用於搜尋引擎、LLM 理解與商品詳情頁呈現
 
@@ -54,7 +54,7 @@
   "status": "published",
   "name": "Galaxy S25",
   "english_name": "Samsung Galaxy S25",
-  "summary": "",
+  "short_description": "",
   "long_description": "",
   "llm_description": "## 快速判斷\n\nSamsung Galaxy S25 是 2025 年旗艦智慧型手機，重點是小尺寸旗艦、Snapdragon 8 Elite 與 Galaxy AI。\n\n## 重要規格\n\n- 6.2 吋 Dynamic AMOLED 螢幕\n- Snapdragon 8 Elite 處理器\n- 5000 萬畫素主鏡頭\n\n## 參考來源\n\n- [Samsung 官方產品頁](https://www.samsung.com/tw/smartphones/galaxy-s25/)",
   "search_aliases": ["三星 S25", "S25"],
@@ -100,8 +100,8 @@
 | `status` | enum | Agent | 預設 `"published"` |
 | `name` | string | Agent | 中文產品名稱 |
 | `english_name` | string | Agent | 英文品牌 + 型號 |
-| `summary` | string | **使用者** | 個人觀點與推薦理由，顯示在**商品卡片、搜尋摘要、SEO fallback**。必須自己就是完整一句話。沒提供時填空字串，在 PR 中標記需補充 |
-| `long_description` | string | **使用者** | 商品**詳情頁「DW 怎麼說」主文**。詳情頁只顯示這欄（`long_description \|\| summary`），所以它非空時必須能獨立讀完。沒有額外補充內容時就留空字串讓它 fallback，不要複製 `summary` |
+| `short_description` | string | **使用者** | 個人觀點與推薦理由，顯示在**商品卡片、搜尋摘要、SEO fallback**。必須自己就是完整一句話。沒提供時填空字串，在 PR 中標記需補充 |
+| `long_description` | string | **使用者** | 商品**詳情頁「DW 怎麼說」主文**。詳情頁只顯示這欄（`long_description \|\| short_description`），所以它非空時必須能獨立讀完。沒有額外補充內容時就留空字串讓它 fallback，不要複製 `short_description` |
 | `llm_description` | string | Agent | 客觀 blog-style Markdown 產品決策 brief，包含段落、bullet points、評測／使用者回饋與 reference links，用於搜尋、LLM 理解與商品詳情頁呈現 |
 | `search_aliases` | string[] | Agent | 替代搜尋詞（中文別名、縮寫等） |
 | `model_numbers` | string[] | Agent | 產品型號 |
@@ -152,7 +152,7 @@
   "slug": "2026-06-13-monitor-buying-guide",
   "status": "published",
   "title": "螢幕選購指南",
-  "summary": "使用者提供的摘要",
+  "short_description": "使用者提供的摘要",
   "source_url": "https://www.facebook.com/applepig/posts/example",
   "image_file": "2026-06-13-monitor-buying-guide.jpg",
   "image_url": null,
@@ -173,7 +173,7 @@
 |------|------|------|
 | `slug` | string | 必填，URL slug，kebab-case ASCII；目前一律與 `id` 相同 |
 | `title` | string | 指南標題 |
-| `summary` | string | 由使用者提供 |
+| `short_description` | string | 由使用者提供 |
 | `source_url` | string | 原始文章 URL（如 Facebook 貼文） |
 | `image_file` | string \| null | 本地圖片檔名 `{id}.{ext}`；無圖時可省略或設為 `null` |
 | `image_url` | string \| null | 只有外部圖片 fallback 才填 HTTP(S) URL；本地圖片只填 `image_file`，不要手寫 `/guides/images/...` 這類公開 path |
@@ -191,7 +191,7 @@
   "slug": "example-link",
   "status": "published",
   "title": "網站名稱",
-  "summary": "簡短說明",
+  "short_description": "簡短說明",
   "url": "https://example.com",
   "icon": "i-lucide-link",
   "category_ids": ["other"],
@@ -211,7 +211,7 @@
 |------|------|------|
 | `slug` | string | 必填，URL slug，kebab-case ASCII；目前一律與 `id` 相同 |
 | `title` | string | 連結標題 |
-| `summary` | string | 簡短說明 |
+| `short_description` | string | 簡短說明 |
 | `url` | string | 目標 URL |
 | `image_url` | string \| null | 選填，只能是 HTTP(S) URL、`null` 或省略；Link 不支援本地 `image_file` |
 | `icon` | string | Lucide icon class，如 `i-lucide-link`、`i-lucide-shopping-cart` |
@@ -329,9 +329,9 @@ Taxonomy item 結構：
 
 1. 建立 `content/products/{id}.json`
 2. 填入所有結構化欄位
-3. `summary` 和 `long_description`（**不要把使用者的一段話拆成兩半各放一邊**——卡片只讀 `summary`、詳情頁只讀 `long_description`，拆兩半會讓兩個畫面都殘缺）：
-   - 使用者只給一句話 → `summary` 放完整原文，`long_description` 填 `""` 讓詳情頁 fallback
-   - 使用者給了短句 + 額外補充 → `summary` 放短句，`long_description` 放「短句原文 + 空行 + 補充」的完整主文
+3. `short_description` 和 `long_description`（**不要把使用者的一段話拆成兩半各放一邊**——卡片只讀 `short_description`、詳情頁只讀 `long_description`，拆兩半會讓兩個畫面都殘缺）：
+   - 使用者只給一句話 → `short_description` 放完整原文，`long_description` 填 `""` 讓詳情頁 fallback
+   - 使用者給了短句 + 額外補充 → `short_description` 放短句，`long_description` 放「短句原文 + 空行 + 補充」的完整主文
    - 使用者沒提供 → 兩者都填空字串 `""`，並標記需補充
 4. `llm_description`：你撰寫的客觀 blog-style Markdown 產品決策 brief；能用 bullet point 就不要寫成一大段，並把已查證的官方頁、評測頁、使用者評論或討論連結直接寫成 Markdown links
 5. 所有 timestamp 設為當天日期 + `T00:00:00+08:00`
@@ -437,7 +437,7 @@ content: add Dyson brand to taxonomy
 
 ## 需使用者補充
 
-- [ ] `summary`：請填入你的推薦理由
+- [ ] `short_description`：請填入你的推薦理由
 - [ ] `long_description`：請填入詳細說明
 
 ## 研究資料
@@ -454,7 +454,7 @@ content: add Dyson brand to taxonomy
 
 ## 約束
 
-1. **不要自己編寫 `summary` 和 `long_description`**——這是使用者的個人觀點。使用者沒提供時留空字串。**也不要把使用者給的一段話拆成 `summary` 一半、`long_description` 一半**：兩欄是兩個獨立顯示場合、UI 擇一顯示，拆開會讓卡片與詳情頁都只看得到半句
+1. **不要自己編寫 `short_description` 和 `long_description`**——這是使用者的個人觀點。使用者沒提供時留空字串。**也不要把使用者給的一段話拆成 `short_description` 一半、`long_description` 一半**：兩欄是兩個獨立顯示場合、UI 擇一顯示，拆開會讓卡片與詳情頁都只看得到半句
 2. **不要新增 category 或 channel**——這些很少變動，需要時請使用者手動處理
 3. **不要修改 schema 或程式碼**——你只操作 `content/` 目錄下的 JSON 和圖片檔案，以及 `content/taxonomies/` 下的 taxonomy 檔案
 4. **Taxonomy 新增必須先取得使用者確認**——先提議，確認後才寫入

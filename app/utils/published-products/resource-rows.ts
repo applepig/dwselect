@@ -39,7 +39,7 @@ function mapSearchSuggestionToRow(result: SearchSuggestion): CompactResourceRow 
     id: result.document_id,
     type: result.type,
     title: result.title,
-    subtitle: result.summary,
+    subtitle: result.short_description,
     meta: getSearchSuggestionMeta(result),
     href: result.href,
     image_url: result.image_url,

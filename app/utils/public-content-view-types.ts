@@ -7,7 +7,7 @@ export const ALL_CATEGORIES_ID = 'all'
 export type ProductCardView = {
   id: string
   name: string
-  summary: string
+  short_description: string
   image_url: string
   category_id: Product['category_id']
   category_label: string
@@ -25,7 +25,7 @@ export type ProductCardView = {
 export type ProductDetailView = {
   id: string
   name: string
-  summary: string
+  short_description: string
   long_description: string
   llm_description: string
   hero_image_url: string
@@ -51,7 +51,7 @@ export type ProductDetailView = {
 export type GuideDetailView = {
   id: string
   title: string
-  summary: string
+  short_description: string
   body: string
   hero_image_url: string
   hero_alt: string

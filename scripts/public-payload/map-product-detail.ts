@@ -20,7 +20,7 @@ export function mapProductDetail(
 
   return {
     ...card_fields,
-    summary: product.summary,
+    short_description: product.short_description,
     long_description: product.long_description,
     llm_description: product.llm_description,
     hero_image_url: image_url,

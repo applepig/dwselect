@@ -27,7 +27,7 @@
       "type": "string",
       "minLength": 1
     },
-    "summary": {
+    "short_description": {
       "type": "string"
     },
     "long_description": {
@@ -239,7 +239,7 @@
     "status",
     "name",
     "english_name",
-    "summary",
+    "short_description",
     "long_description",
     "llm_description",
     "search_aliases",

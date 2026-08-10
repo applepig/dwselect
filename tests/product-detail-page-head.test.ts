@@ -18,7 +18,7 @@ function makeProductDetailView(overrides: Partial<ProductDetailView> = {}): Prod
   return {
     id: 'sample-product',
     name: '示範商品',
-    summary: '摘要',
+    short_description: '摘要',
     long_description: '長描述',
     llm_description: '',
     hero_image_url: '/products/images/sample.jpg',
@@ -132,7 +132,7 @@ describe('product detail page head registration', () => {
     const seo_meta = runtime.use_seo_meta.mock.calls[0]![0] as Record<string, unknown>
     expect(toValue(seo_meta.title)).toBe(expected_title)
     expect(toValue(seo_meta.ogTitle)).toBe(expected_title)
-    expect(toValue(seo_meta.description)).toBe(getSeoDescription(product_view.summary))
+    expect(toValue(seo_meta.description)).toBe(getSeoDescription(product_view.short_description))
     expect(toValue(seo_meta.ogUrl)).toBe(expected_canonical)
     expect(toValue(seo_meta.ogImage)).toBe(getOgImageUrl(product_view.hero_image_url))
     expect(toValue(seo_meta.ogImageAlt)).toBe(product_view.hero_alt)

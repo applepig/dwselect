@@ -3,7 +3,7 @@ import { join } from 'node:path'
 
 import { product_schema, type Product, type ProductOffer } from '../../app/utils/product-schema.ts'
 
-type LegacyProduct = Omit<Product, 'summary' | 'category_id' | 'tag_ids' | 'english_name' | 'long_description' | 'llm_description' | 'search_aliases' | 'model_numbers' | 'offers' | 'reference_links'> & {
+type LegacyProduct = Omit<Product, 'short_description' | 'category_id' | 'tag_ids' | 'english_name' | 'long_description' | 'llm_description' | 'search_aliases' | 'model_numbers' | 'offers' | 'reference_links'> & {
   price_text: string
   description: string
   purchase_url: string
@@ -181,7 +181,7 @@ export function getCompactProductMigration(legacy_product: LegacyProduct): Produ
     slug: legacy_product.id,
     status: migrated_status,
     english_name: legacy_product.name,
-    summary: legacy_product.description,
+    short_description: legacy_product.description,
     long_description: legacy_product.description,
     llm_description: '',
     search_aliases: [],

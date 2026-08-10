@@ -123,7 +123,7 @@
             v-else
             class="detail-llm-paragraph"
           >
-            {{ detail.summary }}
+            {{ detail.short_description }}
           </p>
         </div>
       </section>

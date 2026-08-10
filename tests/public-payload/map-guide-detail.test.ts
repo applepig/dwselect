@@ -19,7 +19,7 @@ describe('guide detail build mapper', () => {
     const guide = makeGuide({
       id: 'keyboard-guide',
       title: '鍵盤入門指南',
-      summary: '挑鍵盤前先看這篇',
+      short_description: '挑鍵盤前先看這篇',
       body: '## 重點\n\n第一段內文。',
       source_url: 'https://example.com/keyboard-guide',
       image_file: 'keyboard-guide.jpg',
@@ -35,7 +35,7 @@ describe('guide detail build mapper', () => {
     expect(mapGuideDetail(guide, [], labels)).toEqual({
       id: 'keyboard-guide',
       title: '鍵盤入門指南',
-      summary: '挑鍵盤前先看這篇',
+      short_description: '挑鍵盤前先看這篇',
       body: '## 重點\n\n第一段內文。',
       hero_image_url: '/guides/images/keyboard-guide.jpg',
       hero_alt: '鍵盤入門指南',
@@ -141,7 +141,7 @@ describe('guide detail build mapper', () => {
       {
         id: 'second-product',
         name: '第二個商品',
-        summary: '推薦短評',
+        short_description: '推薦短評',
         image_url: '/products/images/sample-product.jpg',
         category_id: 'home',
         category_label: '居家',
@@ -156,7 +156,7 @@ describe('guide detail build mapper', () => {
       {
         id: 'first-product',
         name: '第一個商品',
-        summary: '推薦短評',
+        short_description: '推薦短評',
         image_url: '/products/images/sample-product.jpg',
         category_id: 'computer',
         category_label: '電腦',

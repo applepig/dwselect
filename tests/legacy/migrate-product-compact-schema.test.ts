@@ -110,7 +110,7 @@ describe('compact product migration helpers', () => {
       status: 'draft',
       name: '範例商品',
       english_name: '範例商品',
-      summary: '推薦短評',
+      short_description: '推薦短評',
       long_description: '推薦短評',
       llm_description: '',
       search_aliases: [],

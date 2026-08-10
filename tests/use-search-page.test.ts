@@ -57,7 +57,7 @@ const product_suggestion: SearchSuggestion = {
   type: 'product',
   label: 'Sharp',
   title: 'Sharp 鍵盤',
-  summary: '搜尋建議摘要',
+  short_description: '搜尋建議摘要',
   href: '/products/sharp-keyboard',
   external: false,
   category_labels: ['電腦'],

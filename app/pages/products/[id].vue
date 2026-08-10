@@ -20,7 +20,7 @@ const route = useRoute()
 const product_id = resolveRouteId(route.params.id)
 const product_detail = shallowRef<ProductDetailView | null>(null)
 const product_meta_title = computed(() => product_detail.value === null ? SITE_NAME : `${product_detail.value.name}｜${SITE_NAME}`)
-const product_meta_description = computed(() => getSeoDescription(product_detail.value?.summary))
+const product_meta_description = computed(() => getSeoDescription(product_detail.value?.short_description))
 const product_canonical_url = computed(() => {
   if (product_detail.value === null) {
     return getCanonicalUrl('/')
