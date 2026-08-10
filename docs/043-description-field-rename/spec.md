@@ -41,6 +41,7 @@ Guide 與 Link 各只有一格描述，也叫 `summary`，與 product 的短描�
 | `scripts/legacy/migrate-content-domain-taxonomy.ts`、`migrate-category-tag-taxonomy.ts` 的欄位 | 這兩支輸出的是當時的中繼格式、型別自成一格不引用現行 schema，改動只會扭曲歷史意圖 |
 | 遷移統計變數 `const summary = createSummary()` 等 | 是「摘要統計」語意，非資料欄位 |
 | `docs/` 既有 sprint 文件 | 歷史紀錄，保留當時用語；skill 已加註舊名對照 |
+| 108 筆改名紀錄的 `updated_at` | `updated_at` 是 `compare-products.ts`／`compare-guides.ts`／`compare-links.ts` 的**主要排序鍵**，一次全改成同一個遷移時間會讓主鍵全部並列，首頁「最新在前」退化成 category + 名稱字母序（sprint 034 修過的維度）。且本次是純 key 改名、rendered output 逐字元不變，推 108 個 `<lastmod>` 等於對搜尋引擎謊報更新。詳見 `works.md` review finding 1 |
 
 ## 驗收條件
 
