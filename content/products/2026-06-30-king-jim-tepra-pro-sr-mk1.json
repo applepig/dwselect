@@ -27,14 +27,14 @@
     {
       "channel_id": "amazonjp",
       "url": "https://amzn.asia/d/09vNsadt",
-      "price_text": "TWD 2,028.44",
+      "price_text": "￥10,973",
       "price": {
-        "amount": 2028.44,
-        "currency": "TWD",
+        "amount": 10973,
+        "currency": "JPY",
         "unit": "each",
         "label": null
       },
-      "checked_at": "2026-06-30T00:00:00+08:00"
+      "checked_at": "2026-08-11T00:00:00+08:00"
     }
   ],
   "model_numbers": [

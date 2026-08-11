@@ -41,14 +41,14 @@
     {
       "channel_id": "amazonjp",
       "url": "https://www.amazon.co.jp/%E3%80%90%E3%83%AA%E3%83%81%E3%83%A3%E3%83%BC%E3%82%B8WiFi%E3%80%91%E6%97%A5%E6%9C%AC100GB-%E4%B8%96%E7%95%8C3GB-%E7%B0%A1%E5%8D%98%E3%83%AA%E3%83%81%E3%83%A3%E3%83%BC%E3%82%B8-%E9%9B%BB%E6%BA%90ON%E3%81%A7%E5%8D%B3%E6%99%82%E4%BD%BF%E3%81%88%E3%82%8B-%E3%82%B7%E3%83%B3%E3%83%97%E3%83%AB%E3%80%90T8BK-100GB/dp/B0DF7JGFYN",
-      "price_text": "TWD 2,838.31",
+      "price_text": "￥12,980",
       "price": {
-        "amount": 2838.31,
-        "currency": "TWD",
+        "amount": 12980,
+        "currency": "JPY",
         "unit": "each",
         "label": null
       },
-      "checked_at": "2026-06-30T00:00:00+08:00"
+      "checked_at": "2026-08-11T00:00:00+08:00"
     }
   ],
   "created_at": "2026-06-30T00:00:00+08:00",

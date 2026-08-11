@@ -24,14 +24,14 @@
     {
       "url": "https://amzn.asia/d/05DgtVPT",
       "channel_id": "amazonjp",
-      "price_text": "TWD 672.30",
+      "price_text": "￥3,973",
       "price": {
-        "amount": 672.3,
-        "currency": "TWD",
+        "amount": 3973,
+        "currency": "JPY",
         "unit": "each",
         "label": "Prime Early Deal"
       },
-      "checked_at": "2026-07-08T00:00:00+08:00"
+      "checked_at": "2026-08-11T00:00:00+08:00"
     }
   ],
   "category_id": "household",
