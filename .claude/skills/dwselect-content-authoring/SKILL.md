@@ -24,7 +24,7 @@ Division of labor：the subagent does the first-draft writing。When given a tar
   2. **給了短句 + 額外補充** → `short_description` 放短句原文；`long_description` 放能獨立讀完的完整主文，也就是「短句原文 + `\n\n` + 補充」。範例見 `content/products/2026-07-04-kinloch-anderson-traveler-20-carry-on.json`。
   3. **完全沒給意見** → 兩者都設為 `""`，並在回報中標記需要使用者補充。
 - 判準：`long_description` 若非空，就必須是「單獨拿出來給讀者看也完整」的文字——詳情頁的讀者看不到 `short_description`。若你寫出來的 `long_description` 少了 `short_description` 才有的資訊，那就是拆錯了。
-- ⚠️ 既有資料中有 87 筆 `short_description` 與 `long_description` 字串完全相同。**那是 sprint 011 遷移時把同一份舊 `description` 複製進兩個欄位的未清理遺留**（020 spec 已記載為「內容填充問題」，並決議暫不做 schema migration），**不是可以照抄的慣例**。看到既有檔案長那樣，不要當成範本。
+- 既有 95 筆商品中，92 筆的 `long_description` 是空字串、只有 3 筆有獨立主文——這是**正確**的分布，不是缺漏。sprint 006 遷移曾把同一份舊 `description` 複製進兩欄，造成 87 筆重複（020 spec 記載為「內容填充問題」），已於 sprint 044 全數清成 `""`。**不要再把 `short_description` 複製一份到 `long_description`**；沒有額外補充內容時，留空讓詳情頁 fallback 才是正解。
 - Guide `title` and `short_description` are content-derived，not personal opinion：write a concise `title` and an objective 1-2 sentence `short_description` summarizing what the source post covers and its core takeaway。Do not invent opinions or use subjective recommendation words（「便宜」「好用」「剛好」）；the coordinator edits the wording afterward。
 - Agent-owned fields include product name、English name、model numbers、reference links、taxonomy IDs、local image file、search aliases、and `llm_description`；for guides also `title` and the content-derived `short_description`。Offers and prices are agent-maintained only when the user has not supplied explicit offer or price text。
 - `llm_description` must be objective、research-backed、and useful for search or LLM understanding。Do not paraphrase the user’s subjective recommendation text。
@@ -155,7 +155,10 @@ Offer and price precedence：
 Channel price digit obfuscation and cross-check（價格數字防呆）：
 
 - 部分台灣通路會把價格渲染得很難 parse：momo（尤其）、Yahoo 等常把數字拆成 sprite 圖、lazy-load 節點，或用「折扣後價格」「限時折後價」「促銷價」「momo幣回饋」這類 UI 文案包住數字。直接抓 DOM text 容易抓到 UI 文案、抓錯層、或整個漏掉數字。
-- 當通路頁的價格數字無法可靠讀出，或要驗證可疑數字時，改用比價聚合站交叉確認 plain-text 價格：BigGo（`https://biggo.com.tw`）與 FindPrice（`https://www.findprice.com.tw`）。用商品名／型號搜尋，對到同一通路的 listing，以聚合站的純文字價格確認 `price.amount`。
+- 當通路頁的價格數字無法可靠讀出，或要驗證可疑數字時，改用比價聚合站交叉確認 plain-text 價格：
+  - **台灣通路** → BigGo（`https://biggo.com.tw`）與 FindPrice（`https://www.findprice.com.tw`）。
+  - **日本通路（日亞等）** → 價格.com（`https://kakaku.com`）。用型號搜尋，例如 `https://kakaku.com/search_results/NJ-BW10GA-B/`，它會列出各店家與 Amazon 掲載価格的純文字日圓價格。**這對日亞特別有用**：Amazon 會依 IP 把價格換成台幣（見上面的 `i18n-prefs` cookie 規則），而 kakaku.com 一律是日圓原幣別，可以直接驗證你抓到的 `￥` 數字是否合理。
+  - 用商品名／型號搜尋，對到同一通路的 listing，以聚合站的純文字價格確認 `price.amount`。聚合站價格可能落後或含不同賣家，**它是合理性交叉檢查，不是取代通路頁的權威來源**——最終寫入的仍以 offer URL 當下頁面為準。
 - `price.amount` 必須是已確認的數字價格。`price_text` 是前端唯一的價格顯示來源，必須乾淨且完整、可直接顯示（純數字，可帶貨幣符號、千分位，或區間「起」字尾，例如 `39,512`、`NT$39,512`、`NT$1,990 起`），不可塞入通路 UI heading 原文（如「折扣後價格」「限時折後價」）。
 - `price.label`、`amount`、`currency`、`unit` 只是 metadata，前端不顯示。`label` 可選擇性記錄通路價格類型（例如「折扣價」「限時折扣」）當 metadata，但顯示完全只看 `price_text`，所以任何要顯示的修飾詞（區間「起」、幣別）都必須寫進 `price_text` 本身，不能只放在 `label`。
 - 通路同時顯示多層價格（市售價／促銷價／滿件折扣價）時，記錄使用者在該 offer 實際付的可購買價格，並把分層資訊寫進研究筆記或 `price_discrepancy`，不要塞進 label。
@@ -181,7 +184,7 @@ Channel price digit obfuscation and cross-check（價格數字防呆）：
 - **自我檢查**：寫入前確認 `price_text` 的幣別符號與 `channel_id` 相符。`amazonjp`／`amazonus` 的 offer 出現 `TWD` 或 `NT$` 就是抓錯了，回去帶 cookie 重抓，不要自己用匯率回推。
 - **本節只約束你自己研究抓來的價格。** 使用者明確提供的 `price_text` 仍然依「Offer and price precedence」優先，即使它是台幣換算值也不要覆寫——改為回報幣別不符與你抓到的原幣別價格，交由 coordinator／使用者決定。
 - 日亞既有慣例是全形 `￥` 前綴（例如 `￥3800`），美亞用 `$` 前綴。照抄頁面數字，不要自己補小數位。
-- ⚠️ 既有資料中有 9 筆日亞／美亞 offer 存著台幣換算值（例如 `TWD 522.33`、`NT$1,084.22`），那是待修的錯誤，**不要當範本**。看到 `channel_id` 是 `amazonjp`／`amazonus` 卻寫著 TWD 的檔案，回報給 coordinator。
+- 既有資料的日亞／美亞 offer 曾有 9 筆存著台幣換算值，已於 sprint 043／044 全數修回原幣別。目前僅 `2026-06-30-corsair-ai-workstation-300` 仍是 `TWD 54,214.38`——該商品在美亞已 `Currently unavailable`、頁面無現行售價，故保留原值待決，**不是可照抄的範本**。若再看到 `channel_id` 是 `amazonjp`／`amazonus` 卻寫著 TWD／NT$ 的檔案，回報給 coordinator。
 
 PChome fallback：
 
@@ -190,6 +193,7 @@ PChome fallback：
 - Do not infer specs from product category alone。
 
 Amazon fallback（工具選擇是實測結論，不是偏好；2026-08 以 ASIN `B0CRT9VTGM` 驗證）：
+- **⚠️ 把抓下來的 HTML 存檔時，檔名一定要帶 content id。** Coordinator 常同時派多個 researcher，大家共用同一個 scratchpad 目錄；用 `amzn.html`、`page.html` 這種通用檔名會被其他 researcher 覆寫，於是你 parse 到的是別的商品頁面——2026-08-11 一次 8 個並行 researcher 就真的發生過，有 agent 讀到了另外兩個無關商品。正確寫法：`curl ... -o "scratchpad/{content-id}.html"`。**parse 完務必核對頁面的 `id="productTitle"` 與你負責的商品是否相符**，這是最後一道防線。
 
 - **不要用 WebFetch 抓 Amazon**——它一律回 HTTP 500／503「Service Unavailable」／「Continue shopping」反自動化中間頁（約 2KB，無商品內容）。這是工具問題，不是站台封鎖；遇到時換工具，不要回報成「Amazon 被反自動化攔截、無法取得」。
 - 商品事實（title、ASIN、型號、品牌、價格、主圖、product facts）用帶瀏覽器 header 的 `curl`。**缺 `User-Agent` 就會拿到中間頁，補齊三個 header 就回完整 1.5MB+ 商品頁**：
