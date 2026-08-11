@@ -160,6 +160,29 @@ Channel price digit obfuscation and cross-check（價格數字防呆）：
 - `price.label`、`amount`、`currency`、`unit` 只是 metadata，前端不顯示。`label` 可選擇性記錄通路價格類型（例如「折扣價」「限時折扣」）當 metadata，但顯示完全只看 `price_text`，所以任何要顯示的修飾詞（區間「起」、幣別）都必須寫進 `price_text` 本身，不能只放在 `label`。
 - 通路同時顯示多層價格（市售價／促銷價／滿件折扣價）時，記錄使用者在該 offer 實際付的可購買價格，並把分層資訊寫進研究筆記或 `price_discrepancy`，不要塞進 label。
 
+幣別跟著通路走，**Amazon 必須強制原幣別**：
+
+- 目標幣別：
+  | `channel_id` | `price.currency` | `price_text` 範例 |
+  |---|---|---|
+  | `amazonjp` | `JPY` | `￥3800`、`￥42000` |
+  | `amazonus` | `USD` | `$16.13`、`$105` |
+  | `pchome`／`momo`／`costco` | `TWD` | `1,290`、`NT$1,990 起` |
+- **⚠️ Amazon 會依你的 IP 自動把價格換成當地貨幣**。從台灣連線時，`amazon.com` 與 `amazon.co.jp` 的商品頁都會顯示 `TWD 520.39` 這種台幣換算值——照抄它就會把「當下匯率的台幣」寫進 JSON，隔天就過時，還會留下難讀的小數。
+- **解法：帶 `i18n-prefs` cookie 強制原幣別**（實測有效，TWD 會完全消失）：
+  ```bash
+  # 美亞 → USD
+  curl -sL "https://www.amazon.com/dp/{ASIN}" --max-time 30 -b 'i18n-prefs=USD' \
+    -H 'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36' \
+    -H 'Accept-Language: en-US,en;q=0.9'
+  # 日亞 → JPY：改用 -b 'i18n-prefs=JPY' 與 Accept-Language: ja-JP,ja;q=0.9
+  ```
+  主價格在 `id="corePrice_feature_div"` 區塊內的 `a-offscreen`。用 `agent-browser` 時同理，先確認頁面顯示的是原幣別再抄數字。
+- **自我檢查**：寫入前確認 `price_text` 的幣別符號與 `channel_id` 相符。`amazonjp`／`amazonus` 的 offer 出現 `TWD` 或 `NT$` 就是抓錯了，回去帶 cookie 重抓，不要自己用匯率回推。
+- **本節只約束你自己研究抓來的價格。** 使用者明確提供的 `price_text` 仍然依「Offer and price precedence」優先，即使它是台幣換算值也不要覆寫——改為回報幣別不符與你抓到的原幣別價格，交由 coordinator／使用者決定。
+- 日亞既有慣例是全形 `￥` 前綴（例如 `￥3800`），美亞用 `$` 前綴。照抄頁面數字，不要自己補小數位。
+- ⚠️ 既有資料中有 9 筆日亞／美亞 offer 存著台幣換算值（例如 `TWD 522.33`、`NT$1,084.22`），那是待修的錯誤，**不要當範本**。看到 `channel_id` 是 `amazonjp`／`amazonus` 卻寫著 TWD 的檔案，回報給 coordinator。
+
 PChome fallback：
 
 - PChome product pages may return 429。When that happens，use the PChome API first：`https://ecapi.pchome.com.tw/ecshop/prodapi/v2/prod/{PRODUCT_ID}&fields=Id,Name,Nick,Price,Pic,Slogan,Describe,Spec&_callback=jsonp`

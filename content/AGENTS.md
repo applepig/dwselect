@@ -135,9 +135,9 @@
 ```
 
 - `channel_id`：根據 URL host 自動判斷（見 Channels 表）
-- `price_text`：頁面上顯示的價格文字（原樣保留）
+- `price_text`：頁面上顯示的價格文字（原樣保留）。**用該通路的原幣別，不要換算**：日亞 `￥3800`、美亞 `$16.99`、台灣通路 `1,290`
 - `price.amount`：數值型價格，無法取得時設 `null`
-- `price.currency`：`TWD` | `JPY` | `USD`，無法判斷時設 `null`
+- `price.currency`：**跟著通路走**——`amazonjp` → `JPY`、`amazonus` → `USD`、`pchome`／`momo`／`costco` → `TWD`，無法判斷時設 `null`。**⚠️ Amazon 會依 IP 自動換成當地貨幣**：從台灣連線時日亞與美亞都顯示 `TWD 520.39` 這種換算值，照抄會把當下匯率寫進 JSON。抓價時帶 `i18n-prefs` cookie 強制原幣別（美亞 `curl -b 'i18n-prefs=USD'`、日亞 `-b 'i18n-prefs=JPY'`），主價格在 `id="corePrice_feature_div"` 內的 `a-offscreen`
 - `price.unit`：`each` | `kilogram`，通常是 `each`，無法判斷時設 `null`
 - `price.label`：特殊標示（如「會員價」），通常設 `null`
 - `checked_at`：確認價格的時間
