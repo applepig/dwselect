@@ -4,10 +4,24 @@
 
 ### 變更摘要
 
-- 87 筆 `long_description` 與 `short_description` 完全相同者清成 `""`；清理後分布為 92 筆空、3 筆有獨立主文、0 筆重複。
+- 25 筆超過 40 字的 `short_description` 從 owner 原文摘要成卡片長度（19–40 字），`long_description` 保留完整原文；另 6 筆去掉結尾句號。
 - 7 筆日亞／美亞 offer 改回原幣別；第 8 筆（Corsair）因美亞下架無現價而保留原值待決。
 - `2026-06-20-mitsubishi-honsumigama-nj-bw10h` 的 `llm_description` 移除兩個過時台幣換算價。
 - skill／agent 文件新增日本價格交叉驗證來源、平行 researcher 的暫存檔命名規則，並更正已過時的資料債敘述。
+
+### 方向修正（重要）
+
+first pass 做反了：把 87 筆的 `long_description` 清成 `""`、讓完整版留在 `short_description`。owner 指出後全數還原重做。
+
+當時的技術陳述沒錯——`product-detail.vue:121` 是 `long_description || short_description` 且無 `v-if`，清空後詳情頁會 fallback、不會開天窗。但**技術上不會壞 ≠ 是要的排版**：首頁 `.product-summary` 是 `-webkit-line-clamp: 3`（約 50 中文字），完整長文放在 `short_description` 會被 ellipsis 截成半句，正是要解決的問題。
+
+教訓：欄位語意問題要先確認 owner 要哪一種版面，不能只用「render 出來是不是空的」推導正確性。
+
+### 摘要範圍與門檻
+
+首頁卡片實測約可放 50 個中文字，門檻取 40 字留餘裕。實際分布：25 筆超過 40 字需摘要、57 筆本來就 ≤40 字維持原樣（其 `short` 與 `long` 相同，經 owner 確認保留）、3 筆本來就有獨立 long 內容不動。
+
+摘要一律從 owner 原文取材，例如 98 字的 Kohler 浴櫃只留「落水孔靠牆→抽屜能做 2/3 深度、沒有奇怪凹洞」的核心，水龍頭那段吐槽留在詳情頁；78 字的 Apple TV 保留「朋友買了至少十隻便宜機上盒，只是多了十隻電子垃圾」的梗。25 筆前後對照表已交 owner 逐筆核可。
 
 ### 價格修正明細
 
@@ -63,5 +77,5 @@
 ### 驗證結果
 
 - `pnpm content:check` → 113 個 content JSON 語法 OK、16 個測試檔、162 tests passed。
-- 87 筆清理批次逐檔比對 diff：81 個非重疊檔案的變更行僅含 `long_description`（其餘 6 筆與價格批次重疊，diff 為 `long_description` + offer 價格欄位，無其他污染）。
+- 摘要後全站 `short_description` 皆 ≤40 字（19–40），且無結尾句號；`long_description` 與 master 逐字比對無變更。
 - 依 CLAUDE.md 的分級規則，本次為 `content/**` 與文件改動，gate 為 `content:check`，不需全套 verify。
