@@ -48,7 +48,7 @@
         <span
           class="product-summary product-vt-summary"
           :style="getProductViewTransitionStyle(product.id, 'summary')"
-        >{{ product.summary }}</span>
+        >{{ product.short_description }}</span>
       </span>
     </NuxtLink>
 

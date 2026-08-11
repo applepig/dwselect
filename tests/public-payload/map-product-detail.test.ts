@@ -43,7 +43,7 @@ describe('product detail build mapper', () => {
       id: 'products/products/detail-product.json',
       status: 'published',
       name: '很長很長的商品名稱'.repeat(6),
-      summary: 'DW 怎麼說要保留原始短評'.repeat(4),
+      short_description: 'DW 怎麼說要保留原始短評'.repeat(4),
       long_description: '細節說明可以比卡片更長',
       llm_description: 'AI 觀點',
       offers: [
@@ -74,7 +74,7 @@ describe('product detail build mapper', () => {
     expect(detail).toEqual({
       id: 'detail-product',
       name: product.name,
-      summary: product.summary,
+      short_description: product.short_description,
       long_description: '細節說明可以比卡片更長',
       llm_description: 'AI 觀點',
       hero_image_url: '/products/images/detail.jpg',
@@ -110,19 +110,19 @@ describe('product detail build mapper', () => {
     expect(detail.reference_links).toEqual([])
   })
 
-  it('should keep long_description as the original value even when it equals summary', () => {
+  it('should keep long_description as the original value even when it equals short_description', () => {
     const product = makeProduct({
       id: 'duplicated-description-product',
       status: 'published',
       name: '重複文案商品',
-      summary: '同一段推薦文字',
+      short_description: '同一段推薦文字',
       long_description: '同一段推薦文字',
       llm_description: '',
     })
 
     const detail = mapProductDetail(product, [product], makeResolver())
 
-    expect(detail.summary).toBe('同一段推薦文字')
+    expect(detail.short_description).toBe('同一段推薦文字')
     expect(detail.long_description).toBe('同一段推薦文字')
     expect(detail.llm_description).toBe('')
   })
@@ -323,7 +323,7 @@ describe('related product build mapper', () => {
       id: 'related-product',
       status: 'published',
       name: '相關商品',
-      summary: '相關商品短評',
+      short_description: '相關商品短評',
       category_id: 'computer',
       tag_ids: ['typing'],
       offers: [makeOffer('momo')],
@@ -337,7 +337,7 @@ describe('related product build mapper', () => {
       {
         id: 'related-product',
         name: '相關商品',
-        summary: '相關商品短評',
+        short_description: '相關商品短評',
         image_url: '/products/images/sample-product.jpg',
         category_id: 'computer',
         category_label: '電腦',

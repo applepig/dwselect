@@ -16,7 +16,7 @@
       >
         <span class="search-suggestion-type">{{ getResultTypeLabel(suggestion.type) }}</span>
         <span class="search-suggestion-title">{{ suggestion.title }}</span>
-        <span class="search-suggestion-summary">{{ suggestion.summary }}</span>
+        <span class="search-suggestion-summary">{{ suggestion.short_description }}</span>
       </button>
     </div>
     <p

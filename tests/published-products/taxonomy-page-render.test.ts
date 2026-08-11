@@ -25,7 +25,7 @@ function makeCard(id: string): ProductCardView {
   return {
     id,
     name: `${id} 商品`,
-    summary: '短評',
+    short_description: '短評',
     image_url: '/products/images/x.jpg',
     category_id: 'computer',
     category_label: '電腦',

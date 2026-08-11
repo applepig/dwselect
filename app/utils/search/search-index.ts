@@ -26,7 +26,7 @@ export type SearchDocument = {
   content_id: string
   type: 'product' | 'guide' | 'link'
   title: string
-  summary: string
+  short_description: string
   category_ids: string[]
   category_labels: string[]
   tag_ids: string[]
@@ -38,7 +38,7 @@ export type SearchDocument = {
   channel_id?: string
   channel_label?: string
   published_at: string | null
-  description?: string
+  long_description?: string
   llm_description?: string
   search_aliases_text?: string
   model_numbers_text?: string
@@ -52,7 +52,7 @@ export type SearchIndexDocumentSummary = Pick<
   | 'content_id'
   | 'type'
   | 'title'
-  | 'summary'
+  | 'short_description'
   | 'category_ids'
   | 'category_labels'
   | 'tag_ids'
@@ -79,7 +79,7 @@ export type SearchSuggestion = {
   type: SearchDocument['type']
   label: string
   title: string
-  summary: string
+  short_description: string
   category_labels: string[]
   tag_labels: string[]
   image_url: string | null
@@ -101,8 +101,8 @@ type BuildSearchIndexOptions = {
 
 const SEARCH_FIELDS: Array<keyof SearchDocument> = [
   'title',
-  'summary',
-  'description',
+  'short_description',
+  'long_description',
   'llm_description',
   'search_aliases_text',
   'model_numbers_text',
@@ -115,9 +115,9 @@ const SEARCH_FIELDS: Array<keyof SearchDocument> = [
 const SEARCH_FIELD_BOOSTS: Partial<Record<keyof SearchDocument, number>> = {
   title: 8,
   tag_labels: 5,
-  description: 3,
+  long_description: 3,
   llm_description: 2,
-  summary: 1.5,
+  short_description: 1.5,
   search_aliases_text: 1,
   model_numbers_text: 1,
   taxonomy_aliases_text: 1,
@@ -130,7 +130,7 @@ const SEARCH_STORE_FIELDS: Array<keyof SearchDocument> = [
   'content_id',
   'type',
   'title',
-  'summary',
+  'short_description',
   'category_labels',
   'tag_labels',
   'image_url',
@@ -231,7 +231,7 @@ function createSearchIndex() {
   return new MiniSearch<SearchDocument>(getSearchOptions())
 }
 
-type SearchOnlyFieldName = 'description' | 'llm_description' | 'search_aliases_text' | 'model_numbers_text' | 'taxonomy_aliases_text' | 'search_text'
+type SearchOnlyFieldName = 'long_description' | 'llm_description' | 'search_aliases_text' | 'model_numbers_text' | 'taxonomy_aliases_text' | 'search_text'
 type SearchDocumentBase = Omit<SearchDocument, SearchOnlyFieldName>
 
 // Search-only fields 必須維持 non-enumerable：供 MiniSearch 索引，但不被序列化進 document summary。
@@ -261,7 +261,7 @@ function mapProductToSearchDocument(
     content_id,
     type: 'product',
     title: product.name,
-    summary: product.summary,
+    short_description: product.short_description,
     category_ids: [product.category_id],
     category_labels: [labels.getCategoryLabel(product.category_id)],
     tag_ids: [...product.tag_ids],
@@ -276,7 +276,7 @@ function mapProductToSearchDocument(
   }
 
   return attachSearchFields(document, {
-    description: product.long_description,
+    long_description: product.long_description,
     llm_description: product.llm_description,
     search_aliases_text: product.search_aliases.join(' '),
     model_numbers_text: product.model_numbers.join(' '),
@@ -295,7 +295,7 @@ function mapGuideToSearchDocument(
     content_id: guide.id,
     type: 'guide',
     title: guide.title,
-    summary: guide.summary,
+    short_description: guide.short_description,
     category_ids: [...guide.category_ids],
     category_labels: guide.category_ids.map((category_id) => labels.getCategoryLabel(category_id)),
     tag_ids: [...guide.tag_ids],
@@ -307,7 +307,7 @@ function mapGuideToSearchDocument(
   }
 
   return attachSearchFields(document, {
-    description: '',
+    long_description: '',
     llm_description: '',
     search_aliases_text: '',
     model_numbers_text: '',
@@ -326,7 +326,7 @@ function mapLinkToSearchDocument(
     content_id: link.id,
     type: 'link',
     title: link.title,
-    summary: link.summary,
+    short_description: link.short_description,
     category_ids: [...link.category_ids],
     category_labels: link.category_ids.map((category_id) => labels.getCategoryLabel(category_id)),
     tag_ids: [...link.tag_ids],
@@ -338,7 +338,7 @@ function mapLinkToSearchDocument(
   }
 
   return attachSearchFields(document, {
-    description: '',
+    long_description: '',
     llm_description: '',
     search_aliases_text: '',
     model_numbers_text: '',
@@ -353,7 +353,7 @@ function mapDocumentToSummary(document: SearchDocument): SearchIndexDocumentSumm
     content_id: document.content_id,
     type: document.type,
     title: document.title,
-    summary: document.summary,
+    short_description: document.short_description,
     category_ids: document.category_ids,
     category_labels: document.category_labels,
     tag_ids: document.tag_ids,
@@ -375,7 +375,7 @@ function mapSearchResultToSuggestion(result: SearchResult): SearchSuggestion {
     type: result.type as SearchDocument['type'],
     label: String(result.title),
     title: String(result.title),
-    summary: String(result.summary),
+    short_description: String(result.short_description),
     category_labels: toStringArray(result.category_labels),
     tag_labels: toStringArray(result.tag_labels),
     image_url: result.image_url === null ? null : String(result.image_url),

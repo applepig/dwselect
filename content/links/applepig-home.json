@@ -3,7 +3,7 @@
   "slug": "applepig-home",
   "status": "published",
   "title": "applepig.idv.tw",
-  "summary": "DW 的主站",
+  "short_description": "DW 的主站",
   "url": "https://applepig.idv.tw",
   "icon": "i-lucide-link",
   "category_ids": [

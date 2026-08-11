@@ -9,7 +9,7 @@ export const links_dir_url = new URL('../../content/links/', import.meta.url)
 
 export const base_product = {
   english_name: 'Sample Product',
-  summary: '推薦短評',
+  short_description: '推薦短評',
   long_description: '推薦文',
   llm_description: '',
   search_aliases: [],
@@ -71,7 +71,7 @@ export const test_links: LinkDefinition[] = [
     id: 'applepig-home',
     status: 'published',
     title: 'applepig.idv.tw',
-    summary: 'DW 的主站',
+    short_description: 'DW 的主站',
     url: 'https://applepig.idv.tw',
     image_url: null,
     icon: 'i-lucide-link',
@@ -89,7 +89,7 @@ export const test_links: LinkDefinition[] = [
 export const base_guide = {
   status: 'published',
   title: '指南文章',
-  summary: '指南摘要',
+  short_description: '指南摘要',
   source_url: 'https://example.com/guide',
   reference_links: [],
   image_url: null,
@@ -108,7 +108,7 @@ export const test_guides: Guide[] = [
     ...base_guide,
     id: 'guide-keyboard',
     title: '鍵盤入門',
-    summary: '挑選鍵盤前先看這篇',
+    short_description: '挑選鍵盤前先看這篇',
     source_url: 'https://example.com/keyboard-guide',
     image_url: 'https://example.com/keyboard-guide.jpg',
     category_ids: ['computer'],

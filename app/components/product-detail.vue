@@ -118,7 +118,7 @@
             color="primary"
             variant="subtle"
             title="DW 怎麼說"
-            :description="detail.long_description || detail.summary"
+            :description="detail.long_description || detail.short_description"
             :style="getProductViewTransitionStyle(detail.id, 'summary')"
           />
         </div>

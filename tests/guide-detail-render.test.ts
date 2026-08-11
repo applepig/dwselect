@@ -64,7 +64,7 @@ function makeRelatedProductCard(overrides: Partial<ProductCardView> = {}): Produ
   return {
     id: 'product-a',
     name: '商品 A',
-    summary: '推薦短評',
+    short_description: '推薦短評',
     image_url: '/products/images/a.jpg',
     category_id: 'computer',
     category_label: '電腦',
@@ -83,7 +83,7 @@ function makeGuideDetailView(overrides: Partial<GuideDetailView> = {}): GuideDet
   return {
     id: 'sample-guide',
     title: '示範指南',
-    summary: '這是指南摘要。',
+    short_description: '這是指南摘要。',
     body: '## 標題\n\n第一段內文 [參考連結](https://example.com/ref) 結尾。\n\n- 項目一\n- 項目二',
     hero_image_url: '/guides/images/sample-guide.jpg',
     hero_alt: '示範指南',
@@ -133,7 +133,7 @@ describe('GuideDetail', () => {
   })
 
   it('should fall back to the summary when the body is empty', () => {
-    const wrapper = mountGuideDetail(makeGuideDetailView({ body: '', summary: '只有摘要可用。' }))
+    const wrapper = mountGuideDetail(makeGuideDetailView({ body: '', short_description: '只有摘要可用。' }))
 
     expect(wrapper.text()).toContain('只有摘要可用。')
     expect(wrapper.find('.detail-llm-heading').exists()).toBe(false)

@@ -31,7 +31,7 @@ describe('product card build mapper', () => {
       image_file: 'published-product.jpg',
       image_url: null,
       category_id: 'computer',
-      summary: '卡片短評',
+      short_description: '卡片短評',
     })
 
     const card = mapProductCard(product, makeResolver())
@@ -39,7 +39,7 @@ describe('product card build mapper', () => {
     expect(card).toEqual({
       id: 'published-product',
       name: '已上架商品',
-      summary: '卡片短評',
+      short_description: '卡片短評',
       image_url: '/products/images/published-product.jpg',
       category_id: 'computer',
       category_label: '電腦',

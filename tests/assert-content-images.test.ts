@@ -29,7 +29,7 @@ function makeProductJson(overrides: ProductOverrides = {}) {
     status: overrides.status ?? 'published',
     name: '範例商品',
     english_name: 'Sample Product',
-    summary: '短評',
+    short_description: '短評',
     long_description: '長描述',
     llm_description: '',
     search_aliases: [],

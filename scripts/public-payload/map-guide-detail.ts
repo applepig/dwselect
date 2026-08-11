@@ -18,7 +18,7 @@ export function mapGuideDetail(
   return {
     id: extractContentId(guide.id),
     title: guide.title,
-    summary: guide.summary,
+    short_description: guide.short_description,
     body: guide.body ?? '',
     hero_image_url: resolveGuideImageUrl(guide) ?? '',
     hero_alt: guide.title,

@@ -23,7 +23,7 @@
       "type": "string",
       "minLength": 1
     },
-    "summary": {
+    "short_description": {
       "type": "string"
     },
     "body": {
@@ -140,7 +140,7 @@
     "slug",
     "status",
     "title",
-    "summary",
+    "short_description",
     "source_url",
     "category_ids",
     "tag_ids",

@@ -29,7 +29,7 @@ function makeRelatedProduct(overrides: Partial<ProductCardView> = {}): ProductCa
   return {
     id: 'product-a',
     name: '商品 A',
-    summary: '推薦短評 A',
+    short_description: '推薦短評 A',
     image_url: '/products/images/a.jpg',
     category_id: 'computer',
     category_label: '電腦',
@@ -89,7 +89,7 @@ describe('RelatedProductsSection', () => {
     const wrapper = mountRelatedProductsSection([
       makeRelatedProduct({
         name: '商品 A',
-        summary: '推薦短評 A',
+        short_description: '推薦短評 A',
         price_label: 'NT$ 2,490',
         channel_label: 'PChome',
       }),

@@ -20,7 +20,7 @@ const route = useRoute()
 const guide_id = resolveRouteId(route.params.id)
 const guide_detail = shallowRef<GuideDetailView | null>(null)
 const guide_meta_title = computed(() => guide_detail.value === null ? SITE_NAME : `${guide_detail.value.title}｜${SITE_NAME}`)
-const guide_meta_description = computed(() => getSeoDescription(guide_detail.value?.summary))
+const guide_meta_description = computed(() => getSeoDescription(guide_detail.value?.short_description))
 const guide_canonical_url = computed(() => {
   if (guide_detail.value === null) {
     return getCanonicalUrl('/guide')

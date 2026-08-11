@@ -65,7 +65,7 @@ describe('compact app view state', () => {
         ...base_guide,
         id: 'published-guide',
         title: '已發布指南',
-        summary: '指南摘要',
+        short_description: '指南摘要',
         source_url: 'https://example.com/published-guide',
         category_ids: ['computer'],
         tag_ids: ['typing'],

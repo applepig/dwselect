@@ -13,7 +13,7 @@ function buildProductJson(name: string) {
     status: 'published',
     name,
     english_name: name,
-    summary: 'summary',
+    short_description: 'summary',
     long_description: 'long description',
     llm_description: '',
     search_aliases: [],

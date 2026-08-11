@@ -13,20 +13,20 @@ You are a researcher and structured data filler，not a personal-opinion writer�
 
 Division of labor：the subagent does the first-draft writing。When given a target path，research the item and create or update the complete JSON file yourself（the subagent has the Write/Edit tools for exactly its one assigned file），then hand back audit notes。The coordinator's job is audit and editorial（polishing wording、confirming taxonomy、running `pnpm content:check`——not `pnpm generate`），not first-draft data entry。Only skip writing when the coordinator explicitly says research-only。
 
-- Product `summary` and `long_description` are user-authored personal opinions。Do not write or rewrite them unless the user explicitly provides exact text；for new products with no provided opinion，set them to empty string。
-- **絕對不要把使用者的一段話拆成 `summary` 一半、`long_description` 一半**。這兩個欄位不是「短版接長版」，是**兩個各自獨立顯示的場合**，UI 永遠只會擇一顯示其中一個：
-  - `summary` 顯示在**列表卡片**與**搜尋建議**——那裡沒有 `long_description` 可以接續，所以它必須自己就是完整的一句話。
-  - `long_description` 顯示在**商品詳情頁的「DW 怎麼說」**（`product-detail.vue` 用 `long_description || summary`，有 long 就完全不顯示 summary），並且是搜尋索引的 description 來源。
+- Product `short_description` and `long_description` are user-authored personal opinions。Do not write or rewrite them unless the user explicitly provides exact text；for new products with no provided opinion，set them to empty string。
+- **絕對不要把使用者的一段話拆成 `short_description` 一半、`long_description` 一半**。這兩個欄位不是「短版接長版」，是**兩個各自獨立顯示的場合**，UI 永遠只會擇一顯示其中一個：
+  - `short_description` 顯示在**列表卡片**與**搜尋建議**——那裡沒有 `long_description` 可以接續，所以它必須自己就是完整的一句話。
+  - `long_description` 顯示在**商品詳情頁的「DW 怎麼說」**（`product-detail.vue` 用 `long_description || short_description`，有 long 就完全不顯示 short_description），並且是搜尋索引的 description 來源。
   - 拆兩半的後果是兩邊都殘缺：卡片上看到前半句，詳情頁看到後半句，沒有任何一個畫面看得到完整內容。
-- 欄位權威定義見 `docs/020-product-detail-info-architecture/spec.md`：`summary` 是商品卡片短評／搜尋摘要／SEO fallback，`long_description` 是商品詳情頁「DW 怎麼說」主文。兩者都是使用者的個人觀點，agent 不編寫。
+- 欄位權威定義見 `docs/020-product-detail-info-architecture/spec.md`（⚠️ 該 spec 寫的是舊欄位名 `summary`，已於 sprint 043 改名為 `short_description`，語意不變）：`short_description` 是商品卡片短評／搜尋摘要／SEO fallback，`long_description` 是商品詳情頁「DW 怎麼說」主文。兩者都是使用者的個人觀點，agent 不編寫。
 - 使用者提供意見文字時的正確寫法：
-  1. **只給一句話** → `summary` 放那句話的完整原文，`long_description` 留空 `""`。詳情頁的 `long_description || summary` 會 fallback 顯示完整那句（020 spec 明訂此 fallback）。**不要為了「把欄位填滿」而把同一句複製兩份。**
-  2. **給了短句 + 額外補充** → `summary` 放短句原文；`long_description` 放能獨立讀完的完整主文，也就是「短句原文 + `\n\n` + 補充」。範例見 `content/products/2026-07-04-kinloch-anderson-traveler-20-carry-on.json`。
+  1. **只給一句話** → `short_description` 放那句話的完整原文，`long_description` 留空 `""`。詳情頁的 `long_description || short_description` 會 fallback 顯示完整那句（020 spec 明訂此 fallback）。**不要為了「把欄位填滿」而把同一句複製兩份。**
+  2. **給了短句 + 額外補充** → `short_description` 放短句原文；`long_description` 放能獨立讀完的完整主文，也就是「短句原文 + `\n\n` + 補充」。範例見 `content/products/2026-07-04-kinloch-anderson-traveler-20-carry-on.json`。
   3. **完全沒給意見** → 兩者都設為 `""`，並在回報中標記需要使用者補充。
-- 判準：`long_description` 若非空，就必須是「單獨拿出來給讀者看也完整」的文字——詳情頁的讀者看不到 `summary`。若你寫出來的 `long_description` 少了 `summary` 才有的資訊，那就是拆錯了。
-- ⚠️ 既有資料中有 87 筆 `summary` 與 `long_description` 字串完全相同。**那是 sprint 011 遷移時把同一份舊 `description` 複製進兩個欄位的未清理遺留**（020 spec 已記載為「內容填充問題」，並決議暫不做 schema migration），**不是可以照抄的慣例**。看到既有檔案長那樣，不要當成範本。
-- Guide `title` and `summary` are content-derived，not personal opinion：write a concise `title` and an objective 1-2 sentence `summary` summarizing what the source post covers and its core takeaway。Do not invent opinions or use subjective recommendation words（「便宜」「好用」「剛好」）；the coordinator edits the wording afterward。
-- Agent-owned fields include product name、English name、model numbers、reference links、taxonomy IDs、local image file、search aliases、and `llm_description`；for guides also `title` and the content-derived `summary`。Offers and prices are agent-maintained only when the user has not supplied explicit offer or price text。
+- 判準：`long_description` 若非空，就必須是「單獨拿出來給讀者看也完整」的文字——詳情頁的讀者看不到 `short_description`。若你寫出來的 `long_description` 少了 `short_description` 才有的資訊，那就是拆錯了。
+- ⚠️ 既有資料中有 87 筆 `short_description` 與 `long_description` 字串完全相同。**那是 sprint 011 遷移時把同一份舊 `description` 複製進兩個欄位的未清理遺留**（020 spec 已記載為「內容填充問題」，並決議暫不做 schema migration），**不是可以照抄的慣例**。看到既有檔案長那樣，不要當成範本。
+- Guide `title` and `short_description` are content-derived，not personal opinion：write a concise `title` and an objective 1-2 sentence `short_description` summarizing what the source post covers and its core takeaway。Do not invent opinions or use subjective recommendation words（「便宜」「好用」「剛好」）；the coordinator edits the wording afterward。
+- Agent-owned fields include product name、English name、model numbers、reference links、taxonomy IDs、local image file、search aliases、and `llm_description`；for guides also `title` and the content-derived `short_description`。Offers and prices are agent-maintained only when the user has not supplied explicit offer or price text。
 - `llm_description` must be objective、research-backed、and useful for search or LLM understanding。Do not paraphrase the user’s subjective recommendation text。
 
 ## Default Visibility Scope
@@ -118,12 +118,12 @@ Quality bar：
 - Prefer concrete nouns、numbers、comparison points、and verified caveats。
 - Mention the evidence source category implicitly through facts，for example official specs、store listing、Amazon product facts。
 - If the proposed text could still fit a different product in the same category，it is too generic。
-- If the text mainly repeats the user’s `summary` / `long_description`，it is invalid。
+- If the text mainly repeats the user’s `short_description` / `long_description`，it is invalid。
 - If no reviews or user feedback are found，explicitly omit that angle in the research notes；do not invent it。
 
 Avoid：
 
-- Repeating `summary` or `long_description`。
+- Repeating `short_description` or `long_description`。
 - Subjective recommendation words such as「便宜」、「剛好」、「很足」、「可以考慮」、「好用」。
 - Unverified claims。
 - Marketing-only phrasing without specs。
@@ -306,7 +306,7 @@ For category/tag cleanup or multi-product enrichment，use this coordinator flow
 1. Filter target IDs first，usually by `status: "published"` plus `category_id` or `tag_ids`，and exclude already completed IDs。
 2. Dispatch one subagent per product。Each subagent gets exactly one target JSON path。
 3. Let each subagent create or update its assigned target JSON file itself when implementation work is requested（the subagent writes the file；the coordinator does not type the data in）。
-4. Coordinator audits all written/changed JSON files (editorial pass)：checks names are concise，checks product `summary` / `long_description` were preserved，checks guide `title` / `summary` read well and stay objective，confirms taxonomy IDs exist，and confirms offers were not replaced。
+4. Coordinator audits all written/changed JSON files (editorial pass)：checks names are concise，checks product `short_description` / `long_description` were preserved，checks guide `title` / `short_description` read well and stay objective，confirms taxonomy IDs exist，and confirms offers were not replaced。
 5. Coordinator adds any confirmed new taxonomy entries，then runs `pnpm content:check`（not `pnpm generate`），then confirms the live page renders。
 
 ## Subagent Dispatch Contract
@@ -316,7 +316,7 @@ When delegating content research/update to a subagent，the prompt must explicit
 - Read and follow `dwselect-content-authoring`。
 - One subagent handles exactly one target JSON file。
 - If this is implementation work，create or update the assigned target JSON file yourself；write a complete schema-valid file（`id` matching the file stem，required fields，ISO 8601 `+08:00` timestamps，`status: "published"` + `published_at` for new published content）。The coordinator audits、does editorial，and runs `pnpm content:check`（not `pnpm generate`）。If this is research-only，do not modify files。
-- For products，do not write or rewrite `summary` and `long_description`（empty string when no user opinion）。For guides，write a content-derived `title` and an objective 1-2 sentence `summary`。
+- For products，do not write or rewrite `short_description` and `long_description`（empty string when no user opinion）。For guides，write a content-derived `title` and an objective 1-2 sentence `short_description`。
 - Default to `published` items when the task is about visible website content。
 - Keep `name` concise：prefer 32 visible characters or fewer，hard maximum 45；put full official names in `llm_description`、aliases、or model fields。
 - Provide sources、confidence、and unresolved assumptions。
@@ -335,9 +335,9 @@ Suggested one-product implementation prompt shape：
 ```text
 Read and follow `dwselect-content-authoring`。This is implementation work for exactly one content JSON：<path>。
 
-Create or update that JSON file yourself（write the complete schema-valid file）。Do not modify `summary`、`long_description`、`id`、`status`、or user-provided `offers[].url` / `price_text`。Keep `name` concise（prefer <=32 visible characters，hard max 45）；put full official names in `llm_description`、`model_numbers`、or `search_aliases`。Preserve existing taxonomy IDs；if a missing brand/tag is useful，return `taxonomy_suggestions` instead of editing taxonomy。
+Create or update that JSON file yourself（write the complete schema-valid file）。Do not modify `short_description`、`long_description`、`id`、`status`、or user-provided `offers[].url` / `price_text`。Keep `name` concise（prefer <=32 visible characters，hard max 45）；put full official names in `llm_description`、`model_numbers`、or `search_aliases`。Preserve existing taxonomy IDs；if a missing brand/tag is useful，return `taxonomy_suggestions` instead of editing taxonomy。
 
-Research official/spec/store/review sources，then write agent-owned fields：`name`、`english_name`、`model_numbers`、`search_aliases`、`reference_links`、`llm_description`，and clearly missing price currency/unit metadata when verified。For a guide，also write a content-derived `title` and an objective 1-2 sentence `summary`，and keep `source_url` as the post URL。For reviews，if rating/count or a review widget exists，use agent-browser dynamic inspection、review interactions、DOM extraction、and network/API inspection before claiming individual review text is unavailable。If you use agent-browser，pass `--session <content-id>` on every command and close only that session。Do not run `git`、`ls`、`cat`、`find`，build/verify，or `pnpm generate`；the coordinator audits、does editorial，and runs `pnpm content:check`。
+Research official/spec/store/review sources，then write agent-owned fields：`name`、`english_name`、`model_numbers`、`search_aliases`、`reference_links`、`llm_description`，and clearly missing price currency/unit metadata when verified。For a guide，also write a content-derived `title` and an objective 1-2 sentence `short_description`，and keep `source_url` as the post URL。For reviews，if rating/count or a review widget exists，use agent-browser dynamic inspection、review interactions、DOM extraction、and network/API inspection before claiming individual review text is unavailable。If you use agent-browser，pass `--session <content-id>` on every command and close only that session。Do not run `git`、`ls`、`cat`、`find`，build/verify，or `pnpm generate`；the coordinator audits、does editorial，and runs `pnpm content:check`。
 
 Return：files changed、field summary、sources、confidence、offer_status、image source type、image dimensions、taxonomy_suggestions、unresolved assumptions。
 ```
