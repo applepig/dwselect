@@ -23,14 +23,14 @@
     {
       "url": "https://www.amazon.co.jp/dp/B09DRVSFTF",
       "channel_id": "amazonjp",
-      "price_text": "NT$1,084.22",
+      "price_text": "￥6,980",
       "price": {
-        "amount": 1084.22,
-        "currency": "TWD",
+        "amount": 6980,
+        "currency": "JPY",
         "unit": "each",
         "label": "限時優惠"
       },
-      "checked_at": "2026-08-05T00:00:00+08:00"
+      "checked_at": "2026-08-11T00:00:00+08:00"
     }
   ],
   "category_id": "household",

@@ -5,7 +5,7 @@
   "name": "VESSEL 220USB-S1 電動起子",
   "english_name": "VESSEL Electric Ball Grip Screwdriver High Speed (Low Torque) 220USB-S1",
   "short_description": "我最近修電腦都拿這隻起子，快要手無縛螺絲之力了",
-  "long_description": "我最近修電腦都拿這隻起子，快要手無縛螺絲之力了",
+  "long_description": "",
   "llm_description": "## 快速判斷\n\nVESSEL 220USB-S1 是日本 VESSEL「電ドラボールハイスピード」低扭力高速款電動球柄起子，Amazon JP 頁面對應 ASIN `B08MQDCLWK`，選取款式為 `High Speed (Slow Rising)`／低扭力高速型。官方規格標示空載轉速 1200 rpm、電動最大輸出扭力 0.4 N·m、手動最大耐久扭力 10 N·m，定位在大量拆裝輕負載螺絲，而不是鏽死螺絲或高扭力鎖付。\n\n## 重要規格\n\n- 型號：`220USB-S1`；JAN：`4907587028150`；Amazon ASIN：`B08MQDCLWK`。\n- 尺寸與重量：官方規格為全長 140 mm、柄徑 45 mm、重量 160 g；Amazon 商品資訊另列 item weight 172 g。\n- 轉速／扭力：空載 1200 rpm；電動最大輸出扭力 0.4 N·m；手動最大耐久扭力 10 N·m。\n- 電池與充電：Li-ion 3.6 V 800 mAh；MicroUSB Type-B 充電；約 60 分鐘充電；約 500 次充電循環。\n- 起子頭規格：六角對邊 6.35 mm；隨附 `+2 × 100 mm` bit 1 支與 USB 充電線 1 m。\n- 適用螺絲：Amazon 頁面標示相容至 M6（+3，但不支援 M8）；官方描述偏向配電盤、控制盤、端子台、OA 設備維護與輕負載 DIY。\n- 注意事項：官方與 Amazon 皆提醒電氣作業需注意短路／觸電；過負載可能造成螺絲損傷或受傷；Amazon 商品描述也註明不適合拆卸鏽死螺絲或需要高扭力的鎖付。\n\n## 優點與限制\n\n- 1200 rpm 高速與低坐落反動設計，適合大量重複拆裝、端子台或機殼螺絲等輕負載工作。\n- 低扭力設定有助於降低螺絲坐落瞬間的反動，但遇到較緊的螺絲時可能需要先手動破扭或改用更高扭力工具。\n- 充電埠是 MicroUSB Type-B，不是 USB-C；這點在評論中也有人特別抱怨。\n- 可作為手動起子使用，但官方標示手動最大耐久扭力為 10 N·m，不應過度手動加力。\n\n## 評測與使用者回饋\n\nAmazon JP 商品頁顯示 4.1／5，1,095 個全球評分；完整 `/product-reviews/B08MQDCLWK` 評論列表在未登入狀態導向 Amazon Sign-In，因此以下只整理商品頁可見的 top reviews 樣本。\n\n- 正面回饋集中在高速拆裝與電動／手動切換：可見評論提到用於多顆螺絲的設備維修、家具或輕負載組裝時能縮短拆裝時間。\n- 多則評論把「低扭力」視為用途特性：有人認為低扭力不易把螺絲打壞，適合 PC 組裝或精密設備；也有人希望扭力再高一些。\n- 限制回饋包括：螺絲太緊時不易啟動、按鍵／開關有單則接觸不良回報，以及因期待 USB-C 但實際為 MicroUSB 而留下負評。\n\n## 參考來源\n\n- [Amazon.co.jp 商品頁](https://www.amazon.co.jp/dp/B08MQDCLWK/)\n- [VESSEL 官方商品頁：電ドラボールハイスピード No.220USB-S1](https://www.vessel.co.jp/product/screwdriver/148503/)\n- [VESSEL 官方安全說明：電ドラボールを安全にご使用いただくために](https://www.vessel.co.jp/sp/220usb/)\n- [Amazon 使用者指南 PDF](https://m.media-amazon.com/images/I/B1FWaXse5aS.pdf)",
   "search_aliases": [
     "VESSEL 220USB-S1",
@@ -24,14 +24,14 @@
     {
       "url": "https://amzn.asia/d/05DgtVPT",
       "channel_id": "amazonjp",
-      "price_text": "TWD 672.30",
+      "price_text": "￥3,973",
       "price": {
-        "amount": 672.3,
-        "currency": "TWD",
+        "amount": 3973,
+        "currency": "JPY",
         "unit": "each",
         "label": "Prime Early Deal"
       },
-      "checked_at": "2026-07-08T00:00:00+08:00"
+      "checked_at": "2026-08-11T00:00:00+08:00"
     }
   ],
   "category_id": "household",
