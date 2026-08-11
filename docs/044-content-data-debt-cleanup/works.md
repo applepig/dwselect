@@ -30,6 +30,12 @@
 
 因為這個缺陷會靜默產出「格式正確但屬於別的商品」的價格，coordinator 對全部 7 筆做了獨立重抓，逐筆核對 `corePrice_feature_div` 價格與 `id="productTitle"`，確認沒有污染寫進檔案。已把「暫存檔名必須帶 content id、parse 後務必核對 productTitle」寫進兩份 skill 的 Amazon fallback 段。
 
+### Corsair 一筆的處置
+
+`px-corsair` 完整查證後回報阻塞、未動任何欄位，並主動附上官網 `$1,699.99` 佐證與 `54,214.38 ÷ 1,699.99 ≈ 31.9` 的匯率推算，但**沒有自行寫入**——因為那是官網價而非美亞當下顯示價，超出「照抄頁面數字」的授權範圍。這是正確判斷。
+
+2026-08-11 向 repo owner 提出四個選項（換官網 offer／清空價格／寫入官網價／維持現狀），決定為**維持現狀**，日後再處理。查證細節已完整記入 spec 的「非本 sprint 範圍」，後續處理不需重查。
+
 ### 使用者要求的補充
 
 日本價格改用價格.com（`https://kakaku.com`）交叉驗證，比照台灣的 BigGo／FindPrice。特別記錄它對日亞的價值：Amazon 依 IP 換台幣，而 kakaku.com 一律日圓原幣別，可直接驗證抓到的 `￥` 數字合理性。已寫進兩份 skill 與兩份 researcher agent 定義，並註明它是合理性交叉檢查、不取代通路頁權威來源。

@@ -52,4 +52,12 @@ Coordinator 對每一筆**獨立重抓驗證**，比對 `corePrice_feature_div` 
 
 ## 非本 sprint 範圍
 
-- Corsair 該筆 offer 的後續處置（保留、清價、或換賣場）須由 repo owner 決定。
+**Corsair AI Workstation 300 的 offer 處置。** 2026-08-11 經 repo owner 決定**維持現狀**（保留 `TWD 54,214.38`），日後再處理。以下是本次查到的事實，供後續處理時直接使用、不必重查：
+
+- 美亞 ASIN `B0GKPJRXW4`：頁面可正常取得（HTTP 200、1.78MB、`id="productTitle"` 正確），但有 `id="outOfStock"` 區塊「Currently unavailable. We don't know when or if this item will be back in stock.」，`corePrice_desktop` 與整個 centerCol 都沒有任何 `a-offscreen` 價格。agent-browser 實際渲染後結果一致。
+- **不是幣別或反自動化問題**：同頁比較模組的其他 ASIN 正常顯示 `$1,899.99`、`$849.99`，證明 `i18n-prefs=USD` cookie 有生效。
+- 第三方賣家：`/gp/aod/ajax` 回 404，無其他報價。
+- Corsair 官方美國站同 SKU `CS-9080001-NA` 現價 **$1,699.99**、有現貨（該官網頁已在本檔 `reference_links`）。
+- `54,214.38 ÷ 1,699.99 ≈ 31.9`，與當時台幣匯率相符，**可推定原本記錄的就是 $1,699.99 的台幣換算值**。
+- 這個商品目前只有一筆 offer，所以頁面上顯示的是「買不到的商品的錯誤幣別價格」。日後選項：換成官網 offer（channel `other`）／保留美亞連結但清空價格／保留美亞連結寫入官網價（不建議，等於在 Amazon offer 上標 Amazon 不存在的價格）。
+- 查證阻塞紀錄：camelcamelcamel 被 Cloudflare 403 擋；corsair.com 直接 `curl` 也 403，僅 agent-browser 可讀。
