@@ -23,7 +23,17 @@
   - `pnpm typecheck`（隔離 buildDir，可在常駐 dev 旁跑）
   - `pnpm generate`（SSG build；同上隔離）
   - `pnpm content:check`（content/ 資料 gate；改動內容 JSON / taxonomy 後跑）
-- **推 PR 前用 `./dev.sh exec ./dev.sh verify`** 在容器內跑 CI 等價 quality-gate（`test→lint→typecheck→generate`，固定 production `APP_URL`），一輪測完再推；不要把 typecheck/generate deferred 到 CI 才發現紅。
+- **Quality gate 依改動範圍分級，不要一律跑全套 verify**。判準是「這次改的東西，哪個 gate 真的會抓到它的錯」：
+
+  | 改動範圍 | 該跑什麼 | 本機實測 |
+  |---|---|---|
+  | 只改 `content/**` JSON、taxonomy、content 圖片 | `pnpm content:check` | ~4.5s |
+  | 只改 `docs/**`、`*.md`、`.claude/**`、`.opencode/**`、程式碼註解 | 不需要 gate | 0 |
+  | 改 `app/`、`server/`、`scripts/`、`tests/`、`nuxt.config.ts`、依賴、CI 設定 | 全套 `./dev.sh exec ./dev.sh verify` | 3 分鐘起 |
+
+  `content/**` 的 JSON 合法性、zod schema、taxonomy 參照與 published image guard 全部由 `content:check` 覆蓋（見 `scripts/content-check.mjs` 檔頭）。反過來，只要動到會進 build 的程式碼或設定，就跑全套，不要用「改很小」當理由跳過。
+- **全套 quality gate 用 `./dev.sh exec ./dev.sh verify`** 在容器內跑（`test→lint→knip→typecheck→generate`，固定 production `APP_URL`），一輪測完再推；不要把 typecheck/generate deferred 到 CI 才發現紅。本機單步實測（熱快取）：`test` 27.6s、`lint` 11.4s、`knip` 9.1s、`typecheck` 21.0s、`generate` 112.7s。注意本機 `verify` **不含 E2E**，CI 才有。
+- **CI 的耗時分布跟本機不一樣，不要用本機數字推論 CI**。CI 有 Nuxt build cache，`generate` 只要 44s；真正的大宗是 E2E。實測一輪 quality-gate（約 4.5 分鐘）：E2E 152s、Chromium 安裝 24s、`generate` 44s、`test` 14s、`typecheck` 7s、`lint` 5s、`knip` 2s。因此 CI 的省時關鍵是「這次改動需不需要跑 E2E」，不是 generate。`.github/workflows/static-generate.yml` 已依改動路徑條件式跳過不相關的步驟（見該檔的 Detect changed scopes step）。
 - CI 沒有 `.env` 檔，靠 workflow job env 提供 `APP_URL`；`vitest.config.ts` 對 `.env` 不存在採容錯略過。
 
 ## Local Runtime

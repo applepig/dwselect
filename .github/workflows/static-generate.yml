@@ -19,6 +19,55 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          # 需要 base commit 才能算 changed-files diff（見下一步）；shallow clone 取不到 base。
+          fetch-depth: 0
+
+      # 依改動路徑決定跑哪些 gate step。動機：E2E（152s）+ Chromium 安裝（24s）佔一輪 gate 的 65%，
+      # 而 E2E 測的全是 app shell 的版面／路由／搜尋契約，改一個 content JSON 的 typo 不可能讓它們變色。
+      # 安全預設是「算不出 diff 就全跑」——寧可多跑一輪，也不要讓偵測失敗變成靜默跳過 gate。
+      - name: Detect changed scopes
+        id: scope
+        env:
+          BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
+          HEAD_SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+
+          run_all() {
+            printf 'code=true\n' >> "$GITHUB_OUTPUT"
+            printf 'content=true\n' >> "$GITHUB_OUTPUT"
+            printf 'Full gate: %s\n' "$1"
+            exit 0
+          }
+
+          [ -n "${BASE_SHA:-}" ] || run_all 'base SHA is empty'
+          # 新分支首推時 before 是全零 commit，diff 無從比起。
+          case "$BASE_SHA" in
+            *[!0]*) ;;
+            *) run_all 'base SHA is the zero commit (new branch)' ;;
+          esac
+          git cat-file -e "${BASE_SHA}^{commit}" 2>/dev/null \
+            || run_all 'base commit is unreachable (force push or rewritten history)'
+
+          changed="$(git diff --name-only "$BASE_SHA" "$HEAD_SHA")" || run_all 'git diff failed'
+          printf 'Changed files:\n%s\n\n' "$changed"
+
+          # 白名單會 fail-open：漏列的 build 設定（tsconfig.json、Dockerfile、dev.sh）
+          # 會被判成 code=false 而跳過 typecheck。改用黑名單——只有確定不進 build
+          # 的路徑算安全，其餘一律當 code，未知檔案因此 fail-safe 走全套 gate。
+          safe_pattern='(^docs/|^\.claude/|^\.opencode/|^content/|\.md$|^LICENSE$|^\.gitignore$)'
+
+          code=false
+          content=false
+          printf '%s\n' "$changed" | grep -qvE "$safe_pattern" && code=true
+          # content/ 底下除了 JSON 還有 101 個圖片檔，published image guard 在 vitest content
+          # suites 裡，所以整個 content/ 都要觸發 tests，不能只認 *.json。
+          printf '%s\n' "$changed" | grep -qE '^content/' && content=true
+
+          printf 'code=%s\n' "$code" >> "$GITHUB_OUTPUT"
+          printf 'content=%s\n' "$content" >> "$GITHUB_OUTPUT"
+          printf 'Resolved scopes: code=%s content=%s\n' "$code" "$content"
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
@@ -50,27 +99,40 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      # vitest 同時涵蓋 app 單元測試與 content/ 的 schema／taxonomy／image guard suites，故兩種 scope 都要跑。
       - name: Run tests
+        if: steps.scope.outputs.code == 'true' || steps.scope.outputs.content == 'true'
         run: pnpm test
 
+      # lint／knip／typecheck 只看程式碼與設定，不檢查 content JSON 的資料內容。
       - name: Run lint
+        if: steps.scope.outputs.code == 'true'
         run: pnpm lint
 
       - name: Run knip
+        if: steps.scope.outputs.code == 'true'
         run: pnpm knip
 
       - name: Run typecheck
+        if: steps.scope.outputs.code == 'true'
         run: pnpm typecheck
 
+      # generate 與 upload 一律跑、不加 scope 條件：Deploy workflow 靠這份 artifact 部署，缺了就無法上線；
+      # 且對 content-only 改動來說，generate 正是「prerender 會不會被這筆資料弄炸」的那道 gate。
       - name: Generate static site
         env:
           DWSELECT_ALLOW_HOST_GENERATE: "1"
         run: pnpm generate
 
+      # E2E 是整輪 gate 最貴的一段（Chromium 24s + 3 個 viewport project 序列跑 152s），而它驗的是
+      # app shell 的版面／路由／搜尋契約，不驗個別商品資料。content-only 改動跳過這段是安全的：
+      # content 的資料正確性由 vitest 的 content suites 擋，prerender 會不會炸由下面的 generate 擋。
       - name: Install Chromium for static preview E2E
+        if: steps.scope.outputs.code == 'true'
         run: pnpm exec playwright install --with-deps chromium
 
       - name: Run static preview E2E
+        if: steps.scope.outputs.code == 'true'
         env:
           PLAYWRIGHT_EXTERNAL_SERVER: "1"
           PLAYWRIGHT_BASE_URL: http://127.0.0.1:4173
