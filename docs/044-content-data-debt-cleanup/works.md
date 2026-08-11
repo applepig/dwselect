@@ -24,6 +24,26 @@
 
 隱含匯率偏離 4.6–4.8 常態的幾筆（TEPRA 5.41、起子 5.91、女神 6.44）經逐筆重抓確認為商品本身漲價，非抓錯。
 
+### kakaku.com 第二來源交叉驗證（補做）
+
+上述重抓驗證有個弱點：抓的是**同一個來源**（Amazon 商品頁），能抓出「檔案覆寫導致讀到別的商品」，但抓不出「Amazon 這個數字本身讀錯」。使用者指出這點後補做獨立第二來源驗證。
+
+（注意時序：8 個 researcher 執行時 kakaku 規則尚未寫入 skill，因此**它們並未使用**第二來源；本節是 coordinator 事後補驗。）
+
+| 商品 | 我們寫入 | kakaku | 判定 |
+|---|---|---|---|
+| 東芝吸頂燈 NLEH14028B-LC | `￥19,380` | 最低 19,380 | ✅ 完全一致 |
+| 東芝石窯 ER-D3000A | `￥49,800` | 45,700–89,870 | ✅ 落在區間 |
+| 三菱本炭釜 NJ-BW10GA-B | `￥69,800` | 69,800（唯一值） | ✅ 完全一致 |
+| King Jim TEPRA SR-MK1 | `￥10,973` | 10,973 | ✅ 完全一致 |
+| VESSEL 220USB-S1 | `￥3,973` | 最低 4,370 | ✅ Amazon 折扣，見下 |
+| Recharge WiFi T8BK-100GB | `￥12,980` | 無收錄 | 通信服務類，kakaku 不收 |
+| 女神 Premium | `￥6,980` | 無收錄 | 防災用品類，kakaku 不收 |
+
+起子低於 kakaku 最低價約 9%，起初可疑；但該 Amazon 頁面 `basisPrice` 為 `￥7,480`、offer 的 `price.label` 是 `Prime Early Deal`，屬 Amazon 自家折扣，與 5.91 的隱含匯率一致，判定合理。
+
+過程中摸出的 kakaku 實作細節（`p-item_priceNum` selector、`&#165;` entity、EUC-JP 編碼、必須逐項配對商品名以免混入配件低價）已寫進兩份 skill，讓規則可直接執行而非空泛引用。
+
 ### 過程中發現的缺陷
 
 **平行 researcher 共用暫存檔名互相覆寫。** `px-mitsubishi` 回報它第一次把 HTML 存成 `scratchpad/amzn.html`，內容被同時執行的其他 researcher 覆寫，讀到 Corsair 與 pocket WiFi 兩個無關商品頁；改用唯一檔名後結果才穩定。

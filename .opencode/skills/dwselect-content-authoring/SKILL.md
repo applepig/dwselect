@@ -157,7 +157,17 @@ Channel price digit obfuscation and cross-check（價格數字防呆）：
 - 部分台灣通路會把價格渲染得很難 parse：momo（尤其）、Yahoo 等常把數字拆成 sprite 圖、lazy-load 節點，或用「折扣後價格」「限時折後價」「促銷價」「momo幣回饋」這類 UI 文案包住數字。直接抓 DOM text 容易抓到 UI 文案、抓錯層、或整個漏掉數字。
 - 當通路頁的價格數字無法可靠讀出，或要驗證可疑數字時，改用比價聚合站交叉確認 plain-text 價格：
   - **台灣通路** → BigGo（`https://biggo.com.tw`）與 FindPrice（`https://www.findprice.com.tw`）。
-  - **日本通路（日亞等）** → 價格.com（`https://kakaku.com`）。用型號搜尋，例如 `https://kakaku.com/search_results/NJ-BW10GA-B/`，它會列出各店家與 Amazon 掲載価格的純文字日圓價格。**這對日亞特別有用**：Amazon 會依 IP 把價格換成台幣（見上面的 `i18n-prefs` cookie 規則），而 kakaku.com 一律是日圓原幣別，可以直接驗證你抓到的 `￥` 數字是否合理。
+  - **日本通路（日亞等）** → 價格.com（`https://kakaku.com`）。**這對日亞特別有用**：Amazon 會依 IP 把價格換成台幣（見上面的 `i18n-prefs` cookie 規則），而 kakaku.com 一律是日圓原幣別，可直接驗證你抓到的 `￥` 數字。實作細節（2026-08-11 實測）：
+    ```bash
+    curl -sL "https://kakaku.com/search_results/{型號}/" --max-time 30 \
+      -H 'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36' \
+      -H 'Accept-Language: ja-JP,ja;q=0.9'
+    ```
+    - 價格在 `class="p-item_priceNum"` 內（純數字帶千分位）；`￥` 本身是 HTML entity `&#165;`，所以用 `[¥￥]` 抓價會全部落空，**要抓 `p-item_priceNum`**。
+    - 頁面是 **EUC-JP** 編碼，直接當 UTF-8 讀會得到亂碼商品名。要比對商品名時先用 `euc-jp` decode。
+    - **一定要逐項配對商品名與價格**，不要只取整頁價格的 min/max：搜尋結果會混進色帶、鑽頭、配件等低價品項，取 min 會得到毫無意義的區間（例如查 TEPRA `SR-MK1` 會混進 415 円的標籤帶）。
+    - 對得上就是強佐證（實測 4 筆中 3 筆與 Amazon 完全同價）。**比 kakaku 最低價還便宜不代表抓錯**——先看 Amazon 頁面有沒有 `basisPrice` 高於售價或 deal 標記，那是 Amazon 自家折扣。
+    - kakaku 只收 3C／家電。通信服務（SIM、WiFi 分享器）、防災用品、日用消耗品查不到是正常的，不要因此判定價格有問題。
   - 用商品名／型號搜尋，對到同一通路的 listing，以聚合站的純文字價格確認 `price.amount`。聚合站價格可能落後或含不同賣家，**它是合理性交叉檢查，不是取代通路頁的權威來源**——最終寫入的仍以 offer URL 當下頁面為準。
 - `price.amount` 必須是已確認的數字價格。`price_text` 是前端唯一的價格顯示來源，必須乾淨且完整、可直接顯示（純數字，可帶貨幣符號、千分位，或區間「起」字尾，例如 `39,512`、`NT$39,512`、`NT$1,990 起`），不可塞入通路 UI heading 原文（如「折扣後價格」「限時折後價」）。
 - `price.label`、`amount`、`currency`、`unit` 只是 metadata，前端不顯示。`label` 可選擇性記錄通路價格類型（例如「折扣價」「限時折扣」）當 metadata，但顯示完全只看 `price_text`，所以任何要顯示的修飾詞（區間「起」、幣別）都必須寫進 `price_text` 本身，不能只放在 `label`。
