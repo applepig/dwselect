@@ -28,6 +28,8 @@ Division of labor：the subagent does the first-draft writing。When given a tar
 - Guide `title` and `short_description` are content-derived，not personal opinion：write a concise `title` and an objective 1-2 sentence `short_description` summarizing what the source post covers and its core takeaway。Do not invent opinions or use subjective recommendation words（「便宜」「好用」「剛好」）；the coordinator edits the wording afterward。
 - Agent-owned fields include product name、English name、model numbers、reference links、taxonomy IDs、local image file、search aliases、and `llm_description`；for guides also `title` and the content-derived `short_description`。Offers and prices are agent-maintained only when the user has not supplied explicit offer or price text。
 - `llm_description` must be objective、research-backed、and useful for search or LLM understanding。Do not paraphrase the user’s subjective recommendation text。
+- **不要因為 schema 沒有專屬欄位而遺漏已驗證、會影響購買判斷的事實。** 例如免運、限時折扣、保固限制、跨境條件或 bundle 內容，先判斷是否能以既有語意正確的欄位保存；單筆商品的客觀脈絡應寫入 `llm_description` 對應段落，附來源與查核日期。只有該事實需要跨商品篩選、排序、計算，或每筆都需固定 UI 顯示時，才提議新增 structured schema；不得讓 schema 缺口成為不記錄的理由。
+- 回報 schema 缺口時，必須同時說明已保存在哪個既有欄位；若沒有任何欄位能誠實承載，才列為 unresolved assumption，並提出最小 schema 擴充方案。
 
 ## Default Visibility Scope
 
