@@ -1,6 +1,6 @@
 # 046 DW嚴選 全站 Redesign — 前置規劃
 
-> 狀態：探索中，尚未定方向。本檔是盤點與決策清單，不是 spec；方向確認後另寫 `spec.md`。
+> 狀態：五個方向決策已於 2026-09-07 拍板（見「決策」節）。下一步是 design canvas 出圖，定案後再寫 `spec.md`。本檔不是 spec。
 > 脈絡：2026-06 的 `docs/design_handoff_dwselect_redesign/`（Direction C「俐落清單」）是目前版面的出處，
 > 但之後 019～044 各 sprint 各自加頁、加元件，沒有回頭整合。使用者定調：**直接朝 redesign 想，不是修補 Direction C**。
 
@@ -9,7 +9,7 @@
 使用者觀察到三個症狀，盤點後發現是同一個結構性缺口——「沒有可對齊的設計系統」：
 
 1. **換頁慢** → 已由 045 獨立修掉（VT 快照 475 → 6），不在本 sprint。
-2. **設計語言不一致**：token 只有顏色一族（`variables.css`），沒有 spacing／radius／type scale；`catalog.css` 有 7 種 radius、12 種字級、約 40 種間距字面值。價格沒有 formatter，`price_label` 是作者手打字串直印（`500`、`NT$6,498`、`TWD 54,214.38`、`￥840`、`約¥5000`、`249~349`、`大概16000`……），同一個價格在卡片／詳情上方／詳情「目前參考價」／搜尋結果有 4 種視覺；schema 裡的 structured price（amount／currency／unit，95 筆有 93 筆）沒有任何顯示程式碼在讀。Pill 有 5 套（`CatalogPill` 兩變體、`.category-chip`、`.tag-chip`、`.channel-badge`、三種 count），詳情頁把分類／通路／品牌／標籤印成四排長得一樣的 pill，卡片上卻沒有分類、品牌、標籤。
+2. **設計語言不一致**：token 只有顏色一族（`variables.css`），沒有 spacing／radius／type scale；`catalog.css` 有 7 種 radius、12 種字級、約 40 種間距字面值。價格沒有 formatter，`price_label` 是作者手打字串直印（`500`、`NT$6,498`、`TWD 54,214.38`、`￥840`、`約¥5000`、`249~349`、`大概16000`……），同一個價格在卡片／詳情上方／詳情「目前參考價」／搜尋結果有 4 種視覺；schema 裡的 structured price（`price: { amount, currency, unit, label }`，96 個 offer 有 89 個帶 amount，幣別 TWD 67／JPY 22／USD 4）沒有任何顯示程式碼在讀——公開站顯示的是 `price_text`（`scripts/public-payload/map-product-card-fields.ts:25`）。Pill 有 5 套（`CatalogPill` 兩變體、`.category-chip`、`.tag-chip`、`.channel-badge`、三種 count），詳情頁把分類／通路／品牌／標籤印成四排長得一樣的 pill，卡片上卻沒有分類、品牌、標籤。
 3. **導航冗餘**：桌面首頁左上角「DW嚴選」出現三次（側欄 `.nav-brand`、kicker「DW SELECT」、H1 breadcrumb 根節點）；layout 把 breadcrumb 當 H1，商品／指南真正的標題被降成 H2；brand／tag 頁是完整預渲染頁卻只能從詳情頁 pill 進；category 在桌面（側欄）與平板以下（chip bar）用兩套互斥機制。
 
 六月 handoff 其實已規定 radius scale、type scale 與價格格式（`NT$ ` + `toLocaleString`），是實作時沒落地。
@@ -32,20 +32,20 @@
 
 ## 非目標（草案）
 
-- 不改內容模型與 `content/` schema（formatter 讀既有欄位；`price_label` 的手打字串是否退場另議）。
+- 不改內容模型與 `content/` schema（formatter 讀既有 `price.amount／currency／unit／label`；`price_text` 降為作者原始記錄、不再顯示——見決策 3）。
 - 不換技術棧（維持 Nuxt UI + `catalog.css` 的 SSOT 規則）。
 - 不動 SEO route 結構（10 個 route 保留）。
 - 不做 Direction C 以外的全新資訊架構——tab 數、頁面種類維持，重的是視覺與元件系統。
 
-## 待使用者決策
+## 決策（2026-09-07，使用者已拍板）
 
-1. **視覺方向**：保留暖色橘 accent 的 brand feel（六月 handoff 的 A／B／C 三方向比較可再拿出來看），還是連色彩都重來？
-2. **卡片露出多少 taxonomy**：目前只有價格＋通路；redesign 要不要加分類／品牌／標籤 pill（影響卡片密度與 019 的視覺密度決策）。
-3. **價格手打字串的去留**：formatter 上線後，`price_label` 是 fallback、還是移除並把「約／起」搬進 structured price 的 `label`／新欄位？（動 schema 就超出非目標，要先決）。
-4. **breadcrumb 與 H1**：H1 還給內容標題，breadcrumb 降級為導航元件——接受 SEO title 結構變動？
-5. **進行方式**：先用 design canvas 產 2～3 個方向的 phone＋desktop mockup 讓你直接改，定案後再寫 spec；或先寫 spec 以文字定 token 與元件契約、再出圖。建議前者（頁數少、視覺問題用看的比用讀的快）。
+1. **視覺方向：保留暖色橘 accent。** `--dw-*` token 與六月 handoff 的完整雙主題色表已落地，色彩重來會丟掉唯一已成形的一族 token，卻換不到本 sprint 真正要解的缺口（沒有 spacing／radius／type scale）。
+2. **卡片只加分類，不加品牌／標籤。** 019 的既有決策是「減框、減 overlay」＋文字區固定三行以對齊價格／通路列，再塞三種 pill 與之相反。分類是導航主軸（側欄／chip bar 都以它為軸），值得露出；品牌／標籤留在詳情頁。
+3. **不動 schema；`price_text` 退場，formatter 讀 structured price。** 原本以為要加欄位，實測發現 `price.label` 已存在。Formatter 契約：`amount` 有值 → 格式化金額，`label` 以次要註記呈現；`amount` 為 null → 直印 `label`。現有 19 筆 `label` 語意混了三種（無法 parse 時的原文複製、與金額並存的註記如 `折扣價`／`官方促銷價（原價 US$8,950）`、單一筆真正的修飾詞 `約`），此契約三種都吃得下且不需強制改內容。6 筆無 amount（`大概16000`、`低於60000`、`比較貴一點`、`一台4400`、`20~30鎂`、`249~349`）走 label 直印；其中兩筆 range 不加 `amount_max`（YAGNI），可日後選擇性補 amount。
+4. **H1 歸位，直接做。** 查證後 SEO 沒有變動要接受——`<title>` 已是 `${product.name}｜DW嚴選`（見 `tests/product-detail-page-head.test.ts:119`），與 breadcrumb／H1 無關。
+5. **先出圖，且只出一個方向。** 色彩既然沿用（決策 1），2～3 個方向會退化成同一套色的三種排法。用 design canvas 出一個方向的 phone＋desktop，使用者在畫布上直接改，定案後再寫 spec。
 
-## 建議的 Milestones（定案後進 spec）
+## 建議的 Milestones（出圖定案後進 spec）
 
 - M1 設計系統：token 四族＋`catalog.css` 收斂＋price formatter＋語意化 label 元件（含測試：formatter 的 currency／modifier／range 行為）。
 - M2 導航與 layout：品牌名單一處、H1 歸位、category 導航單一機制、brand／tag 入口。
