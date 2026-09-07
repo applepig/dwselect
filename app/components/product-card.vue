@@ -115,6 +115,13 @@ function getActiveViewTransitionStyle(part: ProductViewTransitionPart) {
 // 只有通往詳情頁的連結才啟用：channel pill 導向 /channel/*（列表↔列表），若也啟用，該卡會在兩個列表間
 // 單獨 morph、其他卡隨 root fade，與 045 接受的「列表↔列表隨 root fade」不一致。
 function onCardClicked(event: MouseEvent) {
+  // 與 RouterLink 的 guardEvent 同條件：這些點擊（開新分頁／新視窗／下載、或已被 preventDefault）
+  // 不會在本分頁導航，來源分頁仍停在列表；照樣啟用會留下 6 個殘名，下次列表↔列表換頁就單獨 morph。
+  if (event.defaultPrevented || event.button !== 0
+    || event.metaKey || event.altKey || event.ctrlKey || event.shiftKey) {
+    return
+  }
+
   const target = event.target as HTMLElement | null
 
   if (!target?.closest('.product-card-link')) {

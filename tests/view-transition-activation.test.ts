@@ -138,6 +138,24 @@ describe('product card view-transition-name 啟用互動（AC2）', () => {
     expectCardUnnamed(wrapper)
   })
 
+  // NuxtLink 對這些點擊不做本分頁導航（開新分頁／新視窗／下載，或已被別人 preventDefault），
+  // 來源分頁仍停在列表；若照樣啟用，該卡會留下 6 個殘名，下一次列表↔列表換頁就單獨 morph。
+  it.each([
+    ['Ctrl-click', { ctrlKey: true }],
+    ['Meta-click', { metaKey: true }],
+    ['Shift-click', { shiftKey: true }],
+    ['Alt-click', { altKey: true }],
+    ['middle-click', { button: 1 }],
+    // 程式碼另有 event.defaultPrevented 判斷（與 guardEvent 同條件），但 defaultPrevented 是唯讀屬性、
+    // 無法用 trigger 構造，故不在此列舉。
+  ])('should not activate the card on %s, which does not navigate this tab', async (_label, event_init) => {
+    const wrapper = mountProductCard(makeProductCardView({ id: 'alpha' }))
+
+    await wrapper.find('.product-card-link').trigger('click', event_init)
+
+    expectCardUnnamed(wrapper)
+  })
+
   it('should move the name to the newly clicked card so exactly one product is named at a time', async () => {
     const alpha = mountProductCard(makeProductCardView({ id: 'alpha' }))
     const beta = mountProductCard(makeProductCardView({ id: 'beta' }))

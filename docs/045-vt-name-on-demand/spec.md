@@ -22,7 +22,8 @@ card ↔ detail 的 morph 行為維持不變。
 - [x] AC3：從詳情頁返回列表（返回鈕、瀏覽器 back、或點側欄／chip 進任一含該商品的列表）時，該商品卡片在 new 快照時帶 name，反向 morph 保留；同一時間帶 name 的商品仍恰好一個。
 - [x] AC4：詳情頁自身的 name 行為不變；`prefers-reduced-motion: reduce` 下既有停用規則不變。
 - [x] AC5：`tests/view-transition.test.ts` 中「card 與 detail 共享 name」的既有測試改為在「該卡為 active 商品」狀態下驗證；新增「非 active 卡片無 name」與「啟用後才有 name」的 mount 級行為測試。不新增讀 source 的字串斷言。
-- [x] AC6（量測，works.md 記錄）：對 `pnpm generate` 產物或部署後正式站，以 works.md 的 Playwright 腳本量首頁 → 詳情 DOM 切換時間，中位數落在「只保留 root」情境的同一個量級（現況 4.5s → 目標 < 0.6s，headless 軟體 raster 環境下的相對值）。
+- [ ] AC6（量測，works.md 記錄）：對 `pnpm generate` 產物或部署後正式站，以 works.md 的 Playwright 腳本量首頁 → 詳情 DOM 切換時間，中位數落在「只保留 root」情境的同一個量級（現況 4.5s → 目標 < 0.6s，headless 軟體 raster 環境下的相對值）。
+  - 未達標：本機 generate 產物量到中位數 614ms，超過 `< 0.6s` 門檻 14ms（works.md M2）。改動前的 4519ms 基線量在正式站 CDN，與本機 static server 環境不同，不是同基準比較。留待部署後對 `dwselect.applepig.net` 重量再判定；若使用者決定改門檻，需明確裁決後才勾。
 
 ## ADR
 
