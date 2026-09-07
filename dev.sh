@@ -141,7 +141,9 @@ can_run_build_here() {
 # 互不踩 chunk hash；CI／host 放行時用預設 .nuxt（無常駐 dev，且與 workflow cache 一致）。
 run_nuxt_isolated() {
     if is_container; then
-        NUXT_BUILD_DIR=.nuxt-build VITE_CACHE_DIR=node_modules/.cache/vite-build pnpm exec nuxt "$@"
+        # NUXT_BUILD_DIR 允許外部覆寫（預設 .nuxt-build）：搭配 NUXT_OUTPUT_DIR 可把 build 產物整批
+        # 指到掛進來的非 Dropbox 目錄底下（見 nuxt.config output_dir 註解）。
+        NUXT_BUILD_DIR="${NUXT_BUILD_DIR:-.nuxt-build}" VITE_CACHE_DIR=node_modules/.cache/vite-build pnpm exec nuxt "$@"
     else
         pnpm exec nuxt "$@"
     fi

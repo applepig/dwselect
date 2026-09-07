@@ -158,6 +158,20 @@ describe('dev server script', () => {
     )
   })
 
+  it('should honor an externally provided NUXT_BUILD_DIR inside the container', () => {
+    // 045：一次性容器把 build 產物指到掛進來的非 Dropbox 目錄底下時，隔離步驟不得把外部 buildDir 蓋回 .nuxt-build。
+    const fixture = makeShellFixture()
+    writeFakeCommand(fixture.bin_dir, 'docker', 'printf "unexpected docker %s\\n" "$*" >> "$CALL_LOG"\nexit 42\n')
+    writeFakeCommand(fixture.bin_dir, 'pnpm', 'printf "pnpm %s NUXT_BUILD_DIR=%s VITE_CACHE_DIR=%s\\n" "$*" "${NUXT_BUILD_DIR:-}" "${VITE_CACHE_DIR:-}" >> "$CALL_LOG"\n')
+
+    const result = runDevSh(['typecheck'], fixture, { DWSELECT_IN_CONTAINER: '1', NUXT_BUILD_DIR: '/app/.build-out/nuxt-build' })
+
+    expect(result.status).toBe(0)
+    expect(readFileSync(fixture.log_path, 'utf8')).toBe(
+      'pnpm exec nuxt typecheck NUXT_BUILD_DIR=/app/.build-out/nuxt-build VITE_CACHE_DIR=node_modules/.cache/vite-build\n',
+    )
+  })
+
   it('should run typecheck with the default buildDir under CI without entering docker', () => {
     const fixture = makeShellFixture()
     writeFakeCommand(fixture.bin_dir, 'docker', 'printf "unexpected docker %s\\n" "$*" >> "$CALL_LOG"\nexit 42\n')
