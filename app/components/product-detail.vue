@@ -217,6 +217,10 @@ const props = defineProps<{
   detail: ProductDetailView
 }>()
 
+// 在 setup 同步登記（而非 onMounted）：SSR／SSG 時 active id 隨 payload 送到 client，直接落地詳情頁再返回列表
+// 也能讓對應卡片在 new 快照前就帶 name（AC3）；client 換頁時則在 mount 前就完成，時序不依賴 mounted hook。
+useActiveViewTransitionProduct().activate(props.detail.id)
+
 const detail_root = ref<HTMLElement | null>(null)
 const { isBrokenImage, onImageError, scanForBrokenImage } = useBrokenImageFallback()
 // tag／brand pill：ids 與 labels 為並列陣列、由 mapper 同源同序映射，以 index 配對安全；

@@ -1,17 +1,19 @@
 // @vitest-environment happy-dom
 
 import { mount } from '@vue/test-utils'
-import { computed, defineComponent, h, nextTick, onMounted, onUnmounted, ref } from 'vue'
+import { computed, defineComponent, h, nextTick, onMounted, onUnmounted, readonly, ref } from 'vue'
 import { afterAll, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // srcset 契約以安裝版 @nuxt/image runtime 的 getSizes 實跑（同 product-card-responsive-image.test.ts），
 // 把 M3b 擴充 AC「hero 實際下載尺寸對應 .detail-hero-layout 各斷點顯示尺寸」鎖成自動化斷言。
 import { resolveSrcset } from './helpers/resolve-srcset'
+import { useActiveViewTransitionProduct } from '../app/composables/use-active-view-transition-product'
 import { useBrokenImageFallback } from '../app/composables/use-broken-image-fallback'
 import { useDetailBackNavigation } from '../app/composables/use-detail-back-navigation'
 import ProductDetail from '../app/components/product-detail.vue'
 import GuideDetail from '../app/components/guide-detail.vue'
 import type { GuideDetailView, ProductDetailView } from '../app/utils/public-content-view-types'
+import { createUseStateStub } from './helpers/create-use-state-stub'
 
 // 透傳 stub：把 detail 元件傳給 <NuxtImg> 的響應式與載入屬性原封渲染到 <img>，
 // 讓測試能從 render 後 DOM 觀察 hero 對 image 層宣告的顯示尺寸與載入優先序。
@@ -169,6 +171,9 @@ describe('詳情頁 hero 響應式圖（M3b 擴充）', () => {
     vi.stubGlobal('useRouter', () => ({ back: vi.fn(), push: vi.fn() }))
     vi.stubGlobal('useDetailBackNavigation', useDetailBackNavigation)
     vi.stubGlobal('useBrokenImageFallback', useBrokenImageFallback)
+    vi.stubGlobal('readonly', readonly)
+    vi.stubGlobal('useState', createUseStateStub())
+    vi.stubGlobal('useActiveViewTransitionProduct', useActiveViewTransitionProduct)
   })
 
   afterAll(() => {

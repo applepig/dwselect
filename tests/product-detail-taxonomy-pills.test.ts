@@ -1,9 +1,10 @@
 // @vitest-environment happy-dom
 
 import { mount } from '@vue/test-utils'
-import { computed, onMounted, onUnmounted, ref } from 'vue'
+import { computed, onMounted, onUnmounted, readonly, ref } from 'vue'
 import { afterAll, beforeEach, describe, expect, it, vi } from 'vitest'
 
+import { useActiveViewTransitionProduct } from '../app/composables/use-active-view-transition-product'
 import { useBrokenImageFallback } from '../app/composables/use-broken-image-fallback'
 import { useDetailBackNavigation } from '../app/composables/use-detail-back-navigation'
 import ProductCard from '../app/components/product-card.vue'
@@ -11,6 +12,7 @@ import ProductDetail from '../app/components/product-detail.vue'
 import RelatedProductsSection from '../app/components/related-products-section.vue'
 import ShareButtons from '../app/components/share-buttons.vue'
 import type { ProductCardView, ProductDetailView } from '../app/utils/public-content-view-types'
+import { createUseStateStub } from './helpers/create-use-state-stub'
 
 // CatalogPill 以 NuxtLink 渲染，stub 後把 `to`（{ path, query }）序列化到 href 上方便斷言。
 // `to` 可缺席：ProductCard 的 price pill 是純顯示、不帶連結。
@@ -127,6 +129,9 @@ describe('ProductDetail taxonomy pill routing', () => {
     vi.stubGlobal('useRouter', () => ({ back: vi.fn(), push: vi.fn() }))
     vi.stubGlobal('useDetailBackNavigation', useDetailBackNavigation)
     vi.stubGlobal('useBrokenImageFallback', useBrokenImageFallback)
+    vi.stubGlobal('readonly', readonly)
+    vi.stubGlobal('useState', createUseStateStub())
+    vi.stubGlobal('useActiveViewTransitionProduct', useActiveViewTransitionProduct)
   })
 
   afterAll(() => {
@@ -218,6 +223,9 @@ describe('ProductDetail related products section', () => {
     vi.stubGlobal('useRouter', () => ({ back: vi.fn(), push: vi.fn() }))
     vi.stubGlobal('useDetailBackNavigation', useDetailBackNavigation)
     vi.stubGlobal('useBrokenImageFallback', useBrokenImageFallback)
+    vi.stubGlobal('readonly', readonly)
+    vi.stubGlobal('useState', createUseStateStub())
+    vi.stubGlobal('useActiveViewTransitionProduct', useActiveViewTransitionProduct)
   })
 
   afterAll(() => {
@@ -258,6 +266,9 @@ describe('ProductDetail share buttons', () => {
     vi.stubGlobal('useRouter', () => ({ back: vi.fn(), push: vi.fn() }))
     vi.stubGlobal('useDetailBackNavigation', useDetailBackNavigation)
     vi.stubGlobal('useBrokenImageFallback', useBrokenImageFallback)
+    vi.stubGlobal('readonly', readonly)
+    vi.stubGlobal('useState', createUseStateStub())
+    vi.stubGlobal('useActiveViewTransitionProduct', useActiveViewTransitionProduct)
   })
 
   afterAll(() => {
@@ -284,6 +295,9 @@ describe('ProductDetail Disqus thread', () => {
     vi.stubGlobal('useRouter', () => ({ back: vi.fn(), push: vi.fn() }))
     vi.stubGlobal('useDetailBackNavigation', useDetailBackNavigation)
     vi.stubGlobal('useBrokenImageFallback', useBrokenImageFallback)
+    vi.stubGlobal('readonly', readonly)
+    vi.stubGlobal('useState', createUseStateStub())
+    vi.stubGlobal('useActiveViewTransitionProduct', useActiveViewTransitionProduct)
   })
 
   afterAll(() => {

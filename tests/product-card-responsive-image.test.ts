@@ -1,16 +1,18 @@
 // @vitest-environment happy-dom
 
 import { mount } from '@vue/test-utils'
-import { defineComponent, h, nextTick, onMounted, ref } from 'vue'
+import { defineComponent, h, nextTick, onMounted, readonly, ref } from 'vue'
 import { afterAll, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // srcset 契約以安裝版 @nuxt/image runtime 的 getSizes 實跑（見 resolveSrcset），把 AC「srcset 含
 // 多個依 sizes 換算的寬度候選」與候選集上下界（覆蓋 DPR2–3 手機 / 不過度密集）鎖成自動化斷言，
 // 而非靠不存在的 generate gate 或口頭約定；最終烤製產物另以 M3 人工 throttled/Lighthouse 複驗。
 import { resolveSrcset } from './helpers/resolve-srcset'
+import { useActiveViewTransitionProduct } from '../app/composables/use-active-view-transition-product'
 import { useBrokenImageFallback } from '../app/composables/use-broken-image-fallback'
 import ProductCard from '../app/components/product-card.vue'
 import type { ProductCardView } from '../app/utils/public-content-view-types'
+import { createUseStateStub } from './helpers/create-use-state-stub'
 
 const NuxtLinkStub = {
   props: ['to'],
@@ -99,6 +101,9 @@ describe('ProductCard 響應式卡圖與首屏載入', () => {
     vi.stubGlobal('ref', ref)
     vi.stubGlobal('onMounted', onMounted)
     vi.stubGlobal('useBrokenImageFallback', useBrokenImageFallback)
+    vi.stubGlobal('readonly', readonly)
+    vi.stubGlobal('useState', createUseStateStub())
+    vi.stubGlobal('useActiveViewTransitionProduct', useActiveViewTransitionProduct)
   })
 
   afterAll(() => {

@@ -1,14 +1,26 @@
 import { renderToString } from '@vue/test-utils'
-import { computed, onMounted, ref } from 'vue'
-import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest'
+import { computed, onMounted, readonly, ref } from 'vue'
+import { afterAll, beforeEach, describe, expect, it, vi } from 'vitest'
 
 import nuxt_config from '../nuxt.config'
+import { useActiveViewTransitionProduct } from '../app/composables/use-active-view-transition-product'
 import { useBrokenImageFallback } from '../app/composables/use-broken-image-fallback'
 import { useDetailBackNavigation } from '../app/composables/use-detail-back-navigation'
 import ProductCard from '../app/components/product-card.vue'
 import ProductDetail from '../app/components/product-detail.vue'
 import RelatedProductsSection from '../app/components/related-products-section.vue'
 import type { ProductCardView, ProductDetailView } from '../app/utils/public-content-view-types'
+import { createUseStateStub } from './helpers/create-use-state-stub'
+
+// 卡片上 6 個會掛 view-transition-name 的部件（card/image/title/summary/price/channel）。
+const CARD_PART_CLASSES = [
+  'product-vt-card',
+  'product-vt-image',
+  'product-vt-title',
+  'product-vt-summary',
+  'product-vt-price',
+  'product-vt-channel',
+]
 
 // renderToString 把 inline style 直接序列化成字串（不經 happy-dom CSSOM，後者會丟棄 view-transition-name），
 // 因此能驗收「product id 流入 view-transition-name」這條 morph 契約。讀的是 render 後 markup，
@@ -21,6 +33,10 @@ function getInlineViewTransitionName(html: string, css_class: string): string | 
   const name = tag?.[0].match(/view-transition-name:\s*([^;"]+)/)
 
   return name?.[1]?.trim()
+}
+
+function activateProduct(product_id: string) {
+  useActiveViewTransitionProduct().activate(product_id)
 }
 
 const NuxtLinkStub = { props: ['to'], template: '<a :href="to"><slot /></a>' }
@@ -80,17 +96,17 @@ function makeProductDetailView(overrides: Partial<ProductDetailView> = {}): Prod
   }
 }
 
+const PRODUCT_CARD_STUBS = {
+  UCard: UCardStub,
+  NuxtLink: NuxtLinkStub,
+  NuxtImg: NuxtImgStub,
+  CatalogPill: CatalogPillStub,
+}
+
 function renderProductCard(product: ProductCardView) {
   return renderToString(ProductCard, {
     props: { product },
-    global: {
-      stubs: {
-        UCard: UCardStub,
-        NuxtLink: NuxtLinkStub,
-        NuxtImg: NuxtImgStub,
-        CatalogPill: CatalogPillStub,
-      },
-    },
+    global: { stubs: PRODUCT_CARD_STUBS },
   })
 }
 
@@ -129,82 +145,150 @@ describe('view transition flag single source of truth (nuxt.config)', () => {
 })
 
 describe('shared view-transition-name naming (rendered markup, AC3/AC5a)', () => {
-  beforeAll(() => {
-    // product-detail.vue 依賴 Nuxt auto-import 的 Vue API；此 bare vitest 環境無 auto-import，需 stub。
+  beforeEach(() => {
+    // product-card／product-detail 依賴 Nuxt auto-import 的 Vue API 與 composable；此 bare vitest 環境無 auto-import，需 stub。
     vi.stubGlobal('ref', ref)
     vi.stubGlobal('computed', computed)
+    vi.stubGlobal('readonly', readonly)
     vi.stubGlobal('onMounted', onMounted)
     vi.stubGlobal('useRouter', () => ({ back: vi.fn(), push: vi.fn() }))
     vi.stubGlobal('useDetailBackNavigation', useDetailBackNavigation)
     vi.stubGlobal('useBrokenImageFallback', useBrokenImageFallback)
+    // active 商品狀態跨元件共享，每個 test 給一份全新的 useState 存放區，避免前一個 test 的啟用外洩。
+    vi.stubGlobal('useState', createUseStateStub())
+    vi.stubGlobal('useActiveViewTransitionProduct', useActiveViewTransitionProduct)
   })
 
   afterAll(() => {
     vi.unstubAllGlobals()
   })
 
-  it('should share the product image tile name across card and detail so the image moves inside the expanding card', async () => {
-    const [card_html, detail_html] = await Promise.all([
-      renderProductCard(makeProductCardView({ id: 'alpha' })),
-      renderProductDetail(makeProductDetailView({ id: 'alpha' })),
-    ])
+  describe('非 active 商品（列表靜止狀態，AC1）', () => {
+    it('should render every card part without a view-transition-name when no product has been activated', async () => {
+      const html = await renderProductCard(makeProductCardView({ id: 'alpha' }))
 
-    expect(getInlineViewTransitionName(card_html, 'product-image-tile')).toBe('product-image-alpha')
-    expect(getInlineViewTransitionName(detail_html, 'detail-hero-tile')).toBe('product-image-alpha')
+      for (const css_class of CARD_PART_CLASSES) {
+        expect(getInlineViewTransitionName(html, css_class), css_class).toBeUndefined()
+      }
+    })
+
+    it('should leave other products un-named when a different product is active', async () => {
+      activateProduct('alpha')
+
+      const html = await renderProductCard(makeProductCardView({ id: 'beta' }))
+
+      for (const css_class of CARD_PART_CLASSES) {
+        expect(getInlineViewTransitionName(html, css_class), css_class).toBeUndefined()
+      }
+    })
   })
 
-  it('should share title, summary and price names across card and detail', async () => {
-    const [card_html, detail_html] = await Promise.all([
-      renderProductCard(makeProductCardView({ id: 'alpha' })),
-      renderProductDetail(makeProductDetailView({ id: 'alpha' })),
-    ])
+  describe('active 商品的 card ↔ detail 共享 name（AC2／AC3）', () => {
+    it('should share the product image tile name across card and detail so the image moves inside the expanding card', async () => {
+      activateProduct('alpha')
 
-    expect(getInlineViewTransitionName(card_html, 'product-name')).toBe('product-title-alpha')
-    expect(getInlineViewTransitionName(detail_html, 'detail-title')).toBe('product-title-alpha')
-    expect(getInlineViewTransitionName(card_html, 'product-summary')).toBe('product-summary-alpha')
-    expect(getInlineViewTransitionName(detail_html, 'detail-dw-says')).toBe('product-summary-alpha')
-    expect(getInlineViewTransitionName(card_html, 'product-card-price')).toBe('product-price-alpha')
-    expect(getInlineViewTransitionName(detail_html, 'detail-price')).toBe('product-price-alpha')
+      const [card_html, detail_html] = await Promise.all([
+        renderProductCard(makeProductCardView({ id: 'alpha' })),
+        renderProductDetail(makeProductDetailView({ id: 'alpha' })),
+      ])
+
+      expect(getInlineViewTransitionName(card_html, 'product-image-tile')).toBe('product-image-alpha')
+      expect(getInlineViewTransitionName(detail_html, 'detail-hero-tile')).toBe('product-image-alpha')
+    })
+
+    it('should share title, summary and price names across card and detail', async () => {
+      activateProduct('alpha')
+
+      const [card_html, detail_html] = await Promise.all([
+        renderProductCard(makeProductCardView({ id: 'alpha' })),
+        renderProductDetail(makeProductDetailView({ id: 'alpha' })),
+      ])
+
+      expect(getInlineViewTransitionName(card_html, 'product-name')).toBe('product-title-alpha')
+      expect(getInlineViewTransitionName(detail_html, 'detail-title')).toBe('product-title-alpha')
+      expect(getInlineViewTransitionName(card_html, 'product-summary')).toBe('product-summary-alpha')
+      expect(getInlineViewTransitionName(detail_html, 'detail-dw-says')).toBe('product-summary-alpha')
+      expect(getInlineViewTransitionName(card_html, 'product-card-price')).toBe('product-price-alpha')
+      expect(getInlineViewTransitionName(detail_html, 'detail-price')).toBe('product-price-alpha')
+    })
+
+    it('should name the channel badge of the active card so it morphs together with the rest of the card', async () => {
+      // 列表↔列表切換不再逐卡 morph（045 已接受的變更）；channel badge 只在該卡為 active 商品時與其他部件一起具名。
+      activateProduct('alpha')
+
+      const html = await renderProductCard(makeProductCardView({ id: 'alpha' }))
+
+      expect(getInlineViewTransitionName(html, 'product-vt-channel')).toBe('product-channel-alpha')
+    })
+
+    it('should keep the card shell name separate from nested shared element names', async () => {
+      activateProduct('alpha')
+
+      const html = await renderProductCard(makeProductCardView({ id: 'alpha' }))
+
+      expect(getInlineViewTransitionName(html, 'product-vt-card')).toBe('product-card-alpha')
+      expect(getInlineViewTransitionName(html, 'product-image-tile')).toBe('product-image-alpha')
+    })
+
+    it('should share an identical product shell view-transition-name across card and detail for the same product', async () => {
+      activateProduct('beta')
+
+      const [card_html, detail_html] = await Promise.all([
+        renderProductCard(makeProductCardView({ id: 'beta' })),
+        renderProductDetail(makeProductDetailView({ id: 'beta' })),
+      ])
+      const card_name = getInlineViewTransitionName(card_html, 'product-vt-card')
+      const detail_name = getInlineViewTransitionName(detail_html, 'product-vt-card')
+
+      expect(card_name).toBe(detail_name)
+      expect(card_name).toBe('product-card-beta')
+    })
+
+    it('should keep the product card root un-named so child shared elements are not nested inside a named parent', async () => {
+      activateProduct('gamma')
+
+      const html = await renderProductCard(makeProductCardView({ id: 'gamma' }))
+
+      expect(getInlineViewTransitionName(html, 'product-card')).toBeUndefined()
+    })
   })
 
-  it('should name the channel badge so it morphs with the card on category switch instead of fading with root', async () => {
-    // 分類切換（home↔home）時整張卡的具名部件會 morph（整塊滑動）；channel badge 若沒具名會落入
-    // root snapshot 被 fade 掉（消失再 fade in）。給它 product-channel-{id} 名讓它一起 morph。
-    const html = await renderProductCard(makeProductCardView({ id: 'alpha' }))
+  describe('detail 自身的 name 與返回列表時的登記（AC3／AC4）', () => {
+    it('should always name the detail parts regardless of which product is active', async () => {
+      activateProduct('someone-else')
 
-    expect(getInlineViewTransitionName(html, 'product-vt-channel')).toBe('product-channel-alpha')
+      const html = await renderProductDetail(makeProductDetailView({ id: 'alpha' }))
+
+      expect(getInlineViewTransitionName(html, 'product-vt-card')).toBe('product-card-alpha')
+      expect(getInlineViewTransitionName(html, 'detail-hero-tile')).toBe('product-image-alpha')
+      expect(getInlineViewTransitionName(html, 'detail-title')).toBe('product-title-alpha')
+      expect(getInlineViewTransitionName(html, 'detail-dw-says')).toBe('product-summary-alpha')
+      expect(getInlineViewTransitionName(html, 'detail-price')).toBe('product-price-alpha')
+    })
+
+    it('should register the detail product as active so its card carries the shared names when the list renders next', async () => {
+      // 返回列表（back／側欄／chip）時，卡片要在 new 快照前就帶 name，靠的是詳情頁 render 時登記自己。
+      await renderProductDetail(makeProductDetailView({ id: 'alpha' }))
+
+      const [alpha_html, beta_html] = await Promise.all([
+        renderProductCard(makeProductCardView({ id: 'alpha' })),
+        renderProductCard(makeProductCardView({ id: 'beta' })),
+      ])
+
+      expect(getInlineViewTransitionName(alpha_html, 'product-vt-card')).toBe('product-card-alpha')
+      expect(getInlineViewTransitionName(alpha_html, 'product-vt-image')).toBe('product-image-alpha')
+      expect(getInlineViewTransitionName(beta_html, 'product-vt-card')).toBeUndefined()
+      expect(getInlineViewTransitionName(beta_html, 'product-vt-image')).toBeUndefined()
+    })
+
+    it('should keep the product detail page root un-named so child shared elements are not nested inside a named parent', async () => {
+      const html = await renderProductDetail(makeProductDetailView({ id: 'gamma' }))
+
+      expect(getInlineViewTransitionName(html, 'product-detail-page')).toBeUndefined()
+    })
   })
 
-  it('should keep the card shell name separate from nested shared element names', async () => {
-    const html = await renderProductCard(makeProductCardView({ id: 'alpha' }))
-
-    expect(getInlineViewTransitionName(html, 'product-vt-card')).toBe('product-card-alpha')
-    expect(getInlineViewTransitionName(html, 'product-image-tile')).toBe('product-image-alpha')
-  })
-
-  it('should share an identical product shell view-transition-name across card and detail for the same product', async () => {
-    const [card_html, detail_html] = await Promise.all([
-      renderProductCard(makeProductCardView({ id: 'beta' })),
-      renderProductDetail(makeProductDetailView({ id: 'beta' })),
-    ])
-    const card_name = getInlineViewTransitionName(card_html, 'product-vt-card')
-    const detail_name = getInlineViewTransitionName(detail_html, 'product-vt-card')
-
-    expect(card_name).toBe(detail_name)
-    expect(card_name).toBe('product-card-beta')
-  })
-
-  it('should keep the product card root un-named so child shared elements are not nested inside a named parent', async () => {
-    const html = await renderProductCard(makeProductCardView({ id: 'gamma' }))
-
-    expect(getInlineViewTransitionName(html, 'product-card')).toBeUndefined()
-  })
-
-  it('should keep the product detail page root un-named so child shared elements are not nested inside a named parent', async () => {
-    const html = await renderProductDetail(makeProductDetailView({ id: 'gamma' }))
-
-    expect(getInlineViewTransitionName(html, 'product-detail-page')).toBeUndefined()
-  })
+  // 啟用互動（點擊後才掛 name）需要 DOM 事件，見 view-transition-activation.test.ts（happy-dom；本檔因 import nuxt.config 須留在 node 環境）。
 
   it('should match only the exact class token, not a hyphenated sibling like product-card-link', () => {
     // helper 的錨定回歸測試（Issue #3）：product-card-link 先出現且帶不同 view-transition-name，

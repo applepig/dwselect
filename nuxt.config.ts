@@ -32,6 +32,10 @@ const disqus_shortname = process.env.DISQUS_SHORTNAME?.trim() ?? ''
 // 何時注入哪個值由 dev.sh 的三態分流負責（容器內隔離、CI 預設、host 引導進容器）。
 const build_dir = process.env.NUXT_BUILD_DIR || '.nuxt'
 const vite_cache_dir = process.env.VITE_CACHE_DIR || 'node_modules/.cache/vite'
+// 045：generate 的輸出目錄同樣可由環境變數覆寫，讓本機一次性容器把產物寫到 Dropbox 樹之外。
+// Nitro 會 rm 再重建 output dir，所以 mount 掛載點本身不能當 output dir（EBUSY），要指到掛載點底下的子目錄。
+// 未設時維持 Nitro 預設 .output，CI／deploy 零影響。
+const output_dir = process.env.NUXT_OUTPUT_DIR
 
 const product_routes = buildProductRoutes(fileURLToPath(new URL('./content/products/', import.meta.url)))
 const guide_routes = buildGuideRoutes(fileURLToPath(new URL('./content/guides/', import.meta.url)))
@@ -117,6 +121,7 @@ export default defineNuxtConfig({
   compatibilityDate: '2026-06-05',
   nitro: {
     preset: 'static',
+    ...(output_dir ? { output: { dir: output_dir } } : {}),
     prerender: {
       // failOnError：任一 prerender route（含 /api/content.json、/search-index.json、product detail）
       // 失敗時讓 nuxt generate 以非零碼中止，避免壞 content／壞 route 靜默產出殘缺 static 站（spec Case 1）。
