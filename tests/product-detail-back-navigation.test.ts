@@ -1,12 +1,14 @@
 import { renderToString } from '@vue/test-utils'
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted, readonly, ref } from 'vue'
 import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest'
 
+import { useActiveViewTransitionProduct } from '../app/composables/use-active-view-transition-product'
 import { useBrokenImageFallback } from '../app/composables/use-broken-image-fallback'
 import { useDetailBackNavigation } from '../app/composables/use-detail-back-navigation'
 import ProductDetail from '../app/components/product-detail.vue'
 import RelatedProductsSection from '../app/components/related-products-section.vue'
 import type { ProductDetailView } from '../app/utils/public-content-view-types'
+import { createUseStateStub } from './helpers/create-use-state-stub'
 
 const NuxtLinkStub = { props: ['to'], template: '<a :href="to"><slot /></a>' }
 const NuxtImgStub = { props: ['src', 'alt'], template: '<img :src="src" :alt="alt" />' }
@@ -72,6 +74,9 @@ describe('product detail hero opinion and layout ordering', () => {
     vi.stubGlobal('useRouter', () => ({ back: vi.fn(), push: vi.fn() }))
     vi.stubGlobal('useDetailBackNavigation', useDetailBackNavigation)
     vi.stubGlobal('useBrokenImageFallback', useBrokenImageFallback)
+    vi.stubGlobal('readonly', readonly)
+    vi.stubGlobal('useState', createUseStateStub())
+    vi.stubGlobal('useActiveViewTransitionProduct', useActiveViewTransitionProduct)
   })
 
   afterAll(() => {

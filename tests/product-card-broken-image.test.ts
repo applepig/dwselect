@@ -1,12 +1,14 @@
 // @vitest-environment happy-dom
 
 import { mount } from '@vue/test-utils'
-import { nextTick, onMounted, ref } from 'vue'
+import { nextTick, onMounted, readonly, ref } from 'vue'
 import { afterAll, beforeEach, describe, expect, it, vi } from 'vitest'
 
+import { useActiveViewTransitionProduct } from '../app/composables/use-active-view-transition-product'
 import { useBrokenImageFallback } from '../app/composables/use-broken-image-fallback'
 import ProductCard from '../app/components/product-card.vue'
 import type { ProductCardView } from '../app/utils/public-content-view-types'
+import { createUseStateStub } from './helpers/create-use-state-stub'
 
 const NuxtLinkStub = {
   props: ['to'],
@@ -78,6 +80,9 @@ describe('ProductCard 破圖 fallback', () => {
     vi.stubGlobal('ref', ref)
     vi.stubGlobal('onMounted', onMounted)
     vi.stubGlobal('useBrokenImageFallback', useBrokenImageFallback)
+    vi.stubGlobal('readonly', readonly)
+    vi.stubGlobal('useState', createUseStateStub())
+    vi.stubGlobal('useActiveViewTransitionProduct', useActiveViewTransitionProduct)
   })
 
   afterAll(() => {

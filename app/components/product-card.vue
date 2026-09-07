@@ -3,10 +3,11 @@
     class="product-card"
     :data-product-id="product.id"
     :ui="{ body: 'p-0 sm:p-0' }"
+    @click.capture="onCardClicked"
   >
     <span
       class="product-transition-shell product-vt-card"
-      :style="getProductViewTransitionStyle(product.id, 'card')"
+      :style="getActiveViewTransitionStyle('card')"
       aria-hidden="true"
     />
 
@@ -18,7 +19,7 @@
       <span
         ref="image_tile"
         class="product-image-tile product-vt-image"
-        :style="getProductViewTransitionStyle(product.id, 'image')"
+        :style="getActiveViewTransitionStyle('image')"
       >
         <NuxtImg
           v-if="!isBrokenImage(product.id)"
@@ -43,11 +44,11 @@
       <span class="product-card-body">
         <span
           class="product-name product-vt-title"
-          :style="getProductViewTransitionStyle(product.id, 'title')"
+          :style="getActiveViewTransitionStyle('title')"
         >{{ product.name }}</span>
         <span
           class="product-summary product-vt-summary"
-          :style="getProductViewTransitionStyle(product.id, 'summary')"
+          :style="getActiveViewTransitionStyle('summary')"
         >{{ product.short_description }}</span>
       </span>
     </NuxtLink>
@@ -56,7 +57,7 @@
       <CatalogPill
         class="product-card-price product-vt-price"
         variant="price"
-        :style="getProductViewTransitionStyle(product.id, 'price')"
+        :style="getActiveViewTransitionStyle('price')"
       >
         {{ product.price_label }}
       </CatalogPill>
@@ -64,7 +65,7 @@
       <CatalogPill
         class="channel-badge product-vt-channel"
         :to="`/channel/${product.channel_id}`"
-        :style="getProductViewTransitionStyle(product.id, 'channel')"
+        :style="getActiveViewTransitionStyle('channel')"
       >
         <span class="channel-dot" />
         {{ product.channel_label }}
@@ -75,7 +76,7 @@
 
 <script setup lang="ts">
 import type { ProductCardView } from '../utils/public-content-view-types'
-import { getProductViewTransitionStyle } from '../utils/product-view-transition'
+import { getProductViewTransitionStyle, type ProductViewTransitionPart } from '../utils/product-view-transition'
 
 const props = withDefaults(defineProps<{
   product: ProductCardView
@@ -96,6 +97,32 @@ const props = withDefaults(defineProps<{
 
 const image_tile = ref<HTMLElement | null>(null)
 const { isBrokenImage, onImageError, scanForBrokenImage } = useBrokenImageFallback()
+const { active_product_id, activate } = useActiveViewTransitionProduct()
+
+// 只有 active 商品的卡片掛 view-transition-name：列表靜止時 77 卡 × 6 part 全掛，每次換頁瀏覽器都得逐個拍快照，
+// 是換頁慢的主因（045）。非 active 回 undefined 而非空物件，讓 Vue 不輸出 style 屬性。
+function getActiveViewTransitionStyle(part: ProductViewTransitionPart) {
+  if (props.product.id !== active_product_id.value) {
+    return undefined
+  }
+
+  return getProductViewTransitionStyle(props.product.id, part)
+}
+
+// 用根元素的 capture 階段 click 啟用：它一定跑在 NuxtLink 自己的 click handler（bubble 階段、觸發 router.push）之前，
+// 而 reactive 更新在 microtask flush，早於 View Transition 拍 old 快照；鍵盤 Enter 觸發的 <a> 合成 click
+// 也走同一路徑，滑鼠與鍵盤一次覆蓋，不必另掛 pointerdown＋keydown。
+// 只有通往詳情頁的連結才啟用：channel pill 導向 /channel/*（列表↔列表），若也啟用，該卡會在兩個列表間
+// 單獨 morph、其他卡隨 root fade，與 045 接受的「列表↔列表隨 root fade」不一致。
+function onCardClicked(event: MouseEvent) {
+  const target = event.target as HTMLElement | null
+
+  if (!target?.closest('.product-card-link')) {
+    return
+  }
+
+  activate(props.product.id)
+}
 
 onMounted(() => {
   // SSR／快取已載入即失敗的圖，其 <img @error> 掛載後不會再觸發，掛載時補掃一次。

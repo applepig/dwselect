@@ -1,15 +1,17 @@
 // @vitest-environment happy-dom
 
 import { mount } from '@vue/test-utils'
-import { onMounted, ref } from 'vue'
+import { onMounted, readonly, ref } from 'vue'
 import { beforeAll, afterAll, describe, expect, it, vi } from 'vitest'
 
+import { useActiveViewTransitionProduct } from '../../app/composables/use-active-view-transition-product'
 import { useBrokenImageFallback } from '../../app/composables/use-broken-image-fallback'
 import TaxonomyPage from '../../app/components/taxonomy-page.vue'
 import ResourceList from '../../app/components/resource-list.vue'
 import ProductCard from '../../app/components/product-card.vue'
 import type { ProductCardView } from '../../app/utils/public-content-view-types'
 import type { CompactResourceRow, TaxonomyPageData } from '../../app/utils/published-products/types'
+import { createUseStateStub } from '../helpers/create-use-state-stub'
 
 const NuxtLinkStub = {
   props: ['to'],
@@ -92,6 +94,9 @@ describe('TaxonomyPage render', () => {
     vi.stubGlobal('ref', ref)
     vi.stubGlobal('onMounted', onMounted)
     vi.stubGlobal('useBrokenImageFallback', useBrokenImageFallback)
+    vi.stubGlobal('readonly', readonly)
+    vi.stubGlobal('useState', createUseStateStub())
+    vi.stubGlobal('useActiveViewTransitionProduct', useActiveViewTransitionProduct)
   })
 
   afterAll(() => {
