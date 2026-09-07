@@ -48,14 +48,22 @@ generate 產物（一次性容器 `docker compose run --rm --entrypoint bash app
 
 行為驗證（Playwright，`document.getAnimations()` 讀 `::view-transition-group(*)`）：靜止首頁 0 個 name；點卡片後正向 group 含 product-card/image/title/summary/price ＋ root；返回列表反向 group 同組；返回後只有該卡 6 個 name。首頁與詳情頁截圖版面正常。
 
-環境坑：常駐 dev 容器（2026-08-05 建）雖在 compose 宣告了 `/app/node_modules` volume，實際 mountinfo 沒掛上，用的是 host 的 node_modules，`./dev.sh exec ./dev.sh generate` 穩定失敗於 `Can't resolve 'tailwindcss'`（exit code 有正確回傳）；一次性 `docker compose run` 容器有掛 volume、用 image 內 node_modules，generate 成功。兩邊套件集合、符號連結、原生模組、Nuxt alias 逐項比對皆相同，resolve 差異的根因尚未定位。另：`.output`／`.nuxt-build` 寫在 Dropbox 樹內且無 ignore flag（`node_modules` 有），generate 一次 2316 檔會讓 Dropbox 忙翻；當天 Dropbox 還把重寫中的 `.output` 判成衝突、改名為 `.output (… conflicted copy)`，看起來像整個目錄消失。直接把 volume 掛在 `.output` 會撞 Nitro 的 `rmdir`（EBUSY），故本 sprint 順手加了 `NUXT_OUTPUT_DIR`（nuxt.config → `nitro.output.dir`，未設零影響）並讓 dev.sh 隔離步驟尊重外部 `NUXT_BUILD_DIR`；本機 generate／verify 配方改為掛一個父目錄、用兩個 env 指進子目錄：
+環境坑：常駐 dev 容器（2026-08-05 建）雖在 compose 宣告了 `/app/node_modules` volume，實際 mountinfo 沒掛上，用的是 host 的 node_modules，`./dev.sh exec ./dev.sh generate` 穩定失敗於 `Can't resolve 'tailwindcss'`（exit code 有正確回傳）；一次性 `docker compose run` 容器有掛 volume、用 image 內 node_modules，generate 成功。兩邊套件集合、符號連結、原生模組、Nuxt alias 逐項比對皆相同，resolve 差異的根因尚未定位。另：`.output`／`.nuxt-build` 寫在 Dropbox 樹內且無 ignore flag（`node_modules` 有），generate 一次 2316 檔會讓 Dropbox 忙翻；當天 Dropbox 還把重寫中的 `.output` 判成衝突、改名為 `.output (… conflicted copy)`，看起來像整個目錄消失。直接把 volume 掛在 `.output` 會撞 Nitro 的 `rmdir`（EBUSY），故本 sprint 順手加了 `NUXT_OUTPUT_DIR`（nuxt.config → `nitro.output.dir`，未設零影響）並讓 dev.sh 隔離步驟尊重外部 `NUXT_BUILD_DIR`；本機 generate 配方改為掛一個父目錄、用兩個 env 指進子目錄：
 
 ```
 docker compose run --rm --entrypoint bash \
-  -v <tmp>/build-out:/app/.build-out \
-  -e NUXT_BUILD_DIR=/app/.build-out/nuxt-build -e NUXT_OUTPUT_DIR=/app/.build-out/output \
-  app -c "cd /app && bash /app/dev.sh generate"
+  -v <tmp>/build-out:/build-out \
+  -e NUXT_BUILD_DIR=/build-out/nuxt-build -e NUXT_OUTPUT_DIR=/build-out/output \
+  app -c "cd /app && pnpm exec nuxt prepare && pnpm exec nuxt generate"
 ```
+
+**這個配方不能直接套 `verify`**（2026-09-07 codex 修正時實測，三個坑）：
+
+1. 掛載點要在 `/app` **外面**。掛在 `/app/.build-out` 會被 eslint 與 knip 掃進去（實測 lint 27225 errors、knip 148 unused files，全是 build 產物）。
+2. 先對**預設** `.nuxt` 跑一次 `nuxt prepare`。帶著 `NUXT_BUILD_DIR` 跑 prepare 只會寫進隔離目錄，`tests/post-edit-hook.test.ts` 讀不到 `.nuxt/eslint.config.mjs`、knip 也只認預設 `.nuxt`（見 CLAUDE.md 對 knip 的同一段說明）。
+3. `NUXT_BUILD_DIR` **不要跨 `test` 步驟 export**。`tests/dev-server-script.test.ts` 斷言 dev.sh 轉印的 `NUXT_BUILD_DIR=` 為空，外層 env 會洩進 subprocess 而假紅。
+
+實際可行的分段：`test` 在 host 跑（`pnpm vitest run`，694/694），容器內先 `nuxt prepare` 再跑 `lint`＋`knip`（不掛 build-out、不帶 env），最後只為 `typecheck`＋`generate` 帶上兩個 env。
 
 ## 沒驗／留給使用者
 
