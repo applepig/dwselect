@@ -34,6 +34,7 @@
 - Product 使用 `category_id`、`tag_ids`（含 brand IDs）、`offers[]`（購買外部目標）與 optional `reference_links[]`（非購買參考外部目標）；Guide／Link 使用 `category_ids`、`tag_ids`；不要新增 legacy `category`、`channel_id`、`reference_url` 或自由字串 `tags`。
 - `status = "published"` 才能出現在首頁、指南、連結、category counts 與 search index。
 - `content/taxonomies/links.json` 不是 runtime links SSOT；runtime links 來自 `content/links/*.json`。
+- Facebook 連結（含 `facebook.com/share/p/*` 短網址）一律用 `agent-browser` 開來讀，不用 `curl`／WebFetch：`curl` 只拿得到截斷的 og 摘要，未登入的 headless session 就讀得到全文與作者留言。
 - 原 Google Sheets TSV importer（`scripts/legacy/migrate-google-sheet-products.ts`）已移除（與 ADR-11 的 content id ASCII kebab 約束不相容）；公開內容一律以 `content/` 的 Git-backed JSON 為 SSOT，不要重新引入 Google Sheets importer。
 
 ## Search And Static Output
