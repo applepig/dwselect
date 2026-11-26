@@ -56,8 +56,11 @@ async function waitForHydration(page: import('@playwright/test').Page) {
   await page.waitForTimeout(500)
 }
 
-// 點導覽「連結」必須是同一 document 的 client 導航，且 2 秒內完成（VT 凍結時點擊會被吞）；
-// 這是真實換頁，View Transition 照常啟動並在 2 秒內 finished，不被尾斜線防線誤關。
+// 凍結是卡到瀏覽器 4 秒逾時；時限取 3 秒，低於凍結門檻，又給真實 Pages preview 的冷 CDN 留餘裕。
+const INTERACTIVE_TIMEOUT_MS = 3_000
+
+// 點導覽「連結」必須是同一 document 的 client 導航，且在時限內完成（VT 凍結時點擊會被吞）；
+// 這是真實換頁，View Transition 照常啟動並在時限內 finished，不被尾斜線防線誤關。
 async function expectInstantClientNavigationToLinks(page: import('@playwright/test').Page) {
   await page.evaluate(() => {
     window.__dw_document_marker = Math.random()
@@ -65,9 +68,9 @@ async function expectInstantClientNavigationToLinks(page: import('@playwright/te
   const marker = await page.evaluate(() => window.__dw_document_marker)
   const before = await page.evaluate(() => ({ ...window.__dw_load_probe }))
 
-  await page.locator('a[href="/links/"]:visible').first().click({ timeout: 2_000 })
+  await page.locator('a[href="/links/"]:visible').first().click({ timeout: INTERACTIVE_TIMEOUT_MS })
 
-  await expect(page).toHaveURL(/\/links\/$/, { timeout: 2_000 })
+  await expect(page).toHaveURL(/\/links\/$/, { timeout: INTERACTIVE_TIMEOUT_MS })
   expect(await page.evaluate(() => window.__dw_document_marker)).toBe(marker)
   await expect.poll(async () => {
     const after = await page.evaluate(() => window.__dw_load_probe)
@@ -76,10 +79,14 @@ async function expectInstantClientNavigationToLinks(page: import('@playwright/te
       finished: after.finished_transitions - before.finished_transitions,
       aborted: after.aborted_transitions - before.aborted_transitions,
     }
-  }, { timeout: 2_000 }).toEqual({ started: 1, finished: 1, aborted: 0 })
+  }, { timeout: INTERACTIVE_TIMEOUT_MS }).toEqual({ started: 1, finished: 1, aborted: 0 })
 }
 
+// 308 是靜態主機（Pages、serve-static-output）的目錄語意，dev server 沒有。CI 的靜態 preview 與 deploy
+// preview 都以 PLAYWRIGHT_EXTERNAL_SERVER=1 跑，故只在對本機 dev server 跑時略過。
 test('redirects the slashless URL to the trailing-slash page URL', async ({ request }) => {
+  test.skip(process.env.PLAYWRIGHT_EXTERNAL_SERVER !== '1', 'only static hosts redirect directory paths')
+
   const response = await request.get('/guide', { maxRedirects: 0 })
 
   expect(response.status()).toBe(308)

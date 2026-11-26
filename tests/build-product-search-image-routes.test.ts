@@ -47,6 +47,13 @@ describe('buildProductSearchImageRoutes', () => {
     expect(buildProductSearchImageRoutes(dir)).toEqual([route])
   })
 
+  // config 載入（含 CI 的 pnpm install → nuxt prepare）就會跑到這裡；錯誤要指出是哪一筆商品，不能靜默跳過。
+  it('should name the product when a published product has an invalid image file', () => {
+    const dir = makeProductsDir({ 'broken-product.json': { status: 'published', image_file: '../escape.png' } })
+
+    expect(() => buildProductSearchImageRoutes(dir)).toThrow(/broken-product/)
+  })
+
   it('should skip products that are not published', () => {
     const dir = makeProductsDir({
       'live.json': { status: 'published', image_file: 'live.png' },
