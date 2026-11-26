@@ -42,7 +42,8 @@ export function createStaticPreviewServer(root_dir: string): Server {
 
     if (target_stat.isDirectory()) {
       if (!pathname.endsWith('/')) {
-        response.writeHead(308, { location: `${pathname}/${request_url.search}` })
+        // Location 用未 decode 的 pathname：decode 後 `%2F` 變 `/`，會組出 `//host` 的 open redirect。
+        response.writeHead(308, { location: `${request_url.pathname}/${request_url.search}` })
         response.end()
         return
       }

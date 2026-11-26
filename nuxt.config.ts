@@ -6,6 +6,7 @@ import { buildCategoryRoutes } from './scripts/build-category-routes'
 import { buildChannelRoutes } from './scripts/build-channel-routes'
 import { buildGuideRoutes } from './scripts/build-guide-routes'
 import { buildProductRoutes } from './scripts/build-product-routes'
+import { buildProductSearchImageRoutes } from './scripts/build-product-search-image-routes'
 import { buildTagRoutes } from './scripts/build-tag-routes'
 import { getSiteUrl } from './scripts/site-url'
 
@@ -54,6 +55,7 @@ const channel_routes = buildChannelRoutes(taxonomy_content_dirs)
 // 確保 detail JSON 與 detail 頁同進退，generate 不會漏產（failOnError 維持有效）。
 const product_detail_json_routes = product_routes.map((route) => `/api${route}.json`)
 const guide_detail_json_routes = guide_routes.map((route) => `/api${route.replace('/guide/', '/guides/')}.json`)
+const product_search_image_routes = buildProductSearchImageRoutes(fileURLToPath(new URL('./content/products/', import.meta.url)))
 // 監看 content/ 目錄絕對路徑而非 glob：Vite 7 的 chokidar 5 已移除 glob 支援，
 // 傳 'content/**/*.json' 進 watcher.add() 不會匹配任何檔案。
 const content_watch_paths = [fileURLToPath(new URL('./content/', import.meta.url))]
@@ -141,6 +143,7 @@ export default defineNuxtConfig({
         ...channel_routes,
         ...product_detail_json_routes,
         ...guide_detail_json_routes,
+        ...product_search_image_routes,
       ],
     },
   },
