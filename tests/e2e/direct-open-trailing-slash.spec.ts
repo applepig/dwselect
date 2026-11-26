@@ -4,7 +4,12 @@ import { expect, test } from '@playwright/test'
 // 直接開頁時若 URL 與 prerender payload.path 不一致，Nuxt hydration 會 replace URL；Nuxt VT plugin 把只差
 // 尾斜線的導航當換頁開 View Transition，卻等不到 page:finish，畫面凍結約 4 秒、點擊被吞。
 
-type LoadProbe = { view_transitions: number, url_replacements: string[] }
+type LoadProbe = {
+  view_transitions: number
+  finished_transitions: number
+  aborted_transitions: number
+  url_replacements: string[]
+}
 
 declare global {
   interface Window {
@@ -13,17 +18,22 @@ declare global {
   }
 }
 
-// 在任何頁面 script 之前包住 startViewTransition 與 replaceState，記錄載入期間的呼叫。
+// 在任何頁面 script 之前包住 startViewTransition 與 replaceState，記錄 VT 的啟動／結束與改 URL 的 replace。
 async function installLoadProbe(page: import('@playwright/test').Page) {
   await page.addInitScript(() => {
-    const probe: LoadProbe = { view_transitions: 0, url_replacements: [] }
+    const probe: LoadProbe = { view_transitions: 0, finished_transitions: 0, aborted_transitions: 0, url_replacements: [] }
     window.__dw_load_probe = probe
 
     const start_view_transition = document.startViewTransition?.bind(document)
     if (start_view_transition) {
       document.startViewTransition = ((...args: Parameters<typeof start_view_transition>) => {
         probe.view_transitions += 1
-        return start_view_transition(...args)
+        const transition = start_view_transition(...args)
+        transition.finished.then(
+          () => { probe.finished_transitions += 1 },
+          () => { probe.aborted_transitions += 1 },
+        )
+        return transition
       }) as typeof document.startViewTransition
     }
 
@@ -46,17 +56,27 @@ async function waitForHydration(page: import('@playwright/test').Page) {
   await page.waitForTimeout(500)
 }
 
-// 點導覽「連結」必須是同一 document 的 client 導航，且 2 秒內完成（VT 凍結時點擊會被吞）。
+// 點導覽「連結」必須是同一 document 的 client 導航，且 2 秒內完成（VT 凍結時點擊會被吞）；
+// 這是真實換頁，View Transition 照常啟動並在 2 秒內 finished，不被尾斜線防線誤關。
 async function expectInstantClientNavigationToLinks(page: import('@playwright/test').Page) {
   await page.evaluate(() => {
     window.__dw_document_marker = Math.random()
   })
   const marker = await page.evaluate(() => window.__dw_document_marker)
+  const before = await page.evaluate(() => ({ ...window.__dw_load_probe }))
 
   await page.locator('a[href="/links/"]:visible').first().click({ timeout: 2_000 })
 
   await expect(page).toHaveURL(/\/links\/$/, { timeout: 2_000 })
   expect(await page.evaluate(() => window.__dw_document_marker)).toBe(marker)
+  await expect.poll(async () => {
+    const after = await page.evaluate(() => window.__dw_load_probe)
+    return {
+      started: after.view_transitions - before.view_transitions,
+      finished: after.finished_transitions - before.finished_transitions,
+      aborted: after.aborted_transitions - before.aborted_transitions,
+    }
+  }, { timeout: 2_000 }).toEqual({ started: 1, finished: 1, aborted: 0 })
 }
 
 test('redirects the slashless URL to the trailing-slash page URL', async ({ request }) => {
@@ -75,7 +95,7 @@ for (const path of ['/guide/', '/guide/2026-06-02-japanese-rice-intro/']) {
     expect(response?.status()).toBe(200)
     expect(response?.request().redirectedFrom()).toBeNull()
     await waitForHydration(page)
-    expect(await page.evaluate(() => window.__dw_load_probe)).toEqual({ view_transitions: 0, url_replacements: [] })
+    expect(await page.evaluate(() => window.__dw_load_probe)).toMatchObject({ view_transitions: 0, url_replacements: [] })
     await expect(page).toHaveURL(new RegExp(`${path}$`))
     await expectInstantClientNavigationToLinks(page)
   })

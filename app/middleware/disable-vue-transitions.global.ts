@@ -34,7 +34,8 @@ export default defineNuxtRouteMiddleware((to, from) => {
   // Nuxt isChangingPage 對只差尾斜線的導航開 VT 卻等不到 page:finish 的缺陷防線（047）。
   // VT plugin 以 route.path 判斷換頁，NuxtPage 以 matched.path 當 key：`/x` 與 `/x/` 前者視為換頁、
   // 後者不重 render，page:finish 不觸發，transition 卡到瀏覽器 4 秒逾時，期間畫面凍結無法操作。
-  // 全站 URL 已統一帶斜線，此處兜底漏網的無斜線導航（外部連結、手寫 href、未來新增的程式導航）。
+  // 一般 push 只差尾斜線時 vue-router 判定 duplicated 不導航；會走到這裡的是 forced replace，例如 Nuxt
+  // hydration deferred route（URL 與 payload.path 不一致時，4.6 起只差尾斜線已不 defer）。全站帶斜線後此處是兜底。
   // 移除條件：Nuxt 上游讓 isChangingPage 與 NuxtPage key 一致。
   const stripTrailingSlash = (path: string) => path.replace(/\/+$/, '') || '/'
   if (to.path !== from.path && stripTrailingSlash(to.path) === stripTrailingSlash(from.path)) {
