@@ -1,4 +1,5 @@
 import type { MaybeRefOrGetter } from 'vue'
+import { withTrailingSlash } from 'ufo'
 
 import { getContentImageWebpName } from './content-images/content-image-webp-name'
 import { SITE_NAME } from './site-name'
@@ -13,14 +14,18 @@ export const SITE_DESCRIPTION = '值得買、值得看、值得收藏的選物�
 export const SITE_TITLE = `${SITE_NAME}｜值得買、值得看、值得收藏的選物清單`
 export const SITE_OG_IMAGE = `${SITE_URL}og-image.png`
 
+// 頁面 URL 一律帶尾斜線（047）：Pages 對目錄輸出 `x/index.html` 只以 `/x/` 回 200，canonical、OG、分享
+// 指向最終 URL，也與 prerender payload.path 一致。圖片等非頁面 URL 走 getSiteUrlFor，不加斜線。
 export function getCanonicalUrl(path: string): string {
-  const normalized_path = path.trim()
+  return getSiteUrlFor(withTrailingSlash(path.trim()))
+}
 
-  if (normalized_path === '' || normalized_path === '/') {
+function getSiteUrlFor(path: string): string {
+  if (path === '' || path === '/') {
     return SITE_URL
   }
 
-  return new URL(normalized_path.replace(/^\/+/, ''), SITE_URL).toString()
+  return new URL(path.replace(/^\/+/, ''), SITE_URL).toString()
 }
 
 export function getOgImageUrl(image_url: string | null | undefined): string {
@@ -41,10 +46,10 @@ export function getOgImageUrl(image_url: string | null | undefined): string {
   const content_image_match = /^\/?(products|guides)\/images\/([^/]+)$/.exec(trimmed)
 
   if (content_image_match !== null) {
-    return getCanonicalUrl(`images/${content_image_match[1]}/${getContentImageWebpName(content_image_match[2]!)}`)
+    return getSiteUrlFor(`images/${content_image_match[1]}/${getContentImageWebpName(content_image_match[2]!)}`)
   }
 
-  return getCanonicalUrl(trimmed)
+  return getSiteUrlFor(trimmed)
 }
 
 export function getSeoDescription(description: string | null | undefined): string {

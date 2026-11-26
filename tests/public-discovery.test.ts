@@ -350,27 +350,27 @@ describe('public discovery files', () => {
     expect(llms).toContain(`${site_url}api/content.json`)
     expect(llms).toContain('Do not attempt write actions')
     expect(sitemap).toContain(`<loc>${site_url}</loc>`)
-    expect(sitemap).toContain(`<loc>${site_url}guide</loc>`)
-    expect(sitemap).toContain(`<loc>${site_url}search</loc>`)
-    expect(sitemap).toContain(`<loc>${site_url}links</loc>`)
-    expect(sitemap).toContain(`<loc>${site_url}products/2026-06-02-sample-product</loc>`)
-    expect(sitemap).toContain(`<loc>${site_url}products/no-published-at-product</loc>`)
+    expect(sitemap).toContain(`<loc>${site_url}guide/</loc>`)
+    expect(sitemap).toContain(`<loc>${site_url}search/</loc>`)
+    expect(sitemap).toContain(`<loc>${site_url}links/</loc>`)
+    expect(sitemap).toContain(`<loc>${site_url}products/2026-06-02-sample-product/</loc>`)
+    expect(sitemap).toContain(`<loc>${site_url}products/no-published-at-product/</loc>`)
     expect(sitemap).toContain([
-      `<loc>${site_url}guide/2026-06-03-guide</loc>`,
+      `<loc>${site_url}guide/2026-06-03-guide/</loc>`,
       '<lastmod>2026-06-03</lastmod>',
     ].join('\n    '))
     expect(sitemap).toContain('<lastmod>2026-06-03</lastmod>')
     // Taxonomy 頁要可索引：非空 category／tag（跨三型別 published 關聯）須進 sitemap。
-    expect(sitemap).toContain(`<loc>${site_url}category/computer-3c</loc>`)
-    expect(sitemap).toContain(`<loc>${site_url}category/household</loc>`)
-    expect(sitemap).toContain(`<loc>${site_url}category/other</loc>`)
-    expect(sitemap).toContain(`<loc>${site_url}tag/keyboard</loc>`)
-    expect(sitemap).toContain(`<loc>${site_url}tag/food</loc>`)
+    expect(sitemap).toContain(`<loc>${site_url}category/computer-3c/</loc>`)
+    expect(sitemap).toContain(`<loc>${site_url}category/household/</loc>`)
+    expect(sitemap).toContain(`<loc>${site_url}category/other/</loc>`)
+    expect(sitemap).toContain(`<loc>${site_url}tag/keyboard/</loc>`)
+    expect(sitemap).toContain(`<loc>${site_url}tag/food/</loc>`)
     // brand id 走專屬 /brand/ 前綴、不再出現於 /tag/（ADR-8 單一 canonical）。
-    expect(sitemap).toContain(`<loc>${site_url}brand/fixture-brand</loc>`)
-    expect(sitemap).not.toContain(`<loc>${site_url}tag/fixture-brand</loc>`)
+    expect(sitemap).toContain(`<loc>${site_url}brand/fixture-brand/</loc>`)
+    expect(sitemap).not.toContain(`<loc>${site_url}tag/fixture-brand/</loc>`)
     // channel 頁（products-only）：被 published product offer 引用的 channel 須進 sitemap。
-    expect(sitemap).toContain(`<loc>${site_url}channel/pchome</loc>`)
+    expect(sitemap).toContain(`<loc>${site_url}channel/pchome/</loc>`)
     expect(sitemap).not.toContain('draft-product')
     expect(sitemap).not.toContain('draft-guide')
     expect(rss.indexOf('<title>日本米入門篇</title>')).toBeLessThan(rss.indexOf('<title>機械鍵盤 &amp; &lt;滑鼠&gt;</title>'))
@@ -380,6 +380,9 @@ describe('public discovery files', () => {
     expect(rss).toContain('<link>https://applepig.idv.tw/?a=1&amp;b=2</link>')
     expect(rss).toContain('<pubDate>Tue, 02 Jun 2026 00:00:00 +0800</pubDate>')
     expect(rss).not.toContain('draft-product')
+    // 047：商品 <link> 指向帶斜線的頁面 URL；<guid> 逐字維持舊字串，閱讀器才不會把舊文當新文。
+    expect(rss).toContain(`<link>${site_url}products/2026-06-02-sample-product/</link>`)
+    expect(rss).toContain(`<guid isPermaLink="true">${site_url}products/2026-06-02-sample-product</guid>`)
   })
 
   it('should return empty arrays when content directories are missing', async () => {

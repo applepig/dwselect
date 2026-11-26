@@ -15,25 +15,25 @@ describe('buildTaxonomyPageSeo', () => {
   it('should set the canonical url to /category/{id} for a category', () => {
     const seo = buildTaxonomyPageSeo({ taxonomy_kind: 'category', id: 'computer', label: '電腦', description: null })
 
-    expect(seo.canonical).toBe(`${SITE_URL}category/computer`)
+    expect(seo.canonical).toBe(`${SITE_URL}category/computer/`)
   })
 
   it('should set the canonical url to /tag/{id} for a tag', () => {
     const seo = buildTaxonomyPageSeo({ taxonomy_kind: 'tag', id: 'typing', label: '輸入', description: '輸入設備簡介' })
 
-    expect(seo.canonical).toBe(`${SITE_URL}tag/typing`)
+    expect(seo.canonical).toBe(`${SITE_URL}tag/typing/`)
   })
 
   it('should set the canonical url to /brand/{id} for a brand (single canonical, ADR-10)', () => {
     const seo = buildTaxonomyPageSeo({ taxonomy_kind: 'brand', id: 'panasonic', label: 'Panasonic', description: 'Panasonic 品牌商品' })
 
-    expect(seo.canonical).toBe(`${SITE_URL}brand/panasonic`)
+    expect(seo.canonical).toBe(`${SITE_URL}brand/panasonic/`)
   })
 
   it('should set the canonical url to /channel/{id} for a channel (single canonical, ADR-10)', () => {
     const seo = buildTaxonomyPageSeo({ taxonomy_kind: 'channel', id: 'pchome', label: 'PChome', description: null })
 
-    expect(seo.canonical).toBe(`${SITE_URL}channel/pchome`)
+    expect(seo.canonical).toBe(`${SITE_URL}channel/pchome/`)
   })
 
   it('should use the tag description as the meta description when present', () => {

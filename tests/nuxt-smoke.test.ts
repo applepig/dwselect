@@ -158,15 +158,18 @@ describe('Nuxt SSG baseline', () => {
       expect(readFileSync(new URL(file_path, import.meta.url), 'utf8')).toBeTruthy()
     }
 
+    // 047：頁面 route 全部帶尾斜線，與 Pages 目錄輸出及 payload.path 一致。
     expect(prerender_routes).toContain('/')
-    expect(prerender_routes).toContain('/guide')
-    expect(prerender_routes).toContain('/search')
-    expect(prerender_routes).toContain('/links')
+    expect(prerender_routes).toContain('/guide/')
+    expect(prerender_routes).toContain('/search/')
+    expect(prerender_routes).toContain('/links/')
+    expect(prerender_routes).toContain(`/products/${first_published_product_id}/`)
+    expect(prerender_routes).toContain(`/guide/${first_published_guide_id}/`)
     expect(prerender_routes).toContain('/api/content.json')
     expect(prerender_routes).toContain('/search-index.json')
     expect(prerender_routes.filter((route) => route.startsWith('/products/') && !route.startsWith('/api/'))).toHaveLength(product_route_count)
-    // /guide 列表本身也以 /guide/ 開頭，故扣掉它才是 detail route 數，須等於 published guide 數（AC13）。
-    expect(prerender_routes.filter((route) => route.startsWith('/guide/') && !route.startsWith('/api/'))).toHaveLength(guide_route_count)
+    // /guide/ 列表本身也以 /guide/ 開頭，故扣掉它才是 detail route 數，須等於 published guide 數（AC13）。
+    expect(prerender_routes.filter((route) => route.startsWith('/guide/') && route !== '/guide/')).toHaveLength(guide_route_count)
     // 028 拆分：每筆 published 商品／指南都要 prerender 出 per-id detail JSON，數量與 detail 頁 route 一致，
     // 否則 generate 會漏產 detail JSON 讓詳情頁載入失敗（failOnError 把缺漏放大為 build 中止）。
     expect(prerender_routes.filter((route) => route.startsWith('/api/products/'))).toHaveLength(product_route_count)
@@ -192,6 +195,23 @@ describe('Nuxt SSG baseline', () => {
         interaction: true,
         visibility: false,
       })
+    }
+    finally {
+      await nuxt.close()
+    }
+  })
+
+  // 047：NuxtLink 全站補尾斜線；crawler 關閉，避免 Nuxt 把 router 靜態路由以無斜線推進 prerender。
+  it('should resolve NuxtLink to append trailing slashes and disable prerender link crawling', async () => {
+    const nuxt = await loadNuxt({
+      cwd: fileURLToPath(new URL('..', import.meta.url)),
+      dev: false,
+      ready: false,
+    })
+
+    try {
+      expect(nuxt.options.experimental.defaults.nuxtLink.trailingSlash).toBe('append')
+      expect(nuxt.options.nitro.prerender?.crawlLinks).toBe(false)
     }
     finally {
       await nuxt.close()

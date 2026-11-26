@@ -1,0 +1,100 @@
+import { expect, test } from '@playwright/test'
+
+// 047：頁面 URL 全站帶尾斜線。Pages 只以 `/x/` 服務 `x/index.html`，`/x` 308 過去。
+// 直接開頁時若 URL 與 prerender payload.path 不一致，Nuxt hydration 會 replace URL；Nuxt VT plugin 把只差
+// 尾斜線的導航當換頁開 View Transition，卻等不到 page:finish，畫面凍結約 4 秒、點擊被吞。
+
+type LoadProbe = { view_transitions: number, url_replacements: string[] }
+
+declare global {
+  interface Window {
+    __dw_load_probe: LoadProbe
+    __dw_document_marker?: number
+  }
+}
+
+// 在任何頁面 script 之前包住 startViewTransition 與 replaceState，記錄載入期間的呼叫。
+async function installLoadProbe(page: import('@playwright/test').Page) {
+  await page.addInitScript(() => {
+    const probe: LoadProbe = { view_transitions: 0, url_replacements: [] }
+    window.__dw_load_probe = probe
+
+    const start_view_transition = document.startViewTransition?.bind(document)
+    if (start_view_transition) {
+      document.startViewTransition = ((...args: Parameters<typeof start_view_transition>) => {
+        probe.view_transitions += 1
+        return start_view_transition(...args)
+      }) as typeof document.startViewTransition
+    }
+
+    const replace_state = history.replaceState.bind(history)
+    history.replaceState = (data, unused, url) => {
+      if (url !== undefined && url !== null && new URL(url, location.href).href !== location.href) {
+        probe.url_replacements.push(String(url))
+      }
+      return replace_state(data, unused, url)
+    }
+  })
+}
+
+async function waitForHydration(page: import('@playwright/test').Page) {
+  await page.waitForFunction(() => {
+    const app = (document.querySelector('#__nuxt') as { __vue_app__?: { config: { globalProperties: { $nuxt?: { isHydrating?: boolean } } } } } | null)?.__vue_app__
+    return app?.config.globalProperties.$nuxt?.isHydrating === false
+  })
+  // deferred route 的 replace 掛在 app:suspense:resolve 之後；多等一段，讓「載入期間」涵蓋它。
+  await page.waitForTimeout(500)
+}
+
+// 點導覽「連結」必須是同一 document 的 client 導航，且 2 秒內完成（VT 凍結時點擊會被吞）。
+async function expectInstantClientNavigationToLinks(page: import('@playwright/test').Page) {
+  await page.evaluate(() => {
+    window.__dw_document_marker = Math.random()
+  })
+  const marker = await page.evaluate(() => window.__dw_document_marker)
+
+  await page.locator('a[href="/links/"]:visible').first().click({ timeout: 2_000 })
+
+  await expect(page).toHaveURL(/\/links\/$/, { timeout: 2_000 })
+  expect(await page.evaluate(() => window.__dw_document_marker)).toBe(marker)
+}
+
+test('redirects the slashless URL to the trailing-slash page URL', async ({ request }) => {
+  const response = await request.get('/guide', { maxRedirects: 0 })
+
+  expect(response.status()).toBe(308)
+  expect(new URL(response.headers().location ?? '', 'http://host').pathname).toBe('/guide/')
+})
+
+for (const path of ['/guide/', '/guide/2026-06-02-japanese-rice-intro/']) {
+  test(`direct open of ${path} hydrates without URL replacement or view transition and stays interactive`, async ({ page }) => {
+    await installLoadProbe(page)
+
+    const response = await page.goto(path, { waitUntil: 'load' })
+
+    expect(response?.status()).toBe(200)
+    expect(response?.request().redirectedFrom()).toBeNull()
+    await waitForHydration(page)
+    expect(await page.evaluate(() => window.__dw_load_probe)).toEqual({ view_transitions: 0, url_replacements: [] })
+    await expect(page).toHaveURL(new RegExp(`${path}$`))
+    await expectInstantClientNavigationToLinks(page)
+  })
+}
+
+// 防線（middleware）：只差尾斜線的 forced 導航（Nuxt hydration deferred route 就是這種 replace）不得開 VT 凍結畫面。
+// 一般 push 只差尾斜線時 vue-router 判定 duplicated 直接略過，故以 force 重現 Nuxt 內部的 replace。
+test('a forced slashless replace to the same page does not start a view transition', async ({ page }) => {
+  await installLoadProbe(page)
+  await page.goto('/guide/', { waitUntil: 'load' })
+  await waitForHydration(page)
+
+  await page.evaluate(async () => {
+    type Router = { replace: (to: { path: string, force: boolean }) => Promise<unknown> }
+    const app = (document.querySelector('#__nuxt') as { __vue_app__?: { config: { globalProperties: { $router: Router } } } } | null)?.__vue_app__
+    await app?.config.globalProperties.$router.replace({ path: '/guide', force: true })
+  })
+
+  await expect(page).toHaveURL(/\/guide$/)
+  expect(await page.evaluate(() => window.__dw_load_probe.view_transitions)).toBe(0)
+  await expectInstantClientNavigationToLinks(page)
+})

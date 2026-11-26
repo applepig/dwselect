@@ -89,7 +89,7 @@ describe('client search lazy loader', () => {
         content_id: '2026-06-02-sample-product',
         type: 'product',
         title: '機械鍵盤',
-        href: '/products/2026-06-02-sample-product',
+        href: '/products/2026-06-02-sample-product/',
         external: false,
         price_text: 'NT$ 1,990',
         image_url: '/products/images/2026-06-02-sample-product.jpg',

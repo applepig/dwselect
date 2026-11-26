@@ -34,7 +34,7 @@ describe('guide and link resource row build mapper', () => {
         title: '已發布指南',
         subtitle: '指南摘要',
         meta: '電腦',
-        href: '/guide/published-guide',
+        href: '/guide/published-guide/',
         image_url: null,
         icon: 'i-lucide-book-open',
         external: false,

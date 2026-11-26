@@ -1,5 +1,6 @@
 import { defineNuxtConfig } from 'nuxt/config'
 import { fileURLToPath } from 'node:url'
+import { withTrailingSlash } from 'ufo'
 
 import { buildBrandRoutes } from './scripts/build-brand-routes'
 import { buildCategoryRoutes } from './scripts/build-category-routes'
@@ -8,6 +9,7 @@ import { buildGuideRoutes } from './scripts/build-guide-routes'
 import { buildProductRoutes } from './scripts/build-product-routes'
 import { buildProductSearchImageRoutes } from './scripts/build-product-search-image-routes'
 import { buildTagRoutes } from './scripts/build-tag-routes'
+import { rejectSlashlessPageRoute } from './scripts/reject-slashless-page-route'
 import { getSiteUrl } from './scripts/site-url'
 
 // APP_URL 一律必填（含裸跑 generate/build）：缺 env 硬失敗，不再豁免 generate/build、
@@ -117,6 +119,8 @@ export default defineNuxtConfig({
     defaults: {
       nuxtLink: {
         prefetchOn: { interaction: true, visibility: false },
+        // 頁面 URL 全站帶尾斜線（047）：與 Pages 目錄輸出、prerender payload.path 一致，hydration 不 replace URL。
+        trailingSlash: 'append',
       },
     },
   },
@@ -124,23 +128,21 @@ export default defineNuxtConfig({
   nitro: {
     preset: 'static',
     ...(output_dir ? { output: { dir: output_dir } } : {}),
+    hooks: {
+      'prerender:generate': rejectSlashlessPageRoute,
+    },
     prerender: {
       // failOnError：任一 prerender route（含 /api/content.json、/search-index.json、product detail）
       // 失敗時讓 nuxt generate 以非零碼中止，避免壞 content／壞 route 靜默產出殘缺 static 站（spec Case 1）。
       failOnError: true,
+      // 頁面 route 全部顯式列出且帶尾斜線（047）。static preset 預設 crawlLinks:true 會讓 Nuxt 把 router 靜態路由
+      // 以無斜線（`/guide`）推進 prerender、覆寫同一個 guide/index.html 的 payload.path，故關掉。
+      crawlLinks: false,
       routes: [
-        '/',
-        '/guide',
-        '/search',
-        '/links',
+        ...['/', '/guide', '/search', '/links', ...product_routes, ...guide_routes, ...category_routes, ...tag_routes, ...brand_routes, ...channel_routes]
+          .map((route) => withTrailingSlash(route)),
         '/api/content.json',
         '/search-index.json',
-        ...product_routes,
-        ...guide_routes,
-        ...category_routes,
-        ...tag_routes,
-        ...brand_routes,
-        ...channel_routes,
         ...product_detail_json_routes,
         ...guide_detail_json_routes,
         ...product_search_image_routes,

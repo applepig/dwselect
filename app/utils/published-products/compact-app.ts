@@ -13,9 +13,9 @@ import type {
 // 順序 home/guide/links/search 以桌面導覽為基準。to 直接存字面（url segment 即 tab 語意）。
 export const NAV_TABS: Array<CompactAppTab & { to: string }> = [
   { id: 'home', label: '首頁', icon: 'i-lucide-house', to: '/' },
-  { id: 'guide', label: '指南', icon: 'i-lucide-tags', to: '/guide' },
-  { id: 'links', label: '連結', icon: 'i-lucide-link', to: '/links' },
-  { id: 'search', label: '搜尋', icon: 'i-lucide-search', to: '/search' },
+  { id: 'guide', label: '指南', icon: 'i-lucide-tags', to: '/guide/' },
+  { id: 'links', label: '連結', icon: 'i-lucide-link', to: '/links/' },
+  { id: 'search', label: '搜尋', icon: 'i-lucide-search', to: '/search/' },
 ]
 
 export type CompactAppPayload = Pick<PublicContentPayload, 'products' | 'guides' | 'links' | 'navigation'>

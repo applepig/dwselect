@@ -267,7 +267,8 @@ function mapProductToSearchDocument(
     tag_ids: [...product.tag_ids],
     tag_labels: product.tag_ids.map((tag_id) => labels.getProductTagLabel(tag_id)),
     image_url: resolveProductImageUrl(product),
-    href: `/products/${content_id}`,
+    // 頁面 URL 帶尾斜線（047），與 Pages 目錄輸出及 prerender payload.path 一致。
+    href: `/products/${content_id}/`,
     external: false,
     price_text: primary_offer.price_text,
     channel_id: primary_offer.channel_id,
@@ -301,7 +302,7 @@ function mapGuideToSearchDocument(
     tag_ids: [...guide.tag_ids],
     tag_labels: guide.tag_ids.map((tag_id) => labels.getContentTagLabel(tag_id)),
     image_url: resolveGuideImageUrl(guide),
-    href: `/guide/${guide.id}`,
+    href: `/guide/${guide.id}/`,
     external: false,
     published_at: guide.published_at,
   }

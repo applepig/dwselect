@@ -87,7 +87,7 @@ describe('compact app view state', () => {
         title: '已發布指南',
         subtitle: '指南摘要',
         meta: '電腦',
-        href: '/guide/published-guide',
+        href: '/guide/published-guide/',
         image_url: null,
         icon: 'i-lucide-book-open',
         external: false,
@@ -198,7 +198,7 @@ describe('compact app view state', () => {
 describe('navigation tab single source of truth', () => {
   it('should order nav tabs home, guide, links, search with matching routes', () => {
     expect(NAV_TABS.map((tab) => tab.id)).toEqual(['home', 'guide', 'links', 'search'])
-    expect(NAV_TABS.map((tab) => tab.to)).toEqual(['/', '/guide', '/links', '/search'])
+    expect(NAV_TABS.map((tab) => tab.to)).toEqual(['/', '/guide/', '/links/', '/search/'])
   })
 
   it('should place the links tab before the search tab', () => {

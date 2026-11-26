@@ -1,3 +1,5 @@
+import { withoutTrailingSlash } from 'ufo'
+
 import type { CategoryChipView } from '../public-content-view-types.ts'
 import type { PublicTaxonomies } from '../public-content-payload.ts'
 import { createTaxonomyLabelResolver } from '../content/taxonomy-labels.ts'
@@ -30,10 +32,13 @@ export type BreadcrumbShellData = {
 type RouteQuery = Record<string, string | null | Array<string | null> | undefined>
 
 export function resolveBreadcrumbItems(
-  route_path: string,
+  raw_route_path: string,
   _route_query: RouteQuery,
   shell_data: BreadcrumbShellData | null,
 ): BreadcrumbItem[] {
+  // 頁面 URL 帶尾斜線（`/guide/`，047）；比對前去掉，讓 `/guide` 與 `/guide/` 同義。
+  const route_path = withoutTrailingSlash(raw_route_path)
+
   if (route_path === '/') {
     return []
   }
@@ -86,7 +91,7 @@ function resolveProductBreadcrumb(route_path: string, shell_data: BreadcrumbShel
   return [
     {
       label: product_item.category_label ?? '',
-      to: `/category/${product_item.category_id ?? ''}`,
+      to: `/category/${product_item.category_id ?? ''}/`,
     },
     { label: product_item.name ?? '' },
   ]
@@ -101,7 +106,7 @@ function resolveGuideBreadcrumb(route_path: string, shell_data: BreadcrumbShellD
   }
 
   return [
-    { label: '指南', to: '/guide' },
+    { label: '指南', to: '/guide/' },
     { label: guide_item.title ?? '' },
   ]
 }

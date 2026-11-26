@@ -26,12 +26,14 @@ type RssItem = {
   title: string
   summary: string
   url: string
+  guid: string
   published_at: string | null
   updated_at: string
 }
 
 export const DEFAULT_PUBLIC_DIR = 'public'
-const ROOT_ROUTES = ['/', '/guide', '/search', '/links']
+// 頁面 URL 一律帶尾斜線（047），與 Pages 目錄輸出及 canonical 一致。
+const ROOT_ROUTES = ['/', '/guide/', '/search/', '/links/']
 const RSS_WEEKDAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
 const RSS_MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 
@@ -127,10 +129,10 @@ function buildTaxonomySitemapEntries(source: TaxonomySitemapSource, site_url: st
   )
 
   return [
-    ...Array.from(category_ids, (category_id) => buildSitemapUrlEntry(`${site_url}category/${category_id}`)),
-    ...Array.from(tag_ids, (tag_id) => buildSitemapUrlEntry(`${site_url}tag/${tag_id}`)),
-    ...Array.from(brand_ids, (brand_id) => buildSitemapUrlEntry(`${site_url}brand/${brand_id}`)),
-    ...Array.from(channel_ids, (channel_id) => buildSitemapUrlEntry(`${site_url}channel/${channel_id}`)),
+    ...Array.from(category_ids, (category_id) => buildSitemapUrlEntry(`${site_url}category/${category_id}/`)),
+    ...Array.from(tag_ids, (tag_id) => buildSitemapUrlEntry(`${site_url}tag/${tag_id}/`)),
+    ...Array.from(brand_ids, (brand_id) => buildSitemapUrlEntry(`${site_url}brand/${brand_id}/`)),
+    ...Array.from(channel_ids, (channel_id) => buildSitemapUrlEntry(`${site_url}channel/${channel_id}/`)),
   ]
 }
 
@@ -149,6 +151,7 @@ function buildRssXml(products: Product[], guides: Guide[], links: LinkDefinition
       title: product.name,
       summary: product.short_description,
       url: getProductUrl(product.id, site_url),
+      guid: getLegacyProductGuid(product.id, site_url),
       published_at: product.published_at,
       updated_at: product.updated_at,
     })),
@@ -157,6 +160,7 @@ function buildRssXml(products: Product[], guides: Guide[], links: LinkDefinition
       title: guide.title,
       summary: guide.short_description,
       url: guide.source_url,
+      guid: guide.source_url,
       published_at: guide.published_at,
       updated_at: guide.updated_at,
     })),
@@ -165,6 +169,7 @@ function buildRssXml(products: Product[], guides: Guide[], links: LinkDefinition
       title: link.title,
       summary: link.short_description,
       url: link.url,
+      guid: link.url,
       published_at: link.published_at,
       updated_at: link.updated_at,
     })),
@@ -175,7 +180,7 @@ function buildRssXml(products: Product[], guides: Guide[], links: LinkDefinition
 }
 
 function buildRssItemXml(item: RssItem) {
-  return `    <item>\n      <title>${escapeXml(item.title)}</title>\n      <link>${escapeXml(item.url)}</link>\n      <guid isPermaLink="true">${escapeXml(item.url)}</guid>\n      <pubDate>${escapeXml(formatRssDate(item.published_at ?? item.updated_at))}</pubDate>\n      <description>${escapeXml(item.summary)}</description>\n    </item>`
+  return `    <item>\n      <title>${escapeXml(item.title)}</title>\n      <link>${escapeXml(item.url)}</link>\n      <guid isPermaLink="true">${escapeXml(item.guid)}</guid>\n      <pubDate>${escapeXml(formatRssDate(item.published_at ?? item.updated_at))}</pubDate>\n      <description>${escapeXml(item.summary)}</description>\n    </item>`
 }
 
 function compareRssItems(left_item: RssItem, right_item: RssItem) {
@@ -199,11 +204,16 @@ function compareRssItems(left_item: RssItem, right_item: RssItem) {
 }
 
 function getProductUrl(product_id: string, site_url: string) {
+  return `${getLegacyProductGuid(product_id, site_url)}/`
+}
+
+// 047 前的商品頁 URL（無尾斜線）。RSS <guid> 是閱讀器的去重 key，改了會把舊文全當新文，故逐字保留。
+function getLegacyProductGuid(product_id: string, site_url: string) {
   return `${site_url}products/${encodeURIComponent(product_id)}`
 }
 
 function getGuideUrl(guide_id: string, site_url: string) {
-  return `${site_url}guide/${encodeURIComponent(guide_id)}`
+  return `${site_url}guide/${encodeURIComponent(guide_id)}/`
 }
 
 function getDateText(timestamp: string) {

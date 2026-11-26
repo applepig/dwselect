@@ -81,13 +81,40 @@ describe('resolveBreadcrumbItems for existing routes (regression)', () => {
       product_breadcrumb_by_id: { 'a-product': { name: '商品甲', category_id: 'computer', category_label: '電腦' } },
     } as never
 
-    expect(resolveBreadcrumbItems('/products/a-product', {}, shell_with_product)).toEqual([
-      { label: '電腦', to: '/category/computer' },
+    expect(resolveBreadcrumbItems('/products/a-product/', {}, shell_with_product)).toEqual([
+      { label: '電腦', to: '/category/computer/' },
       { label: '商品甲' },
     ])
   })
 
   it('should fall back to a generic label when a product detail entry is missing', () => {
     expect(resolveBreadcrumbItems('/products/missing', {}, shell)).toEqual([{ label: '商品詳情' }])
+  })
+})
+
+// 047：全站 URL 帶尾斜線（`/guide/`）；route path 比對須容許尾斜線，否則列表頁麵包屑只剩站名。
+describe('resolveBreadcrumbItems with trailing-slash routes', () => {
+  it.each([
+    ['/guide/', '指南'],
+    ['/links/', '連結'],
+    ['/search/', '搜尋'],
+  ])('should label the %s index route', (route_path, label) => {
+    expect(resolveBreadcrumbItems(route_path, {}, shell)).toEqual([{ label }])
+  })
+
+  it('should resolve a guide detail breadcrumb linking back to the guide index', () => {
+    const shell_with_guide = {
+      ...shell,
+      guide_breadcrumb_by_id: { 'a-guide': { title: '指南甲' } },
+    } as never
+
+    expect(resolveBreadcrumbItems('/guide/a-guide/', {}, shell_with_guide)).toEqual([
+      { label: '指南', to: '/guide/' },
+      { label: '指南甲' },
+    ])
+  })
+
+  it('should resolve a taxonomy page breadcrumb from a trailing-slash path', () => {
+    expect(resolveBreadcrumbItems('/category/computer/', {}, shell)).toEqual([{ label: '電腦' }])
   })
 })

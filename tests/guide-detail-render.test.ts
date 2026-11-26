@@ -302,4 +302,17 @@ describe('GuideDetail', () => {
     expect(thread.attributes('data-content-type')).toBe('guides')
     expect(thread.attributes('data-content-id')).toBe('guide-a')
   })
+
+  // 047：頁面 URL 帶尾斜線；沒有站內上一頁時返回鈕導向 `/guide/`，不產生只差斜線的導航。
+  it('should send the back button to the trailing-slash guide index when there is no same-origin history', async () => {
+    const router = { back: vi.fn(), push: vi.fn() }
+    vi.stubGlobal('useRouter', () => router)
+    vi.stubGlobal('history', { length: 1, state: null })
+    const wrapper = mountGuideDetail(makeGuideDetailView())
+
+    await wrapper.find('.detail-back').trigger('click')
+
+    expect(router.back).not.toHaveBeenCalled()
+    expect(router.push).toHaveBeenCalledWith('/guide/')
+  })
 })
