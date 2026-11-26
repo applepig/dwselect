@@ -188,6 +188,15 @@ export default defineNuxtConfig({
       },
     },
   },
+  hooks: {
+    // @nuxt/image 2 會把 image.dir（content/）推進 Nitro publicAssets，generate 因此把原始 content JSON（含 draft）、
+    // taxonomy 與 content/AGENTS.md 複製進公開產物。IPX 直接讀 image.dir 來源，不需要這份 public 副本。
+    // 在 nitro:init 依已解析的 publicAssets 過濾：nuxt.config 的 nitro:config hook 早於 module 註冊，攔不到。
+    'nitro:init'(nitro) {
+      const content_dir = fileURLToPath(new URL('./content', import.meta.url))
+      nitro.options.publicAssets = nitro.options.publicAssets.filter((asset) => asset.dir !== content_dir)
+    },
+  },
   eslint: {
     config: {
       stylistic: {

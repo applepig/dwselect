@@ -13,7 +13,8 @@ export function resolveSrcset(sizes: string): { sizesVal: string, widths: number
     },
   }
   const $img = createImage({
-    providers: { ipx: { provider, defaults: {} } },
+    // @nuxt/image 2 的 provider 註冊形狀是 { setup: () => provider }（v1 是 { provider }）。
+    providers: { ipx: { setup: () => provider, defaults: {} } },
     provider: 'ipx',
     presets: {},
     screens: { xs: 320, sm: 640, md: 768, lg: 1024, xl: 1280, xxl: 1536, '2xl': 1536 },

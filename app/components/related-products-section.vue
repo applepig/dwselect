@@ -13,7 +13,7 @@
         v-for="product in products"
         :key="product.id"
         :product="product"
-        sizes="720:96px 743:30vw 1600:30vw"
+        sizes="720:96px 744:30vw 1600:30vw"
       />
     </div>
   </section>
@@ -25,6 +25,7 @@
 // 卡片版型與破圖 fallback 皆以首頁卡為單一來源，本元件只負責標題與 grid 容器。
 // sizes 覆蓋預設：related 版型 ≤743px 是固定 96px 橫式縮圖（非全寬卡），沿用首頁的 340px
 // 提示會讓手機縮圖挑到過大候選；此處按 96px 縮圖／≥744px 3 欄（~30vw）重新校準。
+// @nuxt/image 2 的 `K:size` 是「寬度 ≥ K 起用 size」，前一段輸出為 `(max-width: K-1px)`，故斷點寫 744。
 import type { ProductCardView } from '../utils/public-content-view-types'
 
 defineProps<{

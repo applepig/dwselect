@@ -124,14 +124,19 @@ describe('Nuxt SSG baseline', () => {
     expect(getContrastRatio('#201c17', '#fff4dd')).toBeGreaterThanOrEqual(4.5)
   })
 
-  it('should keep Nuxt head runtime on Unhead v2 for Nuxt UI color injection', () => {
-    const nuxt_package = JSON.parse(readFileSync(
-      new URL('../node_modules/nuxt/package.json', import.meta.url),
+  // Nuxt 4.4.7 曾解析到 unhead v3、Nuxt UI 仍用 @unhead/vue v2，head runtime 分裂讓 colors plugin 拋
+  // `useHead() was called without provide context`（docs/007 works.md）。守的是兩者同一 major，不是特定版本。
+  it('should keep Nuxt and Nuxt UI on the same Unhead major for Nuxt UI color injection', () => {
+    const readDependencies = (package_path: string) => (JSON.parse(readFileSync(
+      new URL(`../node_modules/${package_path}/package.json`, import.meta.url),
       'utf8',
-    )) as { dependencies?: Record<string, string> }
-    const unhead_range = nuxt_package.dependencies?.unhead ?? ''
+    )) as { dependencies?: Record<string, string> }).dependencies ?? {}
+    const getMajor = (range: string | undefined) => range?.match(/\d+/)?.[0]
+    const nuxt_dependencies = readDependencies('nuxt')
 
-    expect(unhead_range).toMatch(/^\^?2\./)
+    expect(getMajor(nuxt_dependencies.unhead)).toBeDefined()
+    expect(getMajor(nuxt_dependencies['@unhead/vue'])).toBe(getMajor(nuxt_dependencies.unhead))
+    expect(getMajor(readDependencies('@nuxt/ui')['@unhead/vue'])).toBe(getMajor(nuxt_dependencies.unhead))
   })
 
   it('should define routed page files and prerender every product detail route', () => {
