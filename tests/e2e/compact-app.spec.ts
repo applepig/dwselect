@@ -82,7 +82,7 @@ test('soft redirects valid legacy category query links and keeps invalid ones on
 
   await page.goto('/?category=computer-3c', { waitUntil: 'domcontentloaded' })
   await expect(page.locator('vite-error-overlay')).toHaveCount(0)
-  await expect(page).toHaveURL('/category/computer-3c', { timeout: SEARCH_RESULT_TIMEOUT_MS })
+  await expect(page).toHaveURL('/category/computer-3c/', { timeout: SEARCH_RESULT_TIMEOUT_MS })
 
   await expect(page.locator('.compact-top-bar .top-bar-title')).toHaveText(getBreadcrumbTextPattern('電腦3C'))
 
@@ -111,7 +111,7 @@ test('legacy category redirect replaces history so the back button is not trappe
   // Establish home as the prior history entry, then enter via a legacy ?category URL.
   await page.goto('/', { waitUntil: 'domcontentloaded' })
   await page.goto('/?category=computer-3c', { waitUntil: 'domcontentloaded' })
-  await expect(page).toHaveURL('/category/computer-3c', { timeout: SEARCH_RESULT_TIMEOUT_MS })
+  await expect(page).toHaveURL('/category/computer-3c/', { timeout: SEARCH_RESULT_TIMEOUT_MS })
 
   // The redirect must use history replace, so going back escapes to home instead of
   // bouncing back to /?category=computer-3c and getting re-pushed forward (the trap).
@@ -122,7 +122,7 @@ test('legacy category redirect replaces history so the back button is not trappe
 test('keeps sparse category product cards at tablet three-column width', async ({ page }, test_info) => {
   test.skip(test_info.project.name !== 'tablet', 'tablet grid width check only runs on tablet')
 
-  await page.goto('/category/network', { waitUntil: 'domcontentloaded' })
+  await page.goto('/category/network/', { waitUntil: 'domcontentloaded' })
   await expect(page.locator('vite-error-overlay')).toHaveCount(0)
   await expect(page.locator('.compact-top-bar .top-bar-title')).toHaveText(getBreadcrumbTextPattern('網路通訊'))
 
@@ -153,7 +153,7 @@ test('keeps sparse category product cards at tablet three-column width', async (
 test('keeps the mobile header lightweight without card chrome', async ({ page }, test_info) => {
   test.skip(test_info.project.name !== 'phone', 'mobile header chrome check only runs on phone')
 
-  await page.goto('/category/network', { waitUntil: 'domcontentloaded' })
+  await page.goto('/category/network/', { waitUntil: 'domcontentloaded' })
   await expect(page.locator('vite-error-overlay')).toHaveCount(0)
   await expect(page.locator('.compact-top-bar .top-bar-title')).toHaveText(getBreadcrumbTextPattern('網路通訊'))
 
@@ -205,7 +205,7 @@ test('switches tabs without navigation reload and exposes search and link contra
   await expect(page.locator('.compact-top-bar .breadcrumb-link')).toHaveAttribute('href', '/')
 
   await nav_root.getByRole('link', { name: '指南' }).click()
-  await expect(page).toHaveURL('/guide')
+  await expect(page).toHaveURL('/guide/')
   await expect(page.locator('.compact-top-bar .top-bar-title')).toHaveText(getBreadcrumbTextPattern('指南'))
   await expect(page.getByRole('heading', { name: '指南列表' })).toHaveCount(0)
 
@@ -216,7 +216,7 @@ test('switches tabs without navigation reload and exposes search and link contra
   await expect(page.getByPlaceholder('在找什麼嗎？™')).toBeVisible()
 
   await nav_root.getByRole('link', { name: '連結' }).click()
-  await expect(page).toHaveURL('/links')
+  await expect(page).toHaveURL('/links/')
   await expect(page.locator('.compact-top-bar .top-bar-title')).toHaveText(getBreadcrumbTextPattern('連結'))
   await expect(page.getByRole('heading', { name: '相關入口' })).toHaveCount(0)
   await expect(page.getByRole('link', { name: /applepig\.idv\.tw/ })).toBeVisible()
@@ -227,7 +227,7 @@ test('switches tabs without navigation reload and exposes search and link contra
 })
 
 test('renders guide and links with the shared resource row contract', async ({ page }) => {
-  await page.goto('/guide', { waitUntil: 'domcontentloaded' })
+  await page.goto('/guide/', { waitUntil: 'domcontentloaded' })
   await expect(page.locator('vite-error-overlay')).toHaveCount(0)
 
   const guide_list = page.locator('.resource-list')
@@ -259,7 +259,7 @@ test('renders guide and links with the shared resource row contract', async ({ p
     }
   })
 
-  await page.goto('/links', { waitUntil: 'domcontentloaded' })
+  await page.goto('/links/', { waitUntil: 'domcontentloaded' })
   await expect(page.locator('vite-error-overlay')).toHaveCount(0)
 
   const link_list = page.locator('.resource-list')
@@ -390,7 +390,7 @@ test('does not fetch details on home and opens the selected product (028 split)'
   const href = await first_card.getAttribute('href')
   expect(href).toMatch(/\/products\/.+/)
 
-  const expected_id = href?.split('/').at(-1)
+  const expected_id = href?.split('/').filter(Boolean).at(-1)
   if (href === null || expected_id === undefined) {
     throw new Error('Expected product href to include an id')
   }
@@ -410,13 +410,13 @@ test('does not fetch details on home and opens the selected product (028 split)'
 })
 
 test('fetches a single guide detail json on navigation into a guide (028 split)', async ({ page }) => {
-  await page.goto('/guide', { waitUntil: 'networkidle' })
+  await page.goto('/guide/', { waitUntil: 'networkidle' })
   await expect(page.locator('vite-error-overlay')).toHaveCount(0)
 
   const first_guide = page.locator('.resource-list .resource-row').first()
   await expect(first_guide).toBeVisible()
   const href = await first_guide.getAttribute('href')
-  const expected_id = href?.split('/').at(-1) ?? ''
+  const expected_id = href?.split('/').filter(Boolean).at(-1) ?? ''
   expect(expected_id).not.toBe('')
 
   const detail_request = page.waitForRequest(new RegExp(`/guide/${expected_id}/_payload\\.json`))
@@ -507,7 +507,7 @@ test('renders direct product detail routes and unknown product not-found states'
 })
 
 test('restores category taxonomy route state and search query strings', async ({ page }, test_info) => {
-  await page.goto('/category/av-theater', { waitUntil: 'domcontentloaded' })
+  await page.goto('/category/av-theater/', { waitUntil: 'domcontentloaded' })
   await expect(page.locator('vite-error-overlay')).toHaveCount(0)
   await expect(page.locator('.compact-top-bar .top-bar-title')).toHaveText(getBreadcrumbTextPattern('影音劇院'))
 
@@ -515,13 +515,13 @@ test('restores category taxonomy route state and search query strings', async ({
     await expect(page.locator('.compact-app-sidebar').getByRole('link', { name: /影音劇院/ })).toHaveAttribute('aria-current', 'page')
   }
 
-  await page.goto('/guide?tags=影音劇院', { waitUntil: 'domcontentloaded' })
+  await page.goto('/guide/?tags=影音劇院', { waitUntil: 'domcontentloaded' })
   await expect(page.locator('vite-error-overlay')).toHaveCount(0)
   await expect(page.locator('.compact-top-bar .top-bar-title')).toHaveText(getBreadcrumbTextPattern('指南'))
   await expect(page.getByRole('heading', { name: '指南列表' })).toHaveCount(0)
   await expect(page.locator('.tag-chip.is-active')).toHaveCount(0)
 
-  await page.goto('/search?q=Sharp', { waitUntil: 'domcontentloaded' })
+  await page.goto('/search/?q=Sharp', { waitUntil: 'domcontentloaded' })
   await expect(page.locator('vite-error-overlay')).toHaveCount(0)
   await expect(page.getByPlaceholder('在找什麼嗎？™')).toHaveValue('Sharp')
   // Verify search returned at least one product result without binding to a specific product name.
@@ -542,7 +542,7 @@ test('hydrates direct search query routes without mismatch warnings', async ({ p
     }
   })
 
-  await page.goto('/search?q=Sharp', { waitUntil: 'networkidle' })
+  await page.goto('/search/?q=Sharp', { waitUntil: 'networkidle' })
   await expect(page.locator('vite-error-overlay')).toHaveCount(0)
   await expect(page.locator('.search-result-section[data-section-id="products"] .resource-row').first()).toBeVisible({
     timeout: SEARCH_RESULT_TIMEOUT_MS,
@@ -552,7 +552,7 @@ test('hydrates direct search query routes without mismatch warnings', async ({ p
 })
 
 test('separates search typing, autocomplete and submitted query state', async ({ page }) => {
-  await page.goto('/search', { waitUntil: 'domcontentloaded' })
+  await page.goto('/search/', { waitUntil: 'domcontentloaded' })
   await expect(page.locator('vite-error-overlay')).toHaveCount(0)
   await expect(page).toHaveURL(SEARCH_URL_PATTERN)
   await expect(page.locator('.search-result-section')).toHaveCount(0)
@@ -581,7 +581,7 @@ test('separates search typing, autocomplete and submitted query state', async ({
   await expect(page.locator('.search-suggestion-item').first()).toContainText(/產品|指南|連結/)
 
   await search_input.press('Enter')
-  await expect(page).toHaveURL(/\/search\?q=Sharp/)
+  await expect(page).toHaveURL(/\/search\/\?q=Sharp/)
   await expect(page.locator('.search-result-section[data-section-id="products"] .resource-row').first()).toBeVisible({
     timeout: SEARCH_RESULT_TIMEOUT_MS,
   })
@@ -589,12 +589,12 @@ test('separates search typing, autocomplete and submitted query state', async ({
   const history_items = await page.evaluate(() => JSON.parse(localStorage.getItem('dwselect.search.history.v1') ?? '[]'))
   expect(history_items).toEqual(['Sharp'])
 
-  await page.goto('/search', { waitUntil: 'domcontentloaded' })
+  await page.goto('/search/', { waitUntil: 'domcontentloaded' })
   await expect(page.locator('.search-history-panel').getByRole('button', { name: 'Sharp' })).toBeVisible()
 })
 
 test('does not submit search or write history when IME composition confirms with Enter', async ({ page }) => {
-  await page.goto('/search', { waitUntil: 'domcontentloaded' })
+  await page.goto('/search/', { waitUntil: 'domcontentloaded' })
   await expect(page.locator('vite-error-overlay')).toHaveCount(0)
 
   const is_storage_accessible = await page.evaluate(() => {
@@ -627,7 +627,7 @@ test('does not submit search or write history when IME composition confirms with
 })
 
 test('defers search input query updates until IME composition ends', async ({ page }) => {
-  await page.goto('/search', { waitUntil: 'domcontentloaded' })
+  await page.goto('/search/', { waitUntil: 'domcontentloaded' })
   await expect(page.locator('vite-error-overlay')).toHaveCount(0)
 
   const search_input = page.getByPlaceholder('在找什麼嗎？™')
@@ -648,7 +648,7 @@ test('defers search input query updates until IME composition ends', async ({ pa
 })
 
 test('keeps search usable when search history storage contains corrupted JSON', async ({ page }) => {
-  await page.goto('/search', { waitUntil: 'domcontentloaded' })
+  await page.goto('/search/', { waitUntil: 'domcontentloaded' })
   await page.evaluate(() => {
     window.localStorage.setItem('dwselect.search.history.v1', '{broken-json')
   })
@@ -665,7 +665,7 @@ test('keeps search usable when search history storage contains corrupted JSON', 
   await expect(page.locator('.search-suggestion-panel')).toBeVisible()
   await search_input.press('Enter')
 
-  await expect(page).toHaveURL(/\/search\?q=Sharp/)
+  await expect(page).toHaveURL(/\/search\/\?q=Sharp/)
   await expect(page.locator('.search-result-section[data-section-id="products"] .resource-row').first()).toBeVisible({
     timeout: SEARCH_RESULT_TIMEOUT_MS,
   })
@@ -683,7 +683,7 @@ test('recovers suggestions after the search index error retry path', async ({ pa
     await route.continue()
   })
 
-  await page.goto('/search', { waitUntil: 'domcontentloaded' })
+  await page.goto('/search/', { waitUntil: 'domcontentloaded' })
   await expect(page.locator('vite-error-overlay')).toHaveCount(0)
 
   const search_input = page.getByPlaceholder('在找什麼嗎？™')
@@ -700,7 +700,7 @@ test('recovers suggestions after the search index error retry path', async ({ pa
 })
 
 test('popular tags navigate to taxonomy pages; history items submit search', async ({ page }) => {
-  await page.goto('/search', { waitUntil: 'domcontentloaded' })
+  await page.goto('/search/', { waitUntil: 'domcontentloaded' })
   await expect(page.locator('vite-error-overlay')).toHaveCount(0)
   await expect(page.locator('.search-result-section')).toHaveCount(0)
 
@@ -715,22 +715,22 @@ test('popular tags navigate to taxonomy pages; history items submit search', asy
 
   // History items still submit search (one-click → /search?q=...).
   // Populate history first by doing a real search, then verify clicking the history entry works.
-  await page.goto('/search', { waitUntil: 'domcontentloaded' })
+  await page.goto('/search/', { waitUntil: 'domcontentloaded' })
   const search_input = page.getByPlaceholder('在找什麼嗎？™')
   await search_input.fill('Sharp')
   await search_input.press('Enter')
-  await expect(page).toHaveURL(/\/search\?q=Sharp/)
+  await expect(page).toHaveURL(/\/search\/\?q=Sharp/)
   await expect(page.locator('.search-result-section[data-section-id="products"] .resource-row').first()).toBeVisible({
     timeout: SEARCH_RESULT_TIMEOUT_MS,
   })
 
-  await page.goto('/search', { waitUntil: 'domcontentloaded' })
+  await page.goto('/search/', { waitUntil: 'domcontentloaded' })
   await page.locator('.search-history-panel').getByRole('button', { name: 'Sharp' }).click()
-  await expect(page).toHaveURL(/\/search\?q=.*Sharp/)
+  await expect(page).toHaveURL(/\/search\/\?q=.*Sharp/)
 })
 
 test('renders submitted search as ordered resource sections with counts and non-empty sections only', async ({ page }) => {
-  await page.goto('/search?q=%E9%9B%BB%E8%85%A6', { waitUntil: 'domcontentloaded' })
+  await page.goto('/search/?q=%E9%9B%BB%E8%85%A6', { waitUntil: 'domcontentloaded' })
   await expect(page.locator('vite-error-overlay')).toHaveCount(0)
   await expect(page.getByPlaceholder('在找什麼嗎？™')).toHaveValue('電腦')
 
@@ -766,7 +766,7 @@ test('renders submitted search as ordered resource sections with counts and non-
   expect(media_contracts.every((contract) => Math.abs(contract.media_width - contract.media_height) < 1)).toBe(true)
   expect(media_contracts.filter((contract) => contract.object_fit !== null).every((contract) => contract.object_fit === 'contain')).toBe(true)
 
-  await page.goto('/search?q=Sharp', { waitUntil: 'domcontentloaded' })
+  await page.goto('/search/?q=Sharp', { waitUntil: 'domcontentloaded' })
   await expect(page.locator('vite-error-overlay')).toHaveCount(0)
   await expect(page.locator('.search-result-section[data-section-id="products"]')).toHaveCount(1, {
     timeout: SEARCH_RESULT_TIMEOUT_MS,
@@ -785,7 +785,7 @@ test('expands product categories in desktop sidebar only', async ({ page }, test
   await expect(sidebar.locator('.desktop-category-items')).toBeVisible()
   await expect(sidebar.locator('.desktop-category-items').getByRole('link', { name: /其他/ })).toHaveCount(0)
   await sidebar.getByRole('link', { name: /影音劇院/ }).click()
-  await expect(page).toHaveURL('/category/av-theater')
+  await expect(page).toHaveURL('/category/av-theater/')
   await expect(sidebar.getByRole('link', { name: /影音劇院/ })).toHaveAttribute('aria-current', 'page')
 })
 
@@ -806,7 +806,7 @@ test('hides the category chip bar on desktop category pages while keeping sideba
 
   // AC8 / Case6：桌機（≥1200px）分類頁的 chip bar 套用與首頁同一條 display:none 規則，
   // 分類導航改走 sidebar，不在桌機重複出現 pill。
-  await page.goto('/category/computer-3c', { waitUntil: 'domcontentloaded' })
+  await page.goto('/category/computer-3c/', { waitUntil: 'domcontentloaded' })
   await expect(page.locator('vite-error-overlay')).toHaveCount(0)
 
   await expect(page.locator('.category-chip-bar')).toBeHidden()
@@ -825,7 +825,7 @@ test('persists the category chip bar with active state after navigating from hom
   await expect(chip_bar).toBeVisible()
 
   await chip_bar.locator('.category-chip', { hasText: '電腦3C' }).click()
-  await expect(page).toHaveURL('/category/computer-3c', { timeout: SEARCH_RESULT_TIMEOUT_MS })
+  await expect(page).toHaveURL('/category/computer-3c/', { timeout: SEARCH_RESULT_TIMEOUT_MS })
 
   // 導航後 chip bar 必須仍可見（持久化主線），且唯一 active chip 為當前分類。
   await expect(chip_bar).toBeVisible()
@@ -864,7 +864,7 @@ test('keeps desktop product grid columns fluid without stretching sparse categor
   expect(layout.max_card_width).toBeGreaterThan(240)
   expect(layout.grid_width).toBeGreaterThan(0)
 
-  await page.goto('/category/network', { waitUntil: 'domcontentloaded' })
+  await page.goto('/category/network/', { waitUntil: 'domcontentloaded' })
   await expect(page.locator('vite-error-overlay')).toHaveCount(0)
 
   const sparse_category_layout = await page.evaluate(() => {

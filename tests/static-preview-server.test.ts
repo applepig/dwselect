@@ -42,6 +42,20 @@ describe('static preview server', () => {
     await expect(response.text()).resolves.toContain('Search page')
   })
 
+  // decode 後的 pathname 會把 `%2F` 解成 `/`，拿去組 Location 就成了 `//evil.com/...` 的 protocol-relative open redirect。
+  it('does not turn an encoded slash into a protocol-relative redirect location', async () => {
+    const root = await createStaticOutput()
+    const server = createStaticPreviewServer(root)
+    servers.push(server)
+    await listen(server)
+    const port = getPort(server)
+
+    const response = await fetch(`http://127.0.0.1:${port}/%2Fevil.com%2F..%2Fsearch?q=1`, { redirect: 'manual' })
+
+    expect(response.status).toBe(308)
+    expect(response.headers.get('location')).toBe('/%2Fevil.com%2F..%2Fsearch/?q=1')
+  })
+
   it('serves the generated 404 page for an unknown route', async () => {
     const root = await createStaticOutput()
     const server = createStaticPreviewServer(root)

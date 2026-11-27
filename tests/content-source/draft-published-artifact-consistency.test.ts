@@ -177,10 +177,10 @@ function routeStems(routes: string[], prefix: string): Set<string> {
   return new Set(routes.map((route) => route.slice(prefix.length)))
 }
 
-// 從 sitemap.xml 的 <loc> 抽指定 detail path 前綴下的 id 集合（loc 為完整 URL）。
+// 從 sitemap.xml 的 <loc> 抽指定 detail path 前綴下的 id 集合（loc 為完整 URL，頁面 URL 帶尾斜線）。
 function sitemapDetailIds(xml: string, segment: string): Set<string> {
   const ids = new Set<string>()
-  const pattern = new RegExp(`<loc>[^<]*/${segment}/([^<]+)</loc>`, 'g')
+  const pattern = new RegExp(`<loc>[^<]*/${segment}/([^<]+?)/?</loc>`, 'g')
 
   for (const match of xml.matchAll(pattern)) {
     ids.add(decodeURIComponent(match[1]))

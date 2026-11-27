@@ -1,5 +1,5 @@
 // detail 頁返回鈕的共用行為：product/guide 兩頁原本逐字複製同一段 same-origin 判定＋fallback，
-// 收斂成單一 composable，fallback route 參數化（product '/'、guide '/guide'）。
+// 收斂成單一 composable，fallback route 參數化（product '/'、guide '/guide/'）。
 export function useDetailBackNavigation(fallback_route: string): { goBack: () => void } {
   const router = useRouter()
 

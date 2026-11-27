@@ -1,12 +1,15 @@
 import { defineNuxtConfig } from 'nuxt/config'
 import { fileURLToPath } from 'node:url'
+import { withTrailingSlash } from 'ufo'
 
 import { buildBrandRoutes } from './scripts/build-brand-routes'
 import { buildCategoryRoutes } from './scripts/build-category-routes'
 import { buildChannelRoutes } from './scripts/build-channel-routes'
 import { buildGuideRoutes } from './scripts/build-guide-routes'
 import { buildProductRoutes } from './scripts/build-product-routes'
+import { buildProductSearchImageRoutes } from './scripts/build-product-search-image-routes'
 import { buildTagRoutes } from './scripts/build-tag-routes'
+import { rejectSlashlessPageRoute } from './scripts/reject-slashless-page-route'
 import { getSiteUrl } from './scripts/site-url'
 
 // APP_URL 一律必填（含裸跑 generate/build）：缺 env 硬失敗，不再豁免 generate/build、
@@ -54,6 +57,7 @@ const channel_routes = buildChannelRoutes(taxonomy_content_dirs)
 // 確保 detail JSON 與 detail 頁同進退，generate 不會漏產（failOnError 維持有效）。
 const product_detail_json_routes = product_routes.map((route) => `/api${route}.json`)
 const guide_detail_json_routes = guide_routes.map((route) => `/api${route.replace('/guide/', '/guides/')}.json`)
+const product_search_image_routes = buildProductSearchImageRoutes(fileURLToPath(new URL('./content/products/', import.meta.url)))
 // 監看 content/ 目錄絕對路徑而非 glob：Vite 7 的 chokidar 5 已移除 glob 支援，
 // 傳 'content/**/*.json' 進 watcher.add() 不會匹配任何檔案。
 const content_watch_paths = [fileURLToPath(new URL('./content/', import.meta.url))]
@@ -115,6 +119,8 @@ export default defineNuxtConfig({
     defaults: {
       nuxtLink: {
         prefetchOn: { interaction: true, visibility: false },
+        // 頁面 URL 全站帶尾斜線（047）：與 Pages 目錄輸出、prerender payload.path 一致，hydration 不 replace URL。
+        trailingSlash: 'append',
       },
     },
   },
@@ -122,25 +128,24 @@ export default defineNuxtConfig({
   nitro: {
     preset: 'static',
     ...(output_dir ? { output: { dir: output_dir } } : {}),
+    hooks: {
+      'prerender:generate': rejectSlashlessPageRoute,
+    },
     prerender: {
       // failOnError：任一 prerender route（含 /api/content.json、/search-index.json、product detail）
       // 失敗時讓 nuxt generate 以非零碼中止，避免壞 content／壞 route 靜默產出殘缺 static 站（spec Case 1）。
       failOnError: true,
+      // 頁面 route 全部顯式列出且帶尾斜線（047）。static preset 預設 crawlLinks:true 會讓 Nuxt 把 router 靜態路由
+      // 以無斜線（`/guide`）推進 prerender、覆寫同一個 guide/index.html 的 payload.path，故關掉。
+      crawlLinks: false,
       routes: [
-        '/',
-        '/guide',
-        '/search',
-        '/links',
+        ...['/', '/guide', '/search', '/links', ...product_routes, ...guide_routes, ...category_routes, ...tag_routes, ...brand_routes, ...channel_routes]
+          .map((route) => withTrailingSlash(route)),
         '/api/content.json',
         '/search-index.json',
-        ...product_routes,
-        ...guide_routes,
-        ...category_routes,
-        ...tag_routes,
-        ...brand_routes,
-        ...channel_routes,
         ...product_detail_json_routes,
         ...guide_detail_json_routes,
+        ...product_search_image_routes,
       ],
     },
   },
@@ -183,6 +188,15 @@ export default defineNuxtConfig({
         host: vite_host,
         clientPort: 443,
       },
+    },
+  },
+  hooks: {
+    // @nuxt/image 2 會把 image.dir（content/）推進 Nitro publicAssets，generate 因此把原始 content JSON（含 draft）、
+    // taxonomy 與 content/AGENTS.md 複製進公開產物。IPX 直接讀 image.dir 來源，不需要這份 public 副本。
+    // 在 nitro:init 依已解析的 publicAssets 過濾：nuxt.config 的 nitro:config hook 早於 module 註冊，攔不到。
+    'nitro:init'(nitro) {
+      const content_dir = fileURLToPath(new URL('./content', import.meta.url))
+      nitro.options.publicAssets = nitro.options.publicAssets.filter((asset) => asset.dir !== content_dir)
     },
   },
   eslint: {

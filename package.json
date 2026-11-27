@@ -27,28 +27,29 @@
     "preview": "./dev.sh preview"
   },
   "dependencies": {
-    "@nuxt/ui": "^4.8.2",
+    "@nuxt/ui": "^4.13.0",
     "@vueuse/core": "^14.3.0",
     "minisearch": "^7.2.0",
-    "nuxt": "^4.4.8",
-    "vue": "^3.5.24",
+    "nuxt": "^4.6.4",
+    "ufo": "^1.6.4",
+    "vue": "^3.5.46",
     "zod": "^4.4.3"
   },
   "devDependencies": {
     "@iconify-json/simple-icons": "^1.2.89",
     "@nuxt/eslint": "^1.15.2",
-    "@nuxt/image": "^1.10.0",
+    "@nuxt/image": "^2.2.1",
     "@playwright/test": "^1.65.0",
     "@types/node": "^25.9.2",
-    "@vitejs/plugin-vue": "^6.0.7",
+    "@vitejs/plugin-vue": "^6.0.11",
     "@vue/test-utils": "^2.4.11",
     "eslint": "^9.39.4",
     "happy-dom": "^20.10.3",
-    "knip": "^6.25.0",
+    "knip": "^6.48.0",
     "sharp": "^0.35.1",
     "typescript": "^6.0.3",
-    "vitest": "^4.0.14",
-    "vue-tsc": "^3.3.4"
+    "vitest": "^4.1.12",
+    "vue-tsc": "^3.3.14"
   },
   "pnpm": {
     "onlyBuiltDependencies": [

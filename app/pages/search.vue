@@ -140,7 +140,7 @@ function onSuggestionClicked(suggestion: SearchSuggestion) {
 
 function navigateToSearch(query: string | null) {
   router.push({
-    path: '/search',
+    path: '/search/',
     query: query === null ? {} : { q: query },
   })
 }

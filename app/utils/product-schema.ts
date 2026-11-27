@@ -190,15 +190,6 @@ export const category_definition_schema = z.object({
   sort_order: z.number(),
 }).strict()
 
-export const legacy_link_definition_schema = z.object({
-  id: z.string().min(1),
-  title: z.string().min(1),
-  subtitle: z.string(),
-  url: http_url_schema,
-  icon: z.string().min(1),
-  sort_order: z.number(),
-}).strict()
-
 export const tag_definition_schema = z.object({
   id: tag_id_schema,
   label: z.string().min(1),
@@ -214,10 +205,6 @@ export const channel_taxonomy_schema = z.object({
 
 export const category_taxonomy_schema = z.object({
   items: z.array(category_definition_schema),
-}).strict()
-
-export const legacy_link_taxonomy_schema = z.object({
-  items: z.array(legacy_link_definition_schema),
 }).strict()
 
 export const tag_taxonomy_schema = z.object({
@@ -315,8 +302,6 @@ function addMissingTaxonomyViolations(
   }
 }
 
-export type ProductPrice = z.infer<typeof product_price_schema>
-export type ProductExternalTarget = z.infer<typeof product_external_target_schema>
 export type ProductOffer = z.infer<typeof product_offer_schema>
 export type ReferenceLink = z.infer<typeof reference_link_schema>
 export type Product = z.infer<typeof product_schema>
@@ -324,6 +309,5 @@ export type Guide = z.infer<typeof guide_schema>
 export type Link = z.infer<typeof link_schema>
 export type ChannelDefinition = z.infer<typeof channel_definition_schema>
 export type CategoryDefinition = z.infer<typeof category_definition_schema>
-export type LegacyLinkDefinition = z.infer<typeof legacy_link_definition_schema>
 export type LinkDefinition = Link
 export type TagDefinition = z.infer<typeof tag_definition_schema>

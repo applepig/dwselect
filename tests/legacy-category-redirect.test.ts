@@ -33,7 +33,7 @@ describe('legacy category redirect middleware', () => {
 
     await runMiddleware({ path: '/', query: { category: 'computer-3c' } })
 
-    expect(navigate_to).toHaveBeenCalledWith('/category/computer-3c', { replace: true })
+    expect(navigate_to).toHaveBeenCalledWith('/category/computer-3c/', { replace: true })
   })
 
   it('keeps an invalid legacy category query on the home route', async () => {

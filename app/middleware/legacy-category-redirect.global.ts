@@ -22,7 +22,7 @@ export async function redirectLegacyCategory(
     return
   }
 
-  return navigateTo(`/category/${category_query}`, { replace: true })
+  return navigateTo(`/category/${category_query}/`, { replace: true })
 }
 
 export default defineNuxtRouteMiddleware(async (to) => {

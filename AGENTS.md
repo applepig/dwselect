@@ -72,8 +72,8 @@
 
 ## Routing And UI
 
-- Static prerender routes 在 `nuxt.config.ts`：`/`、`/guide`、`/search`、`/links` 與所有 `/products/:id`，product routes 由 `scripts/build-product-routes.ts` 從 `content/products/` 建出。
-- App routes：`/` 首頁、`/guide` 指南、`/search?q=` 搜尋、`/links` 連結、`/products/:id` 商品詳情。
+- 頁面 URL 全站帶尾斜線（`/guide/`、`/products/:id/`），與 Pages 目錄輸出（`/x` 308 → `/x/`）及 payload.path 一致：NuxtLink `trailingSlash: 'append'`，canonical、sitemap、search index href、程式導航帶斜線；`/api/*`、`/_ipx/*`、圖片、discovery 檔不帶；RSS `<guid>` 保留舊字串；比對 `route.path` 要容許尾斜線。頁面 prerender routes 在 `nuxt.config.ts` 顯式列出並補斜線（`crawlLinks: false`，route builder 回傳無斜線），`scripts/reject-slashless-page-route.ts` 讓無斜線頁面 route 的 generate 失敗；不要用 server middleware 做無斜線轉址（prerender 時會覆寫真頁面）。
+- App routes：`/` 首頁、`/guide/` 指南、`/search/?q=` 搜尋、`/links/` 連結、`/products/:id/` 商品詳情。
 - Navigation 使用 `NuxtLink`；mobile bottom nav 與 tablet rail 是四個主要入口，desktop sidebar 會展開 product categories。
 - Nuxt 已啟用 `experimental.viewTransition: true`；做轉場時遵守 progressive enhancement 與 `prefers-reduced-motion` fallback，不要新增手寫全域轉場狀態機。
 

@@ -124,14 +124,19 @@ describe('Nuxt SSG baseline', () => {
     expect(getContrastRatio('#201c17', '#fff4dd')).toBeGreaterThanOrEqual(4.5)
   })
 
-  it('should keep Nuxt head runtime on Unhead v2 for Nuxt UI color injection', () => {
-    const nuxt_package = JSON.parse(readFileSync(
-      new URL('../node_modules/nuxt/package.json', import.meta.url),
+  // Nuxt 4.4.7 曾解析到 unhead v3、Nuxt UI 仍用 @unhead/vue v2，head runtime 分裂讓 colors plugin 拋
+  // `useHead() was called without provide context`（docs/007 works.md）。守的是兩者同一 major，不是特定版本。
+  it('should keep Nuxt and Nuxt UI on the same Unhead major for Nuxt UI color injection', () => {
+    const readDependencies = (package_path: string) => (JSON.parse(readFileSync(
+      new URL(`../node_modules/${package_path}/package.json`, import.meta.url),
       'utf8',
-    )) as { dependencies?: Record<string, string> }
-    const unhead_range = nuxt_package.dependencies?.unhead ?? ''
+    )) as { dependencies?: Record<string, string> }).dependencies ?? {}
+    const getMajor = (range: string | undefined) => range?.match(/\d+/)?.[0]
+    const nuxt_dependencies = readDependencies('nuxt')
 
-    expect(unhead_range).toMatch(/^\^?2\./)
+    expect(getMajor(nuxt_dependencies.unhead)).toBeDefined()
+    expect(getMajor(nuxt_dependencies['@unhead/vue'])).toBe(getMajor(nuxt_dependencies.unhead))
+    expect(getMajor(readDependencies('@nuxt/ui')['@unhead/vue'])).toBe(getMajor(nuxt_dependencies.unhead))
   })
 
   it('should define routed page files and prerender every product detail route', () => {
@@ -153,15 +158,18 @@ describe('Nuxt SSG baseline', () => {
       expect(readFileSync(new URL(file_path, import.meta.url), 'utf8')).toBeTruthy()
     }
 
+    // 047：頁面 route 全部帶尾斜線，與 Pages 目錄輸出及 payload.path 一致。
     expect(prerender_routes).toContain('/')
-    expect(prerender_routes).toContain('/guide')
-    expect(prerender_routes).toContain('/search')
-    expect(prerender_routes).toContain('/links')
+    expect(prerender_routes).toContain('/guide/')
+    expect(prerender_routes).toContain('/search/')
+    expect(prerender_routes).toContain('/links/')
+    expect(prerender_routes).toContain(`/products/${first_published_product_id}/`)
+    expect(prerender_routes).toContain(`/guide/${first_published_guide_id}/`)
     expect(prerender_routes).toContain('/api/content.json')
     expect(prerender_routes).toContain('/search-index.json')
     expect(prerender_routes.filter((route) => route.startsWith('/products/') && !route.startsWith('/api/'))).toHaveLength(product_route_count)
-    // /guide 列表本身也以 /guide/ 開頭，故扣掉它才是 detail route 數，須等於 published guide 數（AC13）。
-    expect(prerender_routes.filter((route) => route.startsWith('/guide/') && !route.startsWith('/api/'))).toHaveLength(guide_route_count)
+    // /guide/ 列表本身也以 /guide/ 開頭，故扣掉它才是 detail route 數，須等於 published guide 數（AC13）。
+    expect(prerender_routes.filter((route) => route.startsWith('/guide/') && route !== '/guide/')).toHaveLength(guide_route_count)
     // 028 拆分：每筆 published 商品／指南都要 prerender 出 per-id detail JSON，數量與 detail 頁 route 一致，
     // 否則 generate 會漏產 detail JSON 讓詳情頁載入失敗（failOnError 把缺漏放大為 build 中止）。
     expect(prerender_routes.filter((route) => route.startsWith('/api/products/'))).toHaveLength(product_route_count)
@@ -187,6 +195,23 @@ describe('Nuxt SSG baseline', () => {
         interaction: true,
         visibility: false,
       })
+    }
+    finally {
+      await nuxt.close()
+    }
+  })
+
+  // 047：NuxtLink 全站補尾斜線；crawler 關閉，避免 Nuxt 把 router 靜態路由以無斜線推進 prerender。
+  it('should resolve NuxtLink to append trailing slashes and disable prerender link crawling', async () => {
+    const nuxt = await loadNuxt({
+      cwd: fileURLToPath(new URL('..', import.meta.url)),
+      dev: false,
+      ready: false,
+    })
+
+    try {
+      expect(nuxt.options.experimental.defaults.nuxtLink.trailingSlash).toBe('append')
+      expect(nuxt.options.nitro.prerender?.crawlLinks).toBe(false)
     }
     finally {
       await nuxt.close()

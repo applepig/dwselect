@@ -198,7 +198,7 @@ describe('useTaxonomyDetailPage composable', () => {
       description: 'Fellow 咖啡器具選物。',
     })
     const runtime = stubTaxonomyComposableRuntime({ route_id: 'fellow', data: taxonomy_data })
-    const canonical_url = `${SITE_URL}brand/fellow`
+    const canonical_url = `${SITE_URL}brand/fellow/`
 
     await useTaxonomyDetailPage('brand')
 

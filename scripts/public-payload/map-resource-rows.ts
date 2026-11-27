@@ -30,7 +30,7 @@ function mapGuideToRow(guide: Guide, labels: TaxonomyLabelResolver): CompactReso
     title: guide.title,
     subtitle: guide.short_description,
     meta: category_labels.length === 0 ? null : category_labels.join('、'),
-    href: `/guide/${guide.id}`,
+    href: `/guide/${guide.id}/`,
     image_url: resolveGuideImageUrl(guide),
     icon: RESOURCE_ROW_ICONS.guide,
     external: false,

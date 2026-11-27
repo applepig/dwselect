@@ -11,7 +11,7 @@
         <NuxtLink
           v-for="category in desktop_category_items"
           :key="`sidebar-category-${category.id}`"
-          :to="category.id === ALL_CATEGORIES_ID ? '/' : `/category/${category.id}`"
+          :to="category.id === ALL_CATEGORIES_ID ? '/' : `/category/${category.id}/`"
           class="app-nav-button desktop-category-link"
           :class="{ 'is-active': isCategoryActive(category.id) }"
           :aria-current="isCategoryActive(category.id) ? 'page' : undefined"
@@ -77,6 +77,8 @@
 </template>
 
 <script setup lang="ts">
+import { withoutTrailingSlash } from 'ufo'
+
 import { ALL_CATEGORIES_ID, type CategoryChipView } from '../utils/public-content-view-types'
 import { NAV_TABS } from '../utils/published-products/compact-app'
 
@@ -87,15 +89,16 @@ const nav_items = NAV_TABS
 const desktop_route_items = nav_items.filter((item) => item.id !== 'home')
 const desktop_category_items = computed(() => catalog_shell_data.value?.desktop_category_items ?? [])
 
+// 頁面 URL 帶尾斜線（047），比對時兩邊都去掉，`/guide` 與 `/guide/` 同義。
 function isRouteActive(path: string) {
-  return route.path === path
+  return withoutTrailingSlash(route.path) === withoutTrailingSlash(path)
 }
 
 function isCategoryActive(category_id: CategoryChipView['id']) {
   if (category_id === ALL_CATEGORIES_ID) {
-    return route.path === '/'
+    return isRouteActive('/')
   }
 
-  return route.path === `/category/${category_id}`
+  return isRouteActive(`/category/${category_id}`)
 }
 </script>

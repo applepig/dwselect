@@ -186,7 +186,7 @@
 import type { GuideDetailView } from '../utils/public-content-view-types'
 import { zipTaxonomyPills } from '../utils/content/zip-taxonomy-pills'
 
-const { goBack } = useDetailBackNavigation('/guide')
+const { goBack } = useDetailBackNavigation('/guide/')
 
 const props = defineProps<{
   detail: GuideDetailView

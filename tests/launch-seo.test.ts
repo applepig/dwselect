@@ -10,6 +10,7 @@ import {
   SITE_TITLE,
   SITE_URL,
   getCanonicalUrl,
+  getOgImageUrl,
   getSeoDescription,
 } from '../app/utils/seo-metadata'
 import { SITE_NAME } from '../app/utils/site-name'
@@ -52,11 +53,17 @@ describe('launch SEO metadata contract', () => {
     expect(readPublicAppSources()).not.toContain('dwselect.toybox.local')
   })
 
-  it('should resolve canonical URLs to absolute site URLs derived from SITE_URL', () => {
+  // 047：頁面 URL 全站帶尾斜線，與 Pages 目錄輸出（`/x` 308 → `/x/`）及 prerender payload.path 一致。
+  it('should resolve canonical page URLs to absolute site URLs with a trailing slash', () => {
     expect(getCanonicalUrl('')).toBe(SITE_URL)
     expect(getCanonicalUrl('/')).toBe(SITE_URL)
-    expect(getCanonicalUrl('/products/foo')).toBe(`${SITE_URL}products/foo`)
-    expect(getCanonicalUrl('/guide')).toBe(`${SITE_URL}guide`)
+    expect(getCanonicalUrl('/products/foo')).toBe(`${SITE_URL}products/foo/`)
+    expect(getCanonicalUrl('/guide')).toBe(`${SITE_URL}guide/`)
+    expect(getCanonicalUrl('/guide/')).toBe(`${SITE_URL}guide/`)
+  })
+
+  it('should keep local content image og URLs without a trailing slash', () => {
+    expect(getOgImageUrl('/products/images/a.png')).toBe(`${SITE_URL}images/products/a.webp`)
   })
 
   it('should fall back to the site description only when the input is blank', () => {

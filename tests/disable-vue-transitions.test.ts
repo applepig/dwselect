@@ -3,7 +3,7 @@ import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest'
 // middleware 以 export default defineNuxtRouteMiddleware(handler) 定義；defineNuxtRouteMiddleware 是
 // Nuxt auto-import，bare vitest 無此 global，故先 stub 成 identity 再 import，取得未包裝的 handler 做
 // function-level 驗收（AC2：flag × VT support 矩陣，只有 true+supported 會關閉 Vue transition）。
-type RouteStub = { meta: Record<string, unknown> }
+type RouteStub = { path?: string, meta: Record<string, unknown> }
 let runMiddleware: (to: RouteStub, from: RouteStub) => void
 let shouldHandOverToViewTransition: (enable: boolean, start_view_transition: unknown) => boolean
 
@@ -73,5 +73,35 @@ describe('disable-vue-transitions middleware', () => {
 
     expect(to.meta.pageTransition).toBeUndefined()
     expect(to.meta.layoutTransition).toBeUndefined()
+  })
+})
+
+// 047：只差尾斜線的導航（`/x` ↔ `/x/`）不是換頁；Nuxt isChangingPage 卻會開 View Transition，
+// NuxtPage 不重 render、page:finish 不觸發，畫面凍結到瀏覽器 4 秒逾時。
+describe('disable-vue-transitions middleware on trailing-slash-only navigation', () => {
+  it.each([
+    ['/guide/2026-06-02-japanese-rice-intro', '/guide/2026-06-02-japanese-rice-intro/'],
+    ['/guide/2026-06-02-japanese-rice-intro/', '/guide/2026-06-02-japanese-rice-intro'],
+    ['/guide', '/guide/'],
+  ])('should skip the view transition when navigating to %s from %s', (to_path, from_path) => {
+    setEnvironment(true, true)
+    const to: RouteStub = { path: to_path, meta: {} }
+
+    runMiddleware(to, { path: from_path, meta: {} })
+
+    expect(to.meta.viewTransition).toBe(false)
+  })
+
+  it.each([
+    ['/guide/2026-06-02-japanese-rice-intro', '/guide/'],
+    ['/products/a', '/'],
+    ['/', '/links/'],
+  ])('should keep the view transition for a real page change to %s from %s', (to_path, from_path) => {
+    setEnvironment(true, true)
+    const to: RouteStub = { path: to_path, meta: {} }
+
+    runMiddleware(to, { path: from_path, meta: {} })
+
+    expect(to.meta.viewTransition).toBeUndefined()
   })
 })
